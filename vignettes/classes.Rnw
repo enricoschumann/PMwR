@@ -1,0 +1,91 @@
+% \VignetteIndexEntry{Classes/methods for financial portfolios}
+\documentclass[a4paper,11pt]{article}
+\usepackage[left = 2.5cm, top = 2cm, bottom = 3cm, right = 3.5cm]{geometry}
+\usepackage[noae,nogin]{Sweave}
+\usepackage{mathptmx}
+\usepackage{amsmath,amstext}
+\usepackage{hyperref}
+\usepackage{natbib}
+
+\SweaveOpts{keep.source = TRUE, eps = TRUE, pdf = FALSE}
+
+\begin{document}
+{\Large \raggedright{Methods for portfolios of financial instruments}}\medskip
+
+\noindent Enrico Schumann\\
+\noindent \texttt{enricoschumann@yahoo.de}\\
+\bigskip
+
+\section{Instruments and portfolios}
+\subsection{Classes}
+
+The following classes are implicitly defined
+\begin{itemize}
+\item Trade
+\item Instrument
+\item Cashflow
+\item Position
+\item Portfolio
+\end{itemize}
+
+
+
+\subsubsection{Trade}
+
+\paragraph{elements}
+\begin{itemize}
+\item tradeId
+\item ticker
+\item datetime
+\item notional
+\item price
+\end{itemize}
+
+
+\paragraph{functions}
+Functions: print
+
+
+\subsubsection{Tradelist}
+A Tradelist is just a list trades.
+
+\paragraph{functions}
+
+\begin{description}
+\item[PL] compute the PL (if all trades are closed), per instrument and total
+\item[PLsorted] sorts the trades per datetime and computes the
+  PL, per instrument and total
+\item[splitTrades]
+\item[limitExposure]
+\item[print] print
+\end{description}
+
+\subsubsection{Position}
+
+
+
+\section{Reporting}
+\subsection{qpTable}
+
+
+
+\subsection{slTable}
+
+arguments:
+    - \ldots : zoo objects
+    - include.returns
+    - include.diffs
+    - compute.with = "returns": or "diffs" or "levels"
+    - columns = list(mean = mean, sd = sd): need to be computed on returns
+
+
+
+\section{Technical indicators}
+
+sum, abssum, sd, absmean, range, minmax, minmaxrange, mad
+
+\section{Backtesting}
+
+
+
+\end{document}

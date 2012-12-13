@@ -1,0 +1,46 @@
+% \VignetteIndexEntry{Frequently-needed functions}
+\documentclass[a4paper,11pt]{article}
+\usepackage[left = 2.5cm, top = 2cm, bottom = 3cm, right = 3.5cm]{geometry}
+\usepackage[noae,nogin]{Sweave}
+\usepackage{mathptmx}
+\usepackage{amsmath,amstext}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{framed}
+
+\SweaveOpts{keep.source = TRUE, eps = TRUE}
+
+\begin{document}
+\title{Frequently-needed functionality}
+\author{Enrico Schumann}
+\maketitle
+
+<<>>=
+require("PM")
+@
+
+\begin{framed}
+  \noindent We need to price an instrument.
+\end{framed}
+
+\begin{framed}
+  \noindent We get a list of trades (typically in a non-standard
+  form), and need to compute PL.
+\end{framed}
+
+\begin{framed}
+  \noindent We get a list of trades in different instruments and need
+  to compute PL.
+\end{framed}
+
+\begin{framed}
+  \noindent We get a list of trades in an instrument and want to plot
+  these trades against the price of the traded instrument.
+\end{framed}
+
+\begin{framed}
+  \noindent We get a signal series (\texttt{+1, 0, 0, +1, \ldots}) and
+  need to transform it into a profit-and-loss series.
+\end{framed}
+
+\end{document}

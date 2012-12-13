@@ -1,0 +1,42 @@
+% \VignetteIndexEntry{Computing profit-and-loss and analysing trades}
+\documentclass[a4paper,11pt]{article}
+\usepackage[left = 2.5cm, top = 2cm, bottom = 3cm, right = 3.5cm]{geometry}
+\usepackage[noae,nogin]{Sweave}
+\usepackage{mathptmx}
+\usepackage{amsmath,amstext}
+\usepackage{hyperref}
+\usepackage{natbib}
+
+\SweaveOpts{keep.source = TRUE, eps = TRUE}
+
+\begin{document}
+\title{Computing profit-and-loss and analysing trades}
+\author{Enrico Schumann}
+\maketitle
+
+<<>>=
+require("PM")
+@
+
+A simple example.
+<<>>=
+n <- c(1,-1)
+p <- c(100,102)
+PL(n, p)
+PLsorted(n, p)
+@
+
+Another simple example
+<<>>=
+P <- 100:110
+T <- seq_along(P)
+n <- c(2, -2)
+p <- c(100, 102)
+tradetimes <- c(2, 4)
+PLsorted(n, p)
+PLsorted(n, p, tradetime = tradetimes,
+         allprices = P, alltimes = T,
+         initcash = 500)
+@
+
+\end{document}

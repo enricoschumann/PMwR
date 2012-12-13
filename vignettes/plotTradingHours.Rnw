@@ -1,0 +1,72 @@
+% \VignetteIndexEntry{Plotting quantities during trading hours}
+\documentclass[a4paper,11pt]{article}
+\usepackage[left = 2.5cm, top = 2cm, bottom = 3cm, right = 3.5cm]{geometry}
+\usepackage[noae,nogin]{Sweave}
+\usepackage{mathptmx}
+\usepackage{amsmath,amstext}
+\usepackage{hyperref}
+\usepackage{natbib}
+
+\SweaveOpts{keep.source = TRUE, eps = TRUE}
+
+\begin{document}
+\title{Plotting quantities during trading hours}
+\author{Enrico Schumann}
+\maketitle
+
+Attach the package.
+
+<<>>=
+require("PM")
+@
+<<eval=false,echo=false>>=
+bund <- getTableSelect("GBL201212",  "ib",
+                       from = "20121019210000",
+                       to   = "201210231000",
+                       columns = "close")
+
+bb <- rbind(bund[c(10,72,120,90,1010,3050), , drop=FALSE],
+            bund[c(5000,6100,7200), , drop=FALSE],
+            bund[c(55000,56782,60782), , drop=FALSE])
+dput(bb$close)
+dput(char2time(row.names(bb)))
+@
+
+We are given these data
+
+<<>>=
+prices <- c(140.46, 140.47, 140.46, 140.47,
+            140.45, 140.39, 140.18, 140.19,
+            140.12, 139.92, 139.94, 140.21)
+
+times <- structure(c(1350673209, 1350673271, 1350673319,
+                     1350673289, 1350674209, 1350676249,
+                     1350886763, 1350887863, 1350888963,
+                     1350972529, 1350974311, 1350978311),
+                   class = c("POSIXct", "POSIXt"), tzone = "")
+@
+
+
+A standard plot looks like this.
+<<fig=true>>=
+plot(times,prices, type = "s")
+@
+
+
+<<fig=true>>=
+plotTradingHours(x = prices,
+                 t = times, interval = "1 sec", labels = "day",
+                 fromHHMMSS="080000", toHHMMSS = "220000",
+                 type = "s")
+@
+
+
+<<fig=true>>=
+t <- as.POSIXct("2012-08-31 08:05:00") - 36000:1
+x <- runif(length(t))
+plotTradingHours(x, t, interval = "15 min", labels = "hours",
+                 mar = c(10,10,1,1),
+                 xlab = "", ylab = "", col = "blue")
+@
+
+\end{document}
