@@ -15,7 +15,7 @@
 \maketitle
 
 <<>>=
-require("PM")
+require("PMwR")
 @
 
 A simple example.

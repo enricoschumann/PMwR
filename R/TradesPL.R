@@ -199,8 +199,8 @@ splitTrades <- function(notional, prices, tradetimes, aggregate = FALSE) {
     }
 }
 
-scaleTrades <- function(notional, prices, tradetimes, aggregate = FALSE, fun = NULL,
-                        ...) {
+scaleTrades <- function(notional, prices, tradetimes, aggregate = FALSE,
+                        fun = NULL, ...) {
     n <- notional
     p <- prices
     trades <- splitTrades(n, p, tradetimes, aggregate = FALSE)
@@ -242,34 +242,33 @@ closeOnFirst <- function(n) {
     n
 }
 
+## limitExposure <- function(trade, lim) {
+##     tol <- 1e-8
+##     skipped <- pos <- 0
 
-limitExposure <- function(trade, lim) {
-    tol <- 1e-8
-    skipped <- pos <- 0
-
-    for (i in seq_along(n)) {
-        npos <- pos + n[i]
-        if (abs(npos) > lim) {
-            nnew    <- (lim - pos) * sign(n[i])
-            skipped <- sign(n[i]) * (n[i] - nnew) + skipped
-            n[i] <- nnew
-            pos <- pos + n[i]
-        } else if (abs(skipped) > tol && sign(n[i]) != sign(skipped)) {
-            if (sign(skipped) > 0) {
-                nnew <- max(abs(n[i])- abs(skipped), 0) * sign(n[i])
-                skipped <- skipped - sign(n[i]) * (n[i] - nnew)
-                n[i] <- nnew
-                pos <- pos + n[i]
-            }
-        } else
-            pos <- npos
-    }
-    keep <- abs(n) >= tol
-    trade$n <- n[keep]
-    trade$p <- trade$p[keep]
-    trade$tradetimes <- trade$tradetimes[keep]
-    trade
-}
+##     for (i in seq_along(n)) {
+##         npos <- pos + n[i]
+##         if (abs(npos) > lim) {
+##             nnew    <- (lim - pos) * sign(n[i])
+##             skipped <- sign(n[i]) * (n[i] - nnew) + skipped
+##             n[i] <- nnew
+##             pos <- pos + n[i]
+##         } else if (abs(skipped) > tol && sign(n[i]) != sign(skipped)) {
+##             if (sign(skipped) > 0) {
+##                 nnew <- max(abs(n[i])- abs(skipped), 0) * sign(n[i])
+##                 skipped <- skipped - sign(n[i]) * (n[i] - nnew)
+##                 n[i] <- nnew
+##                 pos <- pos + n[i]
+##             }
+##         } else
+##             pos <- npos
+##     }
+##     keep <- abs(n) >= tol
+##     trade$n <- n[keep]
+##     trade$p <- trade$p[keep]
+##     trade$tradetimes <- trade$tradetimes[keep]
+##     trade
+## }
 limit <- function(trade, lim, tol = 1e-8) {
     n <- trade[["n"]]
     cn <- cumsum(n)

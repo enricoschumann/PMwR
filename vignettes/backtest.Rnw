@@ -18,6 +18,7 @@
 \bigskip
 
 \section{Introduction}
+
 This vignette explains how to backtest trading strategies with
 the \texttt{backtest} function.
 
@@ -177,7 +178,7 @@ number of simple examples.
 
 \noindent We attach the package.
 <<>>=
-require("PM")
+require("PMwR")
 @
 
 \subsection{A useless first example}
@@ -205,18 +206,19 @@ example, the suggested position always is one unit. (It is only a
 or not to trade. Examples follow below.)
 
 So \texttt{signal} always recommends to hold one unit of the
-asset. To test this strategy, we call \texttt{backtest}. We
-define initial cash \texttt{c0} of 100. (This is also the
-default.)
+asset. To test this strategy, we call \texttt{backtest}. The
+initial cash is 100 (per default). We can change it through the
+argument \texttt{c0}.
+
 <<>>=
 solution <- backtest(prices = prices,
-                     signal = signal,
-                     c0 = 100) ## initial cash
+                     signal = signal)
 @
 
 The function returns a list with a number of components. We
 display the results in a \texttt{data.frame}. \texttt{Xs} is the
 suggested portfolio; \texttt{X} is the actual portfolio.
+
 <<>>=
 makeTable <- function(solution, prices)
     data.frame(prices = prices,
@@ -228,17 +230,16 @@ makeTable <- function(solution, prices)
 makeTable(solution, prices)
 @
 
-We see that we bought in the second period because the default
-setting for the burnin \texttt{b} is 1; thus, we lose one
-observation.
+We bought in the second period because the default setting for
+the burnin \texttt{b} is 1; thus, we lose one observation.
 
 Since we do not rely in any way on the past in this trading rule,
-we set \texttt{b} zo zero.
+we set \texttt{b} zo zero. With this setting, we buy at the first
+price and hold until the end of the data.
 
 <<>>=
 solution <- backtest(prices = prices,
                      signal = signal,
-                     c0 = 100,
                      b  = 0)
 makeTable(solution, prices)
 solution$trades

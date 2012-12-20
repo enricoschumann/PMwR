@@ -30,6 +30,11 @@ backtest  <- function(prices,             ## matrices
     ##            junk[[1]][[i]] + 6,
     ##            junk[[1]][[i]] + attr(junk[[1]], "match.length")[i]-2L)
 
+    if (isdebugged(signal))
+        dd.signal <- TRUE else dd.signal <- FALSE
+    if (is.function(signalYN) && isdebugged(signalYN))
+        dd.signalYN <- TRUE else dd.signalYN <- FALSE
+    
     ##
     doSignalYN <- TRUE
     if (is.null(signalYN)) {
@@ -111,7 +116,9 @@ backtest  <- function(prices,             ## matrices
                                  Portfolio = Portfolio,
                                  SuggestedPortfolio = SuggestedPortfolio,
                                  Globals = Globals))
-
+    if (dd.signal)
+        debug(signal)
+    
     formals(signalYN) <-
         c(formals(signalYN), alist(Open = Open,
                                    High = High,

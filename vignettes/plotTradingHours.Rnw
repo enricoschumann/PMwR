@@ -17,7 +17,7 @@
 Attach the package.
 
 <<>>=
-require("PM")
+require("PMwR")
 @
 <<eval=false,echo=false>>=
 bund <- getTableSelect("GBL201212",  "ib",

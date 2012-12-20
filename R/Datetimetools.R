@@ -48,13 +48,26 @@ endOfPreviousMonth <- function(x) {
     tmp$mday <- 1L
     as.Date(tmp) - 1
 }
-setDayOfMonth <- function(x, day) {
+dayOfMonth <- function(x) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
         stop("input must inherit from class Date or POSIXt")
-    tmp <- as.POSIXlt(x)
-    tmp$mday <- day[1L]
-    as.Date(tmp)
+    as.POSIXlt(x)$mday
 }
+`dayOfMonth<-` <- function(x, value){
+    if (!all(inherits(x, "Date") | inherits(x, "POSIXt")))
+        stop("input must inherit from class Date or POSIXt")
+    cl <- class(x)
+    tmp <- as.POSIXlt(x)
+    tmp$mday <- value
+    if (cl == "Date")
+        as.Date(tmp)
+    else if (cl == "POSIXct")
+        as.POSIXct(tmp)
+    else 
+        tmp
+}
+    
+
 timegrid <- function(from, to, interval,
                      excludeWeekends = TRUE,
                      holidays   = NULL,
