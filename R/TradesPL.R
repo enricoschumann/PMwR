@@ -1,24 +1,34 @@
-PL <- function(notional, prices, symbols = NULL) {
-    tol <- 1e-12
+PL <- function(notional, prices, symbols = NULL, tol = 1e-10) {
     noPL <- FALSE
-    if (!is.null(symbols))
-        warning("symbols is not supported yet -- it is ignored")
     if (any(abs(notional) < tol))
         warning("zero notional")
-    if (abs(sum(notional)) > tol) {
-        warning("Sum of notional is not zero; cannot compute PnL.")
-        noPL <- TRUE
+    PLfun <- function(notional, prices, tol) {
+        if (abs(sum(notional)) > tol) {
+            warning("Sum of notional is not zero; cannot compute PnL.")
+            noPL <- TRUE
+        }
+        sel <- notional < 0L
+        buy <- notional > 0L
+        abuy  <- sum(prices[buy] * notional[buy]) / sum(notional[buy])
+        asel <- sum(prices[sel] * notional[sel]) / sum(notional[sel])
+        PL <- (asel - abuy)*sum(notional[buy])
+        list(averagePriceBuy  = ifelse(is.finite(abuy), abuy, NA),
+             averagePriceSell = ifelse(is.finite(asel), asel, NA),
+             PLtotal = ifelse(noPL, NA, PL),
+             PLperContract = ifelse(noPL, NA, PL/sum(notional[buy])),
+             absNotional = sum(abs(notional)))
     }
-    sel <- notional < 0L
-    buy <- notional > 0L
-    abuy  <- sum(prices[buy] * notional[buy]) / sum(notional[buy])
-    asel <- sum(prices[sel] * notional[sel]) / sum(notional[sel])
-    PL <- (asel - abuy)*sum(notional[buy])
-    list(averagePriceBuy  = ifelse(is.finite(abuy), abuy, NA),
-         averagePriceSell = ifelse(is.finite(asel), asel, NA),
-         PLtotal = ifelse(noPL, NA, PL),
-         PLperContract = ifelse(noPL, NA, PL/sum(notional[buy])),
-         absNotional = sum(abs(notional)))
+    if (is.null(symbols)) {
+        PLfun(notional, prices, tol)
+    } else {
+        slist <- unique(sort(symbols))
+        res <- vector("list", length=length(slist))
+        names(res) <- slist
+        for (s in slist)
+            res[[s]] <- PLfun(notional[s == symbols],
+                              prices[s == symbols], tol)
+        res
+    }    
 }
 PLsorted <- function(notional, prices,
                      tradetimes = NULL,
@@ -82,7 +92,7 @@ PLsorted <- function(notional, prices,
 
                     abstradesize <- min(sumsell, sumbuy)
                     this.adj <- numeric(length(this.notional))
-                        this.adj <- -this.notional
+                    this.adj <- -this.notional
                     if (sumsell < sumbuy) {
                         this.adj[buys] <- -this.notional[buys]*sumsell/sumbuy
                     } else {

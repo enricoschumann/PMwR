@@ -1,10 +1,10 @@
 \name{backtest}
 \alias{backtest}
 \title{
-  Accounting for Trades
+  Backtesting Trading Strategies
 }
 \description{
-  Accounting for trades.
+  Testing trading strategies.
 }
 \usage{
 backtest(prices, signal,
@@ -18,37 +18,48 @@ backtest(prices, signal,
 }
 \arguments{
   \item{prices}{
+    
     For a single asset, a matrix of prices with four columns: open,
     high, low and close. For \code{n} assets, a list of length four:
-    prices[[1]] is then a matrix with \code{n} columns containing the
-    open prices for the assets; prices[[2L]] is a matrix with the high
-    prices, and so on. If only close prices are used: for a single
-    asset, either a matrix of one column or a numeric vector; for
-    multiple assets a list whose single element is a matrix. (For
-    example, with 100 close prices of 5 assets, the prices should be
-    arranged in a matrix \code{p} of size 100 times 5; and \code{prices
-      = list(p)}.
+    \code{prices[[1]]} is then a matrix with \code{n} columns containing
+    the open prices for the assets; \code{prices[[2L]]} is a matrix with
+    the high prices, and so on. If only close prices are used, then for
+    a single asset, either a matrix of one column or a numeric vector;
+    for multiple assets a list of length one, containing the matrix of
+    close prices. (For example, with 100 close prices of 5 assets, the
+    prices should be arranged in a matrix \code{p} of size 100 times 5;
+    and \code{prices = list(p)}.)
+
   }
   \item{signal}{
-    a function
+
+    A function that evaluates to the position suggested by the trading
+    rule; see Details.
+
   }
   \item{signalYN}{
-    a function
+
+    a function that evaluates to \code{TRUE} or \code{FALSE}; default is
+    \code{TRUE}.
+
   }
-  \item{rebalanceYN}{
-    a function. If TRUE (the default), the portfolio is rebalanced in any period.
+  \item{rebalanceYN}{    
+
+    a function that evaluates to \code{TRUE} or \code{FALSE}. If TRUE
+    (the default), the portfolio is rebalanced in any period.
+
   }
   \item{printInfo}{
-    a function. If missing, nothing is printed.
+    A function. If \code{NULL}, nothing is printed. See Details.
   }
   \item{b}{
-    burnin (a scalar). Defaults to 0.
+    burnin (an integer). Defaults to 1.
   }
   \item{phi}{
     amount of rebalancing to be done (a scalar between 0 and 1)
   }
   \item{x0}{
-    initial portfolio
+    initial portfolio (a numeric vector)
   }
   \item{c0}{
     initial cash. Defaults to 100; but this is probably not a reasonable value.
@@ -61,7 +72,11 @@ backtest(prices, signal,
     printInfo) will have access to these arguments.
   }
   \item{addToPosition}{
-    default is FALSE. Not implemented.
+
+    Default is \code{FALSE}. \code{TRUE} is \strong{not implemented}
+    (but would mean that \code{signal} should evaluate to changes in
+    position, ie, orders).
+
   }
   \item{adjustSignal}{
 
@@ -69,7 +84,8 @@ backtest(prices, signal,
     will be transformed into \code{positionSize}.  If \code{weight} and
     \code{positionSize} is \code{NULL}, any output of signal will be
     considered weights. If positionSize is not \code{NULL}, signals will
-    be transformed in fixed weights (\code{positionSize}).
+    be transformed in fixed weights (\code{positionSize}). See Details.
+    
   }
   \item{positionSize}{
 
@@ -77,30 +93,45 @@ backtest(prices, signal,
     \code{fixedPosition} or \code{weight}.
 
   }
-  \item{tradeOnOpen}{a logical vector of length one.}
-  \item{tol}{
-    a numeric vector of length one. Only rebalance if the maximum
-    absolute suggested change in any position is greater than
-    \code{tol}. Default is 0.00001 (which basically means always
-    rebalance).
+  \item{tradeOnOpen}{
+    A logical vector of length one; default is \code{TRUE}.
   }
-  \item{assignInGlobals}{a list}
-  \item{prices0}{a numeric vector (default is \code{NULL})}
+  \item{tol}{
+    
+    A numeric vector of length one: only rebalance if the maximum
+    absolute suggested change in any position is greater than
+    \code{tol}. Default is 0.00001 (which practically means always
+    rebalance).
+
+  }
+  \item{assignInGlobals}{
+
+    A \code{list} of named elements. See Details.
+
+  }
+  \item{prices0}{
+
+    A numeric vector (default is \code{NULL}). Only used if \code{b} is 0 and
+    an initial portfolio \code{x0} is specified.
+
+  }
 }
 \details{
-  The function provides an \sQuote{accounting} framework for
-  trading rules. One basic ingredients are a time series that is supposed to
-  consists of \acronym{OHLC} bars. These bars need actually not be equally
-  spaced, but for now we assume they are.
+  
+  The function provides an accounting framework for trading rules. The
+  basic ingredients are time series that are supposed to consist of
+  \acronym{OHLC} bars (these bars need actually not be equally spaced)
+  and several functions that map these series into positions.
 
-  The function runs a loop from \code{b + 1L} to \code{nrow(prices)}. In a
-  given iteration \code{t} it should should use information from periods
-  \code{< t} (but nothing will ensure this); trading then takes place at
-  the open of \code{t}. For slow-to-compute signals this is reasonable if
-  there is time lag between close and open (eg, for daily prices). For
-  higher frequencies (eg, every second), the signal function should be
-  fast to compute; alternatively, it may be better to use a larger time
-  offset (ie, use information from periods \code{<< t}).
+  \code{backtest} runs a loop from \code{b + 1L} to
+  \code{NROW(prices)}. In a given iteration \code{t} it should should
+  use information from periods prior to \code{t} (but nothing will
+  ensure this); trading then takes place at the opening price of
+  \code{t}. For slow-to-compute signals this is reasonable if there is
+  time lag between close and open (eg, for daily prices). For higher
+  frequencies such as every second, the signal function should be fast to
+  compute; alternatively, it may be better to use a larger time offset
+  (ie, use information from periods \code{<< t}).
 
   If no \acronym{ohlc} bar are available, a single series (assumed to be
   close prices) can be passed.  These will then be expanded. In effect, we
@@ -112,7 +143,7 @@ backtest(prices, signal,
   is possible and often clearer; in particular, it will mimic the logic
   needed in a realtime system). Then the signal vector can be passed as an
   argument, and \code{signalYN} should be a function that returns
-  \code{FALSE}.  For those
+  \code{FALSE}.
 
   Reserved names are currently these: "Open", "High", "Low", "Close",
   "Wealth", "Cash", "Time", "Portfolio", "SuggestedPortfolio",
@@ -121,8 +152,12 @@ backtest(prices, signal,
 }
 \value{
   A list.
-  \item{\code{X}}{The actual portfolio holdings}
-  \item{\code{Xs}}{The suggested holdings}
+  \item{\code{portfolio}}{The actual portfolio holdings}
+  \item{\code{suggested.portfolio}}{The suggested holdings}
+  \item{\code{cash}}{cash}
+  \item{\code{wealth}}{total portfolio value}
+
+  and  cumTC, trades, initial.wealth
 }
 \references{
   Enrico Schumann. Portfolio Managemnt with R.
@@ -131,7 +166,7 @@ backtest(prices, signal,
   Enrico Schumann
 }
 \note{
-  Very experimental.
+  This function is still very experimental and will likely change.
 }
 
 

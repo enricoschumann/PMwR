@@ -18,3 +18,7 @@ makeHHMMSS <- function(x, label = "time specification (HHMMSS)") {
         stop("check ", label)
     x
 }
+wait <- function(x) 
+    if (length(x) == 1L)
+        Sys.sleep(x) else
+            Sys.sleep(runif(1L, min(x), max(x)))

@@ -33,6 +33,7 @@ The following classes are implicitly defined
 \subsubsection{Trade}
 
 \paragraph{elements}
+
 \begin{itemize}
 \item tradeId
 \item ticker
@@ -43,7 +44,7 @@ The following classes are implicitly defined
 
 
 \paragraph{functions}
-Functions: print
+Functions: print, sort, toLatex, PL, PLsorted
 
 
 \subsubsection{Tradelist}

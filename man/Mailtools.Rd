@@ -7,7 +7,7 @@ Functions to handle emails
 Functions that help with emails
 }
 \usage{
-saveAttachment(pattern, fname, writeIfExists = TRUE)
+saveAttachment(pattern, fname, writeIfExists = TRUE, adjustfn = TRUE)
 }
 
 \arguments{
@@ -20,6 +20,10 @@ the mbox file
   \item{writeIfExists}{
     logical
 }
+  \item{adjustfn}{
+    default is \code{TRUE}: adjust filenames on Windows? 
+}
+
 }
 \details{
 The function will load the whole mbox file into memory.

@@ -4,6 +4,7 @@
 \alias{PL}
 \alias{PLsorted}
 \alias{returns}
+\alias{limit}
 \title{
   Analysing Trades
 }
@@ -11,7 +12,7 @@
   Functions to help analyse trades (as opposed to profit-and-loss series)
 }
 \usage{
-PL(notional, prices, symbols = NULL)
+PL(notional, prices, symbols = NULL, tol = 1e-10)
 PLsorted(notional, prices, tradetimes = NULL,
          allprices = NULL, alltimes = NULL,
          initcash = 0, do.sort = FALSE)
@@ -21,6 +22,8 @@ returns(x, pad = NULL)
 scaleTrades(notional, prices, tradetimes, aggregate = FALSE, fun = NULL,
 ...)
 splitTrades(notional, prices, tradetimes, aggregate = FALSE)
+
+limit(trade, lim, tol = 0.00000001)
 }
 \arguments{
   \item{notional}{

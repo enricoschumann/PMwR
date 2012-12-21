@@ -5,15 +5,18 @@
 \alias{firstOfMonth}
 \alias{endOfMonth}
 \alias{endOfPreviousMonth}
-\alias{setDayOfMonth}
+\alias{dayOfMonth}
+\alias{dayOfMonth<-}
 \alias{timegrid}
 \alias{roundPOSIXt}
 \title{
   Handling and Manipulating Dates and Times
 }
 \description{
-    Functions that help to manipulate vectors that inherits from class
-  \code{POSIXt}. If times are returned, they are typically of class POSIXct.
+  
+  Functions for manipulating vectors that inherits from class
+  \code{POSIXt} or \code{Date}. If times are returned, they are
+  typically of class POSIXct.
 
 }
 \usage{
@@ -27,50 +30,71 @@ isWeekend(x)
 firstOfMonth(x)
 endOfMonth(x)
 endOfPreviousMonth(x)
-setDayOfMonth(x)
+dayOfMonth(x)
+dayOfMonth(x) <- value
+
 }
 \arguments{
 
   \item{from}{
-    POSIXt
+    a vector of length one that inherits from class \code{\link{POSIXt}}
   }
   \item{to}{
-    POSIXt
+    a vector of length one that inherits from class \code{\link{POSIXt}}
   }
   \item{interval}{
-    a character string like \dQuote{num units}, in which \code{num} is a
-    number, and \code{units} is sec, min, hour or day
+    
+    A character string like \dQuote{\code{num} \code{units}}, in which
+    \code{num} is a number, and \code{units} is \code{sec}, \code{min},
+    \code{hour} or \code{day}.
+
   }
   \item{excludeWeekends}{
-    logical: default is \code{TRUE}
+    logical; default is \code{TRUE}
   }
   \item{fromHHMMSS}{
-    a character vector of length one like \dQuote{HHMMSS}
+    
+    A character vector of length one like
+    \dQuote{\code{HHMMSS}}. Times-of-day earlier than \code{HHMMSS} are
+    excluded from the grid.
+
   }
   \item{toHHMMSS}{
-    a character vector of length one like \dQuote{HHMMSS}
+
+    A character vector of length one like
+    \dQuote{\code{HHMMSS}}. Times-of-day later than \code{HHMMSS} are
+    excluded from the grid.
+
   }
   \item{holidays}{
-    a vector of class \code{\link{Date}} or a character vector in a format that
-    is understood by \code{\link{as.Date}}
+
+    A vector of class \code{\link{Date}}, or a character vector in a format that
+    is understood by \code{\link{as.Date}}, or anything that can be
+    coerced to class \code{Date} by \code{\link{as.Date}} (eg, \code{\link{POSIXt}}).
+
   }
   \item{t}{
-    a vector that inherits from class \code{POSIXt}
+    a vector of length one that inherits from class \code{\link{POSIXt}}
   }
   \item{x}{
     a vector of class \code{Date}
   }
+  \item{value}{
+    a vector of integers
+  }
 }
 \details{
-  Some of these functions are currently horribly inefficient, and their
-  interfaces will likely change.
+
+  Some of these functions are currently quite inefficient, and their
+  interfaces may change.
 
   \code{roundPOSIXt} rounds to down to the specified interval.
 
 }
 \value{
-  Date in, date out.
-  A vector of class \code{POSIXct}.
+  
+  Vectors of class \code{Date} or \code{POSIXct}; \code{isWeekend}
+  returns \code{TRUE} or \code{FALSE}.
 
 }
 \references{
@@ -85,7 +109,6 @@ setDayOfMonth(x)
 \code{\link{DateTimeClasses}}
 }
 \examples{
-
 from <- as.POSIXct("2012-04-30 08:00:00")
 to   <- as.POSIXct("2012-05-04 22:00:00")
 res  <- timegrid(from, to, interval = "1 hour",

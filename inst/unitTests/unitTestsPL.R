@@ -165,4 +165,9 @@ test.PL <- function() {
                     0.00970873786407767, 0.00961538461538458))
 
     }
+
+    prices <- c(1,2,1,3); notional <- c(1,-1,1,-1)
+    symbols <- c("A","A","BB","BB")
+    PL(notional, prices)
+    PL(notional, prices, symbols)
 }

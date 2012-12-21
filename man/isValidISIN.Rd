@@ -15,13 +15,16 @@ isValidISIN(isin)
   }
 }
 \details{  
+
   Checks a character vector of \acronym{ISIN}s. The function returns
   \code{TRUE} if the \acronym{ISIN} is valid; else \code{FALSE}.
+
 }
 \value{
   a logical vector
 }
 \references{
+  \url{http://en.wikipedia.org/wiki/ISO_6166}
   \url{http://www.anna-web.com/index.php/home/isinsaiso6166}
 }
 \author{
