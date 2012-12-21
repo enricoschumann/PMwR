@@ -1,10 +1,10 @@
 \name{Mailtools}
 \alias{saveAttachment}
 \title{
-Functions to handle emails
+  Tools for Email Handling
 }
 \description{
-Functions that help with emails
+  Tools for Email Handling
 }
 \usage{
 saveAttachment(pattern, fname, writeIfExists = TRUE, adjustfn = TRUE)
@@ -12,7 +12,7 @@ saveAttachment(pattern, fname, writeIfExists = TRUE, adjustfn = TRUE)
 
 \arguments{
   \item{pattern}{
-    the attachment to find. Can be a reg exp.
+    the attachment to find. Can be a regular expression.
 }
   \item{fname}{
 the mbox file
@@ -26,17 +26,25 @@ the mbox file
 
 }
 \details{
-The function will load the whole mbox file into memory.
+  
+The function is currently only tested with mbox files (which is the
+format that Thunderbird uses, or the format of \code{nnfolders} in
+Gnus. The function will load the whole mbox file into memory, which may
+not work very well if the file is large.
+
 }
 \value{
-Called for its side effect.
+  
+  The function is called for its side effect. It returns a character
+  vector of matched attachment names.
+
 }
 \references{
-  ES -- PM with R
+  http://www.gnu.org/software/emacs/manual/html_node/gnus/Mail-Folders.html
 }
 \author{
   Enrico Schumann
 }
 \examples{
-1+1
+## to be added
 }

@@ -1,8 +1,8 @@
 Package: PMwR
 Type: Package
 Title: Functions for 'Portfolio Management with R'
-Version: 0.1-4
-Date: 2012-12-20
+Version: 0.1-5
+Date: 2012-12-21
 Author: Enrico Schumann
 Maintainer: Enrico Schumann <es@enricoschumann.net>
 Description: Functions and examples for 'Portfolio Management with R':

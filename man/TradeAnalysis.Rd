@@ -1,10 +1,12 @@
 \name{TradeAnalysis}
+\alias{PLsorted}
+\alias{PL}
+\alias{closeOnFirst}
+\alias{limit}
+\alias{returns}
+\alias{scaleToUnity}
 \alias{scaleTrades}
 \alias{splitTrades}
-\alias{PL}
-\alias{PLsorted}
-\alias{returns}
-\alias{limit}
 \title{
   Analysing Trades
 }
@@ -24,6 +26,8 @@ scaleTrades(notional, prices, tradetimes, aggregate = FALSE, fun = NULL,
 splitTrades(notional, prices, tradetimes, aggregate = FALSE)
 
 limit(trade, lim, tol = 0.00000001)
+scaleToUnity(n)
+closeOnFirst(n)
 }
 \arguments{
   \item{notional}{

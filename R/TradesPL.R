@@ -311,15 +311,13 @@ drawdown <- function(v, relative = TRUE) {
          lowPosition = troughTime)
 }
 monthlyStats <- function(x, t = NULL) {
-    if (!is.null(dim(x))&&dim(x)[2L]>1L)
-        stop("'x' must be a _vector_ of class zoo")
-    if (!is.zoo(x))
-        stop("'x' must be a vector of class _zoo_")
+    if (!is.null(dim(x)) && dim(x)[2L] > 1L)
+        stop("'x' must be a vector")
 
     returns <- function(x)
         diff(x)/x[-1L]
 
-    x.eom <- aggregate(x, strftime(index(x), "%Y%m"), tail,1)
+    x.eom <- aggregate(x, strftime(index(x), "%Y%m"), tail, 1)
     ult.dates <- endOfMonth(index(x))
     x.eom <- zoo(x.eom, unique(ult.dates))
 
@@ -330,6 +328,30 @@ monthlyStats <- function(x, t = NULL) {
     res <- list(index = x.eom/coredata(x.eom[1L]),
                 returns = returns(x.eom))
 }
+
+finalObs(x, t = NULL, period = "month", missing = "NA") {
+    if (is.null(t)) {
+        if (!inherits(x, "zoo"))
+            stop(sQuote("t"), " not supplied, so ", sQuote("x"), 
+                 " must inherit from class ", sQuote("zoo"))
+        t <- index(x)
+        x <- coredata(x)
+    }
+    getLast <- function(x, by) {
+        lby <- length(by)
+        rby <- by[lby:1L]
+        x[lby - match(unique(by), rby) + 1L]
+    }
+
+    if (period == "month")
+        by <- strftime(t, "%Y%m")
+    getLast(x, by)
+}
+
+
+
+
+
 returns <- function(x, pad = NULL) {
     n <- NROW(x)
     do.pad <- !is.null(pad)
@@ -340,7 +362,7 @@ returns <- function(x, pad = NULL) {
             rets <- c(pad, rets)
     } else {
         x <- as.matrix(x)
-        rets <- x[2:n, ] / x[seq_len(n-1), ] - 1
+        rets <- x[2:n, ] / x[seq_len(n - 1L), ] - 1
         if (do.pad)
             rets <- rbind(pad, rets)
     }
