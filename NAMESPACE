@@ -5,7 +5,7 @@ export(
     closeOnFirst,
     dayOfMonth,
     drawdown,
-    endOfMonth
+    endOfMonth,
     isValidISIN,
     isWeekend,
     limit,

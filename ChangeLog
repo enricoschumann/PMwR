@@ -2,6 +2,10 @@
 
 	* DESCRIPTION (Version): 0.1-5
 
+	* man/drawdown.Rd: small corrections
+
+	* man/computeMonthlyStats.Rd: small corrections
+
 	* NAMESPACE: export endOfMonth, scaleToUnity and closeOnFirst
 
 	* R/TradesPL.R (finalObs): added function (not yet exported)

@@ -329,7 +329,7 @@ monthlyStats <- function(x, t = NULL) {
                 returns = returns(x.eom))
 }
 
-finalObs(x, t = NULL, period = "month", missing = "NA") {
+finalObs <- function(x, t = NULL, period = "month", missing = "NA") {
     if (is.null(t)) {
         if (!inherits(x, "zoo"))
             stop(sQuote("t"), " not supplied, so ", sQuote("x"), 

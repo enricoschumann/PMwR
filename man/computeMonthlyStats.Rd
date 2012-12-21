@@ -1,16 +1,17 @@
 \name{monthlyStats}
 \alias{monthlyStats}
 \title{
-  Monthly returns}
+  Monthly Statistics
+}
 \description{
-  compute monthly returns
+  Compute monthly returns.
 }
 \usage{
 monthlyStats(x, t = NULL)
 }
 \arguments{
   \item{x}{
-    a zoo series or a vector
+    a vector (or a \code{zoo} series)
   }
   \item{t}{
     time vector
@@ -23,11 +24,8 @@ monthlyStats(x, t = NULL)
 \value{
   a list
   \item{index}{scaled performance}
-  \item{returns}{monthyl returns}
+  \item{returns}{monthly returns}
 
-}
-\references{
-  GMS
 }
 \author{
   Enrico Schumann

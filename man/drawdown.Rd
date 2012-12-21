@@ -13,7 +13,7 @@ drawdown(v, relative = TRUE)
 }
 \arguments{
   \item{v}{
-    a price series (returns)
+    a price series
   }
   \item{relative}{
     if \code{TRUE}, maximum drawdown is chosen according to percentage
@@ -32,13 +32,16 @@ drawdown(v, relative = TRUE)
   \item{lowPosition}{position of \code{low}}
 }
 \references{
-  GMS
+
+  Gilli, M., Maringer, D. and Schumann, E. (2011) \emph{Numerical
+    Methods and Optimization in Finance}. Elsevier.
+    \url{http://www.elsevierdirect.com/product.jsp?isbn=9780123756626}
+
 }
 \author{
   Enrico Schumann
 }
-
 \examples{
-v <- cumprod(1+rnorm(20)*0.02)
+v <- cumprod(1 + rnorm(20) * 0.02)
 drawdown(v)
 }
