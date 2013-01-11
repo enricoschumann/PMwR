@@ -1,5 +1,10 @@
 2012-12-21  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/TradesPL.R (lastIndex,firstIndex): added lastIndex and
+	firstIndex
+
+2012-12-21  Enrico Schumann  <es@enricoschumann.net>
+
 	* DESCRIPTION (Version): 0.1-5
 
 	* man/drawdown.Rd: small corrections

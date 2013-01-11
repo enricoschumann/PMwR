@@ -347,7 +347,16 @@ finalObs <- function(x, t = NULL, period = "month", missing = "NA") {
         by <- strftime(t, "%Y%m")
     getLast(x, by)
 }
-
+lastIndex <- function(t) {
+    by <- strftime(t, "%Y%m%d")
+    lby <- length(by)
+    rby <- by[lby:1L]
+    lby - match(unique(by), rby) + 1L
+}
+firstIndex <- function(t) {
+    by <- strftime(t, "%Y%m%d")
+    match(unique(by), by)
+}
 
 
 
