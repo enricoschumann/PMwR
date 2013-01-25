@@ -17,24 +17,40 @@ test.PL <- function() {
     allprices <- 100:105
     alltimes  <- 1:6
     times <- 1; notional <- 2; prices <- 100
-    PLsorted(notional, prices, tradetimes = times,
+    tmp <- PLsorted(notional, prices, tradetimes = times,
              alltimes = alltimes, allprices = allprices)
+    checkEquals(tail(tmp$wealth, 1L), 10)
 
 
     ## case 3: buy in last period
     allprices <- 100:105
     alltimes  <- 1:6
     times <- 6; notional <- 2; prices <- 100
-    PLsorted(notional, prices, tradetimes = times,
-             alltimes = alltimes, allprices = allprices)
+    is <- PLsorted(notional, prices, tradetimes = times,
+                   alltimes = alltimes, allprices = allprices)
+    should <- structure(list(time = 1:6,
+                             prices = c(100, 101, 102, 103, 104, 100),
+                             notional = c(0, 0, 0, 0, 0, 2),
+                             position = c(0, 0, 0, 0, 0, 2),
+                             cash = c(0, 0, 0, 0, 0, -200),
+                             cashposition = c(0, 0, 0, 0, 0, -200),
+                             wealth = c(0, 0, 0, 0, 0, 0)),
+                        .Names = c("time", "prices", "notional", "position",
+                        "cash", "cashposition", "wealth"))
+    checkEquals(is, should)
 
+    
     ## case 4: buy several times in first period
     allprices <- 100:105
     alltimes  <- 1:6
     times <- c(1,1); notional <- c(1,1); prices <- c(100.2, 100.5)
-    PLsorted(notional, prices, tradetimes = times,
+    tmp <- PLsorted(notional, prices, tradetimes = times,
              alltimes = alltimes, allprices = allprices)
-
+    checkEquals(tail(tmp$wealth, 1L),
+                PL(c(notional, -sum(notional)),
+                   c(prices, tail(allprices, 1L)))$PLtotal)
+    
+    
     ## case 5: buy several times in one period
     allprices <- 100:105
     alltimes  <- 1:6
@@ -50,7 +66,7 @@ test.PL <- function() {
     alltimes  <- 1:6
     times <- c(1,1); notional <- c(1,-1)
     prices <- c(100, 101)
-    PL(notional, prices)
+    ##PL(notional, prices)
     checkEquals(tail(PLsorted(notional, prices)$wealth, 1L),
                 PL(notional, prices)$PLtotal)
     checkEquals(tail(PLsorted(notional, prices,
@@ -64,9 +80,9 @@ test.PL <- function() {
     alltimes  <- 1:6
     times <- c(1,1,2,3); notional <- c(1,-1,1,-1)
     prices <- c(100, 101, 101,102)
-    PLsorted(notional, prices, tradetimes = times,
-             alltimes = alltimes, allprices = allprices)
-    PL(notional, prices)
+    ## PLsorted(notional, prices, tradetimes = times,
+    ##          alltimes = alltimes, allprices = allprices)
+    ## PL(notional, prices)
     checkEquals(tail(PLsorted(notional, prices)$wealth, 1L),
                 PL(notional, prices)$PLtotal)
 
@@ -75,9 +91,9 @@ test.PL <- function() {
     alltimes  <- 1:6
     times <- c(1, 1, 1, 1, 3); notional <- c(-0.2, -0.1, 1, 0.4, -1.1)
     prices <- c(101, 101, 101, 101,102)
-    PLsorted(notional, prices, tradetimes = times,
-             alltimes = alltimes, allprices = allprices)
-    PL(notional, prices)
+    ## PLsorted(notional, prices, tradetimes = times,
+    ##          alltimes = alltimes, allprices = allprices)
+    ## PL(notional, prices)
     checkEquals(tail(PLsorted(notional, prices)$wealth, 1L),
                 PL(notional, prices)$PLtotal)
     checkEquals(tail(PLsorted(notional, prices,tradetimes = times,
@@ -117,9 +133,6 @@ test.PL <- function() {
                               alltimes  = times,
                               allprices = p)$wealth, 1L),
                 PL(n,p)$PLtotal)
-
-
-
 
 
 
