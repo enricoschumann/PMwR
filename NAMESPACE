@@ -6,6 +6,8 @@ export(
     dayOfMonth,
     drawdown,
     endOfMonth,
+    firstOfMonth,
+    firstOfPreviousMonth,
     isValidISIN,
     isWeekend,
     limit,
