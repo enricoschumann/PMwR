@@ -2,6 +2,8 @@
 
 	* R/Datetimetools.R (lastWeekday): added (not exported yet)
 
+	* inst/unitTests/unitTestsDateTime.R: added file
+
 2013-02-11  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/TradesPL.R (PLfun): added 'fast' argument
