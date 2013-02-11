@@ -262,3 +262,13 @@ plotTradingHours <- function(x, t = NULL,
              timegrid = grd)
     }
 }
+lastWeekday <- function(weekday, date, shift = 0L) {
+    if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
+        stop("input must inherit from class Date or POSIXt")
+    tmp <- as.POSIXlt(x)
+    tmp$mon <- tmp$mon + 1L
+    tmp$mday <- 1L
+    ldate <- as.Date(tmp) - 1L
+    lweekday <- as.POSIXlt(ldate)$wday
+    ldate - (lweekday - weekday)%%7L - (shift*7L)
+}

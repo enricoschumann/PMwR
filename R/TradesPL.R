@@ -1,33 +1,49 @@
-PL <- function(notional, prices, symbols = NULL, tol = 1e-10) {
-    noPL <- FALSE
-    if (any(abs(notional) < tol))
-        warning("zero notional")
-    PLfun <- function(notional, prices, tol) {
-        if (abs(sum(notional)) > tol) {
-            warning("Sum of notional is not zero; cannot compute PnL.")
-            noPL <- TRUE
+PL <- function(notional, prices, symbols = NULL, tol = 1e-10, fast = FALSE) {
+    if (fast) {
+        if (length(notional) > 1000L)
+            p <- -drop(crossprod(notional, prices)) else
+        p <- -sum(notional * prices)
+        asum <- sum(abs(notional))
+        list(averagePriceBuy  = NA,
+             averagePriceSell = NA,
+             PLtotal = p,
+             PLperContract = p/asum*2,
+             absNotional = asum)        
+    } else {        
+        if (any(abs(notional) < tol))
+            warning("zero notional")
+        PLfun <- function(notional, prices, tol) {
+            if (abs(sum(notional)) > tol) {
+                warning("Sum of notional is not zero; cannot compute PnL.")
+                noPL <- TRUE
+            } else
+                noPL <- FALSE
+            sel  <- notional < 0L   
+            buy  <- notional > 0L
+            nbuy <- notional[buy] 
+            nsel <- notional[sel]
+            nbuySum <- sum(nbuy)
+            nselSum <- sum(nsel)
+            abuy <- sum(prices[buy] * nbuy)/nbuySum
+            asel <- sum(prices[sel] * nsel)/nselSum
+            PL <- (asel - abuy)*nbuySum
+            list(averagePriceBuy  = if (is.finite(abuy)) abuy else NA,
+                 averagePriceSell = if (is.finite(asel)) asel else NA,
+                 PLtotal = ifelse(noPL, NA, PL),
+                 PLperContract = ifelse(noPL, NA, PL/nbuySum),
+                 absNotional = nbuySum-nselSum)
         }
-        sel <- notional < 0L
-        buy <- notional > 0L
-        abuy  <- sum(prices[buy] * notional[buy]) / sum(notional[buy])
-        asel <- sum(prices[sel] * notional[sel]) / sum(notional[sel])
-        PL <- (asel - abuy)*sum(notional[buy])
-        list(averagePriceBuy  = ifelse(is.finite(abuy), abuy, NA),
-             averagePriceSell = ifelse(is.finite(asel), asel, NA),
-             PLtotal = ifelse(noPL, NA, PL),
-             PLperContract = ifelse(noPL, NA, PL/sum(notional[buy])),
-             absNotional = sum(abs(notional)))
-    }
-    if (is.null(symbols)) {
-        PLfun(notional, prices, tol)
-    } else {
-        slist <- unique(sort(symbols))
-        res <- vector("list", length=length(slist))
-        names(res) <- slist
-        for (s in slist)
-            res[[s]] <- PLfun(notional[s == symbols],
-                              prices[s == symbols], tol)
-        res
+        if (is.null(symbols)) {
+            PLfun(notional, prices, tol)
+        } else {
+            slist <- unique(sort(symbols))
+            res <- vector("list", length=length(slist))
+            names(res) <- slist
+            for (s in slist)
+                res[[s]] <- PLfun(notional[s == symbols],
+                                  prices[  s == symbols], tol)
+            res
+        }
     }    
 }
 PLsorted <- function(notional, prices,

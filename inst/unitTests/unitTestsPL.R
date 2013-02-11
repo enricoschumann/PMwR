@@ -1,5 +1,14 @@
-
 test.PL <- function() {
+    n <- c(1,1,-3,1)
+    p <- c(100,100,102,100)
+    ans1 <- PL(n,p)
+    ans2 <- PL(n,p, fast = TRUE)
+    checkTrue(all(unlist(ans1)[3:5] == unlist(ans2)[3:5]))
+
+
+}
+
+test.PLsorted <- function() {
 
     ## case 1
     times <- c(3,1,4); notional <- c(-1,2,-1); prices <- c(102,100,103)
@@ -184,3 +193,4 @@ test.PL <- function() {
     PL(notional, prices)
     PL(notional, prices, symbols)
 }
+
