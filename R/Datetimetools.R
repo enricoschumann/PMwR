@@ -33,11 +33,11 @@ firstOfMonth <- function (x) {
     tmp$mday <- 1L
     as.Date(tmp)
 }
-endOfMonth <- function(x) {
+endOfMonth <- function(x, shift = 0L) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
         stop("input must inherit from class Date or POSIXt")
     tmp <- as.POSIXlt(x)
-    tmp$mon <- tmp$mon + 1
+    tmp$mon <- tmp$mon + 1 + shift
     tmp$mday <- 1L
     as.Date(tmp) - 1
 }
@@ -67,7 +67,6 @@ dayOfMonth <- function(x) {
         tmp
 }
     
-
 timegrid <- function(from, to, interval,
                      excludeWeekends = TRUE,
                      holidays   = NULL,
@@ -262,7 +261,9 @@ plotTradingHours <- function(x, t = NULL,
              timegrid = grd)
     }
 }
-lastWeekday <- function(weekday, date, shift = 0L) {
+
+lastWeekday <- function(weekday, date, shift = 0L,
+                        period = "month", before, inclusive = TRUE) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
         stop("input must inherit from class Date or POSIXt")
     tmp <- as.POSIXlt(x)

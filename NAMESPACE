@@ -1,15 +1,18 @@
 export(
     "dayOfMonth<-",
-    PL, PLsorted,
+    PL,
+    PLsorted,
+    backtest,
     char2num,
     closeOnFirst,
     dayOfMonth,
     drawdown,
     endOfMonth,
+    endOfPreviousMonth,
     firstOfMonth,
-    firstOfPreviousMonth,
     isValidISIN,
     isWeekend,
+    lastWeekday,
     limit,
     monthlyStats,
     nextBusinessDay,
@@ -23,7 +26,6 @@ export(
     scaleToUnity,
     scaleTrades,
     splitTrades,
-    timegrid,
-    backtest
+    timegrid
     )
 useDynLib(PMwR)

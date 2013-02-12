@@ -1,3 +1,12 @@
+2013-02-12  Enrico Schumann  <es@vipag.com>
+
+	* DESCRIPTION (Version): 0.1-6
+
+	* NAMESPACE: added lastWeekday
+
+	* R/Datetimetools.R (lastWeekday): added arguments 'period =
+	"month", before, inclusive = TRUE'
+
 2013-02-11  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/Datetimetools.R (lastWeekday): added (not exported yet)

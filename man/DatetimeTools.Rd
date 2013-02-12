@@ -1,14 +1,15 @@
 \name{DatetimeTools}
-\alias{previousBusinessDay}
-\alias{nextBusinessDay}
-\alias{isWeekend}
-\alias{firstOfMonth}
+\alias{dayOfMonth<-}
+\alias{dayOfMonth}
 \alias{endOfMonth}
 \alias{endOfPreviousMonth}
-\alias{dayOfMonth}
-\alias{dayOfMonth<-}
-\alias{timegrid}
+\alias{firstOfMonth}
+\alias{isWeekend}
+\alias{lastWeekday}
+\alias{nextBusinessDay}
+\alias{previousBusinessDay}
 \alias{roundPOSIXt}
+\alias{timegrid}
 \title{
   Handling and Manipulating Dates and Times
 }
@@ -28,7 +29,7 @@ previousBusinessDay(x, holidays = NULL)
 nextBusinessDay(x, holidays = NULL)
 isWeekend(x)
 firstOfMonth(x)
-endOfMonth(x)
+endOfMonth(x, shift = 0L)
 endOfPreviousMonth(x)
 dayOfMonth(x)
 dayOfMonth(x) <- value
@@ -82,12 +83,23 @@ dayOfMonth(x) <- value
   \item{value}{
     a vector of integers
   }
+  \item{shift}{
+    a vector of integers
+  }
 }
 \details{
 
   Some of these functions are currently quite inefficient, and their
   interfaces may change.
 
+  \code{previousBusinessDay} takes a \code{\link{Date}} \code{x} and
+  returns the last non-weekend day before.
+
+  \code{endOfMonth} returns the last calendar day of a given month. If
+  \code{shift} is positive, then shift \code{months} into the future; if
+  negative, the end of previous months. (\code{endOfMonth(x, -1)} is
+  equivalent to \code{endOfPreviousMonth(x)}.
+  
   \code{roundPOSIXt} rounds to down to the specified interval.
 
 }
