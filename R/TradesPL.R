@@ -374,9 +374,6 @@ firstIndex <- function(t) {
     match(unique(by), by)
 }
 
-
-
-
 returns <- function(x, pad = NULL) {
     n <- NROW(x)
     do.pad <- !is.null(pad)
@@ -393,3 +390,34 @@ returns <- function(x, pad = NULL) {
     }
     rets
 }
+
+twExposure <- function(notional, tradetimes, start, end, abs.value = TRUE) {
+    if (missing(start))
+        start <- min(tradetimes)
+    else {
+        tradetimes <- c(start, tradetimes)
+        notional <- c(0, notional)
+    }
+    if (missing(end))
+        end <- max(tradetimes)
+    else {
+        tradetimes <- c(tradetimes, end)
+        notional <- c(notional,0)
+    }
+
+    n <- cumsum(notional)[-length(notional)]
+    if (abs.value)
+        n <- abs(n)
+    sum(n * diff(as.numeric(tradetimes)))/
+        (as.numeric(end)-as.numeric(start))
+}
+
+
+n <- c(2,-2,-1,1)
+cumsum(n)
+
+st <- Sys.time()
+tradetimes <- c(st-20, st, st+10, st+30)
+twExposure(n, tradetimes)
+twExposure(n, tradetimes, st-60)
+twExposure(n, tradetimes, end=st+100)
