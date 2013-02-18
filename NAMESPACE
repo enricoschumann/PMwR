@@ -26,6 +26,7 @@ export(
     scaleToUnity,
     scaleTrades,
     splitTrades,
-    timegrid
+    timegrid,
+    twExposure    
     )
 useDynLib(PMwR)
