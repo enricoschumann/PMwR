@@ -1,3 +1,9 @@
+2013-02-20  Enrico Schumann  <es@enricoschumann.net>
+
+	* vignettes/PL.Rnw: added example for twExposure
+
+	* inst/unitTests/unitTestsPL.R (test.twExposure): added unit test
+
 2013-02-18  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Date): 0.1-7

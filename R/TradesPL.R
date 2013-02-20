@@ -413,11 +413,11 @@ twExposure <- function(notional, tradetimes, start, end, abs.value = TRUE) {
 }
 
 
-n <- c(2,-2,-1,1)
-cumsum(n)
+## n <- c(2,-2,-1,1)
+## cumsum(n)
 
-st <- Sys.time()
-tradetimes <- c(st-20, st, st+10, st+30)
-twExposure(n, tradetimes)
-twExposure(n, tradetimes, st-60)
-twExposure(n, tradetimes, end=st+100)
+## st <- Sys.time()
+## tradetimes <- c(st-20, st, st+10, st+30)
+## twExposure(n, tradetimes)
+## twExposure(n, tradetimes, st-60)
+## twExposure(n, tradetimes, end=st+100)

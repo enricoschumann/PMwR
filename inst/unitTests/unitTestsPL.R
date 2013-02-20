@@ -194,3 +194,9 @@ test.PLsorted <- function() {
     PL(notional, prices, symbols)
 }
 
+
+test.twExposure <- function() {
+    n <- c(1,3,-3,1,-3,1)
+    t <- c(0,1,3,4,7,12)    
+    checkEqualsNumeric(twExposure(n,t), 1.75)        
+}

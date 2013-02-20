@@ -404,27 +404,12 @@ backtest  <- function(prices,             ## matrices
 }
 
 
- ,IBIS , ,EUR ,,4085.75 ,8.711    ,-269.75 ,0.00    ,No ,STK
- ,IBIS , ,EUR ,,1913.76 ,61.435   ,-52.16  ,0.00    ,No ,STK
- ,IBIS , ,EUR ,,3025.13 ,33.69444 ,-7.37   ,0.00    ,No ,STK
- ,IBIS , ,EUR ,,2907.90 ,24.21333 ,2.30    ,0.00    ,No ,STK
- ,IBIS , ,EUR ,,2070.50 ,102.80   ,14.50   ,0.00    ,No ,STK
- ,IBIS , ,EUR ,,3026.34 ,88.11765 ,30.34   ,0.00    ,No ,STK
- ,IBIS , ,EUR ,,1055.44 ,63.37    ,41.52   ,0.00    ,No ,STK
- ,IBIS , ,EUR ,,3221.02 ,60.53163 ,254.97  ,0.00    ,No ,STK
- ,IBIS , ,EUR ,,0.00    ,null     ,null    ,-76.20  ,No ,STK
- ,IBIS , ,EUR ,,0.00    ,null     ,null    ,-162.64 ,No ,STK
 
+## s <- c("DTE"  ,"SAP"  ,"SDF"  ,"MEO"  ,"MRKK" ,"FRE"  ,"HEN3" ,"BEI"  ,"LIN"  ,"FME")
 
-EXHB,IBIS,80,EUR,95.245,7619.60,96.67658,-114.53,0.00,No,STK
-
-
-
-s <- c("DTE"  ,"SAP"  ,"SDF"  ,"MEO"  ,"MRKK" ,"FRE"  ,"HEN3" ,"BEI"  ,"LIN"  ,"FME")
-
-current <- c(500,32 ,90 ,120,20 ,34 ,16 ,49 ,0  ,0)
-target  <- c(0.2,0.2,0,0,0,0,0,0,0,0)
-prices <- c(8.1715 ,59.805 ,33.6125 ,24.2325 ,103.525 ,89.01 ,65.965 ,65.735 ,132.175 ,52.015)
+## current <- c(500,32 ,90 ,120,20 ,34 ,16 ,49 ,0  ,0)
+## target  <- c(0.2,0.2,0,0,0,0,0,0,0,0)
+## prices <- c(8.1715 ,59.805 ,33.6125 ,24.2325 ,103.525 ,89.01 ,65.965 ,65.735 ,132.175 ,52.015)
 
 
 
@@ -442,4 +427,4 @@ rebalance <- function(current, target, prices, notional, w.target = TRUE, names 
                      check.names = FALSE))
     ans    
 }
-rebalance(current, target, prices, notional = 50000, names= s)
+##rebalance(current, target, prices, notional = 50000, names= s)
