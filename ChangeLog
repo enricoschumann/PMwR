@@ -1,3 +1,7 @@
+2013-02-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/classes.R (print.Tradelist): now shows also instrument
+
 2013-02-20  Enrico Schumann  <es@enricoschumann.net>
 
 	* vignettes/PL.Rnw: added example for twExposure
