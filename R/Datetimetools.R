@@ -252,7 +252,11 @@ plotTradingHours <- function(x, t = NULL,
             do.call("axis", axis1.par)
         if (length(ablinev.par) && !is.na(ablinev.par))
             do.call("abline", ablinev.par)
-        NULL
+        list(t = seq_len(length(grd))[rx],
+             x = values[ri],
+             axis.pos = pos,
+             axis.labels = format(grd[pos], fmt),
+             timegrid = grd)
     } else {
         list(t = seq_len(length(grd))[rx],
              x = values[ri],

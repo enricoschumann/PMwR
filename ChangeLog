@@ -1,3 +1,7 @@
+2013-03-07  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/Datetimetools.R: returns coordinates even when plotting
+
 2013-02-28  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/classes.R (print.Tradelist): now shows also instrument
@@ -12,7 +16,7 @@
 
 	* DESCRIPTION (Date): 0.1-7
 
-	* NAMESPACE: twExpsoure exported
+	* NAMESPACE: twExposure exported
 
 	* R/classes.R (PLsorted): added Tradelist function; experimental:
 	PLsorted as generic
