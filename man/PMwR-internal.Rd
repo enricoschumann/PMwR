@@ -2,6 +2,8 @@
 \alias{PMwR-internal}
 \alias{makeHHMMSS}
 \alias{wait}
+\alias{first}
+\alias{last}
 \title{Internal functions in the PMwR package}
 \description{
   Several internal functions, not exported from the \pkg{PMwR} name space.
@@ -9,6 +11,8 @@
 \usage{
 makeHHMMSS(x, label = "time specification (HHMMSS)")
 wait(x)
+first(x, by, index = FALSE)
+last(x, by, index = FALSE)
 }
 \details{
 
@@ -20,10 +24,16 @@ wait(x)
   vector, a uniform random variate between \code{min(x)} and
   \code{max(x)} is passed to \code{\link{Sys.sleep}}.
 
+  
 }
 
 \author{
   Enrico Schumann
 }
 
+\examples{
+dates <- seq(as.Date("2012-01-01"), as.Date("2013-02-05"), by = "1 day")
+last(dates,  by = format(dates, "%Y%m"))
+first(dates, by = format(dates, "%Y%m"))
+}
 \keyword{internal}

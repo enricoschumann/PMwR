@@ -12,7 +12,7 @@ previousBusinessDay <- function (x, holidays = NULL) {
 nextBusinessDay <- function(x, holidays = NULL) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
         stop("input must inherit from class Date or POSIXt")
-    x <- x + 1
+    x <- x + 1L
     tmp <- as.POSIXlt(x)
     tmpi <- tmp$wday == 6L
     x[tmpi] <- x[tmpi] + 2L
@@ -37,16 +37,16 @@ endOfMonth <- function(x, shift = 0L) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
         stop("input must inherit from class Date or POSIXt")
     tmp <- as.POSIXlt(x)
-    tmp$mon <- tmp$mon + 1 + shift
+    tmp$mon <- tmp$mon + 1L + shift
     tmp$mday <- 1L
-    as.Date(tmp) - 1
+    as.Date(tmp) - 1L
 }
 endOfPreviousMonth <- function(x) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
         stop("input must inherit from class Date or POSIXt")
     tmp <- as.POSIXlt(x)
     tmp$mday <- 1L
-    as.Date(tmp) - 1
+    as.Date(tmp) - 1L
 }
 dayOfMonth <- function(x) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
@@ -66,7 +66,6 @@ dayOfMonth <- function(x) {
     else 
         tmp
 }
-    
 timegrid <- function(from, to, interval,
                      excludeWeekends = TRUE,
                      holidays   = NULL,
@@ -75,9 +74,9 @@ timegrid <- function(from, to, interval,
 
     fromHHMMSS <- makeHHMMSS(fromHHMMSS)
     toHHMMSS   <- makeHHMMSS(toHHMMSS)
-
+    
     if (!inherits(from, "POSIXt") || !inherits(to, "POSIXt"))
-        stop("'from' and 'to' must inherit from 'POSIXt'")
+        stop(sQuote("from"), " and ", sQuote("to"), " must inherit from POSIXt")
     grd <- seq(from, to, by = interval)
     if (!is.null(holidays)) {
         if (!inherits(holidays, "Date")) {
@@ -85,14 +84,13 @@ timegrid <- function(from, to, interval,
         }
         grd <- grd[!(as.Date(grd) %in% holidays)]
     }
-    grd <- as.POSIXlt(grd)
-    grd <- grd[grd$wday > 0L & grd$wday < 6L] ## remove weekends
-    tmp <- paste(sprintf("%02d",grd$hour),
-                 sprintf("%02d",grd$min),
-                 sprintf("%02d",grd$sec), sep = "")
-    grd <- grd[fromHHMMSS <= tmp & toHHMMSS >= tmp]
+    lt <- as.POSIXlt(grd)
+    tmp <- lt$hour*10000 + lt$min*100 + lt$sec
+    grd <- grd[lt$wday > 0L & lt$wday < 6L &
+               as.numeric(fromHHMMSS) <= tmp & as.numeric(toHHMMSS) >= tmp] 
     as.POSIXct(grd)
 }
+
 roundPOSIXt <- function(t, interval) {
 
     if (!inherits(t, "POSIXct"))
@@ -121,19 +119,10 @@ plotTradingHours <- function(x, t = NULL,
                              ...,
                              from = NULL, to = NULL,
                              do.plot = TRUE, do.lines = FALSE,
-                             ppar = list(),
-                             axis1.par = list(),
-                             axis2.par = list(),
-                             ablineh.par = list(),
-                             ablinev.par = list()) {
-
-    ## par
-    ppar.def <- list(tck = 0.001, mgp = c(3,1,0.5), bty = "n")
-    ppar.def[names(ppar)] <- ppar
-    ppar <- ppar.def
+                             axis1.par = list()) {
 
     ## plot
-    plot.par.def <- list(type = "l", xaxt = "n", yaxt = "n",
+    plot.par.def <- list(type = "l", xaxt = "n",
                          xlab = "", ylab = "")
     tmp <- list(...)
     plot.par.def[names(tmp)] <- tmp
@@ -147,37 +136,14 @@ plotTradingHours <- function(x, t = NULL,
 
     ## axis1
     axis1.par.def <- list(1, at = quote(pos),
-                          labels = quote(format(grd[pos], fmt)), lwd = 0,
-                          col = grey(.5), col.axis=grey(.5))
+                          labels = quote(format(grd[pos], fmt)))
     axis1.par.def[names(axis1.par)] <- axis1.par
     axis1.par <- axis1.par.def
 
-    ## axis2
-    axis2.par.def <- list(2, at = quote(axTicks(2L)),
-                          labels = quote(round(axTicks(2L),3)),
-                          las = 2, lwd = 0, col = grey(0.5),
-                          col.axis = grey(0.5))
-    axis2.par.def[names(axis2.par)] <- axis2.par
-    axis2.par <- axis2.par.def
-
-    ## ablineh.par
-    if (length(ablineh.par)==0L || !is.na(ablineh.par)) {
-        ablineh.par.def <- list(h = quote(axTicks(2)), lty=3, col=grey(0.5))
-        ablineh.par.def[names(ablineh.par)] <- ablineh.par
-        ablineh.par <- ablineh.par.def
-    }
-
-    ## ablinev.par
-    if (length(ablinev.par)==0L || !is.na(ablinev.par)) {
-        ablinev.par.def <- list(v = quote(pos), col = grey(0.5), lty = 3)
-        ablinev.par.def[names(ablinev.par)] <- ablinev.par
-        ablinev.par <- ablinev.par.def
-    }
-
     if (is.null(t)) {
         if (!inherits(x, "zoo"))
-            stop(sQuote("t"), " not supplied, so ", sQuote("x"), " must inherit from ",
-                 sQuote("zoo"))
+            stop(sQuote("t"), " not supplied, so ", sQuote("x"),
+                 " must inherit from ", sQuote("zoo"))
         else {
             t <- index(x)
             x <- coredata(x)
@@ -190,16 +156,9 @@ plotTradingHours <- function(x, t = NULL,
         }
     }
 
-
     ## check/prepare times
     fromHHMMSS <- makeHHMMSS(fromHHMMSS)
     toHHMMSS   <- makeHHMMSS(toHHMMSS)
-
-    getLast <- function(x, by) {
-        lby <- length(by)
-        rby <- by[lby:1L]
-        x[lby - match(unique(by), rby) + 1L]
-    }
 
     if (is.null(from))
         from <- roundPOSIXt(t[1L], interval)
@@ -208,16 +167,27 @@ plotTradingHours <- function(x, t = NULL,
 
     grd <- timegrid(from, to, interval = interval,
                     fromHHMMSS = fromHHMMSS, toHHMMSS = toHHMMSS)
-
-    ## aggregate data to grid (last)
+    
+    ## ## aggregate data to grid (last)
     by <- roundPOSIXt(t, interval = interval)
-    values <- getLast(x, by)
+    values <- last(x, by)
     t <- unique(by)
-
+    
     ## match to grid
     ri <- match(grd, t, nomatch = 0L)
     rx <- match(t[ri], grd)
+    values <- values[ri]    
 
+    maptime <- function(t) {
+        ## interval, grd in environment!
+        by <- roundPOSIXt(t, interval = interval)
+        t <- unique(by)
+        ri <- match(grd, t, nomatch = 0L)
+        rx <- match(t[ri], grd)
+        list(x = rx, ival = ri[ri > 0])
+    }
+    maptime(t)
+    
     ## prepare labels
     if (grepl("hour", labels, ignore.case = TRUE)) {
         pos <- which(abs(diff(as.POSIXlt(grd)$hour)) > 0) + 1
@@ -233,33 +203,34 @@ plotTradingHours <- function(x, t = NULL,
         fmt <- "%d.%m."
     }
 
+    
     if (do.lines) {
         do.call("lines", c(list(x = seq_len(length(grd))[rx],
-                                y = values[ri]),
+                                y = values),
                            lines.par))
         NULL
     } else if (do.plot) {
-        do.call("par", ppar)
         do.call("plot", c(list(x = seq_len(length(grd))[rx],
-                               y = values[ri]),
+                               y = values),
                           plot.par))
 
-        if (length(axis2.par) && !is.na(axis2.par))
-            do.call("axis", axis2.par)
-        if (length(ablineh.par) && !is.na(ablineh.par))
-            do.call("abline", ablineh.par)
+        ## if (length(axis2.par) && !is.na(axis2.par))
+        ##     do.call("axis", axis2.par)
+        ## if (length(ablineh.par) && !is.na(ablineh.par))
+        ##     do.call("abline", ablineh.par)
         if (do.plotAxis && length(axis1.par) && !is.na(axis1.par))
             do.call("axis", axis1.par)
-        if (length(ablinev.par) && !is.na(ablinev.par))
-            do.call("abline", ablinev.par)
-        list(t = seq_len(length(grd))[rx],
-             x = values[ri],
-             axis.pos = pos,
-             axis.labels = format(grd[pos], fmt),
-             timegrid = grd)
+        ## if (length(ablinev.par) && !is.na(ablinev.par))
+        ##     do.call("abline", ablinev.par)
+        invisible(list(t = seq_len(length(grd))[rx],
+                       x = values,
+                       axis.pos = pos,
+                       axis.labels = format(grd[pos], fmt),
+                       timegrid = grd,
+                       map = maptime))
     } else {
         list(t = seq_len(length(grd))[rx],
-             x = values[ri],
+             x = values,
              axis.pos = pos,
              axis.labels = format(grd[pos], fmt),
              timegrid = grd)

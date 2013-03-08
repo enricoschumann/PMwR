@@ -20,8 +20,9 @@ Attach the package.
 require("PMwR")
 @
 <<eval=false,echo=false>>=
+require("database")
 bund <- getTableSelect("GBL201212",  "ib",
-                       from = "20121019210000",
+                       from = "20121018200000",
                        to   = "201210231000",
                        columns = "close")
 
@@ -32,41 +33,49 @@ dput(bb$close)
 dput(char2time(row.names(bb)))
 @
 
-We are given these data
+We are given these data.
 
 <<>>=
-prices <- c(140.46, 140.47, 140.46, 140.47,
-            140.45, 140.39, 140.18, 140.19,
-            140.12, 139.92, 139.94, 140.21)
+prices <- c(139.82, 139.82, 139.8, 139.81, 
+            139.77, 139.85, 139.76, 139.76, 
+            139.77, 140.46, 140.39, 140.14)
 
-times <- structure(c(1350673209, 1350673271, 1350673319,
-                     1350673289, 1350674209, 1350676249,
-                     1350886763, 1350887863, 1350888963,
-                     1350972529, 1350974311, 1350978311),
+times <- structure(c(1350583209, 1350583271, 1350583319, 
+                     1350583289, 1350584209, 1350586249, 
+                     1350588199, 1350589299, 1350590399, 
+                     1350673969, 1350675751, 1350888315), 
                    class = c("POSIXct", "POSIXt"), tzone = "")
+data.frame(times, prices)
 @
 
 
-A standard plot looks like this.
+A standard plot looks like this. 
 <<fig=true>>=
 plot(times,prices, type = "s")
 @
 
+That is all fine for most purposes, but the contract for which we have
+prices is not traded on weekends, and also only during 8 to 22 o'clock
+Europe/Berlin time.
 
 <<fig=true>>=
 plotTradingHours(x = prices,
-                 t = times, interval = "1 sec", labels = "day",
+                 t = times, interval = "1 sec", labels = "hour",
                  fromHHMMSS="080000", toHHMMSS = "220000",
                  type = "s")
 @
 
-
-<<fig=true>>=
-t <- as.POSIXct("2012-08-31 08:05:00") - 36000:1
-x <- runif(length(t))
-plotTradingHours(x, t, interval = "15 min", labels = "hours",
-                 mar = c(10,10,1,1),
-                 xlab = "", ylab = "", col = "blue")
+The plot will use a number of defaults: 
+<<eval = FALSE>>=
+list(type = "l", xaxt = "n", xlab = "", ylab = "")
 @
+
+The \texttt{xaxt} is necessary because the function will create its
+own $x$-scale. All settings can be overwritten, since the
+\texttt{\ldots} arguments are passed to plot (note we already set
+\texttt{s} as the plot's \texttt{type} in the last code chunk). 
+
+
+
 
 \end{document}

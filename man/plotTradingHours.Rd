@@ -81,6 +81,10 @@ plotTradingHours(x, t = NULL,
 }
 \details{
   Very much under development.
+
+  par settings: \code{list(tck = 0.001, mgp = c(3,1,0.5), bty = "n")}
+
+
 }
 \value{
 

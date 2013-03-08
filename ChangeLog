@@ -1,6 +1,14 @@
+2013-03-08  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/internals.R (first,last): added first and last
+
+	* R/Datetimetools.R (timegrid): now uses numeric representation of
+	times (instead of character before)
+
 2013-03-07  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/Datetimetools.R: returns coordinates even when plotting
+	* R/Datetimetools.R (plotTradingHours): returns coordinates even
+	when plotting (but invisibly); removed "ppar" argument
 
 2013-02-28  Enrico Schumann  <es@enricoschumann.net>
 
