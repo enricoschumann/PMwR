@@ -1,5 +1,8 @@
 2013-03-08  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/Datetimetools.R (plotTradingHours): removed formating of
+	axis(2), ablines and par
+
 	* R/internals.R (first,last): added first and last
 
 	* R/Datetimetools.R (timegrid): now uses numeric representation of

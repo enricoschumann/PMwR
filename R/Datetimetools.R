@@ -151,8 +151,8 @@ plotTradingHours <- function(x, t = NULL,
     } else {
         if (is.unsorted(t)) {
             idx <- order(t)
-            x <- x[idx]
             t <- t[idx]
+            x <- x[idx]
         }
     }
 
@@ -168,7 +168,7 @@ plotTradingHours <- function(x, t = NULL,
     grd <- timegrid(from, to, interval = interval,
                     fromHHMMSS = fromHHMMSS, toHHMMSS = toHHMMSS)
     
-    ## ## aggregate data to grid (last)
+    ## aggregate data to grid (last)
     by <- roundPOSIXt(t, interval = interval)
     values <- last(x, by)
     t <- unique(by)
@@ -186,15 +186,14 @@ plotTradingHours <- function(x, t = NULL,
         rx <- match(t[ri], grd)
         list(x = rx, ival = ri[ri > 0])
     }
-    maptime(t)
     
     ## prepare labels
-    if (grepl("hour", labels, ignore.case = TRUE)) {
-        pos <- which(abs(diff(as.POSIXlt(grd)$hour)) > 0) + 1
-        fmt <- "%H:%M"
-    } else if (grepl("dayhour", labels, ignore.case = TRUE)) {
+    if (grepl("dayhour", labels, ignore.case = TRUE)) {
         pos <- which(abs(diff(as.POSIXlt(grd)$hour)) > 0) + 1
         fmt <- "%d.%m. %H:%M"
+    } else if (grepl("hour", labels, ignore.case = TRUE)) {
+        pos <- which(abs(diff(as.POSIXlt(grd)$hour)) > 0) + 1
+        fmt <- "%H:%M"
     } else if (grepl("day", labels, ignore.case = TRUE)) {
         pos <- which(abs(diff(as.Date(grd))) > 0) + 1
         fmt <- "%d.%m."
@@ -202,7 +201,6 @@ plotTradingHours <- function(x, t = NULL,
         pos <- which(abs(diff(as.POSIXlt(grd)$mon)) > 0) + 1
         fmt <- "%d.%m."
     }
-
     
     if (do.lines) {
         do.call("lines", c(list(x = seq_len(length(grd))[rx],
@@ -214,14 +212,8 @@ plotTradingHours <- function(x, t = NULL,
                                y = values),
                           plot.par))
 
-        ## if (length(axis2.par) && !is.na(axis2.par))
-        ##     do.call("axis", axis2.par)
-        ## if (length(ablineh.par) && !is.na(ablineh.par))
-        ##     do.call("abline", ablineh.par)
         if (do.plotAxis && length(axis1.par) && !is.na(axis1.par))
             do.call("axis", axis1.par)
-        ## if (length(ablinev.par) && !is.na(ablinev.par))
-        ##     do.call("abline", ablinev.par)
         invisible(list(t = seq_len(length(grd))[rx],
                        x = values,
                        axis.pos = pos,
