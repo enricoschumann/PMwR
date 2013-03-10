@@ -8,38 +8,34 @@
 }
 \usage{
 plotTradingHours(x, t = NULL,
-                 interval = "5 min", labels = "hours",
-                 excludeWeekends = TRUE,
-                 holidays = NULL,
+                 interval = "5 min", labels = "hours", label.format = NULL,
+                 excludeWeekends = TRUE, holidays = NULL,
                  fromHHMMSS = "000000", toHHMMSS = "240000",
                  do.plotAxis = TRUE,
                  ...,
                  from = NULL, to = NULL,
-                 do.plot = TRUE, do.lines = FALSE,
-                 ppar = list(),
-                 axis1.par = list(),
-                 axis2.par = list(),
-                 ablineh.par = list(),
-                 ablinev.par = list())
+                 do.plot = TRUE,
+                 axis1.par = list())
 }
 \arguments{
   \item{x}{
-    A numeric vector. (Can also be of class \code{zoo}; in that case,
-    \code{t} should be \code{NULL}.)
+    A numeric vector. Can also be of class \code{zoo}; in that case,
+    \code{t} should be \code{NULL}.
   }
   \item{t}{
-    a vector that inherits from class \code{POSIXt}. (Default is \code{NULL}: in
-    this case, \code{x} must inherit from class \code{zoo}.)
+    A vector that inherits from class \code{POSIXt}. Default is \code{NULL}: in
+    this case, \code{x} must inherit from class \code{zoo}.
   }
   \item{interval}{
-    a character string like \dQuote{num units}, in which \code{num} is a
+    A character string like \dQuote{num units}, in which \code{num} is a
     number, and \code{units} is \dQuote{sec}, \dQuote{min},
-    \dQuote{hour} or \dQuote{day}
+    \dQuote{hour} or \dQuote{day}. The space between num and
+    units is mandatory.
   }
   \item{labels}{
-    a character vector of length one, determining the grid for
-    plotTradingHours: can be \dQuote{hour}, \dQuote{day},
-    \dQuote{dayhour}, \dQuote{month}.
+    A character vector of length one, determining the grid for
+    \code{plotTradingHours}: can be \dQuote{hour}, \dQuote{day},
+    \dQuote{dayhour} or \dQuote{month}.
   }
   \item{excludeWeekends}{
     logical: default is \code{TRUE}
@@ -80,9 +76,10 @@ plotTradingHours(x, t = NULL,
   \item{ablinev.par}{a list of named elements}
 }
 \details{
-  Very much under development.
 
-  par settings: \code{list(tck = 0.001, mgp = c(3,1,0.5), bty = "n")}
+  This function is still very experimental. In in particular, it is
+  recommended that arguments be always named.
+
 
 
 }
@@ -109,6 +106,7 @@ plotTradingHours(x, t = NULL,
 \examples{
 t <- as.POSIXct("2012-08-31 08:05:00") - 36000:1
 x <- runif(length(t))
+  par(tck = 0.001, mgp = c(3,1,0.5), bty = "n")
 plotTradingHours(x, t,
                  interval = "15 min", labels = "hours",
                  xlab = "time", ylab = "random points",

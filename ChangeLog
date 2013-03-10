@@ -1,3 +1,9 @@
+2013-03-10  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.1-8
+
+	* vignettes/plotTradingHours.Rnw: added examples, discussion
+
 2013-03-08  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/Datetimetools.R (plotTradingHours): removed formating of

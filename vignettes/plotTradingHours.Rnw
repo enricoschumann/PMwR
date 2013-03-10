@@ -10,7 +10,7 @@
 \SweaveOpts{keep.source = TRUE, eps = TRUE}
 
 \begin{document}
-\title{Plotting quantities during trading hours}
+\title{Plotting irregularly-spaced series during trading hours}
 \author{Enrico Schumann}
 \maketitle
 
@@ -19,6 +19,7 @@ We attach the package.
 <<>>=
 require("PMwR")
 @
+
 <<eval=false,echo=false>>=
 require("database")
 bund <- getTableSelect("GBL201212",  "ib",
@@ -27,23 +28,26 @@ bund <- getTableSelect("GBL201212",  "ib",
                        columns = "close")
 
 bb <- rbind(bund[c(10,72,120,90,1010,3050), , drop=FALSE],
-            bund[c(5000,6100,7200), , drop=FALSE],
-            bund[c(55000,56782,60782), , drop=FALSE])
+            bund[c(5000,6100,7200, 12001,14002), , drop=FALSE],
+            bund[c(55000,56782,60782, 62000), , drop=FALSE])
 dput(bb$close)
 dput(char2time(row.names(bb)))
 @
 
+\section{An example}
+
 We are given these data:
 
 <<>>=
-prices <- c(139.82, 139.82, 139.8, 139.81, 
-            139.77, 139.85, 139.76, 139.76, 
-            139.77, 140.46, 140.39, 140.14)
+prices <- c(139.82, 139.82, 139.8, 139.81, 139.77, 139.85, 
+            139.76, 139.76, 139.77, 139.8, 139.86, 140.46, 
+            140.39, 140.14, 140.15)
 
 times <- structure(c(1350583209, 1350583271, 1350583319, 
                      1350583289, 1350584209, 1350586249, 
                      1350588199, 1350589299, 1350590399, 
-                     1350673969, 1350675751, 1350888315), 
+                     1350630970, 1350632971, 1350673969, 
+                     1350675751, 1350888315, 1350889533), 
                    class = c("POSIXct", "POSIXt"), tzone = "")
 data.frame(times, prices)
 @
@@ -51,37 +55,64 @@ data.frame(times, prices)
 
 A plot of price against time looks like this. 
 
-<<fig=true>>=
+<<fig=true, width = 6, height = 4>>=
 plot(times,prices, type = "s")
 @
 
 Such a plot is all fine for many purposes, but the contract for which
 we have prices is not traded on weekends and also only from 08:00 to
-22:00 Europe/Berlin time.
+22:00 Europe/Berlin time. So a plot should better look like this.
 
-<<fig=true>>=
+<<fig=true, width = 6, height = 4>>=
 tmp <- plotTradingHours(x = prices, t = times, 
                         interval = "1 sec", labels = "day",
                         fromHHMMSS="080000", toHHMMSS = "220000",
                         type = "s")
 @
 
-The basic design decision of the plot is make to it as much as
-possible an ordinary plot.
+What we need is a function that maps actual time to a point on the
+$x$-scale; the $y$-scale stays unchanged. If we were talking only
+about days, not times, we need something like this: \medskip
 
+\begin{tabular}{lrr}
+  \emph{day} & \emph{$x$-position} & \emph{mapped $x$-position} \\
+  Thursday   & 1                   & 1                          \\
+  Friday     & 2                   & 2                          \\
+  Saturday   & 3                   & removed                    \\
+  Sunday     & 4                   & removed                    \\
+  Monday     & 5                   & 3                          \\
+\end{tabular}\medskip
 
+This is what \texttt{plotTradingHours} provides. And not much more:
+the basic design goal of the plot is make to it as much as possible an
+ordinary plot; ie, make it similar to the \texttt{plot} function.
 
-The plot will use a number of defaults: 
+\texttt{plotTradingHours} calls plot with a small number of default
+settings:
 <<eval = FALSE>>=
 list(type = "l", xaxt = "n", xlab = "", ylab = "")
 @
 
-The \texttt{xaxt} is necessary because the function will create its
-own $x$-scale. All settings can be overwritten, since the
-\texttt{\ldots} arguments are passed to plot (note we already set
-\texttt{s} as the plot's \texttt{type} in the last code chunk). 
+But they all can be overridden: \texttt{\ldots} arguments are passed to
+\texttt{plot} (note that we already set \texttt{s} as the plot's
+\texttt{type} in the last code chunk).
+
+The only required setting is \texttt{xaxt}; it is necessary because
+the function will create its own $x$-axis via a call to
+\texttt{axis(1, \ldots)}. In case you wish to use your own axis
+specification, set \texttt{do.plotAxis} to \texttt{FALSE}, or you can
+pass settings to \texttt{axis(1, \ldots)} through the argument
+\texttt{axis1.par}, which needs to be a list of named elements.
 
 
+\section{More examples}
 
+Like \texttt{plot}, \texttt{plotTradingHours} is typically called for
+its side effect: creating a plot. But it also returns useful
+information (invisibly, unless called with \texttt{do.plot = FALSE}).
+
+<<>>=
+str(tmp)
+@ 
 
 \end{document}

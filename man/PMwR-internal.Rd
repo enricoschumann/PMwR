@@ -26,11 +26,9 @@ last(x, by, index = FALSE)
 
   
 }
-
 \author{
   Enrico Schumann
 }
-
 \examples{
 dates <- seq(as.Date("2012-01-01"), as.Date("2013-02-05"), by = "1 day")
 last(dates,  by = format(dates, "%Y%m"))

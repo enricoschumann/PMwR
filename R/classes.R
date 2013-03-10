@@ -1,3 +1,5 @@
+if (FALSE) {
+
 ## * INSTRUMENT
 Instrument <- function(type, id = NULL, ...) {
 
@@ -142,7 +144,7 @@ position <- function(x, when, ...) {
 }
 
 
-
+require("Infront")
 tmp <- getInfrontTradesP("Jaro", from = "20130215000000", to = "20130215230000")
 tmp0 <- tmp[tmp$ticker == "GBL201303",]
 jb <- Tradelist(datetime = tmp$datetime, tmp$volume, tmp$price, id = tmp$rownames,
@@ -205,7 +207,6 @@ PLsorted(X)
 
 
 
-if (FALSE) {
 
     ##myfund <- Fund("de000a0dpkd3", "MODULOR LSE 1", "EUR")
 

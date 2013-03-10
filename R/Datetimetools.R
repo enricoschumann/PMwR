@@ -118,7 +118,7 @@ plotTradingHours <- function(x, t = NULL,
                              do.plotAxis = TRUE,
                              ...,
                              from = NULL, to = NULL,
-                             do.plot = TRUE, do.lines = FALSE,
+                             do.plot = TRUE,
                              axis1.par = list()) {
 
     ## plot
@@ -127,12 +127,6 @@ plotTradingHours <- function(x, t = NULL,
     tmp <- list(...)
     plot.par.def[names(tmp)] <- tmp
     plot.par <- plot.par.def
-
-    ## lines
-    lines.par.def <- list(type = "l", xlab = "", ylab = "")
-    tmp <- list(...)
-    lines.par.def[names(tmp)] <- tmp
-    lines.par <- lines.par.def
 
     ## axis1
     axis1.par.def <- list(1, at = quote(pos),
@@ -184,7 +178,7 @@ plotTradingHours <- function(x, t = NULL,
         t <- unique(by)
         ri <- match(grd, t, nomatch = 0L)
         rx <- match(t[ri], grd)
-        list(x = rx, ival = ri[ri > 0])
+        list(t = rx, ix = ri[ri > 0])
     }
     
     ## prepare labels
@@ -202,12 +196,7 @@ plotTradingHours <- function(x, t = NULL,
         fmt <- "%d.%m."
     }
     
-    if (do.lines) {
-        do.call("lines", c(list(x = seq_len(length(grd))[rx],
-                                y = values),
-                           lines.par))
-        NULL
-    } else if (do.plot) {
+    if (do.plot) {
         do.call("plot", c(list(x = seq_len(length(grd))[rx],
                                y = values),
                           plot.par))
@@ -225,7 +214,8 @@ plotTradingHours <- function(x, t = NULL,
              x = values,
              axis.pos = pos,
              axis.labels = format(grd[pos], fmt),
-             timegrid = grd)
+             timegrid = grd,
+             map = maptime)
     }
 }
 
