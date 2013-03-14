@@ -2,6 +2,7 @@ export(
     "dayOfMonth<-",
     PL,
     PLsorted,
+    Tradelist,
     backtest,
     char2num,
     closeOnFirst,
@@ -17,6 +18,7 @@ export(
     monthlyStats,
     nextBusinessDay,
     plotTradingHours,
+    position,
     previousBusinessDay,
     returns,
     rmspace,
@@ -29,4 +31,9 @@ export(
     timegrid,
     twExposure    
     )
+S3method(print,Tradelist)
+S3method(sort,Tradelist)
+S3method(c,Tradelist)
+S3method(position,Tradelist)
+S3method(position,default)
 useDynLib(PMwR)

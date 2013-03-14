@@ -34,6 +34,9 @@ endOfPreviousMonth(x)
 dayOfMonth(x)
 dayOfMonth(x) <- value
 
+lastWeekday(weekday, x, shift = 0L,
+            period = "month", before, inclusive = TRUE)
+
 }
 \arguments{
 
@@ -86,6 +89,18 @@ dayOfMonth(x) <- value
   \item{shift}{
     a vector of integers
   }
+  \item{weekday}{
+    an integer (\code{1} is Monday, \code{2} is Tuesday, and so on)
+  }
+  \item{period}{
+    character. Not implemented.
+  }
+  \item{before}{
+    a Date. See also \code{inclusive}.
+  }
+  \item{inclusive}{
+    logical. Is \code{before} meant is \sQuote{before but including}? 
+  }
 }
 \details{
 
@@ -130,4 +145,9 @@ times <- as.POSIXct("2012-03-24 22:00:00") + 1:1e2
 roundPOSIXt(times, "2 min")
 
 previousBusinessDay(as.Date("2012-06-18"))
+
+## goal: find the third Friday in March 2013
+## => find the last Friday in February 2013 and 
+##    shift forward by 3 weeks
+lastWeekday(5, as.Date("2013-02-01"), shift = 3)
 }

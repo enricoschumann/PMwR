@@ -19,12 +19,12 @@ plotTradingHours(x, t = NULL,
 }
 \arguments{
   \item{x}{
-    A numeric vector. Can also be of class \code{zoo}; in that case,
-    \code{t} should be \code{NULL}.
+    A numeric vector. Can also be of class \code{zoo}.
   }
-  \item{t}{
-    A vector that inherits from class \code{POSIXt}. Default is \code{NULL}: in
-    this case, \code{x} must inherit from class \code{zoo}.
+  \item{t}{    
+    A vector that inherits from class \code{POSIXt}. If \code{x}
+    inherits from class \code{zoo}, then \code{index(x)} is used (and
+    any supplied value for \code{t} is ignored).
   }
   \item{interval}{
     A character string like \dQuote{num units}, in which \code{num} is a
@@ -36,6 +36,9 @@ plotTradingHours(x, t = NULL,
     A character vector of length one, determining the grid for
     \code{plotTradingHours}: can be \dQuote{hour}, \dQuote{day},
     \dQuote{dayhour} or \dQuote{month}.
+  }
+  \item{label.format}{
+    See \code{\link{strftime}}.
   }
   \item{excludeWeekends}{
     logical: default is \code{TRUE}
@@ -66,14 +69,9 @@ plotTradingHours(x, t = NULL,
     logical. Should anything be plotted? Default is \code{TRUE}. If
     \code{FALSE}, the function returns a list of points.
   }
-  \item{do.lines}{
-    logical. Use lines instead of plot (for overlay).
+  \item{axis1.par}{
+    a list of named elements
   }
-  \item{ppar}{a list of named elements}
-  \item{axis1.par}{a list of named elements}
-  \item{axis2.par}{a list of named elements}
-  \item{ablineh.par}{a list of named elements}
-  \item{ablinev.par}{a list of named elements}
 }
 \details{
 
@@ -95,7 +93,6 @@ plotTradingHours(x, t = NULL,
 \references{
   B.D. Ripley and K. Hornik. \emph{Date-Time Classes}. R-News,
   \strong{1}(2):8--12, 2001.
-
 }
 \author{
   Enrico Schumann
@@ -106,7 +103,8 @@ plotTradingHours(x, t = NULL,
 \examples{
 t <- as.POSIXct("2012-08-31 08:05:00") - 36000:1
 x <- runif(length(t))
-  par(tck = 0.001, mgp = c(3,1,0.5), bty = "n")
+
+par(tck = 0.001, mgp = c(3,1,0.5), bty = "n")
 plotTradingHours(x, t,
                  interval = "15 min", labels = "hours",
                  xlab = "time", ylab = "random points",

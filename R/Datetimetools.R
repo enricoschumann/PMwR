@@ -1,3 +1,6 @@
+
+                                        # DATES
+
 previousBusinessDay <- function (x, holidays = NULL) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
         stop("input must inherit from class Date or POSIXt")
@@ -66,6 +69,22 @@ dayOfMonth <- function(x) {
     else 
         tmp
 }
+lastWeekday <- function(weekday, x, shift = 0L,
+                        period = "month", before, inclusive = TRUE) {
+    if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
+        stop("input must inherit from class Date or POSIXt")
+    tmp <- as.POSIXlt(x)
+    tmp$mon <- tmp$mon + 1L
+    tmp$mday <- 1L
+    ldate <- as.Date(tmp) - 1L
+    lweekday <- as.POSIXlt(ldate)$wday
+    ldate - (lweekday - weekday)%%7L + (shift*7L)
+}
+
+
+
+                                        # TIMES
+
 timegrid <- function(from, to, interval,
                      excludeWeekends = TRUE,
                      holidays   = NULL,
@@ -90,7 +109,6 @@ timegrid <- function(from, to, interval,
                as.numeric(fromHHMMSS) <= tmp & as.numeric(toHHMMSS) >= tmp] 
     as.POSIXct(grd)
 }
-
 roundPOSIXt <- function(t, interval) {
 
     if (!inherits(t, "POSIXct"))
@@ -113,6 +131,7 @@ roundPOSIXt <- function(t, interval) {
 }
 plotTradingHours <- function(x, t = NULL,
                              interval = "5 min", labels = "hours",
+                             label.format = NULL,
                              excludeWeekends = TRUE, holidays = NULL,
                              fromHHMMSS = "000000", toHHMMSS = "240000",
                              do.plotAxis = TRUE,
@@ -219,14 +238,3 @@ plotTradingHours <- function(x, t = NULL,
     }
 }
 
-lastWeekday <- function(weekday, date, shift = 0L,
-                        period = "month", before, inclusive = TRUE) {
-    if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
-        stop("input must inherit from class Date or POSIXt")
-    tmp <- as.POSIXlt(x)
-    tmp$mon <- tmp$mon + 1L
-    tmp$mday <- 1L
-    ldate <- as.Date(tmp) - 1L
-    lweekday <- as.POSIXlt(ldate)$wday
-    ldate - (lweekday - weekday)%%7L - (shift*7L)
-}

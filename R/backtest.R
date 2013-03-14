@@ -404,25 +404,3 @@ backtest  <- function(prices,             ## matrices
 }
 
 
-
-s <-       c("DTE","SAP","SDF","MEO","MRKK","FRE","HEN3" ,"BEI"  ,"LIN"  ,"FME")
-current <- c(500  , 0   ,90   ,0    ,20    ,34   ,16     ,49     ,0      ,0)
-target  <- c(0.15,0.0,0.1,0,0.15,0.15,0.15,0.15,0,0.15)
-prices <- c(8.36,63.44 ,35.9325 ,21.2325 ,113.85 ,95.21 ,65.965 ,69.48 ,132.175 ,51.55)
-rebalance(current, target, prices, notional = 50000, names= s)
-
-
-
-
-rebalance <- function(current, target, prices, notional, w.target = TRUE, names = NULL) {
-
-    if (missing(notional))
-        notional <- sum(current*prices)
-    ans <- trunc(target * notional / prices)
-    data.frame(prices = prices, current = current,
-                     value.now = current * prices, " " = "  =>  ", 
-                     target = ans, value.then = ans * prices,
-                     " " = "  =>  ", order = ans - current,
-                     row.names = names,
-                     check.names = FALSE)
-}

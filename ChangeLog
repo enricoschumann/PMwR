@@ -1,3 +1,21 @@
+2013-03-14  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.1-9 (and DESCRIPTION file updated)
+
+	* R/forward.R (putCallParity): removed -- this functionality is
+	available in the NMOF package
+
+	* .Rbuildignore: added R/dev.R
+
+	* R/dev.R: added file
+
+	* NAMESPACE: export 'Tradelist' and S3 methods: c, print, sort
+
+	* R/Tradelist.R (Tradelist): checks if all 'instrument' arguments
+	are equal (and in that case only stores vector of length one)
+
+	* man/Tradelist.Rd: added file
+
 2013-03-10  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): 0.1-8

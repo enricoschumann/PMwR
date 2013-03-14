@@ -268,33 +268,6 @@ closeOnFirst <- function(n) {
     n
 }
 
-## limitExposure <- function(trade, lim) {
-##     tol <- 1e-8
-##     skipped <- pos <- 0
-
-##     for (i in seq_along(n)) {
-##         npos <- pos + n[i]
-##         if (abs(npos) > lim) {
-##             nnew    <- (lim - pos) * sign(n[i])
-##             skipped <- sign(n[i]) * (n[i] - nnew) + skipped
-##             n[i] <- nnew
-##             pos <- pos + n[i]
-##         } else if (abs(skipped) > tol && sign(n[i]) != sign(skipped)) {
-##             if (sign(skipped) > 0) {
-##                 nnew <- max(abs(n[i])- abs(skipped), 0) * sign(n[i])
-##                 skipped <- skipped - sign(n[i]) * (n[i] - nnew)
-##                 n[i] <- nnew
-##                 pos <- pos + n[i]
-##             }
-##         } else
-##             pos <- npos
-##     }
-##     keep <- abs(n) >= tol
-##     trade$n <- n[keep]
-##     trade$p <- trade$p[keep]
-##     trade$tradetimes <- trade$tradetimes[keep]
-##     trade
-## }
 limit <- function(trade, lim, tol = 1e-8) {
     n <- trade[["n"]]
     cn <- cumsum(n)
@@ -306,13 +279,13 @@ limit <- function(trade, lim, tol = 1e-8) {
          tradetimes = trade$tradetimes[subset])
 }
 
-
 ## tests
 ## n <- 0
 ## scaleToUnity(0)
 ## closeOnFirst(0)
 ## splitTrades(c(1,-3,2), p = c(100,104,102), 1:3, FALSE)
 ## scaleTrades(c(1,-3,2), p = c(100,104,102), 1:3, FALSE, fun = scaleToUnity)
+
 drawdown <- function(v, relative = TRUE) {
     cv  <- cummax(v)
     rd  <- cv - v
@@ -326,6 +299,7 @@ drawdown <- function(v, relative = TRUE) {
          low = v[troughTime],
          lowPosition = troughTime)
 }
+## TODO
 monthlyStats <- function(x, t = NULL) {
     if (!is.null(dim(x)) && dim(x)[2L] > 1L)
         stop("'x' must be a vector")
@@ -363,16 +337,16 @@ finalObs <- function(x, t = NULL, period = "month", missing = "NA") {
         by <- strftime(t, "%Y%m")
     getLast(x, by)
 }
-lastIndex <- function(t) {
-    by <- strftime(t, "%Y%m%d")
-    lby <- length(by)
-    rby <- by[lby:1L]
-    lby - match(unique(by), rby) + 1L
-}
-firstIndex <- function(t) {
-    by <- strftime(t, "%Y%m%d")
-    match(unique(by), by)
-}
+## lastIndex <- function(t) {
+##     by <- strftime(t, "%Y%m%d")
+##     lby <- length(by)
+##     rby <- by[lby:1L]
+##     lby - match(unique(by), rby) + 1L
+## }
+## firstIndex <- function(t) {
+##     by <- strftime(t, "%Y%m%d")
+##     match(unique(by), by)
+## }
 
 returns <- function(x, pad = NULL) {
     n <- NROW(x)

@@ -7,6 +7,7 @@
 \alias{scaleToUnity}
 \alias{scaleTrades}
 \alias{splitTrades}
+\alias{twExposure}
 \title{
   Analysing Trades
 }
@@ -14,20 +15,22 @@
   Functions to help analyse trades (as opposed to profit-and-loss series)
 }
 \usage{
-PL(notional, prices, symbols = NULL, tol = 1e-10)
+PL(notional, prices, symbols = NULL, tol = 1e-10, fast = FALSE)
 PLsorted(notional, prices, tradetimes = NULL,
          allprices = NULL, alltimes = NULL,
          initcash = 0, do.sort = FALSE)
 
 returns(x, pad = NULL)
 
-scaleTrades(notional, prices, tradetimes, aggregate = FALSE, fun = NULL,
-...)
+scaleTrades(notional, prices, tradetimes, aggregate = FALSE,
+            fun = NULL, ...)
 splitTrades(notional, prices, tradetimes, aggregate = FALSE)
 
 limit(trade, lim, tol = 0.00000001)
 scaleToUnity(n)
 closeOnFirst(n)
+
+twExposure(notional, tradetimes, start, end, abs.value = TRUE)
 }
 \arguments{
   \item{notional}{
@@ -66,20 +69,22 @@ closeOnFirst(n)
   \item{pad}{fill initial lost observation for returns. Default is \code{NULL}.
   }
   \item{\dots}{passed on to fun}
+  \item{tol}{numeric}
+  \item{fast}{logical}
 }
 \details{
 \code{scaleTrades} takes a vector of notionals, prices and scales all trades
 along the paths so that the maximum exposure is 1.
 
 The default \code{fun} divides every element of a vector \code{n} by
-\code{max(abs(cumsum(n)))}.
-
-The function \code{fun} needs to take a vector of notionals (changes in
-position.)
+\code{max(abs(cumsum(n)))}. If user-specified, the function \code{fun}
+needs to take a vector of notionals (changes in position.)
 
 }
 \value{
-Either a list or a list-of-lists.
+
+  Either a list or a list-of-lists.
+
 }
 \author{
   Enrico Schumann

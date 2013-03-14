@@ -31,7 +31,7 @@ last(x, by, index = FALSE)
 }
 \examples{
 dates <- seq(as.Date("2012-01-01"), as.Date("2013-02-05"), by = "1 day")
-PMwR:::last(dates,  by = format(dates, "%Y%m"))
-PMwR:::first(dates, by = format(dates, "%Y%m"))
+##PMwR:::last(dates,  by = format(dates, "%Y%m"))
+##PMwR:::first(dates, by = format(dates, "%Y%m"))
 }
 \keyword{internal}
