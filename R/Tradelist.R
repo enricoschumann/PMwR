@@ -96,10 +96,10 @@ c.Tradelist <- function(...) {
 ##     pos
 ## }
 
-position <- function(when, ...) {
-    UseMethod("position")
-}
-position.default <- function(when, notional, tradetimes, from, to, ...) {
+## position <- function(when, ...) {
+##     UseMethod("position")
+## }
+position0 <- function(when, notional, tradetimes, from, to) {
     if (is.unsorted(tradetimes)) {
         io  <- order(tradetimes)
         tradetimes <- tradetimes[io]
@@ -109,16 +109,15 @@ position.default <- function(when, notional, tradetimes, from, to, ...) {
     if (length(beforewhen))
         cumsum(notional)[max(beforewhen)] else 0
 }
-position.Tradelist <- function(when, tlist, from, to, ...) {
+position <- function(when, tlist, from, to) {
     tlist$instrument[is.na(tlist$instrument)] <- "not specified"
     pos <- numeric(length(nm <- sort(unique(tlist$instrument))))
     names(pos) <- nm
-
     for (i in seq_along(nm)) {
         ri  <-  nm[i] == tlist$instrument
         idt <- tlist$datetime[if (length(tlist$datetime) == 1L) 1 else ri]
         iv  <- tlist$notional[if (length(tlist$notional) == 1L) 1 else ri]
-        pos[nm[i]] <- position(iv, idt, when, from, to, ...)
+        pos[nm[i]] <- position0(iv, idt, when, from, to)
     }
     pos
 }

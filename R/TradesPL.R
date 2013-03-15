@@ -224,7 +224,6 @@ splitTrades <- function(notional, prices, tradetimes, aggregate = FALSE) {
         list(n = n, p = p, tradetimes = tradetimes)
     }
 }
-
 scaleTrades <- function(notional, prices, tradetimes, aggregate = FALSE,
                         fun = NULL, ...) {
     n <- notional
@@ -250,7 +249,6 @@ scaleTrades <- function(notional, prices, tradetimes, aggregate = FALSE,
         p <- aggregate(p, list(tradetimes), tail,1L)[["x"]]
         list(n = n, p = p, tradetimes = tradetimes) }
 }
-
 scaleToUnity <- function(n) {
     maxn <- max(abs(cumsum(n)))
     n/maxn
@@ -299,6 +297,7 @@ drawdown <- function(v, relative = TRUE) {
          low = v[troughTime],
          lowPosition = troughTime)
 }
+
 ## TODO
 monthlyStats <- function(x, t = NULL) {
     if (!is.null(dim(x)) && dim(x)[2L] > 1L)
@@ -319,33 +318,23 @@ monthlyStats <- function(x, t = NULL) {
                 returns = returns(x.eom))
 }
 
-finalObs <- function(x, t = NULL, period = "month", missing = "NA") {
-    if (is.null(t)) {
-        if (!inherits(x, "zoo"))
-            stop(sQuote("t"), " not supplied, so ", sQuote("x"), 
-                 " must inherit from class ", sQuote("zoo"))
-        t <- index(x)
-        x <- coredata(x)
-    }
-    getLast <- function(x, by) {
-        lby <- length(by)
-        rby <- by[lby:1L]
-        x[lby - match(unique(by), rby) + 1L]
-    }
+## finalObs <- function(x, t = NULL, period = "month", missing = "NA") {
+##     if (is.null(t)) {
+##         if (!inherits(x, "zoo"))
+##             stop(sQuote("t"), " not supplied, so ", sQuote("x"), 
+##                  " must inherit from class ", sQuote("zoo"))
+##         t <- index(x)
+##         x <- coredata(x)
+##     }
+##     getLast <- function(x, by) {
+##         lby <- length(by)
+##         rby <- by[lby:1L]
+##         x[lby - match(unique(by), rby) + 1L]
+##     }
 
-    if (period == "month")
-        by <- strftime(t, "%Y%m")
-    getLast(x, by)
-}
-## lastIndex <- function(t) {
-##     by <- strftime(t, "%Y%m%d")
-##     lby <- length(by)
-##     rby <- by[lby:1L]
-##     lby - match(unique(by), rby) + 1L
-## }
-## firstIndex <- function(t) {
-##     by <- strftime(t, "%Y%m%d")
-##     match(unique(by), by)
+##     if (period == "month")
+##         by <- strftime(t, "%Y%m")
+##     getLast(x, by)
 ## }
 
 returns <- function(x, pad = NULL) {
