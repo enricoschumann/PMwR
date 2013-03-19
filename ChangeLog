@@ -1,3 +1,7 @@
+2013-03-19  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/Tradelist.R (position): 'position' is now generic
+
 2013-03-14  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): 0.1-9 (and DESCRIPTION file updated)

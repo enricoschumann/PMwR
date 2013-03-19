@@ -10,11 +10,11 @@
   in time.
 }
 \usage{
-position(when, ...)
+position(notional, \dots)
 
-\method{position}{default}(when, notional, tradetimes, from, to, \dots)
+\method{position}{Tradelist}(tlist, when, from, to, \dots)
 
-\method{position}{Tradelist}(when, tlist, from, to, \dots)
+\method{position}{default}(notional,tradetimes, when, from, to, \dots)
 }
 \arguments{
   \item{when}{

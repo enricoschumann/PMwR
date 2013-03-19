@@ -25,5 +25,13 @@ and Optimization in Finance}. Elsevier.
 
 Schumann, E. (2013) \emph{Portfolio Management with R}.
 
-} \keyword{package}
+} 
+\examples{
+require("tth")
 
+tex <- c("This is \\\\textbf{bold} and this \\\\textit{italic}.",
+         "Points on the unit circle: $x^2 + y^2 = 1$.")
+tth(tex)
+ttm(tex)
+}
+\keyword{package}

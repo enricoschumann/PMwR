@@ -75,31 +75,11 @@ c.Tradelist <- function(...) {
     } else
         tls        
 }
-## position <- function(when, x, from, to,...) {
-##     ## returns a vector
-##     x$instrument[is.na(x$instrument)] <- "not specified"
-##     pos <- numeric(length(nm <- sort(unique(x$instrument))))
-##     names(pos) <- nm
-##     for (i in seq_along(nm)) {
-##         ri  <-  nm[i] == x$instrument
-##         idt <- x$datetime[ri]
-##         iv  <- x$notional[ri]
-##         if (is.unsorted(idt)) {
-##             io  <- order(idt)
-##             idt <- idt[io]
-##             iv  <- id[io]
-##         }
-##         beforewhen <- which(when >= idt)
-##         if (length(beforewhen))
-##             pos[nm[i]] <- cumsum(iv)[max(beforewhen)]
-##     }
-##     pos
-## }
 
-## position <- function(when, ...) {
-##     UseMethod("position")
-## }
-position0 <- function(when, notional, tradetimes, from, to) {
+position <- function(notional, ...) {
+    UseMethod("position")
+}
+position.default <- function(notional, tradetimes, when, from, to, ...) {
     if (is.unsorted(tradetimes)) {
         io  <- order(tradetimes)
         tradetimes <- tradetimes[io]
@@ -109,7 +89,7 @@ position0 <- function(when, notional, tradetimes, from, to) {
     if (length(beforewhen))
         cumsum(notional)[max(beforewhen)] else 0
 }
-position <- function(when, tlist, from, to) {
+position.Tradelist <- function(tlist, when, from, to, ...) {
     tlist$instrument[is.na(tlist$instrument)] <- "not specified"
     pos <- numeric(length(nm <- sort(unique(tlist$instrument))))
     names(pos) <- nm
@@ -117,7 +97,7 @@ position <- function(when, tlist, from, to) {
         ri  <-  nm[i] == tlist$instrument
         idt <- tlist$datetime[if (length(tlist$datetime) == 1L) 1 else ri]
         iv  <- tlist$notional[if (length(tlist$notional) == 1L) 1 else ri]
-        pos[nm[i]] <- position0(iv, idt, when, from, to)
+        pos[nm[i]] <- position(iv, idt, when, from, to)
     }
     pos
 }

@@ -19,6 +19,7 @@ export(
     nextBusinessDay,
     plotTradingHours,
     position,
+    position.Tradelist
     previousBusinessDay,
     returns,
     rmspace,
@@ -31,6 +32,8 @@ export(
     timegrid,
     twExposure    
     )
+
+# methods
 S3method(print,Tradelist)
 S3method(sort,Tradelist)
 S3method(c,Tradelist)

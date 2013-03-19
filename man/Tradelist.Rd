@@ -30,10 +30,13 @@ Tradelist(datetime, notional, price, id, instrument, account)
 }
 }
 \details{
-  Creates a list of the arguments and attaches a class attribute.  
+  
+  The function creates a list of the arguments and attaches a class
+  attribute (\sQuote{Tradelist}).
+
 }
 \value{
-  A \code{Tradelist}.
+  An object of class \code{Tradelist} (which is simply a list of named arguments).
 }
 \references{
   ES
@@ -64,5 +67,4 @@ x3 <- Tradelist(datetime = "20130215120000",
                 price = c(24.0063, 131.3805, 33.5474),
                 instrument = c("meo", "lin", "sdf"),
                 account = "P3")
-
 }
