@@ -1,7 +1,7 @@
 \name{position}
 \alias{position}
-\alias{position.default}
 \alias{position.Tradelist}
+\alias{position.default}
 \title{
   Aggregate Trade Data into a Position
 }
@@ -10,7 +10,7 @@
   in time.
 }
 \usage{
-position(notional, \dots)
+position(\dots)
 
 \method{position}{Tradelist}(tlist, when, from, to, \dots)
 
@@ -54,7 +54,14 @@ to be added
   \code{\link{Tradelist}}
 }
 \examples{
+## default
 t <- 1:5
 n <- c(1,1,-1,3,-4)
 position(notional=n, tradetimes=t, when = 4.9)
+
+## using a Tradelist
+lst <- Tradelist(datetime = t, notional = n)
+position(lst,4.9)
+lst
+##position(when = 4.9, tlist=lst)
 }

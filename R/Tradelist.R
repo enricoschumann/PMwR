@@ -4,10 +4,12 @@ Tradelist <- function(datetime, notional, price, id, instrument, account) {
         id <- NA
     if (missing(instrument))
         instrument <- NA
-    if (all(instrument == instrument[1L]))
+    else if (all(instrument == instrument[1L]))
         instrument <- instrument[1L]
     if (missing(account))
         account <- NA
+    if (missing(price))
+        price <- NA
     
     ans <- list(id = id,
                 instrument = instrument,
@@ -18,7 +20,6 @@ Tradelist <- function(datetime, notional, price, id, instrument, account) {
     class(ans) <- "Tradelist"
     ans    
 }
-
 print.Tradelist <- function(x, ...) {
     oo <- getOption("scipen")
     options(scipen = 1e8)
@@ -45,9 +46,11 @@ print.Tradelist <- function(x, ...) {
         insts <- insts[seq_len(dspI)]
         insts[dspI] <- "..."
     }
-    cat(paste0("(", n, " trades in ",
-               paste(insts, collapse=", "), 
-               ")\n"))
+    if (length(insts))
+        subs <- paste0(" in ", paste(insts, collapse = ", "))
+    else
+        subs <- ""
+    cat(paste0("(", n, " trades", subs, ")\n"))
     invisible(x)
 }
 sort.Tradelist <- function(x, ...) {
@@ -75,8 +78,7 @@ c.Tradelist <- function(...) {
     } else
         tls        
 }
-
-position <- function(notional, ...) {
+position <- function(...) {
     UseMethod("position")
 }
 position.default <- function(notional, tradetimes, when, from, to, ...) {

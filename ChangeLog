@@ -1,5 +1,10 @@
 2013-03-19  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/Tradelist.R (Tradelist): price can now be NA
+
+	* R/Tradelist.R (print.Tradelist): corrected trade count message
+	when instrument is NA
+
 	* R/Tradelist.R (position): 'position' is now generic
 
 2013-03-14  Enrico Schumann  <es@enricoschumann.net>

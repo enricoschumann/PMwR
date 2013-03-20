@@ -1,5 +1,5 @@
 if (FALSE) {
-
+    
                                         # rebalance
 
     ##
@@ -170,7 +170,7 @@ if (FALSE) {
     portfolio2 <- data$close %*% p
     plot(portfolio2 <- portfolio2/portfolio2[1L], type = "l")
 
-    from <- "20130215120000"; to <- format(Sys.time(), "%Y%m%s%H%M%S")
+    from <- "20130215120000"; to <- format(Sys.time(), "%Y%m%d%H%M%S")
     data <- getTablesSelect(c(names(p3), "dax"), "ib",
                             from = from,
                             to   = to,
@@ -192,28 +192,29 @@ if (FALSE) {
     }
     PP <- chain(portfolio1, portfolio2, portfolio3)
     times <- char2time(unique(sort(c(t1,t2,t3))))
+    tmp <- zoo(PP, times)
 
-
-    from <- "20130114120000"; to <- format(Sys.time(), "%Y%m%s%H%M%S")
+    from <- "20130114120000"; to <- format(Sys.time(), "%Y%m%d%H%M%S")
     data <- getTablesSelect("dax", "ib",
                             from = from,
                             to   = to,
                             columns = "close")
-
-
+    alld <- merge(zoo(data$close, char2time(data$times)), tmp)
+    alld <- na.locf(alld)
+    
     png("~/Trading/aktien1.png", width = 600, height = 400)
     par(bty = "n",las = 1,mar=c(5,5,1,0), tck = 0.003)
-    tmp <- plotTradingHours(x = 100*PP,
-                            t = times,
+    tmp <- plotTradingHours(x = 100*alld[,2],
+                            t = index(alld),
                             interval = "5 min", labels = "days",
                             fromHHMMSS = "090000", col= "goldenrod3",
                             toHHMMSS   = "173000", ylim = c(97,110),
                             do.plotAxis = TRUE)
     legend(x = "topleft", c("Portfolio", "DAX"), bg = "white", lwd = 2,
            col = c("goldenrod3", grey(0.3)), bty="n")
-    mp <- tmp$map(times)
+    mp <- tmp$map(index(alld))
     lines(mp$t, 
-          100*data$close[mp$ix]/data$close[mp$ix][1L],
+          coredata(100*alld[mp$ix,1]/coredata(alld[mp$ix,1][1L])),
           col = grey(0.3))
     dev.off()
 
