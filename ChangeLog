@@ -1,4 +1,11 @@
+2013-03-21  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/TradesPL.R (PLsorted): now generic, methods for 'default' and
+	'Tradelist'
+
 2013-03-19  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.1-10
 
 	* R/Tradelist.R (Tradelist): price can now be NA
 

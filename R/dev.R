@@ -83,35 +83,6 @@ if (FALSE) {
     c1 <- Cashflow(cf, tm)
     summary(c1)
 
-    PLsorted <- function(x, ...) {
-        UseMethod("PLsorted")
-    }
-
-    PLsorted.Tradelist <- function(x, allprices = NULL, alltimes = NULL,
-                                   initcash = 0, do.sort = FALSE) {
-        allinstr <- unique(x$instrument)
-        ans <- vector("list", length = length(allinstr))
-        for (i in seq_along(allinstr)) {
-            ii <- allinstr[i] == x$instrument
-            position <- cumsum(x$notional[ii])
-            pf <- x$price[ii] * position
-            wealth <- pf + cumsum(-x$notional[ii] * x$price[ii]) + initcash        
-            ans[[i]] <- list(position = position, wealth = wealth)
-        }
-        names(ans) <- allinstr
-        ans
-    }
-    PLsorted.default <- function(notional, prices, tradetimes = NULL,
-                                 allprices = NULL, alltimes = NULL,
-                                 initcash = 0, do.sort = FALSE) {
-
-        PMwR:::PLsorted(notional, prices, tradetimes = NULL,
-                        allprices = NULL, alltimes = NULL,
-                        initcash = 0, do.sort = FALSE)
-
-    }
-
-
 
 
     require("Infront")

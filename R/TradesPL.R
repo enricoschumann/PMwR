@@ -46,136 +46,6 @@ PL <- function(notional, prices, symbols = NULL, tol = 1e-10, fast = FALSE) {
         }
     }    
 }
-PLsorted <- function(notional, prices,
-                     tradetimes = NULL,
-                     allprices = NULL, alltimes = NULL,
-                     initcash = 0,
-                     do.sort = FALSE) {
-    if ((n <- length(notional)) != length(prices))
-        stop("length(notional) != length(prices)")
-
-    if (any(notional == 0))
-        stop("'notional' must be nonzero")
-
-    if (is.null(tradetimes)) {
-        cumcash <- cumsum(-prices * notional)
-        cumpos <- cumsum(notional)
-        list(wealth = cumpos * prices + cumcash,
-             position = cumpos)
-    } else {
-        if (do.sort) {
-            ## trade data
-            ot <- order(tradetimes)
-            prices <- prices[ot]
-            notional <- notional[ot]
-            tradetimes <- tradetimes[ot]
-            ## overall series
-            ot <- order(alltimes)
-            alltimes <- alltimes[ot]
-            allprices <- allprices[ot]
-        }
-
-        ## (0) aggregate notional in case of duplicated times
-        if (any(duplicated(tradetimes))) {
-
-            ## diffsigns checks whether the signs of quantities differ
-            diffsigns <- function(x)
-                if (length(x) > 1L && length(unique(sign(x))) > 1L)
-                    TRUE else FALSE
-
-            instTrade <- aggregate(notional, list(tradetimes), diffsigns)
-            if (any(instTrade[["x"]])) {
-
-                ## if there were trade in a single instance of
-                ## time: loop over those periods and add results
-                ## to cash
-                nInstTrade <- sum(instTrade[["x"]])
-                iInstTrade <- which(instTrade[["x"]])
-                addedCash <- numeric(nInstTrade)
-                addedTime <- vector(mode = mode(tradetimes),
-                                    length = nInstTrade)
-
-                for (i in seq_len(nInstTrade)) {
-                    this.t <- instTrade[[1L]][iInstTrade[i]]
-                    this.rows <- which(tradetimes == this.t)
-                    this.prices <- prices[this.rows]
-                    this.notional <- notional[this.rows]
-
-                    sells <- this.notional < 0
-                    buys  <- this.notional > 0
-                    sumsell <- sum(abs(this.notional[sells]))
-                    sumbuy  <- sum(abs(this.notional[buys]))
-
-                    abstradesize <- min(sumsell, sumbuy)
-                    this.adj <- numeric(length(this.notional))
-                    this.adj <- -this.notional
-                    if (sumsell < sumbuy) {
-                        this.adj[buys] <- -this.notional[buys]*sumsell/sumbuy
-                    } else {
-                        this.adj[sells] <- -this.notional[sells]*sumbuy/sumsell
-                    }
-
-                    addedCash[i] <- PL(-this.adj, this.prices)$PLtotal
-                    addedTime[i] <- this.t
-
-                    ## remove closed trades
-                    notional[this.rows] <- notional[this.rows] +
-                        this.adj
-
-                }
-            }
-
-            tmpnotional <- aggregate(notional, list(tradetimes), sum)
-            tmpprices <- aggregate(prices, list(tradetimes), tail,1)
-            prices <- aggregate(notional * prices, list(tradetimes),
-                                sum)[["x"]]/
-                                    ifelse(abs(tmpnotional[["x"]]) < 1e-12,
-                                           1, tmpnotional[["x"]])
-            if (any(repp <- tmpnotional[[2L]] == 0L))
-                prices[repp] <- tmpprices[[2L]][repp]
-
-            notional <- tmpnotional[["x"]]
-            tradetimes <- tmpnotional[["Group.1"]]
-        }
-        ## (1) add missing times: checks if all tradetimes are included
-        ##                        in alltimes. If not, add the missing
-        ##                        times and prices.
-        tmatch <- match(tradetimes, alltimes)
-        if (any(is.na(tmatch))) {
-            alltimes <- c(alltimes, tradetimes[is.na(tmatch)])
-            ot <- order(alltimes)
-            alltimes <- alltimes[ot]
-            allprices <- c(allprices, prices[is.na(tmatch)])[ot]
-            tmatch <- match(tradetimes, alltimes) ## match again
-        }
-
-        ## (2) replace prices: use actual trade prices for valuation
-        allprices[tmatch] <- prices
-
-
-        ## set up cash
-        cash <- rep(0, length(allprices))
-        cash[1L] <- initcash
-
-        position <- numeric(length(alltimes))
-        position[tmatch] <- notional
-        cash[tmatch] <- cash[tmatch] - allprices[tmatch] * position[tmatch]
-
-        ## add instantaneuous trades
-        if (exists("addedTime")) {
-            itmp <- match(addedTime, alltimes)
-            cash[itmp] <- cash[itmp] + addedCash
-        }
-        cumcash <- cumsum(cash)
-        list(time = alltimes,
-             prices = allprices,
-             notional = position,
-             position = cumsum(position),
-             cash = cash,
-             cashposition = cumcash,
-             wealth = cumcash + cumsum(position) * allprices)
-    }
-}
 splitTrades <- function(notional, prices, tradetimes, aggregate = FALSE) {
     n <- notional
     p <- prices
@@ -477,3 +347,152 @@ twExposure <- function(notional, tradetimes, start, end, abs.value = TRUE) {
 ## twExposure(n, tradetimes)
 ## twExposure(n, tradetimes, st-60)
 ## twExposure(n, tradetimes, end=st+100)
+
+
+
+PLsorted <- function(x, ...) {
+    UseMethod("PLsorted")
+}
+PLsorted.Tradelist <- function(x, allprices = NULL, alltimes = NULL,
+                               initcash = 0, do.sort = FALSE) {
+    allinstr <- unique(x$instrument)
+    ans <- vector("list", length = length(allinstr))
+    for (i in seq_along(allinstr)) {
+        ii <- allinstr[i] == x$instrument
+        position <- cumsum(x$notional[ii])
+        pf <- x$price[ii] * position
+        wealth <- pf + cumsum(-x$notional[ii] * x$price[ii]) + initcash        
+        ans[[i]] <- list(position = position, wealth = wealth)
+    }
+    names(ans) <- allinstr
+    ans
+}
+PLsorted.default <- function(notional, prices,
+                     tradetimes = NULL,
+                     allprices = NULL, alltimes = NULL,
+                     initcash = 0, do.sort = FALSE) {
+    if ((n <- length(notional)) != length(prices))
+        stop("length(notional) != length(prices)")
+
+    if (any(notional == 0))
+        stop("'notional' must be nonzero")
+
+    if (is.null(tradetimes)) {
+        cumcash <- cumsum(-prices * notional)
+        cumpos <- cumsum(notional)
+        list(wealth = cumpos * prices + cumcash,
+             position = cumpos)
+    } else {
+        if (do.sort) {
+            ## trade data
+            ot <- order(tradetimes)
+            prices <- prices[ot]
+            notional <- notional[ot]
+            tradetimes <- tradetimes[ot]
+            ## overall series
+            ot <- order(alltimes)
+            alltimes <- alltimes[ot]
+            allprices <- allprices[ot]
+        }
+
+        ## (0) aggregate notional in case of duplicated times
+        if (any(duplicated(tradetimes))) {
+
+            ## diffsigns checks whether the signs of quantities differ
+            diffsigns <- function(x)
+                if (length(x) > 1L && length(unique(sign(x))) > 1L)
+                    TRUE else FALSE
+
+            instTrade <- aggregate(notional, list(tradetimes), diffsigns)
+            if (any(instTrade[["x"]])) {
+
+                ## if there were trade in a single instance of
+                ## time: loop over those periods and add results
+                ## to cash
+                nInstTrade <- sum(instTrade[["x"]])
+                iInstTrade <- which(instTrade[["x"]])
+                addedCash <- numeric(nInstTrade)
+                addedTime <- vector(mode = mode(tradetimes),
+                                    length = nInstTrade)
+
+                for (i in seq_len(nInstTrade)) {
+                    this.t <- instTrade[[1L]][iInstTrade[i]]
+                    this.rows <- which(tradetimes == this.t)
+                    this.prices <- prices[this.rows]
+                    this.notional <- notional[this.rows]
+
+                    sells <- this.notional < 0
+                    buys  <- this.notional > 0
+                    sumsell <- sum(abs(this.notional[sells]))
+                    sumbuy  <- sum(abs(this.notional[buys]))
+
+                    abstradesize <- min(sumsell, sumbuy)
+                    this.adj <- numeric(length(this.notional))
+                    this.adj <- -this.notional
+                    if (sumsell < sumbuy) {
+                        this.adj[buys] <- -this.notional[buys]*sumsell/sumbuy
+                    } else {
+                        this.adj[sells] <- -this.notional[sells]*sumbuy/sumsell
+                    }
+
+                    addedCash[i] <- PL(-this.adj, this.prices)$PLtotal
+                    addedTime[i] <- this.t
+
+                    ## remove closed trades
+                    notional[this.rows] <- notional[this.rows] +
+                        this.adj
+
+                }
+            }
+
+            tmpnotional <- aggregate(notional, list(tradetimes), sum)
+            tmpprices <- aggregate(prices, list(tradetimes), tail,1)
+            prices <- aggregate(notional * prices, list(tradetimes),
+                                sum)[["x"]]/
+                                    ifelse(abs(tmpnotional[["x"]]) < 1e-12,
+                                           1, tmpnotional[["x"]])
+            if (any(repp <- tmpnotional[[2L]] == 0L))
+                prices[repp] <- tmpprices[[2L]][repp]
+
+            notional <- tmpnotional[["x"]]
+            tradetimes <- tmpnotional[["Group.1"]]
+        }
+        ## (1) add missing times: checks if all tradetimes are included
+        ##                        in alltimes. If not, add the missing
+        ##                        times and prices.
+        tmatch <- match(tradetimes, alltimes)
+        if (any(is.na(tmatch))) {
+            alltimes <- c(alltimes, tradetimes[is.na(tmatch)])
+            ot <- order(alltimes)
+            alltimes <- alltimes[ot]
+            allprices <- c(allprices, prices[is.na(tmatch)])[ot]
+            tmatch <- match(tradetimes, alltimes) ## match again
+        }
+
+        ## (2) replace prices: use actual trade prices for valuation
+        allprices[tmatch] <- prices
+
+
+        ## set up cash
+        cash <- rep(0, length(allprices))
+        cash[1L] <- initcash
+
+        position <- numeric(length(alltimes))
+        position[tmatch] <- notional
+        cash[tmatch] <- cash[tmatch] - allprices[tmatch] * position[tmatch]
+
+        ## add instantaneuous trades
+        if (exists("addedTime")) {
+            itmp <- match(addedTime, alltimes)
+            cash[itmp] <- cash[itmp] + addedCash
+        }
+        cumcash <- cumsum(cash)
+        list(time = alltimes,
+             prices = allprices,
+             notional = position,
+             position = cumsum(position),
+             cash = cash,
+             cashposition = cumcash,
+             wealth = cumcash + cumsum(position) * allprices)
+    }
+}
