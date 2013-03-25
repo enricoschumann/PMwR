@@ -115,6 +115,7 @@ if (FALSE) {
                     price = c(24.0063, 131.3805, 33.5474),
                     instrument = c("meo", "lin", "sdf"),
                     account = "Modulor")
+
     X <- c(x1,x2,x3)
     p1 <- position(X, "20130114120000")
     p2 <- position(X, "20130205120000")
@@ -191,6 +192,106 @@ if (FALSE) {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    ## long short
+    x1 <- Tradelist(datetime = "20130322120000",
+                    notional = c(9000, 60000, 6500, 9000, 4500, 5500, 9000, ),
+                    price = c(61.23, 9.04, 82.52, 60.76, 130.5622, 101.50, 61.16),
+                    instrument = c("bei", "dte", "fre", "hen3",  "lin",  "mrk", "sap"),
+                    account = "Modulor")
+
+    X <- c(x1,x2,x3)
+    p1 <- position(X, "20130114120000")
+    p2 <- position(X, "20130205120000")
+    p3 <- position(X, "20130215120000")             
+
+    from <- "20130114120000"; to <- format(Sys.time(), "%Y%m%d%H%M%S")
+    data <- getTablesSelect(c(names(p1), "dax"), "ib",
+                            from = from,
+                            to   = to,
+                            columns = "close")
+    t1 <- data$times
+    p <- c(p1,0)
+    portfolio1 <- data$close %*% p
+    plot(portfolio1 <- portfolio1/portfolio1[1L], type = "l")
+
+
+    from <- "20130205120000"; to <- "20130215120000"
+    data <- getTablesSelect(c(names(p2), "dax"), "ib",
+                            from = from,
+                            to   = to,
+                            columns = "close")
+    t2 <- data$times
+    p <- c(p2,0)
+    portfolio2 <- data$close %*% p
+    plot(portfolio2 <- portfolio2/portfolio2[1L], type = "l")
+
+    from <- "20130215120000"; to <- format(Sys.time(), "%Y%m%d%H%M%S")
+    data <- getTablesSelect(c(names(p3), "dax"), "ib",
+                            from = from,
+                            to   = to,
+                            columns = "close")
+    t3 <- data$times
+    p <- c(p3,0)
+    portfolio3 <- data$close %*% p
+    plot(portfolio3 <- portfolio3/portfolio3[1L], type = "l")
+
+    chain <- function(...) {
+        L <- list(...)
+        r <- na.locf(L[[1L]])
+        if ((n <- length(L)) > 1L) {
+            for (i in 2:n) {
+                r  <- c(r[1:(length(r)-1)], r[length(r)] * na.locf(L[[i]]))
+            }
+        }
+        r
+    }
+    PP <- chain(portfolio1, portfolio2, portfolio3)
+    times <- char2time(unique(sort(c(t1,t2,t3))))
+    tmp <- zoo(PP, times)
+
+    from <- "20130114120000"; to <- format(Sys.time(), "%Y%m%d%H%M%S")
+    data <- getTablesSelect("dax", "ib",
+                            from = from,
+                            to   = to,
+                            columns = "close")
+    alld <- merge(zoo(data$close, char2time(data$times)), tmp)
+    alld <- na.locf(alld)
+    
+    png("~/Trading/aktien1.png", width = 600, height = 400)
+    par(bty = "n",las = 1,mar=c(5,5,1,0), tck = 0.003)
+    tmp <- plotTradingHours(x = 100*alld[,2],
+                            t = index(alld),
+                            interval = "5 min", labels = "days",
+                            fromHHMMSS = "090000", col= "goldenrod3",
+                            toHHMMSS   = "173000", ylim = c(97,110),
+                            do.plotAxis = TRUE)
+    legend(x = "topleft", c("Portfolio", "DAX"), bg = "white", lwd = 2,
+           col = c("goldenrod3", grey(0.3)), bty="n")
+    mp <- tmp$map(index(alld))
+    lines(mp$t, 
+          coredata(100*alld[mp$ix,1]/coredata(alld[mp$ix,1][1L])),
+          col = grey(0.3))
+    dev.off()
+
+
+
+
+    
 
     ##myfund <- Fund("de000a0dpkd3", "MODULOR LSE 1", "EUR")
 
