@@ -199,33 +199,26 @@ if (FALSE) {
 
 
 
-
-
-
-
-
-
-
-
     ## long short
-    x1 <- Tradelist(datetime = "20130322120000",
-                    notional = c(9000, 60000, 6500, 9000, 4500, 5500, 9000, ),
-                    price = c(61.23, 9.04, 82.52, 60.76, 130.5622, 101.50, 61.16),
-                    instrument = c("bei", "dte", "fre", "hen3",  "lin",  "mrk", "sap"),
+    x4 <- Tradelist(datetime = "20130322120000",
+                    notional =     c(-7, 11500, 19000, 6000, 50000, 4500, 5800, 3600, -8000),
+                    price = c(0, 36.9341, 22.8104, 71.1379, 8.4771, 94.2888, 73.1623, 116.1301, 62.2748),
+                    instrument = c("dax", "sdf", "meo", "bei", "dte", "fre", "hen3", "mrk", "sap"),
                     account = "Modulor")
 
-    X <- c(x1,x2,x3)
-    p1 <- position(X, "20130114120000")
-    p2 <- position(X, "20130205120000")
-    p3 <- position(X, "20130215120000")             
+    
+    ##
+    ##7925.2143
 
-    from <- "20130114120000"; to <- format(Sys.time(), "%Y%m%d%H%M%S")
-    data <- getTablesSelect(c(names(p1), "dax"), "ib",
+    
+    p1 <- position(x4, "20130325173000")
+
+    from <- "20130322120000"; to <- format(Sys.time(), "%Y%m%d%H%M%S")
+    data <- getTablesSelect(names(p1), "ib",
                             from = from,
                             to   = to,
                             columns = "close")
     t1 <- data$times
-    p <- c(p1,0)
     portfolio1 <- data$close %*% p
     plot(portfolio1 <- portfolio1/portfolio1[1L], type = "l")
 
