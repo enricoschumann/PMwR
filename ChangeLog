@@ -1,3 +1,7 @@
+2013-04-04  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/texttools.R (expstr): added
+
 2013-03-21  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/TradesPL.R (PLsorted): now generic, methods for 'default' and

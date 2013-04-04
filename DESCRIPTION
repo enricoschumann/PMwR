@@ -1,8 +1,8 @@
 Package: PMwR
 Type: Package
 Title: Functions for 'Portfolio Management with R'
-Version: 0.1-11
-Date: 2013-03-21
+Version: 0.1-12
+Date: 2013-04-04
 Author: Enrico Schumann
 Authors@R: person(given = "Enrico", family = "Schumann", 
                   role  = c("aut", "cre"),
@@ -17,4 +17,4 @@ License: GPL-3
 LazyLoad: yes
 LazyData: yes
 URL: http://enricoschumann.net/R/packages/PMwR/index.htm
-X-ES-keywords: finance, derivatives, reproducible research, LaTeX
+X-es-keywords: finance, derivatives, reproducible research, LaTeX

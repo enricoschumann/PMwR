@@ -20,3 +20,16 @@ TeXunits <- function(from, to) {
 
     grepl(".*[0-9].*", to)
 }
+
+## inserts space 
+expstr <- function(s, after, width, fill = " ", at) {
+    ns <- nchar(s)
+    space <- character(length(s))
+    for (i in seq_along(space))
+        space[i] <- paste(rep(" ", width[1L] - ns[i]), collapse = "")
+
+    if (!missing(after))
+        at <- as.numeric(regexpr(after, s)) + 1L
+    paste(substr(s, 1L, at - 1L), space,
+          substr(s, at, ns), sep = "")    
+}
