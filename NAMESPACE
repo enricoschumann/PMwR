@@ -2,6 +2,8 @@ export(
     "dayOfMonth<-",
     PL,
     PLsorted,
+    PLsorted.Tradelist,
+    PLsorted.default,
     Tradelist,
     backtest,
     char2num,
@@ -39,4 +41,6 @@ S3method(sort,Tradelist)
 S3method(c,Tradelist)
 S3method(position,Tradelist)
 S3method(position,default)
+S3method(PLsorted,Tradelist)
+S3method(PLsorted,default)
 useDynLib(PMwR)

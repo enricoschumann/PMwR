@@ -353,7 +353,8 @@ twExposure <- function(notional, tradetimes, start, end, abs.value = TRUE) {
 PLsorted <- function(x, ...) {
     UseMethod("PLsorted")
 }
-PLsorted.Tradelist <- function(x, allprices = NULL, alltimes = NULL,
+PLsorted.Tradelist <- function(x,
+                               allprices = NULL, alltimes = NULL,
                                initcash = 0, do.sort = FALSE) {
     allinstr <- unique(x$instrument)
     ans <- vector("list", length = length(allinstr))
