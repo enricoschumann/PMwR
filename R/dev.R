@@ -180,7 +180,7 @@ if (FALSE) {
                             t = index(alld),
                             interval = "5 min", labels = "days",
                             fromHHMMSS = "090000", col= "goldenrod3",
-                            toHHMMSS   = "173000", ylim = c(97,110),
+                            toHHMMSS   = "173000", ylim = c(97,112),
                             do.plotAxis = TRUE)
     legend(x = "topleft", c("Portfolio", "DAX"), bg = "white", lwd = 2,
            col = c("goldenrod3", grey(0.3)), bty="n")
@@ -201,87 +201,37 @@ if (FALSE) {
 
     ## long short
     x4 <- Tradelist(datetime = "20130322120000",
-                    notional =     c(-7, 11500, 19000, 6000, 50000, 4500, 5800, 3600, -8000),
+                    notional =     c(-7*25, 11500, 19000, 6000, 50000, 4500, 5800, 3600, -8000),
                     price = c(0, 36.9341, 22.8104, 71.1379, 8.4771, 94.2888, 73.1623, 116.1301, 62.2748),
-                    instrument = c("dax", "sdf", "meo", "bei", "dte", "fre", "hen3", "mrk", "sap"),
+                    instrument = c("fdax201306", "sdf", "meo", "bei", "dte", "fre", "hen3", "mrk", "sap"),
                     account = "Modulor")
 
     
-    ##
-    ##7925.2143
-
-    
-    p1 <- position(x4, "20130325173000")
-
-    from <- "20130322120000"; to <- format(Sys.time(), "%Y%m%d%H%M%S")
+    to <- format(Sys.time(), "%Y%m%d%H%M%S")
+    p1 <- position(x4, to)
+    from <- "20130322120000"
     data <- getTablesSelect(names(p1), "ib",
                             from = from,
                             to   = to,
-                            columns = "close")
-    t1 <- data$times
-    portfolio1 <- data$close %*% p
-    plot(portfolio1 <- portfolio1/portfolio1[1L], type = "l")
+                            columns = "open")
 
+    pr <- data$open[keep <- apply(data$open, 1, function(x) if (sum(is.na(x)) > 5) FALSE else TRUE), ]
+    ti <- data$times[keep]
 
-    from <- "20130205120000"; to <- "20130215120000"
-    data <- getTablesSelect(c(names(p2), "dax"), "ib",
-                            from = from,
-                            to   = to,
-                            columns = "close")
-    t2 <- data$times
-    p <- c(p2,0)
-    portfolio2 <- data$close %*% p
-    plot(portfolio2 <- portfolio2/portfolio2[1L], type = "l")
+    pr[,names(p1)== "fdax201306"] <- pr[,names(p1)== "fdax201306"]-7925.2143
+    portfolio1 <- pr %*% p1
+    portfolio1 <- portfolio1/portfolio1[1L]
 
-    from <- "20130215120000"; to <- format(Sys.time(), "%Y%m%d%H%M%S")
-    data <- getTablesSelect(c(names(p3), "dax"), "ib",
-                            from = from,
-                            to   = to,
-                            columns = "close")
-    t3 <- data$times
-    p <- c(p3,0)
-    portfolio3 <- data$close %*% p
-    plot(portfolio3 <- portfolio3/portfolio3[1L], type = "l")
-
-    chain <- function(...) {
-        L <- list(...)
-        r <- na.locf(L[[1L]])
-        if ((n <- length(L)) > 1L) {
-            for (i in 2:n) {
-                r  <- c(r[1:(length(r)-1)], r[length(r)] * na.locf(L[[i]]))
-            }
-        }
-        r
-    }
-    PP <- chain(portfolio1, portfolio2, portfolio3)
-    times <- char2time(unique(sort(c(t1,t2,t3))))
-    tmp <- zoo(PP, times)
-
-    from <- "20130114120000"; to <- format(Sys.time(), "%Y%m%d%H%M%S")
-    data <- getTablesSelect("dax", "ib",
-                            from = from,
-                            to   = to,
-                            columns = "close")
-    alld <- merge(zoo(data$close, char2time(data$times)), tmp)
-    alld <- na.locf(alld)
-    
-    png("~/Trading/aktien1.png", width = 600, height = 400)
+    png("~/Trading/aktienLS.png", width = 600, height = 400)
     par(bty = "n",las = 1,mar=c(5,5,1,0), tck = 0.003)
-    tmp <- plotTradingHours(x = 100*alld[,2],
-                            t = index(alld),
+    tmp <- plotTradingHours(x = 100*portfolio1,
+                            t = char2time(ti),
+                            holidays = as.Date(c("2013-03-29", "2013-04-01")),
                             interval = "5 min", labels = "days",
                             fromHHMMSS = "090000", col= "goldenrod3",
-                            toHHMMSS   = "173000", ylim = c(97,110),
+                            toHHMMSS   = "173000",
                             do.plotAxis = TRUE)
-    legend(x = "topleft", c("Portfolio", "DAX"), bg = "white", lwd = 2,
-           col = c("goldenrod3", grey(0.3)), bty="n")
-    mp <- tmp$map(index(alld))
-    lines(mp$t, 
-          coredata(100*alld[mp$ix,1]/coredata(alld[mp$ix,1][1L])),
-          col = grey(0.3))
     dev.off()
-
-
 
 
     

@@ -349,7 +349,6 @@ twExposure <- function(notional, tradetimes, start, end, abs.value = TRUE) {
 ## twExposure(n, tradetimes, end=st+100)
 
 
-
 PLsorted <- function(x, ...) {
     UseMethod("PLsorted")
 }
