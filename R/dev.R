@@ -201,9 +201,9 @@ if (FALSE) {
 
     ## long short
     x4 <- Tradelist(datetime = "20130322120000",
-                    notional =     c(-7*25, 11500, 19000, 6000, 50000, 4500, 5800, 3600, -8000),
-                    price = c(0, 36.9341, 22.8104, 71.1379, 8.4771, 94.2888, 73.1623, 116.1301, 62.2748),
-                    instrument = c("fdax201306", "sdf", "meo", "bei", "dte", "fre", "hen3", "mrk", "sap"),
+                    notional =     c(-7*25, 11500, 19000, 6000, 50000, 4500, 5800, 3600),
+                    price = c(0, 36.9341, 22.8104, 71.1379, 8.4771, 94.2888, 73.1623, 116.1301),
+                    instrument = c("fdax201306", "sdf", "meo", "bei", "dte", "fre", "hen3", "mrk"),
                     account = "Modulor")
 
     
@@ -232,8 +232,6 @@ if (FALSE) {
                             toHHMMSS   = "173000",
                             do.plotAxis = TRUE)
     dev.off()
-
-
     
 
     ##myfund <- Fund("de000a0dpkd3", "MODULOR LSE 1", "EUR")
