@@ -1,27 +1,18 @@
 \name{position}
 \alias{position}
-\alias{position.Tradelist}
-\alias{position.default}
 \title{
   Aggregate Trade Data into a Position
 }
 \description{
-  Use information on trades  to compute a position at a specific point
+  Use information on trades to compute a position at a specific point
   in time.
 }
 \usage{
-position(\dots)
-
-\method{position}{Tradelist}(tlist, when, from, to, \dots)
-
-\method{position}{default}(notional,tradetimes, when, from, to, \dots)
+position(notional,tradetimes, instrument, when, from, to, \dots)
 }
 \arguments{
   \item{when}{
     a timestamp or a vector of timestamps
-  }
-  \item{tlist}{
-    a \code{\link{Tradelist}}
   }
   \item{\dots}{
   }
@@ -30,6 +21,9 @@ position(\dots)
   }
   \item{tradetimes}{
     times (sortable)
+  }
+  \item{instrument}{
+    character. Symbols to identify different instruments
   }
   \item{from}{
     timestamp
@@ -61,7 +55,7 @@ position(notional=n, tradetimes=t, when = 4.9)
 
 ## using a Tradelist
 lst <- Tradelist(datetime = t, notional = n)
-position(lst,4.9)
+position(lst,when = 4.9)
 lst
 ##position(when = 4.9, tlist=lst)
 }

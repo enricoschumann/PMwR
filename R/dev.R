@@ -92,8 +92,6 @@ if (FALSE) {
                     instrument = tmp$ticker, account = "JB")
     jb
 
-    PLsorted(tmp0$volume, tmp0$price, tmp0$datetime)$wealth
-    PMwR::PLsorted(tmp0$volume, tmp0$price, tmp0$datetime)$wealth
 
 
 
@@ -117,9 +115,9 @@ if (FALSE) {
                     account = "Modulor")
 
     X <- c(x1,x2,x3)
-    p1 <- position(X, "20130114120000")
-    p2 <- position(X, "20130205120000")
-    p3 <- position(X, "20130215120000")             
+    p1 <- position(X, when="20130114120000")
+    p2 <- position(X, when="20130205120000")
+    p3 <- position(X, when="20130215120000")             
 
     from <- "20130114120000"; to <- "20130205120000"
     data <- getTablesSelect(c(names(p1), "dax"), "ib",
@@ -208,7 +206,7 @@ if (FALSE) {
 
     
     to <- format(Sys.time(), "%Y%m%d%H%M%S")
-    p1 <- position(x4, to)
+    p1 <- position(x4, when=to)
     from <- "20130322120000"
     data <- getTablesSelect(names(p1), "ib",
                             from = from,

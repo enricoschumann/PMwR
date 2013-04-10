@@ -1,3 +1,10 @@
+2013-04-10  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R, PL.R (position, PLsorted): added file. Removed
+	generic for position and PLsorted (the function now checks the
+	class of its first argument: if 'Tradelist', it will convert into
+	vectors for notional etc.).
+
 2013-04-04  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/texttools.R (expstr): added

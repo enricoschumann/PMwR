@@ -25,7 +25,7 @@ expstr(s, after, width, fill = " ", at)
     character: will be removed, see Details.
   }
   \item{after}{
-    character: a pattern, to be passed to \code{\link{regepxr}}
+    character: a pattern, to be passed to \code{\link{regexpr}}
   }
   \item{width}{integer}
   \item{fill}{character}
