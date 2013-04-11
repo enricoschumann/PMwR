@@ -188,15 +188,6 @@ if (FALSE) {
           col = grey(0.3))
     dev.off()
 
-
-
-
-
-
-
-
-
-
     ## long short
     x4 <- Tradelist(datetime = "20130322120000",
                     notional =     c(-7*25, 11500, 19000, 6000, 50000, 4500, 5800, 3600),
@@ -263,6 +254,21 @@ if (FALSE) {
     ## sort
 
     ## toLatex
+
+
+
+
+                   in %
+## RHOEN-KLINIKUM  15.0
+## Suedzucker AG I 15.0
+## Talanx AG Namen 15.0
+## Kabel Deutschla 12.3
+## TAG Immobilien  12.0
+## SGL CARBON SE I  9.4
+## Fielmann AG Inh  8.3
+## Gagfah S.A. Act  6.5
+## GSW Immobilien   5.9
+## Symrise AG Inha  0.5
 
 
 }
