@@ -271,5 +271,26 @@ if (FALSE) {
 ## GSW Immobilien   5.9
 ## Symrise AG Inha  0.5
 
+    ids <- c("de0007042301", "de0007297004", "de000tlx1005",
+             "de000kd88880", "de0008303504", "de0007235301",
+             "de0005772206", "lu0269583422", "de000gsw1111",
+             "de000sym9999")
+    w <- c(15.0, 15.0, 15.0, 12.3, 12.0, 9.4, 8.3, 6.5, 5.9, 0.5)/100
+    w <- w/sum(w)
+    data <- getTablesSelect(ids, "daily",
+                            from = "20130311",
+                            to   = "20130412",
+                            columns = "close")
+
+    u <- w/data$close[1,]
+    plot(char2time(data$times), data$close %*% u, type = "l",
+         ylim = c(0.96,1.04), xlab = "", ylab = "")
+
+    data <- getTablesSelect("de0008467416", "indices",
+                            from = "20130311",
+                            to   = "20130412",
+                            columns = "close")
+
+    lines(char2time(data$times), data$close/data$close[1L], col = "blue")
 
 }
