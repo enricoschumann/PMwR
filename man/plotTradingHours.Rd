@@ -91,8 +91,10 @@ plotTradingHours(x, t = NULL,
 
 }
 \references{
+
   B.D. Ripley and K. Hornik. \emph{Date-Time Classes}. R-News,
   \strong{1}(2):8--12, 2001.
+
 }
 \author{
   Enrico Schumann

@@ -8,7 +8,7 @@
   in time.
 }
 \usage{
-position(notional,tradetimes, instrument, when, from, to, \dots)
+position(amount,timestamp, instrument, when, from, to, \dots)
 }
 \arguments{
   \item{when}{
@@ -16,10 +16,10 @@ position(notional,tradetimes, instrument, when, from, to, \dots)
   }
   \item{\dots}{
   }
-  \item{notional}{
+  \item{amount}{
     numeric
   }
-  \item{tradetimes}{
+  \item{timestamp}{
     times (sortable)
   }
   \item{instrument}{
@@ -51,10 +51,10 @@ to be added
 ## default
 t <- 1:5
 n <- c(1,1,-1,3,-4)
-position(notional=n, tradetimes=t, when = 4.9)
+position(amount=n, timestamp=t, when = 4.9)
 
 ## using a Tradelist
-lst <- Tradelist(datetime = t, notional = n)
+lst <- Tradelist(timestamp = t, amount = n)
 position(lst,when = 4.9)
 lst
 ##position(when = 4.9, tlist=lst)

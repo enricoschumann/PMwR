@@ -1,11 +1,11 @@
 localTesting <- TRUE
 if (require("RUnit", quietly = TRUE)) {
-    require("PM")
+    require("PMwR")
     if (localTesting)
-        path <- "~/Packages/PM/inst/unitTests" else
-    path <- system.file("unitTests", package = "PM")
+        path <- "~/Packages/PMwR/inst/unitTests" else
+    path <- system.file("unitTests", package = "PMwR")
 
-    myTestSuite <- defineTestSuite("PM",
+    myTestSuite <- defineTestSuite("PMwR",
                                    dirs = path,
                                    testFileRegexp = "unitTests.+")
     stopifnot(isValidTestSuite(myTestSuite))

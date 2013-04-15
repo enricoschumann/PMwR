@@ -14,12 +14,15 @@
 \author{Enrico Schumann}
 \maketitle
 
+We need to package.
 <<>>=
 require("PMwR")
 @
 
 \section{PL}
-A simple example.
+
+A simple example: we buy one contract at 100; we sell at 102.
+
 <<>>=
 n <- c(1,-1)
 p <- c(100,102)
@@ -27,27 +30,36 @@ PL(n, p)
 PLsorted(n, p)
 @
 
-Another simple example
+\texttt{PLsorted} gives a bit more information: it tells us that at
+the end of the first point in time, we had a position of 1. Our final
+wealth is 2 (the last element of \texttt{wealth} is the same as the
+\texttt{pl} that is returned by \texttt{PL}).
+
+Another simple example. This time we also supply a time series of prices.
+
 <<>>=
 P <- 100:110
 T <- seq_along(P)
 n <- c(2, -2)
 p <- c(100, 102)
-tradetimes <- c(2, 4)
+timestamp <- c(2, 4)
 PLsorted(n, p)
-PLsorted(n, p, tradetime = tradetimes,
+PLsorted(n, p, timestamp = timestamp,
          allprices = P, alltimes = T,
          initcash = 500)
 @
 
 \section{Exposure}
+
 Suppose we have the following trades and times.
+
 <<>>=
 n <- c(1,3,-3,1,-3,1)
 t <- c(0,1,3,4,7,12)
 @ 
 
-The holding period of these trades can be computed so:
+The holding period (\texttt{duration}) of these trades can be computed
+so:
 <<>>=
 data.frame(position = cumsum(n)[-length(n)], 
            duration = diff(t))
@@ -63,4 +75,28 @@ We have had a position over 12~time units (hours, say).
 <<>>=
 twExposure(n, t)
 @ 
+
+
+\section{Splitting and rescaling}
+
+Suppose we have the following trades and impose a limit that the
+maximum absolute exposure for the trader should only be 2.
+
+<<>>=
+t <- 1:6
+n <- c(-1,-1,-1,1,1,1)
+p <- c(100,99,98,98,99,100)
+limit(n, p, t, lim = 2)
+@ 
+
+Scaling the trades.
+<<>>=
+scaleToUnity(n)
+@ 
+
+Closing the trade at once.
+<<>>=
+closeOnFirst(n)
+@
+
 \end{document}

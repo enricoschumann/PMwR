@@ -9,48 +9,61 @@
 \alias{splitTrades}
 \alias{twExposure}
 \title{
-  Analysing Trades
+  Analysing Trades: Compute Profit/Loss, Resize and more
 }
 \description{
   Functions to help analyse trades (as opposed to profit-and-loss series)
 }
 \usage{
-PL(notional, prices, symbols = NULL, tol = 1e-10, fast = FALSE)
-PLsorted(notional, prices, tradetimes = NULL,
+PL(amount, price, instrument = NULL, tol = 1e-10)
+
+PLsorted(amount, price, timestamp = NULL,
          allprices = NULL, alltimes = NULL,
          initcash = 0, do.sort = FALSE)
 
 returns(x, pad = NULL)
 
-scaleTrades(notional, prices, tradetimes, aggregate = FALSE,
+scaleTrades(amount, price, timestamp, aggregate = FALSE,
             fun = NULL, ...)
-splitTrades(notional, prices, tradetimes, aggregate = FALSE)
+splitTrades(amount, price, timestamp, aggregate = FALSE)
 
-limit(trade, lim, tol = 0.00000001)
-scaleToUnity(n)
-closeOnFirst(n)
+limit(amount, price, timestamp, lim, tol = 1e-8)
+scaleToUnity(amount)
+closeOnFirst(amount)
 
-twExposure(notional, tradetimes, start, end, abs.value = TRUE)
+twExposure(amount, timestamp, start, end, abs.value = TRUE)
 }
 \arguments{
-  \item{notional}{
+  \item{amount}{
     notionals
   }
-  \item{prices}{
-    prices
+  \item{price}{
+    a vector of prices
+  }
+  \item{timestamp}{
+    a vector. If \code{timestamp} is not specified for \code{PLsorted},
+    no mapping to a time series will take place.
   }
   \item{aggregate}{
-    TRUE or FALSE
+    \code{TRUE} or \code{FALSE}
   }
   \item{fun}{
     a function
   }
-  \item{symbols}{
-    a character vector
+  \item{lim}{
+    a maximum absolute position size
   }
-  \item{tradetimes}{
-    a vector. If tradetimes is not specified, no mapping to a time
-    series will take place.
+  \item{start}{
+    optional time
+  }
+  \item{end}{
+    optional time
+  }
+  \item{abs.value}{
+    logical. If \code{TRUE}, the absolute exposure is computed.
+  }
+  \item{instrument}{
+    a character vector
   }
   \item{allprices}{
     a vector
@@ -64,24 +77,34 @@ twExposure(notional, tradetimes, start, end, abs.value = TRUE)
   \item{do.sort}{
     sort all by time
   }
-  \item{x}{a \code{numeric} vector (possibly with a \code{dim} attribute; ie, a matrix)
+  \item{x}{
+    a \code{numeric} vector (possibly with a \code{dim} attribute; ie, a
+    matrix)
   }
-  \item{pad}{fill initial lost observation for returns. Default is \code{NULL}.
+  \item{pad}{
+    fill initial lost observation for returns. Default is \code{NULL}.
   }
   \item{\dots}{passed on to fun}
   \item{tol}{numeric}
-  \item{fast}{logical}
 }
 \details{
-\code{scaleTrades} takes a vector of notionals, prices and scales all trades
-along the paths so that the maximum exposure is 1.
+
+\code{scaleTrades} takes a vector of notionals, prices and scales all
+trades along the paths so that the maximum exposure is 1.
 
 The default \code{fun} divides every element of a vector \code{n} by
 \code{max(abs(cumsum(n)))}. If user-specified, the function \code{fun}
 needs to take a vector of notionals (changes in position.)
 
+\code{splitTrades} decomposes a trade list into single trades, where a
+single trade comprises those trades from a zero position to the next
+zero position.
+
 }
 \value{
+
+  \code{PL}: an object of class \code{PL}, which is a list of five
+  elements (and the class attribute).
 
   Either a list or a list-of-lists.
 
@@ -95,10 +118,19 @@ needs to take a vector of notionals (changes in position.)
 \examples{
 n <- c(1,1,-3,-1,2)
 p <- 100 + 1:length(n)
-tradetimes <- 1:length(n)
-splitTrades(n,p,tradetimes)
-splitTrades(n,p,tradetimes, TRUE)  ## almost like the original series
+timestamp <- 1:length(n)
+splitTrades(n,p,timestamp)
+splitTrades(n,p,timestamp, TRUE)  ## almost like the original series
 
-scaleTrades(n,p,tradetimes)
-scaleTrades(n,p,tradetimes, TRUE) ## each _trade_ gets scaled
+scaleTrades(n,p,timestamp)
+scaleTrades(n,p,timestamp, TRUE) ## each _trade_ gets scaled
+
+x1 <- Tradelist(timestamp = c(1,2,3,1,2,3),
+                amount = c(1, 1, -2, 1,1,-2),
+                price = c(100,102, 101, 100,102,105),
+                instrument = c(rep("A", 3), rep("B", 3)))
+
+PL(x1)
+PL(c(1, 1, -2), c(100,102, 101))  ## Tradelist is not required
+
 }

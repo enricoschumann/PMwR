@@ -31,9 +31,9 @@ export(
     timegrid,
     twExposure    
     )
-
 # methods
 S3method(print,Tradelist)
+S3method(print,PL)
 S3method(sort,Tradelist)
 S3method(c,Tradelist)
 useDynLib(PMwR)

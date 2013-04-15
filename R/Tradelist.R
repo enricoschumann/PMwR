@@ -1,4 +1,4 @@
-Tradelist <- function(datetime, notional, price, id, instrument, account) {
+Tradelist <- function(timestamp, amount, price, id, instrument, account) {
     
     if (missing(id))
         id <- NA
@@ -14,8 +14,8 @@ Tradelist <- function(datetime, notional, price, id, instrument, account) {
     ans <- list(id = id,
                 instrument = instrument,
                 account = account,
-                datetime = datetime,
-                notional = notional,
+                timestamp = timestamp,
+                amount = amount,
                 price = price)
     class(ans) <- "Tradelist"
     ans    
@@ -33,13 +33,13 @@ print.Tradelist <- function(x, ...) {
     if (all(!is.na(x$id)))
         rn <- paste(rn, x$id, sep = " | ")
 
-    print(head(data.frame(datetime = x$datetime,
+    print(head(data.frame(timestamp = x$timestamp,
                           instrument = x$instrument,
-                          notional = x$notional,
+                          amount = x$amount,
                           price = x$price,
-                          row.names = seq_len(length(x$notional)),
+                          row.names = seq_len(length(x$amount)),
                           stringsAsFactors = FALSE), dspT))
-    if ((n <- length(x$notional)) > dspT)
+    if ((n <- length(x$amount)) > dspT)
         cat("...\n")
     insts <- sort(unique(x$instrument))
     if (length(insts) > dspI) {
@@ -57,7 +57,7 @@ sort.Tradelist <- function(x, ...) {
     cat("not implemented\n")
     invisible(x)
 }
-filterTradelist <- function(x, datetime, notional, price,
+filterTradelist <- function(x, timestamp, amount, price,
                             id, instrument, account, ...) {    
     cat("not implemented\n")
     invisible(x)
@@ -72,8 +72,8 @@ c.Tradelist <- function(...) {
         Tradelist(id = ans$id,
                   instrument = ans$instrument,
                   account = ans$account,
-                  datetime = ans$datetime,
-                  notional = ans$notional,
+                  timestamp = ans$timestamp,
+                  amount = ans$amount,
                   price = ans$price)
     } else
         tls        

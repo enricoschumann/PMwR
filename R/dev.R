@@ -1,5 +1,6 @@
 if (FALSE) {
-    
+    require("database")    
+
                                         # rebalance
 
     ##
@@ -96,20 +97,20 @@ if (FALSE) {
 
 
     ## example Tradelist
-    x1 <- Tradelist(datetime = "20130114120000",
-                    notional = c(9000, 60000, 6500, 9000, 4500, 5500, 9000),
+    x1 <- Tradelist(timestamp = "20130114120000",
+                    amount = c(9000, 60000, 6500, 9000, 4500, 5500, 9000),
                     price = c(61.23, 9.04, 82.52, 60.76, 130.5622, 101.50, 61.16),
                     instrument = c("bei", "dte", "fre", "hen3",  "lin",  "mrk", "sap"),
                     account = "Modulor")
 
-    x2 <- Tradelist(datetime = "20130205120000",
-                    notional = c(7000, 50000, 3500, 5500, 7500, 4500, 7000),
+    x2 <- Tradelist(timestamp = "20130205120000",
+                    amount = c(7000, 50000, 3500, 5500, 7500, 4500, 7000),
                     price = c(64.8606, 8.7785, 133.0005, 91.6590, 65.5398, 102.0192,60.4702),
                     instrument = c("bei", "dte", "lin", "fre",  "hen3",  "mrk", "sap"),
                     account = "Modulor")
 
-    x3 <- Tradelist(datetime = "20130215120000",
-                    notional = c(22000, -8000, 16000),
+    x3 <- Tradelist(timestamp = "20130215120000",
+                    amount = c(22000, -8000, 16000),
                     price = c(24.0063, 131.3805, 33.5474),
                     instrument = c("meo", "lin", "sdf"),
                     account = "Modulor")
@@ -175,7 +176,7 @@ if (FALSE) {
     png("~/Trading/aktien1.png", width = 600, height = 400)
     par(bty = "n",las = 1,mar=c(5,5,1,0), tck = 0.003)
     tmp <- plotTradingHours(x = 100*alld[,2],
-                            t = index(alld),
+                            t = index(alld),type="s",
                             interval = "5 min", labels = "days",
                             fromHHMMSS = "090000", col= "goldenrod3",
                             toHHMMSS   = "173000", ylim = c(97,112),
@@ -189,8 +190,8 @@ if (FALSE) {
     dev.off()
 
     ## long short
-    x4 <- Tradelist(datetime = "20130322120000",
-                    notional =     c(-7*25, 11500, 19000, 6000, 50000, 4500, 5800, 3600),
+    x4 <- Tradelist(timestamp = "20130322120000",
+                    amount =     c(-7*25, 11500, 19000, 6000, 50000, 4500, 5800, 3600),
                     price = c(0, 36.9341, 22.8104, 71.1379, 8.4771, 94.2888, 73.1623, 116.1301),
                     instrument = c("fdax201306", "sdf", "meo", "bei", "dte", "fre", "hen3", "mrk"),
                     account = "Modulor")
@@ -214,7 +215,7 @@ if (FALSE) {
     png("~/Trading/aktienLS.png", width = 600, height = 400)
     par(bty = "n",las = 1,mar=c(5,5,1,0), tck = 0.003)
     tmp <- plotTradingHours(x = 100*portfolio1,
-                            t = char2time(ti),
+                            t = char2time(ti),type = "s",
                             holidays = as.Date(c("2013-03-29", "2013-04-01")),
                             interval = "5 min", labels = "days",
                             fromHHMMSS = "090000", col= "goldenrod3",
@@ -258,7 +259,7 @@ if (FALSE) {
 
 
 
-                   in %
+##                 in %
 ## RHOEN-KLINIKUM  15.0
 ## Suedzucker AG I 15.0
 ## Talanx AG Namen 15.0

@@ -3,6 +3,7 @@
 \usepackage[left = 2.5cm, top = 2cm, bottom = 3cm, right = 3.5cm]{geometry}
 \usepackage[noae,nogin]{Sweave}
 \usepackage{mathptmx}
+\usepackage{framed}
 \usepackage{amsmath,amstext}
 \usepackage{hyperref}
 \usepackage{natbib}
@@ -13,8 +14,13 @@
 {\Large \raggedright{Methods for portfolios of financial instruments}}\medskip
 
 \noindent Enrico Schumann\\
-\noindent \texttt{enricoschumann@yahoo.de}\\
+\noindent \texttt{es@enricoschumann.net}\\
 \bigskip
+
+\begin{framed}
+  \noindent This is an internal vignette. It will be removed in the
+  future.
+\end{framed}
 
 \section{Instruments and portfolios}
 \subsection{Classes}
