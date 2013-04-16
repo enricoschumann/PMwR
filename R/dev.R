@@ -271,6 +271,8 @@ if (FALSE) {
 ## GSW Immobilien   5.9
 ## Symrise AG Inha  0.5
 
+    png("~/Trading/aktienMDAX.png", width = 600, height = 400)
+
     ids <- c("de0007042301", "de0007297004", "de000tlx1005",
              "de000kd88880", "de0008303504", "de0007235301",
              "de0005772206", "lu0269583422", "de000gsw1111",
@@ -284,13 +286,17 @@ if (FALSE) {
 
     u <- w/data$close[1,]
     plot(char2time(data$times), data$close %*% u, type = "l",
-         ylim = c(0.96,1.04), xlab = "", ylab = "")
-
+         ylim = c(0.96,1.04), xlab = "", ylab = "", col = "goldenrod3")
+    sd(returns(data$close %*% u))*16
+    
     data <- getTablesSelect("de0008467416", "indices",
                             from = "20130311",
                             to   = "20130412",
                             columns = "close")
 
     lines(char2time(data$times), data$close/data$close[1L], col = "blue")
-
+    sd(returns(data$close/data$close[1L]))*16
+    legend(x="topleft", legend = c("Portfolio", "MDAX"),
+           col= c("goldenrod3","blue"), lwd=2)
+    dev.off()
 }
