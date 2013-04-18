@@ -27,6 +27,22 @@ if (FALSE) {
     rebalance(current, target, prices, notional = 50000, names= s)
 
 
+    ## compare
+    t1 <- getTableSelect("de000a0dpkd3", "dtfonds", from = "2013-01-01")
+    t2 <- getTableSelect("de0008469008", "indices", from = "2013-01-01")
+    t1 <- zoo(t1$close, char2time(row.names(t1)))
+    t2 <- zoo(t2$close, char2time(row.names(t2)))
+    
+    cmpSeries <- function(t1,t2) {
+        s1 <- sd(returns(coredata(t1)))
+        tmp <- coredata(t2[1]) *
+            cumprod(c(1, 1 + returns(coredata(t2))/sd(returns(coredata(t2))) * s1))
+        t3 <- zoo(tmp, index(t2))
+        plot(100*t1/coredata(t1[1L]))
+        lines(100*t3/coredata(t3[1L]), col = "blue")
+    }
+    
+
     ## * INSTRUMENT
     Instrument <- function(type, id = NULL, ...) {
 
