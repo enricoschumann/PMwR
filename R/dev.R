@@ -41,7 +41,7 @@ if (FALSE) {
         plot(100*t1/coredata(t1[1L]))
         lines(100*t3/coredata(t3[1L]), col = "blue")
     }
-    
+    cmpSeries(t1,t2)
 
     ## * INSTRUMENT
     Instrument <- function(type, id = NULL, ...) {
