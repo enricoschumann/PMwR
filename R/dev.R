@@ -195,7 +195,7 @@ if (FALSE) {
                             t = index(alld),type="s",
                             interval = "5 min", labels = "days",
                             fromHHMMSS = "090000", col= "goldenrod3",
-                            toHHMMSS   = "173000", ylim = c(97,112),
+                            toHHMMSS   = "173000", ylim = c(95,112),
                             do.plotAxis = TRUE)
     legend(x = "topleft", c("Portfolio", "DAX"), bg = "white", lwd = 2,
            col = c("goldenrod3", grey(0.3)), bty="n")
@@ -223,11 +223,12 @@ if (FALSE) {
 
     pr <- data$open[keep <- apply(data$open, 1, function(x) if (sum(is.na(x)) > 5) FALSE else TRUE), ]
     ti <- data$times[keep]
-
+    bm <- pr[, grep("dax", names(p1))]
+    
     pr[,names(p1)== "fdax201306"] <- pr[,names(p1)== "fdax201306"]-7925.2143
     portfolio1 <- pr %*% p1
     portfolio1 <- portfolio1/portfolio1[1L]
-
+    
     png("~/Trading/aktienLS.png", width = 600, height = 400)
     par(bty = "n",las = 1,mar=c(5,5,1,0), tck = 0.003)
     tmp <- plotTradingHours(x = 100*portfolio1,
@@ -235,8 +236,13 @@ if (FALSE) {
                             holidays = as.Date(c("2013-03-29", "2013-04-01")),
                             interval = "5 min", labels = "days",
                             fromHHMMSS = "090000", col= "goldenrod3",
-                            toHHMMSS   = "173000",
+                            toHHMMSS   = "173000", ylim=c(94,102),
                             do.plotAxis = TRUE)
+
+    mp <- tmp$map(char2time(ti))
+    lines(mp$t, 
+          100*bm[mp$ix]/bm[mp$ix][1L],
+          col = grey(0.3), type = "l")
     dev.off()
     
 
