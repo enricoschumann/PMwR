@@ -1,3 +1,13 @@
+2013-04-23  Enrico Schumann  <es@enricoschumann.net>
+
+
+	* R/position.R (position): if 'when' is missing, the latest
+	position (= maximum timestamp) is assumed
+
+	* R/internals.R (rebalance), man/PMwR-internal.Rd: function
+	'rebalance' is available, but not exported. It also gets a
+	'do.trunc' argument
+
 2013-04-15  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): 0.1-15

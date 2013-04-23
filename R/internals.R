@@ -36,4 +36,19 @@ first <- function(x, by, index = FALSE) {
     else
         x[match(unique(by), by)]
 }
-
+rebalance <- function(current, target, prices, notional,
+                      w.target = TRUE, names = NULL,
+                      do.trunc = TRUE) {
+    
+    if (missing(notional))
+        notional <- sum(current*prices)
+    ans <- target * notional / prices
+    if (do.trunc)
+        ans <- round(trunc(ans/10^(-do.trunc))*10^(-do.trunc))
+    data.frame(prices = prices, current = current,
+               value.now = current * prices, " " = "  =>  ", 
+               target = ans, value.then = ans * prices,
+               " " = "  =>  ", order = ans - current,
+               row.names = names,
+               check.names = FALSE)
+}
