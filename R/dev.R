@@ -183,7 +183,7 @@ if (FALSE) {
     mp <- tmp$map(index(alld))
     lines(mp$t, 
           coredata(100*alld[mp$ix,1]/coredata(alld[mp$ix,1][1L])),
-          col = grey(0.3))
+          col = grey(0.3), type = "s")
     dev.off()
 
     ## long short
@@ -284,7 +284,7 @@ if (FALSE) {
     w <- w/sum(w)
     data <- getTablesSelect(ids, "daily",
                             from = "20130311",
-                            to   = "20130412",
+                            to   = "20130423",
                             columns = "close")
 
     u <- w/data$close[1,]
@@ -294,7 +294,7 @@ if (FALSE) {
     
     data <- getTablesSelect("de0008467416", "indices",
                             from = "20130311",
-                            to   = "20130412",
+                            to   = "20130423",
                             columns = "close")
 
     lines(char2time(data$times), data$close/data$close[1L], col = "blue")
