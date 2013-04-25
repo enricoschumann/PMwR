@@ -1,3 +1,10 @@
+2013-04-25  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.1-16
+
+	* R/position.R (position): 'when' can be a vector, thus the
+	position at several times can be computed
+
 2013-04-23  Enrico Schumann  <es@enricoschumann.net>
 
 
