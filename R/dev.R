@@ -284,7 +284,7 @@ if (FALSE) {
     w <- w/sum(w)
     data <- getTablesSelect(ids, "daily",
                             from = "20130311",
-                            to   = "20130423",
+                            to   = "20130425",
                             columns = "close")
 
     u <- w/data$close[1,]
@@ -294,7 +294,7 @@ if (FALSE) {
     
     data <- getTablesSelect("de0008467416", "indices",
                             from = "20130311",
-                            to   = "20130423",
+                            to   = "20130425",
                             columns = "close")
 
     lines(char2time(data$times), data$close/data$close[1L], col = "blue")
