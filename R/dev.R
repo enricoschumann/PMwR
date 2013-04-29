@@ -69,7 +69,7 @@ if (FALSE) {
         invisible(x)
     }
 
-                                        # example
+          # example
     tm <- 1:3
     cf <- c(3,3,103)
     c1 <- Cashflow(cf, tm)
@@ -262,17 +262,17 @@ if (FALSE) {
 
 
 
-##                 in %
-## RHOEN-KLINIKUM  15.0
-## Suedzucker AG I 15.0
-## Talanx AG Namen 15.0
-## Kabel Deutschla 12.3
-## TAG Immobilien  12.0
-## SGL CARBON SE I  9.4
-## Fielmann AG Inh  8.3
-## Gagfah S.A. Act  6.5
-## GSW Immobilien   5.9
-## Symrise AG Inha  0.5
+    ##                 in %
+    ## RHOEN-KLINIKUM  15.0
+    ## Suedzucker AG I 15.0
+    ## Talanx AG Namen 15.0
+    ## Kabel Deutschla 12.3
+    ## TAG Immobilien  12.0
+    ## SGL CARBON SE I  9.4
+    ## Fielmann AG Inh  8.3
+    ## Gagfah S.A. Act  6.5
+    ## GSW Immobilien   5.9
+    ## Symrise AG Inha  0.5
 
     png("~/Trading/aktienMDAX.png", width = 600, height = 400)
 
@@ -315,31 +315,47 @@ if (FALSE) {
         imin <- 1L 
         imax <- length(x)
         count <- 0L
-        while (imax >= imin) {
-            imid <- as.integer(imin + (imax - imin)/2)
-            message("step ", count <- count + 1L, " -- ", imid)
-            if (x[imid] > t)
-                imax <- imid - 1L
-            else if ((x[imid] < t))
-                imin <- imid + 1L
-            else
-                break
+        if (duplicates == "undef") {
+            while (imax >= imin) {
+                imid <- as.integer(imin + (imax - imin)/2)
+                message("step ", count <- count + 1L, " -- ", imid)
+                if (x[imid] > t)
+                    imax <- imid - 1L
+                else if (x[imid] < t)
+                    imin <- imid + 1L
+                else
+                    break
+            }
+            imid
+        } else if (duplicates == "last") {
+            while (imax >= imin) {
+                imid <- as.integer(imin + (imax - imin)/2)
+                message("step ", count <- count + 1L, " -- ", imid)
+                if (x[imid] > t)
+                    imax <- imid - 1L
+                else
+                    imin <- imid + 1L
+            }
+            imid
         }
-        imax
     }
-    x <- sort(c(rnorm(10000000), 0.5))
+    x <- sort(c(rnorm(1000000), 0.5))
     t <- 0.5    
-    system.time(bs(x,t))
+    system.time(bs(x,t, "undef"))
     system.time(match(t, x))
     
-    x <- sort(c(runif(100), 1, runif(100)))
+    x <- rep(1, 10000)
     t <- 1
     bs(x,t)
+    bs(x,t, "last")
 
-    x <- 1:2000
+    
+    x <- 1:1000
     x[599:820] <- 700
     t <- 700
-    bs(x,t)
+    bs(x,t, "undef")
+    bs(x,t, "last")
+
 
           # intraday
 
