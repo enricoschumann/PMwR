@@ -302,4 +302,37 @@ if (FALSE) {
     legend(x="topleft", legend = c("Portfolio", "MDAX"),
            col= c("goldenrod3","blue"), lwd=2)
     dev.off()
+
+
+
+
+
+
+
+
+
+
+# BINARY SEARCH
+
+    x <- sort(rnorm(1000000))
+    
+    t <- -100
+    
+    bs <- function(x, t) {
+        imin <- 1L
+        imax <- length(x)
+        while (imax >= imin) {
+            imid <- as.integer(imin + (imax - imin) / 2)
+            if (x[imid] > t)
+                imax <- imid - 1L
+            else
+                imin <- imid + 1L
+        }
+        message(imin)
+        message(imid)
+        imax
+    }
+    bs(x,t)
+
+    
 }

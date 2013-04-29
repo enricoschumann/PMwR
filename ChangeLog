@@ -1,3 +1,7 @@
+2013-04-29  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/dev.R (bs): added binary search
+
 2013-04-25  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): 0.1-16
