@@ -310,29 +310,41 @@ if (FALSE) {
 
 
 
-
-
-# BINARY SEARCH
-
-    x <- sort(rnorm(1000000))
-    
-    t <- -100
-    
-    bs <- function(x, t) {
-        imin <- 1L
+          # BINARY SEARCH
+    bs <- function(x, t, duplicates = "undef") {
+        imin <- 1L 
         imax <- length(x)
+        count <- 0L
         while (imax >= imin) {
-            imid <- as.integer(imin + (imax - imin) / 2)
+            imid <- as.integer(imin + (imax - imin)/2)
+            message("step ", count <- count + 1L, " -- ", imid)
             if (x[imid] > t)
                 imax <- imid - 1L
-            else
+            else if ((x[imid] < t))
                 imin <- imid + 1L
+            else
+                break
         }
-        message(imin)
-        message(imid)
         imax
     }
+    x <- sort(c(rnorm(10000000), 0.5))
+    t <- 0.5    
+    system.time(bs(x,t))
+    system.time(match(t, x))
+    
+    x <- sort(c(runif(100), 1, runif(100)))
+    t <- 1
     bs(x,t)
+
+    x <- 1:2000
+    x[599:820] <- 700
+    t <- 700
+    bs(x,t)
+
+          # intraday
+
+    
+
 
     
 }
