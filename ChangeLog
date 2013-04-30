@@ -1,3 +1,13 @@
+2013-04-30  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-17
+
+	* R/Datetimetools.R (timegrid): fixed -- timegrid ignored holidays
+	specified as character ('YYYY-MM-DD')
+
+	* R/internals.R (print.rebalance): rebalance evaluates to list;
+	print method added
+
 2013-04-29  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/dev.R (bs): added binary search

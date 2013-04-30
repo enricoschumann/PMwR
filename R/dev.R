@@ -106,11 +106,79 @@ if (FALSE) {
                     instrument = c("meo", "lin", "sdf"),
                     account = "Modulor")
 
-    ## x4 <- Tradelist(timestamp = "20130315120000",
-    ##                 amount = c(22000, -8000, 16000),
-    ##                 price = c(24.0063, 131.3805, 33.5474),
-    ##                 instrument = c("meo", "lin", "sdf"),
-    ##                 account = "Modulor")
+    x4 <- Tradelist(timestamp = "20130315120000",
+                    amount = c(-5000, -8000, -8000,-55000,-8000,-8250,-11000,-6000),
+                    price = c(112.86, 37.35, 64.68, 8.56, 70.09, 72.27, 21.54, 94.93),
+                    instrument = c("mrk", "sdf", "sap", "dte", "bei", "hen3", "meo", "fre"),
+                    account = "Modulor")
+
+    x5 <- Tradelist(timestamp = "20130322120000",
+                    amount = -8000,
+                    price = 62.27,
+                    instrument = "sap",
+                    account = "Modulor")
+
+    
+    tl <- c(x1,x2,x3,x4,x5)
+    tg <- time2char(timegrid(ISOdatetime(2013,01,14,12,00,00), Sys.time(),
+                             interval = "30 min",
+                             fromHHMMSS = 9, toHHMMSS = "173000",
+                             holidays = as.Date(c("2013-03-29", "2013-04-01"))))
+    p <- position(tl, when = tg)
+    from <- "20130114120000"; to <- format(Sys.time(), "%Y%m%d%H%M%S")
+    data <- getTablesSelect(c(colnames(p), "dax"), "ib",
+                            from = from,
+                            to   = to,
+                            columns = "close")
+    p <- cbind(p,0)  ## zero column for dax
+    di <- match(tg, data$times, nomatch=0L)
+    p <- p[di!=0L, ]
+    times <- data$times[di]
+    tmp <- dim(data$close[di, ])
+    tmp2 <- na.locf(data$close[di, ])
+    dim(tmp2) <- tmp
+    close <- tmp2
+
+    png("~/Trading/aktien1.png", width = 600, height = 400)
+    par(bty = "n",las = 1,mar=c(5,5,1,0), tck = 0.003)
+    tmp <- plotTradingHours(x <- 100*c(1, cumprod(1+twReturns(close, p))), 
+                            t = char2time(times), type ="l",
+                            labels = "days", fromHHMMSS = 8,
+                            toHHMMSS = "173000",
+                            col = "goldenrod3", , ylim = c(95,112),
+                            interval = "30 min",
+                            holidays = as.Date(c("2013-03-29", "2013-04-01")))
+    mp <- tmp$map(char2time(times))
+    lines(mp$t, 
+          100*close[mp$ix,10]/(close[mp$ix,10])[1],
+          col = grey(0.3), type = "s")
+    dev.off()
+
+    
+
+    amount <- c(1,1,2,2)
+    price <- c(101,102,103,104)
+    all.equal(twReturns(price, amount), returns(price))
+
+    amount <- c(1,1,1,2,2,0)
+    dim(amount) <- c(3,2)
+    price <- c(100,100,100,100,100,100)
+    dim(price) <- c(3,2)
+    twReturns(price, amount)
+    all.equal(twReturns(price, amount), returns(price[,1]))
+
+    amount <- c(1,1,1,2,2,2)
+    dim(amount) <- c(3,2)
+    price <- c(101,102,103,103,105,107)
+    dim(price) <- c(3,2)
+    all.equal(twReturns(price, amount), returns(rowSums(price*amount)))
+
+    amount <- c(1,1,1,2,2,0)
+    dim(amount) <- c(3,2)
+    price <- c(101,102,103,103,105,107)
+    dim(price) <- c(3,2)
+    twReturns(price, amount)
+    
     
     X <- c(x1,x2,x3)
     p1 <- position(X, when="20130114120000")
@@ -284,7 +352,7 @@ if (FALSE) {
     w <- w/sum(w)
     data <- getTablesSelect(ids, "daily",
                             from = "20130311",
-                            to   = "20130425",
+                            to   = "20130429",
                             columns = "close")
 
     u <- w/data$close[1,]

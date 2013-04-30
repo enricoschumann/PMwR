@@ -27,3 +27,18 @@ drawdown <- function(v, relative = TRUE) {
          low = v[troughTime],
          lowPosition = troughTime)
 }
+twReturns <- function(price, amount, pad = NULL) {
+    if (missing(amount))
+        returns(price, pad)
+    do.pad <- !is.null(pad)        
+    amount <- as.matrix(amount)
+    price <- as.matrix(price)
+    n <- dim(price)[1L]
+    ap <- amount*price
+    rt <- returns(price)        
+    weights <- (price*amount/rowSums(price*amount))[-n, , drop = FALSE]
+    rt <- rowSums(rt*weights)        
+    if (do.pad) 
+        rt <- c(pad, rt)
+    rt
+}

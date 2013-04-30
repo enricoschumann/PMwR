@@ -1,8 +1,6 @@
 position <- function(amount, timestamp, instrument, when, from, to, ...) {
     if (missing(instrument))
         instrument <- NA
-    if (missing(when))
-        when <- max(timestamp)
     if (inherits(amount, "Tradelist")) {
         instrument <- amount$instrument
         timestamp <- amount$timestamp
@@ -16,6 +14,8 @@ position <- function(amount, timestamp, instrument, when, from, to, ...) {
         timestamp <- instrument$timestamp
         instrument <- instrument$instrument
     }
+    if (missing(when))
+        when <- max(timestamp)
     if (is.unsorted(timestamp)) {
         io  <- order(timestamp)
         timestamp <- timestamp[io]

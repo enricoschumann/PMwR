@@ -99,7 +99,7 @@ timegrid <- function(from, to, interval,
     grd <- seq(from, to, by = interval)
     if (!is.null(holidays)) {
         if (!inherits(holidays, "Date")) {
-            as.Date(holidays)
+            holidays <- as.Date(holidays)
         }
         grd <- grd[!(as.Date(grd) %in% holidays)]
     }
