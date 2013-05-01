@@ -425,6 +425,44 @@ if (FALSE) {
     bs(x,t, "last")
 
 
+
+    bs <- function(x, t) {
+        lo <- 1L 
+        hi <- length(x)
+        count <- 0
+        while (lo <= hi) {
+            mid <- as.integer(lo + (hi - lo)/2)
+            message("step ", count <- count + 1, "  ", mid)
+            if (x[mid] > t)
+                hi <- mid - 1L
+            else if (x[mid] < t)
+                lo <- mid + 1L
+            else break
+        }
+        mid
+    }
+
+
+
+    x <- sort(c(rnorm(1000000), 0.5))
+    t <- 0.5    
+    bs(x,t)
+    
+    x <- rep(1, 10000)
+    t <- 1
+    bs(x,t)
+
+    
+    x <- 1:1000
+    x[599:820] <- 700
+    t <- 700
+    bs(x,t)
+    t <- 821.1
+    x[bs(x,t)]
+
+
+
+    
           # intraday
 
     

@@ -1,6 +1,12 @@
+2013-05-01  Enrico Schumann  <es@enricoschumann.net>
+
+	* man/rebalance.Rd: added Rd file
+
 2013-04-30  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-17
+
+	* R/returns.R (twReturns): added. Compute time-weighted returns.
 
 	* R/Datetimetools.R (timegrid): fixed -- timegrid ignored holidays
 	specified as character ('YYYY-MM-DD')
