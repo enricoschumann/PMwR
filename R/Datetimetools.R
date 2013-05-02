@@ -179,6 +179,7 @@ plotTradingHours <- function(x, t = NULL,
         to <- roundPOSIXt(t[length(t)], interval)
 
     grd <- timegrid(from, to, interval = interval,
+                    holidays = holidays,
                     fromHHMMSS = fromHHMMSS, toHHMMSS = toHHMMSS)
     
     ## aggregate data to grid (last)

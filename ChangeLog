@@ -1,3 +1,8 @@
+2013-05-02  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/Datetimetools.R (plotTradingHours): fixed -- plotTradingHours
+	had ignored 'holidays' argument
+
 2013-05-01  Enrico Schumann  <es@enricoschumann.net>
 
 	* man/rebalance.Rd: added Rd file
