@@ -76,6 +76,40 @@ if (FALSE) {
     summary(c1)
 
 
+    ## * TIMESERIES
+    ## index (t) is sorted, but not unique
+    require("fastmatch")
+    require("zoo")
+    sts <- function(t, x, check.sorted = TRUE) {
+        if (length(t) != NROW(x))
+            stop("lengths of t and x differ")
+        z <- list(t = t, x = x)
+        class(z) <- "sts"
+        z
+    }
+    ##window.sts
+    N1 <- 100000
+    N2 <- 200000
+    t1 <- sts(1:N1, rnorm(N1))
+    t2 <- sts(sort(runif(N2))*N1, rnorm(N2))
+    t1z <- zoo(t1$x, t1$t)
+    t2z <- zoo(t2$x, t2$t)
+    merge.sts <- function(...) {
+        args <- list(...)
+        ## TODO: check classes of indices
+        T <- sort(unlist(lapply(args, `[[`, "t"), use.names = FALSE))
+        X <- array(NA, dim = c(length(T), length(args)))
+        for (j in seq_along(args)) {
+            i <- fmatch(args[[j]][["t"]], T)
+            X[cbind(i,j)] <- args[[j]][["x"]]
+        }
+        sts(T, X)
+    }
+    STS <- merge.sts(t1,t2)
+    merge(t1z,t2z)
+
+
+    
 
     require("Infront")
     tmp <- getInfrontTradesP("Jaro", from = "20130215000000", to = "20130215230000")
