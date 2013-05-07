@@ -1,3 +1,7 @@
+2013-05-07  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: exported twReturns
+
 2013-05-02  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/Datetimetools.R (plotTradingHours): fixed -- plotTradingHours

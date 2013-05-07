@@ -175,7 +175,7 @@ if (FALSE) {
 
     png("~/Trading/aktien1.png", width = 600, height = 400)
     par(bty = "n",las = 1,mar=c(5,5,1,0), tck = 0.003)
-    tmp <- plotTradingHours(x <- 100*c(1, cumprod(1+twReturns(close, p))), 
+    tmp <- plotTradingHours(x <- 100*c(1, cumprod(1+PMwR:::twReturns(close, p))), 
                             t = char2time(times), type ="l",
                             labels = "days", fromHHMMSS = 8,
                             toHHMMSS = "173000",
