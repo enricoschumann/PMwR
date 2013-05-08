@@ -1,12 +1,11 @@
 \name{rebalance}
 \alias{rebalance}
 \alias{print.rebalance}
-%- Also NEED an '\alias' for EACH other topic documented here.
 \title{
-%%  ~~function to do ... ~~
+  Rebalance portfolio
 }
 \description{
-%%  ~~ A concise (1-5 lines) description of what the function does. ~~
+  Rebalance portfolio  
 }
 \usage{
 rebalance(current, target, prices,
@@ -16,7 +15,6 @@ rebalance(current, target, prices,
 
 \method{print}{rebalance}(x, ... \dots)
 }
-%- maybe also 'usage' for other objects documented here.
 \arguments{
   \item{current}{
     the current holdings: a vector of position sizes
