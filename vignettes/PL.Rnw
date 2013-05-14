@@ -9,6 +9,8 @@
 
 \SweaveOpts{keep.source = TRUE, eps = TRUE}
 
+\renewcommand{\PMwR}{\texttt{PMwR}}
+
 \begin{document}
 \title{Computing profit-and-loss and analysing trades}
 \author{Enrico Schumann}
@@ -98,5 +100,33 @@ Closing the trade at once.
 <<>>=
 closeOnFirst(n)
 @
+
+\section{Tradelists}
+
+\PMwR\ provides a simple, implictly-defined class \texttt{Tradelist}
+that should help to handle trades.  A \texttt{Tradelist} is created
+with the function that goes by the same name.
+
+Suppose we buy five times one unit of some unspecified asset.
+
+<<>>=
+tl1 <- Tradelist(timestamp = 1:5, 
+                 amount = 1, 
+                 price = c(2,2,2,3,4), 
+                 account = "my account")
+tl1
+@ 
+
+Now we close the trade.
+<<>>=
+tl2 <- Tradelist(timestamp = 6, 
+                amount    = 5, 
+                price     = 3, 
+                account   = "my account")
+@ 
+
+<<>>=
+c(tl1, tl2)
+@ 
 
 \end{document}

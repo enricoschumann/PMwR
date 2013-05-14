@@ -1,3 +1,8 @@
+2013-05-13  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/Tradelist.R (Tradelist): added '...' argument; all arguments
+	passed that way musz be named
+
 2013-05-07  Enrico Schumann  <es@enricoschumann.net>
 
 	* NAMESPACE: exported twReturns

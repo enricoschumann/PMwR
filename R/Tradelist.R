@@ -1,4 +1,4 @@
-Tradelist <- function(timestamp, amount, price, id, instrument, account) {
+Tradelist <- function(timestamp, amount, price, id, instrument, account, ...) {
     
     if (missing(id))
         id <- NA
@@ -10,13 +10,20 @@ Tradelist <- function(timestamp, amount, price, id, instrument, account) {
         account <- NA
     if (missing(price))
         price <- NA
-    
     ans <- list(id = id,
                 instrument = instrument,
-                account = account,
-                timestamp = timestamp,
-                amount = amount,
-                price = price)
+                account    = account,
+                timestamp  = timestamp,
+                amount     = amount,
+                price      = price)
+    dots <- list(...)
+    nd <- names(dots)
+    if (length(dots)) {
+        if (any(nd == "") || is.null(nd))
+            stop("arguments passed via ... must be named")
+        else
+            ans <- c(ans, dots)
+    }    
     class(ans) <- "Tradelist"
     ans    
 }
@@ -39,7 +46,7 @@ print.Tradelist <- function(x, ...) {
                           price = x$price,
                           row.names = seq_len(length(x$amount)),
                           stringsAsFactors = FALSE), dspT))
-    if ((n <- length(x$amount)) > dspT)
+    if ((n <- max(length(x$amount),length(x$price))) > dspT)
         cat("...\n")
     insts <- sort(unique(x$instrument))
     if (length(insts) > dspI) {
@@ -77,4 +84,14 @@ c.Tradelist <- function(...) {
                   price = ans$price)
     } else
         tls        
+}
+c.Tradelist <- function(...) {
+    tls <- list(...)
+    if (!all(unlist(lapply(tls, "class")) == "class"))
+        stop("all ... must be Tradelists")
+    
+    ns <- unique(unlist(lapply(tls, names)))
+    for (n in seq_along(ns)) {
+        lapply(tls, `[[`, ns[n])
+    }
 }
