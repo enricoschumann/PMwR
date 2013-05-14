@@ -1,3 +1,10 @@
+2013-05-14  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-18
+
+	* R/Tradelist.R (c.Tradelist, length.Tradelist): added method for
+	length; rewrote c.Tradelist
+
 2013-05-13  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/Tradelist.R (Tradelist): added '...' argument; all arguments

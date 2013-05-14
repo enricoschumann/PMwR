@@ -1,4 +1,4 @@
-position <- function(amount, timestamp, instrument, when, from, to, ...) {
+position <- function(amount, timestamp, instrument, when, from, to, nonzero.only = FALSE) {
     if (missing(instrument))
         instrument <- NA
     if (inherits(amount, "Tradelist")) {

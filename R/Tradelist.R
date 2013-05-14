@@ -1,4 +1,5 @@
 Tradelist <- function(timestamp, amount, price, id, instrument, account, ...) {
+    ## timestamp, amount, price
     
     if (missing(id))
         id <- NA
@@ -10,12 +11,24 @@ Tradelist <- function(timestamp, amount, price, id, instrument, account, ...) {
         account <- NA
     if (missing(price))
         price <- NA
-    ans <- list(id = id,
-                instrument = instrument,
-                account    = account,
-                timestamp  = timestamp,
-                amount     = amount,
-                price      = price)
+    len <- max(length(timestamp),
+               length(amount),
+               length(price),
+               length(id),
+               length(instrument),
+               length(account))
+    rep0 <- function(x, len) {
+        if (len == 1L || length(x) == len)
+            x
+        else 
+            rep(x, len)
+    }
+    ans <- list(id = rep0(id, len),
+                instrument = rep0(instrument, len),
+                account    = rep0(account, len),
+                timestamp  = rep0(timestamp, len),
+                amount     = rep0(amount, len),
+                price      = rep0(amount, len))
     dots <- list(...)
     nd <- names(dots)
     if (length(dots)) {
@@ -60,6 +73,8 @@ print.Tradelist <- function(x, ...) {
     cat(paste0("(", n, " trades", subs, ")\n"))
     invisible(x)
 }
+length.Tradelist <- function(x)
+    length(x$amount)
 sort.Tradelist <- function(x, ...) {
     cat("not implemented\n")
     invisible(x)
@@ -69,29 +84,33 @@ filterTradelist <- function(x, timestamp, amount, price,
     cat("not implemented\n")
     invisible(x)
 }
+## c.Tradelist0 <- function(...) {
+##     tls <- list(...)
+##     if (length(tls) > 1L) {
+##         ans <- as.data.frame(unclass(tls[[1L]]), stringsAsFactors = FALSE)
+##         for (i in 2:length(tls))
+##             ans <- rbind(ans, as.data.frame(unclass(tls[[i]]),
+##                                             stringsAsFactors = FALSE))            
+##         Tradelist(id = ans$id,
+##                   instrument = ans$instrument,
+##                   account = ans$account,
+##                   timestamp = ans$timestamp,
+##                   amount = ans$amount,
+##                   price = ans$price)
+##     } else
+##         tls        
+## }
 c.Tradelist <- function(...) {
     tls <- list(...)
-    if (length(tls) > 1L) {
-        ans <- as.data.frame(unclass(tls[[1L]]), stringsAsFactors = FALSE)
-        for (i in 2:length(tls))
-            ans <- rbind(ans, as.data.frame(unclass(tls[[i]]),
-                                            stringsAsFactors = FALSE))            
-        Tradelist(id = ans$id,
-                  instrument = ans$instrument,
-                  account = ans$account,
-                  timestamp = ans$timestamp,
-                  amount = ans$amount,
-                  price = ans$price)
-    } else
-        tls        
-}
-c.Tradelist <- function(...) {
-    tls <- list(...)
-    if (!all(unlist(lapply(tls, "class")) == "class"))
+    if (!all(unlist(lapply(tls, "class")) == "Tradelist"))
         stop("all ... must be Tradelists")
     
     ns <- unique(unlist(lapply(tls, names)))
+    ans <- vector("list", length = length(ns))
+    names(ans) <- ns
     for (n in seq_along(ns)) {
-        lapply(tls, `[[`, ns[n])
+        ans[[ns[n]]] <- unlist(lapply(tls, `[[`, ns[n]))
     }
+    class(ans) <- "Tradelist"
+    ans
 }

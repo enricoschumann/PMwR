@@ -9,7 +9,7 @@
 
 \SweaveOpts{keep.source = TRUE, eps = TRUE}
 
-\renewcommand{\PMwR}{\texttt{PMwR}}
+\newcommand{\PMwR}{\texttt{PMwR}}
 
 \begin{document}
 \title{Computing profit-and-loss and analysing trades}
@@ -120,13 +120,20 @@ tl1
 Now we close the trade.
 <<>>=
 tl2 <- Tradelist(timestamp = 6, 
-                amount    = 5, 
+                amount    = -5, 
                 price     = 3, 
                 account   = "my account")
 @ 
 
+To compute the profit or loss, we first concatenate the two lists.
+
 <<>>=
-c(tl1, tl2)
+##tl <- c(tl1, tl2)
+@ 
+
+
+<<>>=
+##PL(tl)
 @ 
 
 \end{document}
