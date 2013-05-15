@@ -12,9 +12,9 @@ Description: Functions and examples for 'Portfolio Management with R':
   pricing of financial instruments, computing profit-and-loss, 
   reporting, backtesting and more.
 Depends: base64enc
-Suggests: NMOF, RUnit, rbenchmark, zoo, tth
+Suggests: NMOF, RUnit, rbenchmark, zoo
 License: GPL-3
 LazyLoad: yes
 LazyData: yes
 URL: http://enricoschumann.net/R/packages/PMwR/index.htm
-X-es-keywords: finance, derivatives, financial risk, reproducible research, LaTeX
+X-es-keywords: finance, derivatives, financial risk, reproducible research, (La)TeX

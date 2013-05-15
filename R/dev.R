@@ -1,31 +1,4 @@
 if (FALSE) {
-    require("database")    
-
-
-    ## compare
-    t1 <- getTableSelect("de000a0dpkd3", "dtfonds", from = "2013-01-01")
-    t2 <- getTableSelect("de0008469008", "indices", from = "2013-01-01")
-    t3 <- getTableSelect("de0008469115", "indices", from = "2013-01-01")
-    t1 <- zoo(t1$close, char2time(row.names(t1)))
-    t2 <- zoo(t2$close, char2time(row.names(t2)))
-    t3 <- zoo(t3$close, char2time(row.names(t3)))
-    
-    cmpSeries <- function(t1,t2) {
-        s1 <- sd(returns(coredata(t1)))
-        tmp <- coredata(t2[1]) *
-            cumprod(c(1, 1 + returns(coredata(t2))/sd(returns(coredata(t2))) * s1))
-        t3 <- zoo(tmp, index(t2))
-        list(t1 = 100*t1/coredata(t1[1L]),
-             t2 = 100*t3/coredata(t3[1L]))
-        ## plot(100*t1/coredata(t1[1L]))
-        ## lines(100*t3/coredata(t3[1L]), col = "blue")
-    }
-    tmp <- cmpSeries(t1,t2)
-    par(bty = "n", mar = c(3,4,1,1), las = 1)
-    plot(tmp$t1, col = "goldenrod3",xlab="", ylab = "")
-    lines(tmp$t2, col = grey(0.5))
-    tmp <- cmpSeries(t1,t3)
-    lines(tmp$t2, col = "blue")
 
     
     ## * INSTRUMENT
@@ -127,9 +100,6 @@ if (FALSE) {
     jb <- Tradelist(datetime = tmp$datetime, tmp$volume, tmp$price, id = tmp$rownames,
                     instrument = tmp$ticker, account = "JB")
     jb
-
-
-
 
     
     amount <- c(1,1,2,2)

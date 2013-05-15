@@ -29,16 +29,16 @@ returns <- function(x, pad = NULL) {
     }
     rets
 }
-twReturns <- function(price, amount, pad = NULL) {
-    if (missing(amount))
+twReturns <- function(price, position, pad = NULL) {
+    if (missing(position))
         returns(price, pad)
     do.pad <- !is.null(pad)        
-    amount <- as.matrix(amount)
+    position <- as.matrix(position)
     price <- as.matrix(price)
     n <- dim(price)[1L]
-    ap <- amount*price
+    ap <- position*price
     rt <- returns(price)        
-    weights <- (price*amount/rowSums(price*amount))[-n, , drop = FALSE]
+    weights <- (price*position/rowSums(price*position))[-n, , drop = FALSE]
     rt <- rowSums(rt*weights)        
     if (do.pad) 
         rt <- c(pad, rt)
@@ -74,24 +74,25 @@ pReturns <- function(x, t = NULL, period, complete.first = TRUE) {
     ans <- list(returns = returns(x[ii]),
                 t = t[ii][-1L],
                 period = period)
-
+    class(ans) <- "PMwR-pReturns"
+    ans
 }
 
 require("tseries")
 sp   <- get.hist.quote("^GSPC", quote="AdjClose")
   
   
-mReturns <- function(x, t = NULL, complete.first = TRUE) {
-    if (is.null(t) && !inherits(x, "zoo"))
-        stop("x should be of class zoo")
+## mReturns <- function(x, t = NULL, complete.first = TRUE) {
+##     if (is.null(t) && !inherits(x, "zoo"))
+##         stop("x should be of class zoo")
     
-    Ym <- format(index(x), "%Y%m")
+##     Ym <- format(index(x), "%Y%m")
     
-    if (complete.first && Ym[1] == Ym[2])
-        index(x)[1L] <- endOfPreviousMonth(index(x)[1L])
-    rets <- PMwR:::last(sp, Ym)
+##     if (complete.first && Ym[1] == Ym[2])
+##         index(x)[1L] <- endOfPreviousMonth(index(x)[1L])
+##     rets <- PMwR:::last(sp, Ym)
     
-}
+## }
 
 monthlyStats <- function(t,x) {
     x.eom <- aggregate(x, strftime(index(x), "%Y%m"), tail,1)
