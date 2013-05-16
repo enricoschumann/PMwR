@@ -28,7 +28,7 @@ Tradelist <- function(timestamp, amount, price, id, instrument, account, ...) {
                 account    = rep0(account, len),
                 timestamp  = rep0(timestamp, len),
                 amount     = rep0(amount, len),
-                price      = rep0(amount, len))
+                price      = rep0(price, len))
     dots <- list(...)
     nd <- names(dots)
     if (length(dots)) {
