@@ -21,7 +21,7 @@ makeHHMMSS <- function(x, label = "time specification (HHMMSS)") {
 wait <- function(x) 
     if (length(x) == 1L)
         Sys.sleep(x) else
-            Sys.sleep(runif(1L, min(x), max(x)))
+Sys.sleep(runif(1L, min(x), max(x)))
 last <- function(x, by, index = FALSE) {
     lby <- length(by)
     rby <- by[lby:1L]
@@ -36,3 +36,41 @@ first <- function(x, by, index = FALSE) {
     else
         x[match(unique(by), by)]
 }
+divCorrection <- function(x, t, div, match.last = FALSE) {
+    if (!is.null(dim(x)))
+        stop(sQuote("x"), " must be a vector")
+
+    ti <- t > 1L
+    div <- div[ti]
+    t <- t[ti]
+    if (length(t) && length(div) == 1L)
+        div <- rep(div, length(t))
+    if (length(div) != length(t))
+        stop("different lengths for ", sQuote("div"), " and ", sQuote("t"))
+    rets <- returns(x, 0)
+    rets[t] <- (x[t] + div)/x[t - 1L] - 1
+    new.series <- x[1L]*cumprod(1 + rets)
+    if (match.last){
+        n <- length(x)
+        new.series <- new.series*x[n]/new.series[n]
+    }
+    new.series        
+}
+
+## -3.526091%
+
+
+## Commerzbank
+##| 20130423 |  1.078 |
+##| 20130424 |   10.4 |
+##| 20130425 |  10.55 |
+## x <- c(1.078, 10.40, 10.55)
+## t <- 2
+## div <- -1.04*9
+
+## 1.04/1.078-1
+
+## divCorrection(x,t,div, TRUE)
+## fun <- function(x) ((10.4+x)/1.078) - 1.04/1.078
+
+## z <- uniroot(fun, c(-7,-12))$root

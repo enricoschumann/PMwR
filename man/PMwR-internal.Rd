@@ -19,6 +19,7 @@ first(x, by, index = FALSE)
 last(x, by, index = FALSE)
 rebalance(current, target, prices, notional,
           w.target = TRUE, names = NULL)
+divCorrection(x, t, div, match.last = FALSE)
 }
 \details{
 
@@ -28,7 +29,7 @@ rebalance(current, target, prices, notional,
   If the argument to \code{wait} is a single number, the function will
   call \code{\link{Sys.sleep}} with this number. If \code{x} is a
   vector, a uniform random variate between \code{min(x)} and
-  \code{max(x)} is passed to \code{\link{Sys.sleep}}.
+  \code{max(x)} is passed to \code{\link{Sys.sleep}}.  
   
 }
 \author{
@@ -44,6 +45,14 @@ current <- c(500  , 0   ,90   ,0    ,20    ,34   ,16     ,49     ,0      ,0)
 target  <- c(0.15,0.0,0.1,0,0.15,0.15,0.15,0.15,0,0.15)
 prices <- c(8.36,63.44 ,35.9325 ,21.2325 ,113.85 ,95.21 ,65.965 ,69.48 ,132.175 ,51.55)
 PMwR:::rebalance(current, target, prices, notional = 50000, names= s)
+
+
+x <- c(7,7,9,11)
+div <- 1
+t <- 4
+
+PMwR:::divCorrection(x, t, div)
+PMwR:::divCorrection(x, t, div, TRUE)
 
 }
 \keyword{internal}
