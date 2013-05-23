@@ -33,7 +33,6 @@ endOfMonth(x, shift = 0L)
 endOfPreviousMonth(x)
 dayOfMonth(x)
 dayOfMonth(x) <- value
-
 lastWeekday(weekday, x, shift = 0L,
             period = "month", before, inclusive = TRUE)
 
@@ -50,7 +49,8 @@ lastWeekday(weekday, x, shift = 0L,
     
     A character string like \dQuote{\code{num} \code{units}}, in which
     \code{num} is a number, and \code{units} is \code{sec}, \code{min},
-    \code{hour} or \code{day}.
+    \code{hour} or \code{day}. \code{num} and \code{units} must be
+    separated by white space.
 
   }
   \item{excludeWeekends}{
@@ -104,9 +104,12 @@ lastWeekday(weekday, x, shift = 0L,
 }
 \details{
 
-  Some of these functions are currently quite inefficient, and their
-  interfaces may change.
+  \code{timegrid} creates an equally-spaced grid of class \code{POSIXct}
+  (or \code{character(0)} in case no valid points remain).
 
+  \code{roundPOSIXt} rounds down an input of class \code{POSIXt}; it
+  returns a vector of class \code{POSIXct}.
+  
   \code{previousBusinessDay} takes a \code{\link{Date}} \code{x} and
   returns the last non-weekend day before.
 
@@ -115,8 +118,12 @@ lastWeekday(weekday, x, shift = 0L,
   negative, the end of previous months. (\code{endOfMonth(x, -1)} is
   equivalent to \code{endOfPreviousMonth(x)}.
   
-  \code{roundPOSIXt} rounds to down to the specified interval.
-
+  \code{lastWeekday} gives the last day of the week (specified as an
+  integer 0 to 6, with Sunday being 0) of a given month.  \code{shift}
+  moves forward (when positive) or backward (when negative) by one week;
+  see Examples.
+ 
+  
 }
 \value{
   
@@ -133,7 +140,7 @@ lastWeekday(weekday, x, shift = 0L,
   Enrico Schumann
 }
 \seealso{
-\code{\link{DateTimeClasses}}
+\code{\link{DateTimeClasses}}, \code{\link{plotTradingHours}}
 }
 \examples{
 from <- as.POSIXct("2012-04-30 08:00:00")
