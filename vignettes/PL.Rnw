@@ -101,16 +101,16 @@ Closing the trade at once.
 closeOnFirst(n)
 @
 
-\section{Tradelists}
+\section{Journals}
 
-\PMwR\ provides a simple, implictly-defined class \texttt{Tradelist}
-that should help to handle trades.  A \texttt{Tradelist} is created
+\PMwR\ provides a simple, implictly-defined class \texttt{Journal}
+that should help to handle trades.  A \texttt{Journal} is created
 with the function that goes by the same name.
 
 Suppose we buy five times one unit of some unspecified asset.
 
 <<>>=
-tl1 <- Tradelist(timestamp = 1:5, 
+tl1 <- Journal(timestamp = 1:5, 
                  amount = 1, 
                  price = c(2,2,2,3,4), 
                  account = "my account")
@@ -119,7 +119,7 @@ tl1
 
 Now we close the trade.
 <<>>=
-tl2 <- Tradelist(timestamp = 6, 
+tl2 <- Journal(timestamp = 6, 
                 amount    = -5, 
                 price     = 3, 
                 account   = "my account")
@@ -139,8 +139,11 @@ To compute the profit or loss, we first concatenate the two lists.
 
 \section{PL}
 
+Suppose we keep a simple log of trades for an account.
 
-ticker; timestamp; amount; price; fees
+<<>>= 
+
+trades <- read.table(textConnection("ticker; timestamp; amount; price; fees
 BEId ; 2012-12-05 03:17:37;49;  60.4500; -4.00
 BEId ; 2013-03-13 08:56:11;58;  69.5500; -4.03
 DTEd ; 2012-12-05 03:22:02;313; 8.6000;  -4.00
@@ -164,7 +167,20 @@ SAPd  ;2013-03-13 05:05:37;-32; 63.5800; -4.00
 SDFd  ;2013-02-15 06:02:00;90;  33.6500; -4.00
 SDFd  ;2013-03-13 08:50:47;49;  35.9400; -4.00
 SIEd  ;2012-12-05 03:46:14;37;  79.8900; -4.00
-SIEd  ;2013-01-09 03:25:10;-37; 83.5200; -4.00
+SIEd  ;2013-01-09 03:25:10;-37; 83.5200; -4.00"),
+                     sep =";", header = TRUE, 
+                     stringsAsFactors = TRUE)
 
+@ 
+
+<<>>=
+
+Journal(timestamp = trades$timestamp, 
+          amount = trades$amount,
+          price = trades$price,
+          instrument = trades$ticker,
+          fees = trades$fees)
+
+@ 
 
 \end{document}

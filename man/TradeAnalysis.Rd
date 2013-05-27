@@ -130,12 +130,12 @@ splitTrades(n,p,timestamp, TRUE)  ## almost like the original series
 scaleTrades(n,p,timestamp)
 scaleTrades(n,p,timestamp, TRUE) ## each _trade_ gets scaled
 
-x1 <- Tradelist(timestamp = c(1,2,3,1,2,3),
+x1 <- Journal(timestamp = c(1,2,3,1,2,3),
                 amount = c(1, 1, -2, 1,1,-2),
                 price = c(100,102, 101, 100,102,105),
                 instrument = c(rep("A", 3), rep("B", 3)))
 
 PL(x1)
-PL(c(1, 1, -2), c(100,102, 101))  ## Tradelist is not required
+PL(c(1, 1, -2), c(100,102, 101))  ## Journal is not required
 
 }

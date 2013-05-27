@@ -53,8 +53,8 @@ The following classes are implicitly defined
 Functions: print, sort, toLatex, PL, PLsorted
 
 
-\subsubsection{Tradelist}
-A Tradelist is just a list trades.
+\subsubsection{Journal}
+A Journal is just a list trades.
 
 \paragraph{functions}
 

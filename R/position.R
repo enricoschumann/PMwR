@@ -1,19 +1,24 @@
-position <- function(amount, timestamp, instrument, when, from, to, nonzero.only = FALSE) {
+position <- function(amount, timestamp, instrument, when, from, to, nonzero.only = FALSE,
+                     aggr.accounts = FALSE, account.sep = "::") {
     if (missing(instrument))
         instrument <- NA
-    if (inherits(amount, "Tradelist")) {
+    if (inherits(amount, "Journal")) {
+        J <- amount
         instrument <- amount$instrument
         timestamp <- amount$timestamp
         amount <- amount$amount
-    } else if (inherits(timestamp, "Tradelist")) {
+    } else if (inherits(timestamp, "Journal")) {
+        J <- timestamp
         instrument <- timestamp$instrument
         amount <- timestamp$amount
         timestamp <- timestamp$timestamp
-    } else if (inherits(instrument, "Tradelist")) {
+    } else if (inherits(instrument, "Journal")) {
+        J <- instrument
         amount <- instrument$amount
         timestamp <- instrument$timestamp
         instrument <- instrument$instrument
     }
+
     if (missing(when))
         when <- max(timestamp)
     if (is.unsorted(timestamp)) {
@@ -23,6 +28,13 @@ position <- function(amount, timestamp, instrument, when, from, to, nonzero.only
         instrument <- instrument[io]
     }
     instrument[is.na(instrument)] <- "not specified"
+
+    if (!aggr.accounts && !all(is.na(J$account)) && length(unique(J$account)) > 1L) {
+        instrument <- paste0(J$account, account.sep, instrument)
+        by.account <- TRUE
+    } else 
+        by.account <- FALSE
+
     nw <- length(when)
     pos <- array(0, dim = c(nw,
                     length(nm <- sort(unique(instrument)))))
@@ -38,5 +50,5 @@ position <- function(amount, timestamp, instrument, when, from, to, nonzero.only
                 cumsum(iv)[max(beforewhen)] else 0
         }
     }
-    drop(pos)
+    pos
 }

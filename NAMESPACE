@@ -2,7 +2,7 @@ export(
     "dayOfMonth<-",
     PL,
     PLsorted,
-    Tradelist,
+    Journal,
     backtest,
     char2num,
     closeOnFirst,
@@ -10,6 +10,7 @@ export(
     drawdown,
     endOfMonth,
     endOfPreviousMonth,
+    expstr,
     firstOfMonth,
     isValidISIN,
     isWeekend,
@@ -33,8 +34,8 @@ export(
     twExposure    
     )
 # methods
-S3method(print,Tradelist)
+S3method(print,Journal)
 S3method(print,PL)
-S3method(sort,Tradelist)
-S3method(c,Tradelist)
+S3method(sort,Journal)
+S3method(c,Journal)
 useDynLib(PMwR)

@@ -21,126 +21,66 @@ We need to package.
 require("PMwR")
 @
 
-\section{PL}
+\section{The journal function}
 
-A simple example: we buy one contract at 100; we sell at 102.
+
+\subsection{Data}
+
+\PMwR\ provides an S3 class \texttt{Journal} for handling transaction
+data.  A \texttt{Journal} is created through the function
+\texttt{Journal}, but it is really just a list of atomic vectors with
+a class attribute.  Methods should not rely on these vectors being
+sorted; that is, components of a journal should always be retrieved by
+name, never by position.
+
+The simplicity of the class is intended, as it is mostly used in
+interactive analyses.  Thus, the analyst is supposed to dissect the
+information at will.
+
+What is actually stored in a \texttt{Journal} is up to its user, but a few
+fields are typical (and required for several methods):
+
+\begin{description}
+
+\item[timestamp] anything that can be sorted (and that fits into an
+  atomic vector: POSIXlt is possible, but not recommended)
+
+\item[amount] notional amount that is transfered
+
+\item[price] price
+
+\item[id] (ideally unique) id
+
+\item[instrument] description of the financial instrument
+
+\item[account] description of the account
+
+\item[\texttt{...}]  other fields (must named, eg, \texttt{fees =
+    c(1,2,1)}
+\end{description}
+
+The idea is that all transactions are put into a hierachy
+
+\begin{verbatim}
+   <account>::<instrument>
+\end{verbatim}
+
+
+To a give really simple example, suppose you kept track of a bank account.
 
 <<>>=
-n <- c(1,-1)
-p <- c(100,102)
-PL(n, p)
-PLsorted(n, p)
-@
-
-\texttt{PLsorted} gives a bit more information: it tells us that at
-the end of the first point in time, we had a position of 1. Our final
-wealth is 2 (the last element of \texttt{wealth} is the same as the
-\texttt{pl} that is returned by \texttt{PL}).
-
-Another simple example. This time we also supply a time series of prices.
-
-<<>>=
-P <- 100:110
-T <- seq_along(P)
-n <- c(2, -2)
-p <- c(100, 102)
-timestamp <- c(2, 4)
-PLsorted(n, p)
-PLsorted(n, p, timestamp = timestamp,
-         allprices = P, alltimes = T,
-         initcash = 500)
-@
-
-\section{Exposure}
-
-Suppose we have the following trades and times.
-
-<<>>=
-n <- c(1,3,-3,1,-3,1)
-t <- c(0,1,3,4,7,12)
+when   <- as.Date("2012-01-01") + 0:3
+amount <- c(1,2,-2,5) 
+J <- Journal(when, amount)
 @ 
 
-The holding period (\texttt{duration}) of these trades can be computed
-so:
 <<>>=
-data.frame(position = cumsum(n)[-length(n)], 
-           duration = diff(t))
-@ 
-
-We can plot the exposure.
-<<fig=true>>=
-plot(c(t[1L], t), cumsum(c(0, n)), type = "s",
-     xlab = "time", ylab = "position")
-@ 
-
-We have had a position over 12~time units (hours, say).
-<<>>=
-twExposure(n, t)
-@ 
-
-
-\section{Splitting and rescaling}
-
-Suppose we have the following trades and impose a limit that the
-maximum absolute exposure for the trader should only be 2.
-
-<<>>=
-t <- 1:6
-n <- c(-1,-1,-1,1,1,1)
-p <- c(100,99,98,98,99,100)
-limit(n, p, t, lim = 2)
-@ 
-
-Scaling the trades.
-<<>>=
-scaleToUnity(n)
-@ 
-
-Closing the trade at once.
-<<>>=
-closeOnFirst(n)
-@
-
-\section{Tradelists}
-
-\PMwR\ provides a simple, implictly-defined class \texttt{Tradelist}
-that should help to handle trades.  A \texttt{Tradelist} is created
-with the function that goes by the same name.
-
-Suppose we buy five times one unit of some unspecified asset.
-
-<<>>=
-tl1 <- Tradelist(timestamp = 1:5, 
-                 amount = 1, 
-                 price = c(2,2,2,3,4), 
-                 account = "my account")
-tl1
-@ 
-
-Now we close the trade.
-<<>>=
-tl2 <- Tradelist(timestamp = 6, 
-                amount    = -5, 
-                price     = 3, 
-                account   = "my account")
-@ 
-
-To compute the profit or loss, we first concatenate the two lists.
-
-<<>>=
-##tl <- c(tl1, tl2)
+position(J)
 @ 
 
 
-<<>>=
-##PL(tl)
-@ 
-
-
-\section{PL}
-
-Suppose we keep a simple log of trades for an account.
-
+\subsection{An example}
+ 
 <<>>= 
 
 trades <- read.table(textConnection("ticker; timestamp; amount; price; fees
@@ -160,6 +100,7 @@ LINd  ;2013-05-16 06:49:10;50;  151.7000;-7.58
 LINd  ;2013-02-15 05:54:30;-22; 131.4000;-4.00
 MEOd  ;2013-02-15 07:38:39;120; 24.1800; -4.00
 MEOd  ;2013-03-13 05:05:30;-120;21.1300; -4.00
+MEOd  ;2013-05-23 03:09:09;270;26.4700; -7.15
 MRKd  ;2012-12-05 03:53:23;20;  102.6000;-4.00
 MRKd  ;2013-03-13 08:55:29;45;  113.8500;-5.12
 SAPd  ;2012-12-05 03:31:58;32;  61.3100; -4.00
@@ -168,19 +109,82 @@ SDFd  ;2013-02-15 06:02:00;90;  33.6500; -4.00
 SDFd  ;2013-03-13 08:50:47;49;  35.9400; -4.00
 SIEd  ;2012-12-05 03:46:14;37;  79.8900; -4.00
 SIEd  ;2013-01-09 03:25:10;-37; 83.5200; -4.00"),
-                     sep =";", header = TRUE, 
-                     stringsAsFactors = TRUE)
+                     sep =";", header = TRUE,
+                     strip.white = TRUE, 
+                     stringsAsFactors = FALSE)
+
+trades$timestamp <- c(as.POSIXct(trades$timestamp, tz = "America/New_York"))
 
 @ 
+
+We put this all into a Journal \texttt{J}.
+<<>>=
+J <- Journal(timestamp = trades$timestamp, 
+             amount = trades$amount,
+             price = trades$price,
+             instrument = trades$ticker,
+             fees = trades$fees)
+J
+@ 
+
+What is the current position?
+<<>>=
+position(J)
+@ 
+
+What was the positon in 15 January 2013, 11:00:00? 
+<<>>=
+position(J, when = as.POSIXct("2013-01-15 11:00:00"))
+@ 
+
+This suggests a mechanism to value a portfolio: decide \texttt{when}
+to value the portfolio, then get prices for when, take the inner
+product of the position at when with these prices.
+
+
+\subsection{Two accounts}
 
 <<>>=
 
-Tradelist(timestamp = trades$timestamp, 
-          amount = trades$amount,
-          price = trades$price,
-          instrument = trades$ticker,
-          fees = trades$fees)
-
+trades <- read.table(textConnection(
+"account; ticker; timestamp; amount; price
+private ; A ; 1;   100; 60
+private ; A ; 2;   100; 70
+private ; A ; 3;  -200; 66
+longterm; A ; 1; 100; 60
+longterm; B ; 1; 100; 5"),
+                     sep =";", header = TRUE,
+                     strip.white = TRUE, 
+                     stringsAsFactors = FALSE)
 @ 
 
+<<>>=
+J <- Journal(trades$timestamp, trades$amount,
+             trades$price, NA, trades$ticker, trades$account)
+J
+@
+
+
+But now we also have accounts.
+<<>>=
+J$account
+@ 
+
+<<>>=
+position(J)
+@ 
+
+<<>>=
+position(J, aggr.accounts=FALSE)
+@ 
+
+<<eval=false>>=
+## Journal.cli(J, ...)
+##while (input != "exit") {
+##  input <- readline()
+##  ## parse me
+##}
+@ 
 \end{document}
+
+

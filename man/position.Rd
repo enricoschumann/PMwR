@@ -45,7 +45,7 @@ to be added
   Enrico Schumann
 }
 \seealso{
-  \code{\link{Tradelist}}
+  \code{\link{Journal}}
 }
 \examples{
 ## default
@@ -53,8 +53,8 @@ t <- 1:5
 n <- c(1,1,-1,3,-4)
 position(amount=n, timestamp=t, when = 4.9)
 
-## using a Tradelist
-lst <- Tradelist(timestamp = t, amount = n)
+## using a Journal
+lst <- Journal(timestamp = t, amount = n)
 position(lst,when = 4.9)
 lst
 ##position(when = 4.9, tlist=lst)

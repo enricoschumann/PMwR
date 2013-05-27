@@ -74,7 +74,7 @@ ES
   Experimental. The interface may change.
 }
 \seealso{
-  \code{\link{Tradelist}}
+  \code{\link{Journal}}
 }
 \examples{
 ## to be added

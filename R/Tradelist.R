@@ -1,4 +1,4 @@
-Tradelist <- function(timestamp, amount, price, id, instrument, account, ...) {
+Journal <- function(timestamp, amount, price, id, instrument, account, ...) {
     ## timestamp, amount, price
     
     if (missing(id))
@@ -11,6 +11,7 @@ Tradelist <- function(timestamp, amount, price, id, instrument, account, ...) {
         account <- NA
     if (missing(price))
         price <- NA
+    instrument <- as.character(instrument)    
     len <- max(length(timestamp),
                length(amount),
                length(price),
@@ -37,10 +38,10 @@ Tradelist <- function(timestamp, amount, price, id, instrument, account, ...) {
         else
             ans <- c(ans, dots)
     }    
-    class(ans) <- "Tradelist"
+    class(ans) <- "Journal"
     ans    
 }
-print.Tradelist <- function(x, ...) {
+print.Journal <- function(x, ...) {
     oo <- getOption("scipen")
     options(scipen = 1e8)
     on.exit(options(scipen = oo))
@@ -53,45 +54,45 @@ print.Tradelist <- function(x, ...) {
     if (all(!is.na(x$id)))
         rn <- paste(rn, x$id, sep = " | ")
 
-    print(head(data.frame(timestamp = x$timestamp,
-                          instrument = x$instrument,
-                          amount = x$amount,
-                          price = x$price,
-                          row.names = seq_len(length(x$amount)),
-                          stringsAsFactors = FALSE), dspT))
+    df <- as.data.frame(unclass(x),                        
+                        row.names = seq_len(length(x)),
+                        stringsAsFactors = FALSE)
+    notAllNA <- unlist(lapply(df, function(x) !all(is.na(x))))
+    print(head(df[notAllNA],dspT))
     if ((n <- max(length(x$amount),length(x$price))) > dspT)
         cat("...\n")
     insts <- sort(unique(x$instrument))
     if (length(insts) > dspI) {
         insts <- insts[seq_len(dspI)]
+        insts <- as.character(rmspace(insts))
         insts[dspI] <- "..."
     }
     if (length(insts))
-        subs <- paste0(" in ", paste(insts, collapse = ", "))
+        subs <- paste0(" in ", paste(insts, sep = "", collapse = ", "))
     else
         subs <- ""
-    cat(paste0("(", n, " trades", subs, ")\n"))
+    cat(paste0("\n", n, " trades", subs, "\n"))
     invisible(x)
 }
-length.Tradelist <- function(x)
+length.Journal <- function(x)
     length(x$amount)
-sort.Tradelist <- function(x, ...) {
+sort.Journal <- function(x, ...) {
     cat("not implemented\n")
     invisible(x)
 }
-filterTradelist <- function(x, timestamp, amount, price,
+filterJournal <- function(x, timestamp, amount, price,
                             id, instrument, account, ...) {    
     cat("not implemented\n")
     invisible(x)
 }
-## c.Tradelist0 <- function(...) {
+## c.Journal0 <- function(...) {
 ##     tls <- list(...)
 ##     if (length(tls) > 1L) {
 ##         ans <- as.data.frame(unclass(tls[[1L]]), stringsAsFactors = FALSE)
 ##         for (i in 2:length(tls))
 ##             ans <- rbind(ans, as.data.frame(unclass(tls[[i]]),
 ##                                             stringsAsFactors = FALSE))            
-##         Tradelist(id = ans$id,
+##         Journal(id = ans$id,
 ##                   instrument = ans$instrument,
 ##                   account = ans$account,
 ##                   timestamp = ans$timestamp,
@@ -100,10 +101,10 @@ filterTradelist <- function(x, timestamp, amount, price,
 ##     } else
 ##         tls        
 ## }
-c.Tradelist <- function(...) {
+c.Journal <- function(...) {
     tls <- list(...)
-    if (!all(unlist(lapply(tls, "class")) == "Tradelist"))
-        stop("all ... must be Tradelists")
+    if (!all(unlist(lapply(tls, "class")) == "Journal"))
+        stop("all ... must be Journals")
     
     ns <- unique(unlist(lapply(tls, names)))
     ans <- vector("list", length = length(ns))
@@ -111,6 +112,6 @@ c.Tradelist <- function(...) {
     for (n in seq_along(ns)) {
         ans[[ns[n]]] <- unlist(lapply(tls, `[[`, ns[n]))
     }
-    class(ans) <- "Tradelist"
+    class(ans) <- "Journal"
     ans
 }

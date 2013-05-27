@@ -97,7 +97,7 @@ if (FALSE) {
     require("Infront")
     tmp <- getInfrontTradesP("Jaro", from = "20130215000000", to = "20130215230000")
     tmp0 <- tmp[tmp$ticker == "GBL201303",]
-    jb <- Tradelist(datetime = tmp$datetime, tmp$volume, tmp$price, id = tmp$rownames,
+    jb <- Journal(datetime = tmp$datetime, tmp$volume, tmp$price, id = tmp$rownames,
                     instrument = tmp$ticker, account = "JB")
     jb
 

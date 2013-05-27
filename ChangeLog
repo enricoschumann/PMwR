@@ -1,3 +1,30 @@
+2013-05-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/Tradelist.R (print.Journal): NAs are not printed; non-standard
+	fields are also printed
+
+	* R/position.R (position): position now always returns a matrix;
+	ie, a dim attribute is attached
+	(position): new argument 'aggr.accounts' to specify whether pool
+	instruments by account (if TRUE) or not (FALSE); 
+	(position): new argument 'account.sep'
+
+	* R/Tradelist.R (print.Journal): fixed -- when instruments were
+	factors, a (harmless) warning was produced
+	(Journal): 'instrument' is now explicitly coerced to character (if
+	the original instrument is a class, it should have as as.character
+	method)
+
+2013-05-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-19
+
+	* NAMESPACE, R/, man/: renamed 'Tradelist' into 'Journal'
+
+2013-05-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: added 'expstr'
+
 2013-05-20  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/internals.R (divCorrection): added function: corrects series

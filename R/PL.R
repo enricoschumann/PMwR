@@ -1,4 +1,4 @@
-## PLsorted.Tradelist <- function(x,
+## PLsorted.Journal <- function(x,
 ##                                allprices = NULL, alltimes = NULL,
 ##                                initcash = 0, do.sort = FALSE) {
 ##     allinstr <- unique(x$instrument)
@@ -146,11 +146,11 @@ PLsorted <- function(amount, price,
 
 ## test case
 
-## x1 <- Tradelist(timestamp = c(1,2,3),
+## x1 <- Journal(timestamp = c(1,2,3),
 ##                 amount = c(1, 1, -2),
 ##                 price = c(100,102, 101))
 
-## x1 <- Tradelist(timestamp = c(1,2,3,1,2,3),
+## x1 <- Journal(timestamp = c(1,2,3,1,2,3),
 ##                 amount = c(1, 1, -2, 1,1,-2),
 ##                 price = c(100,102, 101, 100,102,105),
 ##                 instrument = c(rep("A", 3), rep("B", 3)))
@@ -159,7 +159,7 @@ PLsorted <- function(amount, price,
 ## x <- PL(c(1, 1, -2), c(100,102, 101))
 
 PL <- function(amount, price, instrument = NULL, tol = 1e-10) {
-    if (inherits(amount, "Tradelist")) {
+    if (inherits(amount, "Journal")) {
         price <- amount$price
         instrument <- amount$instrument
         amount <- amount$amount
