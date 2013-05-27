@@ -27,9 +27,10 @@ position <- function(amount, timestamp, instrument, when, from, to, nonzero.only
         amount  <- amount[io]
         instrument <- instrument[io]
     }
-    instrument[is.na(instrument)] <- "not specified"
+    if (!all(is.na(instrument)))
+        instrument[is.na(instrument)] <- "not specified"
 
-    if (!aggr.accounts && !all(is.na(J$account)) && length(unique(J$account)) > 1L) {
+    if (!aggr.accounts && exists("J") && !all(is.na(J$account)) && length(unique(J$account)) > 1L) {
         instrument <- paste0(J$account, account.sep, instrument)
         by.account <- TRUE
     } else 

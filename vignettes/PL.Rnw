@@ -26,10 +26,7 @@ require("PMwR")
 A simple example: we buy one contract at 100; we sell at 102.
 
 <<>>=
-n <- c(1,-1)
-p <- c(100,102)
-PL(n, p)
-PLsorted(n, p)
+pl(amount = c(1, -1), price = c(100, 102))
 @
 
 \texttt{PLsorted} gives a bit more information: it tells us that at
@@ -68,7 +65,7 @@ data.frame(position = cumsum(n)[-length(n)],
 @ 
 
 We can plot the exposure.
-<<fig=true>>=
+<<fig=true, height=3, width=5>>=
 plot(c(t[1L], t), cumsum(c(0, n)), type = "s",
      xlab = "time", ylab = "position")
 @ 
@@ -111,33 +108,33 @@ Suppose we buy five times one unit of some unspecified asset.
 
 <<>>=
 tl1 <- Journal(timestamp = 1:5, 
-                 amount = 1, 
-                 price = c(2,2,2,3,4), 
-                 account = "my account")
+               amount = 1, 
+               price = c(2,2,2,3,4), 
+               account = "my account")
 tl1
 @ 
 
 Now we close the trade.
 <<>>=
 tl2 <- Journal(timestamp = 6, 
-                amount    = -5, 
-                price     = 3, 
-                account   = "my account")
+               amount    = -5, 
+               price     = 3, 
+               account   = "my account")
 @ 
 
 To compute the profit or loss, we first concatenate the two lists.
 
 <<>>=
-##tl <- c(tl1, tl2)
+tl <- c(tl1, tl2)
 @ 
 
 
 <<>>=
-##PL(tl)
+pl(tl)
 @ 
 
 
-\section{PL}
+\section{Profit and (or) loss}
 
 Suppose we keep a simple log of trades for an account.
 
@@ -169,17 +166,17 @@ SDFd  ;2013-03-13 08:50:47;49;  35.9400; -4.00
 SIEd  ;2012-12-05 03:46:14;37;  79.8900; -4.00
 SIEd  ;2013-01-09 03:25:10;-37; 83.5200; -4.00"),
                      sep =";", header = TRUE, 
-                     stringsAsFactors = TRUE)
+                     stringsAsFactors = FALSE, strip.white = TRUE)
 
 @ 
 
 <<>>=
 
 Journal(timestamp = trades$timestamp, 
-          amount = trades$amount,
-          price = trades$price,
-          instrument = trades$ticker,
-          fees = trades$fees)
+        amount = trades$amount,
+        price = trades$price,
+        instrument = trades$ticker,
+        fees = trades$fees)
 
 @ 
 

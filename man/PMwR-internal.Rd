@@ -4,7 +4,6 @@
 \alias{wait}
 \alias{first}
 \alias{last}
-\alias{rebalance}
 \title{Internal (non-exported) functions in the PMwR package}
 \description{
 
@@ -17,8 +16,6 @@ makeHHMMSS(x, label = "time specification (HHMMSS)")
 wait(x)
 first(x, by, index = FALSE)
 last(x, by, index = FALSE)
-rebalance(current, target, prices, notional,
-          w.target = TRUE, names = NULL)
 divCorrection(x, t, div, match.last = FALSE)
 }
 \details{

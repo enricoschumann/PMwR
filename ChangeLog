@@ -1,5 +1,13 @@
 2013-05-27  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/PL.R (diffsigns): removed test cases
+
+2013-05-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-20
+
+	* man/tradeanalysis.Rd: 'PL' changed into 'pl'
+
 	* R/Tradelist.R (print.Journal): NAs are not printed; non-standard
 	fields are also printed
 

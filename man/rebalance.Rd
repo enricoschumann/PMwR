@@ -13,7 +13,7 @@ rebalance(current, target, prices,
           w.current = FALSE, w.target = TRUE,
           do.trunc = TRUE)
 
-\method{print}{rebalance}(x, ... \dots)
+\method{print}{rebalance}(x, \dots)
 }
 \arguments{
   \item{current}{

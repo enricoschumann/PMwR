@@ -144,20 +144,6 @@ PLsorted <- function(amount, price,
 }
 
 
-## test case
-
-## x1 <- Journal(timestamp = c(1,2,3),
-##                 amount = c(1, 1, -2),
-##                 price = c(100,102, 101))
-
-## x1 <- Journal(timestamp = c(1,2,3,1,2,3),
-##                 amount = c(1, 1, -2, 1,1,-2),
-##                 price = c(100,102, 101, 100,102,105),
-##                 instrument = c(rep("A", 3), rep("B", 3)))
-
-## PL(x1)
-## x <- PL(c(1, 1, -2), c(100,102, 101))
-
 PL <- function(amount, price, instrument = NULL, tol = 1e-10,
                aggr.accounts = FALSE, account.sep = "::") {
     if (inherits(amount, "Journal")) {
@@ -185,7 +171,7 @@ PL <- function(amount, price, instrument = NULL, tol = 1e-10,
               sum(price[!i] * amount[!i])/sum(amount[!i]))
         }
     }
-    if (!aggr.accounts && !all(is.na(J$account)) && length(unique(J$account)) > 1L) {
+    if (!aggr.accounts && exists("J") && !all(is.na(J$account)) && length(unique(J$account)) > 1L) {
         instrument <- paste0(J$account, account.sep, instrument)
         by.account <- TRUE
     } else 
@@ -266,7 +252,7 @@ pl <- function(amount, price, instrument = NULL, tol = 1e-10,
               sum(price[!i] * amount[!i])/sum(amount[!i]))
         }
     }
-    if (!aggr.accounts && !all(is.na(J$account)) && length(unique(J$account)) > 1L) {
+    if (!aggr.accounts && exists("J") && !all(is.na(J$account)) && length(unique(J$account)) > 1L) {
         instrument <- paste0(J$account, account.sep, instrument)
         by.account <- TRUE
     } else 
@@ -316,16 +302,3 @@ print.pl <- function(x, ...) {
     cat("average.sell => average sell price\n")    
     invisible(x)
 }
-x1 <- Journal(timestamp = c(1,2,3),
-                amount = c(1, 1, -2),
-                price  = c(100,102, 101))
-pl(x1)
-
-x1 <- Journal(timestamp = c(1,2,3,1,2,3),
-                amount = c(1, 1, -2, 1,1,-2),
-                price = c(100,102, 101, 100,102,105),
-                instrument = c(rep("A", 3), rep("B", 3)))
-
-pl(x1)
-
-pl(c(1, 1, -2), c(100,102, 101)) ## without a Journal

@@ -62,7 +62,7 @@ Journal(timestamp, amount, price, id, instrument, account, \dots)
   Enrico Schumann
 }
 \seealso{
-  \code{\link{PL}}
+  \code{\link{pl}}
 }
 \examples{
 

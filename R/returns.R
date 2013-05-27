@@ -78,8 +78,8 @@ pReturns <- function(x, t = NULL, period, complete.first = TRUE) {
     ans
 }
 
-require("tseries")
-sp   <- get.hist.quote("^GSPC", quote="AdjClose")
+##require("tseries")
+##sp   <- get.hist.quote("^GSPC", quote="AdjClose")
   
   
 ## mReturns <- function(x, t = NULL, complete.first = TRUE) {
