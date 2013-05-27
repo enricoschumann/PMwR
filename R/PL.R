@@ -158,14 +158,16 @@ PLsorted <- function(amount, price,
 ## PL(x1)
 ## x <- PL(c(1, 1, -2), c(100,102, 101))
 
-PL <- function(amount, price, instrument = NULL, tol = 1e-10) {
+PL <- function(amount, price, instrument = NULL, tol = 1e-10,
+               aggr.accounts = FALSE, account.sep = "::") {
     if (inherits(amount, "Journal")) {
-        price <- amount$price
-        instrument <- amount$instrument
-        amount <- amount$amount
+        J <- amount
+        price <- J$price
+        instrument <- J$instrument
+        amount <- J$amount
     }
     if (any(abs(amount) < tol))
-        warning("zero amount")
+        warning("zero 'amount' values")
             
     plfun <- function(amount, price) {
         if (abs(sum(amount)) > tol) {
@@ -183,6 +185,12 @@ PL <- function(amount, price, instrument = NULL, tol = 1e-10) {
               sum(price[!i] * amount[!i])/sum(amount[!i]))
         }
     }
+    if (!aggr.accounts && !all(is.na(J$account)) && length(unique(J$account)) > 1L) {
+        instrument <- paste0(J$account, account.sep, instrument)
+        by.account <- TRUE
+    } else 
+        by.account <- FALSE
+
     
     if (is.null(instrument) || length(unique(instrument)) == 1L) {
         tmp <- plfun(amount, price)
@@ -228,3 +236,96 @@ print.PL <- function(x, ...) {
     cat("average.sell -- average sell price\n")    
     invisible(x)
 }
+
+
+
+pl <- function(amount, price, instrument = NULL, tol = 1e-10,
+               aggr.accounts = FALSE, account.sep = "::") {
+    if (inherits(amount, "Journal")) {
+        J <- amount
+        price <- J$price
+        instrument <- J$instrument
+        amount <- J$amount
+    }
+    if (any(abs(amount) < tol))
+        warning("zero 'amount' values")
+            
+    plfun <- function(amount, price) {
+        if (abs(sum(amount)) > tol) {
+            warning("Sum of amount is not zero; cannot compute PnL.")
+            c(NA, sum(abs(amount)),
+              sum(price[ i] * amount[ i])/sum(amount[ i]),
+              sum(price[!i] * amount[!i])/sum(amount[!i]))
+        } else {
+            if (length(amount) > 1000L)
+                p <- -drop(crossprod(amount, price)) else
+            p <- -sum(amount * price)
+            i <- amount > 0
+            c(p, sum(abs(amount)),
+              sum(price[ i] * amount[ i])/sum(amount[ i]),
+              sum(price[!i] * amount[!i])/sum(amount[!i]))
+        }
+    }
+    if (!aggr.accounts && !all(is.na(J$account)) && length(unique(J$account)) > 1L) {
+        instrument <- paste0(J$account, account.sep, instrument)
+        by.account <- TRUE
+    } else 
+        by.account <- FALSE
+
+    
+    if (is.null(instrument) || length(unique(instrument)) == 1L) {
+        tmp <- plfun(amount, price)
+        res <- list(instrument = if (is.null(instrument)) NA else unique(instrument),
+                    pl = tmp[1L], total.amount = tmp[2L],
+                    average.buy = tmp[3L], average.sell = tmp[4L])
+    } else {
+        instr <- sort(unique(instrument))
+        pls <- sumamounts <- mbuys <- msells <- numeric(length(instr))
+        for (i in seq_along(instr)) {
+            ix <- instr[i] == instrument  
+            n <- amount[ix]
+            tmp <- plfun(amount[ix], price[ix])
+            pls[i] <- tmp[1L]
+            sumamounts[i] <- tmp[2L]
+            mbuys[i] <- tmp[3L]
+            msells[i] <- tmp[4L]
+        }
+        res <- list(instrument = instr, 
+                    pl = pls,
+                    total.amount = sumamounts,
+                    average.buy = mbuys,
+                    average.sell = msells)
+    }
+    class(res) <- "pl"
+    res
+}
+print.pl <- function(x, ...) {
+    oo <- getOption("scipen")
+    options(scipen = 1e+08)
+    on.exit(options(scipen = oo))
+    df <- as.data.frame(unclass(x))
+    if (all(is.na(df$instrument))) 
+        row.names(df) <- ""
+    else 
+        row.names(df) <- df[["instrument"]]    
+    df <- df[,-1L]
+    print(df)
+    cat("\n          pl => total PnL in units of instrument\n")
+    cat("total.amount => total /absolute/ amount of traded instruments\n")
+    cat(" average.buy => average buy price\n")
+    cat("average.sell => average sell price\n")    
+    invisible(x)
+}
+x1 <- Journal(timestamp = c(1,2,3),
+                amount = c(1, 1, -2),
+                price  = c(100,102, 101))
+pl(x1)
+
+x1 <- Journal(timestamp = c(1,2,3,1,2,3),
+                amount = c(1, 1, -2, 1,1,-2),
+                price = c(100,102, 101, 100,102,105),
+                instrument = c(rep("A", 3), rep("B", 3)))
+
+pl(x1)
+
+pl(c(1, 1, -2), c(100,102, 101)) ## without a Journal

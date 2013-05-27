@@ -1,6 +1,6 @@
 \name{TradeAnalysis}
 \alias{PLsorted}
-\alias{PL}
+\alias{pl}
 \alias{closeOnFirst}
 \alias{limit}
 \alias{returns}
@@ -17,7 +17,7 @@
   Functions to help analyse trades (as opposed to profit-and-loss series)
 }
 \usage{
-PL(amount, price, instrument = NULL, tol = 1e-10)
+pl(amount, price, instrument = NULL, tol = 1e-10)
 
 PLsorted(amount, price, timestamp = NULL,
          allprices = NULL, alltimes = NULL,
@@ -108,7 +108,7 @@ zero position.
 }
 \value{
 
-  \code{PL}: an object of class \code{PL}, which is a list of five
+  \code{pl}: an object of class \code{pl}, which is a list of five
   elements (and the class attribute).
 
   Either a list or a list-of-lists.
@@ -130,12 +130,20 @@ splitTrades(n,p,timestamp, TRUE)  ## almost like the original series
 scaleTrades(n,p,timestamp)
 scaleTrades(n,p,timestamp, TRUE) ## each _trade_ gets scaled
 
-x1 <- Journal(timestamp = c(1,2,3,1,2,3),
-                amount = c(1, 1, -2, 1,1,-2),
-                price = c(100,102, 101, 100,102,105),
-                instrument = c(rep("A", 3), rep("B", 3)))
 
-PL(x1)
-PL(c(1, 1, -2), c(100,102, 101))  ## Journal is not required
+J <- Journal(timestamp = c(1, 2, 3),
+                amount = c(1, 1, -2),
+                price  = c(100,102, 101))
+pl(J)
+pl(c(1, 1, -2), c(100,102, 101)) ## without a 'Journal'
+
+
+J <- Journal(timestamp  = c(1,2,3,1,2,3),
+             amount     = c(1, 1, -2, 1,1,-2),
+             price      = c(100, 102, 101, 100, 102, 105),
+             instrument = c(rep("A", 3), rep("B", 3)))
+pl(J)
+
+
 
 }

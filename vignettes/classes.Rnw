@@ -27,7 +27,7 @@
 
 The following classes are implicitly defined
 \begin{itemize}
-\item Trade
+\item Journal
 \item Instrument
 \item Cashflow
 \item Position
@@ -35,18 +35,6 @@ The following classes are implicitly defined
 \end{itemize}
 
 
-
-\subsubsection{Trade}
-
-\paragraph{elements}
-
-\begin{itemize}
-\item tradeId
-\item ticker
-\item datetime
-\item notional
-\item price
-\end{itemize}
 
 
 \paragraph{functions}
@@ -69,7 +57,25 @@ A Journal is just a list trades.
 
 \subsubsection{Position}
 
+\subsubsection{Instrument}
+classes: Fund Equity Account Currency Future Index
 
+
+fields:
+
+     id
+     isin
+     description
+     underlier
+     expirydate
+     expirytime
+     strike
+     type c/p
+     exercise e/a
+     pricing premium/future
+     class
+
+     
 
 \section{Reporting}
 \subsection{qpTable}
