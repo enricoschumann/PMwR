@@ -1,4 +1,36 @@
+2013-05-29  Enrico Schumann  <es@vipag.com>
+
+	* DESCRIPTION (Version): Version: 0.1-23
+
+	* R/position.R (position): check NA timestamps
+
+	* R/journal.R (Journal): if timestamp missing, set to NA
+
+2013-05-29  Enrico Schumann  <es@enricoschumann.net>
+
+	* man/Texttools.Rd, Mailtools.Rd: renamed files to lower case
+
+	* man/PMwR-package.Rd: corrected example (which used 'tth')
+
+2013-05-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-22
+
+	* R/instrument.R (Instrument): added example for
+	'VanillaOptionEuropean'
+
+	* R/dev.R: removed all code for 'instrument'
+
+	* R/instrument.R (Instrument): added
+
+	* R/classes.R: deleted
+
+	* R/pl.R (plsorted): added function (simplified version of
+	PLsorted, which is deprecated)
+
 2013-05-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-21
 
 	* R/PL.R (diffsigns): removed test cases
 

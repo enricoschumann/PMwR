@@ -252,7 +252,8 @@ pl <- function(amount, price, instrument = NULL, tol = 1e-10,
               sum(price[!i] * amount[!i])/sum(amount[!i]))
         }
     }
-    if (!aggr.accounts && exists("J") && !all(is.na(J$account)) && length(unique(J$account)) > 1L) {
+    if (!aggr.accounts && exists("J", inherits = FALSE)
+        && !all(is.na(J$account)) && length(unique(J$account)) > 1L) {
         instrument <- paste0(J$account, account.sep, instrument)
         by.account <- TRUE
     } else 
@@ -301,4 +302,37 @@ print.pl <- function(x, ...) {
     cat(" average.buy => average buy price\n")
     cat("average.sell => average sell price\n")    
     invisible(x)
+}
+
+
+
+plsorted <- function(amount, price, 
+                     timestamp = NULL,
+                     initcash = 0, do.sort = FALSE,
+                     tol = 1e-10) {
+
+    if ((n <- length(amount)) != length(price))
+        stop("length(amount) != length(price)")
+
+    if (any(abs(amount) < tol))
+        stop(sQuote("amount"), " must be nonzero (see ",
+             sQuote("tol"), " parameter)")
+
+    if (do.sort) {
+        if (is.null(timestamp))
+            warning("cannot sort without timestamp")
+        else  {
+            ot <- order(timestamp)
+            price <- price[ot]
+            amount <- amount[ot]
+            timestamp <- timestamp[ot]
+        }
+    }
+
+    
+    cumcash <- cumsum(-price * amount)
+    cumpos  <- cumsum(amount)
+    list(value = cumpos * price + cumcash,
+         position = cumpos)
+
 }

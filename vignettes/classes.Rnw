@@ -22,20 +22,83 @@
   future.
 \end{framed}
 
-\section{Instruments and portfolios}
-\subsection{Classes}
+\section{Requirements}
 
-The following classes are implicitly defined
 \begin{itemize}
-\item Journal
-\item Instrument
-\item Cashflow
-\item Position
-\item Portfolio
+\item store a 'portfolio' of assets, evaluate for new market data;
+  possibility to change correlation assumptions
+\item reevaluate for scenario (= new market data or artificial data)
+\item read in transactions from various sources
+\item show portfolio on certain day/time: create a position, evaluate
+  this position
+\item testing portfolios of options --> show payoff, simulate *paths*
+  of underlier and vol surface
+\item run simulations for VaR
 \end{itemize}
 
 
 
+
+\subsection{Classes}
+
+The following classes are implicitly defined (ie, S3 classes):
+
+\begin{itemize}
+\item Journal: keeps transactions
+\item Instrument: term sheet (description etc); it does know nothing
+  about market data
+\item Position: only for printing
+\item Cashflow: internal
+\item Timeseries: internal
+\end{itemize}
+
+\subsection{Valuation}
+
+Theoretical valuation takes places via the generic function value:
+
+\texttt{value(x, ..., dots2args = NULL) } 
+
+The simplest case:
+\texttt{x} is character, then a call will be generated as
+
+\texttt{do.call(x, list(...))}
+
+\texttt{dots2args.default <- function(x, ...) list(...)}
+
+Note that this will be the default method; notably, a method when
+\texttt{x} is character will be left unspecified (meant for the user).
+
+
+A more typical case: collect all market data in a list \texttt{Data}:
+EvaluationDate, Prices, Vols, Irates.
+
+dots2args will react on \texttt{x}, retrieve the required information,
+and 
+
+
+
+     - evaluates to list "value", "delta" etc
+     - Instrument[names(result)] <- result
+
+
+<<>>=
+Time   <- as.Date("2013-05-28")
+Prices <- list(DAX = 8472)
+Irates <- list(EUR = function(t) 0.1)
+Vols   <- list(DAX = function(x,t) 0.2)
+
+DATA <- list(Time = Time, 
+             Prices = Prices, 
+             IRates = Irates, 
+             Vols = Vols)
+DATA
+DATA$Vols$DAX(8000,0.2)
+DATA$IRates$EUR(0.5)
+
+@      
+     
+
+\section{Instruments and portfolios}
 
 \paragraph{functions}
 Functions: print, sort, toLatex, PL, PLsorted

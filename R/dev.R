@@ -1,30 +1,5 @@
 if (FALSE) {
 
-    
-    ## * INSTRUMENT
-    Instrument <- function(type, id = NULL, ...) {
-
-        type <- tolower(type)
-        properties <- list(...)
-        if (type == "equity") {
-
-            I <- list(id = id,
-                      description = properties$description,
-                      modelValue = properties$modelValue,
-                      marketValue = properties$marketValue,
-                      currency = properties$currency)
-
-
-            class(I) <- c("Equity", "Instrument")
-
-        } else if (type == "vanillaoption") {
-            class(I) <- c("VanillaOption", "Option", "Instrument")
-        } else {
-            stop("unknown Instrument type")
-        }
-        I
-    }
-
 
     ## * CASHFLOW
     Cashflow <- function(cashflows, times) {
@@ -128,41 +103,6 @@ if (FALSE) {
     
 
 
-    ##myfund <- Fund("de000a0dpkd3", "MODULOR LSE 1", "EUR")
-
-
-    ## methods
-    ## tValue: berechnet theoretischen Wert (+ Griechen, Yields, etc)
-    tValue <- function(x, ...)
-        UseMethod("tValue")
-
-    tValue.default <- function(x, ...)
-        stop("don't know how to valuate ", deparse(substitute(x)))
-
-    tValue.Instrument <- function(x, ...)
-        list(tValue = x$tValue)
-
-    tValue.Fund <- function(x, ...)
-        list(tValue = x$tValue)
-
-    tValue.Position <- function(P, ...) {}
-    tValue.Portfolio <- function(P,  ...) {}
-
-    mValue.default <- function(x, ..., aux) {
-        NULL
-    }
-    aux <- identity
-    mValue.Instrument <- function(x, ..., aux) {
-        fargs <- aux(...)    
-    }
-
-    ## sort
-
-    ## toLatex
-
-
-
-
     ##                 in %
     ## RHOEN-KLINIKUM  15.0
     ## Suedzucker AG I 15.0
@@ -209,7 +149,7 @@ if (FALSE) {
 
 
 
-
+    
 
           # BINARY SEARCH
     bs <- function(x, t, duplicates = "undef") {

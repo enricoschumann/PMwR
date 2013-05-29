@@ -21,7 +21,7 @@ position <- function(amount, timestamp, instrument, when, from, to, nonzero.only
 
     if (missing(when))
         when <- max(timestamp)
-    if (is.unsorted(timestamp)) {
+    if (!any(is.na(timestamp)) && is.unsorted(timestamp)) {
         io  <- order(timestamp)
         timestamp <- timestamp[io]
         amount  <- amount[io]

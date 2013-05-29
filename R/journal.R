@@ -1,8 +1,9 @@
 Journal <- function(timestamp, amount, price, id, instrument, account, ...) {
-    ## timestamp, amount, price
-    
+
     if (missing(id))
         id <- NA
+    if (missing(timestamp))
+        timestamp <- NA
     if (missing(instrument))
         instrument <- NA
     else if (all(instrument == instrument[1L]))

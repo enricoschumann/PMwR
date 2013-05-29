@@ -27,11 +27,7 @@ Schumann, E. (2013) \emph{Portfolio Management with R}.
 
 } 
 \examples{
-require("tth")
-
-tex <- c("This is \\\\textbf{bold} and this \\\\textit{italic}.",
-         "Points on the unit circle: $x^2 + y^2 = 1$.")
-tth(tex)
-ttm(tex)
+\dontrun{
+vignette("Journal", package = "PMwR")}
 }
 \keyword{package}
