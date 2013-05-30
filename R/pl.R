@@ -1,18 +1,3 @@
-## PLsorted.Journal <- function(x,
-##                                allprices = NULL, alltimes = NULL,
-##                                initcash = 0, do.sort = FALSE) {
-##     allinstr <- unique(x$instrument)
-##     ans <- vector("list", length = length(allinstr))
-##     for (i in seq_along(allinstr)) {
-##         ii <- allinstr[i] == x$instrument
-##         position <- cumsum(x$amount[ii])
-##         pf <- x$price[ii] * position
-##         wealth <- pf + cumsum(-x$amount[ii] * x$price[ii]) + initcash        
-##         ans[[i]] <- list(position = position, wealth = wealth)
-##     }
-##     names(ans) <- allinstr
-##     ans
-## }
 PLsorted <- function(amount, price, 
                      timestamp = NULL,
                      allprices = NULL, alltimes = NULL,
@@ -311,6 +296,17 @@ plsorted <- function(amount, price,
                      initcash = 0, do.sort = FALSE,
                      tol = 1e-10) {
 
+    if (inherits(amount, "Journal")) {
+        J <- amount
+        price <- J$price
+        amount <- J$amount
+    } else if (inherits(price, "Journal")) {
+        J <- price
+        price <- J$price
+        amount <- J$amount
+    }
+
+    
     if ((n <- length(amount)) != length(price))
         stop("length(amount) != length(price)")
 
@@ -333,6 +329,7 @@ plsorted <- function(amount, price,
     cumcash <- cumsum(-price * amount)
     cumpos  <- cumsum(amount)
     list(value = cumpos * price + cumcash,
-         position = cumpos)
+         position = cumpos,
+         cash = cumcash+initcash)
 
 }

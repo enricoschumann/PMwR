@@ -1,12 +1,19 @@
-2013-05-29  Enrico Schumann  <es@vipag.com>
+2013-05-30  Enrico Schumann  <es@enricoschumann.net>
+
+	* man/journal.Rd: example for subset added
+
+	* R/journal.R (subset.Journal): added method
+
+	* R/position.R (position): now uses 'from' and 'to' reduce size of
+	journal
+
+2013-05-29  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-23
 
 	* R/position.R (position): check NA timestamps
 
 	* R/journal.R (Journal): if timestamp missing, set to NA
-
-2013-05-29  Enrico Schumann  <es@enricoschumann.net>
 
 	* man/Texttools.Rd, Mailtools.Rd: renamed files to lower case
 

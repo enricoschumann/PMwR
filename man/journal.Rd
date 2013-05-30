@@ -12,9 +12,10 @@
 \usage{
 Journal(timestamp, amount, price, id, instrument, account, \dots)
 
-\method{print}{Journal}(x, \dots)
-\method{length}{Journal}(x)
 \method{c}{Journal}(\dots)
+\method{print}{Journal}(x, \dots)
+\method{subset}{Journal}(x, \dots)
+\method{length}{Journal}(x)
 }
 \arguments{
   \item{timestamp}{
@@ -35,8 +36,12 @@ Journal(timestamp, amount, price, id, instrument, account, \dots)
   \item{account}{
      account id
 }
-  \item{dots}{
-    further arguments; they must all be named
+\item{dots}{
+  
+  For \code{Journal}: further arguments, which must all be named. For
+  \code{subset}: an expression that evaluates to a logical vector; it
+  can use all fields of the passed Journal; see Examples.
+  
 }
   \item{x}{
     a \code{Journal} object
@@ -80,5 +85,6 @@ t2 <- Journal(timestamp = "2013-02-05 12:00:00",
 
 c(t1, t2)
 
+subset(t1, amount > 10000)
 
 }

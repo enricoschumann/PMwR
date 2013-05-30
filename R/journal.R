@@ -86,22 +86,6 @@ filterJournal <- function(x, timestamp, amount, price,
     cat("not implemented\n")
     invisible(x)
 }
-## c.Journal0 <- function(...) {
-##     tls <- list(...)
-##     if (length(tls) > 1L) {
-##         ans <- as.data.frame(unclass(tls[[1L]]), stringsAsFactors = FALSE)
-##         for (i in 2:length(tls))
-##             ans <- rbind(ans, as.data.frame(unclass(tls[[i]]),
-##                                             stringsAsFactors = FALSE))            
-##         Journal(id = ans$id,
-##                   instrument = ans$instrument,
-##                   account = ans$account,
-##                   timestamp = ans$timestamp,
-##                   amount = ans$amount,
-##                   price = ans$price)
-##     } else
-##         tls        
-## }
 c.Journal <- function(...) {
     tls <- list(...)
     if (!all(unlist(lapply(tls, "class")) == "Journal"))
@@ -113,6 +97,12 @@ c.Journal <- function(...) {
     for (n in seq_along(ns)) {
         ans[[ns[n]]] <- unlist(lapply(tls, `[[`, ns[n]))
     }
+    class(ans) <- "Journal"
+    ans
+}
+subset.Journal <- function(x, ...) {
+    i <- with(x, ...)
+    ans <- lapply(unclass(x), `[`, i)
     class(ans) <- "Journal"
     ans
 }

@@ -36,8 +36,9 @@ export(
     twExposure    
     )
 # methods
-S3method(print,Journal)
-S3method(print,pl)
-S3method(sort,Journal)
 S3method(c,Journal)
+S3method(print,Journal)
+S3method(sort,Journal)
+S3method(subset,Journal)
+S3method(print,pl)
 useDynLib(PMwR)

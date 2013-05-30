@@ -4,9 +4,9 @@ position <- function(amount, timestamp, instrument, when, from, to, nonzero.only
         instrument <- NA
     if (inherits(amount, "Journal")) {
         J <- amount
-        instrument <- amount$instrument
-        timestamp <- amount$timestamp
-        amount <- amount$amount
+        instrument <- J$instrument
+        timestamp  <- J$timestamp
+        amount     <- J$amount
     } else if (inherits(timestamp, "Journal")) {
         J <- timestamp
         instrument <- timestamp$instrument
@@ -21,6 +21,16 @@ position <- function(amount, timestamp, instrument, when, from, to, nonzero.only
 
     if (missing(when))
         when <- max(timestamp)
+
+    if (!missing(from)) {
+        if (missing(to))
+            to <- max(timestamp)
+        keep <- timestamp < from & timestamp > to
+        amount <- amount[keep]
+        timestamp <- timestamp[keep]
+        instrument <- instrument[keep]
+    }
+        
     if (!any(is.na(timestamp)) && is.unsorted(timestamp)) {
         io  <- order(timestamp)
         timestamp <- timestamp[io]
@@ -29,7 +39,10 @@ position <- function(amount, timestamp, instrument, when, from, to, nonzero.only
     }
     if (!all(is.na(instrument)))
         instrument[is.na(instrument)] <- "not specified"
+    if (all(is.na(instrument)))
+        instrument[] <- ""
 
+    
     if (!aggr.accounts && exists("J") && !all(is.na(J$account)) && length(unique(J$account)) > 1L) {
         instrument <- paste0(J$account, account.sep, instrument)
         by.account <- TRUE
@@ -47,7 +60,7 @@ position <- function(amount, timestamp, instrument, when, from, to, nonzero.only
             idt <- timestamp[if (length(timestamp) == 1L) 1 else ri]
             iv  <- amount[if (length(amount) == 1L) 1 else ri]
             beforewhen <- which(when[j] >= idt)
-            pos[j, nm[i]] <- if (length(beforewhen))
+            pos[j, i] <- if (length(beforewhen))
                 cumsum(iv)[max(beforewhen)] else 0
         }
     }

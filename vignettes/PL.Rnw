@@ -66,23 +66,32 @@ transaction costs, but it provides more information than only
 computing the profit/loss for the trades.
 
 
-\texttt{PLsorted} gives a bit more information: it tells us that at
-the end of the first point in time, we had a position of 1. Our final
-wealth is 2 (the last element of \texttt{wealth} is the same as the
-\texttt{pl} that is returned by \texttt{PL}).
+<<>>=
+J <- Journal(price     = c( 90, 50, 100), 
+             amount    = c(  1,  1,  -2),
+             timestamp = c(  2,  4,   7))
+plsorted(J)
+position(J, when = 1:10)
+@ 
 
-Another simple example. This time we also supply a time series of prices.
+
+Suppose we also have a time series of the prices between time 1 and
+10.  That is useful to figure what has happened.  So now we have to
+evaluate the position at every time instant.
+
 
 <<>>=
-P <- 100:110
+P <- c(100,90,40,50,60,84,100,120,100,90)
 T <- seq_along(P)
-n <- c(2, -2)
-p <- c(100, 102)
-timestamp <- c(2, 4)
-PLsorted(n, p)
-PLsorted(n, p, timestamp = timestamp,
+PLsorted(J$amount, J$price, timestamp = J$timestamp,
          allprices = P, alltimes = T,
          initcash = 500)
+
+p <- position(J, when = 1:11)
+plsorted(J, initcash = 500)
+
+##mvalue.position(J, when, series)
+
 @
 
 \section{Exposure}
