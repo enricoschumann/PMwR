@@ -1,3 +1,18 @@
+2013-05-31  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-24
+
+	* vignettes/PL.Rnw: moved vignette 'Journal' into 'PL' (and rm'd
+	Journal)
+
+	* R/journal.R (filterJournal): removed (use 'subset' instead)
+	(sort.Journal): added and exported
+
+	* NAMESPACE: export 'length.Journal'
+
+	* R/pl.R (pl): new argument along.timestamp: default is FALSE; if
+	TRUE, include functionality of 'plsorted'
+
 2013-05-30  Enrico Schumann  <es@enricoschumann.net>
 
 	* man/journal.Rd: example for subset added

@@ -1,21 +1,25 @@
 \name{Journal}
 \alias{Journal}
-\alias{print.Journal}
 \alias{c.Journal}
 \alias{length.Journal}
+\alias{print.Journal}
+\alias{sort.Journal}
+\alias{subset.Journal}
 \title{
-  Create a Trade List
+  Create a Journal
 }
 \description{
-  Create a Journal.
+  Create a journal of financial transactions.
 }
 \usage{
 Journal(timestamp, amount, price, id, instrument, account, \dots)
 
 \method{c}{Journal}(\dots)
-\method{print}{Journal}(x, \dots)
-\method{subset}{Journal}(x, \dots)
 \method{length}{Journal}(x)
+\method{print}{Journal}(x, \dots)
+\method{sort}{Journal}(x, decreasing = FALSE, by = "timestamp", ..., na.last = TRUE)
+\method{subset}{Journal}(x, \dots)
+
 }
 \arguments{
   \item{timestamp}{

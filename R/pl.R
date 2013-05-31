@@ -209,18 +209,51 @@ print.PL <- function(x, ...) {
 }
 
 
+print.pl <- function(x, ...) {
+    oo <- getOption("scipen")
+    options(scipen = 1e+08)
+    on.exit(options(scipen = oo))
+    df <- as.data.frame(unclass(x))
+    if (all(is.na(df$instrument))) 
+        row.names(df) <- ""
+    else 
+        row.names(df) <- df[["instrument"]]    
+    df <- df[,-1L]
+    print(df)
+    cat("\n          pl => total PnL in units of instrument\n")
+    cat("total.amount => total /absolute/ amount of traded instruments\n")
+    cat(" average.buy => average buy price\n")
+    cat("average.sell => average sell price\n")    
+    invisible(x)
+}
 
-pl <- function(amount, price, instrument = NULL, tol = 1e-10,
+pl <- function(amount, price, instrument = NULL, timestamp = NULL,
+               along.timestamp = FALSE, do.sort = FALSE,
+               initcash = 0,
+               tol = 1e-10,
                aggr.accounts = FALSE, account.sep = "::") {
     if (inherits(amount, "Journal")) {
         J <- amount
         price <- J$price
         instrument <- J$instrument
         amount <- J$amount
+        timestamp <- J$timestamp
     }
     if (any(abs(amount) < tol))
         warning("zero 'amount' values")
-            
+
+    if (do.sort) {
+        if (is.null(timestamp))
+            warning("cannot sort without timestamp")
+        else  {
+            ot <- order(timestamp)
+            price <- price[ot]
+            amount <- amount[ot]
+            timestamp <- timestamp[ot]
+            instrument <- instrument[ot]
+        }
+    }
+    
     plfun <- function(amount, price) {
         if (abs(sum(amount)) > tol) {
             warning("Sum of amount is not zero; cannot compute PnL.")
@@ -244,14 +277,29 @@ pl <- function(amount, price, instrument = NULL, tol = 1e-10,
     } else 
         by.account <- FALSE
 
-    
-    if (is.null(instrument) || length(unique(instrument)) == 1L) {
-        tmp <- plfun(amount, price)
-        res <- list(instrument = if (is.null(instrument)) NA else unique(instrument),
-                    pl = tmp[1L], total.amount = tmp[2L],
-                    average.buy = tmp[3L], average.sell = tmp[4L])
+    ui <- unique(instrument)    
+    if (is.null(instrument) || length(ui) == 1L) {
+        if (along.timestamp) {
+            cumcash <- cumsum(-price * amount)
+            cumpos  <- cumsum(amount)
+            res <- list(value = cumpos * price + cumcash,
+                 position = cumpos,
+                 cash = cumcash+initcash)
+        } else {
+            tmp <- plfun(amount, price)
+            res <- list(instrument = if (is.null(instrument)) NA
+                                     else unique(instrument),
+                        pl = tmp[1L],
+                        total.amount = tmp[2L],
+                        average.buy = tmp[3L],
+                        average.sell = tmp[4L])
+            class(res) <- "pl"
+        }        
     } else {
-        instr <- sort(unique(instrument))
+        if (along.timestamp)
+            stop("currently only supported for a single instrument")
+            
+        instr <- sort(ui)
         pls <- sumamounts <- mbuys <- msells <- numeric(length(instr))
         for (i in seq_along(instr)) {
             ix <- instr[i] == instrument  
@@ -267,69 +315,52 @@ pl <- function(amount, price, instrument = NULL, tol = 1e-10,
                     total.amount = sumamounts,
                     average.buy = mbuys,
                     average.sell = msells)
+        class(res) <- "pl"
     }
-    class(res) <- "pl"
     res
 }
-print.pl <- function(x, ...) {
-    oo <- getOption("scipen")
-    options(scipen = 1e+08)
-    on.exit(options(scipen = oo))
-    df <- as.data.frame(unclass(x))
-    if (all(is.na(df$instrument))) 
-        row.names(df) <- ""
-    else 
-        row.names(df) <- df[["instrument"]]    
-    df <- df[,-1L]
-    print(df)
-    cat("\n          pl => total PnL in units of instrument\n")
-    cat("total.amount => total /absolute/ amount of traded instruments\n")
-    cat(" average.buy => average buy price\n")
-    cat("average.sell => average sell price\n")    
-    invisible(x)
-}
 
 
 
-plsorted <- function(amount, price, 
-                     timestamp = NULL,
-                     initcash = 0, do.sort = FALSE,
-                     tol = 1e-10) {
+## plsorted <- function(amount, price, 
+##                      timestamp = NULL,
+##                      initcash = 0, do.sort = FALSE,
+##                      tol = 1e-10) {
 
-    if (inherits(amount, "Journal")) {
-        J <- amount
-        price <- J$price
-        amount <- J$amount
-    } else if (inherits(price, "Journal")) {
-        J <- price
-        price <- J$price
-        amount <- J$amount
-    }
+##     if (inherits(amount, "Journal")) {
+##         J <- amount
+##         price <- J$price
+##         amount <- J$amount
+##     } else if (inherits(price, "Journal")) {
+##         J <- price
+##         price <- J$price
+##         amount <- J$amount
+##     }
 
     
-    if ((n <- length(amount)) != length(price))
-        stop("length(amount) != length(price)")
+##     if ((n <- length(amount)) != length(price))
+##         stop("length(amount) != length(price)")
 
-    if (any(abs(amount) < tol))
-        stop(sQuote("amount"), " must be nonzero (see ",
-             sQuote("tol"), " parameter)")
+##     if (any(abs(amount) < tol))
+##         stop(sQuote("amount"), " must be nonzero (see ",
+##              sQuote("tol"), " parameter)")
 
-    if (do.sort) {
-        if (is.null(timestamp))
-            warning("cannot sort without timestamp")
-        else  {
-            ot <- order(timestamp)
-            price <- price[ot]
-            amount <- amount[ot]
-            timestamp <- timestamp[ot]
-        }
-    }
+##     if (do.sort) {
+##         if (is.null(timestamp))
+##             warning("cannot sort without timestamp")
+##         else  {
+##             ot <- order(timestamp)
+##             price <- price[ot]
+##             amount <- amount[ot]
+##             timestamp <- timestamp[ot]
+##         }
+##     }
 
     
-    cumcash <- cumsum(-price * amount)
-    cumpos  <- cumsum(amount)
-    list(value = cumpos * price + cumcash,
-         position = cumpos,
-         cash = cumcash+initcash)
+##     cumcash <- cumsum(-price * amount)
+##     cumpos  <- cumsum(amount)
+##     list(value = cumpos * price + cumcash,
+##          position = cumpos,
+##          cash = cumcash+initcash)
 
-}
+## }

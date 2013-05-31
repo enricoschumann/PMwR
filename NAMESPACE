@@ -1,7 +1,6 @@
 export(
     "dayOfMonth<-",
     pl,
-    plsorted,
     PL,
     PLsorted,
     Journal,
@@ -38,6 +37,7 @@ export(
 # methods
 S3method(c,Journal)
 S3method(print,Journal)
+S3method(length,Journal)
 S3method(sort,Journal)
 S3method(subset,Journal)
 S3method(print,pl)

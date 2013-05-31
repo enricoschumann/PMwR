@@ -17,7 +17,11 @@
   Functions to help analyse trades (as opposed to profit-and-loss series)
 }
 \usage{
-pl(amount, price, instrument = NULL, tol = 1e-10)
+pl(amount, price,
+   instrument = NULL, timestamp = NULL,
+   along.timestamp = FALSE, do.sort = FALSE, initcash = 0,
+   tol = 1e-10,
+   aggr.accounts = FALSE, account.sep = "::")
 
 PLsorted(amount, price, timestamp = NULL,
          allprices = NULL, alltimes = NULL,

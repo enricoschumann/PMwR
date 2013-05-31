@@ -77,14 +77,12 @@ print.Journal <- function(x, ...) {
 }
 length.Journal <- function(x)
     length(x$amount)
-sort.Journal <- function(x, ...) {
-    cat("not implemented\n")
-    invisible(x)
-}
-filterJournal <- function(x, timestamp, amount, price,
-                            id, instrument, account, ...) {    
-    cat("not implemented\n")
-    invisible(x)
+sort.Journal <- function(x, decreasing = FALSE, by = "timestamp",
+                         ..., na.last = TRUE) {
+    o <- order(x[by], na.last = na.last, decreasing = decreasing)    
+    for (i in seq_along(unclass(x)))
+        x[[i]]<- x[[i]][o]
+    x    
 }
 c.Journal <- function(...) {
     tls <- list(...)

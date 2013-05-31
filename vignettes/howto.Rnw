@@ -25,12 +25,12 @@ require("PMwR")
 
 \begin{framed}
   \noindent We get a list of trades (typically in a non-standard
-  form), and need to compute PL.
+  form), and need to compute profit-or-loss.
 \end{framed}
 
 \begin{framed}
   \noindent We get a list of trades in different instruments and need
-  to compute PL.
+  to compute profit-or-loss.
 \end{framed}
 
 \begin{framed}
@@ -42,5 +42,30 @@ require("PMwR")
   \noindent We get a signal series (\texttt{+1, 0, 0, +1, \ldots}) and
   need to transform it into a profit-and-loss series.
 \end{framed}
+
+\begin{framed}
+  \noindent We have a list of trades and need to determine the
+  profit-and-loss between two timestamps.
+\end{framed}
+
+Unless the position was zero at $t_\mathrm{0}$ and $t_\mathrm{1}$, we
+cannot compute the PL without having prices for the positions at these
+points in time.  (Use \texttt{pl} with \texttt{subset(J, timestamp >=
+  t0 \& timestamp <=t1)} fot this case.)
+
+The general case is not so complicated, after all.
+
+\begin{enumerate}
+\item Compute the position at $t_\mathrm{0}$, and make it a Journal $J_0$.
+  
+\item Take all transactions at $t > t_\mathrm{0}$ and $t \leq
+  t_\mathrm{1}$ and put them into a Journal $J$.
+
+\item Compute the position at $t_\mathrm{1}$, and make it a Journal
+  $J_1$, but \emph{multiply all amounts by $-1$}.
+
+
+\item Combine $J_0$, $J$, and $J_1$ and compute the PL.
+\end{enumerate}
 
 \end{document}
