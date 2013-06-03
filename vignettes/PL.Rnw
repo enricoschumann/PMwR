@@ -28,8 +28,15 @@ require("PMwR")
 
 \section{Profit and (or) loss}
 
-We buy one unit of an asset at a price of 100; we sell one unit at
-102.
+\subsection{The simple case}
+
+Suppose we have an account denominated in euro.  We buy one asset at a
+price of 100 euro and sell it again at 102 euro.  We have made a
+profit of 2 euros.
+
+This simple cape happens often enough to make the required computation
+simple as well.  Computing profit-or-loss can be handled through the
+function \texttt{pl}.
 
 <<>>=
 pl(price  = c(100, 102), 
@@ -106,6 +113,28 @@ executed can be useful to value any open position.
 
 <<>>=
 @ 
+
+
+
+\subsection{More complicated cases}
+
+Unfortunately, in real life computing PL is often more complicated:
+
+\begin{itemize}
+\item One asset-price unit may not translate into one currency unit:
+  we multipliers or contract factors.
+
+\item Asset positions may map into non-trivial cashflows.  The simple
+  case would be the delay in actual payment and delivery of an asset;
+  but the more problematic cases are derivatives with daily
+  adjustments of margins.
+
+\item Assets may be denominated in various currencies.
+  
+\item Currencies may be assets in the portfolio.  Depending on how
+  they are traded (cash, forwards, \texttt{\&c.}), computing PL may
+  not be simple.
+\end{itemize}
 
 \section{Exposure}
 
