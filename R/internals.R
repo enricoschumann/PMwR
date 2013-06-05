@@ -56,21 +56,11 @@ divCorrection <- function(x, t, div, match.last = FALSE) {
     }
     new.series        
 }
-
-## -3.526091%
-
-
-## Commerzbank
-##| 20130423 |  1.078 |
-##| 20130424 |   10.4 |
-##| 20130425 |  10.55 |
-## x <- c(1.078, 10.40, 10.55)
-## t <- 2
-## div <- -1.04*9
-
-## 1.04/1.078-1
-
-## divCorrection(x,t,div, TRUE)
-## fun <- function(x) ((10.4+x)/1.078) - 1.04/1.078
-
-## z <- uniroot(fun, c(-7,-12))$root
+letter2month <- function(s){
+    s <- toupper(s)
+    meaning <- c("C 1", "C 2", "C 3", "C 4",  "C 5",  "C 6",
+                 "C 7", "C 8", "C 9", "C 10", "C 11", "C 12",
+                 "P 1", "P 2", "P 3", "P 4",  "P 5" , "P 6",
+                 "P 7", "P 8", "P 9", "P 10", "P 11", "P 12")
+    meaning[match(s, LETTERS[1:24])]
+}
