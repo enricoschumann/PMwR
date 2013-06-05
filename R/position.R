@@ -64,5 +64,16 @@ position <- function(amount, timestamp, instrument, when, from, to, nonzero.only
                 cumsum(iv)[max(beforewhen)] else 0
         }
     }
-    pos
+    ans <- list(position = pos, timestamp = timestamp, instrument = nm)
+    class(ans) <- "Position"
+    ans
 }
+
+print.Position <- function(x, ...){
+    if (dim(x$position)[1L] > 1L)
+        print(x$position, big.mark = ",")
+    else
+        print(t(x$position, big.mark = ","))
+    invisible(x)
+}
+x <- position(tl)
