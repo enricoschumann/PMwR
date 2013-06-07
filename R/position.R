@@ -73,7 +73,15 @@ print.Position <- function(x, ...){
     if (dim(x$position)[1L] > 1L)
         print(x$position, big.mark = ",")
     else
-        print(t(x$position, big.mark = ","))
+        print(t(x$position), big.mark = ",")
     invisible(x)
 }
 x <- position(tl)
+
+value.Position <- function(x, prices, ...) {
+    if (is.function(prices))
+        prices(position  = x$position,
+               timestamp = x$timestamp,
+               instrument = x$instrument,...)
+
+}
