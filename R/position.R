@@ -76,7 +76,6 @@ print.Position <- function(x, ...){
         print(t(x$position), big.mark = ",")
     invisible(x)
 }
-x <- position(tl)
 
 value.Position <- function(x, prices, ...) {
     if (is.function(prices))

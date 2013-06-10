@@ -111,10 +111,6 @@ result.  At such a frequency, the prices at which the trades were
 executed can be useful to value any open position. 
 
 
-<<>>=
-@ 
-
-
 
 \subsection{More complicated cases}
 
@@ -356,7 +352,6 @@ product of the position at when with these prices.
 \subsection{Two accounts}
 
 <<>>=
-
 trades <- read.table(textConnection(
 "account; ticker; timestamp; amount; price
 private ; A ; 1;   100; 60
