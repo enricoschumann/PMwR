@@ -64,7 +64,7 @@ position <- function(amount, timestamp, instrument, when, from, to, nonzero.only
                 cumsum(iv)[max(beforewhen)] else 0
         }
     }
-    ans <- list(position = pos, timestamp = timestamp, instrument = nm)
+    ans <- list(position = pos, timestamp = when, instrument = nm)
     class(ans) <- "Position"
     ans
 }
