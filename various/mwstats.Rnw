@@ -17,7 +17,7 @@
 \noindent This vignette holds a number of tests for function
 \texttt{runStats}. We compare the results with functions from packages caTools and TTR.
 <<>>=
-require("PM")
+require("PMwR")
 require("caTools")
 require("TTR")
 require("rbenchmark")
@@ -31,12 +31,12 @@ benchmark(runStats("min", y, N),                           ## PM
           runmin(x=y, k=N, endrule="NA", align = "right"), ## caTools
           runMin(x=y, n=N, cumulative=FALSE),              ## TTR
           order = "relative",
-          replications = 10,
+          replications = 20,
           columns = c("test", "elapsed", "relative")
           )
 
 ## randomwalk
-y <- 100*cumprod(1+rnorm(100000,sd=0.01)); N <- 5000
+y <- 100*cumprod(1+rnorm(100000,sd=0.01)); N <- 10000
 benchmark(runStats("min", y, N),                           ## PM
           runmin(x=y, k=N, endrule="NA", align = "right"), ## caTools
           order = "relative",

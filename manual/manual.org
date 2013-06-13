@@ -1,0 +1,47 @@
+#+TITLE: Portfolio Management with R
+#+AUTHOR: Enrico Schumann
+
+* How to ... ?
+
+/I need to value a financial instrument./
+
+
+/I have a list of trades (bought or sold what, when and at what price)
+and I need to compute the profit or loss./
+
+
+
+/I have a list of trades in an instrument and want to plot these
+  trades against the price of the traded instrument./
+
+
+/I have a signal series (=+1=, =0=, =0=, =+1=, ...) and need to
+  transform it into a profit-and-loss series./
+
+
+/We have a list of trades and need to determine the
+  profit-and-loss between two timestamps./
+
+
+Call the two timestamps t0 and t1.  Unless the position was zero at t0
+and t1, we can compute the profit/loss only if we have prices for the
+positions at these points in time.  In case the position was indeed
+zero, you can use =pl=; the transactions are stored in a journal =j=.
+
+#+BEGIN_SRC R :eval never
+subset(j, timestamp >= t0 & timestamp <=t1)
+#+END_SRC
+
+But even the more general case is not so complicated, after all.
+
+1. Compute the position at =t0= and make it a journal j0.
+  
+2. Take all transactions at $t > t_\mathrm{0}$ and $t \leq
+   t_\mathrm{1}$ and put them into a Journal $J$.
+
+3. Compute the position at $t_\mathrm{1}$, and make it a Journal
+   $J_1$, but \emph{multiply all amounts by $-1$}.
+
+4. Combine $J_0$, $J$, and $J_1$ and compute the PL.
+
+
