@@ -32,7 +32,8 @@ export(
     scaleTrades,
     splitTrades,
     timegrid,
-    twExposure    
+    twExposure,
+    value
     )
 # methods
 S3method(c,Journal)
@@ -41,4 +42,6 @@ S3method(length,Journal)
 S3method(sort,Journal)
 S3method(subset,Journal)
 S3method(print,pl)
+S3method(print,position)
+S3method(print,value)
 useDynLib(PMwR)

@@ -65,11 +65,11 @@ position <- function(amount, timestamp, instrument, when, from, to, nonzero.only
         }
     }
     ans <- list(position = pos, timestamp = when, instrument = nm)
-    class(ans) <- "Position"
+    class(ans) <- "position"
     ans
 }
 
-print.Position <- function(x, ...){
+print.position <- function(x, ...){
     if (dim(x$position)[1L] > 1L)
         print(x$position, big.mark = ",")
     else
@@ -77,7 +77,7 @@ print.Position <- function(x, ...){
     invisible(x)
 }
 
-value.Position <- function(x, prices, ...) {
+value.position <- function(x, prices, ...) {
     if (is.function(prices))
         prices(position  = x$position,
                timestamp = x$timestamp,

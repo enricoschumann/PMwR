@@ -1,3 +1,7 @@
+2013-06-12  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-25
+
 2013-06-05  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/internals.R (letter2month): added internal function to convert

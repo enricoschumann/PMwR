@@ -364,3 +364,20 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
 ##          cash = cumcash+initcash)
 
 ## }
+plPeriod <- function(journal, t0, t1, prices0, prices1) {
+    p0 <- position(journal, when = t0)
+    J0 <- Journal(instrument = p0$instrument,
+                  amount     = as.vector(p0$position),
+                  price      = prices0[match(p0$instrument, names(prices0))],
+                  timestamp = t0)
+
+    p1 <- position(journal, when = t1)
+    J1 <- Journal(instrument = p1$instrument,
+                  amount     = -as.vector(p1$position), ## switch sign
+                  price      = prices1[match(p1$instrument, names(prices1))],
+                  timestamp = t1)
+
+    Jbetween <- subset(journal, timestamp > t0 & timestamp <= t1)
+
+    pl(c(J0, Jbetween, J1))    
+} 

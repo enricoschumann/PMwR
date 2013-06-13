@@ -37,6 +37,8 @@
 \item testing portfolios of options --> show payoff, simulate *paths*
   of underlier and vol surface
 \item run simulations for VaR
+\item various ways to compute pnl: weighted average,
+  first-in-first-out and last-in-last-out
 \end{itemize}
 
 
