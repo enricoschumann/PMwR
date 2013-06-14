@@ -1,5 +1,8 @@
 2013-06-14  Enrico Schumann  <es@enricoschumann.net>
 
+	* vignettes/PL.Rnw: removed vignettes PL and classes (transferred
+	into manual.org)
+
 	* R/pl.R (): "plBetween" now in pl (which takes additional
 	arguments t0, t1, prices0, prices1)
 
