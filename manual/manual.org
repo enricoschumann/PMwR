@@ -494,3 +494,22 @@ position(J, aggr.accounts = TRUE)
 \bibliographystyle{plainnat}
 \bibliography{bibliothek}
 #+END_LATEX
+
+
+* TO-DO list
+** qpTable
+
+** slTable
+
+
+    - \ldots : zoo objects
+    - include.returns
+    - include.diffs
+    - compute.with = "returns": or "diffs" or "levels"
+    - columns = list(mean = mean, sd = sd): need to be computed on returns
+
+** Technical indicators
+
+sum, abssum, sd, absmean, range, minmax, minmaxrange, mad
+
+

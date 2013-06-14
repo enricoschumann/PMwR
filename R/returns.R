@@ -12,6 +12,7 @@ drawdown <- function(v, relative = TRUE) {
          lowPosition = troughTime)
 }
 
+## not exported
 returns0 <- function(x, pad = NULL) {
     n <- NROW(x)
     do.pad <- !is.null(pad)
@@ -29,9 +30,8 @@ returns0 <- function(x, pad = NULL) {
     rets
 }
 
+## not exported
 twReturns <- function(price, position, pad = NULL) {
-    if (missing(position))
-        returns(price, pad)
     do.pad <- !is.null(pad)        
     position <- as.matrix(position)
     price <- as.matrix(price)
@@ -45,6 +45,7 @@ twReturns <- function(price, position, pad = NULL) {
     rt
 }
 
+## not exported
 pReturns <- function(x, t = NULL, period = "month",
                      complete.first = TRUE) {
 
