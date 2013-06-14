@@ -40,26 +40,39 @@ first <- function(x, by, index = FALSE) {
         x[match(unique(by), by)]
 }
 
-divCorrection <- function(x, t, div, match.last = FALSE) {
+x <- c(9,9,10,8,10,11)
+div <- 2
+t <- 4
+
+divAdjust <- function(x, t, div, backward = TRUE, additive = FALSE) {
     if (!is.null(dim(x)))
         stop(sQuote("x"), " must be a vector")
-
-    ti <- t > 1L
-    div <- div[ti]
-    t <- t[ti]
-    if (length(t) && length(div) == 1L)
+    tmp <- t > 1L
+    div <- div[tmp]
+    t <- t[tmp]
+    if (length(t) > 1L && length(div) == 1L)
         div <- rep(div, length(t))
-    if (length(div) != length(t))
-        stop("different lengths for ", sQuote("div"), " and ", sQuote("t"))
-    rets <- returns(x, 0)
-    rets[t] <- (x[t] + div)/x[t - 1L] - 1
-    new.series <- x[1L]*cumprod(1 + rets)
-    if (match.last){
-        n <- length(x)
-        new.series <- new.series*x[n]/new.series[n]
+    else if (length(div) != length(t))
+        stop("different lengths for ", sQuote("div"),
+             " and ", sQuote("t"))
+    n <- length(x)
+    if (!additive) {
+        rets <- returns(x, 0)
+        rets[t] <- (x[t] + div)/x[t - 1L] - 1
+        new.series <- x[1L] * cumprod(1 + rets)        
+        if (backward)
+            new.series <- new.series * x[n] / new.series[n]
+    } else {
+        x[2:n]-x[seq_len(n-1)]
+        dif <- c(0, diff(x))
+        dif[t] <- dif[t] + div
+        new.series <- x[1L] + cumsum(dif)                
+        if (backward)
+            new.series <- new.series - new.series[n] + x[n]
     }
     new.series        
 }
+
 letter2month <- function(s){
     s <- toupper(s)
     meaning <- c("C 1", "C 2", "C 3", "C 4",  "C 5",  "C 6",

@@ -1,11 +1,15 @@
+2013-06-14  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/internals.R (divAdjust): renamed function (from
+	divCorrection);
+	(letter2month): added to documentation
+
 2013-06-13  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-26
 
 	* R/journal.R (print.Journal): new argument "width", default is 60
 
-	* see git ChangeLog
-	
 2013-06-12  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-25

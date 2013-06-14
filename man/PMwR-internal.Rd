@@ -16,7 +16,8 @@ makeHHMMSS(x, label = "time specification (HHMMSS)")
 wait(x)
 first(x, by, index = FALSE)
 last(x, by, index = FALSE)
-divCorrection(x, t, div, match.last = FALSE)
+divAdjust(x, t, div, x, t, div, backward = TRUE, additive = FALSE)
+letter2month(s)
 }
 \details{
 
@@ -27,6 +28,9 @@ divCorrection(x, t, div, match.last = FALSE)
   call \code{\link{Sys.sleep}} with this number. If \code{x} is a
   vector, a uniform random variate between \code{min(x)} and
   \code{max(x)} is passed to \code{\link{Sys.sleep}}.  
+
+  \code{letter2month} converts a string to an option type and month (eg,
+  \code{"A"} means \code{"Call January"}).
   
 }
 \author{
@@ -43,13 +47,12 @@ target  <- c(0.15,0.0,0.1,0,0.15,0.15,0.15,0.15,0,0.15)
 prices <- c(8.36,63.44 ,35.9325 ,21.2325 ,113.85 ,95.21 ,65.965 ,69.48 ,132.175 ,51.55)
 PMwR:::rebalance(current, target, prices, notional = 50000, names= s)
 
+x <- c(9.777, 10.04, 9.207, 9.406)
+div <- 0.7
+t <- 3
 
-x <- c(7,7,9,11)
-div <- 1
-t <- 4
-
-PMwR:::divCorrection(x, t, div)
-PMwR:::divCorrection(x, t, div, TRUE)
+PMwR:::divAdjust(x, t, div)
+PMwR:::divAdjust(x, t, div, FALSE)
 
 }
 \keyword{internal}
