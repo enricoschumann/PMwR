@@ -31,7 +31,7 @@
 #+OPTIONS: toc:nil 
 #+HTML_HEAD: <link rel="stylesheet" type="text/css" href="style.css" />
 
-* How to ... ?
+* Frequently-used functions
 
 /I need to value a financial instrument./
 

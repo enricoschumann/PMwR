@@ -1,5 +1,5 @@
 position <- function(amount, timestamp, instrument, when, from, to,
-                     nonzero.only = FALSE,
+                     drop.zero = FALSE,
                      aggr.accounts = FALSE, account.sep = "::") {
     if (missing(instrument))
         instrument <- NA
@@ -52,8 +52,9 @@ position <- function(amount, timestamp, instrument, when, from, to,
         by.account <- FALSE
 
     nw <- length(when)
-    pos <- array(0, dim = c(nw,
-                    length(nm <- sort(unique(instrument)))))
+    pos <- array(0,
+                 dim = c(nw,
+                         length(nm <- sort(unique(instrument)))))
     colnames(pos) <- nm        
     rownames(pos) <- as.character(when)
     for (j in seq_len(nw)) {
@@ -65,6 +66,15 @@ position <- function(amount, timestamp, instrument, when, from, to,
             pos[j, i] <- if (length(beforewhen))
                 cumsum(iv)[max(beforewhen)] else 0
         }
+    }
+    if (!is.logical(drop.zero)) {
+        drop <- apply(pos, 2, function(x) all(abs(x) < drop.zero))
+        pos <- pos[ , !drop, drop = FALSE]
+        nm <- nm[!drop]
+    } else if (drop.zero) {
+        drop <- apply(pos, 2, function(x) all(x == 0))
+        pos <- pos[ , !drop, drop = FALSE]
+        nm <- nm[!drop]
     }
     ans <- list(position = pos, timestamp = when, instrument = nm)
     class(ans) <- "position"

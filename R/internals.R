@@ -57,14 +57,13 @@ divAdjust <- function(x, t, div, backward = TRUE, additive = FALSE) {
              " and ", sQuote("t"))
     n <- length(x)
     if (!additive) {
-        rets <- returns(x, 0)
+        rets <- c(0, x[-1L]/x[-n] - 1)
         rets[t] <- (x[t] + div)/x[t - 1L] - 1
         new.series <- x[1L] * cumprod(1 + rets)        
         if (backward)
             new.series <- new.series * x[n] / new.series[n]
     } else {
-        x[2:n]-x[seq_len(n-1)]
-        dif <- c(0, diff(x))
+        dif <- c(0, x[-1L] - x[-n])
         dif[t] <- dif[t] + div
         new.series <- x[1L] + cumsum(dif)                
         if (backward)

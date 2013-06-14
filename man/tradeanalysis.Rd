@@ -3,9 +3,6 @@
 \alias{pl}
 \alias{closeOnFirst}
 \alias{limit}
-\alias{returns}
-\alias{pReturns}
-\alias{twReturns}
 \alias{scaleToUnity}
 \alias{scaleTrades}
 \alias{splitTrades}
@@ -26,11 +23,6 @@ pl(amount, price,
 PLsorted(amount, price, timestamp = NULL,
          allprices = NULL, alltimes = NULL,
          initcash = 0, do.sort = FALSE)
-
-returns(x, pad = NULL)
-pReturns(x, t = NULL, period, complete.first = TRUE)
-twReturns(price, position, pad = NULL)
-
 
 scaleTrades(amount, price, timestamp, aggregate = FALSE,
             fun = NULL, ...)

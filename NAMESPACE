@@ -1,9 +1,7 @@
 export(
     "dayOfMonth<-",
-    pl,
-    PL,
-    PLsorted,
     Journal,
+    PLsorted,
     backtest,
     char2num,
     closeOnFirst,
@@ -19,6 +17,7 @@ export(
     limit,
     monthlyStats,
     nextBusinessDay,
+    pl,
     plotTradingHours,
     position,
     previousBusinessDay,
@@ -26,7 +25,6 @@ export(
     rmspace,
     roundPOSIXt,
     runStats,
-    twReturns,
     saveAttachment,
     scaleToUnity,
     scaleTrades,
@@ -44,4 +42,5 @@ S3method(subset,Journal)
 S3method(print,pl)
 S3method(print,position)
 S3method(print,value)
+S3method(print,preturns)
 useDynLib(PMwR)

@@ -13,10 +13,14 @@
 }
 \usage{
 makeHHMMSS(x, label = "time specification (HHMMSS)")
+
 wait(x)
+
 first(x, by, index = FALSE)
 last(x, by, index = FALSE)
-divAdjust(x, t, div, x, t, div, backward = TRUE, additive = FALSE)
+
+divAdjust(x, t, div, backward = TRUE, additive = FALSE)
+
 letter2month(s)
 }
 \details{

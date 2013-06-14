@@ -335,30 +335,6 @@ if (FALSE) {
     jb
 
     
-    amount <- c(1,1,2,2)
-    price <- c(101,102,103,104)
-    all.equal(twReturns(price, amount), returns(price))
-
-    amount <- c(1,1,1,2,2,0)
-    dim(amount) <- c(3,2)
-    price <- c(100,100,100,100,100,100)
-    dim(price) <- c(3,2)
-    twReturns(price, amount)
-    all.equal(twReturns(price, amount), returns(price[,1]))
-
-    amount <- c(1,1,1,2,2,2)
-    dim(amount) <- c(3,2)
-    price <- c(101,102,103,103,105,107)
-    dim(price) <- c(3,2)
-    all.equal(twReturns(price, amount), returns(rowSums(price*amount)))
-
-    amount <- c(1,1,1,2,2,0)
-    dim(amount) <- c(3,2)
-    price <- c(101,102,103,103,105,107)
-    dim(price) <- c(3,2)
-    twReturns(price, amount)
-    
-    
 
 
     ##                 in %

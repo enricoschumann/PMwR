@@ -1,6 +1,7 @@
+.es_keywords
 .git
 .gitignore
-various
 R/dev.R
 TODO
 manual
+various

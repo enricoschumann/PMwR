@@ -1,5 +1,15 @@
 2013-06-14  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/pl.R (): "plBetween" now in pl (which takes additional
+	arguments t0, t1, prices0, prices1)
+
+	* DESCRIPTION (Version): Version: 0.1-27
+
+	* R/returns.R (returns): all return functions (returns, pReturns,
+	twReturns) now have a single interface: returns
+
+	* R/returns.R (print.preturns): new method
+
 	* R/internals.R (divAdjust): renamed function (from
 	divCorrection);
 	(letter2month): added to documentation

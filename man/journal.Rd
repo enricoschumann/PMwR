@@ -16,8 +16,8 @@ Journal(timestamp, amount, price, id, instrument, account, \dots)
 
 \method{c}{Journal}(\dots)
 \method{length}{Journal}(x)
-\method{print}{Journal}(x, \dots)
-\method{sort}{Journal}(x, decreasing = FALSE, by = "timestamp", ..., na.last = TRUE)
+\method{print}{Journal}(x, \dots, width = 60L)
+\method{sort}{Journal}(x, decreasing = FALSE, by = "timestamp", \dots, na.last = TRUE)
 \method{subset}{Journal}(x, \dots)
 
 }
@@ -40,7 +40,7 @@ Journal(timestamp, amount, price, id, instrument, account, \dots)
   \item{account}{
      account id
 }
-\item{dots}{
+\item{\dots}{
   
   For \code{Journal}: further arguments, which must all be named. For
   \code{subset}: an expression that evaluates to a logical vector; it
@@ -49,6 +49,18 @@ Journal(timestamp, amount, price, id, instrument, account, \dots)
 }
   \item{x}{
     a \code{Journal} object
+}
+  \item{width}{
+    integer
+}
+  \item{decreasing}{
+    arguments passed to sort
+}
+  \item{by}{
+    sort by
+}
+  \item{na.last}{
+    arguments passed to sort
 }
 }
 \details{

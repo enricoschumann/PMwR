@@ -12,7 +12,7 @@ drawdown <- function(v, relative = TRUE) {
          lowPosition = troughTime)
 }
 
-returns <- function(x, pad = NULL) {
+returns0 <- function(x, pad = NULL) {
     n <- NROW(x)
     do.pad <- !is.null(pad)
     if (is.null(dim(x))) {
@@ -28,6 +28,7 @@ returns <- function(x, pad = NULL) {
     }
     rets
 }
+
 twReturns <- function(price, position, pad = NULL) {
     if (missing(position))
         returns(price, pad)
@@ -43,7 +44,9 @@ twReturns <- function(price, position, pad = NULL) {
         rt <- c(pad, rt)
     rt
 }
-pReturns <- function(x, t = NULL, period, complete.first = TRUE) {
+
+pReturns <- function(x, t = NULL, period = "month",
+                     complete.first = TRUE) {
 
     ## TODO: make internal function that checks x and t
     if (is.null(t)) {
@@ -73,17 +76,17 @@ pReturns <- function(x, t = NULL, period, complete.first = TRUE) {
     ans <- list(returns = returns(x[ii]),
                 t = t[ii][-1L],
                 period = period)
-    class(ans) <- "PMwR-pReturns"
+    class(ans) <- "preturns"
     ans
 }
-returns0 <- function(x, t = NULL, period, complete.first = TRUE,
+returns <- function(x, t = NULL, period = "month", complete.first = TRUE,
                      pad = NULL, position) {
     if (is.null(t) &&  missing(position)) {
-        returns(x, pad)        
+        returns0(x, pad)        
     } else if (!is.null(t)) {
         pReturns(x, t, period, complete.first)
     } else {
-        twReturns(x, position, pad) {
+        twReturns(x, position, pad)
     }
 }
 
@@ -103,18 +106,6 @@ returns0 <- function(x, t = NULL, period, complete.first = TRUE,
     
 ## }
 
-monthlyStats <- function(t,x) {
-    x.eom <- aggregate(x, strftime(index(x), "%Y%m"), tail,1)
-    ult.dates <- getEndOfMonth(index(x))
-    x.eom <- zoo(x.eom, unique(ult.dates))
-    
-    if (identical(ult.dates[1L], ult.dates[2L])) {
-        tmp <- zoo(coredata(x[1L]), getEndOfPreviousMonth(ult.dates[1L]))
-        x.eom <- rbind(tmp, x.eom)
-    }
-    list(index = x.eom/coredata(x.eom[1L]),
-         returns = zoo(returns(x.eom), index(x.eom)[-1L]))
-}
 rtTab <- function(x) {
     f <- function(x)
         format(round(coredata(100*x), 1), nsmall=1)
@@ -128,3 +119,5 @@ rtTab <- function(x) {
     tb
     paste(apply(tb, 1, function(x) paste(x, collapse = "&")), "\\\\")
 }
+print.preturns <- function(x, ...)
+    print(unclass(x))

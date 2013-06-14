@@ -8,7 +8,8 @@
   in time.
 }
 \usage{
-position(amount,timestamp, instrument, when, from, to, \dots)
+position(amount, timestamp, instrument, when, from, to,
+         drop.zero = FALSE, aggr.accounts = FALSE, account.sep = "::")
 }
 \arguments{
   \item{when}{
@@ -36,7 +37,7 @@ position(amount,timestamp, instrument, when, from, to, \dots)
 to be added
 }
 \value{
-  a numeric vector or matrix
+  An object of class position.
 }
 \references{
   ES -- PMwR
