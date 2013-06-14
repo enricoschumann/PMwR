@@ -228,7 +228,8 @@ print.pl <- function(x, ...) {
 }
 
 pl <- function(amount, price, instrument = NULL, timestamp = NULL,
-               along.timestamp = FALSE, do.sort = FALSE,
+               along.timestamp = FALSE,
+               do.sort = FALSE,
                initcash = 0,
                tol = 1e-10,
                aggr.accounts = FALSE, account.sep = "::") {

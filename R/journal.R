@@ -41,13 +41,12 @@ Journal <- function(timestamp, amount, price, id, instrument, account, ...) {
     class(ans) <- "Journal"
     ans    
 }
-print.Journal <- function(x, ...) {
+print.Journal <- function(x, ..., width = 60) {
     oo <- getOption("scipen")
     options(scipen = 1e8)
     on.exit(options(scipen = oo))
 
     dspT <- 10 ## display trades, instruments
-    dspI <- 8
     
     if (all(!is.na(x$account)))
         rn <- x$account        
@@ -58,20 +57,19 @@ print.Journal <- function(x, ...) {
                         row.names = seq_len(length(x)),
                         stringsAsFactors = FALSE)
     notAllNA <- unlist(lapply(df, function(x) !all(is.na(x))))
-    print(head(df[notAllNA],dspT))
+    print(head(df[notAllNA],dspT), quote=FALSE,
+          print.gap=2)
     if ((n <- max(length(x$amount),length(x$price))) > dspT)
-        cat("...\n")
+        cat("[ ... ]\n\n") else cat("\n")
     insts <- sort(unique(x$instrument))
-    if (length(insts) > dspI) {
-        insts <- insts[seq_len(dspI)]
-        insts <- as.character(rmspace(insts))
-        insts[dspI] <- "..."
-    }
+    insts <- as.character(rmspace(insts))
     if (length(insts))
         subs <- paste0(" in ", paste(insts, sep = "", collapse = ", "))
     else
         subs <- ""
-    cat(paste0("\n", n, " trades", subs, "\n"))
+    msg <- strwrap(paste0("\n", n, " transactions", subs), width)
+    msg <- paste(msg[1L], if (length(msg)>1L) "...", "\n")
+    cat(msg)
     invisible(x)
 }
 length.Journal <- function(x)

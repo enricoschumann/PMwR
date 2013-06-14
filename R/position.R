@@ -1,4 +1,5 @@
-position <- function(amount, timestamp, instrument, when, from, to, nonzero.only = FALSE,
+position <- function(amount, timestamp, instrument, when, from, to,
+                     nonzero.only = FALSE,
                      aggr.accounts = FALSE, account.sep = "::") {
     if (missing(instrument))
         instrument <- NA
@@ -43,7 +44,8 @@ position <- function(amount, timestamp, instrument, when, from, to, nonzero.only
         instrument[] <- ""
 
     
-    if (!aggr.accounts && exists("J") && !all(is.na(J$account)) && length(unique(J$account)) > 1L) {
+    if (!aggr.accounts && exists("J") && !all(is.na(J$account)) &&
+        length(unique(J$account)) > 1L) {
         instrument <- paste0(J$account, account.sep, instrument)
         by.account <- TRUE
     } else 

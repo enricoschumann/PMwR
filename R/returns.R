@@ -12,7 +12,6 @@ drawdown <- function(v, relative = TRUE) {
          lowPosition = troughTime)
 }
 
-## various functions to compute returns
 returns <- function(x, pad = NULL) {
     n <- NROW(x)
     do.pad <- !is.null(pad)
@@ -76,6 +75,16 @@ pReturns <- function(x, t = NULL, period, complete.first = TRUE) {
                 period = period)
     class(ans) <- "PMwR-pReturns"
     ans
+}
+returns0 <- function(x, t = NULL, period, complete.first = TRUE,
+                     pad = NULL, position) {
+    if (is.null(t) &&  missing(position)) {
+        returns(x, pad)        
+    } else if (!is.null(t)) {
+        pReturns(x, t, period, complete.first)
+    } else {
+        twReturns(x, position, pad) {
+    }
 }
 
 ##require("tseries")
