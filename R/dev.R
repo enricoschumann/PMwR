@@ -386,6 +386,10 @@ if (FALSE) {
     
 
                                         # BINARY SEARCH
+    ## x
+    ## key, min, max, what = undef, first, last
+
+
     bs <- function(x, t, duplicates = "undef") {
         imin <- 1L 
         imax <- length(x)
