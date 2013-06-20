@@ -1,3 +1,8 @@
+2013-06-19  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/datetimetools.R (ssm): added function ssm ("seconds since
+	midnight")
+
 2013-06-14  Enrico Schumann  <es@enricoschumann.net>
 
 	* vignettes/PL.Rnw: removed vignettes PL and classes (transferred

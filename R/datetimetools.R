@@ -109,6 +109,7 @@ timegrid <- function(from, to, interval,
                as.numeric(fromHHMMSS) <= tmp & as.numeric(toHHMMSS) >= tmp] 
     as.POSIXct(grd)
 }
+
 roundPOSIXt <- function(t, interval) {
 
     if (!inherits(t, "POSIXct"))
@@ -239,3 +240,11 @@ plotTradingHours <- function(x, t = NULL,
     }
 }
 
+ssm <- function(time, tz = "") {
+    if (tz == "UTC" || tz == "GMT")
+        as.numeric(time) %% 86400
+    else {
+        pt <- as.POSIXlt(time, tz)        
+        3600 * pt$hour + 60 * pt$min + pt$sec
+    }
+}

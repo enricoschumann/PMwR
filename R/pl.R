@@ -232,7 +232,7 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
                do.sort = FALSE,
                initcash = 0,
                t0, t1, prices0, prices1,
-               tol = 1e-10,
+               tol = 1e-10, do.warn = TRUE,
                aggr.accounts = FALSE, account.sep = "::") {
     if (inherits(amount, "Journal")) {
         J <- amount
@@ -241,7 +241,7 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
         amount <- J$amount
         timestamp <- J$timestamp
     }
-    if (any(abs(amount) < tol))
+    if (any(abs(amount) < tol) && do.warn)
         warning("zero ", sQuote("amount"), " values")
 
     if (do.sort) {
@@ -274,7 +274,7 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
         pl(c(J0, Jbetween, J1))    
     } 
     plfun <- function(amount, price) {
-        if (abs(sum(amount)) > tol) {
+        if (abs(sum(amount)) > tol && do.warn) {
             warning("Sum of amount is not zero; cannot compute PnL.")
             c(NA, sum(abs(amount)),
               sum(price[ i] * amount[ i])/sum(amount[ i]),
