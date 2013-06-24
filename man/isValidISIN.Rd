@@ -31,6 +31,7 @@ isValidISIN(isin)
   Enrico Schumann
 }
 \examples{
-isin <- c("US0378331005", "AU0000XVGZA3", "DE000A0C3743", "")
+isin <- c("US0378331005", "AU0000XVGZA3", "DE000A0C3743", "ss")
 isValidISIN(isin)
+isValidISIN("US0378331005")
 }

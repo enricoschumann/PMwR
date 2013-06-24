@@ -22,7 +22,7 @@ makeHHMMSS <- function(x, label = "time specification (HHMMSS)") {
 wait <- function(x) 
     if (length(x) == 1L)
         Sys.sleep(x) else
-Sys.sleep(runif(1L, min(x), max(x)))
+           Sys.sleep(runif(1L, min(x), max(x)))
 
 last <- function(x, by, index = FALSE) {
     lby <- length(by)

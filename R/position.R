@@ -1,6 +1,5 @@
 position <- function(amount, timestamp, instrument, when, from, to,
-                     drop.zero = FALSE,
-                     aggr.accounts = FALSE, account.sep = "::") {
+                     drop.zero = FALSE) {
     if (missing(instrument))
         instrument <- NA
     if (inherits(amount, "Journal")) {
@@ -43,18 +42,9 @@ position <- function(amount, timestamp, instrument, when, from, to,
     if (all(is.na(instrument)))
         instrument[] <- ""
 
-    
-    if (!aggr.accounts && exists("J") && !all(is.na(J$account)) &&
-        length(unique(J$account)) > 1L) {
-        instrument <- paste0(J$account, account.sep, instrument)
-        by.account <- TRUE
-    } else 
-        by.account <- FALSE
-
     nw <- length(when)
-    pos <- array(0,
-                 dim = c(nw,
-                         length(nm <- sort(unique(instrument)))))
+    nm <- sort(unique(instrument))
+    pos <- array(0, dim = c(nw, length(nm)))
     colnames(pos) <- nm        
     rownames(pos) <- as.character(when)
     for (j in seq_len(nw)) {

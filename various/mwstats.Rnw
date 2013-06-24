@@ -26,7 +26,7 @@ require("rbenchmark")
 Some examples.
 <<>>=
 ## noise
-y <- rnorm(10000); N <- 1000
+y <- rnorm(10000); N <- 10
 benchmark(runStats("min", y, N),                           ## PM
           runmin(x=y, k=N, endrule="NA", align = "right"), ## caTools
           runMin(x=y, n=N, cumulative=FALSE),              ## TTR

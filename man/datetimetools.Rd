@@ -15,9 +15,9 @@
 }
 \description{
   
-  Functions for manipulating vectors that inherits from class
-  \code{POSIXt} or \code{Date}. If times are returned, they are
-  typically of class POSIXct.
+  Functions for manipulating vectors that inherit from class
+  \code{POSIXt} or \code{Date}.  If times are returned, they are
+  typically of class \code{POSIXct}.
 
 }
 \usage{
@@ -153,8 +153,8 @@ roundPOSIXt(times, "2 min")
 
 previousBusinessDay(as.Date("2012-06-18"))
 
-## goal: find the third Friday in March 2013
-## => find the last Friday in February 2013 and 
-##    shift forward by 3 weeks
+## goal:   find the third Friday in March 2013
+## how to: find the last Friday in February 2013 and 
+##         shift forward by 3 weeks
 lastWeekday(5, as.Date("2013-02-01"), shift = 3)
 }

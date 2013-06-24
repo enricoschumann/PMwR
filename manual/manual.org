@@ -79,6 +79,8 @@ But even the more general case is not so complicated, after all.
 
 * Journals
 
+** Fields
+
 The basis for most computations in the PMwR package are list of
 transactions.  =PMwR= provides an S3 class \texttt{Journal} for
 handling transaction data.  A \texttt{Journal} is created through the
@@ -89,7 +91,8 @@ be retrieved by name, never by position.
 
 The simplicity of the class is intended, as it is mostly used in
 interactive analyses.  Thus, the analyst is actually supposed to
-dissect the information at will (eg, remove the class attribute).
+dissect the information at will (which includes removing the class
+attribute).
 
 What is actually stored in a \texttt{Journal} is up to its user, but a
 few fields are typical (and required for several methods):
@@ -119,8 +122,9 @@ Transactions are considered to be in a hierachy
 #+END_QUOTE
 
 
-To a give really simple example, suppose you kept track of a bank
-account.
+** A first example
+
+Suppose you kept track of a bank account.
 
 #+BEGIN_SRC R :results output
   require("PMwR")
@@ -154,11 +158,11 @@ Let us do some more finance-style transactions: we buy five times one
 unit of some unspecified asset.
 
 #+BEGIN_SRC R :results output
-tl1 <- Journal(timestamp = 1:5, 
-               amount = 1, 
-               price = c(2,2,2,3,4), 
-               account = "my account")
-tl1
+  tl1 <- Journal(timestamp = 1:5, 
+                 amount = 1, 
+                 price = c(2,2,2,3,4), 
+                 account = "my account")
+  tl1
 #+END_SRC 
 
 #+RESULTS:
@@ -219,8 +223,15 @@ pl(tl)
 : average.sell => average sell price
 
 
+** More details
 
-A more complicated example.
+As stated above the hierarchy of accounts is simply
+=<account>::<instrument>=.  But there is nothing enforce it.
+  
+
+
+
+** A more complicated example.
 
 #+NAME: trades
 | Symbol | ISIN         | Date/Time       | Buy/Sell | Quantity |  Price | Commission |

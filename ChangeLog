@@ -1,3 +1,24 @@
+2013-06-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (position): removed aggregation of
+	account/instrument
+
+	* man/runStats.Rd: updated documentation
+
+	* vignettes/plotTradingHours.Rnw: updated vignette
+
+	* R/forward.R: removed (archived in dev.R)
+
+	* R/backtestALT.R: removed (archived in dev.R)
+
+	* R/ISIN.R: fixed -- isValidISIN did not work correctly for a
+	vector of length 1
+
+	* vignettes/backtest.Rnw: moved to manual directory (to be added
+	to org file)
+
+	* R/plotTradingHours.R (plotTradingHours): new file
+
 2013-06-19  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/datetimetools.R (ssm): added function ssm ("seconds since

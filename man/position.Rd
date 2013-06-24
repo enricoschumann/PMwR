@@ -9,7 +9,7 @@
 }
 \usage{
 position(amount, timestamp, instrument, when, from, to,
-         drop.zero = FALSE, aggr.accounts = FALSE, account.sep = "::")
+         drop.zero = FALSE)
 }
 \arguments{
   \item{when}{
@@ -32,6 +32,9 @@ position(amount, timestamp, instrument, when, from, to,
   \item{to}{
     timestamp
   }
+  \item{drop.zero}{
+    timestamp
+  }  
 }
 \details{
 to be added
