@@ -1,5 +1,0 @@
-require("PMwR")
-current <- c(0,0,100,100)
-prices  <- c(1,1,1,1)
-target  <- c(0.25, 0.25, 0.25, 0.25)
-x <- rebalance(current, target, prices)
