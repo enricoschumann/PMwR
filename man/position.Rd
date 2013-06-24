@@ -1,7 +1,7 @@
 \name{position}
 \alias{position}
 \title{
-  Aggregate Trade Data into a Position
+  Aggregate Transaction Data into a Position
 }
 \description{
   Use information on trades to compute a position at a specific point
@@ -33,11 +33,15 @@ position(amount, timestamp, instrument, when, from, to,
     timestamp
   }
   \item{drop.zero}{
-    timestamp
+    drop instruments that have a zero position
   }  
 }
 \details{
-to be added
+
+  By default, only instrument is specified, but to compute positions on
+  an account basis, simply paste account to instrument.
+
+  
 }
 \value{
   An object of class position.

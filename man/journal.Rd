@@ -69,15 +69,19 @@ Journal(timestamp, amount, price, id, instrument, account, \dots)
   attaches a class attribute (\sQuote{Journal}).  There are few
   methods (\code{\link{print}}, \code{\link{c}}).
 
+  Currently, anything missing will be coded as \code{\link{NA}}, but for
+  id and account, \code{NULL} is more appropriate and will be
+  implaemented in the future.
+  
 }
 \value{
   
-  An object of class \code{Journal}, which is simply a list of
+  An object of class \code{journal}, which is simply a list of
   vectors.
 
 }
 \references{
-  ES
+  ES - PMwR
 }
 \author{
   Enrico Schumann

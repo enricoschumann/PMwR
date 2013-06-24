@@ -1,132 +1,132 @@
-PLsorted <- function(amount, price, 
-                     timestamp = NULL,
-                     allprices = NULL, alltimes = NULL,
-                     initcash = 0, do.sort = FALSE) {
-    if ((n <- length(amount)) != length(price))
-        stop("length(amount) != length(price)")
+## PLsorted <- function(amount, price, 
+##                      timestamp = NULL,
+##                      allprices = NULL, alltimes = NULL,
+##                      initcash = 0, do.sort = FALSE) {
+##     if ((n <- length(amount)) != length(price))
+##         stop("length(amount) != length(price)")
 
-    if (any(amount == 0))
-        stop("'amount' must be nonzero")
+##     if (any(amount == 0))
+##         stop("'amount' must be nonzero")
 
-    if (is.null(timestamp)) {
-        cumcash <- cumsum(-price * amount)
-        cumpos <- cumsum(amount)
-        list(wealth = cumpos * price + cumcash,
-             position = cumpos)
-    } else {
-        if (do.sort) {
-            ## trade data
-            ot <- order(timestamp)
-            price <- price[ot]
-            amount <- amount[ot]
-            timestamp <- timestamp[ot]
-            ## overall series
-            ot <- order(alltimes)
-            alltimes <- alltimes[ot]
-            allprices <- allprices[ot]
-        }
+##     if (is.null(timestamp)) {
+##         cumcash <- cumsum(-price * amount)
+##         cumpos <- cumsum(amount)
+##         list(wealth = cumpos * price + cumcash,
+##              position = cumpos)
+##     } else {
+##         if (do.sort) {
+##             ## trade data
+##             ot <- order(timestamp)
+##             price <- price[ot]
+##             amount <- amount[ot]
+##             timestamp <- timestamp[ot]
+##             ## overall series
+##             ot <- order(alltimes)
+##             alltimes <- alltimes[ot]
+##             allprices <- allprices[ot]
+##         }
 
-        ## (0) aggregate amount in case of duplicated times
-        if (any(duplicated(timestamp))) {
+##         ## (0) aggregate amount in case of duplicated times
+##         if (any(duplicated(timestamp))) {
 
-            ## diffsigns checks whether the signs of quantities differ
-            diffsigns <- function(x)
-                if (length(x) > 1L && length(unique(sign(x))) > 1L)
-                    TRUE else FALSE
+##             ## diffsigns checks whether the signs of quantities differ
+##             diffsigns <- function(x)
+##                 if (length(x) > 1L && length(unique(sign(x))) > 1L)
+##                     TRUE else FALSE
 
-            instTrade <- aggregate(amount, list(timestamp), diffsigns)
-            if (any(instTrade[["x"]])) {
+##             instTrade <- aggregate(amount, list(timestamp), diffsigns)
+##             if (any(instTrade[["x"]])) {
 
-                ## if there were trade in a single instance of
-                ## time: loop over those periods and add results
-                ## to cash
-                nInstTrade <- sum(instTrade[["x"]])
-                iInstTrade <- which(instTrade[["x"]])
-                addedCash <- numeric(nInstTrade)
-                addedTime <- vector(mode = mode(timestamp),
-                                    length = nInstTrade)
+##                 ## if there were trade in a single instance of
+##                 ## time: loop over those periods and add results
+##                 ## to cash
+##                 nInstTrade <- sum(instTrade[["x"]])
+##                 iInstTrade <- which(instTrade[["x"]])
+##                 addedCash <- numeric(nInstTrade)
+##                 addedTime <- vector(mode = mode(timestamp),
+##                                     length = nInstTrade)
 
-                for (i in seq_len(nInstTrade)) {
-                    this.t <- instTrade[[1L]][iInstTrade[i]]
-                    this.rows <- which(timestamp == this.t)
-                    this.price <- price[this.rows]
-                    this.amount <- amount[this.rows]
+##                 for (i in seq_len(nInstTrade)) {
+##                     this.t <- instTrade[[1L]][iInstTrade[i]]
+##                     this.rows <- which(timestamp == this.t)
+##                     this.price <- price[this.rows]
+##                     this.amount <- amount[this.rows]
 
-                    sells <- this.amount < 0
-                    buys  <- this.amount > 0
-                    sumsell <- sum(abs(this.amount[sells]))
-                    sumbuy  <- sum(abs(this.amount[buys]))
+##                     sells <- this.amount < 0
+##                     buys  <- this.amount > 0
+##                     sumsell <- sum(abs(this.amount[sells]))
+##                     sumbuy  <- sum(abs(this.amount[buys]))
 
-                    abstradesize <- min(sumsell, sumbuy)
-                    this.adj <- numeric(length(this.amount))
-                    this.adj <- -this.amount
-                    if (sumsell < sumbuy) {
-                        this.adj[buys] <- -this.amount[buys]*sumsell/sumbuy
-                    } else {
-                        this.adj[sells] <- -this.amount[sells]*sumbuy/sumsell
-                    }
+##                     abstradesize <- min(sumsell, sumbuy)
+##                     this.adj <- numeric(length(this.amount))
+##                     this.adj <- -this.amount
+##                     if (sumsell < sumbuy) {
+##                         this.adj[buys] <- -this.amount[buys]*sumsell/sumbuy
+##                     } else {
+##                         this.adj[sells] <- -this.amount[sells]*sumbuy/sumsell
+##                     }
 
-                    addedCash[i] <- PL(-this.adj, this.price)$PLtotal
-                    addedTime[i] <- this.t
+##                     addedCash[i] <- PL(-this.adj, this.price)$PLtotal
+##                     addedTime[i] <- this.t
 
-                    ## remove closed trades
-                    amount[this.rows] <- amount[this.rows] +
-                        this.adj
+##                     ## remove closed trades
+##                     amount[this.rows] <- amount[this.rows] +
+##                         this.adj
 
-                }
-            }
+##                 }
+##             }
 
-            tmpamount <- aggregate(amount, list(timestamp), sum)
-            tmpprice <- aggregate(price, list(timestamp), tail,1)
-            price <- aggregate(amount * price, list(timestamp),
-                                sum)[["x"]]/
-                                    ifelse(abs(tmpamount[["x"]]) < 1e-12,
-                                           1, tmpamount[["x"]])
-            if (any(repp <- tmpamount[[2L]] == 0L))
-                price[repp] <- tmpprice[[2L]][repp]
+##             tmpamount <- aggregate(amount, list(timestamp), sum)
+##             tmpprice <- aggregate(price, list(timestamp), tail,1)
+##             price <- aggregate(amount * price, list(timestamp),
+##                                 sum)[["x"]]/
+##                                     ifelse(abs(tmpamount[["x"]]) < 1e-12,
+##                                            1, tmpamount[["x"]])
+##             if (any(repp <- tmpamount[[2L]] == 0L))
+##                 price[repp] <- tmpprice[[2L]][repp]
 
-            amount <- tmpamount[["x"]]
-            timestamp <- tmpamount[["Group.1"]]
-        }
-        ## (1) add missing times: checks if all timestamp are included
-        ##                        in alltimes. If not, add the missing
-        ##                        times and price.
-        tmatch <- match(timestamp, alltimes)
-        if (any(is.na(tmatch))) {
-            alltimes <- c(alltimes, timestamp[is.na(tmatch)])
-            ot <- order(alltimes)
-            alltimes <- alltimes[ot]
-            allprices <- c(allprices, price[is.na(tmatch)])[ot]
-            tmatch <- match(timestamp, alltimes) ## match again
-        }
+##             amount <- tmpamount[["x"]]
+##             timestamp <- tmpamount[["Group.1"]]
+##         }
+##         ## (1) add missing times: checks if all timestamp are included
+##         ##                        in alltimes. If not, add the missing
+##         ##                        times and price.
+##         tmatch <- match(timestamp, alltimes)
+##         if (any(is.na(tmatch))) {
+##             alltimes <- c(alltimes, timestamp[is.na(tmatch)])
+##             ot <- order(alltimes)
+##             alltimes <- alltimes[ot]
+##             allprices <- c(allprices, price[is.na(tmatch)])[ot]
+##             tmatch <- match(timestamp, alltimes) ## match again
+##         }
 
-        ## (2) replace price: use actual trade price for valuation
-        allprices[tmatch] <- price
+##         ## (2) replace price: use actual trade price for valuation
+##         allprices[tmatch] <- price
 
 
-        ## set up cash
-        cash <- rep(0, length(allprices))
-        cash[1L] <- initcash
+##         ## set up cash
+##         cash <- rep(0, length(allprices))
+##         cash[1L] <- initcash
 
-        position <- numeric(length(alltimes))
-        position[tmatch] <- amount
-        cash[tmatch] <- cash[tmatch] - allprices[tmatch] * position[tmatch]
+##         position <- numeric(length(alltimes))
+##         position[tmatch] <- amount
+##         cash[tmatch] <- cash[tmatch] - allprices[tmatch] * position[tmatch]
 
-        ## add instantaneuous trades
-        if (exists("addedTime")) {
-            itmp <- match(addedTime, alltimes)
-            cash[itmp] <- cash[itmp] + addedCash
-        }
-        cumcash <- cumsum(cash)
-        list(time = alltimes,
-             price = allprices,
-             amount = position,
-             position = cumsum(position),
-             cash = cash,
-             cashposition = cumcash,
-             wealth = cumcash + cumsum(position) * allprices)
-    }
-}
+##         ## add instantaneuous trades
+##         if (exists("addedTime")) {
+##             itmp <- match(addedTime, alltimes)
+##             cash[itmp] <- cash[itmp] + addedCash
+##         }
+##         cumcash <- cumsum(cash)
+##         list(time = alltimes,
+##              price = allprices,
+##              amount = position,
+##              position = cumsum(position),
+##              cash = cash,
+##              cashposition = cumcash,
+##              wealth = cumcash + cumsum(position) * allprices)
+##     }
+## }
 
 
 ## PL <- function(amount, price, instrument = NULL, tol = 1e-10,
@@ -232,8 +232,7 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
                do.sort = FALSE,
                initcash = 0,
                t0, t1, prices0, prices1,
-               tol = 1e-10, do.warn = TRUE,
-               aggr.accounts = FALSE, account.sep = "::") {
+               tol = 1e-10, do.warn = TRUE) {
     if (inherits(amount, "Journal")) {
         J <- amount
         price <- J$price
@@ -289,11 +288,6 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
               sum(price[!i] * amount[!i])/sum(amount[!i]))
         }
     }
-    if (!aggr.accounts &&
-        exists("J", inherits = FALSE) &&
-        !all(is.na(J$account)) &&
-        length(unique(J$account)) > 1L)
-        instrument <- paste0(J$account, account.sep, instrument)
     
     if (!missing(t0) && !missing(t1) &&
         !missing(prices0) && !missing(prices1)) {

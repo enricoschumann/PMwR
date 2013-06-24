@@ -1,5 +1,4 @@
 \name{TradeAnalysis}
-\alias{PLsorted}
 \alias{pl}
 \alias{closeOnFirst}
 \alias{limit}
@@ -17,12 +16,7 @@
 pl(amount, price,
    instrument = NULL, timestamp = NULL,
    along.timestamp = FALSE, do.sort = FALSE, initcash = 0,
-   tol = 1e-10,
-   aggr.accounts = FALSE, account.sep = "::")
-
-PLsorted(amount, price, timestamp = NULL,
-         allprices = NULL, alltimes = NULL,
-         initcash = 0, do.sort = FALSE)
+   tol = 1e-10)
 
 scaleTrades(amount, price, timestamp, aggregate = FALSE,
             fun = NULL, ...)
@@ -42,8 +36,10 @@ twExposure(amount, timestamp, start, end, abs.value = TRUE)
     a vector of prices
   }
   \item{timestamp}{
-    a vector. If \code{timestamp} is not specified for \code{PLsorted},
-    no mapping to a time series will take place.
+    a vector. 
+  }
+  \item{along.timestamp}{
+    a logical
   }
   \item{aggregate}{
     \code{TRUE} or \code{FALSE}
@@ -66,24 +62,11 @@ twExposure(amount, timestamp, start, end, abs.value = TRUE)
   \item{instrument}{
     a character vector
   }
-  \item{allprices}{
-    a vector
-  }
-  \item{alltimes}{
-    a vector
-  }
   \item{initcash}{
     a numeric vector of length one
   }
   \item{do.sort}{
     sort all by time
-  }
-  \item{x}{
-    a \code{numeric} vector (possibly with a \code{dim} attribute; ie, a
-    matrix)
-  }
-  \item{pad}{
-    fill initial lost observation for returns. Default is \code{NULL}.
   }
   \item{\dots}{passed on to fun}
   \item{tol}{numeric}

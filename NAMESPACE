@@ -1,7 +1,6 @@
 export(
     "dayOfMonth<-",
     Journal,
-    PLsorted,
     backtest,
     char2num,
     closeOnFirst,
@@ -30,8 +29,7 @@ export(
     scaleTrades,
     splitTrades,
     timegrid,
-    twExposure,
-    value
+    twExposure
     )
 # methods
 S3method(c,Journal)

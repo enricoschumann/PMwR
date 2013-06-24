@@ -1,5 +1,7 @@
 2013-06-24  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/pl.R (## PLsorted): removed
+
 	* R/position.R (position): removed aggregation of
 	account/instrument
 
