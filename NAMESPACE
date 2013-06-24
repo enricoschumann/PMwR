@@ -1,0 +1,46 @@
+export(
+    "dayOfMonth<-",
+    Journal,
+    PLsorted,
+    backtest,
+    char2num,
+    closeOnFirst,
+    dayOfMonth,
+    drawdown,
+    endOfMonth,
+    endOfPreviousMonth,
+    expstr,
+    firstOfMonth,
+    isValidISIN,
+    isWeekend,
+    lastWeekday,
+    limit,
+    monthlyStats,
+    nextBusinessDay,
+    pl,
+    plotTradingHours,
+    position,
+    previousBusinessDay,
+    returns,
+    rmspace,
+    roundPOSIXt,
+    runStats,
+    saveAttachment,
+    scaleToUnity,
+    scaleTrades,
+    splitTrades,
+    timegrid,
+    twExposure,
+    value
+    )
+# methods
+S3method(c,Journal)
+S3method(print,Journal)
+S3method(length,Journal)
+S3method(sort,Journal)
+S3method(subset,Journal)
+S3method(print,pl)
+S3method(print,position)
+S3method(print,value)
+S3method(print,preturns)
+useDynLib(PMwR)

@@ -1,0 +1,12 @@
+# -*- mode: org; -*-
+
+* pl
+- with along.timestamp, allow for sereval instruments
+- if timestamp if missing, supply 1:length(...) for every instrument
+  (and a warning)
+
+* value
+
+     Data: evalDate, marketPrices, vols, irates
+     - evaluates to list "value", "delta" etc
+     - Instrument[names(result)] <- result

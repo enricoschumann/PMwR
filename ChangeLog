@@ -1,0 +1,409 @@
+2013-06-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/forward.R: removed (archived in dev.R)
+
+	* R/backtestALT.R: removed (archived in dev.R)
+
+	* R/ISIN.R: fixed -- isValidISIN did not work correctly for a
+	vector of length 1
+
+	* vignettes/backtest.Rnw: moved to manual directory (to be added
+	to org file)
+
+	* R/plotTradingHours.R (plotTradingHours): new file
+
+2013-06-19  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/datetimetools.R (ssm): added function ssm ("seconds since
+	midnight")
+
+2013-06-14  Enrico Schumann  <es@enricoschumann.net>
+
+	* vignettes/PL.Rnw: removed vignettes PL and classes (transferred
+	into manual.org)
+
+	* R/pl.R (): "plBetween" now in pl (which takes additional
+	arguments t0, t1, prices0, prices1)
+
+	* DESCRIPTION (Version): Version: 0.1-27
+
+	* R/returns.R (returns): all return functions (returns, pReturns,
+	twReturns) now have a single interface: returns
+
+	* R/returns.R (print.preturns): new method
+
+	* R/internals.R (divAdjust): renamed function (from
+	divCorrection);
+	(letter2month): added to documentation
+
+2013-06-13  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-26
+
+	* R/journal.R (print.Journal): new argument "width", default is 60
+
+2013-06-12  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-25
+
+2013-06-05  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/internals.R (letter2month): added internal function to convert
+	option-symbol letter to type & month
+
+2013-05-31  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-24
+
+	* vignettes/PL.Rnw: moved vignette 'Journal' into 'PL' (and rm'd
+	Journal)
+
+	* R/journal.R (filterJournal): removed (use 'subset' instead)
+	(sort.Journal): added and exported
+
+	* NAMESPACE: export 'length.Journal'
+
+	* R/pl.R (pl): new argument along.timestamp: default is FALSE; if
+	TRUE, include functionality of 'plsorted'
+
+2013-05-30  Enrico Schumann  <es@enricoschumann.net>
+
+	* man/journal.Rd: example for subset added
+
+	* R/journal.R (subset.Journal): added method
+
+	* R/position.R (position): now uses 'from' and 'to' reduce size of
+	journal
+
+2013-05-29  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-23
+
+	* R/position.R (position): check NA timestamps
+
+	* R/journal.R (Journal): if timestamp missing, set to NA
+
+	* man/Texttools.Rd, Mailtools.Rd: renamed files to lower case
+
+	* man/PMwR-package.Rd: corrected example (which used 'tth')
+
+2013-05-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-22
+
+	* R/instrument.R (Instrument): added example for
+	'VanillaOptionEuropean'
+
+	* R/dev.R: removed all code for 'instrument'
+
+	* R/instrument.R (Instrument): added
+
+	* R/classes.R: deleted
+
+	* R/pl.R (plsorted): added function (simplified version of
+	PLsorted, which is deprecated)
+
+2013-05-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-21
+
+	* R/PL.R (diffsigns): removed test cases
+
+2013-05-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-20
+
+	* man/tradeanalysis.Rd: 'PL' changed into 'pl'
+
+	* R/Tradelist.R (print.Journal): NAs are not printed; non-standard
+	fields are also printed
+
+	* R/position.R (position): position now always returns a matrix;
+	ie, a dim attribute is attached
+	(position): new argument 'aggr.accounts' to specify whether pool
+	instruments by account (if TRUE) or not (FALSE); 
+	(position): new argument 'account.sep'
+
+	* R/Tradelist.R (print.Journal): fixed -- when instruments were
+	factors, a (harmless) warning was produced
+	(Journal): 'instrument' is now explicitly coerced to character (if
+	the original instrument is a class, it should have as as.character
+	method)
+
+2013-05-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-19
+
+	* NAMESPACE, R/, man/: renamed 'Tradelist' into 'Journal'
+
+2013-05-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: added 'expstr'
+
+2013-05-20  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/internals.R (divCorrection): added function: corrects series
+	for dividend payment
+
+2013-05-16  Enrico Schumann  <es@enricoschumann.net>
+
+	* man/Tradelist.Rd: added methods ('print', 'c', 'length') to docs
+
+2013-05-15  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Suggests): removed 'tth'
+
+2013-05-14  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-18
+
+	* R/Tradelist.R (c.Tradelist, length.Tradelist): added method for
+	length; rewrote c.Tradelist
+
+2013-05-13  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/Tradelist.R (Tradelist): added '...' argument; all arguments
+	passed that way musz be named
+
+2013-05-07  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: exported twReturns
+
+2013-05-02  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/Datetimetools.R (plotTradingHours): fixed -- plotTradingHours
+	had ignored 'holidays' argument
+
+2013-05-01  Enrico Schumann  <es@enricoschumann.net>
+
+	* man/rebalance.Rd: added Rd file
+
+2013-04-30  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-17
+
+	* R/returns.R (twReturns): added. Compute time-weighted returns.
+
+	* R/Datetimetools.R (timegrid): fixed -- timegrid ignored holidays
+	specified as character ('YYYY-MM-DD')
+
+	* R/internals.R (print.rebalance): rebalance evaluates to list;
+	print method added
+
+2013-04-29  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/dev.R (bs): added binary search
+
+2013-04-25  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.1-16
+
+	* R/position.R (position): 'when' can be a vector, thus the
+	position at several times can be computed
+
+2013-04-23  Enrico Schumann  <es@enricoschumann.net>
+
+
+	* R/position.R (position): if 'when' is missing, the latest
+	position (= maximum timestamp) is assumed
+
+	* R/internals.R (rebalance), man/PMwR-internal.Rd: function
+	'rebalance' is available, but not exported. It also gets a
+	'do.trunc' argument
+
+2013-04-15  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.1-15
+
+	* R/PL.R (print.PL): added print method
+
+	* R/returns.R (returns): added file
+
+	* R/position.R (position): now checks whether "amount",
+	"timestamp" or "instrument" (in that order) inherits from class
+	"Tradelist"
+
+	* R/Tradelist.R, PL.R: made arguments more consistent: "amount"
+	[before sometimes "n" or "notional"]; "timestamp" [was:
+	"datetime", "times"]; all in singular (eg, "price" not "prices")
+
+2013-04-10  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R, PL.R (position, PLsorted): added file. Removed
+	generic for position and PLsorted (the function now checks the
+	class of its first argument: if 'Tradelist', it will convert into
+	vectors for notional etc.).
+
+2013-04-04  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/texttools.R (expstr): added
+
+2013-03-21  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/TradesPL.R (PLsorted): now generic, methods for 'default' and
+	'Tradelist'
+
+2013-03-19  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.1-10
+
+	* R/Tradelist.R (Tradelist): price can now be NA
+
+	* R/Tradelist.R (print.Tradelist): corrected trade count message
+	when instrument is NA
+
+	* R/Tradelist.R (position): 'position' is now generic
+
+2013-03-14  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.1-9 (and DESCRIPTION file updated)
+
+	* R/forward.R (putCallParity): removed -- this functionality is
+	available in the NMOF package
+
+	* .Rbuildignore: added R/dev.R
+
+	* R/dev.R: added file
+
+	* NAMESPACE: export 'Tradelist' and S3 methods: c, print, sort
+
+	* R/Tradelist.R (Tradelist): checks if all 'instrument' arguments
+	are equal (and in that case only stores vector of length one)
+
+	* man/Tradelist.Rd: added file
+
+2013-03-10  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.1-8
+
+	* vignettes/plotTradingHours.Rnw: added examples, discussion
+
+2013-03-08  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/Datetimetools.R (plotTradingHours): removed formating of
+	axis(2), ablines and par
+
+	* R/internals.R (first,last): added first and last
+
+	* R/Datetimetools.R (timegrid): now uses numeric representation of
+	times (instead of character before)
+
+2013-03-07  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/Datetimetools.R (plotTradingHours): returns coordinates even
+	when plotting (but invisibly); removed "ppar" argument
+
+2013-02-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/classes.R (print.Tradelist): now shows also instrument
+
+2013-02-20  Enrico Schumann  <es@enricoschumann.net>
+
+	* vignettes/PL.Rnw: added example for twExposure
+
+	* inst/unitTests/unitTestsPL.R (test.twExposure): added unit test
+
+2013-02-18  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Date): 0.1-7
+
+	* NAMESPACE: twExposure exported
+
+	* R/classes.R (PLsorted): added Tradelist function; experimental:
+	PLsorted as generic
+
+2013-02-13  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/TradesPL.R (twExposure): added function
+
+2013-02-12  Enrico Schumann  <es@vipag.com>
+
+	* DESCRIPTION (Version): 0.1-6
+
+	* NAMESPACE: added lastWeekday
+
+	* R/Datetimetools.R (lastWeekday): added arguments 'period =
+	"month", before, inclusive = TRUE'
+
+2013-02-11  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/Datetimetools.R (lastWeekday): added (not exported yet)
+
+	* inst/unitTests/unitTestsDateTime.R: added file
+
+2013-02-11  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/TradesPL.R (PLfun): added 'fast' argument
+
+2013-02-05  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/texttools.R (TeXunits): added function
+
+2013-01-30  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: export firstOfMonth and firstOfPreviousMonth
+
+2012-12-21  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/TradesPL.R (lastIndex,firstIndex): added lastIndex and
+	firstIndex
+
+2012-12-21  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.1-5
+
+	* man/drawdown.Rd: small corrections
+
+	* man/computeMonthlyStats.Rd: small corrections
+
+	* NAMESPACE: export endOfMonth, scaleToUnity and closeOnFirst
+
+	* R/TradesPL.R (finalObs): added function (not yet exported)
+
+	* R/internals.R (wait): added to unexported functions
+
+	* man/: expanded documentation
+
+2012-12-20  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.1-4
+
+	* R/TradesPL.R (PL): symbols is now supported
+
+	* R/Datetimetools.R (`dayOfMonth<-`): added replacement fun for
+	dayOfMonth (and added both to NAMESPACE)
+
+	* NAMESPACE: added 'isWeekend'
+
+2012-12-13  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.1-3
+
+	* /: clean up of repository
+
+2012-12-12  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/TradesPL.R (limit): new "limit" function
+
+2012-11-21  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.1-2
+
+	* NAMESPACE: added limitExposure to exported functions
+
+2012-11-19  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.1-1
+
+	* R/saveAttachment.R (saveAttachment): fixed -- regexp for
+	matching filename now works with quoted and unquoted filenames
+	(saveAttachment): if not base64, attachment is not decoded and
+	written "as is" to outfile
+
+2012-11-16  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/saveAttachment.R (saveAttachment): changed decoding from
+	base64 package to base64enc
+
+	* DESCRIPTION (Version): initial version
+

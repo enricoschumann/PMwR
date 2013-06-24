@@ -1,0 +1,200 @@
+%% \VignetteIndexEntry{Plotting quantities during trading hours}
+\documentclass[a4paper,11pt]{article}
+\usepackage[left = 3cm, top = 2cm, bottom = 2cm, right = 4cm]{geometry}
+\usepackage[noae,nogin]{Sweave}
+\usepackage{mathptmx}
+\usepackage{amsmath,amstext}
+\usepackage{hyperref}
+\usepackage{natbib}
+
+\SweaveOpts{keep.source = TRUE, eps = TRUE}
+
+\begin{document}
+\title{Plotting irregularly-spaced series during trading hours}
+\author{Enrico Schumann\\\url{es@enricoschumann.net}}
+\maketitle
+
+We attach the package.
+
+<<>>=
+require("PMwR")
+@
+
+\section{An example}
+
+We are given these data:%
+\footnote{Note that I leave the time zone to the operating system
+  here. Since my computer is typically located in the time zone that
+  the \texttt{tz database} calls `Europe/Berlin', the first time
+  should be \texttt{2012-10-18 20:00:09}. Suppose your computer was in
+  `America/Chicago' and you recompiled this vignette. Then the first
+  time would come out as \texttt{2012-10-18 13:00:09}. Which is right:
+  it is still the correct time, only translated into Chigcao local
+  time.} %
+
+<<>>=
+prices <- c(139.82, 139.82, 139.8, 139.81, 139.77, 139.85, 
+            139.76, 139.76, 139.77, 139.8, 139.86, 140.46, 
+            140.39, 140.14, 140.15)
+
+times <- structure(c(1350583209, 1350583271, 1350583319, 
+                     1350583289, 1350584209, 1350586249, 
+                     1350588199, 1350589299, 1350590399, 
+                     1350630970, 1350632971, 1350673969, 
+                     1350675751, 1350888315, 1350889533), 
+                   class = c("POSIXct", "POSIXt"), tzone = "")
+data.frame(times, prices)
+@
+
+A \texttt{plot} of price against time looks like this.
+
+<<fig=true, width = 5, height = 3.5>>=
+plot(times,prices, type = "s")
+@
+
+Such a plot is fine for many purposes, but the contract for which we
+have prices is only traded from Monday to Friday (not on weekends),
+and only from 08:00 to 22:00 Europe/Berlin time. So a plot should
+better omit those times at which no trading takes place. Here is an
+example:
+
+<<fig=true, width = 5, height = 3.5>>=
+tmp <- plotTradingHours(x = prices, t = times, 
+                        interval = "1 sec", labels = "day",
+                        fromHHMMSS="080000", toHHMMSS = "220000",
+                        type = "s")
+@
+
+What we need for such a plot is a function that maps actual time to a
+point on the $x$-scale; the $y$-scale stays unchanged. If we were
+talking only about days, not times, we needed something like this:
+\medskip
+
+\begin{tabular}{rrr}
+  \emph{day} & \emph{$x$-position} & \emph{mapped $x$-position} \\
+  Thursday   & 1                   & 1                          \\
+  Friday     & 2                   & 2                          \\
+  Saturday   & 3                   & \texttt{<removed>}         \\
+  Sunday     & 4                   & \texttt{<removed>}         \\
+  Monday     & 5                   & 3                          \\
+\end{tabular}\medskip
+
+This mapping is what \texttt{plotTradingHours} provides. And not much
+more: the design goal of the function is to make it as much as
+possible an ordinary plot; or more specifically, to make it as similar
+as possible to the \texttt{plot} function.
+
+Indeed, \texttt{plotTradingHours} calls \texttt{plot} with a small
+number of default settings:
+<<eval = FALSE>>=
+list(type = "l", xaxt = "n", xlab = "", ylab = "")
+@
+
+These settings can all be overridden: \texttt{\ldots} arguments are
+passed to \texttt{plot} (note that we already set \texttt{s} as the
+plot's \texttt{type} in the last code chunk).
+
+The only required setting is \texttt{xaxt}; it is necessary because
+the function will create its own $x$-axis via a call to
+\texttt{axis(1, \ldots)}. In case you wish to use your own axis
+specification, either set \texttt{do.plotAxis} to \texttt{FALSE} or
+pass settings to \texttt{axis} through the argument
+\texttt{axis1.par}.
+
+
+\section{More examples}
+
+Like \texttt{plot}, \texttt{plotTradingHours} is typically called for
+its side effect: creating a plot. But it also returns useful
+information (invisibly, unless called with \texttt{do.plot = FALSE}).
+
+<<>>=
+str(tmp)
+@ 
+
+\subsection{Adding gridlines}
+
+You can add gridlines with \texttt{abline}. The $y$-axis poses no
+specical problem. The positions of the $x$-axis ticks are returned
+from \texttt{plotTradingHours}.
+
+<<fig=true, width = 5, height = 3.5>>=
+tmp <- plotTradingHours(x = prices, t = times, 
+                        interval = "1 sec", labels = "day",
+                        fromHHMMSS="080000", toHHMMSS = "220000",
+                        type = "s")
+abline(h = axTicks(2), v = tmp$axis.pos, 
+       col = "lightgrey", lty = "dotted")
+@ 
+
+To add a specific time, say 19 Oct, 13:10:23, you can use the function
+\texttt{map} that the call to \texttt{plotTradingHours} returns. We
+first create the specific time with, for example, \texttt{ISOdatetime}
+or \texttt{strptime}.
+
+<<>>=
+## Again, I do not specify a time zone since time zones depend on the 
+## operating system. To reproduce the example, you may also use this
+## representation:
+## mytime <- structure(1350645023, 
+##                     class = c("POSIXct", "POSIXt"), tzone = "")
+##
+
+mytime <- ISOdatetime(2012, 10, 19, 13, 10, 23)
+mytime
+@ 
+
+Now we use \texttt{map} to translate this time into the appropriate
+$x$-position.
+
+
+<<fig=true, width = 5, height = 3.5>>=
+tmp <- plotTradingHours(x = prices, t = times, 
+                        interval = "1 sec", labels = "day",
+                        fromHHMMSS="080000", toHHMMSS = "220000",
+                        type = "s")
+abline(h = axTicks(2), v = tmp$axis.pos, 
+       col = "lightgrey", lty = "dotted")
+abline(v = tmp$map(mytime)$t, col = "red")
+@ 
+
+The function \texttt{map} returns a list with two components,
+\texttt{t} and \texttt{ix}.
+
+<<>>=
+tmp$map(mytime)
+@ 
+
+The first component is the appropriate position on the $x$-scale;
+since it is a time it is called \texttt{t}. The second component gives
+the subscripts to values that should actually be plotted. Example:
+suppose that, for whatever reason, we wish to plot points at several
+prices at 21:00:00 for several days.
+
+<<>>=
+## moretimes <- structure(c(1350586800, 1350673200, 1350759600), 
+##                        class = c("POSIXct", "POSIXt"), tzone = "")
+##
+
+moretimes <- ISOdatetime(2012, 10, 18:20, 21, 00, 00)
+values <- seq(140,140.20, length.out = length(moretimes))
+data.frame(moretimes, values)
+@ 
+
+But 20 October is a Saturday, so it does not appear on the plot. 
+<<>>=
+tmp$map(moretimes)
+@ 
+
+The values that should be plotted can conveniently be found by use
+\texttt{ix}.
+<<>>=
+values[tmp$map(moretimes)$ix]
+@
+
+\newpage
+\appendix
+<<results=tex>>=
+toLatex(sessionInfo())
+@ 
+\end{document}

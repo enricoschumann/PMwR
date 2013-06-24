@@ -1,0 +1,659 @@
+% \VignetteIndexEntry{Backtesting}
+\documentclass[a4paper,11pt]{article}
+\usepackage[left = 2.5cm, top = 2cm, bottom = 3cm, right = 3.5cm]{geometry}
+\usepackage[noae,nogin]{Sweave}
+\usepackage{mathptmx}
+\usepackage{amsmath,amstext}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{textcomp}
+\SweaveOpts{keep.source = TRUE, eps = TRUE, pdf = FALSE}
+
+
+\begin{document}
+{\raggedright{\Large The \texttt{backtest} function}}\medskip
+
+\noindent Enrico Schumann\\
+\noindent \texttt{es@enricoschumann.net}\\
+\bigskip
+
+\section{Introduction}
+
+This vignette explains how to backtest trading strategies with
+the \texttt{backtest} function.
+
+\subsection{Decisions}
+
+The current instant is time~$t$; in actual life, it's simply
+`now'. We need to answer the following questions:
+\begin{enumerate}
+\item Do we want to compute a new target portfolio, yes or no? If yes,
+  compute the new target portfolio.
+\item Given the target portfolio and the actual portfolio, do we
+  want to rebalance (ie, close the gap between the actual
+  portfolio and the target portfolio)? If yes, rebalance.
+\end{enumerate}
+
+If such a decision is not just hypothetical, then the answer to
+the second question may lead to a number of orders sent to a
+broker. Note that many traders do not think in terms of
+\emph{stock} (ie, balances) as we did here; rather, they think in
+terms of \emph{flow} (ie, orders). Both approaches are
+equivalent, but the described one makes it easier to handle
+missed trades and synchronise accounts.
+
+During a backtest, we will simulate the decisions of the trader.
+How precisely we simulate depends on the trading strategy. The
+\texttt{backtest} function is meant as a helper function to
+simulate these decisions. The logic for the decisions described
+above is coded in the functions \texttt{signalYN},
+\texttt{signal} and \texttt{rebalanceYN}.
+
+When we implement and use \texttt{backtest}, we need to make a
+number of decisions: (i)~what to model (ie, how to simulate the
+trader), and (ii)~how to code it. Example for (i): how precisely
+do we want to model the order process (eg, use limit orders?
+allow partial fills?) Example for~(ii): the backbone of
+\texttt{backtest} is a loop that runs through the data. Loops are
+slow in \textsf{R} when compared with compiled languages, so why
+not vectorise? Vectorisation is indeed often possible, namely if
+trading is not path-dependent. For instance, if we have a list of
+trades, we can efficiently transform them into a profit-and-loss
+in \textsf{R} without relying on an explicit loop. Yet, one
+advantage of looping is that the trade logic is more similar to
+actual trading; we may even be able to reuse some code in live
+trading.
+
+Altogether, the aim is to stick to the functional paradigm as
+much as possible. Functions receive arguments and evaluate to
+results; but they do not change their arguments, nor do they
+assign or change other variables `outside' their environment, nor
+do the results depend on some variable outside the function. This
+creates a problem, of course: how to keep track of state? If we
+know what variables need to be persistent, we could pass them
+into the function and always return them. But we would like to be
+more flexible, so we can pass an environment; examples are
+below. But functional programming should not be seen as a
+yes-or-no decision, but it is a matter of degree. And a bit more
+of the functional approach can help already.
+
+\subsection{Data}
+
+We have one or several price series of length \texttt{T}. The
+\texttt{backtest} function runs from \texttt{b + 1} to
+\texttt{T}. The variable~\texttt{b} is the burnin,%
+\marginpar{\texttt{b} burnin} %
+and it needs to be a positive integer (in rare cases it may be
+zero). In the simplest case (`no decision'), we could run a loop
+without any action from \texttt{1:T} (with \texttt{b} equal to
+zero). When we actually take decisions we will always lose at
+least one data point.
+
+
+At time \texttt{t}, we can make decision based on information up
+to time \texttt{t - 1}. Suppose that \texttt{t} was 4. We may use
+all information up to time 3, and trade at the \texttt{open} in
+period 4.
+
+%TODO create nice display
+
+\begin{verbatim}
+t    time      open  high  low   close
+1    HH:MM:SS                             <-- \
+2    HH:MM:SS                             <-- - use information
+3    HH:MM:SS  _________________________  <-- /
+4    HH:MM:SS    X                        <- trade here
+5    HH:MM:SS
+\end{verbatim}
+
+We could also trade at the \texttt{close}.
+
+\begin{verbatim}
+t    time      open  high  low   close
+1    HH:MM:SS                             <-- \
+2    HH:MM:SS                             <-- - use information
+3    HH:MM:SS  _________________________  <-- /
+4    HH:MM:SS                       X     <-- trade here
+5    HH:MM:SS
+\end{verbatim}
+
+(No, we cannot trade at the high or low. But perhaps we could add
+this later as a robustness check -- always buy at the high, sell
+at the low.)
+
+\subsection{Functions}\label{functions}
+
+\texttt{backtest} expects a number of functions. The default is to not
+specify arguments to these functions, because they can all access the
+following objects. These objects are themselves functions that can
+access certain data; there are no replacement functions.
+
+\begin{description}
+\item[Open] access open prices
+\item[High] access high prices
+\item[Low] access low prices
+\item[Close] access close prices
+\item[Wealth] the total wealth (cash plus positions) at a given
+  point in time
+\item[Cash] cash (in accounting currency)
+\item[Time] current time (an integer)
+\item[Portfolio] the current portfolio
+\item[SuggestedPortfolio] the currenly-suggested portfolio
+\item[Globals] an environment
+\end{description}
+
+All the functions have the argument \texttt{lag} which defaults
+to \texttt{1}.
+
+\subsubsection{signal}
+
+The \texttt{signal} function uses information until \texttt{t -
+  1} and returns the suggested portfolio (a vector) to be held at
+\texttt{t}.
+
+\subsubsection{signalYN}
+
+\texttt{signalYN} uses information until \texttt{t - 1} and must
+return \texttt{TRUE} or \texttt{FALSE}. If the function is not
+specified, it defaults to \texttt{function() TRUE}.
+
+\subsubsection{rebalanceYN}
+
+\texttt{rebalanceYN} uses information until \texttt{t - 1} and
+returns \texttt{TRUE} or \texttt{FALSE}. If the function is not
+specified, it defaults to \texttt{function() TRUE}.
+
+\subsubsection{printInfo}
+
+The function is called at the end of an iteration. It should not
+return anything but is called for its side effect: print
+information to the screen, into a file or into some other
+connection.
+
+
+\section{Single assets}
+
+It is best to describe the \texttt{backtest} function through a
+number of simple examples.
+
+\noindent We attach the package.
+<<>>=
+require("PMwR")
+@
+
+\subsection{A useless first example}
+
+I really like simple examples. Suppose we have a single
+instrument, and we use only close prices. The trading rule is to
+buy, and then to hold forever. All we need is the time series of
+the prices and the signal function. To keep this example (and
+also those that follow) simple, we use an artificial series.
+<<>>=
+prices <- c(100,98,98,97,101,102,101,98,99,101)
+@
+
+
+The \texttt{signal} function is very simple indeed.
+<<>>=
+signal <- function()
+    1
+@
+
+\texttt{signal} must be written so that it returns the suggested
+portfolio (or position) in units of the asset. In this first
+example, the suggested position always is one unit. (It is only a
+\texttt{suggested} portfolio because we can specify rules whether
+or not to trade. Examples follow below.)
+
+So \texttt{signal} always recommends to hold one unit of the
+asset. To test this strategy, we call \texttt{backtest}. The
+initial cash is 100 (per default). We can change it through the
+argument \texttt{c0}.
+
+<<>>=
+solution <- backtest(prices = prices,
+                     signal = signal)
+@
+
+The function returns a list with a number of components. We
+display the results in a \texttt{data.frame}. \texttt{Xs} is the
+suggested portfolio; \texttt{X} is the actual portfolio.
+
+<<>>=
+makeTable <- function(solution, prices)
+    data.frame(prices = prices,
+               p     = solution$portfolio,
+               sp      = solution$suggested.portfolio,
+               wealth = solution$wealth,
+               cash   = solution$cash)
+
+makeTable(solution, prices)
+@
+
+We bought in the second period because the default setting for
+the burnin \texttt{b} is 1; thus, we lose one observation.
+
+Since we do not rely in any way on the past in this trading rule,
+we set \texttt{b} zo zero. With this setting, we buy at the first
+price and hold until the end of the data.
+
+<<>>=
+solution <- backtest(prices = prices,
+                     signal = signal,
+                     b  = 0)
+makeTable(solution, prices)
+solution$trades
+@
+
+
+\subsection{A more useful first example}
+
+Now we make our strategy slightly more selective. The trading
+rule is to buy whenever the last observed price is below 100, and
+sell when it is above. The signal function could look like this.
+<<>>=
+signal <- function()
+    if (Close() < 100)
+        1 else 0
+@
+
+We call \texttt{backtest}.
+<<>>=
+solution <- backtest(prices = prices,
+                     signal = signal,
+                     c0 = 100)        ## initial cash
+
+makeTable(solution, prices)
+@
+
+The argument \texttt{x0} specifies the initial position. (Default
+is no position.) Suppose we had already held one unit of the
+asset.
+
+<<>>=
+solution <- backtest(prices = prices,
+                     signal = signal,
+                     x0 = 1,          ## initial position
+                     c0 = 100)        ## initial cash
+
+makeTable(solution, prices)
+@
+
+Internally, \texttt{backtest} stores \textsc{ohlc} prices in matrices.
+So even for a single instrument we have four matrices, and each matrix has
+one column. If we were dealing with two assets, we would again have
+four matrices, each with two columns. And so on.
+
+%% TODO: add picture of matrices
+
+We do not access these data directly. \texttt{Close} is a
+function that is defined in \texttt{backtest}, and which is
+passed as an argument to \texttt{signal}. Note that we do not add
+it as a formal argument to \texttt{signal} since this is done
+automatically (in fact, doing it manually would trigger an error
+message):
+<<>>=
+##signal <- function(Close = NULL)
+##    1
+1
+##cat(try(backtest(prices = prices, signal = signal)))
+@
+
+Similarly, we have functions \texttt{Open}, \texttt{High} and
+\texttt{Low} (see Section~\ref{functions} above for a available
+functions).
+
+Suppose we wanted to add a variable, like a \texttt{threshold}
+that tells us when to buy. This would need to be an argument to
+\texttt{signal}; but it would also need to be passed with the
+\texttt{\dots} argument of \texttt{backtest}.
+<<>>=
+signal <- function(threshold)
+    if (Close() < threshold)
+        1 else 0
+
+solution <- backtest(prices = prices,
+                     signal = signal,
+                     threshold = 98,  ## buy if price < threshold
+                     x0 = 0,          ## initial position
+                     c0 = 100)        ## initial cash
+
+makeTable(solution, prices)
+@
+
+So far we have treated \texttt{Close} as a function without arguments,
+but actually it has an argument \texttt{lag} that defaults to
+\texttt{1}. Suppose the rule were to buy if the last close is below the
+second-to-last close. \texttt{signal} could look like this.
+<<>>=
+signal <- function()
+    if (Close(1L) < Close(2L))
+        1 else 0
+@
+
+We could also have written \texttt{(Close() < Close(2L))}. We need to
+increase \texttt{b}.
+<<>>=
+solution <- backtest(prices = prices,
+                     signal = signal,
+                     b = 2,           ## increase burnin
+                     x0 = 0,          ## initial position
+                     c0 = 100)        ## initial cash
+makeTable(solution, prices)
+@
+
+If we wanted to trade any other size, we would change our signal as
+follows.
+<<>>=
+signal <- function()
+    if (Close() < 100)
+        2 else 0
+
+solution <- backtest(prices = prices,
+                     signal = signal,
+                     x0 = 0,          ## initial position
+                     c0 = 100)        ## initial cash
+
+makeTable(solution, prices)
+@
+
+A typical way to specify a trading strategy is to map past prices into
+\texttt{+1}, \texttt{0} or \texttt{-1} for long, flat or short. A
+signal is often only given at a specified point (like in `buy one unit
+now'). Example: suppose the third day is a Monday, and our rule says
+`buy after Monday'.
+<<>>=
+signal <- function()
+    if (Time() == 3)
+        1 else 0
+solution <- backtest(prices = prices,
+                     signal = signal,
+                     x0 = 0,          ## initial position
+                     c0 = 100)        ## initial cash
+
+makeTable(solution, prices)
+@
+
+But this is probably not what we wanted. If the rule is to
+buy and stay long, we should have written it like this.
+<<>>=
+signal <- function()
+    if (Time() == 3L)
+        1 else Portfolio()
+@
+
+The function \texttt{Portfolio} returns last period's
+portfolio. Like \texttt{Close}, it takes an argument \texttt{lag}
+that defaults to one.
+<<>>=
+solution <- backtest(prices = prices,
+                     signal = signal,
+                     x0 = 0,          ### initial position
+                     c0 = 100)        ### initial cash
+
+makeTable(solution, prices)
+@
+
+
+
+
+\subsubsection{Signals (\texttt{+1}, \texttt{0}, \texttt{-1}) to
+  fixed number of units}
+
+Suppose we prefer to write rules in terms of \texttt{+1}, \texttt{0},
+\texttt{-1}. Then there are a number of settings that help to
+translate such signals into holdings. \texttt{backtest} takes an
+argument \texttt{adjustSignal} which controls this behaviour. Its
+default is \texttt{NULL} (do nothing).
+
+If we use \texttt{fixedPosition} and specify the argument
+\texttt{positionSize}, the algorithm will translate any signal
+into \texttt{positionSize} \texttimes{} \texttt{signal}.
+
+<<>>=
+signal <- function()
+    if (Close() < 100)
+        1 else 0
+
+solution <- backtest(prices = prices,
+                     signal = signal,
+                     x0 = 0,
+                     c0 = 100,
+                     adjustSignal = "fixedPosition",
+                     positionSize = 5)
+
+makeTable(solution, prices)
+@
+
+This can be useful when we have an original series of zeros and
+ones (eg, following some technical indicator).
+
+<<>>=
+givenPositions <- c(0, -1, -1, 0, 1, 1, -1, 0, -1, -1)
+
+signal <- function(givenPositions)
+    givenPositions[Time()]
+
+## fixed position size in units
+solution <- backtest(prices = prices,
+                     signal = signal,
+                     x0 = 0,          ## initial position
+                     c0 = 100,        ## initial cash
+                     givenPositions = givenPositions,
+                     adjustSignal   = "fixedPosition",
+                     positionSize   = 5)
+
+cbind(makeTable(solution, prices), givenPositions)
+@
+
+Note again the timelag: we can never trade at the same time instant in
+which we compute a signal.
+
+But if you really think there should be no timelag, you could write
+<<>>=
+signal <- function(givenPositions)
+    givenPositions[Time(0L)]
+
+solution <- backtest(prices = prices,
+                     signal = signal,
+                     x0 = 0,          ## initial position
+                     c0 = 100,        ## initial cash
+                     givenPositions = givenPositions,
+                     adjustSignal   = "fixedPosition",
+                     positionSize   = 5)
+cbind(makeTable(solution, prices), givenPositions)
+@
+
+What if we had had a signal in the first period?
+<<>>=
+givenPositions <- c(1, 0, -1, 0, 1, 1, -1, 0, -1, -1)
+@
+
+
+<<>>=
+solution <- backtest(prices = prices,
+                     signal = signal,
+                     b = 0,
+                     x0 = 0,          ## initial position
+                     c0 = 100,        ## initial cash
+                     givenPositions = givenPositions,
+                     adjustSignal   = "fixedPosition",
+                     positionSize   = 5)
+cbind(makeTable(solution, prices), givenPositions)
+@
+
+\subsubsection{Signals (\texttt{+1}, \texttt{0}, \texttt{-1}) to fixed weight}
+
+%% TODO: check -- anything pos becomes pos weight, anything neg
+%% becomes nec weight?
+
+Suppose we want to hold a constant weight in an asset. (Note that
+that to keep the weight constant we will -- under the current
+settings -- rebalance in every period.)
+
+<<>>=
+## fixed position size in %
+signal <- function()
+    if (Close() < 100)
+        3 else 0
+solution <- backtest(prices = prices,
+                     signal = signal,
+                     adjustSignal = "weight",
+                     positionSize = 0.2)
+makeTable(solution, prices)
+
+signal <- function()
+    if (Close() < 100)
+        -1.2 else 0
+
+solution <- backtest(prices = prices,
+                     signal = signal,
+                     adjustSignal = "weight",
+                     positionSize = 0.2)
+
+makeTable(solution, prices)
+
+@
+
+To be fully invested, set \texttt{positionSize} to \texttt{1}.
+<<>>=
+solution <- backtest(prices = prices,
+                     signal = signal,
+                     adjustSignal = "weight",
+                     positionSize = 1)
+
+makeTable(solution, prices)
+
+@
+
+
+A more common scenario is probably that \texttt{signal} gives a
+weight; for instance, after a portfolio optimisation.
+<<>>=
+signal <- function()
+    if (Close() < 100)
+        0.05 else 0
+
+solution <- backtest(prices = prices,
+                     signal = signal,
+                     adjustSignal = "weight")
+makeTable(solution, prices)
+@
+
+Again, we get a weight and now rebalance in every period. Suppose
+we do not want that.
+<<>>=
+signal <- function()
+    if (Close() < 100)
+        0.05 else 0
+
+rebalanceYN <- function() {
+    if (sum(abs(SuggestedPortfolio(0) - SuggestedPortfolio())) > 0.02)
+        TRUE else FALSE
+}
+
+solution <- backtest(prices = prices,
+                     signal = signal,
+                     rebalanceYN = rebalanceYN,
+                     adjustSignal = "weight")
+
+makeTable(solution, prices)
+@
+
+A numerical analyst would rather put a tolerance that is more
+closely related to the machine precision. I prefer using meaningful
+tolerance: having invested less than one cent means we are not
+invested.
+
+Note also that with weights, we cannot exactly specify the number of
+assets we buy or sell because we do not know the price at which we
+trade. Practically, this does not matter.
+
+\subsubsection{Passing environments}
+To keep information persistent, we can use environments
+<<>>=
+external <- new.env()
+external$vec <- numeric(length(prices))
+signal <- function(threshold, external) {
+    external$vec[Time()] <- Close()
+    if (Close() < threshold)
+        1 else 0
+}
+
+solution <- backtest(prices = prices,
+                     signal = signal,
+                     threshold = 100,
+                     external = external)
+
+cbind(makeTable(solution, prices), external$vec)
+@
+
+\section{Multiple assets}
+
+
+\subsection{Again, a simple example}
+
+<<>>=
+prices1 <- c(100,98, 98, 97, 96, 98,97,98,99,101)
+prices2 <- c(100,99,100,102,101,100,96,97,95,82)
+prices <- cbind(prices1, prices2)
+
+signal <- function()
+    if (Close()[1L] > Close()[2L])
+        c(1, 0) else c(0, 1)
+
+
+(solution <- backtest(prices = list(prices),
+                     signal = signal,
+                      b=2))
+@
+
+We can also give more useful names to the assets.
+<<>>=
+prices <- cbind(AA = prices1, BB = prices2)
+solution <- backtest(prices = list(prices),
+                               signal = signal, b=2)
+makeTable(solution, prices)
+
+@
+
+
+
+\section{Common tasks}
+There are many ways to do the same thing. I describe how I have
+handled some specific tasks.
+
+\subsection{Remembering an entry price}
+In signal: use the current price and assign in \texttt{Globals}.
+
+\subsection{Delaying signals}
+
+\subsection{Losing signals}
+
+\subsection{Writing a log}
+<<>>=
+prices <- c(100,98,98,97,101,102,101,98,99,101)
+
+signal <- function()
+    if (Close() < 100)
+        1 else 0
+
+printInfo <- function() {
+    cat("period",
+        sprintf("%2d", Time(0L)), "...",
+        sprintf("%3d", Wealth(0)), "\n")
+    flush.console()
+}
+
+solution <- backtest(prices = prices,
+                     printInfo = printInfo,
+                     signal = signal)
+
+makeTable(solution, prices)
+
+@
+
+And since \texttt{cat} has a \texttt{file} argument, we can also write
+such information into a logfile.
+
+\end{document}
