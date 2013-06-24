@@ -45,12 +45,6 @@ dates <- seq(as.Date("2012-01-01"), as.Date("2013-02-05"), by = "1 day")
 PMwR:::last(dates,  by = format(dates, "\%Y\%m"))
 PMwR:::first(dates, by = format(dates, "\%Y\%m"))
 
-s <- c("DTE","SAP","SDF","MEO","MRKK","FRE","HEN3" ,"BEI"  ,"LIN"  ,"FME")
-current <- c(500  , 0   ,90   ,0    ,20    ,34   ,16     ,49     ,0      ,0)
-target  <- c(0.15,0.0,0.1,0,0.15,0.15,0.15,0.15,0,0.15)
-prices <- c(8.36,63.44 ,35.9325 ,21.2325 ,113.85 ,95.21 ,65.965 ,69.48 ,132.175 ,51.55)
-PMwR:::rebalance(current, target, prices, notional = 50000, names= s)
-
 x <- c(9.777, 10.04, 9.207, 9.406)
 div <- 0.7
 t <- 3
