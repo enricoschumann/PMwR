@@ -2,17 +2,17 @@ position <- function(amount, timestamp, instrument, when, from, to,
                      drop.zero = FALSE) {
     if (missing(instrument))
         instrument <- NA
-    if (inherits(amount, "Journal")) {
+    if (inherits(amount, "journal")) {
         J <- amount
         instrument <- J$instrument
         timestamp  <- J$timestamp
         amount     <- J$amount
-    } else if (inherits(timestamp, "Journal")) {
+    } else if (inherits(timestamp, "journal")) {
         J <- timestamp
         instrument <- timestamp$instrument
         amount <- timestamp$amount
         timestamp <- timestamp$timestamp
-    } else if (inherits(instrument, "Journal")) {
+    } else if (inherits(instrument, "journal")) {
         J <- instrument
         amount <- instrument$amount
         timestamp <- instrument$timestamp

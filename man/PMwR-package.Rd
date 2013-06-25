@@ -27,7 +27,6 @@ Schumann, E. (2013) \emph{Portfolio Management with R}.
 
 } 
 \examples{
-\dontrun{
-vignette("Journal", package = "PMwR")}
+## see the Manual
 }
 \keyword{package}

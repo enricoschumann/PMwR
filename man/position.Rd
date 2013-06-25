@@ -53,14 +53,14 @@ position(amount, timestamp, instrument, when, from, to,
   Enrico Schumann
 }
 \seealso{
-  \code{\link{Journal}}
+  \code{\link{journal}}
 }
 \examples{
 position(amount = c(1,1,-1,3,-4),
          timestamp = 1:5, when = 4.9)
 
 ## using a Journal
-lst <- Journal(timestamp = 1:5,
+lst <- journal(timestamp = 1:5,
                amount = c(1,1,-1,3,-4))
 position(lst, when = 4.9)
 }

@@ -1,4 +1,4 @@
-Journal <- function(timestamp, amount, price, id, instrument, account, ...) {
+journal <- function(timestamp, amount, price, id, instrument, account, ...) {
     if (missing(id))
         id <- NA
     if (missing(timestamp))
@@ -38,10 +38,10 @@ Journal <- function(timestamp, amount, price, id, instrument, account, ...) {
         else
             ans <- c(ans, dots)
     }    
-    class(ans) <- "Journal"
+    class(ans) <- "journal"
     ans    
 }
-print.Journal <- function(x, ..., width = 60) {
+print.journal <- function(x, ..., width = 60) {
     oo <- getOption("scipen")
     options(scipen = 1e8)
     on.exit(options(scipen = oo))
@@ -72,19 +72,19 @@ print.Journal <- function(x, ..., width = 60) {
     cat(msg)
     invisible(x)
 }
-length.Journal <- function(x)
+length.journal <- function(x)
     length(x$amount)
-sort.Journal <- function(x, decreasing = FALSE, by = "timestamp",
+sort.journal <- function(x, decreasing = FALSE, by = "timestamp",
                          ..., na.last = TRUE) {
     o <- order(x[by], na.last = na.last, decreasing = decreasing)    
     for (i in seq_along(unclass(x)))
         x[[i]]<- x[[i]][o]
     x    
 }
-c.Journal <- function(...) {
+c.journal <- function(...) {
     tls <- list(...)
-    if (!all(unlist(lapply(tls, "class")) == "Journal"))
-        stop("all ... must be Journals")
+    if (!all(unlist(lapply(tls, "class")) == "journal"))
+        stop("all ... must be journals")
     
     ns <- unique(unlist(lapply(tls, names)))
     ans <- vector("list", length = length(ns))
@@ -92,12 +92,12 @@ c.Journal <- function(...) {
     for (n in seq_along(ns)) {
         ans[[ns[n]]] <- unlist(lapply(tls, `[[`, ns[n]))
     }
-    class(ans) <- "Journal"
+    class(ans) <- "journal"
     ans
 }
-subset.Journal <- function(x, ...) {
+subset.journal <- function(x, ...) {
     i <- with(x, ...)
     ans <- lapply(unclass(x), `[`, i)
-    class(ans) <- "Journal"
+    class(ans) <- "journal"
     ans
 }

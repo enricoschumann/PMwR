@@ -1,48 +1,49 @@
-Instrument <- function(class, id = NULL, ...) {
+instrument <- function(class, id = NULL, ...) {
 
     properties <- list(...)
-    if (class == "Equity") {
+    class <- tolower(class)
+
+    if (class == "equity") {
         
-        ans <- list(id = id,
+        ans <- list(id          = id,
                     description = properties$description,
-                    modelValue = properties$modelValue,
-                    marketValue = properties$marketValue,
-                    currency = properties$currency)
+                    currency    = properties$currency,
+                    vfun        = function(x,...) NA)
+                
+        class(ans) <- c("equity", "instrument")
         
-        
-        class(ans) <- c("Equity", "Instrument")
-        
-    } else if (class == "VanillaOptionEuropean") {
+    } else if (class == "vanillaoptioneuropean") {
         
         ans <- list(id          = id,
                     description = properties$description,
                     underlier   = properties$underlier,
-                    tvalue      = NULL,
-                    mvalue      = NULL,
                     currency    = properties$currency,
                     strike      = properties$strike,
                     expiry      = properties$expiry,
-                    payoff      = properties$payoff)
+                    payoff      = properties$payoff,
+                    vfun        = NMOF::vanillaOptionEuropean)
         
-        class(ans) <- c("VanillaOptionEuropean", "VanillaOption",
-                        "Option", "Instrument")
+        class(ans) <- c("vanillaOptionEuropean", "instrument")
+
     } else
-        stop("unknown Instrument class ", sQuote(class))
+        stop("unknown instrument class ", sQuote(class))
     
     ans
 }
-ii <- Instrument(class = "VanillaOptionEuropean", id = NA,
-                 description = "ODAX 8000 Call Jun 2013",
+length.instrument <- function(x)
+    1L
+
+ii <- instrument(class       = "vanillaOptionEuropean",
+                 id          = "odax201309c8000",
+                 description = "ODAX 8000 Call Sep 2013",
                  underlier   = "DAX",
                  currency    = "EUR",
                  strike      = 8000,
-                 expiry      = "2013-06-21",
+                 expiry      = "2013-09-20",
                  payoff      = "call")
 
-length.Instrument <- function(x)
-    1L
     
-print.VanillaOptionEuropean <- function(x, ...) {
+print.vanillaOptionEuropean <- function(x, ...) {
     cat(x$description, "\n")
     cat("underlier:", format(substr(x$underlier,
                                     1,
@@ -51,26 +52,4 @@ print.VanillaOptionEuropean <- function(x, ...) {
     cat("|", format(toupper(x$payoff), width = 4), " ")    
     cat("expires", x$expiry, "\n")
 }
-
-## value: berechnet theoretischen Wert (+ Griechen, Yields, etc)
-value <- function(x, ...)
-    UseMethod("value")
-
-dots2args <- function(x, ...)
-    UseMethod("dots2args")
-
-dots2args.default <- function(x, ...)
-    list(...)
-
-## value.default <- function(x, ...)
-##     stop("don't know how to valuate ", deparse(substitute(x)))
-
-
-value.default <- function(x, ..., dots2args = list())
-    do.call(x, dots2args(x, ...))
-    
-value.Instrument <- function(x, ..., dots2args)
-    stop("implement me :-)")
-
-##myfund <- Fund("de000a0dpkd3", "MODULOR LSE 1", "EUR")
 

@@ -74,7 +74,7 @@ ES
   Experimental. The interface may change.
 }
 \seealso{
-  \code{\link{Journal}}
+  \code{\link{journal}}
 }
 \examples{
 ## to be added
