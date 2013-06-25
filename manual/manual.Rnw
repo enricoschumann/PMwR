@@ -1,5 +1,5 @@
 % \VignetteIndexEntry{Backtesting}
-\documentclass[a4paper,11pt]{article}
+\documentclass[a4paper,11pt]{book}
 \usepackage[left = 2.5cm, top = 2cm, bottom = 3cm, right = 3.5cm]{geometry}
 \usepackage[noae,nogin]{Sweave}
 \usepackage{mathptmx}
@@ -17,12 +17,468 @@
 \noindent \texttt{es@enricoschumann.net}\\
 \bigskip
 
+
+
+\chapter{Journals}
+
+\section{Transactions}
+
+The basis for most computations in the PMwR package are list of
+transactions.  \texttt{PMwR} provides an S3 class \texttt{Journal} for
+handling transaction data.  A \texttt{Journal} is created through the
+function \texttt{Journal}, but it is really just a list of atomic
+vectors with a class attribute.  Methods should not rely on these
+vectors being sorted; that is, components of a journal should always
+be retrieved by name, never by position.
+
+The simplicity of the class is intended, as it is mostly used in
+interactive analyses.  Thus, the analyst is actually supposed to
+dissect the information at will (which includes removing the class
+attribute).
+
+What is actually stored in a \texttt{Journal} is up to its user, but a
+few fields are typical (and required for several methods):
+
+\begin{description}
+\item[{timestamp}] anything that can be sorted (and that fits into an
+atomic vector: POSIXlt is possible, but not
+recommended)
+
+\item[{amount}] notional amount that is transfered
+
+\item[{price}] price
+
+\item[{id}] (ideally unique) id
+
+\item[{instrument}] description of the financial instrument
+
+\item[{account}] description of the account
+
+\item[{\ldots{}}] other fields. They must be named, for instance \texttt{fees =
+          c(1,2,1)}
+\end{description}
+
+
+Transactions are considered to be in a hierachy
+
+\begin{quote}
+<account>::<instrument>
+\end{quote}
+
+\section{A first example}
+
+Suppose you kept track of a bank account.
+
+\begin{verbatim}
+require("PMwR")
+when   <- as.Date("2012-01-01") + 0:3
+amount <- c(1,2,-2,5) 
+J <- Journal(timestamp = when, amount = amount)
+J
+\end{verbatim}
+
+The \texttt{position} function gives the current balance of an account.
+
+\begin{verbatim}
+position(J)
+\end{verbatim}
+
+Let us do some more finance-style transactions: we buy five times one
+unit of some unspecified asset.
+
+\begin{verbatim}
+tl1 <- Journal(timestamp = 1:5, 
+               amount = 1, 
+               price = c(2,2,2,3,4), 
+               account = "my account")
+tl1
+\end{verbatim}
+
+
+
+Now we close the trade.
+
+\begin{verbatim}
+tl2 <- Journal(timestamp = 6, 
+               amount    = -5, 
+               price     = 3, 
+               account   = "my account")
+\end{verbatim}
+
+To compute the profit or loss, we first concatenate the two lists.
+
+\begin{verbatim}
+tl <- c(tl1, tl2)
+tl
+\end{verbatim}
+
+Then we use the function pl.  
+
+\begin{verbatim}
+pl(tl)
+\end{verbatim}
+
+\section{More details}
+
+As stated above the hierarchy of accounts is simply
+\texttt{<account>::<instrument>}.  But there is nothing enforce it.
+
+
+
+\section{A more complicated example.}
+\label{sec-2-4}
+
+\begin{center}
+\begin{tabular}{llllrrr}
+Symbol & ISIN & Date/Time & Buy/Sell & Quantity & Price & Commission\\
+\hline
+BEId & DE0005200000 & 20121205;031737 & BUY & 49 & 60.45 & -4\\
+BEId & DE0005200000 & 20130313;085611 & BUY & 58 & 69.55 & -4.0339\\
+DB1d & DE0005810055 & 20130611;033824 & BUY & 100 & 49.115 & -4.9115\\
+DTEd & DE0005557508 & 20121205;032202 & BUY & 313 & 8.6 & -4\\
+DTEd & DE0005557508 & 20130204;112639 & BUY & 187 & 8.854 & -4\\
+DTEd & DE0005557508 & 20130313;085439 & BUY & 397 & 8.375 & -4\\
+DTEd & DE0005557508 & 20130603;035843 & BUY & 850 & 8.77 & -7.4545\\
+DTEd & DE0005557508 & 20130516;062317 & SELL & -27 & 9.92 & -4\\
+DTEd & DE0005557508 & 20130516;062317 & SELL & -870 & 9.92 & -4.89824\\
+FMEd & DE0005785802 & 20130313;085049 & BUY & 145 & 51.56 & -7.4762\\
+FREd & DE0005785604 & 20121205;032954 & BUY & 34 & 88 & -4\\
+FREd & DE0005785604 & 20130313;085049 & BUY & 37 & 95.22 & -4\\
+FREd & DE0005785604 & 20130313;085049 & BUY & 7 & 95.22 & -0.18968\\
+HEN3d & DE0006048432 & 20121205;033430 & BUY & 16 & 63.12 & -4\\
+HEN3d & DE0006048432 & 20130313;085827 & BUY & 97 & 72.68 & -7.04996\\
+LINd & DE0006483001 & 20130131;040813 & BUY & 22 & 134.5 & -4\\
+LINd & DE0006483001 & 20130516;064910 & BUY & 47 & 151.7 & -7.1299\\
+LINd & DE0006483001 & 20130516;064910 & BUY & 3 & 151.7 & -0.4551\\
+LINd & DE0006483001 & 20130215;055430 & SELL & -22 & 131.4 & -4\\
+MEOd & DE0007257503 & 20130215;073839 & BUY & 120 & 24.18 & -4\\
+MEOd & DE0007257503 & 20130523;030909 & BUY & 270 & 26.47 & -7.1469\\
+MEOd & DE0007257503 & 20130313;050530 & SELL & -120 & 21.13 & -4\\
+MRKd & DE0006599905 & 20121205;035323 & BUY & 20 & 102.6 & -4\\
+MRKd & DE0006599905 & 20130313;085529 & BUY & 45 & 113.85 & -5.12325\\
+SAPd & DE0007164600 & 20121205;033158 & BUY & 32 & 61.31 & -4\\
+SAPd & DE0007164600 & 20130313;050537 & SELL & -32 & 63.58 & -4\\
+SDFd & DE000KSAG888 & 20130215;060200 & BUY & 90 & 33.65 & -4\\
+SDFd & DE000KSAG888 & 20130313;085047 & BUY & 49 & 35.94 & -4\\
+SIEd & DE0007236101 & 20121205;034614 & BUY & 37 & 79.89 & -4\\
+SIEd & DE0007236101 & 20130109;032510 & SELL & -37 & 83.52 & -4\\
+\end{tabular}
+\end{center}
+
+
+
+We put this all into a journal \texttt{J}.
+
+
+\begin{verbatim}
+J <- Journal(timestamp = c(as.POSIXct(trades$Date.Time,
+                                      format = "%Y%m%d;%H%M%S",
+                                      tz = "America/New_York")),
+                 amount = trades$Quantity,
+                  price = trades$Price,
+             instrument = tolower(trades$ISIN),
+                    fee = trades$Commission,
+                 ticker = trades$Symbol)
+
+J
+\end{verbatim}
+
+
+
+
+What is the current position?
+
+\begin{verbatim}
+position(J)
+\end{verbatim}
+
+
+What was the positon in 15 January 2013, 11:00:00? 
+
+\begin{verbatim}
+position(J, when = as.POSIXct("2013-01-15 11:00:00"))
+\end{verbatim}
+
+
+This suggests a mechanism to value a portfolio: decide \texttt{when} to value
+the portfolio, then get prices for \texttt{when} and take the inner product
+of the position at \texttt{when} with these prices.
+
+We can also evaluate a portfolio between two points-in-time.
+
+\begin{verbatim}
+t0 <- as.POSIXct("2013-05-31 17:30:00")
+t1 <- as.POSIXct("2013-06-10 17:30:00")
+
+##insts <- sort(unique(J$instrument))
+##prices0 <- closePrice(insts, "daily", date = t0)
+##prices1 <- closePrice(insts, "daily", date = t1)
+
+prices0 <- structure(c(69.53, 8.838, 91.48, 52.4, 49.79, 74.6, 148.05,
+                       122.25, 58.03, 81.61, 26.33, 32.51),
+                     .Names =
+                     c("de0005200000", "de0005557508", "de0005785604",
+                       "de0005785802", "de0005810055", "de0006048432",
+                       "de0006483001", "de0006599905", "de0007164600",
+                       "de0007236101", "de0007257503", "de000ksag888"))
+
+
+prices1 <- structure(c(68.58, 8.975, 93.15, 53.15, 49.415, 74.99,
+                       146.2, 124.05, 58.39, 81.09, 26.225, 30.445),
+                     .Names =
+                     c("de0005200000", "de0005557508", "de0005785604",
+                       "de0005785802", "de0005810055", "de0006048432",
+                       "de0006483001", "de0006599905", "de0007164600",
+                       "de0007236101", "de0007257503", "de000ksag888"))
+
+PMwR:::plPeriod(J, t0,t1, prices0, prices1)
+\end{verbatim}
+
+\section{Several accounts}
+\label{sec-2-5}
+
+
+\begin{verbatim}
+  trades <- read.table(textConnection(
+      "account; ticker; timestamp; amount; price
+  private ; A ; 1;   100; 60
+  private ; A ; 2;   100; 70
+  private ; A ; 3;  -200; 66
+  longterm; A ; 1; 100; 60
+  longterm; B ; 1; 100; 5"),
+                       sep =";", header = TRUE,
+                       strip.white = TRUE, 
+                       stringsAsFactors = FALSE)
+J <- Journal(trades$timestamp, trades$amount,
+             trades$price, NA, trades$ticker, trades$account)
+J
+\end{verbatim}
+
+
+But now we also have accounts.
+
+\begin{verbatim}
+J$account
+\end{verbatim}
+
+Per default, the function will compute the positions per account
+(which is equivalent to setting \texttt{aggr.accounts} to FALSE).  So here,
+we have asset \texttt{A} in account \texttt{longterm} and in \texttt{private}.
+
+\begin{verbatim}
+position(J)
+\end{verbatim}
+
+
+\begin{verbatim}
+position(J, aggr.accounts = FALSE)
+\end{verbatim}
+
+
+\begin{verbatim}
+position(J, aggr.accounts = TRUE)
+\end{verbatim}
+
+
+
+\#\# Journal.cli(J, \ldots{})
+\#\#while (input != "exit") \{
+\#\#  input <- readline()
+\#\#  \#\# parse me
+\#\#\}
+
+
+\chapter{Profit and (or) loss}
+
+\section{The simple case}
+
+Suppose we have an account denominated in euro.  We buy one asset at a
+price of 100 euro and sell it again at 102 euro.  We have made a
+profit of 2 euros.
+
+This simple cape happens often enough to make the required computation
+simple as well.  Computing profit-or-loss can be handled through the
+function \texttt{pl}.
+
+<<>>=
+pl(price  = c(100, 102), 
+   amount = c(  1,  -1))
+@
+
+Suppose a trader bought 1 unit @ 50, 1 unit @ 90 and sold 2 units @
+\begin{enumerate}
+\item It is easy enough to compute the profit for these trades.
+\end{enumerate}
+
+<<>>=
+pl(price  = c( 50, 90, 100), 
+   amount = c(  1,  1,  -2))
+@
+
+\noindent But suppose that the actual order of the trades was
+
+buy @ 90 \quad $\Rightarrow$ \quad buy @ 50 \quad $\Rightarrow$ \quad
+sell @ 100$\backslash$,.
+
+\noindent Even if we know nothing about what was traded and when, some
+information is provided by the order of the trades: the first position
+of 1 unit had a realised drawdown of at least 40 before it recovered.
+For situations like this, the argument \texttt{along.timestamp} can be
+used. (Note that we do not provide an actual timestamp, in which case
+the function will implictly use integers 1, 2, \ldots,
+\texttt{length(amount)}$\backslash$,.)
+
+<<>>=
+pl(price  = c( 90, 50, 100), 
+   amount = c(  1,  1,  -2), along.timestamp = TRUE)
+@ 
+
+\noindent With no further arguments, the function will compute the
+running position and evaluate it at every trade with the trade's
+price.  This may not be accurate because of bid--ask spreads or other
+transaction costs, but it provides more information than only
+computing the profit/loss for the trades. 
+
+
+<<>>=
+J <- Journal(price     = c( 90, 50, 100), 
+             amount    = c(  1,  1,  -2),
+             timestamp = c(  2,  4,   7))
+pl(J, along.timestamp = TRUE)
+position(J, when = 1:10)
+@ 
+
+
+Suppose we also have a time series of the prices between time 1 and
+\begin{enumerate}
+\item That is useful to figure what has happened.  So now we have to
+\end{enumerate}
+evaluate the position at every time instant.
+
+
+<<>>=
+P <- c(100,90,40,50,60,84,100,120,100,90)
+T <- seq$_{\text{along}}$(P)
+PLsorted(J\$amount, J\$price, timestamp = J\$timestamp,
+         allprices = P, alltimes = T,
+         initcash = 500)
+
+p <- position(J, when = 1:11)
+pl(J, initcash = 500, along.timestamp = TRUE)
+
+\#\#mvalue.position(J, when, series)
+
+@
+
+A more-useful example for pl with \texttt{along.timestamp} is a
+trading history of a high-frequency strategy.  Suppose for example we
+had traded EURUSD 200 times in single day and wished to plot the
+result.  At such a frequency, the prices at which the trades were
+executed can be useful to value any open position. 
+
+
+
+\section{More complicated cases}
+
+Unfortunately, in real life computing PL is often more complicated:
+
+\begin{itemize}
+\item One asset-price unit may not translate into one currency unit:
+  we multipliers or contract factors.
+
+\item Asset positions may map into non-trivial cashflows.  The simple
+  case would be the delay in actual payment and delivery of an asset;
+  but the more problematic cases are derivatives with daily
+  adjustments of margins.
+
+\item Assets may be denominated in various currencies.
+  
+\item Currencies may be assets in the portfolio.  Depending on how
+  they are traded (cash, forwards, \texttt{\&c.}), computing PL may
+  not be simple.
+\end{itemize}
+
+\chapter{Analysing trades}
+
+\section{Exposure}
+
+We have the following trades and times.
+
+<<>>=
+amount <- c(1,3,-3,1,-3,1)
+time <- c(0,1,3,4,7,12)
+@ 
+
+The holding period (\texttt{duration}) of these trades can be computed
+so:
+<<>>=
+data.frame(position = cumsum(amount)[-length(amount)], 
+           from = time[-length(time)],
+           to   = time[-1L],
+           duration = diff(time))
+@ 
+
+We can plot the exposure.
+\label{fig-true-height-2-width-5}=
+par(bty = "n", mar = c(4,4,0,0), tck = 0.005, las = 1, cex = 0.8)
+plot(c(time[1L], time), cumsum(c(0, amount)), type = "s",
+     xlab = "time", ylab = "position")
+@ 
+
+\noindent Thus, we have had a position from time zero to 12 (hours, say), but
+its size varied.  The function \texttt{twExposure} (time-weighted
+exposure) computes the average absolute exposure.
+
+<<>>=
+twExposure(amount, time)
+@ 
+
+\noindent To give a simple example: suppose we bought at the open of a
+trading day and sold at noon.  The average exposure for the day is
+thus half a contract.
+
+<<>>=
+amount <- c(1, -1 , 0)
+time   <- c(0,0.5,1)
+twExposure(amount, time)
+@ 
+
+
+\section{Splitting and rescaling}
+
+Suppose we have the following trades and impose a limit that the
+maximum absolute exposure for the trader should only be 2.
+
+<<>>=
+t <- 1:6
+n <- c(-1,-1,-1,1,1,1)
+p <- c(100,99,98,98,99,100)
+limit(n, p, t, lim = 2)
+@ 
+
+Scaling the trades.
+<<>>=
+scaleToUnity(n)
+@ 
+
+Closing the trade at once.
+<<>>=
+closeOnFirst(n)
+@
+
+
+
+
+
+
+\chapter{Backtesting}
+
 \section{Introduction}
 
 This vignette explains how to backtest trading strategies with
 the \texttt{backtest} function.
 
-\subsection{Decisions}
+\section{Decisions}
 
 The current instant is time~$t$; in actual life, it's simply
 `now'. We need to answer the following questions:
@@ -77,7 +533,7 @@ below. But functional programming should not be seen as a
 yes-or-no decision, but it is a matter of degree. And a bit more
 of the functional approach can help already.
 
-\subsection{Data}
+\section{Data}
 
 We have one or several price series of length \texttt{T}. The
 \texttt{backtest} function runs from \texttt{b + 1} to
@@ -121,7 +577,7 @@ t    time      open  high  low   close
 this later as a robustness check -- always buy at the high, sell
 at the low.)
 
-\subsection{Functions}\label{functions}
+\section{Functions}\label{functions}
 
 \texttt{backtest} expects a number of functions. The default is to not
 specify arguments to these functions, because they can all access the
@@ -145,25 +601,25 @@ access certain data; there are no replacement functions.
 All the functions have the argument \texttt{lag} which defaults
 to \texttt{1}.
 
-\subsubsection{signal}
+\subsection{signal}
 
 The \texttt{signal} function uses information until \texttt{t -
   1} and returns the suggested portfolio (a vector) to be held at
 \texttt{t}.
 
-\subsubsection{signalYN}
+\subsection{signalYN}
 
 \texttt{signalYN} uses information until \texttt{t - 1} and must
 return \texttt{TRUE} or \texttt{FALSE}. If the function is not
 specified, it defaults to \texttt{function() TRUE}.
 
-\subsubsection{rebalanceYN}
+\subsection{rebalanceYN}
 
 \texttt{rebalanceYN} uses information until \texttt{t - 1} and
 returns \texttt{TRUE} or \texttt{FALSE}. If the function is not
 specified, it defaults to \texttt{function() TRUE}.
 
-\subsubsection{printInfo}
+\subsection{printInfo}
 
 The function is called at the end of an iteration. It should not
 return anything but is called for its side effect: print
@@ -652,8 +1108,201 @@ solution <- backtest(prices = prices,
 makeTable(solution, prices)
 
 @
-
 And since \texttt{cat} has a \texttt{file} argument, we can also write
 such information into a logfile.
+
+
+
+
+\chapter{Reporting}
+
+\section{qpTable}
+
+quartile plot table
+
+\section{slTable}
+
+arguments:
+\begin{itemize}
+\item \ldots : zoo objects
+\item include.returns
+\item include.diffs
+\item compute.with = "returns": or "diffs" or "levels"
+\item columns = list(mean = mean, sd = sd): need to be computed on returns
+\end{itemize}
+
+
+
+\chapter{Technical indicators}
+
+sum, abssum, sd, absmean, range, minmax, minmaxrange, mad
+
+
+
+
+\appendix
+\chapter{Design}
+
+\section{Requirements}
+
+\begin{itemize}
+\item Store a 'portfolio' of assets and compute the value (or other
+  quantities, like Greeks) for different data.  Data can refer to
+  market prices, but also to theoretical prices.
+\item Reevaluate a portfolio for scenario (= new market data or
+  artificial data).
+\item Read in transactions from various sources. $\to$ done via a
+  Journal class.
+\item Show portfolio on certain day/time: create a position, evaluate
+  this position $\to$ position class
+\item testing portfolios of options --> show payoff, simulate *paths*
+  of underlier and vol surface
+\item run simulations for VaR
+\item various ways to compute pnl: weighted average,
+  first-in-first-out and last-in-last-out
+\end{itemize}
+
+
+\section{Classes}
+
+The following classes are implicitly defined (ie, S3 classes):
+
+\begin{itemize}
+\item Journal: keeps transactions
+\item Position: only for printing. It comprises the numerical
+  positions of different accounts/instruments, the timestamps and the
+  description of the instruments.
+\item Instrument: term sheet (description etc); it does know nothing
+  about market data
+\item Cashflow: internal
+\item Timeseries: internal
+\end{itemize}
+
+\section{Valuation}
+
+Valueing a position can mean two things: compute theoretical prices,
+or market prices.
+
+Theoretical valuation takes places via the generic function value:
+
+\texttt{value(x, ..., dots2args = NULL) } 
+
+The simplest case:
+\texttt{x} is character, then a call will be generated as
+
+\texttt{do.call(x, list(...))}
+
+\texttt{dots2args.default <- function(x, ...) list(...)}
+
+Note that this will be the default method; notably, a method when
+\texttt{x} is character will be left unspecified (meant for the user).
+
+
+A more typical case: collect all market data in a list \texttt{Data}:
+EvaluationDate, Prices, Vols, Irates.
+
+dots2args will react on \texttt{x}, retrieve the required information,
+and 
+
+
+
+\begin{itemize}
+\item evaluates to list "value", "delta" etc
+\item Instrument[names(result)] <- result
+\end{itemize}
+
+
+<<>>=
+Time   <- as.Date("2013-05-28")
+Prices <- list(DAX = 8472)
+Irates <- list(EUR = function(t) 0.1)
+Vols   <- list(DAX = function(x,t) 0.2)
+
+DATA <- list(Time = Time, 
+             Prices = Prices, 
+             IRates = Irates, 
+             Vols = Vols)
+DATA
+DATA\$Vols\$DAX(8000,0.2)
+DATA\$IRates\$EUR(0.5)
+
+@      
+
+
+\section{Instruments and portfolios}
+
+
+
+\subsubsection{Instrument}
+classes: Fund Equity Account Currency Future Index
+
+
+fields:
+
+id
+isin
+description
+underlier
+expirydate
+expirytime
+strike
+type c/p
+exercise e/a
+pricing premium/future
+class
+
+
+
+\chapter{Frequently-used functions}
+
+\emph{I need to value a financial instrument.}
+
+
+\emph{I have a list of trades (bought or sold what, when and at what price)
+and I need to compute the profit or loss.}
+
+If all trades are closed (ie, the current positions are all zero), use
+\texttt{pl}.
+
+
+\emph{I have a list of trades in an instrument and want to plot these
+  trades against the price of the traded instrument.}
+
+
+\emph{I have a signal series (\texttt{+1}, \texttt{0}, \texttt{0}, \texttt{+1}, \ldots{}) and need to
+  transform it into a profit-and-loss series.}
+
+
+\emph{We have a list of trades and need to determine the
+  profit-and-loss between two timestamps.}
+
+
+Call the two timestamps \texttt{t0} and \texttt{t1}.  Unless the position was zero
+at t0 and t1, we can compute the profit/loss only if we have prices
+for the positions at these points in time.  In case the position was
+indeed zero, you can use \texttt{pl}; the transactions are stored in a
+journal \texttt{j}.
+
+\begin{verbatim}
+subset(j, timestamp >= t0 & timestamp <=t1)
+\end{verbatim}
+
+But even the more general case is not so complicated, after all.
+
+\begin{enumerate}
+\item Compute the position at \texttt{t0} and make it a journal j0.
+
+\item Take all transactions at $t > t_\mathrm{0}$ and $t \leq
+   t_\mathrm{1}$ and put them into a Journal $J$.
+
+\item Compute the position at $t_\mathrm{1}$, and make it a Journal
+   $J_1$, but \emph{multiply all amounts by $-1$}.
+
+\item Combine $J_0$, $J$, and $J_1$ and compute the PL.
+\end{enumerate}
+
+%\printindex
+\bibliographystyle{plainnat}
+\bibliography{bibliothek}
 
 \end{document}

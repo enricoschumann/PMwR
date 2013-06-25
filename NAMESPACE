@@ -1,10 +1,12 @@
 export(
     "dayOfMonth<-",
+    "mday<-",
     Journal,
     backtest,
     char2num,
     closeOnFirst,
     dayOfMonth,
+    mday,
     drawdown,
     endOfMonth,
     endOfPreviousMonth,
