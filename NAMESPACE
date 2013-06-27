@@ -2,6 +2,8 @@ export(
     "dayOfMonth<-",
     dayOfMonth,
     endOfMonth,
+    mday,
+    "mday<-",
     endOfPreviousMonth,
     firstOfMonth,
     isWeekend,

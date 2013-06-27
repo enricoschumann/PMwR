@@ -1,7 +1,9 @@
 2013-06-27  Enrico Schumann  <es@enricoschumann.net>
 
+	* DESCRIPTION (Version): Version: 0.1-29
+
 	* PMwR/R/datetimetools.R (mday): added wrapper 'mday' for
-	dayOfMonth (consistent with name of POSIXlt)
+	'dayOfMonth' (consistent with element name of POSIXlt)
 
 2013-06-24  Enrico Schumann  <es@enricoschumann.net>
 

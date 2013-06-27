@@ -20,3 +20,14 @@ runStats <- function(what, y, N = 5L, pad = NULL, q = NULL, h = NULL) {
         res[seq_len(N - 1L)] <- pad
     res
 }
+
+## mSum <- function (y, N = 5L, pad = NULL) {
+##     N <- as.integer(N)
+##     stopifnot(N > 0L)
+##     n <- length(y)
+##     ss <- cumsum(y)
+##     ss[N:n] <- ss[N:n] - c(0L, ss[1L:(n - N)])
+##     if (!is.null(pad) & N > 1L)
+##         ss[1L:(N - 1L)] <- pad
+##     ss
+## }

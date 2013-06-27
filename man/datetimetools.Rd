@@ -1,6 +1,8 @@
-\name{DatetimeTools}
+\name{DateTimeTools}
 \alias{dayOfMonth<-}
 \alias{dayOfMonth}
+\alias{mday<-}
+\alias{mday}
 \alias{endOfMonth}
 \alias{endOfPreviousMonth}
 \alias{firstOfMonth}
@@ -23,6 +25,7 @@
 \usage{
 timegrid(from, to, interval, excludeWeekends = TRUE, holidays = NULL,
          fromHHMMSS = "080000", toHHMMSS = "220000")
+
 roundPOSIXt(t, interval)
 
 previousBusinessDay(x, holidays = NULL)
@@ -93,7 +96,7 @@ lastWeekday(weekday, x, shift = 0L,
     an integer (\code{1} is Monday, \code{2} is Tuesday, and so on)
   }
   \item{period}{
-    character. Not implemented.
+    character. 
   }
   \item{before}{
     a Date. See also \code{inclusive}.
@@ -122,7 +125,8 @@ lastWeekday(weekday, x, shift = 0L,
   integer 0 to 6, with Sunday being 0) of a given month.  \code{shift}
   moves forward (when positive) or backward (when negative) by one week;
   see Examples.
- 
+
+  \code{mday} is a wrapper for \code{dayOfMonth}.
   
 }
 \value{
@@ -132,6 +136,7 @@ lastWeekday(weekday, x, shift = 0L,
 
 }
 \references{
+
   B.D. Ripley and K. Hornik. \emph{Date-Time Classes}. R-News,
   \strong{1}(2):8--12, 2001.
 
@@ -151,7 +156,18 @@ res  <- timegrid(from, to, interval = "1 hour",
 times <- as.POSIXct("2012-03-24 22:00:00") + 1:1e2
 roundPOSIXt(times, "2 min")
 
-previousBusinessDay(as.Date("2012-06-18"))
+## businessdays
+previousBusinessDay(Sys.Date())
+nextBusinessDay(Sys.Date())
+firstOfMonth(Sys.Date())
+
+## vectorisation
+endOfMonth(as.Date("2013-01-15"), shift = c(-1, 0, 1))
+endOfMonth(as.Date("2013-01-15") + 0:100)
+
+dayOfMonth(d <- as.Date("2013-01-22"))
+dayOfMonth(d) <- 5
+d
 
 ## goal:   find the third Friday in March 2013
 ## how to: find the last Friday in February 2013 and 

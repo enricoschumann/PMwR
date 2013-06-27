@@ -51,12 +51,17 @@ endOfPreviousMonth <- function(x) {
     tmp$mday <- 1L
     as.Date(tmp) - 1L
 }
+mday <- function(x)
+    dayOfMonth(x)
+`mday<-` <- function(x, value){
+    dayOfMonth(x) <- value
+}
 dayOfMonth <- function(x) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
         stop("input must inherit from class Date or POSIXt")
     as.POSIXlt(x)$mday
 }
-`dayOfMonth<-` <- function(x, value){
+`dayOfMonth<-` <- function(x, value) {
     if (!all(inherits(x, "Date") | inherits(x, "POSIXt")))
         stop("input must inherit from class Date or POSIXt")
     cl <- class(x)
