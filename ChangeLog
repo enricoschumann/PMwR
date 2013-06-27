@@ -1,5 +1,9 @@
 2013-06-27  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/journal.R (subset.journal): new arguments account and
+	instrument that expect regular expressions (but default to NULL)
+	(`[.journal`): added `[` method (experimental)
+
 	* inst/unitTests/ut_journal.R (test.journal): added tests
 
 	* R/journal.R (as.data.frame.journal): added method

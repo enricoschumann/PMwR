@@ -3,13 +3,15 @@
 test.journal <- function() {
 
     require("PMwR")
+    require("RUnit")
+    
     timestamp <- 1:5
     amount <- 1
     price <- 101:105
     instrument <- "Stock A"
     
-    ## journal
 
+    ## journal
     j <- journal(timestamp,amount, price, instrument = instrument)
 
     checkTrue(is.null(j$account))
@@ -20,12 +22,12 @@ test.journal <- function() {
     jj <- c(j, j)
 
     ## method: sort
-    sort(jj)
-    sort(jj, decreasing = TRUE)
+    checkEquals(sort(jj)$timestamp, rep(1:5, each = 2))
+    checkEquals(sort(jj, decreasing = TRUE)$timestamp, rep(5:1, each = 2))
     
     ## method: length
     checkEquals(length(jj), 10L)
     
-##
+    ##
 
 }

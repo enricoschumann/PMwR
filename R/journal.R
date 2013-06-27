@@ -54,19 +54,19 @@ print.journal <- function(x, ..., width = 60L) {
 
     dspT <- 10 ## display trades, instruments
 
-    
+    lx <- length(x)
     ## if (!is.null(x$account) && all(!is.na(x$account)))
     ##     rn <- x$account        
     ## if (!is.null(x$id) && all(!is.na(x$id)))
     ##     rn <- paste(rn, x$id, sep = " | ")
 
     df <- as.data.frame(unclass(x),                        
-                        row.names = seq_len(length(x)),
+                        row.names = seq_len(lx),
                         stringsAsFactors = FALSE)
     notAllNA <- unlist(lapply(df, function(x) !all(is.na(x))))
     print(head(df[notAllNA],dspT), quote = FALSE,
           print.gap=2)
-    if ((n <- max(length(x$amount),length(x$price))) > dspT)
+    if (lx > dspT)
         cat("[ ... ]\n\n") else cat("\n")
     insts <- sort(unique(x$instrument))
     insts <- as.character(rmspace(insts))
@@ -74,7 +74,9 @@ print.journal <- function(x, ..., width = 60L) {
         subs <- paste0(" in ", paste(insts, sep = "", collapse = ", "))
     else
         subs <- ""
-    msg <- strwrap(paste0("\n", n, " transactions", subs), width)
+    if (lx > 1L)
+        ps <- "s" else ps <- ""
+    msg <- strwrap(paste0("\n", lx, " transaction", ps, subs), width)
     msg <- paste(msg[1L], if (length(msg)>1L) "...", "\n")
     cat(msg)
     invisible(x)
@@ -102,7 +104,11 @@ c.journal <- function(...) {
     class(ans) <- "journal"
     ans
 }
-subset.journal <- function(x, ...) {
+subset.journal <- function(x, ..., account = NULL, instrument = NULL) {
+    if (!is.null(account))
+        stop("not implemented yet")
+    if (!is.null(instrument))
+        stop("not implemented yet")
     i <- with(x, ...)
     ans <- lapply(unclass(x), `[`, i)
     class(ans) <- "journal"
@@ -149,3 +155,35 @@ account <- function(x, pattern = NULL, ...) {
         x$account <- rep(value, lenx)
     x
 }
+summary.journal <- function(x, ...) {
+    ## number of trades per instrument
+    ## level: instrument or account or factor
+    ## number of transactions, min/max price, first/last transactions
+}
+amount <- function(x, abs = FALSE, ...) {
+
+    if (!inherits(x, "journal"))
+        stop(sQuote("x"), " must inherit from class ", sQuote("journal"))
+    x$amount
+}
+`amount<-` <- function(x, value) {
+
+    if (!inherits(x, "journal"))
+        stop(sQuote("x"), " must inherit from class ", sQuote("journal"))
+
+    len <- length(value)
+    lenx <- length(x)
+    if (len == lenx)
+        x$amount <- value
+    else if (len == 1L)
+        x$amount <- rep(value, lenx)
+    x
+}
+`[.journal`  <- function(x, i) {
+    ans <- lapply(unclass(x), `[`, i)
+    class(ans) <- "journal"
+    ans
+}
+
+position(amount, timestamp, instrument, when, from, to,
+              drop.zero = FALSE)
