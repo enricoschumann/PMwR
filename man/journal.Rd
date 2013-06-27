@@ -19,6 +19,7 @@ journal(timestamp, amount, price, id, instrument, account, \dots)
 \method{print}{journal}(x, \dots, width = 60L)
 \method{sort}{journal}(x, decreasing = FALSE, by = "timestamp", \dots, na.last = TRUE)
 \method{subset}{journal}(x, \dots)
+\method{as.data.frame}{journal}(x, row.names = NULL, optional = FALSE, \dots)
 
 }
 \arguments{
@@ -35,10 +36,10 @@ journal(timestamp, amount, price, id, instrument, account, \dots)
     trade id
 }
   \item{instrument}{
-    instrument id
+    instrument
 }
   \item{account}{
-     account id
+     account 
 }
 \item{\dots}{
   
@@ -69,9 +70,8 @@ journal(timestamp, amount, price, id, instrument, account, \dots)
   attaches a class attribute (\sQuote{journal}).  There are few
   methods (\code{\link{print}}, \code{\link{c}}).
 
-  Currently, anything missing will be coded as \code{\link{NA}}, but for
-  id and account, \code{NULL} is more appropriate and will be
-  implaemented in the future.
+  Currently, missing arguments will be coded as \code{\link{NA}} except
+  for \code{id} and \code{account} which become \code{NULL}.
   
 }
 \value{

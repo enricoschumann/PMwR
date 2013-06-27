@@ -1,3 +1,13 @@
+2013-06-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* inst/unitTests/ut_journal.R (test.journal): added tests
+
+	* R/journal.R (as.data.frame.journal): added method
+
+2013-06-26  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (pm): added function 'pm'
+
 2013-06-24  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/pl.R (## PLsorted): removed

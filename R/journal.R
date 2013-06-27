@@ -1,6 +1,6 @@
 journal <- function(timestamp, amount, price, id, instrument, account, ...) {
     if (missing(id))
-        id <- NA
+        id <- NULL
     if (missing(timestamp))
         timestamp <- NA
     if (missing(instrument))
@@ -8,7 +8,7 @@ journal <- function(timestamp, amount, price, id, instrument, account, ...) {
     else if (all(instrument == instrument[1L]))
         instrument <- instrument[1L]
     if (missing(account))
-        account <- NA
+        account <- NULL
     if (missing(price))
         price <- NA
     instrument <- as.character(instrument)    
@@ -30,6 +30,12 @@ journal <- function(timestamp, amount, price, id, instrument, account, ...) {
                 timestamp  = rep0(timestamp, len),
                 amount     = rep0(amount, len),
                 price      = rep0(price, len))
+    ## remove NULL
+    isNul <- unlist(lapply(ans, is.null))
+    for (i in seq_along(isNul))
+        if (isNul[i])
+            ans[[names(isNul[i])]] <- NULL
+
     dots <- list(...)
     nd <- names(dots)
     if (length(dots)) {
@@ -41,23 +47,24 @@ journal <- function(timestamp, amount, price, id, instrument, account, ...) {
     class(ans) <- "journal"
     ans    
 }
-print.journal <- function(x, ..., width = 60) {
+print.journal <- function(x, ..., width = 60L) {
     oo <- getOption("scipen")
     options(scipen = 1e8)
     on.exit(options(scipen = oo))
 
     dspT <- 10 ## display trades, instruments
+
     
-    if (all(!is.na(x$account)))
-        rn <- x$account        
-    if (all(!is.na(x$id)))
-        rn <- paste(rn, x$id, sep = " | ")
+    ## if (!is.null(x$account) && all(!is.na(x$account)))
+    ##     rn <- x$account        
+    ## if (!is.null(x$id) && all(!is.na(x$id)))
+    ##     rn <- paste(rn, x$id, sep = " | ")
 
     df <- as.data.frame(unclass(x),                        
                         row.names = seq_len(length(x)),
                         stringsAsFactors = FALSE)
     notAllNA <- unlist(lapply(df, function(x) !all(is.na(x))))
-    print(head(df[notAllNA],dspT), quote=FALSE,
+    print(head(df[notAllNA],dspT), quote = FALSE,
           print.gap=2)
     if ((n <- max(length(x$amount),length(x$price))) > dspT)
         cat("[ ... ]\n\n") else cat("\n")
@@ -76,7 +83,7 @@ length.journal <- function(x)
     length(x$amount)
 sort.journal <- function(x, decreasing = FALSE, by = "timestamp",
                          ..., na.last = TRUE) {
-    o <- order(x[by], na.last = na.last, decreasing = decreasing)    
+    o <- order(x[[by]], na.last = na.last, decreasing = decreasing)    
     for (i in seq_along(unclass(x)))
         x[[i]]<- x[[i]][o]
     x    
@@ -100,4 +107,17 @@ subset.journal <- function(x, ...) {
     ans <- lapply(unclass(x), `[`, i)
     class(ans) <- "journal"
     ans
+}
+joinAI <- function(x, sep = "::") {
+    tmp <- paste0(x$account, sep, $instrument)
+    x$account <- NA
+    x$instrument <- tmp
+    x
+}
+as.data.frame.journal <- function(x, row.names = NULL, optional = FALSE, ...) {
+    if (!is.null(row.names))
+        warning("'row.names' not supported yet")
+    if (!is.null(optional))
+        warning("'optional' not supported yet")
+    data.frame(unclass(x))
 }

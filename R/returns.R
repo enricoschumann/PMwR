@@ -80,6 +80,7 @@ pReturns <- function(x, t = NULL, period = "month",
     class(ans) <- "preturns"
     ans
 }
+
 returns <- function(x, t = NULL, period = "month", complete.first = TRUE,
                      pad = NULL, position) {
     if (is.null(t) &&  missing(position)) {
@@ -122,3 +123,24 @@ rtTab <- function(x) {
 }
 print.preturns <- function(x, ...)
     print(unclass(x))
+
+pm <- function(x, xp = 2, threshold = 0, lower = TRUE, keep.sign = FALSE) {
+    x <- x - threshold
+    if (lower)
+        x <- x - abs(x)
+    else
+        x <- x + abs(x)        
+    if (keep.sign)
+        sx <- sign(x)
+    x <- abs(x)
+    if (xp == 1L)
+        sum(x)/2/length(x)
+    else if (xp == 2L)
+        sum(x*x)/4/length(x)
+    else if (xp == 3L)
+        sum(x*x*x)/8/length(x)
+    else if (xp == 4L)
+        sum(x*x*x*x)/16/length(x)
+    else 
+        sum(x^xp)/2^xp/length(x)
+}
