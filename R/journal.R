@@ -109,7 +109,7 @@ subset.journal <- function(x, ...) {
     ans
 }
 joinAI <- function(x, sep = "::") {
-    tmp <- paste0(x$account, sep, $instrument)
+    tmp <- paste0(x$account, sep, x$instrument)
     x$account <- NA
     x$instrument <- tmp
     x
@@ -120,4 +120,32 @@ as.data.frame.journal <- function(x, row.names = NULL, optional = FALSE, ...) {
     if (!is.null(optional))
         warning("'optional' not supported yet")
     data.frame(unclass(x))
+}
+
+
+## accessors
+account <- function(x, pattern = NULL, ...) {
+
+    if (!inherits(x, "journal"))
+        stop(sQuote("x"), " must inherit from class ", sQuote("journal"))
+
+    if (is.null(x$account)) {
+        NULL
+    } else if (!is.null(pattern)) {
+        ts <- grep(pattern, x$account, ...)
+        x$account[ts]
+    }    else
+        x$account
+}
+`account<-` <- function(x, value) {
+    if (!inherits(x, "journal"))
+        stop(sQuote("x"), " must inherit from class ", sQuote("journal"))
+
+    len <- length(value)
+    lenx <- length(x)
+    if (len == lenx)
+        x$account <- value
+    else if (len == 1L)
+        x$account <- rep(value, lenx)
+    x
 }
