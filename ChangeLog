@@ -1,3 +1,7 @@
+2013-07-02  Enrico Schumann  <es@enricoschumann.net>
+
+	* man/texttools.Rd: updated documentation for 'expstr'
+
 2013-06-27  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (subset.journal): new arguments account and
