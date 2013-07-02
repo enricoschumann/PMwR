@@ -1125,7 +1125,45 @@ such information into a logfile.
 
 
 
+
 \chapter{Reporting}
+
+<<echo=false>>=
+require("PMwR")
+@ 
+
+\section{Text tools}
+
+In many cases, reporting simply means constructing a message text that
+is printed on a terminal or sent as an email.
+
+\subsection{rmspace}
+
+<<>>=
+s <- c(" a a", " 19 EUR ")
+rmspace(s)
+@ 
+
+\subsection{char2num}
+
+<<>>=
+char2num("12.000,23")
+char2num("12,000.23", big.mark = ",")
+char2num("12000.23",  big.mark = " ") ## but 'as.numeric' is simpler
+char2num("12'000.23", big.mark = "'")
+char2num("12 000|23", dec = "|", big.mark = " ")
+@ 
+
+\subsection{expstring}
+Expand a string
+
+<<>>=
+s <- c("profits: 100 EUR", "fees:  20 EUR")
+cat(s, sep = "\n")
+s <- expstr(s, after = ": ", width = 20)
+cat(s, sep = "\n")
+nchar(s)  ## width
+@ 
 
 \section{qpTable}
 
@@ -1147,6 +1185,7 @@ arguments:
 \chapter{Technical indicators}
 
 sum, abssum, sd, absmean, range, minmax, minmaxrange, mad
+
 
 
 

@@ -1,13 +1,13 @@
-\name{Texttools}
-\alias{Texttools}
+\name{texttools}
+\alias{texttools}
 \alias{rmspace}
 \alias{char2num}
 \alias{expstr}
 \title{
-  Functions to manipulate character vectors
+  Manipulating Character Vectors
 }
-\description{
-  Manipulating character vectors, typically to transform them into
+\description{  
+  Manipulating and (re-)formating character vectors; for example, to transform them into
   numerical vectors.
 }
 \usage{
@@ -40,12 +40,16 @@ expstr(s, after, width, fill = " ", at)
   after removing/replacing certain characters: all occurences of
   \code{big.mark} are removed, and \code{dec} is changed to a dot.
 
+  \code{expstr} inserts blanks into the elements of a character vector
+  such that all elements have the same \code{width} (ie,
+  \code{\link{nchar}}).
+
 }
 \value{
   a character vector
 }
 \seealso{
-   \code{\link{strwrap}}.
+   \code{\link{strwrap}}, \code{\code{format}}
 }
 \author{
   Enrico Schumann
@@ -60,5 +64,4 @@ char2num("12,000.23", big.mark = ",")
 char2num("12000.23",  big.mark = " ") ## but 'as.numeric' is simpler
 char2num("12'000.23", big.mark = "'")
 char2num("12 000|23", dec = "|", big.mark = " ")
-
 }

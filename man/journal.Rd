@@ -14,6 +14,7 @@
 \usage{
 journal(timestamp, amount, price, id, instrument, account, \dots)
 
+
 \method{c}{journal}(\dots)
 \method{length}{journal}(x)
 \method{print}{journal}(x, \dots, width = 60L)

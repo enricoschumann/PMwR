@@ -10,8 +10,6 @@ char2num <- function(s, dec = ",", big.mark = ".") {
     as.numeric(sub(dec, ".", s, fixed = TRUE))
 }
 
-
-## TeX
 ## convert from one TeXunit to another
 TeXunits <- function(from, to) {
     frU <- gsub("([-+0-9,. ])+([a-z]+)", "\\2", from)
