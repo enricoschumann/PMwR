@@ -3,14 +3,27 @@
 \alias{PMwR}
 \docType{package}
 \title{
-Functions for the Practical Management of Financial Portfolios
+  Tools for the Practical Management of Financial Portfolios
 }
 \description{
-Functions for the practical management of financial portfolios:
-computing profit-and-loss, analysing trades, reporting and more.
+
+  Functions for the practical management of financial portfolios:
+  computing profit-and-loss, accounting, analysing trades, reporting and
+  more.
+
 }
 \details{
-See the book
+
+  The package comprises functions that have been written in various
+  circumstances and for various purposes.  Which means that in the
+  current version, the interfaces to functions are not stable (eg,
+  argument names are being made consistent across functions); in some
+  cases, generics will be introduced.  The recommended practice is
+  therefore currently to explicitly name arguments in function calls.
+  Any changes in argument names will be documented in the ChangeLog and
+  so can be easily followed. 
+
+  For more details see the Manual.
 }
 \author{
 Enrico Schumann
