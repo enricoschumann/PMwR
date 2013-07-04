@@ -49,7 +49,7 @@ expstr(s, after, width, fill = " ", at)
   a character vector
 }
 \seealso{
-   \code{\link{strwrap}}, \code{\code{format}}
+   \code{\link{strwrap}}, \code{\link{format}}
 }
 \author{
   Enrico Schumann
