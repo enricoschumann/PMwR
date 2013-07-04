@@ -1,3 +1,17 @@
+2013-07-03  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pl.R (plPeriod): positions at t0 and t1 are computed with
+	drop.zero=TRUE
+
+	* man/mailtools.Rd: renamed to 'MailTools' (upper case), inline
+	with 'DateTimeTools'
+
+	* man/texttools.Rd: renamed to 'TextTools' (upper case), inline
+	with 'DateTimeTools'
+
+	* R/journal.R (print.journal): new max.print argument (default is
+	10)
+
 2013-07-02  Enrico Schumann  <es@enricoschumann.net>
 
 	* man/texttools.Rd: updated documentation for 'expstr'

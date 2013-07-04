@@ -45,20 +45,20 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
     }
     
     plPeriod <- function(journal, t0, t1, prices0, prices1) {
-        p0 <- position(journal, when = t0)
+        p0 <- position(journal, when = t0, drop.zero = TRUE)
         J0 <- journal(instrument = p0$instrument,
                       amount     = as.vector(p0$position),
                       price      = prices0[match(p0$instrument, names(prices0))],
                       timestamp = t0)
         
-        p1 <- position(journal, when = t1)
+        p1 <- position(journal, when = t1, drop.zero = TRUE)
         J1 <- journal(instrument = p1$instrument,
                       amount     = -as.vector(p1$position), ## switch sign
                       price      = prices1[match(p1$instrument, names(prices1))],
                       timestamp = t1)
-        
-        Jbetween <- subset(journal, timestamp > t0 & timestamp <= t1)
-        
+
+        ex <- substitute(timestamp > t0 & timestamp <= t1, list(t0 = t0, t1 = t1))
+        Jbetween <- do.call(subset, list(journal, ex))
         pl(c(J0, Jbetween, J1))    
     } 
     plfun <- function(amount, price) {

@@ -71,18 +71,18 @@ journal(timestamp, amount, price, id, instrument, account, \dots)
   attaches a class attribute (\sQuote{journal}).  There are few
   methods (\code{\link{print}}, \code{\link{c}}).
 
-  Currently, missing arguments will be coded as \code{\link{NA}} except
-  for \code{id} and \code{account} which become \code{NULL}.
+  Missing arguments will be coded as \code{\link{NA}} except for
+  \code{id} and \code{account} which become \code{\link{NULL}}.
   
 }
 \value{
   
-  An object of class \code{journal}, which is simply a list of
+  An object of class \code{journal}, which is simply a list of atomic
   vectors.
 
 }
 \references{
-  ES - PMwR
+  Enrico Schumann -- Portfolio Management with R
 }
 \author{
   Enrico Schumann

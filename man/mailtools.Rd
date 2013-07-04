@@ -1,4 +1,4 @@
-\name{Mailtools}
+\name{MailTools}
 \alias{saveAttachment}
 \title{
   Tools for Email Handling
@@ -27,10 +27,11 @@ the mbox file
 }
 \details{
   
-The function is currently only tested with mbox files (which is the
-format that Thunderbird uses, or the format of \code{nnfolders} in
-Gnus. The function will load the whole mbox file into memory, which may
-not work very well if the file is large.
+  The function is currently only tested with mbox files (which is the
+  format that Thunderbird uses, or the format of \code{nnfolders} in
+  Gnus (\url{http://www.gnus.org/}). The function will load the whole
+  mbox file into memory, which may not work very well if the file is
+  large.
 
 }
 \value{

@@ -47,12 +47,12 @@ journal <- function(timestamp, amount, price, id, instrument, account, ...) {
     class(ans) <- "journal"
     ans    
 }
-print.journal <- function(x, ..., width = 60L) {
+print.journal <- function(x, ..., width = 60L, max.print = 10) {
     oo <- getOption("scipen")
     options(scipen = 1e8)
     on.exit(options(scipen = oo))
 
-    dspT <- 10 ## display trades, instruments
+    dspT <- max.print ## display trades, instruments
 
     lx <- length(x)
     ## if (!is.null(x$account) && all(!is.na(x$account)))
@@ -185,5 +185,3 @@ amount <- function(x, abs = FALSE, ...) {
     ans
 }
 
-position(amount, timestamp, instrument, when, from, to,
-              drop.zero = FALSE)

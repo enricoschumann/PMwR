@@ -1,4 +1,5 @@
 
+require("PMwR")
 
 ## construct from raw data
 t <- 1:5

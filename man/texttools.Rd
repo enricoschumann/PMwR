@@ -1,5 +1,5 @@
-\name{texttools}
-\alias{texttools}
+\name{TextTools}
+\alias{TextTools}
 \alias{rmspace}
 \alias{char2num}
 \alias{expstr}
