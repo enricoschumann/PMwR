@@ -158,10 +158,8 @@ abline(h = axTicks(2), v = tmp$axis.pos,
        col = "lightgrey", lty = "dotted")
 abline(v = tmp$map(mytime)$t, col = "red")
 @ 
-
 The function \texttt{map} returns a list with two components,
 \texttt{t} and \texttt{ix}.
-
 <<>>=
 tmp$map(mytime)
 @ 

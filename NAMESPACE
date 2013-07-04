@@ -13,6 +13,9 @@ export(
     previousBusinessDay,
     roundPOSIXt,
     runStats,
+    rmspace,
+    char2num,
+    expstr,
     timegrid
     )
 useDynLib(PMwR)
