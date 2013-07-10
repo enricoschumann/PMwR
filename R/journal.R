@@ -47,7 +47,7 @@ journal <- function(timestamp, amount, price, id, instrument, account, ...) {
     class(ans) <- "journal"
     ans    
 }
-print.journal <- function(x, ..., width = 60L, max.print = 10) {
+print.journal <- function(x, ..., width = 60L, max.print = 100) {
     oo <- getOption("scipen")
     options(scipen = 1e8)
     on.exit(options(scipen = oo))

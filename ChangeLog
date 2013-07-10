@@ -1,3 +1,7 @@
+2013-07-10  Enrico Schumann  <es@vipag.com>
+
+	* R/journal.R (print.journal): max.print increased to 100
+
 2013-07-03  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/pl.R (plPeriod): positions at t0 and t1 are computed with
