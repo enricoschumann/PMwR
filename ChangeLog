@@ -1,3 +1,13 @@
+2013-07-12  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-31
+
+	* R/texttools.R (expstr): fixed -- fill was inserted at the
+	beginning of regexp 'after', now it is inserted after it (see
+	examples with repeated spaces)
+
+	* R/returns.R (returns): added function
+
 2013-07-04  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-30

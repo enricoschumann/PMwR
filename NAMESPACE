@@ -1,21 +1,23 @@
 export(
     "dayOfMonth<-",
+    "mday<-",
+    char2num,
     dayOfMonth,
     endOfMonth,
-    mday,
-    "mday<-",
     endOfPreviousMonth,
+    expstr,
     firstOfMonth,
     isWeekend,
     lastWeekday,
+    mday,
     nextBusinessDay,
     plotTradingHours,
     previousBusinessDay,
+    returns,
+    rmspace,
     roundPOSIXt,
     runStats,
-    rmspace,
-    char2num,
-    expstr,
     timegrid
     )
+S3method(print,preturns)
 useDynLib(PMwR)

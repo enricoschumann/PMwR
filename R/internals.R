@@ -80,3 +80,10 @@ letter2month <- function(s){
                  "P 7", "P 8", "P 9", "P 10", "P 11", "P 12")
     meaning[match(s, LETTERS[1:24])]
 }
+
+insert <- function(x, list, values) {
+    len <- length(list) * (length(values) - 1) + length(x)
+    ans <- vector(typeof(x), length = len)
+    seq_len(len)
+}
+
