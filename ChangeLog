@@ -1,5 +1,9 @@
 2013-07-12  Enrico Schumann  <es@enricoschumann.net>
 
+	* inst/unitTests/ut_returns.R (test.returns): added file
+
+	* R/returns.R (print.preturns): added print.preturns
+
 	* R/texttools.R (expstr): fixed -- fill was inserted at the
 	beginning of regexp 'after', now it is inserted after it (see
 	examples with repeated spaces)
