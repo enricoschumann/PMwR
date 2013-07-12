@@ -1,4 +1,10 @@
-2013-07-10  Enrico Schumann  <es@vipag.com>
+2013-07-12  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/texttools.R (expstr): fixed -- fill was inserted at the
+	beginning of regexp 'after', now it is inserted after it (see
+	examples with repeated spaces)
+
+2013-07-10  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (print.journal): max.print increased to 100
 
