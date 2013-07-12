@@ -42,7 +42,8 @@ expstr(s, after, width, fill = " ", at)
 
   \code{expstr} inserts blanks into the elements of a character vector
   such that all elements have the same \code{width} (ie,
-  \code{\link{nchar}}).
+  \code{\link{nchar}}).  Note that it will (currently) not contract a
+  string, only expand it.
 
 }
 \value{
@@ -64,4 +65,8 @@ char2num("12,000.23", big.mark = ",")
 char2num("12000.23",  big.mark = " ") ## but 'as.numeric' is simpler
 char2num("12'000.23", big.mark = "'")
 char2num("12 000|23", dec = "|", big.mark = " ")
+
+## expand to width 10, but keep two initial blanks 
+s <- c("  A 1", "  B     2")
+expstr(s, after = " +[^ ]+ +", width = 10)
 }
