@@ -1,17 +1,3 @@
-drawdown <- function(v, relative = TRUE) {
-    cv  <- cummax(v)
-    rd  <- cv - v
-    if (relative)
-        rd  <- rd/cv
-    troughTime <- which.max(rd)
-    peakTime <- which.max(v[seq_len(troughTime)])
-    list(maximum = max(rd),
-         high = v[peakTime],
-         highPosition = peakTime,
-         low = v[troughTime],
-         lowPosition = troughTime)
-}
-
 ## not exported
 returns0 <- function(x, pad = NULL) {
     n <- NROW(x)
@@ -108,21 +94,6 @@ returns <- function(x, t = NULL, period = "month", complete.first = TRUE,
     
 ## }
 
-rtTab <- function(x) {
-    f <- function(x)
-        format(round(coredata(100*x), 1), nsmall=1)
-    years <- as.numeric(format(index(x), "%Y"))
-    mons <- as.numeric(format(index(x), "%m"))
-    tb <- array("", dim = c(length(unique(years)), 14L))
-    tb[cbind(years - years[1L] + 1L, mons + 1L)] <- f(x)
-    for (y in sort(unique(years)))
-        tb[y - years[1L] + 1L, 14L] <- f(prod(coredata(x)[years==y] + 1L) - 1L)
-    tb[ ,1L] <- sort(unique(years))
-    tb
-    paste(apply(tb, 1, function(x) paste(x, collapse = "&")), "\\\\")
-}
-print.preturns <- function(x, ...)
-    print(unclass(x))
 
 pm <- function(x, xp = 2, threshold = 0, lower = TRUE, keep.sign = FALSE) {
     x <- x - threshold
@@ -143,4 +114,58 @@ pm <- function(x, xp = 2, threshold = 0, lower = TRUE, keep.sign = FALSE) {
         sum(x*x*x*x)/16/length(x)
     else 
         sum(x^xp)/2^xp/length(x)
+}
+
+drawdown <- function(v, relative = TRUE, summary = TRUE) {
+    cv  <- cummax(v)
+    rd  <- cv - v
+    if (relative)
+        rd  <- rd/cv
+    troughTime <- which.max(rd)
+    peakTime <- which.max(v[seq_len(troughTime)])
+    list(maximum = max(rd),
+         high = v[peakTime],
+         highPosition = peakTime,
+         low = v[troughTime],
+         lowPosition = troughTime)
+}
+
+rtTab <- function(x) {
+    f <- function(x)
+        format(round(coredata(100*x), 1), nsmall=1)
+    years <- as.numeric(format(index(x), "%Y"))
+    mons <- as.numeric(format(index(x), "%m"))
+    tb <- array("", dim = c(length(unique(years)), 14L))
+    tb[cbind(years - years[1L] + 1L, mons + 1L)] <- f(x)
+    for (y in sort(unique(years)))
+        tb[y - years[1L] + 1L, 14L] <- f(prod(coredata(x)[years==y] + 1L) - 1L)
+    tb[ ,1L] <- sort(unique(years))
+    tb
+    paste(apply(tb, 1, function(x) paste(x, collapse = "&")), "\\\\")
+}
+mtab <- function(x) {
+    f <- function(x)
+        format(round(100*x, 1), nsmall = 1)    
+    years <- as.numeric(format(x$t, "%Y"))
+    mons  <- as.numeric(format(x$t, "%m"))
+    tb <- array("", dim = c(length(unique(years)), 13L))
+    tb[cbind(years - years[1L] + 1L, mons)] <- f(x$returns)
+    for (y in sort(unique(years)))
+        tb[y - years[1L] + 1L, 13L] <- f(prod(x$returns[years==y] + 1L) - 1L)
+    rownames(tb) <- sort(unique(years))
+    colnames(tb) <- c(format(as.Date(paste0("2012-", 1:12, "-1")), "%b"), "YTD")
+    tb
+}
+
+print.preturns <- function(x, ..., year.rows = TRUE) {
+    if (x$period == "month") {
+        if (year.rows)
+            print(mtab(x), quote = FALSE, print.gap = 2, right = TRUE)
+        else
+            print(t(mtab(x)), quote = FALSE, print.gap = 2, right = TRUE)
+        
+    } else {
+        print(unclass(x))
+    }
+    invisible(x)
 }
