@@ -68,14 +68,17 @@ print.journal <- function(x, ..., width = 60L, max.print = 100) {
           print.gap=2)
     if (lx > dspT)
         cat("[ ... ]\n\n") else cat("\n")
-    insts <- sort(unique(x$instrument))
-    insts <- as.character(rmspace(insts))
-    if (length(insts))
-        subs <- paste0(" in ", paste(insts, sep = "", collapse = ", "))
-    else
-        subs <- ""
+
+    subs <- ""
+    if (!is.null(x$instruments)) {
+        insts <- sort(unique(x$instrument))
+        insts <- as.character(rmspace(insts))
+        if (length(insts))
+            subs <- paste0(" in ", paste(insts, sep = "", collapse = ", "))
+    } 
     if (lx > 1L)
         ps <- "s" else ps <- ""
+    
     msg <- strwrap(paste0("\n", lx, " transaction", ps, subs), width)
     msg <- paste(msg[1L], if (length(msg)>1L) "...", "\n")
     cat(msg)

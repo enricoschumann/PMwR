@@ -9,10 +9,10 @@ print.pl <- function(x, ...) {
         row.names(df) <- df[["instrument"]]    
     df <- df[,-1L]
     print(df)
-    cat("\n          pl => total PnL in units of instrument\n")
-    cat("total.amount => total /absolute/ amount of traded instruments\n")
-    cat(" average.buy => average buy price\n")
-    cat("average.sell => average sell price\n")    
+    cat("\n          pl = total PnL in units of instrument\n")
+    cat("total.amount = total /absolute/ amount of traded instruments\n")
+    cat(" average.buy = average buy price\n")
+    cat("average.sell = average sell price\n")    
     invisible(x)
 }
 

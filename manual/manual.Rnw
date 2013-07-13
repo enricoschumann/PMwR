@@ -11,7 +11,7 @@
 
 
 \begin{document}
-{\raggedright{\Large The \texttt{backtest} function}}\medskip
+{\raggedright{\Large The PMwR Manual}}\medskip
 
 \noindent Enrico Schumann\\
 \noindent \texttt{es@enricoschumann.net}\\
@@ -30,14 +30,17 @@ transaction data.  A \texttt{journal} is created through the function
 \texttt{journal}, but it is really just a list of atomic vectors with
 a class attribute.  Methods should not rely on the names of these
 vectors being sorted in any particular way; that is, components of a
-journal should always be retrieved by name, never by position.
+journal should always be retrieved by name, never by position (which
+is different from a dataframe, for which I can meaningfully speak of
+the second column, say).
 
-The simplicity of the class is intended, as it is mostly used in
-interactive analyses.  Thus, the user is supposed to dissect the
-information at will (which includes removing the class attribute).
+The simplicity of the class is intended, as it is meant for
+interactive analyses.  Thus, the analyst is supposed to dissect the
+information in a journal at will (which includes removing the class
+attribute).
 
-What is actually stored in a \texttt{journal} is up to the user, but a
-few fields are typical (and required for several methods):
+What is actually stored in a \texttt{journal} is up to the analyst,
+but a few fields are typical (and required for several methods):
 
 \begin{description}
 
@@ -72,6 +75,7 @@ pension::equities
 
 
 
+
 \section{A first example}
 
 Suppose you kept track of a bank account.
@@ -90,9 +94,29 @@ The \texttt{position} function gives the current balance of an account.
 position(J)
 @
 
+It's actually tedious to enter journals that way, in particular if we
+want to update it over time.  So we write transactions into files,
+like this:
+
+\VerbatimInput{ex1.txt}
+
+(In case you use Org-mode, such tables should look familiar.)
+
+
+Here is a simple function to read such journal files.
+<<>>=
+readjnl <- function(file) {
+    ans <- read.table(file, 
+                      header = TRUE, sep = "|", as.is = TRUE)
+    ans <- as.list(ans[ ,apply(ans, 2, function(x) !all(is.na(x)))])
+    class(ans) <- "journal"
+    ans
+}
+(J <- readjnl("ex1.txt"))
+@ 
+
 Let us do some more finance-style transactions.  We buy five times one
 unit of some unspecified asset.
-
 <<>>=
 j1 <- journal(timestamp = 1:5, 
                amount = 1, 
@@ -100,28 +124,20 @@ j1 <- journal(timestamp = 1:5,
                account = "my account")
 j1
 @
-
-
-
 Now we close the trade.
-
 <<>>=
 j2 <- journal(timestamp  =  6, 
                amount    = -5, 
                price     =  3, 
                account   = "my account")
 @
-
 To compute the profit or loss, we first concatenate the two lists.
-
 <<>>=
 j <- c(j1, j2)
 j
 @
-
 Since the position is now zero, it is easy to compute the
 profit/loss.  We can use the function \texttt{pl}.  
-
 <<>>=
 pl(j)
 @
@@ -131,8 +147,8 @@ pl(j)
 \section{A more complicated example.}
 
 <<>>=
-tr <- readLines("~/Desktop/trades.org")
-tr <- strsplit(tr, "\\|")
+##tr <- readLines("~/Desktop/trades.org")
+##tr <- strsplit(tr, "\\|")
 
 @ 
 
@@ -199,14 +215,14 @@ J
 
 What is the current position?
 
-\begin{verbatim}
+<<>>=
 position(J)
 @
 
 
 What was the positon in 15 January 2013, 11:00:00? 
 
-\begin{verbatim}
+<<>>=
 position(J, when = as.POSIXct("2013-01-15 11:00:00"))
 @
 
@@ -292,11 +308,11 @@ position(J, aggr.accounts = TRUE)
 
 
 
-\#\# journal.cli(J, \ldots{})
-\#\#while (input != "exit") \{
-\#\#  input <- readline()
-\#\#  \#\# parse me
-\#\#\}
+%\#\# journal.cli(J, \ldots{})
+%\#\#while (input != "exit") \{
+%\#\#  input <- readline()
+%\#\#  \#\# parse me
+%\#\#\}
 
 
 \chapter{Profit and (or) loss}
@@ -436,9 +452,9 @@ plot(c(time[1L], time), cumsum(c(0, amount)), type = "s",
      xlab = "time", ylab = "position")
 @ 
 
-\noindent Thus, we have had a position from time zero to 12 (hours, say), but
-its size varied.  The function \texttt{twExposure} (time-weighted
-exposure) computes the average absolute exposure.
+\noindent Thus, we have had a position from time zero to 12 (hours,
+say), but its size varied.  The function \texttt{twExposure}
+(time-weighted exposure) computes the average absolute exposure.
 
 <<>>=
 twExposure(amount, time)
@@ -571,7 +587,7 @@ t    time      open  high  low   close
 3    HH:MM:SS  _________________________  <-- /
 4    HH:MM:SS    X                        <- trade here
 5    HH:MM:SS
-@
+\end{verbatim}
 
 We could also trade at the \texttt{close}.
 
@@ -582,7 +598,8 @@ t    time      open  high  low   close
 3    HH:MM:SS  _________________________  <-- /
 4    HH:MM:SS                       X     <-- trade here
 5    HH:MM:SS
-@
+\end{verbatim}
+
 
 (No, we cannot trade at the high or low. But perhaps we could add
 this later as a robustness check -- always buy at the high, sell
@@ -1327,11 +1344,11 @@ If all trades are closed (ie, the current positions are all zero), use
   profit-and-loss between two timestamps.}
 
 
-Call the two timestamps \texttt{t0} and \texttt{t1}.  Unless the position was zero
-at t0 and t1, we can compute the profit/loss only if we have prices
-for the positions at these points in time.  In case the position was
-indeed zero, you can use \texttt{pl}; the transactions are stored in a
-journal \texttt{j}.
+Call the two timestamps \texttt{t0} and \texttt{t1}.  Unless the
+position was zero at t0 and t1, we can compute the profit/loss only if
+we have prices for the positions at these points in time.  In case the
+position was indeed zero, you can use \texttt{pl}; the transactions
+are stored in a journal \texttt{j}.
 
 <<eval=false>>=
 subset(j, timestamp >= t0 & timestamp <=t1)
