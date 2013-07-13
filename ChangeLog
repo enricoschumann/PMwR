@@ -1,3 +1,9 @@
+2013-07-13  Enrico Schumann  <es@enricoschumann.net>
+
+	* man/drawdown.Rd: added separate Rd file
+
+	* man/pm.Rd: added separate Rd file
+
 2013-07-12  Enrico Schumann  <es@enricoschumann.net>
 
 	* inst/unitTests/ut_returns.R (test.returns): added file

@@ -95,40 +95,6 @@ returns <- function(x, t = NULL, period = "month", complete.first = TRUE,
 ## }
 
 
-pm <- function(x, xp = 2, threshold = 0, lower = TRUE, keep.sign = FALSE) {
-    x <- x - threshold
-    if (lower)
-        x <- x - abs(x)
-    else
-        x <- x + abs(x)        
-    if (keep.sign)
-        sx <- sign(x)
-    x <- abs(x)
-    if (xp == 1L)
-        sum(x)/2/length(x)
-    else if (xp == 2L)
-        sum(x*x)/4/length(x)
-    else if (xp == 3L)
-        sum(x*x*x)/8/length(x)
-    else if (xp == 4L)
-        sum(x*x*x*x)/16/length(x)
-    else 
-        sum(x^xp)/2^xp/length(x)
-}
-
-drawdown <- function(v, relative = TRUE, summary = TRUE) {
-    cv  <- cummax(v)
-    rd  <- cv - v
-    if (relative)
-        rd  <- rd/cv
-    troughTime <- which.max(rd)
-    peakTime <- which.max(v[seq_len(troughTime)])
-    list(maximum = max(rd),
-         high = v[peakTime],
-         highPosition = peakTime,
-         low = v[troughTime],
-         lowPosition = troughTime)
-}
 
 rtTab <- function(x) {
     f <- function(x)

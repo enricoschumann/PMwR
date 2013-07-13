@@ -1,15 +1,12 @@
-\name{RiskReturnStatistics}
-\alias{drawdown}
+\name{drawdown}
 \title{
-  Risk and Return Statistics for Time Series
+  Drawdown
 }
 \description{
-  Functions for computing risk/reward statistics for time series (eg,
-  price series of mutual funds).
-
+  Compute the drawdown of a time series.
 }
 \usage{
-drawdown(v, relative = TRUE)
+  drawdown(v, relative = TRUE, summary = TRUE)
 }
 \arguments{
   \item{v}{
@@ -19,12 +16,19 @@ drawdown(v, relative = TRUE)
     if \code{TRUE}, maximum drawdown is chosen according to percentage
     losses; else in units of \code{v}
   }
+  \item{summary}{
+    if \code{TRUE}, provide maximum drawdown and time when it occured;
+    else return drawdown vector
+  }
 }
 \details{
   requires a vector (can be \code{zoo})
 }
 \value{
-  a list
+
+  If \code{summary} is FALSE, a vector of the same length as \code{v}.  If
+  \code{summary} is TRUE, a list
+
   \item{maximum}{maximum drawdown}
   \item{high}{the max of \code{v}}
   \item{highPosition}{position of \code{high}}
