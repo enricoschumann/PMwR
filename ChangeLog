@@ -1,3 +1,8 @@
+2013-07-14  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (print.journal): new argument 'exclude' for not
+	printing specific columns
+
 2013-07-13  Enrico Schumann  <es@enricoschumann.net>
 
 	* man/drawdown.Rd: added separate Rd file
@@ -75,15 +80,15 @@
 
 2013-06-19  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/datetimetools.R (ssm): added function ssm ("seconds since
-	midnight")
+	* R/datetimetools.R (ssm): added function ssm ('seconds since
+	midnight')
 
 2013-06-14  Enrico Schumann  <es@enricoschumann.net>
 
 	* vignettes/PL.Rnw: removed vignettes PL and classes (transferred
 	into manual.org)
 
-	* R/pl.R (): "plBetween" now in pl (which takes additional
+	* R/pl.R (): 'plBetween' now in pl (which takes additional
 	arguments t0, t1, prices0, prices1)
 
 	* DESCRIPTION (Version): Version: 0.1-27
@@ -101,7 +106,7 @@
 
 	* DESCRIPTION (Version): Version: 0.1-26
 
-	* R/journal.R (print.Journal): new argument "width", default is 60
+	* R/journal.R (print.Journal): new argument 'width', default is 60
 
 2013-06-12  Enrico Schumann  <es@enricoschumann.net>
 
@@ -280,13 +285,13 @@
 
 	* R/returns.R (returns): added file
 
-	* R/position.R (position): now checks whether "amount",
-	"timestamp" or "instrument" (in that order) inherits from class
-	"Tradelist"
+	* R/position.R (position): now checks whether 'amount',
+	'timestamp' or 'instrument' (in that order) inherits from class
+	'Tradelist'
 
-	* R/Tradelist.R, PL.R: made arguments more consistent: "amount"
-	[before sometimes "n" or "notional"]; "timestamp" [was:
-	"datetime", "times"]; all in singular (eg, "price" not "prices")
+	* R/Tradelist.R, PL.R: made arguments more consistent: 'amount'
+	[before sometimes 'n' or 'notional']; 'timestamp' [was:
+	'datetime', 'times']; all in singular (eg, 'price' not 'prices')
 
 2013-04-10  Enrico Schumann  <es@enricoschumann.net>
 
@@ -352,7 +357,7 @@
 2013-03-07  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/Datetimetools.R (plotTradingHours): returns coordinates even
-	when plotting (but invisibly); removed "ppar" argument
+	when plotting (but invisibly); removed 'ppar' argument
 
 2013-02-28  Enrico Schumann  <es@enricoschumann.net>
 
@@ -384,7 +389,7 @@
 	* NAMESPACE: added lastWeekday
 
 	* R/Datetimetools.R (lastWeekday): added arguments 'period =
-	"month", before, inclusive = TRUE'
+	'month', before, inclusive = TRUE'
 
 2013-02-11  Enrico Schumann  <es@enricoschumann.net>
 
@@ -444,7 +449,7 @@
 
 2012-12-12  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/TradesPL.R (limit): new "limit" function
+	* R/TradesPL.R (limit): new 'limit' function
 
 2012-11-21  Enrico Schumann  <es@enricoschumann.net>
 
@@ -459,7 +464,7 @@
 	* R/saveAttachment.R (saveAttachment): fixed -- regexp for
 	matching filename now works with quoted and unquoted filenames
 	(saveAttachment): if not base64, attachment is not decoded and
-	written "as is" to outfile
+	written 'as is' to outfile
 
 2012-11-16  Enrico Schumann  <es@enricoschumann.net>
 

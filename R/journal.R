@@ -47,22 +47,20 @@ journal <- function(timestamp, amount, price, id, instrument, account, ...) {
     class(ans) <- "journal"
     ans    
 }
-print.journal <- function(x, ..., width = 60L, max.print = 100) {
+print.journal <- function(x, ..., width = 60L, max.print = 100,
+                          exclude = NULL) {
     oo <- getOption("scipen")
     options(scipen = 1e8)
     on.exit(options(scipen = oo))
 
     dspT <- max.print ## display trades, instruments
-
     lx <- length(x)
-    ## if (!is.null(x$account) && all(!is.na(x$account)))
-    ##     rn <- x$account        
-    ## if (!is.null(x$id) && all(!is.na(x$id)))
-    ##     rn <- paste(rn, x$id, sep = " | ")
-
     df <- as.data.frame(unclass(x),                        
                         row.names = seq_len(lx),
                         stringsAsFactors = FALSE)
+
+    if (!is.null(exclude))
+        df[TRUE, setdiff(colnames(df), exclude), drop = FALSE]
     notAllNA <- unlist(lapply(df, function(x) !all(is.na(x))))
     print(head(df[notAllNA],dspT), quote = FALSE,
           print.gap=2)
