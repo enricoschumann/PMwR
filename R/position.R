@@ -19,12 +19,16 @@ position <- function(amount, timestamp, instrument, when, from, to,
         instrument <- instrument$instrument
     }
 
-    if (missing(when) || when == "last" || when == "newest" || when == "latest")
+    if (missing(when)) {
         when <- max(timestamp)
-    else if (when == "all")
-        when <- timestamp
-    else if (when == "first" || when == "oldest")
-        when <- min(timestamp)
+    } else if (is.character(when)) {
+        if (when == "last" || when == "newest" || when == "latest")
+            when <- max(timestamp)
+        else if (when == "all")
+            when <- timestamp
+        else if (when == "first" || when == "oldest")
+            when <- min(timestamp)
+    }
 
     if (!missing(from)) {
         if (missing(to))
