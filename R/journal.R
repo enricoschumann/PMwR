@@ -1,9 +1,18 @@
 journal <- function(timestamp, amount, price, id, instrument, account, ...) {
+    if (match.call() == "journal()") {
+        ans <- list(timestamp = numeric(0),
+                    amount = numeric(0),
+                    price = numeric(0),
+                    instrument = character())
+        class(ans) <- "journal"
+        return(ans)
+    }
+        
     if (missing(id))
         id <- NULL
     if (missing(timestamp))
         timestamp <- NA
-    if (missing(instrument))
+    if (missing(instrument) || all(is.na(instrument)))
         instrument <- NA
     else if (all(instrument == instrument[1L]))
         instrument <- instrument[1L]
@@ -74,7 +83,7 @@ print.journal <- function(x, ..., width = 60L, max.print = 100,
         if (length(insts))
             subs <- paste0(" in ", paste(insts, sep = "", collapse = ", "))
     } 
-    if (lx > 1L)
+    if (lx > 1L || lx == 0L)
         ps <- "s" else ps <- ""
     
     msg <- strwrap(paste0("\n", lx, " transaction", ps, subs), width)

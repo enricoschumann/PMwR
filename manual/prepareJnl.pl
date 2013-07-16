@@ -1,11 +1,9 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2013-07-13 14:27:24 CEST (es)>
+## Time-stamp: <2013-07-16 11:47:36 CEST (es)>
 
 use warnings;
 use strict;
 
 while (<>) {
-    if (/^\s*\|/){
-        print "$_";
-    }
+        print "$_" if /^\s*\|/;
 }

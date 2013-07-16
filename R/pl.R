@@ -22,6 +22,7 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
                initcash = 0,
                t0, t1, prices0, prices1,
                tol = 1e-10, do.warn = TRUE) {
+
     if (inherits(amount, "journal")) {
         J <- amount
         price <- J$price
@@ -29,6 +30,7 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
         amount <- J$amount
         timestamp <- J$timestamp
     }
+
     if (any(abs(amount) < tol) && do.warn)
         warning("zero ", sQuote("amount"), " values")
 
@@ -45,25 +47,39 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
     }
     
     plPeriod <- function(journal, t0, t1, prices0, prices1) {
-        p0 <- position(journal, when = t0, drop.zero = TRUE)
-        J0 <- journal(instrument = p0$instrument,
-                      amount     = as.vector(p0$position),
-                      price      = prices0[match(p0$instrument, names(prices0))],
-                      timestamp = t0)
-        
+        if (is.na(t0)) {
+            J0 <-journal()
+            ex <- substitute(timestamp <= t1, list(t1 = t1))
+        } else {
+            p0 <- position(journal, when = t0, drop.zero = TRUE)
+            if (!length(p0$position)) 
+            if (!is.null(names(prices0)))
+                price0 <- prices1[match(p0$instrument, names(prices0))]
+            J0 <- journal(instrument = p0$instrument,
+                          amount     = as.vector(p0$position),
+                          price      = prices0,
+                          timestamp  = t0)
+            ex <- substitute(timestamp > t0 & timestamp <= t1, list(t0 = t0, t1 = t1))
+        }
         p1 <- position(journal, when = t1, drop.zero = TRUE)
-        J1 <- journal(instrument = p1$instrument,
-                      amount     = -as.vector(p1$position), ## switch sign
-                      price      = prices1[match(p1$instrument, names(prices1))],
-                      timestamp = t1)
-
-        ex <- substitute(timestamp > t0 & timestamp <= t1, list(t0 = t0, t1 = t1))
+        if (length(p1$position) > 0) {
+            if (!is.null(names(prices1)))
+                price1 <- prices1[match(p1$instrument, names(prices1))]
+            J1 <- journal(instrument = p1$instrument,
+                          amount     = -as.vector(p1$position), ## switch sign
+                          price      = prices1,
+                          timestamp = t1)
+        } else
+            J1 <- journal()
         Jbetween <- do.call(subset, list(journal, ex))
+
         pl(c(J0, Jbetween, J1))    
+
     } 
+
     plfun <- function(amount, price) {
         if (abs(sum(amount)) > tol && do.warn) {
-            warning("Sum of amount is not zero; cannot compute PnL.")
+            warning("sum of amount is not zero; cannot compute profit/loss.")
             c(NA, sum(abs(amount)),
               sum(price[ i] * amount[ i])/sum(amount[ i]),
               sum(price[!i] * amount[!i])/sum(amount[!i]))
@@ -77,6 +93,17 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
               sum(price[!i] * amount[!i])/sum(amount[!i]))
         }
     }
+    if (missing(t0) && !missing(t1)) {
+        ## initial position (zero) up to some point
+        t0 <- NA
+        prices0 <- NA
+    }
+    if (!missing(t0) && missing(t1)) {
+        ## initial position, but until end
+        t1 <- NA
+        prices1 <- NA
+    }
+    
     
     if (!missing(t0) && !missing(t1) &&
         !missing(prices0) && !missing(prices1)) {

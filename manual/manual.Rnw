@@ -17,21 +17,23 @@
 \noindent \texttt{es@enricoschumann.net}\\
 \bigskip
 
-
+<<echo=false>>=
+require("PMwR")
+@
 
 \chapter{Journals}
 
 \section{Transactions}
 
-The basis for many computations in the PMwR package are lists of
-transactions which, conceptually, are nothing more than dataframes.
+The basis for many computations that PMwR package provides are lists
+of transactions which, essentially, are nothing more than dataframes.
 \texttt{PMwR} provides an S3 class \texttt{journal} for handling such
 transaction data.  A \texttt{journal} is created through the function
 \texttt{journal}, but it is really just a list of atomic vectors with
 a class attribute.  Methods should not rely on the names of these
 vectors being sorted in any particular way; that is, components of a
 journal should always be retrieved by name, never by position (which
-is different from a dataframe, for which I can meaningfully speak of
+is different for a dataframe, for which we can meaningfully speak of
 the second column, say).
 
 The simplicity of the class is intended, as it is meant for
@@ -76,20 +78,20 @@ pension::equities
 
 
 
-\section{A first example}
+\section{First examples}
 
-Suppose you kept track of a bank account.
+\subsection{Single-entry accounting}
+
+For many purposes, single-entry accounting is sufficient.  Suppose you
+kept track of a bank account.
 
 <<>>=
-require("PMwR")
 when   <- as.Date("2012-01-01") + 0:3
 amount <- c(1,2,-2,5) 
 J <- journal(timestamp = when, amount = amount)
 J 
 @
-
 The \texttt{position} function gives the current balance of an account.
-
 <<>>=
 position(J)
 @
@@ -98,7 +100,18 @@ It's actually tedious to enter journals that way, in particular if we
 want to update it over time.  So we write transactions into files,
 like this:
 
+\VerbatimInput{ex1.jnl}
+
+If the original file happened to look such:
+
 \VerbatimInput{ex1.txt}
+
+then there are many tools to transform.
+ 
+<<>>=
+system("perl -ne 'print $_ if /^\\s*\\| /;' < ex1.txt > ex1.jnl")
+@ 
+
 
 (In case you use Org-mode, such tables should look familiar.)
 
@@ -112,45 +125,84 @@ readjnl <- function(file) {
     class(ans) <- "journal"
     ans
 }
-(J <- readjnl("ex1.txt"))
+(J <- readjnl("ex1.jnl"))
 @ 
+
+<<>>=
+position(J)
+@ 
+
+Suppose some of these transactions mean actually a gain or loss to us
+(a dividend payment, say), while others are neutral (such as a
+transfer between accounts).  How can we deal with that?  One way is to
+switch to double-entry accounting (see the next section).  Another way
+is to add description fields like \texttt{"expense"} and then subset
+by these fields. 
+
+And yet another approach is this: use prices.  Whenever you evaluate
+the balances of your account, say that the price per commodity unit is
+one.  That is reasonable: if I my account has a balance of, say,
+`120.2', that it actually means `120.2 euros'.  When evaluated in
+euro, the price is one.  
+
+An expense should be a negative amount; income should go woth positive
+amounts.  When you add such an entry, make its price 0.
+
+
+
+<<>>=
+jnl <- journal(timestamp = 1:3, 
+               amount    = c(100,100,-200), 
+               price     = c(  1,  0,   0),
+               comment   = c("neutral", "income", "expense"),
+               account   = "my account")
+jnl
+@
+
+The current balance is 100.
+<<>>=
+pl(jnl, t1 = 3, prices1 = 1)
+@ 
+
+
 
 Let us do some more finance-style transactions.  We buy five times one
 unit of some unspecified asset.
 <<>>=
 j1 <- journal(timestamp = 1:5, 
-               amount = 1, 
-               price = c(2,2,2,3,4), 
-               account = "my account")
+               amount   = 1, 
+               price    = c(2,2,2,3,4), 
+               account  = "my account")
 j1
 @
 Now we close the trade.
 <<>>=
-j2 <- journal(timestamp  =  6, 
-               amount    = -5, 
-               price     =  3, 
-               account   = "my account")
+j2 <- journal(timestamp =  6, 
+               amount   = -5, 
+               price    =  3, 
+               account  = "my account")
 @
-To compute the profit or loss, we first concatenate the two lists.
+We can combine these journals with \texttt{c}.
 <<>>=
-j <- c(j1, j2)
-j
+c(j1, j2)
 @
 Since the position is now zero, it is easy to compute the
 profit/loss.  We can use the function \texttt{pl}.  
 <<>>=
-pl(j)
+pl(c(j1, j2))
 @
 
 
 
+\subsection{Double-entry accounting}
+
+Expenses, Income
+
+Assets, Liabs, Equity
+
+
 \section{A more complicated example.}
 
-<<>>=
-##tr <- readLines("~/Desktop/trades.org")
-##tr <- strsplit(tr, "\\|")
-
-@ 
 
 \begin{center}
 \begin{tabular}{llllrrr}

@@ -38,9 +38,12 @@ position(amount, timestamp, instrument, when, from, to,
 }
 \details{
 
-  By default, only instrument is specified, but to compute positions on
-  an account basis, simply paste account to instrument.
+  Only \code{instrument} can be specified, but to compute positions on
+  an \code{account} basis, simply paste \code{account} to
+  \code{instrument}.  
 
+  The function checks if \code{timestamp} is sorted (see
+  \code{\link{is.unsorted}}); if not
   
 }
 \value{

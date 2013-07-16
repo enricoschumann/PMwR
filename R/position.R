@@ -19,8 +19,12 @@ position <- function(amount, timestamp, instrument, when, from, to,
         instrument <- instrument$instrument
     }
 
-    if (missing(when))
+    if (missing(when) || when == "last" || when == "newest" || when == "latest")
         when <- max(timestamp)
+    else if (when == "all")
+        when <- timestamp
+    else if (when == "first" || when == "oldest")
+        when <- min(timestamp)
 
     if (!missing(from)) {
         if (missing(to))
@@ -37,10 +41,15 @@ position <- function(amount, timestamp, instrument, when, from, to,
         amount  <- amount[io]
         instrument <- instrument[io]
     }
+    if (is.null(instrument)) 
+        instrument <- rep.int("", length(timestamp))    
+    allna <- FALSE
+    if (all(is.na(instrument))) {
+        instrument[] <- ""
+        allna <- TRUE
+    }
     if (!all(is.na(instrument)))
         instrument[is.na(instrument)] <- "not specified"
-    if (all(is.na(instrument)))
-        instrument[] <- ""
 
     nw <- length(when)
     nm <- sort(unique(instrument))
@@ -66,12 +75,14 @@ position <- function(amount, timestamp, instrument, when, from, to,
         pos <- pos[ , !drop, drop = FALSE]
         nm <- nm[!drop]
     }
+    if (allna)
+        nm[] <- NA
     ans <- list(position = pos, timestamp = when, instrument = nm)
     class(ans) <- "position"
     ans
 }
 
-print.position <- function(x, ...){
+print.position <- function(x, ..., sep = ":"){
     if (dim(x$position)[1L] > 1L)
         print(x$position, big.mark = ",")
     else

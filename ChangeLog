@@ -1,3 +1,13 @@
+2013-07-16  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (journal): 'journal()' returns an empty journal
+
+	* R/position.R (position): when now also accepts 'all', 'first' or
+	'last' (last is equivalent to missing)
+	(print.position): new argument 'sep'
+	(position): fixed -- there was a (harmless) warning when
+	'instrument' was NULL
+
 2013-07-14  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (print.journal): new argument 'exclude' for not
