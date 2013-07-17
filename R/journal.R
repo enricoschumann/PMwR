@@ -133,7 +133,7 @@ joinAI <- function(x, sep = "::") {
 as.data.frame.journal <- function(x, row.names = NULL, optional = FALSE, ...) {
     if (!is.null(row.names))
         warning("'row.names' not supported yet")
-    if (!optional)
+    if (optional)
         warning("'optional' not supported yet")
     data.frame(unclass(x))
 }
