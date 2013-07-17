@@ -3,9 +3,15 @@ test.pl <- function() {
     require("PMwR")
     require("RUnit")
     
-    n <- c(1,1,-3,-1,2)
-    p <- 100 + 1:length(n)
+    checkEquals(pl(amount = c(1,-1),
+                   price  = c(1,2))[["pl"]], 1)
 
-    pl(amount = c(1,-1),
-       price  = c(1,2))
+
+    timestamp <- 1:4
+    amount <- c(1,1,1,1)
+    price <- 101:104
+    instrument <- "my I"
+    jnl <- journal(timestamp, amount, price, , instrument)
+    pl(jnl)
+    
 }

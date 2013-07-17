@@ -46,8 +46,6 @@ test.journal <- function() {
     checkEquals(c(j, journal()) , j)
     
     tmp <- as.data.frame(c(journal(), j))
-    
-    checkEquals( , j)
 
     
     
@@ -62,9 +60,6 @@ test.journal <- function() {
     
     ## method: length
     checkEquals(length(jj), 10L)
-    
-    ##
-
 
 
     

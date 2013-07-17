@@ -1,5 +1,4 @@
 \name{TradeAnalysis}
-\alias{pl}
 \alias{closeOnFirst}
 \alias{limit}
 \alias{scaleToUnity}
@@ -13,11 +12,6 @@
   Functions to help analyse trades (as opposed to profit-and-loss series)
 }
 \usage{
-pl(amount, price,
-   instrument = NULL, timestamp = NULL,
-   along.timestamp = FALSE, do.sort = FALSE, initcash = 0,
-   tol = 1e-10)
-
 scaleTrades(amount, price, timestamp, aggregate = FALSE,
             fun = NULL, ...)
 splitTrades(amount, price, timestamp, aggregate = FALSE)
@@ -38,9 +32,6 @@ twExposure(amount, timestamp, start, end, abs.value = TRUE)
   \item{timestamp}{
     a vector. 
   }
-  \item{along.timestamp}{
-    a logical
-  }
   \item{aggregate}{
     \code{TRUE} or \code{FALSE}
   }
@@ -58,15 +49,6 @@ twExposure(amount, timestamp, start, end, abs.value = TRUE)
   }
   \item{abs.value}{
     logical. If \code{TRUE}, the absolute exposure is computed.
-  }
-  \item{instrument}{
-    a character vector
-  }
-  \item{initcash}{
-    a numeric vector of length one
-  }
-  \item{do.sort}{
-    sort all by time
   }
   \item{\dots}{passed on to fun}
   \item{tol}{numeric}
@@ -103,26 +85,10 @@ zero position.
 n <- c(1,1,-3,-1,2)
 p <- 100 + 1:length(n)
 timestamp <- 1:length(n)
+
 splitTrades(n,p,timestamp)
 splitTrades(n,p,timestamp, TRUE)  ## almost like the original series
 
 scaleTrades(n,p,timestamp)
-scaleTrades(n,p,timestamp, TRUE) ## each _trade_ gets scaled
-
-
-J <- journal(timestamp = c(1, 2, 3),
-                amount = c(1, 1, -2),
-                price  = c(100,102, 101))
-pl(J)
-pl(c(1, 1, -2), c(100,102, 101)) ## without a 'journal'
-
-
-J <- journal(timestamp  = c(1,2,3,1,2,3),
-             amount     = c(1, 1, -2, 1,1,-2),
-             price      = c(100, 102, 101, 100, 102, 105),
-             instrument = c(rep("A", 3), rep("B", 3)))
-pl(J)
-
-
-
+scaleTrades(n,p,timestamp, TRUE)  ## each _trade_ gets scaled
 }

@@ -8,7 +8,8 @@ print.pl <- function(x, ...) {
     else 
         row.names(df) <- df[["instrument"]]    
     df <- df[ ,-1L]
-    print(df)
+    df[is.na(df)] <- "."
+    print(df, na.print = ".", quote = FALSE)
     cat("\n          pl = total PnL in units of instrument\n")
     cat("total.amount = total /absolute/ amount of traded instruments\n")
     cat(" average.buy = average buy price\n")
@@ -78,6 +79,7 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
     ## } 
 
     plfun <- function(amount, price) {
+        i <- amount > 0
         if (abs(sum(amount)) > tol && do.warn) {
             warning("sum of amount is not zero; cannot compute profit/loss.")
             c(NA, sum(abs(amount)),
@@ -87,7 +89,6 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
             if (length(amount) > 1000L)
                 p <- -drop(crossprod(amount, price)) else
             p <- -sum(amount * price)
-            i <- amount > 0
             c(p, sum(abs(amount)),
               sum(price[ i] * amount[ i])/sum(amount[ i]),
               sum(price[!i] * amount[!i])/sum(amount[!i]))
@@ -130,8 +131,9 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
     }
 
     if (t0.given || t1.given) {
+        if (t0.given)
+            keep <- timestamp > t0
         if (!t0.given) {
-            t0 <- min(timestamp)
             keep <- timestamp >= t0
         }
         else if (!t1.given)
@@ -145,15 +147,9 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
         amount  <-    c(amount0,     amount,     amount1)
         timestamp  <- c(timestamp0,  timestamp,  timestamp1)
         instrument <- c(instrument0, instrument, instrument1)
-        prices     <- c(prices0,     price,      prices1)
+        price      <- c(prices0,     price,      prices1)
     }
     
-    ## if (!missing(t0) && !missing(t1) &&
-    ##     !missing(prices0) && !missing(prices1)) {
-    ##     j <- journal(timestamp, amount, price = price,
-    ##                  instrument = instrument)
-    ##     return(plPeriod(j, t0, t1, prices0, prices1))        
-    ## }
     
     ui <- unique(instrument)    
     if (is.null(instrument) || length(ui) == 1L) {
