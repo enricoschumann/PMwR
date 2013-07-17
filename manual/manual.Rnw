@@ -8,6 +8,7 @@
 \usepackage{natbib}
 \usepackage{textcomp}
 \usepackage{ragged2e}
+\usepackage{framed}
 \SweaveOpts{keep.source = TRUE, eps = TRUE, pdf = FALSE}
 
 
@@ -432,6 +433,13 @@ complicated:
   on how they are traded (cash, forwards, \emph{\&c.}), computing
   profit/loss may not be straightforward.
 \end{itemize}
+
+
+TODO:
+
+- example EUR investor buys INTC
+
+- pure FX portfolio
 
 \chapter{Analysing trades}
 
@@ -1140,140 +1148,138 @@ such information into a logfile.
 
 
 
-%% \chapter{Reporting}
+\chapter{Reporting}
 
-%% <<echo=false>>=
-%% require("PMwR")
-%% @ 
+\section{Text tools}
 
-%% \section{Text tools}
+In many cases, reporting simply means constructing a message text that
+is printed on a terminal or sent as an email.
 
-%% In many cases, reporting simply means constructing a message text that
-%% is printed on a terminal or sent as an email.
+\subsection{rmspace}
 
-%% \subsection{rmspace}
+<<>>=
+s <- c(" a a", " 19 EUR ")
+rmspace(s)
+@ 
 
-%% <<>>=
-%% s <- c(" a a", " 19 EUR ")
-%% rmspace(s)
-%% @ 
+\subsection{char2num}
 
-%% \subsection{char2num}
+<<>>=
+char2num("12.000,23")
+char2num("12,000.23", big.mark = ",")
+char2num("12000.23",  big.mark = " ") ## but 'as.numeric' is simpler
+char2num("12'000.23", big.mark = "'")
+char2num("12 000|23", dec = "|", big.mark = " ")
+@ 
 
-%% <<>>=
-%% char2num("12.000,23")
-%% char2num("12,000.23", big.mark = ",")
-%% char2num("12000.23",  big.mark = " ") ## but 'as.numeric' is simpler
-%% char2num("12'000.23", big.mark = "'")
-%% char2num("12 000|23", dec = "|", big.mark = " ")
-%% @ 
+\subsection{expstring}
+Expand a string
 
-%% \subsection{expstring}
-%% Expand a string
+<<>>=
+s <- c("profits: 100 EUR", "fees:  20 EUR")
+cat(s, sep = "\n")
+s <- expstr(s, after = ": ", width = 20)
+cat(s, sep = "\n")
+nchar(s)  ## width
+@ 
 
-%% <<>>=
-%% s <- c("profits: 100 EUR", "fees:  20 EUR")
-%% cat(s, sep = "\n")
-%% s <- expstr(s, after = ": ", width = 20)
-%% cat(s, sep = "\n")
-%% nchar(s)  ## width
-%% @ 
+\section{qpTable}
 
-%% \section{qpTable}
+quartile plot table
 
-%% quartile plot table
+\section{slTable}
 
-%% \section{slTable}
+sparkline table
 
-%% arguments:
-%% \begin{itemize}
-%% \item \ldots : zoo objects
-%% \item include.returns
-%% \item include.diffs
-%% \item compute.with = "returns": or "diffs" or "levels"
-%% \item columns = list(mean = mean, sd = sd): need to be computed on returns
-%% \end{itemize}
+arguments:
+\begin{itemize}
+\item \ldots : zoo objects
+\item include.returns
+\item include.diffs
+\item compute.with = "returns": or "diffs" or "levels"
+\item columns = list(mean = mean, sd = sd): need to be computed on returns
+\end{itemize}
 
 
 
-%% \chapter{Technical indicators}
+\chapter{Technical indicators}
 
-%% sum, abssum, sd, absmean, range, minmax, minmaxrange, mad
+sum, abssum, sd, absmean, range, minmax, minmaxrange, mad
 
 
 
 
 
-%% \appendix
-%% \chapter{Design}
+\appendix
+\chapter{Design}
 
-%% \section{Requirements}
+\section{Requirements}
 
-%% \begin{itemize}
-%% \item Store a 'portfolio' of assets and compute the value (or other
-%%   quantities, like Greeks) for different data.  Data can refer to
-%%   market prices, but also to theoretical prices.
-%% \item Reevaluate a portfolio for scenario (= new market data or
-%%   artificial data).
-%% \item Read in transactions from various sources. $\to$ done via a
-%%   journal class.
-%% \item Show portfolio on certain day/time: create a position, evaluate
-%%   this position $\to$ position class
-%% \item testing portfolios of options --> show payoff, simulate *paths*
-%%   of underlier and vol surface
-%% \item run simulations for VaR
-%% \item various ways to compute pnl: weighted average,
-%%   first-in-first-out and last-in-last-out
-%% \end{itemize}
-
-
-%% \section{Classes}
-
-%% The following classes are implicitly defined (ie, S3 classes):
-
-%% \begin{itemize}
-%% \item journal: keeps transactions
-%% \item Position: only for printing. It comprises the numerical
-%%   positions of different accounts/instruments, the timestamps and the
-%%   description of the instruments.
-%% \item Instrument: term sheet (description etc); it does know nothing
-%%   about market data
-%% \item Cashflow: internal
-%% \item Timeseries: internal
-%% \end{itemize}
-
-%% \section{Valuation}
-
-%% Valueing a position can mean two things: compute theoretical prices,
-%% or market prices.
-
-%% Theoretical valuation takes places via the generic function value:
-
-%% \texttt{value(x, ..., dots2args = NULL) } 
-
-%% The simplest case:
-%% \texttt{x} is character, then a call will be generated as
-
-%% \texttt{do.call(x, list(...))}
-
-%% \texttt{dots2args.default <- function(x, ...) list(...)}
-
-%% Note that this will be the default method; notably, a method when
-%% \texttt{x} is character will be left unspecified (meant for the user).
+\begin{itemize}
+\item Store a 'portfolio' of assets and compute the value (or other
+  quantities, like Greeks) for different data.  Data can refer to
+  market prices, but also to theoretical prices.
+\item Reevaluate a portfolio for scenario (= new market data or
+  artificial data).
+\item Read in transactions from various sources. $\to$ done via a
+  journal class.
+\item Show portfolio on certain day/time: create a position, evaluate
+  this position $\to$ position class
+\item testing portfolios of options --> show payoff, simulate *paths*
+  of underlier and vol surface
+\item run simulations for VaR
+\item various ways to compute pnl: weighted average,
+  first-in-first-out and last-in-last-out
+\end{itemize}
 
 
-%% A more typical case: collect all market data in a list \texttt{Data}:
-%% EvaluationDate, Prices, Vols, Irates.
+\section{Classes}
 
-%% dots2args will react on \texttt{x}, retrieve the required information,
-%% and 
+The following classes are implicitly defined (ie, S3 classes):
+
+\begin{itemize}
+\item journal: keeps transactions
+\item Position: only for printing. It comprises the numerical
+  positions of different accounts/instruments, the timestamps and the
+  description of the instruments.
+\item Instrument: term sheet (description etc); it does know nothing
+  about market data
+\item Cashflow: internal
+\item Timeseries: internal
+\end{itemize}
+
+\section{Valuation}
+
+Valueing a position can mean two things: compute theoretical prices,
+or market prices.
+
+Theoretical valuation takes places via the generic function value:
+
+\texttt{value(x, ..., dots2args = NULL) } 
+
+The simplest case:
+\texttt{x} is character, then a call will be generated as
+
+\texttt{do.call(x, list(...))}
+
+\texttt{dots2args.default <- function(x, ...) list(...)}
+
+Note that this will be the default method; notably, a method when
+\texttt{x} is character will be left unspecified (meant for the user).
+
+
+A more typical case: collect all market data in a list \texttt{Data}:
+EvaluationDate, Prices, Vols, Irates.
+
+dots2args will react on \texttt{x}, retrieve the required information,
+and 
 
 
 
-%% \begin{itemize}
-%% \item evaluates to list "value", "delta" etc
-%% \item Instrument[names(result)] <- result
-%% \end{itemize}
+\begin{itemize}
+\item evaluates to list \texttt{"value"}, \texttt{"delta"} etc
+\item \texttt{Instrument[names(result)] <- result}
+\end{itemize}
 
 
 %% <<>>=
@@ -1293,12 +1299,13 @@ such information into a logfile.
 %% @      
 
 
-%% \section{Instruments and portfolios}
+\section{Instruments and portfolios}
 
 
 
-%% \subsubsection{Instrument}
-%% classes: Fund Equity Account Currency Future Index
+\subsubsection{Instrument}
+
+classes: Fund Equity Account Currency Future Index
 
 
 %% fields:
@@ -1317,56 +1324,64 @@ such information into a logfile.
 
 
 
-%% \chapter{Frequently-used functions}
+\chapter{Frequently-used functions}
 
-%% \emph{I need to value a financial instrument.}
+\begin{framed}
+  \emph{\noindent I need to value a financial instrument.}
+\end{framed}
 
+\begin{framed}
+  \emph{I have a list of trades (bought or sold what, when and at what
+    price) and I need to compute the profit or loss.}
+\end{framed}
 
-%% \emph{I have a list of trades (bought or sold what, when and at what price)
-%% and I need to compute the profit or loss.}
+\begin{framed}
+  If all trades are closed (ie, the current positions are all zero),
+  use \texttt{pl}.
+\end{framed}
 
-%% If all trades are closed (ie, the current positions are all zero), use
-%% \texttt{pl}.
+\begin{framed}
+  \emph{I have a list of trades in an instrument and want to plot
+    these trades against the price of the traded instrument.}
+\end{framed}
 
+\begin{framed}
+  \emph{I have a signal series (\texttt{+1}, \texttt{0}, \texttt{0},
+    \texttt{+1}, \ldots{}) and need to transform it into a
+    profit-and-loss series.}
+\end{framed}
 
-%% \emph{I have a list of trades in an instrument and want to plot these
-%%   trades against the price of the traded instrument.}
+\begin{framed}
+  \emph{We have a list of trades and need to determine the
+    profit-and-loss between two timestamps.}
+\end{framed}
 
+Call the two timestamps \texttt{t0} and \texttt{t1}.  Unless the
+position was zero at t0 and t1, we can compute the profit/loss only if
+we have prices for the positions at these points in time.  In case the
+position was indeed zero, you can use \texttt{pl}; the transactions
+are stored in a journal \texttt{j}.
 
-%% \emph{I have a signal series (\texttt{+1}, \texttt{0}, \texttt{0}, \texttt{+1}, \ldots{}) and need to
-%%   transform it into a profit-and-loss series.}
+<<eval=false>>=
+subset(j, timestamp >= t0 & timestamp <=t1)
+@
 
+But even the more general case is not so complicated, after all.
 
-%% \emph{We have a list of trades and need to determine the
-%%   profit-and-loss between two timestamps.}
+\begin{enumerate}
+\item Compute the position at \texttt{t0} and make it a journal j0.
 
+\item Take all transactions at $t > t_\mathrm{0}$ and $t \leq
+   t_\mathrm{1}$ and put them into a journal $J$.
 
-%% Call the two timestamps \texttt{t0} and \texttt{t1}.  Unless the
-%% position was zero at t0 and t1, we can compute the profit/loss only if
-%% we have prices for the positions at these points in time.  In case the
-%% position was indeed zero, you can use \texttt{pl}; the transactions
-%% are stored in a journal \texttt{j}.
+\item Compute the position at $t_\mathrm{1}$, and make it a journal
+   $J_1$, but \emph{multiply all amounts by $-1$}.
 
-%% <<eval=false>>=
-%% subset(j, timestamp >= t0 & timestamp <=t1)
-%% @
+\item Combine $J_0$, $J$, and $J_1$ and compute the PL.
+\end{enumerate}
 
-%% But even the more general case is not so complicated, after all.
-
-%% \begin{enumerate}
-%% \item Compute the position at \texttt{t0} and make it a journal j0.
-
-%% \item Take all transactions at $t > t_\mathrm{0}$ and $t \leq
-%%    t_\mathrm{1}$ and put them into a journal $J$.
-
-%% \item Compute the position at $t_\mathrm{1}$, and make it a journal
-%%    $J_1$, but \emph{multiply all amounts by $-1$}.
-
-%% \item Combine $J_0$, $J$, and $J_1$ and compute the PL.
-%% \end{enumerate}
-
-%% %\printindex
-%% \bibliographystyle{plainnat}
-%% \bibliography{bibliothek}
+%\printindex
+\bibliographystyle{plainnat}
+\bibliography{bibliothek}
 
 \end{document}
