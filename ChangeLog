@@ -1,3 +1,8 @@
+2013-07-17  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pl.R (pl): fixed -- corrections for cases in which 't0' and
+	't1' were specified and when portfolio at t0 or t1 was empty
+
 2013-07-16  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (journal): 'journal()' returns an empty journal
