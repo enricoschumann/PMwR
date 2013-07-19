@@ -62,18 +62,22 @@ print.journal <- function(x, ..., width = 60L, max.print = 100,
     options(scipen = 1e8)
     on.exit(options(scipen = oo))
 
-    dspT <- max.print ## display trades, instruments
     lx <- length(x)
     df <- as.data.frame(unclass(x),                        
                         row.names = seq_len(lx),
                         stringsAsFactors = FALSE)
 
+    ndf <- colnames(df)
+    first.cols <- c("instrument", "timestamp", "amount","price")
+    df <- df[TRUE, c(first.cols, setdiff(ndf, first.cols)), drop = FALSE]
+    
     if (!is.null(exclude))
-        df[TRUE, setdiff(colnames(df), exclude), drop = FALSE]
+        df[TRUE, setdiff(ndf, exclude), drop = FALSE]
+
     notAllNA <- unlist(lapply(df, function(x) !all(is.na(x))))
-    print(head(df[notAllNA],dspT), quote = FALSE,
+    print(head(df[notAllNA], max.print), quote = FALSE,
           print.gap=2)
-    if (lx > dspT)
+    if (lx > max.print)
         cat("[ ... ]\n\n") else cat("\n")
 
     subs <- ""
@@ -194,4 +198,19 @@ amount <- function(x, abs = FALSE, ...) {
     class(ans) <- "journal"
     ans
 }
+aggregate.journal <- function(x, by, FUN, ...) {
+    if (!missing(FUN))
+        FUN <- match.fun(FUN)
+    ins <- x$instrument
+    sgn <- ifelse(x$amount >= 0, "buy ", "sell")
+    grp <- paste(ins, by, sgn, sep = "_")
 
+    j <- journal()
+    for (g in sort(unique(grp))) {
+        sx <- x[g == grp]
+        j <- c(j, journal(amount = sum(sx$amount),
+                          price = mean(sx$price),
+                          instrument = sx$instrument[1]))
+    }
+    j
+}
