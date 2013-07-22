@@ -1,3 +1,9 @@
+2013-07-22  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-32
+
+	* R/isValidISIN.R (isValidISIN): function added
+
 2013-07-12  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-31
