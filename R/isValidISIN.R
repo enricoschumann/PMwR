@@ -2,6 +2,7 @@ isValidISIN <- function(isin) {
     validNC <- 12L
     result <- logical(length(isin))
     isin <- isin[hasValidNC <- which(nchar(isin) == validNC)]
+    isin <- toupper(isin)
     pasteAndSplit <- function(s)
         as.numeric(unlist(strsplit(paste(s, collapse = ""), "")))
     multSecby2 <- function(x) {

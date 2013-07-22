@@ -16,7 +16,6 @@ export(
     isWeekend,
     lastWeekday,
     limit,
-    monthlyStats,
     nextBusinessDay,
     pl,
     pm,

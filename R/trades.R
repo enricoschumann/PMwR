@@ -98,21 +98,21 @@ limit <- function(amount, price, timestamp, lim, tol = 1e-8) {
 }
 
 
-monthlyStats <- function(x, t = NULL) {
-    if (!is.null(dim(x)) && dim(x)[2L] > 1L)
-        stop("'x' must be a vector")
+## monthlyStats <- function(x, t = NULL) {
+##     if (!is.null(dim(x)) && dim(x)[2L] > 1L)
+##         stop("'x' must be a vector")
 
-    x.eom <- aggregate(x, strftime(index(x), "%Y%m"), tail, 1)
-    ult.dates <- endOfMonth(index(x))
-    x.eom <- zoo(x.eom, unique(ult.dates))
+##     x.eom <- aggregate(x, strftime(index(x), "%Y%m"), tail, 1)
+##     ult.dates <- endOfMonth(index(x))
+##     x.eom <- zoo(x.eom, unique(ult.dates))
 
-    if (identical(ult.dates[1L], ult.dates[2L])) {
-        tmp <- zoo(coredata(x[1L]), endOfPreviousMonth(ult.dates[1L]))
-        x.eom <- rbind(tmp, x.eom)
-    }
-    res <- list(index = x.eom/coredata(x.eom[1L]),
-                returns = returns(x.eom))
-}
+##     if (identical(ult.dates[1L], ult.dates[2L])) {
+##         tmp <- zoo(coredata(x[1L]), endOfPreviousMonth(ult.dates[1L]))
+##         x.eom <- rbind(tmp, x.eom)
+##     }
+##     res <- list(index = x.eom/coredata(x.eom[1L]),
+##                 returns = returns(x.eom))
+## }
 
 periodObs <- function(x, t = NULL, period = "month", missing = "NA") {
     if (is.null(t)) {
