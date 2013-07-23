@@ -3,6 +3,7 @@ export(
     "mday<-",
     char2num,
     dayOfMonth,
+    drawdown,
     endOfMonth,
     endOfPreviousMonth,
     expstr,

@@ -1,3 +1,9 @@
+2013-07-23  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-33
+
+	* R/drawdown.R (drawdown): function added
+
 2013-07-22  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-32
