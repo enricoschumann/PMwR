@@ -1,4 +1,5 @@
 \name{pl}
+\alias{pl}
 \title{
   Profit and Loss
 }

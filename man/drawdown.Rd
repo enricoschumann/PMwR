@@ -1,4 +1,5 @@
 \name{drawdown}
+\name{alias}
 \title{
   Drawdown
 }

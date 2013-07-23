@@ -1,4 +1,5 @@
 \name{pm}
+\name{alias}
 \title{
   Partial Moments
 }
@@ -53,5 +54,4 @@ var(x)/2
 
 pm(x, 2, normalise = TRUE)
 sqrt(var(x)/2)
-
 }
