@@ -1,5 +1,5 @@
 \name{pm}
-\name{alias}
+\alias{pm}
 \title{
   Partial Moments
 }

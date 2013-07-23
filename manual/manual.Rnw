@@ -1322,7 +1322,14 @@ classes: Fund Equity Account Currency Future Index
 %% pricing premium/future
 %% class
 
+\section{Vectorisation}
 
+Functions should do vectorisation when they have to.  Example:
+drawdown is interally computed through \texttt{cumsum}, so even for a
+matrix of time series, it would need a loop.  This should be left to
+the user. 
+
+The exception is when computations can be accelerated.
 
 \chapter{Frequently-used functions}
 
