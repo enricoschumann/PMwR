@@ -15,13 +15,14 @@
 \details{
 
   The package comprises functions that have been written in various
-  circumstances and for various purposes.  Which means that in the
-  current version, the interfaces to functions are not stable (eg,
-  argument names are being made consistent across functions); in some
-  cases, generics will be introduced.  The recommended practice is
-  therefore currently to explicitly name arguments in function calls.
-  Any changes in argument names will be documented in the ChangeLog and
-  so can be easily followed. 
+  circumstances and for various purposes.  Which is simply an apologetic
+  way of saying that in the current version, the interfaces to functions
+  are not stable (eg, argument names are currently being made consistent
+  across functions); in some cases, generics will be introduced.  The
+  recommended practice is therefore currently to explicitly name
+  arguments in function calls (and not pass arguments by position).  Any
+  changes in argument names will be documented in the ChangeLog and so
+  can be easily followed.
 
   For more details see the Manual.
 }

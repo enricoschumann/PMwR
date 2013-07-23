@@ -19,10 +19,9 @@ isValidISIN(isin)
   Checks a character vector of \acronym{ISIN}s. The function returns
   \code{TRUE} if the \acronym{ISIN} is valid; else \code{FALSE}.
 
-  \acronym{ISO} 6166 is silent when it comes to upper/lower case of
-  letters, but the test procedure does not differentiate between cases.
-  Thus, \acronym{ISIN}s are transformed to uppercase before being
-  tested.
+  The test procedure in \acronym{ISO} 6166 does not differentiate
+  between cases.  Thus, \acronym{ISIN}s are transformed to uppercase
+  before being tested.
   
 }
 \value{
@@ -30,6 +29,7 @@ isValidISIN(isin)
 }
 \references{
   \url{http://en.wikipedia.org/wiki/ISO_6166}
+
   \url{http://www.anna-web.com/index.php/home/isinsaiso6166}
 }
 \author{

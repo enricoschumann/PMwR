@@ -45,7 +45,7 @@ plotTradingHours(x, t = NULL,
   }
   \item{holidays}{
     a vector of class \code{\link{Date}} or a character vector in a format that
-    is understood by \code{\link{as.Date}}. \strong{Currently not supported.}
+    is understood by \code{\link{as.Date}}.
   }
   \item{fromHHMMSS}{
     a character vector of length one in format \dQuote{HHMMSS}
