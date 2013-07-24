@@ -14,6 +14,7 @@ export(
     mday,
     nextBusinessDay,
     plotTradingHours,
+    pm,
     previousBusinessDay,
     returns,
     rmspace,
