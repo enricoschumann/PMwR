@@ -208,8 +208,13 @@ amount <- function(x, abs = FALSE, ...) {
         x$amount <- rep(value, lenx)
     x
 }
-`[.journal`  <- function(x, i) {
-    ans <- lapply(unclass(x), `[`, i)
+`[.journal`  <- function(x, i, match.against = NULL) {
+    if (is.character(i)) {
+        ii <- grepl(i, x$instrument)
+        if (!is.null(x$account))
+            ii <- ii | grepl(i, x$account)
+    }
+    ans <- lapply(unclass(x), `[`, ii)
     class(ans) <- "journal"
     ans
 }

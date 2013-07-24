@@ -1,5 +1,11 @@
 2013-07-24  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/journal.R (`[.journal`): subsetting transactions can now be
+	done (i) by number and (ii) by regexp (matched against instrument
+	and account
+
+2013-07-24  Enrico Schumann  <es@enricoschumann.net>
+
 	* DESCRIPTION (Version): Version: 0.2-0
 
 	* R/journal.R (journal): experimental -- journal can take a
