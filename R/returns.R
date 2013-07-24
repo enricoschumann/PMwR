@@ -78,37 +78,7 @@ returns <- function(x, t = NULL, period = "month", complete.first = TRUE,
     }
 }
 
-##require("tseries")
-##sp   <- get.hist.quote("^GSPC", quote="AdjClose")
-  
-  
-## mReturns <- function(x, t = NULL, complete.first = TRUE) {
-##     if (is.null(t) && !inherits(x, "zoo"))
-##         stop("x should be of class zoo")
-    
-##     Ym <- format(index(x), "%Y%m")
-    
-##     if (complete.first && Ym[1] == Ym[2])
-##         index(x)[1L] <- endOfPreviousMonth(index(x)[1L])
-##     rets <- PMwR:::last(sp, Ym)
-    
-## }
-
-
-
-rtTab <- function(x) {
-    f <- function(x)
-        format(round(coredata(100*x), 1), nsmall=1)
-    years <- as.numeric(format(index(x), "%Y"))
-    mons <- as.numeric(format(index(x), "%m"))
-    tb <- array("", dim = c(length(unique(years)), 14L))
-    tb[cbind(years - years[1L] + 1L, mons + 1L)] <- f(x)
-    for (y in sort(unique(years)))
-        tb[y - years[1L] + 1L, 14L] <- f(prod(coredata(x)[years==y] + 1L) - 1L)
-    tb[ ,1L] <- sort(unique(years))
-    tb
-    paste(apply(tb, 1, function(x) paste(x, collapse = "&")), "\\\\")
-}
+## not exported
 mtab <- function(x) {
     f <- function(x)
         format(round(100*x, 1), nsmall = 1)    
@@ -122,6 +92,10 @@ mtab <- function(x) {
     colnames(tb) <- c(format(as.Date(paste0("2012-", 1:12, "-1")), "%b"), "YTD")
     tb
 }
+
+## TODO: tolatex
+## paste(apply(tb, 1, function(x) paste(x, collapse = "&")), "\\\\")
+
 
 print.preturns <- function(x, ..., year.rows = TRUE) {
     if (x$period == "month") {

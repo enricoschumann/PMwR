@@ -1,5 +1,12 @@
 2013-07-24  Enrico Schumann  <es@enricoschumann.net>
 
+	* DESCRIPTION (Version): Version: 0.2-0
+
+	* R/journal.R (journal): experimental -- journal can take a
+	position and convert it to journal
+
+	* R/returns.R: removed unused function rtTab and comments
+
 	* man/pm.Rd: added documentation
 
 	* R/pm.R (pm): removed 'keep.sign', added 'na.rm'

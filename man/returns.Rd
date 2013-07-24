@@ -5,7 +5,7 @@
   Compute Returns
 }
 \description{
-  Compute returns of price series.
+  Convert prices into returns.
 }
 \usage{
 returns(x, t = NULL, period = "month", complete.first = TRUE,
@@ -17,7 +17,8 @@ returns(x, t = NULL, period = "month", complete.first = TRUE,
 \arguments{
   \item{x}{
     a \code{numeric} vector (possibly with a \code{dim} attribute; ie, a
-    matrix) of prices
+    matrix) of prices.  Can also be of class \code{zoo}, in which case
+    argument \code{t} should be \code{NULL}.
   }
   \item{t}{
         timestamps. See argument \code{"period"}.
@@ -29,12 +30,13 @@ returns(x, t = NULL, period = "month", complete.first = TRUE,
   \item{complete.first}{
     logical. 
   }
-  \item{pad}{
-    either \code{NULL} (no padding of initial lost observation) or a value used
-    for padding (reasonable values might be \link{NA} or 0)
+  \item{pad}{    
+    either \code{NULL} (no padding of initial lost observation) or a
+    value used for padding (reasonable values might be \link{NA} or 0)
   }
   \item{position}{
-    numeric; the same length/dimension as \code{x}. \strong{Experimental.}
+    numeric; the same length/dimension as
+    \code{x}. \strong{Experimental.}
   }
   \item{\dots}{
     further arguments
@@ -54,16 +56,16 @@ returns(x, t = NULL, period = "month", complete.first = TRUE,
 
   If called as \code{returns(x)}: a numeric vector or matrix.
 
-  If called with a time argument, an object of class "preturns" (period
-  returns), which is a list of the dates, the returns and the period. 
+  If called with a \code{time} argument, an object of class
+  \code{"preturns"} (period returns), which is a list of the dates, the
+  returns and the period.
   
 }
 \author{
   Enrico Schumann
 }
 \seealso{
-%  \code{\link{backtest}}
-backtest
+  backtest % TODO: add link
 }
 \examples{
 

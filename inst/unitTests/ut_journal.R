@@ -7,8 +7,10 @@ test.journal <- function() {
     
 
     ## the simplest journal
-    j <- journal(amount = amount)
     j <- journal(amount = 1:2)
+
+    ## length
+    checkEquals(length(j), 2)
     
     ## 'account' and 'id' missing: NULL
     checkTrue(is.null(j$account))
@@ -43,13 +45,8 @@ test.journal <- function() {
     instrument <- "Stock A"
     j <- journal(timestamp, amount, price, instrument = instrument)
 
-    checkEquals(c(j, journal()) , j)
-    
-    tmp <- as.data.frame(c(journal(), j))
-
-    
-    
-    
+    checkEquals(c(j, journal()) , j)    
+    ## tmp <- as.data.frame(c(journal(), j))
 
     ## method: c
     jj <- c(j, j)
@@ -60,7 +57,5 @@ test.journal <- function() {
     
     ## method: length
     checkEquals(length(jj), 10L)
-
-
     
 }

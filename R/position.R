@@ -86,18 +86,13 @@ position <- function(amount, timestamp, instrument, when, from, to,
     ans
 }
 
-print.position <- function(x, ..., sep = ":"){
+print.position <- function(x, ..., sep = NA){
+
+    if (!is.na(sep))
+        stop("'sep' is not yet implemented")
     if (dim(x$position)[1L] > 1L)
         print(x$position, big.mark = ",")
     else
         print(t(x$position), big.mark = ",")
     invisible(x)
-}
-
-value.position <- function(x, prices, ...) {
-    if (is.function(prices))
-        prices(position  = x$position,
-               timestamp = x$timestamp,
-               instrument = x$instrument,...)
-
 }
