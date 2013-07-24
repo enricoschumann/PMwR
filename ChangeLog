@@ -1,3 +1,9 @@
+2013-07-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* man/pm.Rd: added documentation
+
+	* R/pm.R (pm): removed 'keep.sign', added 'na.rm'
+
 2013-07-22  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/trades.R (monthlyStats): removed function definition and Rd

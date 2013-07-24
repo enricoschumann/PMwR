@@ -1,32 +1,37 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2013-07-13 14:54:21 CEST (es)>
+## Time-stamp: <2013-07-24 08:51:30 CEST (es)>
 
 pm <- function(x, xp = 2, threshold = 0, lower = TRUE,
-               keep.sign = FALSE, normalise = FALSE) {
+               normalise = FALSE, na.rm = FALSE) {
 
-    ##TODO: normalise: only if xp is integer?
-    is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)
-        abs(x - round(x)) < tol
+    ## TODO: check normalise: only if xp is integer?
+    ## is.wholenumber <- function(x, tol = .Machine$double.eps^0.5)
+    ##     abs(x - round(x)) < tol
 
+    if (length(d <- dim(x))) {
+        n <- d[1L]
+        sum <- colSums
+    } else {
+        n <- length(x)
+    }
     x <- x - threshold
     if (lower)
         x <- x - abs(x)
     else
         x <- x + abs(x)        
-    if (keep.sign)
-        sx <- sign(x)
     x <- abs(x)
 
-    if (xp == 1L)
-        ans <- sum(x)/2/length(x)
+    ans <- if (xp == 1L)
+        sum(x, na.rm = na.rm)/2
     else if (xp == 2L)
-        ans <- sum(x*x)/4/length(x)
+        sum(x*x, na.rm = na.rm)/4
     else if (xp == 3L)
-        ans <- sum(x*x*x)/8/length(x)
+        sum(x*x*x, na.rm = na.rm)/8
     else if (xp == 4L)
-        ans <- sum(x*x*x*x)/16/length(x)
+        sum(x*x*x*x, na.rm = na.rm)/16
     else 
-        ans <- sum(x^xp)/2^xp/length(x)
+        sum(x^xp, na.rm = na.rm)/2^xp
+    ans <- ans/n
 
     if (normalise)
         ans^(1/xp)
