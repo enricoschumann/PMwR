@@ -51,12 +51,17 @@ pReturns <- function(x, t = NULL, period = "month",
             x <- x[idx]
         }
     }
-    if (grepl("da(y|i)", period, ignore.case = TRUE)) {
+    if (length(period) > 1L) {
+        by <- period
+    } else if (grepl("da(y|i)", period, ignore.case = TRUE)) {
         by <- format(t, "%Y%m%d")
-    } else if (grepl("month", period, ignore.case = TRUE)) {
+    } else if (grepl("year(ly)?", period, ignore.case = TRUE)) {
+        by <- format(t, "%Y")
+    } else if (grepl("month(ly)?", period, ignore.case = TRUE)) {
         by <- format(t, "%Y%m")
-    }
-    ii <- PMwR:::last(x, by, TRUE)
+    } else
+
+    ii <- last(x, by, TRUE)
     if (complete.first && by[1L] == by[2L])
         ii <- c(1, ii)
 
@@ -69,9 +74,9 @@ pReturns <- function(x, t = NULL, period = "month",
 
 returns <- function(x, t = NULL, period = "month", complete.first = TRUE,
                      pad = NULL, position) {
-    if (is.null(t) &&  missing(position)) {
+    if (is.null(t) && !inherits(x, "zoo")  &&  missing(position)) {
         returns0(x, pad)        
-    } else if (!is.null(t)) {
+    } else if (!is.null(t) || inherits(x, "zoo")) {
         pReturns(x, t, period, complete.first)
     } else {
         twReturns(x, position, pad)

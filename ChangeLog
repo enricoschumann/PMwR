@@ -1,3 +1,9 @@
+2013-07-26  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (returns): fixed -- if 'x' inherits from class
+	'zoo', 't' had to be specified explicitly (now NULL works)
+	(pReturns): 'period' can now any grouping variable
+
 2013-07-24  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (`[.journal`): subsetting transactions can now be

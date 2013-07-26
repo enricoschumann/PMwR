@@ -1,16 +1,37 @@
 test.returns <- function() {
 
+    ## numeric vector
     x <- 101:112
     checkEqualsNumeric(returns(x), x[-1]/x[-length(x)]-1)
     checkEqualsNumeric(returns(x, pad = NA)[-1], x[-1]/x[-length(x)]-1)
     checkTrue(is.na(returns(x, pad = NA)[1]))
 
+    ## ... and matrix 
+    x <- cbind(x,x)
+    checkEqualsNumeric(returns(x), x[-1,]/x[-nrow(x),] - 1)
+    checkEqualsNumeric(returns(x, pad = NA)[-1,], x[-1, ]/x[-nrow(x),]-1)
+    checkTrue(all(is.na(returns(x, pad = NA)[1L,])))
 
+    ## zoo
+    if (require("zoo")) {
+        x <- 101:112
+        z <-zoo(x, seq_along(x))
+        checkEquals(returns(as.numeric(z)), returns(x))
+        t <- seq(as.Date("2012-01-01"), as.Date("2012-12-31"), by = "1 day")
+        x <- seq_along(t) + 1000
+        z <-zoo(x, t)
+        returns(z)
+
+    }
+
+    
     t <- seq(as.Date("2012-01-01"), as.Date("2012-12-31"), by = "1 day")
     x <- seq_along(t) + 100
     returns(x, t = t, period = "month")
     returns(x, t = t, period = "month", complete.first = FALSE)
 
+
+    
 
     ## time-weighted returns
     x <- 101:105
