@@ -75,17 +75,13 @@ plotTradingHours(x, t = NULL,
 }
 \details{
 
-  This function is still very experimental. In in particular, it is
-  recommended that arguments be always named.
-
-
+  This function is still very \bold{experimental}. In in particular, it
+  is recommended that arguments be always named.
 
 }
 \value{
 
-  \code{NULL} (the function is called for its side effect, a plot),
-  unless \code{do.plot} and \code{do.lines} are both \code{FALSE}. In
-  that case, a list is return:
+  A list (invisibly if \code{do.plot} is \code{TRUE}):
 
   \code{list(t, x, axis.pos = pos, axis.labels, timegrid)}
 
@@ -100,7 +96,7 @@ plotTradingHours(x, t = NULL,
   Enrico Schumann
 }
 \seealso{
-\code{\link{DateTimeClasses}}
+  \code{\link{DateTimeClasses}}
 }
 \examples{
 t <- as.POSIXct("2012-08-31 08:05:00") - 36000:1
