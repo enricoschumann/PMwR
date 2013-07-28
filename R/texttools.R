@@ -10,15 +10,23 @@ char2num <- function(s, dec = ",", big.mark = ".") {
     as.numeric(sub(dec, ".", s, fixed = TRUE))
 }
 
-## convert from one TeXunit to another
-TeXunits <- function(from, to) {
-    frU <- gsub("([-+0-9,. ])+([a-z]+)", "\\2", from)
-    fr <- gsub("([-+0-9,. ]+)([a-z]+)", "\\1", from)
-    fr <- as.numeric(gsub("([+-]?) *([^ ]*) *", "\\1\\2", fr))
+.TeXunit.table <- c("cm" = 1864680,
+                    "in" = 4736287)
 
-    grepl(".*[0-9].*", to)
+## convert from one TeXunit to another
+TeXunits <- function(from, to, from.unit = NULL) {
+    if (!is.null(from.unit))
+        frU <- from.unit
+    else
+        frU <- gsub("([-+0-9,. ])+([a-z]+) *", "\\2", from)
+    fr <- gsub("([-+0-9,. ]+)([a-z]+) *", "\\1", from)
+    fr <- as.numeric(gsub(",", ".", fr))
+    fr * .TeXunit.table[frU] / .TeXunit.table[to]
+    
 }
 
+
+## expand string to given width
 expstr <- function(s, after, width, fill = " ", at) {
     ns <- nchar(s)
     space <- character(length(s))
