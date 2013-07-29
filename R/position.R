@@ -22,11 +22,11 @@ position <- function(amount, timestamp, instrument, when, from, to,
     if (missing(when)) {
         when <- max(timestamp)
     } else if (is.character(when)) {
-        if (when == "last" || when == "newest" || when == "latest")
+        if (when[1L] == "last" || when[1L] == "newest" || when[1L] == "latest")
             when <- max(timestamp)
-        else if (when == "all")
+        else if (when[1L] == "all")
             when <- timestamp
-        else if (when == "first" || when == "oldest")
+        else if (when[1L] == "first" || when[1L] == "oldest")
             when <- min(timestamp)
     }
 
