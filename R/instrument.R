@@ -33,23 +33,23 @@ instrument <- function(class, id = NULL, ...) {
 length.instrument <- function(x)
     1L
 
-ii <- instrument(class       = "vanillaOptionEuropean",
-                 id          = "odax201309c8000",
-                 description = "ODAX 8000 Call Sep 2013",
-                 underlier   = "DAX",
-                 currency    = "EUR",
-                 strike      = 8000,
-                 expiry      = "2013-09-20",
-                 payoff      = "call")
+## ii <- instrument(class       = "vanillaOptionEuropean",
+##                  id          = "odax201309c8000",
+##                  description = "ODAX 8000 Call Sep 2013",
+##                  underlier   = "DAX",
+##                  currency    = "EUR",
+##                  strike      = 8000,
+##                  expiry      = "2013-09-20",
+##                  payoff      = "call")
 
     
-print.vanillaOptionEuropean <- function(x, ...) {
-    cat(x$description, "\n")
-    cat("underlier:", format(substr(x$underlier,
-                                    1,
-                                    min(12, nchar(x$underlier))),
-                             width = 12))
-    cat("|", format(toupper(x$payoff), width = 4), " ")    
-    cat("expires", x$expiry, "\n")
-}
+## print.vanillaOptionEuropean <- function(x, ...) {
+##     cat(x$description, "\n")
+##     cat("underlier:", format(substr(x$underlier,
+##                                     1,
+##                                     min(12, nchar(x$underlier))),
+##                              width = 12))
+##     cat("|", format(toupper(x$payoff), width = 4), " ")    
+##     cat("expires", x$expiry, "\n")
+## }
 

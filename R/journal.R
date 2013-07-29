@@ -11,7 +11,7 @@ journal <- function(timestamp, amount, price, id, instrument, account, ...) {
     }
 
     ## convert position to journal 
-    if (inherits("position", timestamp)) {
+    if (inherits(timestamp, "position")) {
         if (!missing(price) && !is.null(names(price))) 
             price <- price[match(timestamp$instrument, names(price))]
         else if (missing(price))
