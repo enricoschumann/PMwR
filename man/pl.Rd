@@ -39,6 +39,7 @@ pl(amount, price,
 }
 \details{
 
+  Computes profit and/or loss.
   
 
 }

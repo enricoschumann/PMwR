@@ -69,11 +69,12 @@ returns(x, t = NULL, period = "month", complete.first = TRUE,
 }
 \examples{
 
+require("PMwR")
 x <- 101:112
 returns(x)
 returns(x, pad = NA)
 
-t <- seq(as.Date("2012-01-01"), as.Date("2012-12-31"), by = "1 day")
+t <- seq(as.Date("2012-01-05"), as.Date("2012-12-31"), by = "1 day")
 x <- seq_along(t) + 1000
 returns(x, t = t, period = "month")
 returns(x, t = t, period = "month", complete.first = FALSE)

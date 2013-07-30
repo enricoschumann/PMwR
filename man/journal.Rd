@@ -12,12 +12,13 @@
   Create a journal of financial transactions.
 }
 \usage{
-journal(timestamp, amount, price, id, instrument, account, \dots)
+journal(timestamp, amount, price, instrument,
+        id = NULL, account = NULL, \dots)
 
 
 \method{c}{journal}(\dots)
 \method{length}{journal}(x)
-\method{print}{journal}(x, \dots, width = 60L)
+\method{print}{journal}(x, \dots, width = 60L, max.print = 100, exclude = NULL)
 \method{sort}{journal}(x, decreasing = FALSE, by = "timestamp", \dots, na.last = TRUE)
 \method{subset}{journal}(x, \dots)
 \method{as.data.frame}{journal}(x, row.names = NULL, optional = FALSE, \dots)
@@ -63,6 +64,12 @@ journal(timestamp, amount, price, id, instrument, account, \dots)
 }
   \item{na.last}{
     arguments passed to sort
+}
+  \item{max.print}{
+    maximum number of transactions to print
+}
+  \item{exclude}{
+    character: fields that should not be printed
 }
 }
 \details{

@@ -23,18 +23,29 @@
   }
 }
 \details{
-  requires a vector (can be \code{zoo})
+
+  The drawdown at position \emph{t} of a time series \emph{v} is the
+  difference between the highest peak that was reached before \emph{t}
+  and the current value.  If the current value represents a new high,
+  the drawdown is zero.
+
+
+%% \begin{equation}\label{Eeq:portfolio:EqDD} \operatorname{DD}_t =
+%% v^{\max}_t - v_t \end{equation} where $v^{\max}_t$ is the running
+%% maximum, that is $v^{\max}_t=\max\{v_{t'}\,|\,{t'} \in [0,t]\}$.
+
+
 }
 \value{
 
-  If \code{summary} is FALSE, a vector of the same length as \code{v}.  If
-  \code{summary} is TRUE, a list
+  If \code{summary} is \code{FALSE}, a vector of the same length as
+  \code{v}.  If \code{summary} is \code{TRUE}, a list
 
   \item{maximum}{maximum drawdown}
   \item{high}{the max of \code{v}}
-  \item{highPosition}{position of \code{high}}
+  \item{high.position}{position of \code{high}}
   \item{low}{the min of \code{v}}
-  \item{lowPosition}{position of \code{low}}
+  \item{low.position}{position of \code{low}}
 }
 \references{
 

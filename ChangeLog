@@ -1,3 +1,14 @@
+2013-07-29  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (journal): changed default arguments: 'id = NULL,
+	account = NULL' to emphasise optional nature
+
+	* R/drawdown.R (drawdown): returned list now contains
+	high.position, low.position (instead of highPosition, lowPosition)
+
+	* R/returns.R (returns): checking 't'/zoo is now done in
+	'returns'
+
 2013-07-28  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/texttools.R (.TeXunit.table): added vector (scaled points per

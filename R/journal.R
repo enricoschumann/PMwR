@@ -1,4 +1,5 @@
-journal <- function(timestamp, amount, price, id, instrument, account, ...) {
+journal <- function(timestamp, amount, price, instrument,
+                    id = NULL,  account = NULL, ...) {
 
     ## empty journal
     if (match.call() == "journal()") {
@@ -11,7 +12,7 @@ journal <- function(timestamp, amount, price, id, instrument, account, ...) {
     }
 
     ## convert position to journal 
-    if (inherits(timestamp, "position")) {
+    if (!missing(timestamp) && inherits(timestamp, "position")) {
         if (!missing(price) && !is.null(names(price))) 
             price <- price[match(timestamp$instrument, names(price))]
         else if (missing(price))
@@ -23,16 +24,12 @@ journal <- function(timestamp, amount, price, id, instrument, account, ...) {
         returns(ans)
     }
         
-    if (missing(id))
-        id <- NULL
     if (missing(timestamp))
         timestamp <- NA
     if (missing(instrument) || all(is.na(instrument)))
         instrument <- NA
     else if (all(instrument == instrument[1L]))
         instrument <- instrument[1L]
-    if (missing(account))
-        account <- NULL
     if (missing(price))
         price <- NA
     instrument <- as.character(instrument)    

@@ -32,25 +32,8 @@ twReturns <- function(price, position, pad = NULL) {
 }
 
 ## not exported
-pReturns <- function(x, t = NULL, period = "month",
-                     complete.first = TRUE) {
+pReturns <- function(x, t, period, complete.first = TRUE) {
 
-    ## TODO: make internal function that checks x and t
-    if (is.null(t)) {
-        if (!inherits(x, "zoo")) {
-            stop(sQuote("t"), " not supplied, so ", sQuote("x"),
-                 " must inherit from ", sQuote("zoo"))
-        } else {
-            t <- index(x)
-            x <- coredata(x)
-        }
-    } else {
-        if (is.unsorted(t)) {
-            idx <- order(t)
-            t <- t[idx]
-            x <- x[idx]
-        }
-    }
     if (length(period) > 1L) {
         by <- period
     } else if (grepl("da(y|i)", period, ignore.case = TRUE)) {
@@ -59,7 +42,7 @@ pReturns <- function(x, t = NULL, period = "month",
         by <- format(t, "%Y")
     } else if (grepl("month(ly)?", period, ignore.case = TRUE)) {
         by <- format(t, "%Y%m")
-    } else
+    } 
 
     ii <- last(x, by, TRUE)
     if (complete.first && by[1L] == by[2L])
@@ -73,10 +56,31 @@ pReturns <- function(x, t = NULL, period = "month",
 }
 
 returns <- function(x, t = NULL, period = "month", complete.first = TRUE,
-                     pad = NULL, position) {
-    if (is.null(t) && !inherits(x, "zoo")  &&  missing(position)) {
+                    pad = NULL, position) {
+
+    ## TODO: make internal function that checks x and t
+    if (is.null(t)) {
+        if (inherits(x, "zoo")) {
+            t <- index(x)
+            x <- zoo:::coredata(x)
+            if (!is.null(dim(x)))
+                stop("with ", sQuote("t"), " supplied, ",
+                     sQuote("x"), " must be a vector")                    
+        }
+    } else {
+        if (!is.null(dim(x)))
+            stop("with ", sQuote("t"), " supplied, ",
+                 sQuote("x"), " must be a vector")                
+        if (is.unsorted(t)) {
+            idx <- order(t)
+            t <- t[idx]
+            x <- x[idx]
+        }
+    }
+
+    if (is.null(t) &&  missing(position)) {
         returns0(x, pad)        
-    } else if (!is.null(t) || inherits(x, "zoo")) {
+    } else if (!is.null(t)) {
         pReturns(x, t, period, complete.first)
     } else {
         twReturns(x, position, pad)
@@ -98,8 +102,6 @@ mtab <- function(x) {
     tb
 }
 
-## TODO: tolatex
-## paste(apply(tb, 1, function(x) paste(x, collapse = "&")), "\\\\")
 
 
 print.preturns <- function(x, ..., year.rows = TRUE) {
@@ -113,4 +115,27 @@ print.preturns <- function(x, ..., year.rows = TRUE) {
         print(unclass(x))
     }
     invisible(x)
+}
+
+## TODO: tolatex
+## paste(apply(tb, 1, function(x) paste(x, collapse = "&")), "\\\\")
+
+toLatex.preturns <- function(object, ..., year.rows = TRUE) {
+    if (object$period == "month") {
+        if (year.rows)
+            mt <- mtab(object)
+        else
+            mt <- t(mtab(object))
+    } else {
+        stop("currently only supported for period ", sQuote("month"))
+    }
+    mt <- rbind(colnames(mt), mt)
+    mt <- cbind(rownames(mt), mt)
+    mt <- paste(apply(mt, 1, function(x) paste(x, collapse = "&")), "\\\\")        
+    class(mt) <- "Latex"
+    mt
+}
+toHTML.preturns <- function(x, ..., stand.alone = TRUE) {
+    message("not supported yet")
+
 }
