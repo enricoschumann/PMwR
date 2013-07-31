@@ -1,5 +1,7 @@
 2013-07-31  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/returns.R (toHTML.preturns, toLatex.preturns): added/exported
+
 	* NAMESPACE: removed 'saveAttachment'
 
 	* DESCRIPTION (Depends): removed base64enc. Moved function

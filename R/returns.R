@@ -117,9 +117,6 @@ print.preturns <- function(x, ..., year.rows = TRUE) {
     invisible(x)
 }
 
-## TODO: tolatex
-## paste(apply(tb, 1, function(x) paste(x, collapse = "&")), "\\\\")
-
 toLatex.preturns <- function(object, ..., year.rows = TRUE) {
     if (object$period == "month") {
         if (year.rows)
@@ -135,7 +132,32 @@ toLatex.preturns <- function(object, ..., year.rows = TRUE) {
     class(mt) <- "Latex"
     mt
 }
-toHTML.preturns <- function(x, ..., stand.alone = TRUE) {
-    message("not supported yet")
+toHTML.preturns <- function(x, ..., year.rows = TRUE, stand.alone = TRUE) {
 
+    .th <- function(x)
+        paste0("<th>", x, "</th>")
+    .td <- function(x)
+        paste0("<td style='text-align:right;padding:0.5em;' >", x, "</td>")
+    .tr <- function(x)
+        paste0("<tr>", x, "</tr>")
+    
+    if (x$period == "month") {
+        if (year.rows)
+            mt <- mtab(x)
+        else
+            mt <- t(mtab(x))
+    } else {
+        stop("currently only supported for period ", sQuote("month"))
+    }
+    mt <- rbind(colnames(mt), mt)
+    mt <- cbind(rownames(mt), mt)
+    mt <- unname(mt)
+    mt[1, ]   <- .th(mt[1, ])
+    mt[-1 ,1] <- .th(mt[-1, 1])
+    mt[-1,-1] <- .td(mt[-1,-1])
+
+
+    mt <- paste(.tr(apply(mt, 1, paste, collapse = "")), collapse = "")
+    mt <- paste("<table>", mt, "</table>", sep = "")
+    mt
 }

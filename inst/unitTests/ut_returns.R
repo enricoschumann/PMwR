@@ -25,13 +25,12 @@ test.returns <- function() {
     }
 
     
-    t <- seq(as.Date("2012-01-01"), as.Date("2012-12-31"), by = "1 day")
+    t <- seq(as.Date("2012-01-01"), as.Date("2013-12-31"), by = "1 day")
     x <- seq_along(t) + 100
     returns(x, t = t, period = "month")
     returns(x, t = t, period = "month", complete.first = FALSE)
 
 
-    
 
     ## time-weighted returns
     x <- 101:105
