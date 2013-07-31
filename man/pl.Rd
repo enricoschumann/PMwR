@@ -7,10 +7,10 @@
   Profit and (or) loss of financial transactions. 
 }
 \usage{
-pl(amount, price,
-   instrument = NULL, timestamp = NULL,
+pl(amount, price, instrument = NULL, timestamp = NULL,
    along.timestamp = FALSE, do.sort = FALSE, initcash = 0,
-   tol = 1e-10)
+   t0, t1, prices0, prices1,
+   tol = 1e-10, do.warn = TRUE)
 }
 \arguments{
   \item{amount}{
@@ -28,14 +28,18 @@ pl(amount, price,
   \item{along.timestamp}{
     a logical
   }
-  \item{initcash}{
-    a numeric vector of length one
-  }
   \item{do.sort}{
     sort all by time
   }
-  \item{\dots}{passed on to fun}
+  \item{initcash}{
+    a numeric vector of length one
+  }
+  \item{t0}{from}
+  \item{t1}{to}
+  \item{prices0}{price.from}
+  \item{prices1}{price.to}
   \item{tol}{numeric}
+  \item{do.warn}{logical}
 }
 \details{
 

@@ -130,29 +130,25 @@ c.journal <- function(...) {
     class(ans) <- "journal"
     ans
 }
-subset.journal <- function(x, ..., account = NULL, instrument = NULL) {
-    if (!is.null(account))
-        stop("not implemented yet")
-    if (!is.null(instrument))
-        stop("not implemented yet")
+
+subset.journal <- function(x, ...) {
     i <- with(x, ...)
     ans <- lapply(unclass(x), `[`, i)
     class(ans) <- "journal"
     ans
 }
+
 joinAI <- function(x, sep = "::") {
     tmp <- paste0(x$account, sep, x$instrument)
     x$account <- NA
     x$instrument <- tmp
     x
 }
-as.data.frame.journal <- function(x, row.names = NULL, optional = FALSE, ...) {
-    if (!is.null(row.names))
-        warning("'row.names' not supported yet")
-    if (optional)
-        warning("'optional' not supported yet")
-    data.frame(unclass(x))
-}
+
+as.data.frame.journal <- function(x, row.names = NULL,
+                                  optional = FALSE, ...)
+    as.data.frame(unclass(x),
+                  row.names = row.names, optional = optional, ...)
 
 
 ## accessors

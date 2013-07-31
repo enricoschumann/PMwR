@@ -139,8 +139,9 @@ readjnl <- function(file) {
     ans <- read.table(file, 
                       header = TRUE, sep = "|", as.is = TRUE)
     ans <- as.list(ans[ ,apply(ans, 2, function(x) !all(is.na(x)))])
-    class(ans) <- "journal"
-    ans
+    journal(timestamp = ans$timestamp,
+            amount    = ans$amount,
+            comment   = ans$comment)
 }
 (jnl <- readjnl("ex1.jnl"))
 @ 

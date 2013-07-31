@@ -5,6 +5,7 @@
 \alias{print.journal}
 \alias{sort.journal}
 \alias{subset.journal}
+\alias{as.data.frame.journal}
 \title{
   Create a Journal
 }
@@ -27,50 +28,61 @@ journal(timestamp, amount, price, instrument,
 \arguments{
   \item{timestamp}{
     time
-}
+  }
   \item{amount}{
     volume per trade
-}
+  }
   \item{price}{
     trade price
-}
+  }
   \item{id}{
     trade id
-}
+  }
   \item{instrument}{
     instrument
-}
+  }
   \item{account}{
-     account 
-}
-\item{\dots}{
-  
-  For \code{journal}: further arguments, which must all be named. For
-  \code{subset}: an expression that evaluates to a logical vector; it
-  can use all fields of the passed journal; see Examples.
-  
-}
+    account 
+  }
+  \item{\dots}{
+    
+    For \code{journal}: further arguments, which must all be named. For
+    \code{subset}: an expression that evaluates to a logical vector; it
+    can use all fields of the passed journal; see Examples.
+    
+  }
   \item{x}{
+    
     a \code{journal} object
-}
+    
+  }
   \item{width}{
+
     integer
-}
+
+  }
   \item{decreasing}{
     arguments passed to sort
-}
+  }
   \item{by}{
     sort by
-}
+  }
   \item{na.last}{
     arguments passed to sort
-}
+  }
   \item{max.print}{
     maximum number of transactions to print
-}
+  }
   \item{exclude}{
     character: fields that should not be printed
-}
+  }
+  \item{row.names}{
+    see \code{\link{as.data.frame}}
+  }
+  \item{optional}{
+    see \code{\link{as.data.frame}}
+    
+  }
 }
 \details{
   

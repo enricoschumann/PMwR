@@ -26,7 +26,6 @@ export(
     rmspace,
     roundPOSIXt,
     runStats,
-    saveAttachment,
     scaleToUnity,
     scaleTrades,
     splitTrades,

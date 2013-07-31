@@ -1,3 +1,14 @@
+2013-07-31  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: removed 'saveAttachment'
+
+	* DESCRIPTION (Depends): removed base64enc. Moved function
+	'saveAttachment' to package mailtools.
+
+2013-07-30  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/dev.R (## ): removed comments/old function definitions
+
 2013-07-29  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (journal): changed default arguments: 'id = NULL,
