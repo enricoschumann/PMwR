@@ -8,6 +8,9 @@
 
 	* R/returns.R (toHTML.preturns, toLatex.preturns): added/exported
 
+	* R/drawdown.R (drawdown): returned list now contains
+	high.position, low.position (instead of highPosition, lowPosition)
+
 2013-07-24  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-34

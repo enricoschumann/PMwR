@@ -16,6 +16,7 @@ export(
     plotTradingHours,
     pm,
     previousBusinessDay,
+    rebalance,
     returns,
     rmspace,
     roundPOSIXt,
@@ -23,4 +24,6 @@ export(
     timegrid
     )
 S3method(print,preturns)
+S3method(toHTML,preturns)
+S3method(toLatex,preturns)
 useDynLib(PMwR)
