@@ -70,7 +70,8 @@ ES
   Very experimental. The interface may change.
 }
 \seealso{
-##  \code{\link{journal}}
+\code{journal}
+  %%  \code{\link{journal}}
 }
 \examples{
 ## to be added
