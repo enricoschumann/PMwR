@@ -33,6 +33,8 @@ export(
     twExposure
     )
 # methods
+importFrom(utils,toLatex)
+importFrom(tools,toHTML)
 S3method(c, journal)
 S3method(print, journal)
 S3method(length, journal)
