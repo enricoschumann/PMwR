@@ -23,6 +23,8 @@ export(
     runStats,
     timegrid
     )
+importFrom(utils,toLatex)
+importFrom(tools,toHTML)
 S3method(print,preturns)
 S3method(toHTML,preturns)
 S3method(toLatex,preturns)
