@@ -8,37 +8,33 @@
   Rebalance portfolio  
 }
 \usage{
-rebalance(current, target, prices,
-          notional, names = NULL,
-          w.current = FALSE, w.target = TRUE,
-          do.trunc = TRUE)
+rebalance(current, target, price,
+          notional = NULL, 
+          truncate = TRUE,
+          match.names = TRUE)
 
 \method{print}{rebalance}(x, \dots)
 }
 \arguments{
   \item{current}{
-    the current holdings: a vector of position sizes
+    the current holdings: a (typically named) vector of position sizes;
+    can also be a \code{position}
   }
   \item{target}{
-    the target holdings: a vector of weights
+    the target holdings: a (typically named) vector of weights;
+    can also be a \code{position}
   }
-  \item{prices}{
+  \item{price}{
     the current prices
   }
   \item{notional}{
     the value of the portfolio; if missing, replaced by \code{sum(current*prices)}
   }
-  \item{names}{
-    character.
-  }
-  \item{w.current}{
-    are \code{current} positions weights? Default is \code{FALSE}.
-  }
-  \item{w.target}{
-    are \code{target} positions weights? Default is \code{TRUE}.
-  }
-  \item{do.trunc}{
+  \item{truncate}{
     truncate computed positions? Default is \code{TRUE}.
+  }
+  \item{match.names}{
+    logical
   }
   \item{x}{
     an object of class \code{rebalance}.
@@ -65,16 +61,16 @@ rebalance(current, target, prices,
 
 }
 \references{
-ES
+ES - PMwR
 }
 \author{
 ES
 }
 \section{Warning }{
-  Experimental. The interface may change.
+  Very experimental. The interface may change.
 }
 \seealso{
-  \code{\link{journal}}
+##  \code{\link{journal}}
 }
 \examples{
 ## to be added
