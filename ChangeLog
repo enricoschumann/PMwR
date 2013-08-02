@@ -1,4 +1,10 @@
+2013-08-02  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Depends): 'tools' added (for 'toHTML')
+
 2013-07-31  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/rebalance.R (rebalance): removed w.current/w.target arguments
 
 	* R/returns.R (toHTML.preturns, toLatex.preturns): added/exported
 
