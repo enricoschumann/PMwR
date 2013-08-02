@@ -32,31 +32,19 @@ twReturns <- function(price, position, pad = NULL) {
 }
 
 ## not exported
-pReturns <- function(x, t = NULL, period = "month",
-                     complete.first = TRUE) {
+pReturns <- function(x, t, period, complete.first = TRUE) {
 
-    ## TODO: make internal function that checks x and t
-    if (is.null(t)) {
-        if (!inherits(x, "zoo")) {
-            stop(sQuote("t"), " not supplied, so ", sQuote("x"),
-                 " must inherit from ", sQuote("zoo"))
-        } else {
-            t <- index(x)
-            x <- coredata(x)
-        }
-    } else {
-        if (is.unsorted(t)) {
-            idx <- order(t)
-            t <- t[idx]
-            x <- x[idx]
-        }
-    }
-    if (grepl("da(y|i)", period, ignore.case = TRUE)) {
+    if (length(period) > 1L) {
+        by <- period
+    } else if (grepl("da(y|i)", period, ignore.case = TRUE)) {
         by <- format(t, "%Y%m%d")
-    } else if (grepl("month", period, ignore.case = TRUE)) {
+    } else if (grepl("year(ly)?", period, ignore.case = TRUE)) {
+        by <- format(t, "%Y")
+    } else if (grepl("month(ly)?", period, ignore.case = TRUE)) {
         by <- format(t, "%Y%m")
-    }
-    ii <- PMwR:::last(x, by, TRUE)
+    } 
+
+    ii <- last(x, by, TRUE)
     if (complete.first && by[1L] == by[2L])
         ii <- c(1, ii)
 
@@ -68,7 +56,28 @@ pReturns <- function(x, t = NULL, period = "month",
 }
 
 returns <- function(x, t = NULL, period = "month", complete.first = TRUE,
-                     pad = NULL, position) {
+                    pad = NULL, position) {
+
+    ## TODO: make internal function that checks x and t
+    if (is.null(t)) {
+        if (inherits(x, "zoo")) {
+            t <- index(x)
+            x <- zoo:::coredata(x)
+            if (!is.null(dim(x)))
+                stop("with ", sQuote("t"), " supplied, ",
+                     sQuote("x"), " must be a vector")                    
+        }
+    } else {
+        if (!is.null(dim(x)))
+            stop("with ", sQuote("t"), " supplied, ",
+                 sQuote("x"), " must be a vector")                
+        if (is.unsorted(t)) {
+            idx <- order(t)
+            t <- t[idx]
+            x <- x[idx]
+        }
+    }
+
     if (is.null(t) &&  missing(position)) {
         returns0(x, pad)        
     } else if (!is.null(t)) {
@@ -78,37 +87,7 @@ returns <- function(x, t = NULL, period = "month", complete.first = TRUE,
     }
 }
 
-##require("tseries")
-##sp   <- get.hist.quote("^GSPC", quote="AdjClose")
-  
-  
-## mReturns <- function(x, t = NULL, complete.first = TRUE) {
-##     if (is.null(t) && !inherits(x, "zoo"))
-##         stop("x should be of class zoo")
-    
-##     Ym <- format(index(x), "%Y%m")
-    
-##     if (complete.first && Ym[1] == Ym[2])
-##         index(x)[1L] <- endOfPreviousMonth(index(x)[1L])
-##     rets <- PMwR:::last(sp, Ym)
-    
-## }
-
-
-
-rtTab <- function(x) {
-    f <- function(x)
-        format(round(coredata(100*x), 1), nsmall=1)
-    years <- as.numeric(format(index(x), "%Y"))
-    mons <- as.numeric(format(index(x), "%m"))
-    tb <- array("", dim = c(length(unique(years)), 14L))
-    tb[cbind(years - years[1L] + 1L, mons + 1L)] <- f(x)
-    for (y in sort(unique(years)))
-        tb[y - years[1L] + 1L, 14L] <- f(prod(coredata(x)[years==y] + 1L) - 1L)
-    tb[ ,1L] <- sort(unique(years))
-    tb
-    paste(apply(tb, 1, function(x) paste(x, collapse = "&")), "\\\\")
-}
+## not exported
 mtab <- function(x) {
     f <- function(x)
         format(round(100*x, 1), nsmall = 1)    
@@ -123,6 +102,8 @@ mtab <- function(x) {
     tb
 }
 
+
+
 print.preturns <- function(x, ..., year.rows = TRUE) {
     if (x$period == "month") {
         if (year.rows)
@@ -134,4 +115,49 @@ print.preturns <- function(x, ..., year.rows = TRUE) {
         print(unclass(x))
     }
     invisible(x)
+}
+
+toLatex.preturns <- function(object, ..., year.rows = TRUE) {
+    if (object$period == "month") {
+        if (year.rows)
+            mt <- mtab(object)
+        else
+            mt <- t(mtab(object))
+    } else {
+        stop("currently only supported for period ", sQuote("month"))
+    }
+    mt <- rbind(colnames(mt), mt)
+    mt <- cbind(rownames(mt), mt)
+    mt <- paste(apply(mt, 1, function(x) paste(x, collapse = "&")), "\\\\")        
+    class(mt) <- "Latex"
+    mt
+}
+toHTML.preturns <- function(x, ..., year.rows = TRUE, stand.alone = TRUE) {
+
+    .th <- function(x)
+        paste0("<th>", x, "</th>")
+    .td <- function(x)
+        paste0("<td style='text-align:right;padding:0.5em;' >", x, "</td>")
+    .tr <- function(x)
+        paste0("<tr>", x, "</tr>")
+    
+    if (x$period == "month") {
+        if (year.rows)
+            mt <- mtab(x)
+        else
+            mt <- t(mtab(x))
+    } else {
+        stop("currently only supported for period ", sQuote("month"))
+    }
+    mt <- rbind(colnames(mt), mt)
+    mt <- cbind(rownames(mt), mt)
+    mt <- unname(mt)
+    mt[1, ]   <- .th(mt[1, ])
+    mt[-1 ,1] <- .th(mt[-1, 1])
+    mt[-1,-1] <- .td(mt[-1,-1])
+
+
+    mt <- paste(.tr(apply(mt, 1, paste, collapse = "")), collapse = "")
+    mt <- paste("<table>", mt, "</table>", sep = "")
+    mt
 }

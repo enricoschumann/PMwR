@@ -1,3 +1,13 @@
+2013-08-02  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Depends): 'tools' added (for 'toHTML'), removed
+	'base64enc'
+	(Version): Version: 0.1-35
+
+	* R/rebalance.R (rebalance): added
+
+	* R/returns.R (toHTML.preturns, toLatex.preturns): added/exported
+
 2013-07-24  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-34

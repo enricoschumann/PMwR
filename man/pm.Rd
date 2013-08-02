@@ -4,7 +4,7 @@
   Partial Moments
 }
 \description{
-  Compute partial moments
+  Compute partial moments.
 }
 \usage{
   pm(x, xp = 2, threshold = 0, lower = TRUE,
@@ -65,7 +65,7 @@
   Enrico Schumann
 }
 \examples{
-pm(x <-rnorm(100), 2)
+pm(x <- rnorm(100), 2)
 var(x)/2
 
 pm(x, 2, normalise = TRUE)
