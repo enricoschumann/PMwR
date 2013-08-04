@@ -206,7 +206,8 @@ amount <- function(x, abs = FALSE, ...) {
         ii <- grepl(i, x$instrument)
         if (!is.null(x$account))
             ii <- ii | grepl(i, x$account)
-    }
+    } else
+        ii <- i
     ans <- lapply(unclass(x), `[`, ii)
     class(ans) <- "journal"
     ans
@@ -222,7 +223,7 @@ aggregate.journal <- function(x, by, FUN, ...) {
     for (g in sort(unique(grp))) {
         sx <- x[g == grp]
         j <- c(j, journal(amount = sum(sx$amount),
-                          price = mean(sx$price),
+                          price = sum(sx$amount*sx$price)/sum(sx$amount),
                           instrument = sx$instrument[1]))
     }
     j
