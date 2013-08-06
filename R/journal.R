@@ -68,8 +68,9 @@ journal <- function(timestamp, amount, price, instrument,
     class(ans) <- "journal"
     ans    
 }
-print.journal <- function(x, ..., width = 60L, max.print = 100,
-                          exclude = NULL) {
+
+print.journal <- function(x, ..., width = 60L, max.print = 100L,
+                          exclude = NULL, include = NULL) {
     oo <- getOption("scipen")
     options(scipen = 1e8)
     on.exit(options(scipen = oo))
@@ -107,8 +108,10 @@ print.journal <- function(x, ..., width = 60L, max.print = 100,
     cat(msg)
     invisible(x)
 }
+
 length.journal <- function(x)
     length(x$amount)
+
 sort.journal <- function(x, decreasing = FALSE, by = "timestamp",
                          ..., na.last = TRUE) {
     o <- order(x[[by]], na.last = na.last, decreasing = decreasing)    
@@ -116,7 +119,8 @@ sort.journal <- function(x, decreasing = FALSE, by = "timestamp",
         x[[i]]<- x[[i]][o]
     x    
 }
-c.journal <- function(...) {
+
+c.journal <- function(..., recursive = FALSE) {
     tls <- list(...)
     if (!all(unlist(lapply(tls, "class")) == "journal"))
         stop("all ... must be journals")
@@ -152,19 +156,16 @@ as.data.frame.journal <- function(x, row.names = NULL,
 
 
 ## accessors
-account <- function(x, pattern = NULL, ...) {
-
+account <- function(x, ...) {
     if (!inherits(x, "journal"))
         stop(sQuote("x"), " must inherit from class ", sQuote("journal"))
 
-    if (is.null(x$account)) {
+    if (is.null(x$account)) 
         NULL
-    } else if (!is.null(pattern)) {
-        ts <- grep(pattern, x$account, ...)
-        x$account[ts]
-    }    else
+    else
         x$account
 }
+
 `account<-` <- function(x, value) {
     if (!inherits(x, "journal"))
         stop(sQuote("x"), " must inherit from class ", sQuote("journal"))
@@ -177,17 +178,13 @@ account <- function(x, pattern = NULL, ...) {
         x$account <- rep(value, lenx)
     x
 }
-summary.journal <- function(x, ...) {
-    ## number of trades per instrument
-    ## level: instrument or account or factor
-    ## number of transactions, min/max price, first/last transactions
-}
-amount <- function(x, abs = FALSE, ...) {
 
+amount <- function(x, abs = FALSE, ...) {
     if (!inherits(x, "journal"))
         stop(sQuote("x"), " must inherit from class ", sQuote("journal"))
     x$amount
 }
+
 `amount<-` <- function(x, value) {
 
     if (!inherits(x, "journal"))
@@ -201,6 +198,14 @@ amount <- function(x, abs = FALSE, ...) {
         x$amount <- rep(value, lenx)
     x
 }
+
+summary.journal <- function(x, ...) {
+    ## number of trades per instrument
+    ## level: instrument or account or factor
+    ## number of transactions, min/max price, first/last transactions
+}
+
+
 `[.journal`  <- function(x, i, match.against = NULL) {
     if (is.character(i)) {
         ii <- grepl(i, x$instrument)
@@ -212,9 +217,13 @@ amount <- function(x, abs = FALSE, ...) {
     class(ans) <- "journal"
     ans
 }
+
 aggregate.journal <- function(x, by, FUN, ...) {
     if (!missing(FUN))
         FUN <- match.fun(FUN)
+
+    ## FIXME: use by
+    
     ins <- x$instrument
     sgn <- ifelse(x$amount >= 0, "buy ", "sell")
     grp <- paste(ins, by, sgn, sep = "_")
@@ -229,7 +238,13 @@ aggregate.journal <- function(x, by, FUN, ...) {
     j
 }
 
+split.journal <- function(x, f, drop = FALSE, ...) {
+    
+    
+}
+
 head.journal <- function(x, n = 6L, ..., by = TRUE) {
+
     if (length(x) == 0L)  ## empty journal
         x
 
@@ -255,7 +270,7 @@ tail.journal <- function(x, n = 6L, ..., by = TRUE) {
         ans <- journal()
         for (i in insts) {
             sx <- x[x$instrument == i]
-            if (lenght(sx == 0L)
+            if (length(sx == 0L))
                 next
             ans <- c(ans, sx[seq_len(min(n, length(sx)))])            
         }

@@ -57,5 +57,13 @@ test.journal <- function() {
     
     ## method: length
     checkEquals(length(jj), 10L)
-    
+
+    ## method: head/tail
+    timestamp <- 1:20
+    amount <- rep(1, length(timestamp))
+    price <- sample(100:110, length(timestamp), replace = TRUE)
+    instrument <- rep(letters[1:4], each = 5L)
+    j <- journal(timestamp, amount, price, instrument = instrument)
+    head(j, 4)
+    head(j, 4, by = FALSE)
 }

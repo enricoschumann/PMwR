@@ -1,3 +1,7 @@
+importFrom(utils,toLatex)
+importFrom(utils,head)
+importFrom(utils,tail)
+importFrom(tools,toHTML)
 export(
     "dayOfMonth<-",
     "mday<-",
@@ -33,9 +37,9 @@ export(
     twExposure
     )
 # methods
-importFrom(utils,toLatex)
-importFrom(tools,toHTML)
 S3method(c, journal)
+S3method(head, journal)
+S3method(tail, journal)
 S3method(print, journal)
 S3method(length, journal)
 S3method(sort, journal)
