@@ -228,3 +228,39 @@ aggregate.journal <- function(x, by, FUN, ...) {
     }
     j
 }
+
+head.journal <- function(x, n = 6L, ..., by = TRUE) {
+    if (length(x) == 0L)  ## empty journal
+        x
+
+    if (by) {
+        insts <- sort(unique(x$instrument))
+        ans <- journal()
+        for (i in insts) {
+            sx <- x[x$instrument == i]
+            ans <- c(ans, sx[seq_len(min(n, length(sx)))])            
+        }
+        ans
+    } else {
+        x[seq_len(min(n, length(x)))]        
+    }
+}
+
+tail.journal <- function(x, n = 6L, ..., by = TRUE) {
+    if ((lenx <- length(x)) == 0L)  ## empty journal
+        x
+
+    if (by) {
+        insts <- sort(unique(x$instrument))
+        ans <- journal()
+        for (i in insts) {
+            sx <- x[x$instrument == i]
+            if (lenght(sx == 0L)
+                next
+            ans <- c(ans, sx[seq_len(min(n, length(sx)))])            
+        }
+        ans
+    } else {
+        x[(lenx - min(n, lenx) + 1L):lenx]        
+    }
+}
