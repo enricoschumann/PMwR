@@ -5,6 +5,8 @@
 \alias{print.journal}
 \alias{sort.journal}
 \alias{subset.journal}
+\alias{aggregate.journal}
+\alias{split.journal}
 \alias{as.data.frame.journal}
 \title{
   Create a Journal
@@ -17,7 +19,7 @@ journal(timestamp, amount, price, instrument,
         id = NULL, account = NULL, \dots)
 
 
-\method{c}{journal}(\dots)
+\method{c}{journal}(\dots, recursive = FALSE)
 \method{length}{journal}(x)
 \method{print}{journal}(x, \dots, width = 60L, max.print = 100, exclude = NULL)
 \method{sort}{journal}(x, decreasing = FALSE, by = "timestamp", \dots, na.last = TRUE)
@@ -87,9 +89,28 @@ journal(timestamp, amount, price, instrument,
 \details{
   
   The \code{journal} function creates a list of the arguments and
-  attaches a class attribute (\sQuote{journal}).  There are few
-  methods (\code{\link{print}}, \code{\link{c}}).
+  attaches a class attribute (\sQuote{journal}).  There are several
+  methods:
 
+  \describe{
+    \item{\code{aggregate}}{Splits a journal according to by, applies a
+    function to every sub-journal and recombines the results into a
+    journal.}
+  
+    \item{\code{split}}{Splits a journal according to \code{f}, yielding
+    a list of journals.  (Often used interactively to have information
+    per sub-journal \code{print}ed }
+
+    \item{\code{c}}{Combine several journals into one.  Note that the
+      first argument to \code{c.journal} must be a journal, or else method
+      dispatch will fail.  For empty journals, use \code{journal()} (not
+      \code{NULL}).}
+    
+    \item{\code{length}}{number of transactions in a journal; it uses
+    the length of \code{amount}.}
+  }  
+
+  
   Missing arguments will be coded as \code{\link{NA}} except for
   \code{id} and \code{account} which become \code{\link{NULL}}.
   
