@@ -5,7 +5,7 @@ splitTrades <- function(amount, price, timestamp, aggregate = FALSE) {
     cumn <- cumsum(n)
     N <- length(cumn)
 
-    I <- which(cumn[-1L] * cumn[-N] < 0) + 1L
+    I <- which(sign(cumn[-1L]) * sign(cumn[-N]) < 0) + 1L
     if (length(I)) {
         n[I] <- -cumn[I - 1L]
         newtimes <- timestamp[I]
