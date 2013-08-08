@@ -1,3 +1,8 @@
+2013-08-08  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/trades.R (splitTrades): if 'timestamp' is missing, do
+	'seq_along(amount)'
+
 2013-08-07  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/datetimetools.R (`mday<-`): fixed -- returned the

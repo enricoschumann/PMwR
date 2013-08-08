@@ -1360,7 +1360,7 @@ The exception is when computations can be accelerated.
 \end{framed}
 
 \begin{framed}
-  \emph{We have a list of trades and need to determine the
+  \emph{I have a list of trades and need to determine the
     profit-and-loss between two timestamps.}
 \end{framed}
 
@@ -1387,6 +1387,19 @@ But even the more general case is not so complicated, after all.
 
 \item Combine $J_0$, $J$, and $J_1$ and compute the PL.
 \end{enumerate}
+
+\begin{framed}
+  \emph{I need to determine the month-to-date profit-and-loss.}
+\end{framed}
+
+1) compute position on last day of last month
+
+2) make journal from position (add prices)
+
+3) combine with journal since month start
+
+4) use average (\texttt{avg}) on all instruments
+
 
 %\printindex
 \bibliographystyle{plainnat}

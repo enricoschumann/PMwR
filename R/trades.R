@@ -2,6 +2,8 @@ splitTrades <- function(amount, price, timestamp, aggregate = FALSE) {
     n <- amount
     p <- price
 
+    if (missing(timestamp))
+        timestamp <- seq_along(amount)
     cumn <- cumsum(n)
     N <- length(cumn)
 
