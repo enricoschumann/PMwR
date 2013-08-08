@@ -12,6 +12,7 @@ previousBusinessDay <- function (x, holidays = NULL) {
     x[tmpi] <- x[tmpi] - 2L
     x
 }
+
 nextBusinessDay <- function(x, holidays = NULL) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
         stop("input must inherit from class Date or POSIXt")
@@ -23,12 +24,14 @@ nextBusinessDay <- function(x, holidays = NULL) {
     x[tmpi] <- x[tmpi] + 1L
     x
 }
+
 isWeekend <- function(x) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
         stop("input must inherit from class Date or POSIXt")
     tmp <- as.POSIXlt(x)
     tmp$wday == 0L | tmp$wday == 6L
 }
+
 firstOfMonth <- function (x) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
         stop("input must inherit from class Date or POSIXt")
@@ -36,6 +39,7 @@ firstOfMonth <- function (x) {
     tmp$mday <- 1L
     as.Date(tmp)
 }
+
 endOfMonth <- function(x, shift = 0L) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
         stop("input must inherit from class Date or POSIXt")
@@ -44,6 +48,7 @@ endOfMonth <- function(x, shift = 0L) {
     tmp$mday <- 1L
     as.Date(tmp) - 1L
 }
+
 endOfPreviousMonth <- function(x) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
         stop("input must inherit from class Date or POSIXt")
@@ -51,16 +56,21 @@ endOfPreviousMonth <- function(x) {
     tmp$mday <- 1L
     as.Date(tmp) - 1L
 }
+
 mday <- function(x)
     dayOfMonth(x)
+
 `mday<-` <- function(x, value){
     dayOfMonth(x) <- value
+    x
 }
+
 dayOfMonth <- function(x) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
         stop("input must inherit from class Date or POSIXt")
     as.POSIXlt(x)$mday
 }
+
 `dayOfMonth<-` <- function(x, value) {
     if (!all(inherits(x, "Date") | inherits(x, "POSIXt")))
         stop("input must inherit from class Date or POSIXt")
@@ -74,6 +84,7 @@ dayOfMonth <- function(x) {
     else 
         tmp
 }
+
 lastWeekday <- function(weekday, x, shift = 0L,
                         period = "month", before, inclusive = TRUE) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))

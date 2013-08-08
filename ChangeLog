@@ -1,3 +1,14 @@
+2013-08-08  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-36
+
+	* R/datetimetools.R (`mday<-`): fixed -- returned the
+	day-of-month, not the date
+
+	* R/internals.R (avg): added (unexported)
+
+	* NAMESPACE: export rebalance
+
 2013-08-02  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Depends): 'tools' added (for 'toHTML'), removed
