@@ -70,7 +70,7 @@ journal <- function(timestamp, amount, price, instrument,
 }
 
 print.journal <- function(x, ..., width = 60L, max.print = 100L,
-                          exclude = NULL, include = NULL) {
+                          exclude = NULL, include.only = NULL) {
     oo <- getOption("scipen")
     options(scipen = 1e8)
     on.exit(options(scipen = oo))
@@ -204,7 +204,6 @@ summary.journal <- function(x, ...) {
     ## level: instrument or account or factor
     ## number of transactions, min/max price, first/last transactions
 }
-
 
 `[.journal`  <- function(x, i, match.against = NULL) {
     if (is.character(i)) {

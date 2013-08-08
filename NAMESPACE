@@ -2,6 +2,8 @@ importFrom(utils,toLatex)
 importFrom(utils,head)
 importFrom(utils,tail)
 importFrom(tools,toHTML)
+
+## exports
 export(
     "dayOfMonth<-",
     "mday<-",
@@ -26,6 +28,7 @@ export(
     plotTradingHours,
     position,
     previousBusinessDay,
+    rebalance,
     returns,
     rmspace,
     roundPOSIXt,
@@ -36,7 +39,8 @@ export(
     timegrid,
     twExposure
     )
-# methods
+
+## methods
 S3method(c, journal)
 S3method(head, journal)
 S3method(tail, journal)
@@ -47,6 +51,7 @@ S3method(subset, journal)
 S3method(as.data.frame, journal)
 S3method(`[`, journal)
 S3method(print, pl)
+S3method(print, rebalance)
 S3method(print, position)
 S3method(print, preturns)
 S3method(toLatex,preturns)

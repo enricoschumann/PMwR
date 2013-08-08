@@ -9,7 +9,7 @@ print.pl <- function(x, ...) {
         row.names(df) <- df[["instrument"]]    
     df <- df[ ,-1L]
     df[is.na(df)] <- "."
-    print(df, na.print = ".", quote = FALSE)
+    print(df, na.print = ".", quote = FALSE, print.gap = 2L)
     cat("\n          pl = total PnL in units of instrument\n")
     cat("total.amount = total /absolute/ amount of traded instruments\n")
     cat(" average.buy = average buy price\n")

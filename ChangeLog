@@ -1,3 +1,14 @@
+2013-08-07  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/datetimetools.R (`mday<-`): fixed -- returned the
+	day-of-month, not the date
+
+	* R/internals.R (avg): added (unexported)
+
+	* R/pl.R (print.pl): print.gap is 2
+
+	* NAMESPACE: export rebalance
+
 2013-08-06  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (c.journal): added recursive argument

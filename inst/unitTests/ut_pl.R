@@ -14,4 +14,12 @@ test.pl <- function() {
     jnl <- journal(timestamp, amount, price, , instrument)
     pl(jnl)
     
+
+    amount <- -c(1,1,-1,1,-1)
+    price <- c(100,100,101,100,101)
+
+    pl(amount, price, along.timestamp = TRUE)
+    PMwR:::avg(amount, price)
+
 }
+

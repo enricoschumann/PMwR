@@ -21,8 +21,7 @@ makeHHMMSS <- function(x, label = "time specification (HHMMSS)") {
 
 wait <- function(x) 
     if (length(x) == 1L)
-        Sys.sleep(x) else
-           Sys.sleep(runif(1L, min(x), max(x)))
+        Sys.sleep(x) else Sys.sleep(runif(1L, min(x), max(x)))
 
 last <- function(x, by, index = FALSE) {
     lby <- length(by)
@@ -82,8 +81,36 @@ letter2month <- function(s){
 }
 
 insert <- function(x, list, values) {
-    len <- length(list) * (length(values) - 1) + length(x)
+    len <- length(list) * (length(values) - 1L) + length(x)
     ans <- vector(typeof(x), length = len)
     seq_len(len)
 }
 
+avg <- function(amount, price, tol = 1e-8) {
+    if (any(rm <- abs(amount) < tol)) {
+        warning("removed zero amounts")
+        amount <-  amount[!rm]
+        price  <- price[!rm]
+    }
+    cs <- cumsum(amount)
+    acs <- abs(cs)
+    av <- rd <- numeric(n <- length(cs))
+    
+    if (n == 1L) {
+        list(average = price, realised = 0)            
+    } else {
+        av[1L] <- price[1L]
+        for (i in 2L:n) {
+            i1 <- i-1L
+            if (acs[i] > acs[i1]) {
+                av[i] <- (av[i1] * cs[i1] + price[i]*amount[i])/
+                    (amount[i] + cs[i1])
+                rd[i] <- rd[i1]
+            } else {
+                av[i] <- av[i1]
+                rd[i] <- rd[i1] + amount[i] * (av[i] - price[i])
+            }
+        }
+        list(average = av, realised = rd)            
+    }
+}

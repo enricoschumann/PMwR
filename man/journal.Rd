@@ -7,6 +7,7 @@
 \alias{subset.journal}
 \alias{aggregate.journal}
 \alias{split.journal}
+\alias{[.journal}
 \alias{as.data.frame.journal}
 \title{
   Create a Journal
@@ -20,12 +21,19 @@ journal(timestamp, amount, price, instrument,
 
 
 \method{c}{journal}(\dots, recursive = FALSE)
-\method{length}{journal}(x)
-\method{print}{journal}(x, \dots, width = 60L, max.print = 100, exclude = NULL)
-\method{sort}{journal}(x, decreasing = FALSE, by = "timestamp", \dots, na.last = TRUE)
-\method{subset}{journal}(x, \dots)
-\method{as.data.frame}{journal}(x, row.names = NULL, optional = FALSE, \dots)
 
+\method{length}{journal}(x)
+
+\method{print}{journal}(x, \dots, width = 60L, max.print = 100,
+                       exclude = NULL, include.only = NULL)
+
+\method{sort}{journal}(x, decreasing = FALSE, by = "timestamp", \dots, na.last = TRUE)
+
+\method{subset}{journal}(x, \dots)
+
+\method{[}{journal}(x, i, match.against = NULL)
+
+\method{as.data.frame}{journal}(x, row.names = NULL, optional = FALSE, \dots)
 }
 \arguments{
   \item{timestamp}{
@@ -78,12 +86,23 @@ journal(timestamp, amount, price, instrument,
   \item{exclude}{
     character: fields that should not be printed
   }
+  \item{include.only}{
+    character: print only those fields
+  }
   \item{row.names}{
     see \code{\link{as.data.frame}}
   }
   \item{optional}{
-    see \code{\link{as.data.frame}}
-    
+    see \code{\link{as.data.frame}}    
+  }
+  \item{recursive}{
+    ignored (see \code{\link{c}})
+  }
+  \item{i}{
+    integer, logical or character.  The latter is interpreted as a regexp.
+  }
+  \item{match.against}{
+    character vector
   }
 }
 \details{
