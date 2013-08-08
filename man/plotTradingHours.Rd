@@ -108,3 +108,6 @@ plotTradingHours(x, t,
                  xlab = "time", ylab = "random points",
                  col = "blue")
 }
+\keyword{chron}
+\keyword{hplot}
+\keyword{ts}
