@@ -1,4 +1,4 @@
-% \VignetteIndexEntry{Backtesting}
+% \VignetteIndexEntry{PMwR-Manual}
 \documentclass[a4paper,11pt]{book}
 \usepackage[left = 2.5cm, top = 2cm, bottom = 3cm, right = 4.5cm]{geometry}
 \usepackage[noae,nogin]{Sweave}
@@ -9,6 +9,7 @@
 \usepackage{textcomp}
 \usepackage{ragged2e}
 \usepackage{framed}
+\usepackage{makeidx}
 \SweaveOpts{keep.source = TRUE, eps = TRUE, pdf = FALSE}
 
 
@@ -35,7 +36,7 @@ require("PMwR")
 \section{Transactions}
 
 The basis for many computations that PMwR package provides are lists
-of transactions which, essentially, are nothing more than dataframes.
+of transactions.  Such list are nothing more than dataframes, but
 \texttt{PMwR} provides an S3 class \texttt{journal} for handling such
 transaction data.  A \texttt{journal} is created through the function
 \texttt{journal}, but it is really just a list of atomic vectors with
@@ -43,7 +44,7 @@ a class attribute.  Methods should not rely on the names of these
 vectors being sorted in any particular way; that is, components of a
 journal should always be retrieved by name, never by position (which
 is different for a dataframe, for which we can meaningfully speak of
-the second column, say).
+the \emph{n}th column).
 
 The simplicity of the class is intended, as it is meant for
 interactive analyses.  Thus, the analyst is supposed to dissect the
@@ -51,12 +52,12 @@ information in a journal at will (which includes removing the class
 attribute).
 
 What is actually stored in a \texttt{journal} is up to the analyst,
-but a few fields are typical (and required for several methods):
+but a few fields are typical (and required by several methods):
 
 \begin{description}
 
 \item[{timestamp}] anything that can be sorted (and that fits into an
-  atomic vector: POSIXlt is possible, but not recommended);
+  atomic vector; \texttt{POSIXlt} is possible, but not recommended);
 
 \item[{amount}] notional amount that is transferred;
 
@@ -74,18 +75,14 @@ but a few fields are typical (and required for several methods):
 
 Transactions are considered to be in a hierachy
 \begin{verbatim}
-<account>::<instrument>
+<account>:::<instrument>
 \end{verbatim}
 but currently there is little to use the hierarchy.  A simple scheme
-is to use specific character or pattern to separate more accounts,
-such as
+is to use specific character or pattern such as `\texttt{:::}' to
+introduce hierarchies into accounts, such as
 \begin{verbatim}
-pension::equities
+pension:::equities
 \end{verbatim}
-
-
-
-
 
 \section{First examples}
 
@@ -113,7 +110,7 @@ timestamps that were passed.
 <<>>=
 position(jnl, when = "all")
 @
-We are not limited to the timestamps in the journal:
+We are not limited to the timestamps that exist in the journal.
 <<>>=
 position(jnl, when = seq(from = as.Date("2011-12-30"), 
                            to = as.Date("2012-01-06"),
@@ -124,7 +121,8 @@ want to update it over time.  So we write transactions into files,
 like this:
 
 \VerbatimInput{ex1.jnl}
-In case you use Org-mode, such tables should look familiar. An aside:
+
+\noindent In case you use Org-mode, such tables should look familiar. An aside:
 if the original file happened to look such
 
 \VerbatimInput{ex1.txt}
@@ -145,10 +143,6 @@ readjnl <- function(file) {
 }
 (jnl <- readjnl("ex1.jnl"))
 @ 
-
-<<>>=
-position(jnl)
-@ 
 Some of these transactions may mean a gain or loss to us (such as a
 dividend payment), while others are neutral (such as a transfer
 between bank accounts).  How can we deal with that?  One way is to
@@ -158,11 +152,11 @@ by these fields.
 
 And yet another approach is this: use prices.  Whenever you evaluate
 the balances of your account, say that the price per commodity unit is
-one.  That is reasonable: if I my account has a balance of, say,
-`120.2', that it actually means `120.2 euros'.  When evaluated in
-euro, the price is one.
+one.  That is reasonable: if I my account has a balance of `120.2', it
+actually means `120.2 euros'.  When evaluated in euro, the price is
+one.
 
-An expense should be a negative amount; income should go woth positive
+An expense should be a negative amount; income should go with positive
 amounts.  When you add such an entry, make its price 0; when you
 compute that value of a position, make its price 1.  An example:
 
@@ -334,11 +328,6 @@ print(jnl2)
 
 
 
-%\#\# journal.cli(J, \ldots{})
-%\#\#while (input != "exit") \{
-%\#\#  input <- readline()
-%\#\#  \#\# parse me
-%\#\#\}
 
 
 \chapter{Profit and (or) loss}
@@ -507,8 +496,27 @@ closeOnFirst(n)
 
 
 
+\section{Computing returns}
 
+\subsection{Numeric data}
+A vector.
+<<>>=
+x <- c(100,101,105)
+returns(x)
+@ 
+A matrix.
+<<>>=
+X <- cbind(x,x,x)
+returns(X)
+@ 
 
+\subsection{Time series}
+
+<<>>=
+x
+t <- 1:3
+returns(x, t)
+@ 
 
 \chapter{Backtesting}
 
@@ -1401,8 +1409,15 @@ But even the more general case is not so complicated, after all.
 4) use average (\texttt{avg}) on all instruments
 
 
-%\printindex
+\printindex
 \bibliographystyle{plainnat}
 \bibliography{bibliothek}
 
 \end{document}
+
+
+%\#\# journal.cli(J, \ldots{})
+%\#\#while (input != "exit") \{
+%\#\#  input <- readline()
+%\#\#  \#\# parse me
+%\#\#\}

@@ -33,29 +33,36 @@ twReturns <- function(price, position, pad = NULL) {
 
 ## not exported
 pReturns <- function(x, t, period, complete.first = TRUE) {
+    
+    if (is.null(period)) {
+        ans <- list(returns = returns(x),
+                    t = t[-1L],
+                    period = period)
+    } else {        
 
-    if (length(period) > 1L) {
-        by <- period
-    } else if (grepl("da(y|i)", period, ignore.case = TRUE)) {
-        by <- format(t, "%Y%m%d")
-    } else if (grepl("year(ly)?", period, ignore.case = TRUE)) {
-        by <- format(t, "%Y")
-    } else if (grepl("month(ly)?", period, ignore.case = TRUE)) {
-        by <- format(t, "%Y%m")
-    } 
-
-    ii <- last(x, by, TRUE)
-    if (complete.first && by[1L] == by[2L])
-        ii <- c(1, ii)
-
-    ans <- list(returns = returns(x[ii]),
-                t = t[ii][-1L],
-                period = period)
+        if (length(period) > 1L) {
+            by <- period
+        } else if (grepl("da(y|i)", period, ignore.case = TRUE)) {
+            by <- format(t, "%Y%m%d")
+        } else if (grepl("year(ly)?", period, ignore.case = TRUE)) {
+            by <- format(t, "%Y")
+        } else if (grepl("month(ly)?", period, ignore.case = TRUE)) {
+            by <- format(t, "%Y%m")
+        } 
+        
+        ii <- last(x, by, TRUE)
+        if (complete.first && by[1L] == by[2L])
+            ii <- c(1, ii)
+        
+        ans <- list(returns = returns(x[ii]),
+                    t = t[ii][-1L],
+                    period = period)        
+    }
     class(ans) <- "preturns"
     ans
 }
 
-returns <- function(x, t = NULL, period = "month", complete.first = TRUE,
+returns <- function(x, t = NULL, period = NULL, complete.first = TRUE,
                     pad = NULL, position) {
 
     ## TODO: make internal function that checks x and t
@@ -105,7 +112,7 @@ mtab <- function(x) {
 
 
 print.preturns <- function(x, ..., year.rows = TRUE) {
-    if (x$period == "month") {
+    if (!is.null(x$period) && x$period == "month") {
         if (year.rows)
             print(mtab(x), quote = FALSE, print.gap = 2, right = TRUE)
         else
@@ -132,6 +139,7 @@ toLatex.preturns <- function(object, ..., year.rows = TRUE) {
     class(mt) <- "Latex"
     mt
 }
+
 toHTML.preturns <- function(x, ..., year.rows = TRUE, stand.alone = TRUE) {
 
     .th <- function(x)

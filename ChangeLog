@@ -1,3 +1,7 @@
+2013-08-22  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (returns): changed default period to NULL
+
 2013-08-08  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/trades.R (splitTrades): if 'timestamp' is missing, do
