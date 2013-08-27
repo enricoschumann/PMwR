@@ -7,10 +7,12 @@
 \alias{subset.journal}
 \alias{aggregate.journal}
 \alias{split.journal}
+\alias{head.journal}
+\alias{tail.journal}
 \alias{[.journal}
 \alias{as.data.frame.journal}
 \title{
-  Create a Journal
+  Journal
 }
 \description{
   Create a journal of financial transactions.
@@ -18,7 +20,6 @@
 \usage{
 journal(timestamp, amount, price, instrument,
         id = NULL, account = NULL, \dots)
-
 
 \method{c}{journal}(\dots, recursive = FALSE)
 
@@ -34,6 +35,11 @@ journal(timestamp, amount, price, instrument,
 \method{[}{journal}(x, i, match.against = NULL)
 
 \method{as.data.frame}{journal}(x, row.names = NULL, optional = FALSE, \dots)
+
+\method{head}{journal}(x, n = 6L, \dots, by = TRUE)
+
+\method{tail}{journal}(x, n = 6L, \dots, by = TRUE)
+
 }
 \arguments{
   \item{timestamp}{
@@ -61,21 +67,17 @@ journal(timestamp, amount, price, instrument,
     can use all fields of the passed journal; see Examples.
     
   }
-  \item{x}{
-    
-    a \code{journal} object
-    
+  \item{x}{    
+    a \code{journal} object    
   }
   \item{width}{
-
     integer
-
   }
   \item{decreasing}{
     arguments passed to sort
   }
   \item{by}{
-    sort by
+    \code{sort}: sort by field. \code{head}/\code{tail}: by instrument.
   }
   \item{na.last}{
     arguments passed to sort
@@ -100,6 +102,9 @@ journal(timestamp, amount, price, instrument,
   }
   \item{i}{
     integer, logical or character.  The latter is interpreted as a regexp.
+  }
+  \item{n}{
+    integer.
   }
   \item{match.against}{
     character vector

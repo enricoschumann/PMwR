@@ -45,10 +45,15 @@ test.journal <- function() {
     instrument <- "Stock A"
     j <- journal(timestamp, amount, price, instrument = instrument)
 
+    ## method: c
     checkEquals(c(j, journal()) , j)    
     ## tmp <- as.data.frame(c(journal(), j))
 
-    ## method: c
+    ## subsetting
+    j[1]
+    j["stock"]
+    
+    
     jj <- c(j, j)
 
     ## method: sort
@@ -66,4 +71,8 @@ test.journal <- function() {
     j <- journal(timestamp, amount, price, instrument = instrument)
     head(j, 4)
     head(j, 4, by = FALSE)
+
+    
+
+
 }

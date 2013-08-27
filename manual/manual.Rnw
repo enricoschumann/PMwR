@@ -326,6 +326,8 @@ jnl2
 print(jnl2)
 @ 
 
+\section{Subsetting journals}
+
 
 
 

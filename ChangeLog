@@ -1,3 +1,11 @@
+2013-08-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (`[.journal`): default for 'match.against' is now
+	c("instrument", "account")
+
+	* R/journal.R (c.journal): issue warning (instead of error) when
+	not all passed arguments are of class 'journal'
+
 2013-08-22  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/returns.R (returns): changed default period to NULL

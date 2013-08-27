@@ -122,9 +122,8 @@ sort.journal <- function(x, decreasing = FALSE, by = "timestamp",
 
 c.journal <- function(..., recursive = FALSE) {
     tls <- list(...)
-    if (!all(unlist(lapply(tls, "class")) == "journal"))
-        stop("all ... must be journals")
-    
+    if (!all(unlist(lapply(tls, inherits, "journal")) ))
+        warning("method only works for ", sQuote("journal"), " objects")    
     ns <- unique(unlist(lapply(tls, names)))
     ans <- vector("list", length = length(ns))
     names(ans) <- ns
@@ -200,24 +199,28 @@ amount <- function(x, abs = FALSE, ...) {
 }
 
 summary.journal <- function(x, ...) {
+    ## TODO
     ## number of trades per instrument
     ## level: instrument or account or factor
     ## number of transactions, min/max price, first/last transactions
 }
 
-`[.journal`  <- function(x, i, match.against = NULL) {
+`[.journal`  <- function(x, i, match.against = c("instrument", "account"),
+                         ignore.case = TRUE) {
     if (is.character(i)) {
-        ii <- grepl(i, x$instrument)
-        if (!is.null(x$account))
-            ii <- ii | grepl(i, x$account)
+        ii <- logical(length(x))
+        for (m in match.against) {
+            if (is.null(x[[m]]))
+                next
+            ii <- ii | grepl(i, x[[m]], ignore.case = ignore.case)
+        }        
     } else
         ii <- i
-    ans <- lapply(unclass(x), `[`, ii)
-    class(ans) <- "journal"
-    ans
+    x[ii]
 }
 
 aggregate.journal <- function(x, by, FUN, ...) {
+    ## TODO
     if (!missing(FUN))
         FUN <- match.fun(FUN)
 
@@ -238,15 +241,12 @@ aggregate.journal <- function(x, by, FUN, ...) {
 }
 
 split.journal <- function(x, f, drop = FALSE, ...) {
-    
-    
+    ## TODO    
 }
 
 head.journal <- function(x, n = 6L, ..., by = TRUE) {
-
-    if (length(x) == 0L)  ## empty journal
+    if ((lenx <- length(x)) <= 1L)
         x
-
     if (by) {
         insts <- sort(unique(x$instrument))
         ans <- journal()
@@ -256,14 +256,13 @@ head.journal <- function(x, n = 6L, ..., by = TRUE) {
         }
         ans
     } else {
-        x[seq_len(min(n, length(x)))]        
+        x[seq_len(min(n, lenx))]        
     }
 }
 
 tail.journal <- function(x, n = 6L, ..., by = TRUE) {
-    if ((lenx <- length(x)) == 0L)  ## empty journal
+    if ((lenx <- length(x)) <= 1L)
         x
-
     if (by) {
         insts <- sort(unique(x$instrument))
         ans <- journal()
