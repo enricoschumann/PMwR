@@ -4,10 +4,10 @@ Title: Portfolio Management with R
 Version: 0.2-0
 Date: 2013-07-24
 Author: Enrico Schumann
+Maintainer: Enrico Schumann <es@enricoschumann.net>
 Authors@R: person(given = "Enrico", family = "Schumann", 
                   role  = c("aut", "cre"),
                   email = "es@enricoschumann.net")
-Maintainer: Enrico Schumann <es@enricoschumann.net>
 Description: Functions and examples for 'Portfolio Management with R':
   pricing of financial instruments, computing profit-and-loss, 
   reporting, backtesting and more. 
@@ -17,4 +17,5 @@ Suggests: NMOF, RUnit, rbenchmark, zoo
 License: GPL-3
 LazyLoad: yes
 LazyData: yes
+ByteCompile: yes
 URL: http://enricoschumann.net/R/packages/PMwR/index.htm
