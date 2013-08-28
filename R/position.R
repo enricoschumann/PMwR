@@ -1,5 +1,7 @@
 position <- function(amount, timestamp, instrument, when, from, to,
                      drop.zero = FALSE) {
+    if (missing(instrument))
+        instrument <- NA
     if (inherits(amount, "journal")) {
         J <- amount
         instrument <- J$instrument
@@ -15,8 +17,7 @@ position <- function(amount, timestamp, instrument, when, from, to,
         amount <- instrument$amount
         timestamp <- instrument$timestamp
         instrument <- instrument$instrument
-    } else if (missing(instrument))
-        instrument <- NA
+    } 
 
     if (missing(when)) {
         when <- max(timestamp)
@@ -32,10 +33,10 @@ position <- function(amount, timestamp, instrument, when, from, to,
     if (!missing(from)) {
         if (missing(to))
             to <- max(timestamp)
-        keep <- timestamp < from & timestamp > to
-        amount <- amount[keep]
-        timestamp <- timestamp[keep]
-        instrument <- instrument[keep]
+        drop <- timestamp < from | timestamp > to
+        amount <- amount[!drop]
+        timestamp <- timestamp[!drop]
+        instrument <- instrument[!drop]
     }
         
     if (!any(is.na(timestamp)) && is.unsorted(timestamp)) {
