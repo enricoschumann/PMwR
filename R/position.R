@@ -1,7 +1,5 @@
 position <- function(amount, timestamp, instrument, when, from, to,
                      drop.zero = FALSE) {
-    if (missing(instrument))
-        instrument <- NA
     if (inherits(amount, "journal")) {
         J <- amount
         instrument <- J$instrument
@@ -17,7 +15,8 @@ position <- function(amount, timestamp, instrument, when, from, to,
         amount <- instrument$amount
         timestamp <- instrument$timestamp
         instrument <- instrument$instrument
-    }
+    } else if (missing(instrument))
+        instrument <- NA
 
     if (missing(when)) {
         when <- max(timestamp)
@@ -45,15 +44,16 @@ position <- function(amount, timestamp, instrument, when, from, to,
         amount  <- amount[io]
         instrument <- instrument[io]
     }
+
     if (is.null(instrument)) 
         instrument <- rep.int("", length(timestamp))    
+
     allna <- FALSE
-    if (all(is.na(instrument))) {
+    if (all(ina <- is.na(instrument))) {
         instrument[] <- ""
         allna <- TRUE
-    }
-    if (!all(is.na(instrument)))
-        instrument[is.na(instrument)] <- "not specified"
+    } else
+        instrument[ina] <- "NA"
 
     nw <- length(when)
     nm <- sort(unique(instrument))
@@ -63,8 +63,8 @@ position <- function(amount, timestamp, instrument, when, from, to,
     for (j in seq_len(nw)) {
         for (i in seq_along(nm)) {
             ri  <-  nm[i] == instrument
-            idt <- timestamp[if (length(timestamp) == 1L) 1 else ri]
-            iv  <- amount[if (length(amount) == 1L) 1 else ri]
+            idt <- timestamp[ri]
+            iv  <- amount[ri]
             beforewhen <- which(when[j] >= idt)
             pos[j, i] <- if (length(beforewhen))
                 cumsum(iv)[max(beforewhen)] else 0
