@@ -214,6 +214,8 @@ summary.journal <- function(x, ...) {
                 next
             ii <- ii | grepl(i, x[[m]], ignore.case = ignore.case)
         }        
+    } else if (is.numeric(i)) {
+        ii <- seq_along(x) %in% i
     } else
         ii <- i
     x[ii]
