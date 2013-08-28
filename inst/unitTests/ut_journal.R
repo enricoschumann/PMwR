@@ -5,7 +5,6 @@ test.journal <- function() {
     require("PMwR")
     require("RUnit")
     
-
     ## the simplest journal
     j <- journal(amount = 1:2)
 
@@ -47,12 +46,11 @@ test.journal <- function() {
 
     ## method: c
     checkEquals(c(j, journal()) , j)    
-    ## tmp <- as.data.frame(c(journal(), j))
 
     ## subsetting
     j[1]
-    j["stock"]
-    
+    checkEquals(j["stock"], j)
+    checkEquals(x <- j["bla"], journal())
     
     jj <- c(j, j)
 

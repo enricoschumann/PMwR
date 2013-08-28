@@ -4,10 +4,9 @@ if (require("RUnit", quietly = TRUE)) {
     if (localTesting)
         path <- "~/Packages/PMwR/inst/unitTests" else
     path <- system.file("unitTests", package = "PMwR")
-
     myTestSuite <- defineTestSuite("PMwR",
                                    dirs = path,
-                                   testFileRegexp = "unitTests.+")
+                                   testFileRegexp = "ut_.*")
     stopifnot(isValidTestSuite(myTestSuite))
     testResult <- runTestSuite(myTestSuite, verbose = 0L)
     printTextProtocol(testResult, showDetails = TRUE,

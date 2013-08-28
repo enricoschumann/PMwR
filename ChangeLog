@@ -1,3 +1,8 @@
+2013-08-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (print.journal): do not create data.frame
+	for length-zero journal any more
+
 2013-08-27  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (`[.journal`): default for 'match.against' is now

@@ -71,11 +71,16 @@ journal <- function(timestamp, amount, price, instrument,
 
 print.journal <- function(x, ..., width = 60L, max.print = 100L,
                           exclude = NULL, include.only = NULL) {
+
+    lx <- length(x)
+    if (lx == 0L) {
+        cat("no transactions\n")
+        return(invisible(x))
+    }
     oo <- getOption("scipen")
     options(scipen = 1e8)
     on.exit(options(scipen = oo))
-
-    lx <- length(x)
+    
     df <- as.data.frame(unclass(x),                        
                         row.names = seq_len(lx),
                         stringsAsFactors = FALSE)
@@ -214,11 +219,11 @@ summary.journal <- function(x, ...) {
                 next
             ii <- ii | grepl(i, x[[m]], ignore.case = ignore.case)
         }        
-    } else if (is.numeric(i)) {
-        ii <- seq_along(x) %in% i
     } else
         ii <- i
-    x[ii]
+    ans <- lapply(unclass(x), `[`, ii)
+    class(ans) <- "journal"
+    ans
 }
 
 aggregate.journal <- function(x, by, FUN, ...) {

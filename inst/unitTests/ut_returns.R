@@ -49,7 +49,7 @@ test.returns <- function() {
     all.equal(returns(price, position = pos), returns(price[,1]))
     
     pos1 <- c(1,1,1,2,2,2)
-    pos2 <- pos1 * 2c
+    pos2 <- pos1 * 2
     dim(pos2) <- dim(pos1) <- c(3,2)
     price <- c(101,102,103,103,105,107)
     dim(price) <- c(3,2)
