@@ -1,53 +1,45 @@
 \name{position}
 \alias{position}
 \title{
-  Aggregate Transaction Data into a Position
+  Aggregate Transactions to Position
 }
 \description{
   Use information on trades to compute a position at a specific point
   in time.
 }
 \usage{
-position(amount, timestamp, instrument, when, from, to,
-         drop.zero = FALSE)
+position(amount, timestamp, instrument, when, drop.zero = FALSE)
 }
 \arguments{
   \item{when}{
     a timestamp or a vector of timestamps
   }
-  \item{\dots}{
-  }
   \item{amount}{
-    numeric
+    numeric or an object of class \code{\link{journal}}
   }
   \item{timestamp}{
-    times (sortable)
+    timestamps (must be sortable)
   }
   \item{instrument}{
-    character. Symbols to identify different instruments
-  }
-  \item{from}{
-    timestamp
-  }
-  \item{to}{
-    timestamp
+    character: symbols to identify different instruments
   }
   \item{drop.zero}{
-    drop instruments that have a zero position
+    logical: drop instruments that have a zero position
   }  
+  \item{\dots}{
+  }
 }
 \details{
 
-  Only \code{instrument} can be specified, but to compute positions on
-  an \code{account} basis, simply paste \code{account} to
-  \code{instrument}.  
+  Only \code{instrument} can be specified, so to compute positions on an
+  \code{account} basis, paste \code{account} to \code{instrument}.
 
   The function checks if \code{timestamp} is sorted (see
-  \code{\link{is.unsorted}}); if not
+  \code{\link{is.unsorted}}) and sorts by timestamp, if required.
   
 }
 \value{
-  An object of class position.
+  An object of class \code{position}.
 }
 \references{
   ES -- PMwR
@@ -59,11 +51,9 @@ position(amount, timestamp, instrument, when, from, to,
   \code{\link{journal}}
 }
 \examples{
-position(amount = c(1,1,-1,3,-4),
-         timestamp = 1:5, when = 4.9)
+position(amount = c(1, 1, -1, 3, -4), timestamp = 1:5, when = 4.9)
 
-## using a Journal
-lst <- journal(timestamp = 1:5,
-               amount = c(1,1,-1,3,-4))
-position(lst, when = 4.9)
+## using a journal
+J <- journal(timestamp = 1:5, amount = c(1, 1, -1, 3, -4))
+position(J, when = 4.9)
 }

@@ -1,4 +1,4 @@
-position <- function(amount, timestamp, instrument, when, from, to,
+position <- function(amount, timestamp, instrument, when, 
                      drop.zero = FALSE) {
     if (missing(instrument))
         instrument <- NA
@@ -28,15 +28,6 @@ position <- function(amount, timestamp, instrument, when, from, to,
             when <- timestamp
         else if (when[1L] == "first" || when[1L] == "oldest")
             when <- min(timestamp)
-    }
-
-    if (!missing(from)) {
-        if (missing(to))
-            to <- max(timestamp)
-        drop <- timestamp < from | timestamp > to
-        amount <- amount[!drop]
-        timestamp <- timestamp[!drop]
-        instrument <- instrument[!drop]
     }
         
     if (!any(is.na(timestamp)) && is.unsorted(timestamp)) {

@@ -51,6 +51,8 @@ test.journal <- function() {
     j[1]
     checkEquals(j["stock"], j)
     checkEquals(x <- j["bla"], journal())
+
+    
     
     jj <- c(j, j)
 

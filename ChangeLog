@@ -1,3 +1,8 @@
+2013-08-29  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (position): removed from/to arguments (instead,
+	create a subset of a journal and pass this to position)
+
 2013-08-28  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (print.journal): do not create data.frame

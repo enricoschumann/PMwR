@@ -32,7 +32,8 @@ journal(timestamp, amount, price, instrument,
 
 \method{subset}{journal}(x, \dots)
 
-\method{[}{journal}(x, i, match.against = NULL)
+\method{[}{journal}(x, i, match.against = c("instrument", "account"),
+                    ignore.case = TRUE, ...)
 
 \method{as.data.frame}{journal}(x, row.names = NULL, optional = FALSE, \dots)
 
@@ -122,21 +123,25 @@ journal(timestamp, amount, price, instrument,
     journal.}
   
     \item{\code{split}}{Splits a journal according to \code{f}, yielding
-    a list of journals.  (Often used interactively to have information
-    per sub-journal \code{print}ed }
+    a list of journals.  Often used interactively to have information
+    per sub-journal printed. }
 
     \item{\code{c}}{Combine several journals into one.  Note that the
-      first argument to \code{c.journal} must be a journal, or else method
-      dispatch will fail.  For empty journals, use \code{journal()} (not
-      \code{NULL}).}
+      first argument to \code{c.journal} must inherit from
+      \code{journal}, or else the method dispatch will fail.  For empty
+      journals, use \code{journal()} (not \code{NULL}).}
     
     \item{\code{length}}{number of transactions in a journal; it uses
     the length of \code{amount}.}
-  }  
 
+    \item{\code{subset}}{evaluates an expression in an environment that
+    can access all fields of the journal.  The function is meant for
+    interactive analysis; care is needed when it is used within other
+    functions: see Examples.}
+  }  
   
   Missing arguments will be coded as \code{\link{NA}} except for
-  \code{id} and \code{account} which become \code{\link{NULL}}.
+  \code{id} and \code{account}, which become \code{\link{NULL}}.
   
 }
 \value{
@@ -152,24 +157,33 @@ journal(timestamp, amount, price, instrument,
   Enrico Schumann
 }
 \seealso{
-  \code{\link{pl}}
+  \code{\link{position}}, \code{\link{pl}}
 }
 \examples{
+j <- journal(timestamp = 1:3,
+             amount = c(1,2,3),
+             price = 101:103,
+             instrument = c("Stock A", "Stock A", "Stock B"))
 
-t1 <- journal(timestamp = "2013-01-14 12:00:00",
-                amount = c(9000, 60000, 6500, 9000, 4500, 5500, 9000),
-                price = c(61.23, 9.04, 82.52, 60.76, 130.5622, 101.50, 61.16),
-                instrument = c("bei", "dte", "fre", "hen3",  "lin",  "mrk", "sap"),
-                account = "P1")
+## 'subset' in functions
+## this should work as expected ...
+t0 <- 2.5                         
+subset(j, timestamp > t0)
 
-t2 <- journal(timestamp = "2013-02-05 12:00:00",
-                amount = c(7000, 50000, 3500, 5500, 7500, 4500, 7000),
-                price = c(64.8606, 8.7785, 133.0005, 91.6590, 65.5398, 102.0192,60.4702),
-                instrument = c("bei", "dte", "lin", "fre",  "hen3",  "mrk", "sap"),
-                account = "P2")
+## ... but here?!
+tradesAfterT <- function(j, t0)   
+    subset(j, timestamp > t0)        
+tradesAfterT(j, 0)               
 
-c(t1, t2)
+## if really required
+tradesAfterT <- function(j, t0) {
+    e <- substitute(timestamp > t0, list(t0 = t0))
+    do.call(subset, list(j, e))
+}
+tradesAfterT(j, 0)
 
-subset(t1, amount > 10000)
-
+## ... or much simpler
+tradesAfterT <- function(j, t0)
+    j[j$timestamp > t0]
+tradesAfterT(j, 0)
 }

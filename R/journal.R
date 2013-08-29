@@ -2,7 +2,7 @@ journal <- function(timestamp, amount, price, instrument,
                     id = NULL,  account = NULL, ...) {
 
     ## empty journal
-    if (match.call() == "journal()") {
+    if (match.call() == journal()) {
         ans <- list(timestamp = numeric(0),
                     amount = numeric(0),
                     price = numeric(0),
