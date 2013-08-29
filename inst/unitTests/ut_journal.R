@@ -50,7 +50,7 @@ test.journal <- function() {
     ## subsetting
     j[1]
     checkEquals(j["stock"], j)
-    checkEquals(x <- j["bla"], journal())
+    checkEquals(length(j["bla"]), 0)
 
     
     

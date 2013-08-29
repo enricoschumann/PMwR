@@ -1,5 +1,10 @@
 2013-08-29  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/journal.R (journal): replaced 'rep0' with 'rep'
+
+	* R/returns.R (pReturns): 'pad' is now passed also to 'period
+	returns'
+
 	* R/position.R (position): removed from/to arguments (instead,
 	create a subset of a journal and pass this to position)
 

@@ -23,21 +23,26 @@ twReturns <- function(price, position, pad = NULL) {
     price <- as.matrix(price)
     n <- dim(price)[1L]
     ap <- position*price
-    rt <- returns(price)        
-    weights <- (price*position/rowSums(price*position))[-n, , drop = FALSE]
-    rt <- rowSums(rt*weights)        
+    rt <- returns(price)
+
+    M <- price * position
+    rsM <- rowSums(M)
+    weights <- (M/rsM)
+    weights[abs(rsM) < 1e-14] <- 0
+    weights <- weights[-n, , drop = FALSE]
+    rt <- rowSums(rt * weights)        
     if (do.pad) 
         rt <- c(pad, rt)
     rt
 }
 
 ## not exported
-pReturns <- function(x, t, period, complete.first = TRUE) {
+pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
     
     if (is.null(period)) {
-        ans <- list(returns = returns(x),
-                    t = t[-1L],
-                    period = period)
+        ans <- list(returns = returns(x, pad = pad),
+                    t = if (is.null(pad)) t[-1L] else t,
+                    period = period)        
     } else {        
 
         if (length(period) > 1L) {
@@ -54,8 +59,8 @@ pReturns <- function(x, t, period, complete.first = TRUE) {
         if (complete.first && by[1L] == by[2L])
             ii <- c(1, ii)
         
-        ans <- list(returns = returns(x[ii]),
-                    t = t[ii][-1L],
+        ans <- list(returns = returns(x[ii], pad = pad),
+                    t = if (is.null(pad)) t[ii][-1L] else t[ii],
                     period = period)        
     }
     class(ans) <- "preturns"
@@ -69,7 +74,7 @@ returns <- function(x, t = NULL, period = NULL, complete.first = TRUE,
     if (is.null(t)) {
         if (inherits(x, "zoo")) {
             t <- index(x)
-            x <- zoo:::coredata(x)
+            x <- coredata(x)
             if (!is.null(dim(x)))
                 stop("with ", sQuote("t"), " supplied, ",
                      sQuote("x"), " must be a vector")                    
@@ -86,11 +91,11 @@ returns <- function(x, t = NULL, period = NULL, complete.first = TRUE,
     }
 
     if (is.null(t) &&  missing(position)) {
-        returns0(x, pad)        
+        returns0(x, pad = pad)        
     } else if (!is.null(t)) {
-        pReturns(x, t, period, complete.first)
+        pReturns(x, t, period, complete.first, pad = pad)
     } else {
-        twReturns(x, position, pad)
+        twReturns(x, position, pad = pad)
     }
 }
 

@@ -39,18 +39,13 @@ journal <- function(timestamp, amount, price, instrument,
                length(id),
                length(instrument),
                length(account))
-    rep0 <- function(x, len) {
-        if (len == 1L || length(x) == len)
-            x
-        else 
-            rep(x, len)
-    }
-    ans <- list(id = rep0(id, len),
-                instrument = rep0(instrument, len),
-                account    = rep0(account, len),
-                timestamp  = rep0(timestamp, len),
-                amount     = rep0(amount, len),
-                price      = rep0(price, len))
+    ans <- list(id         = rep(id,         len/length(id)),
+                instrument = rep(instrument, len/length(instrument)),
+                account    = rep(account,    len/length(account)),
+                timestamp  = rep(timestamp,  len/length(timestamp)),
+                amount     = rep(amount,     len/length(amount)),
+                price      = rep(price,      len/length(price)))
+
     ## remove NULL
     isNul <- unlist(lapply(ans, is.null))
     for (i in seq_along(isNul))
@@ -211,13 +206,13 @@ summary.journal <- function(x, ...) {
 }
 
 `[.journal`  <- function(x, i, match.against = c("instrument", "account"),
-                         ignore.case = TRUE) {
+                         ignore.case = TRUE, ...) {
     if (is.character(i)) {
         ii <- logical(length(x))
         for (m in match.against) {
             if (is.null(x[[m]]))
                 next
-            ii <- ii | grepl(i, x[[m]], ignore.case = ignore.case)
+            ii <- ii | grepl(i, x[[m]], ignore.case = ignore.case, ...)
         }        
     } else
         ii <- i

@@ -61,12 +61,11 @@ journal(timestamp, amount, price, instrument,
   \item{account}{
     account 
   }
-  \item{\dots}{
-    
-    For \code{journal}: further arguments, which must all be named. For
+  \item{\dots}{    
+    For \code{journal}: further arguments, which must all be named.  For
     \code{subset}: an expression that evaluates to a logical vector; it
-    can use all fields of the passed journal; see Examples.
-    
+    can use all fields of the passed journal; see Examples.  For
+    \code{`[`}, further arguments passed to \code{\link{grep}}.    
   }
   \item{x}{    
     a \code{journal} object    
@@ -79,6 +78,9 @@ journal(timestamp, amount, price, instrument,
   }
   \item{by}{
     \code{sort}: sort by field. \code{head}/\code{tail}: by instrument.
+  }
+  \item{ignore.case}{
+    logical
   }
   \item{na.last}{
     arguments passed to sort
