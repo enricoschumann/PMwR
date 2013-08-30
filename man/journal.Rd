@@ -92,7 +92,7 @@ journal(timestamp, amount, price, instrument,
     character: fields that should not be printed
   }
   \item{include.only}{
-    character: print only those fields
+    character: print only those fields. (Not supported yet.) 
   }
   \item{row.names}{
     see \code{\link{as.data.frame}}

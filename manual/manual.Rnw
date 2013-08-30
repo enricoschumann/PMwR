@@ -40,49 +40,117 @@ of transactions.  Such list are nothing more than dataframes, but
 \texttt{PMwR} provides an S3 class \texttt{journal} for handling such
 transaction data.  A \texttt{journal} is created through the function
 \texttt{journal}, but it is really just a list of atomic vectors with
-a class attribute.  Methods should not rely on the names of these
-vectors being sorted in any particular way; that is, components of a
-journal should always be retrieved by name, never by position (which
-is different for a dataframe, for which we can meaningfully speak of
-the \emph{n}th column).
+a class attribute.  Methods should not rely on this list sorted in any
+particular way; that is, components of a journal should always be
+retrieved by name, never by position (which is different for a
+dataframe, for which we can meaningfully speak of the \emph{n}th
+column).  I will often refer to these components, such as
+\texttt{amount} or \texttt{timestamp}, as fields.
 
 The simplicity of the class is intended, as it is meant for
-interactive analyses.  Thus, the analyst is supposed to dissect the
+interactive analyses.  Thus, you may and are expected to dissect the
 information in a journal at will (which includes removing the class
 attribute).
 
-What is actually stored in a \texttt{journal} is up to the analyst,
-but a few fields are typical (and required by several methods):
-
+What is actually stored in a \texttt{journal} is up to you, but a few
+fields are offered by default (and required by some methods):
 \begin{description}
+\item[\texttt{timestamp}] anything that can be sorted and that fits into an
+  atomic vector (\texttt{POSIXlt} is possible, too, but not
+  recommended);
 
-\item[{timestamp}] anything that can be sorted (and that fits into an
-  atomic vector; \texttt{POSIXlt} is possible, but not recommended);
+\item[\texttt{amount}] notional amount that is transferred;
 
-\item[{amount}] notional amount that is transferred;
+\item[\texttt{price}] price;
 
-\item[{price}] price;
+\item[\texttt{instrument}] description of the financial instrument;
 
-\item[{id}] (possibly unique) id;
+\item[\texttt{id}] (possibly unique) id;
 
-\item[{instrument}] description of the financial instrument;
+\item[\texttt{account}] description of the account;
 
-\item[{account}] description of the account;
-
-\item[{\ldots{}}] other fields. They must be named, for instance like
-  in \texttt{fees = c(1,2,1)}
+\item[\texttt{\ldots}] other fields. They must be named, for instance
+  like in \texttt{fees = c(1,2,1)}\,.
 \end{description}
+All these can be missing, except \texttt{amount}.
 
-Transactions are considered to be in a hierachy
+Transactions in a journal can be organised in a hierachy
 \begin{verbatim}
 <account>:::<instrument>
 \end{verbatim}
-but currently there is little to use the hierarchy.  A simple scheme
-is to use specific character or pattern such as `\texttt{:::}' to
-introduce hierarchies into accounts, such as
+even though currently few functions use this hierarchy.  A simple
+scheme is to use specific character or pattern such as `\texttt{:::}'
+to introduce hierarchies into accounts, such as
 \begin{verbatim}
 pension:::equities
 \end{verbatim}
+
+\section{Handling journals}
+
+\subsection{Creating journals}
+
+The function \texttt{journal} creates journal objects.
+<<>>=
+J <- journal(timestamp  = as.Date("2012-01-01") + 0:3, 
+             amount     = c(1, 2, -2, 5),
+             instrument = c("EUR", "EUR", "CHF", "CHF"))
+J
+@ 
+For details on the function and methods for journal objects, see
+\texttt{?journal}\,.  A \texttt{print} method defines how to display a
+journal.
+<<>>=
+print(J, max.print = 2, exclude = "instrument")
+@ 
+Journals can be combined with \texttt{c}.
+<<>>=
+JJ <- J
+JJ$fees <- rep(1,4)
+c(J, JJ)
+@ 
+
+\subsection{Subsetting journals}
+For interactive use, there is a method for \texttt{subset}.
+<<>>=
+subset(J, amount > 1) 
+@ 
+To extract a field, use its name.
+<<>>=
+J$amount
+@ 
+<<>>=
+J$amount <- c(1 ,2, -2, 8)
+J
+@ 
+The \texttt{`[`} method works with integers or logicals, returning
+the respective transactions.
+<<>>=
+J[2:3]
+J[J$amount < 0]
+@ 
+You can also pass a string, which is then interpreted as a regular
+expression that is matched against fields \texttt{instrument} and (if
+available) \texttt{account}.
+<<>>=
+J["eur"]
+@ 
+By default, case is ignored, but you can set \texttt{ignore.case =
+  FALSE}.  You can also specify the fields to match the string against.
+<<>>=
+J <- journal(timestamp  = as.Date("2012-01-01") + 0:5, 
+             amount     = rep(1, 6),
+             instrument = c("Equity A", "Equity A", 
+                            "Equity B", 
+                            "Bond exp 2019", "Bond exp 2017", 
+                            "Bond exp 2021"),
+             comment = c("pension plan", "pension plan", 
+                          "", "", "", ""))
+J["equ", ignore.case = FALSE]
+J["equ", ignore.case = TRUE]
+J["[Pp]ension"]
+J["[Pp]ension", match.against = "comment"]
+@ 
+
 
 \section{First examples}
 

@@ -85,7 +85,7 @@ print.journal <- function(x, ..., width = 60L, max.print = 100L,
     df <- df[TRUE, c(first.cols, setdiff(ndf, first.cols)), drop = FALSE]
     
     if (!is.null(exclude))
-        df[TRUE, setdiff(ndf, exclude), drop = FALSE]
+        df <- df[TRUE, setdiff(ndf, exclude), drop = FALSE]
 
     notAllNA <- unlist(lapply(df, function(x) !all(is.na(x))))
     print(head(df[notAllNA], max.print), quote = FALSE,
@@ -128,8 +128,17 @@ c.journal <- function(..., recursive = FALSE) {
     ans <- vector("list", length = length(ns))
     names(ans) <- ns
     for (n in seq_along(ns)) {
+        nul <- unlist(lapply(lapply(tls, `[[`, ns[n]), is.null))
+        for (i in which(nul))
+            tls[[i]][[ns[n]]] <- rep(NA, length(tls[[i]]))        
         ans[[ns[n]]] <- unlist(lapply(tls, `[[`, ns[n]))
     }
+
+    nts <- which(ns == "timestamp")
+    classes <- unlist(lapply(lapply(tls, `[[`, "timestamp"), class))
+    class(ans[[nts]]) <- classes[1L]
+    if (length(unique(classes))>1L)
+        warning("different timestamp classes")
     class(ans) <- "journal"
     ans
 }
