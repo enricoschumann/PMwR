@@ -1,21 +1,14 @@
 if (FALSE) {
 
-    ## forward <- function(spot, t2m, r, q = NULL, cf = NULL, t2cf = NULL) {
-    ##     if (!is.null(q) && !is.null(cf))
-    ##         stop("specify either 'q' or 'cf'")
-    ##     if (t2m < 0)
-    ##         return(NA)
-    ##     if (is.null(cf) && is.null(q))
-    ##         q <- 0
-    ##     if (!is.null(q)) {
-    ##         f <- spot * exp((r - q) * t2m)
-    ##     } else {
-    ##         f <- spot -  sum(exp(-r * t2cf) * cf)
-    ##     }
-    ##     f
-    ## }
+    forward <- function(S, tau, r, q = 0, tauD = 0, D = 0) {
+        if (q != 0L && hasD <- any(D != 0))
+            stop("specify either 'q' or 'D', not both")
+        if (tau < 0)
+            stop("time to maturity must be nonnegative")
+        S *  exp((r - q) * tau) -  if (hasD) sum(exp(-r * tau) * D) else 0
+    }
 
-    ## #f <- forward(spot=100, t2m = 1, r = 0.1, cf = c(1,2), t2cf = c(.3,.6))
+    ## f <- forward(S = 100, tau = 1, r = 0.1, D = c(1,2), tauD = c(.3,.6))
     ## #f <- forward(spot=100, t2m = 1, r = 0.1)
     ## #f <- forward(spot=100, t2m = 1, r = 0.1, q= 0.02)
 
