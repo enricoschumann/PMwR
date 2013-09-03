@@ -1,3 +1,7 @@
+2013-09-02  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/dev.R: added replNA tests (vs approx)
+
 2013-08-30  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (print.journal): fixed -- exclude did not exclude

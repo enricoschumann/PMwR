@@ -1,5 +1,29 @@
 if (FALSE) {
 
+
+    x <- c(1,NA,2,3,NA,5)
+    
+    approx(x=x, n = length(x), method = "constant")$y
+    
+    
+    replNA <- function(x) {
+        na <- which(is.na(x[-1L])) + 1L
+        n <- length(na)
+        i <- c(which(na[-1L] != na[-n]), n)        
+        len <- diff(c(0L, i))
+        for (i in seq_along(na))
+            x[na[i]:(na[i] + len[i]-1L)] <- x[na[i]-1L]
+        x
+    }
+
+    x <- rnorm(1000)
+    x[sample.int(length(x), 30)] <- NA
+    x[1] <- NA
+    all.equal(replNA(x), approx(x=x, n = length(x), method = "constant")$y)
+
+    system.time(for(i in 1:100) replNA(x))
+    system.time(for(i in 1:100) approx(x=x, n = length(x), method = "constant")$y)
+        
     forward <- function(S, tau, r, q = 0, tauD = 0, D = 0) {
         if (q != 0L && hasD <- any(D != 0))
             stop("specify either 'q' or 'D', not both")
@@ -28,7 +52,7 @@ if (FALSE) {
     ##     }
     ##     s
     ## }
-
+    
                                         #s <- spot(f, t2m = 1, r = 0.1, cf = c(1,2), t2cf = c(.3,.6))
                                         #s <- spot(f, t2m = 1, r = 0.1)
                                         #s <- spot(f, t2m = 1, r = 0.1, q= 0.02)

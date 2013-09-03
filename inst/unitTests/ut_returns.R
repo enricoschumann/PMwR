@@ -51,7 +51,6 @@ test.returns <- function() {
                 returns(x))
     checkEquals(returns(x, position = c(0,0,0,0,0)),
                 rep(0, 4))
-
     
     pos <- c(1,1,1,2,2,0)
     price <- c(100,100,100,100,100,100)
@@ -73,6 +72,19 @@ test.returns <- function() {
                 rowSums((price*pos1 / rowSums(price*pos1))[-3, ] * returns(price)))
     checkEquals(returns(price, position = pos1),
                 returns(price, position = pos2))
+    
+
+    ## from journal to time-weighted returns
+
+    prices <- cbind(a = 101:110, b = 201:210)
+
+    j <- journal(timestamp  = c(1,4,4,5,5,7),
+                 amount     = c(1,1,1,-1,1,-1),
+                 instrument = c("a", "a", "b", "a", "b", "a"),
+                 price      = c(100.5,104.1,203,105,205.2,108))
+
+    p <- position(j, when = 1:10)
+    rowSums(p$position*prices)
     
     
 }
