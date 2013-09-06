@@ -139,7 +139,7 @@ journal(timestamp, amount, price, instrument,
     \item{\code{subset}}{evaluates an expression in an environment that
     can access all fields of the journal.  The function is meant for
     interactive analysis; care is needed when it is used within other
-    functions: see Examples.}
+    functions: see Examples and the Manual.}
   }  
   
   Missing arguments will be coded as \code{\link{NA}} except for
@@ -168,23 +168,23 @@ j <- journal(timestamp = 1:3,
              instrument = c("Stock A", "Stock A", "Stock B"))
 
 ## *** subset *** in functions
-## this should work as expected ...
+##   this should work as expected ...
 t0 <- 2.5                         
 subset(j, timestamp > t0)
 
-## ... but here?!
+##   ... but here?!
 tradesAfterT <- function(j, t0)   
     subset(j, timestamp > t0)        
 tradesAfterT(j, 0)               
 
-## if really required
+##   if really required
 tradesAfterT <- function(j, t0) {
     e <- substitute(timestamp > t0, list(t0 = t0))
     do.call(subset, list(j, e))
 }
 tradesAfterT(j, 0)
 
-## ... or much simpler
+##   ... or much simpler
 tradesAfterT <- function(j, t0)
     j[j$timestamp > t0]
 tradesAfterT(j, 0)
@@ -200,13 +200,12 @@ j <- journal(timestamp = structure(c(15950, 15951, 15950, 15951, 15950,
              instrument = c("B", "B", "A", "A", "B", "B", "A", "B", "A", "A"))
 
 by <- list(j$instrument, sign(j$amount), as.Date(j$timestamp))
-## FUN expects one journal
 fun <- function(x) {
-    journal(amount = sum(x$amount),
+    journal(timestamp = as.Date(x$timestamp[1]),
+            amount = sum(x$amount),
             price = sum(x$amount*x$price)/sum(x$amount),
             instrument = x$instrument[1L])
 }
-
 aggregate(j, by = by, FUN = fun)
 
 

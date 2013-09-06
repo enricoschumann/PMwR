@@ -1,5 +1,7 @@
 2013-09-06  Enrico Schumann  <es@enricoschumann.net>
 
+	* man/journal.Rd: updated examples for aggregate.journal
+
 	* NAMESPACE: export method aggregate.journal
 
 	* R/journal.R (c.journal): timestamp-classes of zero length
