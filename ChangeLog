@@ -1,3 +1,11 @@
+2013-09-06  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: export method aggregate.journal
+
+	* R/journal.R (c.journal): timestamp-classes of zero length
+	journals are not checked; no more warnings in case of class
+	vectors of length > 1 [such c("POSIXct", "POSIXt")]
+
 2013-09-02  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/dev.R: added replNA tests (vs approx)

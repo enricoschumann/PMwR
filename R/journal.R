@@ -135,9 +135,10 @@ c.journal <- function(..., recursive = FALSE) {
     }
 
     nts <- which(ns == "timestamp")
-    classes <- unlist(lapply(lapply(tls, `[[`, "timestamp"), class))
-    class(ans[[nts]]) <- classes[1L]
-    if (length(unique(classes))>1L)
+    classes <- lapply(lapply(tls, `[[`, "timestamp"), class)
+    classes[unlist(lapply(tls, length)) == 0L] <- NULL ## remove empty journals
+    class(ans[[nts]]) <- classes[[1L]]
+    if (length(unique(lapply(classes, paste, collapse = ""))) > 1L)
         warning("different timestamp classes")
     class(ans) <- "journal"
     ans
@@ -230,23 +231,27 @@ summary.journal <- function(x, ...) {
     ans
 }
 
+
 aggregate.journal <- function(x, by, FUN, ...) {
+
+    lenx <- length(x)    
+    grp <- double(lenx)
+    for (ind in rev(by)) {
+        if (length(ind) != lenx) 
+            stop("all vectors in 'by' must have same length")
+        ind <- as.factor(ind)
+        grp <- grp * nlevels(ind) + (as.integer(ind) - 1L)
+    }
+    
     ## TODO
     if (!missing(FUN))
         FUN <- match.fun(FUN)
-
-    ## FIXME: use by
-    
-    ins <- x$instrument
-    sgn <- ifelse(x$amount >= 0, "buy ", "sell")
-    grp <- paste(ins, by, sgn, sep = "_")
-
     j <- journal()
     for (g in sort(unique(grp))) {
         sx <- x[g == grp]
-        j <- c(j, journal(amount = sum(sx$amount),
-                          price = sum(sx$amount*sx$price)/sum(sx$amount),
-                          instrument = sx$instrument[1]))
+        if (length(sx) == 0L)
+            next
+        j <- c(j, FUN(sx))
     }
     j
 }

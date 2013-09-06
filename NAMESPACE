@@ -41,6 +41,7 @@ export(
     )
 
 ## methods
+S3method(aggregate, journal)
 S3method(c, journal)
 S3method(head, journal)
 S3method(tail, journal)
