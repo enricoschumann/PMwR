@@ -2,6 +2,7 @@ importFrom(utils,toLatex)
 importFrom(utils,head)
 importFrom(utils,tail)
 importFrom(tools,toHTML)
+importFrom(stats,aggregate)
 
 ## exports
 export(

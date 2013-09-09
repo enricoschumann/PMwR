@@ -1,5 +1,6 @@
 \name{journal}
 \alias{journal}
+\alias{aggregate.journal}
 \alias{c.journal}
 \alias{length.journal}
 \alias{print.journal}
