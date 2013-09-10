@@ -1,3 +1,10 @@
+2013-09-10  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (`[.journal`): added argument 'reverse'
+
+	* R/returns.R (print.preturns): fixed -- period 'monthly' (instead
+	of month) is now also accepted
+
 2013-09-06  Enrico Schumann  <es@enricoschumann.net>
 
 	* man/journal.Rd: updated examples for aggregate.journal

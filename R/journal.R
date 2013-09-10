@@ -17,11 +17,13 @@ journal <- function(timestamp, amount, price, instrument,
             price <- price[match(timestamp$instrument, names(price))]
         else if (missing(price))
             price <- NA
-            ans <- journal(timestamp  = timestamp$timestamp,
-                           amount     = timestamp$position,
-                           price      = price,
-                           instrument = timestamp$instrument)
-        returns(ans)
+        if (length(timestamp$timestamp) > 1L)
+            stop("must be position at one point in time")
+        ans <- journal(timestamp  = timestamp$timestamp,
+                       amount     = c(timestamp$position),
+                       price      = price,
+                       instrument = timestamp$instrument)
+        return(ans)
     }
         
     if (missing(timestamp))
@@ -216,7 +218,7 @@ summary.journal <- function(x, ...) {
 }
 
 `[.journal`  <- function(x, i, match.against = c("instrument", "account"),
-                         ignore.case = TRUE, ...) {
+                         ignore.case = TRUE, ..., reverse = FALSE) {
     if (is.character(i)) {
         ii <- logical(length(x))
         for (m in match.against) {
@@ -226,6 +228,8 @@ summary.journal <- function(x, ...) {
         }        
     } else
         ii <- i
+    if (reverse)
+        ii <- !ii
     ans <- lapply(unclass(x), `[`, ii)
     class(ans) <- "journal"
     ans

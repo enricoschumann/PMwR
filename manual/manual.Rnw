@@ -404,47 +404,38 @@ print(jnl2)
 
 \section{The simple case}
 
-Suppose we have an account denominated in euro.  We buy one asset at a
-price of 100 euro and sell it again at 102 euro.  We have made a
-profit of 2 euros.  This simple case happens often enough to make the
-required computation simple as well.  Computing profit-or-loss can be
-handled through the function \texttt{pl}.
+We have an account, currency is euro.  We buy one asset at a price of
+100~euro and sell it again at 102~euro.  We have made a profit of
+2~euros.  This simple case happens often enough to make the required
+computation simple as well.  Computing profit-or-loss can be handled
+through the function \texttt{pl}.
 
 <<>>=
 pl(price  = c(100, 102), 
    amount = c(  1,  -1))
-@
-Suppose a trader bought 1 unit @ 50, 1 unit @ 90 and sold 2 units @
-100.
-<<>>=
-pl(price  = c( 50, 90, 100), 
-   amount = c(  1,  1,  -2))
-@
-But suppose that the actual order of the trades was\medskip
+@ 
+A trader bought 1~unit at 50, 1~unit at 90 and sold 2~units at 100,
+resulting in a profit of 60.  But suppose that the actual order of the
+trades was\medskip
 
-buy @ 90 \quad $\Rightarrow$ \quad buy @ 50 \quad $\Rightarrow$ \quad
-sell @ 100\,.\medskip
+buy at 90 \quad $\Rightarrow$ \quad buy at 50 \quad $\Rightarrow$ \quad
+sell at 100\,.\medskip
 
 \noindent Even if we know nothing about what was traded and when, some
-information is provided by the order of the trades: the first position
-of 1 unit had a realised drawdown of at least 40 before it recovered.
-For situations like this, the argument \texttt{along.timestamp} can be
-used. (Note that we do not provide an actual timestamp, in which case
-the function will implictly use integers 1, 2, \ldots,
-\texttt{length(amount)}\,.)
-
+information is provided by the order of the trades: the position had a
+drawdown of at least~40 before it recovered.  For situations like
+this, the argument \texttt{along.timestamp} can be used. (Note that we
+do not provide an actual timestamp, in which case the function will
+implictly use integers 1, 2, \ldots, \texttt{length(amount)}\,.)
 <<>>=
 pl(price  = c( 90, 50, 100), 
    amount = c(  1,  1,  -2), along.timestamp = TRUE)
 @ 
-
-\noindent With no further arguments, the function will compute the
+With no further arguments, the function will compute the
 running position and evaluate it at every trade with the trade's
 price.  This may not be accurate because of bid--ask spreads or other
 transaction costs, but it provides more information than only
 computing the profit/loss for the trades.
-
-
 <<>>=
 J <- journal(price     = c( 90, 50, 100), 
              amount    = c(  1,  1,  -2),
@@ -452,14 +443,12 @@ J <- journal(price     = c( 90, 50, 100),
 pl(J, along.timestamp = TRUE)
 position(J, when = 1:10)
 @ 
-
-
 Suppose we also have a time series of the prices between time 1 and
-time 10.  One of the most useful tools to look at what a trader did is
-to evaluate the position at every time instant, and then plot
-position, profit/loss and the traded instrument.
+time 10.  We can evaluate the position at every time
+instant, and then plot position, profit/loss and the price of the traded
+instrument.
 
-
+[TODO]
 
 A more-useful example for pl with \texttt{along.timestamp} is a
 trading history of a high-frequency strategy.  Suppose for example we
@@ -467,6 +456,50 @@ had traded EURUSD 200 times in single day and wished to plot the
 result.  At such a frequency, the prices at which the trades were
 executed can be useful to value any open position.
 
+[TODO]
+
+
+We may also want to compute the profit/loss between to points in
+time.  This becomes more difficult because now we need to evaluate the
+position at both points in time.  Simple example:
+<<>>=
+require("PMwR")
+timestamp <- 1:20
+amount <- c(-5, 5, 5, -5, -5, 5, 5, 5, 5, 
+            -5, 5, 5, -5, 5, 5, -5, -5, -5, 
+            -5, -5)
+price <- c(106, 101, 110, 110, 105, 105, 105, 104, 110, 104, 
+           103, 108, 106, 102, 108, 107, 103, 104, 109, 104)
+J <- journal(timestamp = timestamp, amount = amount, price = price)
+@ 
+
+Suppose we want the pl between time 5 and 8. We first compute the
+position at 5 and the extract the trades that occured later than 5, up
+to 8.
+<<>>=
+from <- 5
+to <- 8
+price.from <- 106
+price.to <- 105
+position.from <- position(J, when = from)
+trades <- J[J$timestamp > from & J$timestamp <= to]
+
+pl(trades, 
+   initial.position = position.from, 
+   initial.price = price.from,
+   current.price = price.to)   
+@ 
+
+These arguments can also be used if positions are still open.
+<<>>=
+J <- J[1]
+J
+pl(J)
+@ 
+Supplying current prices:
+<<>>=
+pl(J, current.price = 105)
+@ 
 
 
 \section{More complicated cases}

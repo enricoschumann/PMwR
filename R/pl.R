@@ -20,8 +20,8 @@ print.pl <- function(x, ...) {
 pl <- function(amount, price, instrument = NULL, timestamp = NULL,
                along.timestamp = FALSE,
                do.sort = FALSE,
-               initcash = 0,
-               t0, t1, prices0, prices1,
+               initial.cash = 0, initial.position = NULL,
+               initial.price, current.price,
                tol = 1e-10, do.warn = TRUE) {
 
     if (inherits(amount, "journal")) {
@@ -64,60 +64,39 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
         }
     }
 
-    if (t0.given <- !missing(t0)) {  
-        p0 <- position(amount, timestamp, instrument, when = t0,
-                       drop.zero = TRUE)
-        if (length(p0$position)) {
-            if (!is.null(names(prices0))) 
-                  prices0 <- prices0[match(p0$instrument, names(prices0))]
-            amount0 <- p0$position
-            instrument0 <- p0$instrument
-            timestamp0 <- t0            
-        } else {
-            prices0 <- timestamp0 <- amount0 <- numeric(0)
-            instrument0 <- character(0)            
-        }
+    if (!is.null(initial.position) && length(initial.position$position)) {
+        if (!is.null(names(initial.price)))
+            initial.price <- initial.price[match(initial.position$instrument,
+                                                 names(initial.price))]        
+        amount0 <- c(initial.position$position)
+        instrument0 <- initial.position$instrument
+        timestamp0 <- rep(initial.position$timestamp, length(amount0))
     } else {
-        prices0 <- timestamp0 <- amount0 <- numeric(0)
+        initial.price <- timestamp0 <- amount0 <- numeric(0)
         instrument0 <- character(0)
     }
-    if (t1.given <- !missing(t1)) { 
-        p1 <- position(amount, timestamp, instrument, when = t1,
-                       drop.zero = TRUE)
-        if (length(p1$position)) {
-            if (!is.null(names(prices1))) 
-                  prices1 <- prices1[match(p1$instrument, names(prices1))]
-            amount1 <- -p1$position  ## revert position
-            instrument1 <- p1$instrument
-            timestamp1 <- t1            
-        } else {
-            prices1 <- timestamp1 <- amount1 <- numeric(0)
-            instrument1 <- character(0)            
-        }
+    amount <- c(amount0, amount)
+    timestamp <- c(timestamp0, timestamp)
+    instrument <- c(instrument0, instrument)
+    price <- c(initial.price, price)
+    
+    ## open position?
+    p1 <- position(amount, timestamp, instrument,
+                   drop.zero = TRUE)
+    if (length(p1$position) && !missing(current.price)) {
+        if (!is.null(names(current.price))) 
+            current.price <- current.price[match(p1$instrument, names(current.price))]
+        amount1 <- c(-p1$position)  ## revert position
+        instrument1 <- p1$instrument
+        timestamp1 <- p1$timestamp            
     } else {
-        prices1 <- timestamp1 <- amount1 <- numeric(0)
-        instrument1 <- character(0)
+        current.price <- timestamp1 <- amount1 <- numeric(0)
+        instrument1 <- character(0)            
     }
-
-    if (t0.given || t1.given) {
-        if (t0.given)
-            keep <- timestamp > t0
-        if (!t0.given) {
-            keep <- rep.int(TRUE, length(timestamp))
-        }
-        else if (!t1.given)
-            t1 <- max(timestamp)
-        keep <- keep & timestamp <= t1
-        amount <- amount[keep]
-        timestamp <- timestamp[keep]
-        instrument <- instrument[keep]
-        price <- price[keep]
-
-        amount  <-    c(amount0,     amount,     amount1)
-        timestamp  <- c(timestamp0,  timestamp,  timestamp1)
-        instrument <- c(instrument0, instrument, instrument1)
-        price      <- c(prices0,     price,      prices1)
-    }
+    amount <- c(amount, amount1)
+    timestamp <- c(timestamp, timestamp1)
+    instrument <- c(instrument, instrument1)
+    price <- c(price, current.price)
     
     
     ui <- unique(instrument)    
