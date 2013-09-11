@@ -29,5 +29,11 @@ test.pl <- function() {
                        aggregate = TRUE)    
     PMwR:::avg(tmp$amount, tmp$price)
 
+    
+    J <- journal(timestamp = c(1, 2, 3),
+                 amount = c(1, 1, -2),
+                 price  = c(100,102, 101))
+    pl(c(1, 1, -2), c(100,102, 101))
+
 }
 

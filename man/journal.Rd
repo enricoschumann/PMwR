@@ -34,7 +34,7 @@ journal(timestamp, amount, price, instrument,
 \method{subset}{journal}(x, \dots)
 
 \method{[}{journal}(x, i, match.against = c("instrument", "account"),
-                    ignore.case = TRUE, ...)
+                    ignore.case = TRUE, \dots, reverse = FALSE)
 
 \method{as.data.frame}{journal}(x, row.names = NULL, optional = FALSE, \dots)
 
@@ -45,37 +45,42 @@ journal(timestamp, amount, price, instrument,
 }
 \arguments{
   \item{timestamp}{
-    time
+    An atomic vector. Timestamps should typically be sortable.
   }
   \item{amount}{
-    volume per trade
+    numeric
   }
   \item{price}{
-    trade price
-  }
-  \item{id}{
-    trade id
+    numeric
   }
   \item{instrument}{
-    instrument
+    character
+  }
+  \item{id}{
+    An atomic vector. Default is \code{NULL}.
   }
   \item{account}{
-    account 
+    An atomic vector. default is \code{NULL}. 
   }
   \item{\dots}{    
-    For \code{journal}: further arguments, which must all be named.  For
-    \code{subset}: an expression that evaluates to a logical vector; it
-    can use all fields of the passed journal; see Examples.  For
-    \code{`[`}, further arguments passed to \code{\link{grep}}.    
+    For \code{journal}: further arguments, which must all be named.
+
+    For \code{subset}: an expression that evaluates to a logical vector. The
+    epxression may use all fields of the passed journal; see Examples.
+
+    For \code{`[`}: arguments other than \code{ignore.case} to be passed
+    to \code{\link{grep}}.
+
+    For \code{sort}: arguments passed to \code{\link{sort}}.
   }
   \item{x}{    
-    a \code{journal} object    
+    a \code{journal}
   }
   \item{width}{
-    integer
+    integer. See \code{\link{options}}.
   }
   \item{decreasing}{
-    arguments passed to sort
+    passed to \code{\link{sort}}
   }
   \item{by}{
     \code{sort}: sort by field. \code{head}/\code{tail}: by instrument.
@@ -105,13 +110,18 @@ journal(timestamp, amount, price, instrument,
     ignored (see \code{\link{c}})
   }
   \item{i}{
-    integer, logical or character.  The latter is interpreted as a regexp.
+    integer, logical or character.  The latter is interpreted as a
+  regexp (see \code{\link{grep}})
   }
   \item{n}{
     integer.
   }
   \item{match.against}{
     character vector
+  }
+  \item{reverse}{
+    logical. If \code{TRUE}, select journal entries that do not match
+regular expression.
   }
 }
 \details{

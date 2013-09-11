@@ -2,6 +2,7 @@ position <- function(amount, timestamp, instrument, when,
                      drop.zero = FALSE) {
     if (missing(instrument))
         instrument <- NA
+        
     if (inherits(amount, "journal")) {
         J <- amount
         instrument <- J$instrument
@@ -18,7 +19,11 @@ position <- function(amount, timestamp, instrument, when,
         timestamp <- instrument$timestamp
         instrument <- instrument$instrument
     } 
-
+    if (missing(timestamp) || !length(timestamp)){
+        if (!missing(when))
+            warning(sQuote("when"), " specified, but no valid timestamp supplied")
+        timestamp <- rep(1, length(amount))        
+    }
     if (missing(when)) {
         when <- max(timestamp)
     } else if (is.character(when)) {
@@ -37,8 +42,8 @@ position <- function(amount, timestamp, instrument, when,
         instrument <- instrument[io]
     }
 
-    if (is.null(instrument)) 
-        instrument <- rep.int("", length(timestamp))    
+    if (is.null(instrument) || !length(instrument)) 
+        instrument <- rep.int("", length(amount))    
 
     allna <- FALSE
     if (all(ina <- is.na(instrument))) {

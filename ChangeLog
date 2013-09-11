@@ -1,3 +1,12 @@
+2013-09-11  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pl.R (pl): added multiplier argument
+
+	* R/pl.R (plfun): absolute amount -- initial/final positions are
+	subtracted (ie, amount only reflects _traded_ quantities)
+
+	* R/position.R (position): timestamp can be missing/zero-length
+
 2013-09-10  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (`[.journal`): added argument 'reverse'

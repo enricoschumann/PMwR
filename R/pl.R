@@ -19,9 +19,10 @@ print.pl <- function(x, ...) {
 
 pl <- function(amount, price, instrument = NULL, timestamp = NULL,
                along.timestamp = FALSE,
-               do.sort = FALSE,
+               do.sort = FALSE, 
                initial.cash = 0, initial.position = NULL,
                initial.price, current.price,
+               multiplier,
                tol = 1e-10, do.warn = TRUE) {
 
     if (inherits(amount, "journal")) {
@@ -31,7 +32,7 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
         amount <- J$amount
         timestamp <- J$timestamp
     }
-
+    
     if (any(abs(amount) < tol) && do.warn)
         warning("zero ", sQuote("amount"), " values")
 
@@ -98,7 +99,8 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
     instrument <- c(instrument, instrument1)
     price <- c(price, current.price)
     
-    
+    if (!length(instrument))
+        instrument <- NULL    
     ui <- unique(instrument)    
     if (is.null(instrument) || length(ui) == 1L) {
         if (along.timestamp) {
@@ -106,15 +108,15 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
             cumpos  <- cumsum(amount)
             res <- list(value = cumpos * price + cumcash,
                         position = cumpos,
-                        cash = cumcash+initcash)
+                        cash = cumcash + initial.cash)
             class(res) <- "plsorted"
         } else {
             tmp <- plfun(amount, price)
-            res <- list(instrument = if (is.null(instrument)) NA
-                                     else unique(instrument),
-                        pl = tmp[1L],
-                        total.amount = tmp[2L],
-                        average.buy = tmp[3L],
+            res <- list(instrument   = if (is.null(instrument)) NA else ui,
+                        pl           = tmp[1L],
+                        ## subtract amounts that were not actually traded
+                        total.amount = tmp[2L] - sum(abs(amount0)) - sum(abs(amount1)),
+                        average.buy  = tmp[3L],
                         average.sell = tmp[4L])
             class(res) <- "pl"
         }        
@@ -125,7 +127,6 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
         pls <- sumamounts <- mbuys <- msells <- numeric(length(instr))
         for (i in seq_along(instr)) {
             ix <- instr[i] == instrument  
-            n <- amount[ix]
             tmp <- plfun(amount[ix], price[ix])
             pls[i] <- tmp[1L]
             sumamounts[i] <- tmp[2L]

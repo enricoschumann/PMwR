@@ -226,10 +226,10 @@ summary.journal <- function(x, ...) {
                 next
             ii <- ii | grepl(i, x[[m]], ignore.case = ignore.case, ...)
         }        
+        if (reverse)
+            ii <- !ii
     } else
         ii <- i
-    if (reverse)
-        ii <- !ii
     ans <- lapply(unclass(x), `[`, ii)
     class(ans) <- "journal"
     ans

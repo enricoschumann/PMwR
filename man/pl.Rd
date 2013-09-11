@@ -8,8 +8,9 @@
 }
 \usage{
 pl(amount, price, instrument = NULL, timestamp = NULL,
-   along.timestamp = FALSE, do.sort = FALSE, initcash = 0,
-   t0, t1, prices0, prices1,
+   along.timestamp = FALSE, do.sort = FALSE,
+   initial.cash = 0, initial.position = NULL,
+   initial.price, current.price, multiplier,
    tol = 1e-10, do.warn = TRUE)
 }
 \arguments{
@@ -31,13 +32,15 @@ pl(amount, price, instrument = NULL, timestamp = NULL,
   \item{do.sort}{
     sort all by time
   }
-  \item{initcash}{
+  \item{initial.cash}{
     a numeric vector of length one
   }
-  \item{t0}{from}
-  \item{t1}{to}
-  \item{prices0}{price.from}
-  \item{prices1}{price.to}
+  \item{initial.position}{
+    a \code{\link{position}}
+  }
+  \item{current.price}{price.from}
+  \item{initial.price}{price.to}
+  \item{multiplier}{not supported}
   \item{tol}{numeric}
   \item{do.warn}{logical}
 }
