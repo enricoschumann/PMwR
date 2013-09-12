@@ -1,5 +1,8 @@
 2013-09-11  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/backtest.R (btest): added function -- future replacement of
+	backtest
+
 	* R/pl.R (pl): added multiplier argument
 
 	* R/pl.R (plfun): absolute amount -- initial/final positions are
