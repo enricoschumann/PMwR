@@ -1,3 +1,11 @@
+2013-09-13  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/texttools.R (rmspace): added leading/trailing arguments
+
+2013-09-12  Enrico Schumann  <es@enricoschumann.net>
+
+	* man/texttools.Rd: added 'rrp'
+
 2013-09-11  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/backtest.R (btest): added function -- future replacement of

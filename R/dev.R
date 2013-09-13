@@ -1,9 +1,6 @@
 if (FALSE) {
 
 
-    x <- c(1,NA,2,3,NA,5)
-    
-    approx(x=x, n = length(x), method = "constant")$y
     
     
     replNA <- function(x) {

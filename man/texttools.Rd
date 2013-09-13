@@ -3,6 +3,7 @@
 \alias{rmspace}
 \alias{char2num}
 \alias{expstr}
+\alias{rmrp}
 \title{
   Manipulating Character Vectors
 }
@@ -15,6 +16,8 @@ rmspace(s)
 char2num(s, dec = ",", big.mark = ".")
 
 expstr(s, after, width, fill = " ", at)
+
+rmrp(s, pattern, \dots)
 }
 \arguments{
   \item{s}{a character vector}
@@ -30,6 +33,8 @@ expstr(s, after, width, fill = " ", at)
   \item{width}{integer}
   \item{fill}{character}
   \item{at}{integer}
+  \item{pattern}{character}
+  \item{\dots}{arguments passed to \code{\link{grep}}}
 }
 \details{
 
@@ -45,6 +50,9 @@ expstr(s, after, width, fill = " ", at)
   \code{\link{nchar}}).  Note that it will (currently) not contract a
   string, only expand it.
 
+  \code{rmrp} removes a repeated pattern in a character vector (eg,
+  repeated blank lines).
+  
 }
 \value{
   a character vector
@@ -69,4 +77,8 @@ char2num("12 000|23", dec = "|", big.mark = " ")
 ## expand to width 10, but keep two initial blanks 
 s <- c("  A 1", "  B     2")
 expstr(s, after = " +[^ ]+ +", width = 10)
+
+## remove repeated blanks from vector
+s <- c("* Header", "", "  ","", "** Subheader")
+rrp(s, "^ *$")
 }
