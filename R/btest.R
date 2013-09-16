@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2013-09-16 16:20:28 CEST (es)>
+## Time-stamp: <2013-09-16 17:45:36 CEST (es)>
 btest  <- function(prices,              ## matrices
                    signal,            ## a function
                    do.signal = TRUE,  ## a function
@@ -12,7 +12,7 @@ btest  <- function(prices,              ## matrices
                    tc = 0,
                    ...,
                    add = FALSE,   ## if TRUE, 'position' is flow
-                   adjust.position = NULL,
+                   adjust.signal = NULL,
                    size = NULL,
                    tradeOnOpen = TRUE,
                    tol = 1e-5,
@@ -169,7 +169,7 @@ btest  <- function(prices,              ## matrices
     if (db.print.info)
         debug(print.info)
     
-    if (is.null(adjSignal))
+    if (is.null(adjust.signal))
         adjSignal <- FALSE
     else
         adjSignal <- TRUE
@@ -235,53 +235,55 @@ btest  <- function(prices,              ## matrices
     } else
         initial.wealth <- initial.cash
 
-    ## period 1 (only if b == 0L)
+    ## period 1: code is only used if  b == 0L
     if (b == 0L) {
         t <- 1L
-        ## COMPUTE SIGNAL?
-        computeSignal <- do.signal(..., Open = Open, High = High,
-                                  Low = Low, Close = Close,
-                                  Wealth = Wealth, Cash = Cash,
-                                  Time = Time, Portfolio = Portfolio,
-                                  SuggestedPortfolio = SuggestedPortfolio,
-                                  Globals = Globals)
+        computeSignal <- do.signal(...,
+                                   Open = Open, High = High,
+                                   Low = Low, Close = Close,
+                                   Wealth = Wealth, Cash = Cash,
+                                   Time = Time, Portfolio = Portfolio,
+                                   SuggestedPortfolio = SuggestedPortfolio,
+                                   Globals = Globals)
 
         if (computeSignal) {
-
             temp <- signal(..., Open = Open, High = High, Low = Low,
                            Close = Close, Wealth = Wealth, Cash = Cash,
                            Time = Time, Portfolio = Portfolio,
                            SuggestedPortfolio = SuggestedPortfolio,
                            Globals = Globals)
 
-            if (adjSignal) {
-                switch(adjust.position,
+            if (!is.null(adjust.signal)) {
+                switch(adjust.signal,
                        fixedPosition = temp <- size *  temp,
                        weight = {
                            if (!is.null(size)) {
                                temp <- size * sign(temp) * initial.wealth / prices0
-                           } else temp <- temp * initial.wealth /prices0
+                           } else
+                               temp <- temp * initial.wealth /prices0
                        },
-                       stop("unknown value for 'adjust.position'"))}
+                       stop("unknown value for ", sQuote("adjust.signal"))
+                       )
+            }
 
-            if (!is.null(temp))
-                Xs[t, ] <- temp
-            else
-                Xs[t, ] <- rep.int(0, nA)
+            Xs[t, ] <- temp
             computeSignal <- FALSE
         } else {
             Xs[t, ] <- rep.int(0, nA)
         }
 
         ## REBALANCE?
-        rebalance <- rebalance(..., Open = Open, High = High,
-                                 Low = Low, Close = Close,
-                                 Wealth = Wealth, Cash = Cash,
-                                 Time = Time, Portfolio = Portfolio,
-                                 SuggestedPortfolio = SuggestedPortfolio,
-                                 Globals = Globals)
+        rebalance <- rebalance(...,
+                               Open = Open, High = High,
+                               Low = Low, Close = Close,
+                               Wealth = Wealth, Cash = Cash,
+                               Time = Time, Portfolio = Portfolio,
+                               SuggestedPortfolio = SuggestedPortfolio,
+                               Globals = Globals)
 
-        dXs <- Xs[t, ] - ifelse(initial.position != 0, initial.position, 0)
+        dXs <- Xs[t, ] - if (any(initial.position != 0))
+            initial.position else 0
+
         if (max(abs(dXs)) < tol)
             rebalance <- FALSE
 
@@ -295,7 +297,7 @@ btest  <- function(prices,              ## matrices
             abs_sx <- (abs(dx) * tc) %*% open
             tccum[t] <- abs_sx
             cash[t] <- initial.cash - sx - abs_sx
-            X[t, ] <- ifelse(initial.position != 0, initial.position, 0) + dx
+            X[t, ] <- if (any(initial.position != 0)) initial.position else 0  + dx
             rebalance <- FALSE
         } else {
             tccum[t] <- 0
@@ -313,18 +315,16 @@ btest  <- function(prices,              ## matrices
     }
     ## end period 1
 
-    strt <- max(2L, b+1L)
-    for ( t in strt:T ) {
+    for ( t in max(2L, b+1L):T ) {
 
-        t1 <- t-1L
-
-        ## COMPUTE SIGNAL?
-        computeSignal <- do.signal(..., Open = Open, High = High,
-                                     Low = Low, Close = Close,
-                                     Wealth = Wealth, Cash = Cash,
-                                     Time = Time, Portfolio = Portfolio,
-                                     SuggestedPortfolio = SuggestedPortfolio,
-                                     Globals = Globals)
+        t1 <- t - 1L        
+        computeSignal <- do.signal(...,
+                                   Open = Open, High = High,
+                                   Low = Low, Close = Close,
+                                   Wealth = Wealth, Cash = Cash,
+                                   Time = Time, Portfolio = Portfolio,
+                                   SuggestedPortfolio = SuggestedPortfolio,
+                                   Globals = Globals)
 
         if (computeSignal) {
             temp <- signal(..., Open = Open, High = High,
@@ -335,16 +335,17 @@ btest  <- function(prices,              ## matrices
                              Globals = Globals)
 
             if (adjSignal) {
-                switch(adjust.position,
+                switch(adjust.signal,
                        fixedPosition = {
                            temp <- size *  temp
                        },
                        weight = {
                            if (!is.null(size)) {
                                temp <- size * sign(temp) * v[t1] / mC[t1, ]
-                           } else temp <- temp * v[t1] / mC[t1, ]
+                           } else
+                               temp <- temp * v[t1] / mC[t1, ]
                        },
-                       stop("unknown value for 'adjust.position'")
+                       stop("unknown value for 'adjust.signal'")
                        ) ## end switch
             }
             if (!is.null(temp))
