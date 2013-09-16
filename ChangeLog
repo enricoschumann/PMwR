@@ -1,3 +1,7 @@
+2013-09-16  Enrico Schumann  <es@enricoschumann.net>
+
+	* updated docs for rmspace
+
 2013-09-15  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/html.R (.xhtml.skeleton,.html5.skeleton): added functions

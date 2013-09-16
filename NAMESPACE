@@ -10,6 +10,7 @@ export(
     "mday<-",
     journal,
     backtest,
+    btest,
     char2num,
     closeOnFirst,
     dayOfMonth,
