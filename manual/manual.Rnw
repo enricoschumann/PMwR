@@ -242,7 +242,7 @@ position(jnl)
 @ 
 In terms of income and expenses we have made a loss of 100.
 <<>>=
-pl(jnl, t1 = "day 3", prices1 = 1)
+##pl(jnl, t1 = "day 3", prices1 = 1)
 @ 
 
 
@@ -1510,6 +1510,29 @@ But even the more general case is not so complicated, after all.
 3) combine with journal since month start
 
 4) use average (\texttt{avg}) on all instruments
+
+
+\chapter{Computations}
+\section{Positions}
+
+We have three vectors: \texttt{when}, \texttt{timestamp} and
+\texttt{amount}.  Vectors \texttt{when} and \texttt{timestamp} are of
+the same type and are both sorted in increasing order;
+\texttt{timestamp} and \texttt{amount} have the same length.  The
+result of the computation is a vector \texttt{position} with the same
+length as \texttt{when}.
+
+\begin{verbatim}
+i, j = 0  /* i loops over when; j loops over amount/timestamp */
+for (i = 0; i < length(when); i++) {
+  if (i == 0)
+    pos[i] = 0;
+  else
+    pos[i] = pos[i - 1];
+  while (timestamp[j] <= when[i] && j < length(j))
+    position[i] += amount[j++];
+}
+\end{verbatim}
 
 
 \printindex

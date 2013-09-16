@@ -1,8 +1,5 @@
 if (FALSE) {
-
-
-    
-    
+        
     replNA <- function(x) {
         na <- which(is.na(x[-1L])) + 1L
         n <- length(na)
