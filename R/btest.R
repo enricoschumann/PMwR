@@ -1,14 +1,14 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2013-09-16 17:45:36 CEST (es)>
-btest  <- function(prices,              ## matrices
-                   signal,            ## a function
-                   do.signal = TRUE,  ## a function
-                   rebalance = TRUE,    ## a function
-                   print.info = NULL,    ##
+## Time-stamp: <2013-09-17 11:24:39 CEST (es)>
+btest  <- function(prices,              
+                   signal,              ## a function
+                   do.signal = TRUE,    ## a function
+                   do.rebalance = TRUE, ## a function
+                   print.info = NULL,   ##
                    b = 1L,              ## burnin
                    phi = 1,             ## how much to rebalance
-                   initial.position = 0,              ## initial portfolio
-                   initial.cash = 100,            ## initial cash
+                   initial.position = 0,## initial portfolio
+                   initial.cash = 0, ## initial cash
                    tc = 0,
                    ...,
                    add = FALSE,   ## if TRUE, 'position' is flow
@@ -29,10 +29,10 @@ btest  <- function(prices,              ## matrices
     else
         db.do.signal <- FALSE
 
-    if (is.function(rebalance) && isdebugged(rebalance))
-        db.rebalance <- TRUE
+    if (is.function(do.rebalance) && isdebugged(do.rebalance))
+        db.do.rebalance <- TRUE
     else
-        db.rebalance <- FALSE
+        db.do.rebalance <- FALSE
 
     if (is.function(print.info) && isdebugged(print.info))
         db.print.info <- TRUE
@@ -40,10 +40,7 @@ btest  <- function(prices,              ## matrices
         db.print.info <- FALSE
 
     
-    if (is.null(do.signal)) {
-        do.signal <- function(...)
-            TRUE
-    } else if (identical(do.signal, TRUE)) {
+    if (is.null(do.signal) || identical(do.signal, TRUE)) {
         do.signal <- function(...)
             TRUE
     } else if (identical(do.signal, FALSE)) {
@@ -52,14 +49,11 @@ btest  <- function(prices,              ## matrices
         warning(sQuote("do.signal"), " is FALSE: strategy will never trade")
     }
 
-    if (is.null(rebalance)) {
-        rebalance <- function(...)
+    if (is.null(do.rebalance) || identical(do.rebalance, TRUE)) {
+        do.rebalance <- function(...)
             TRUE
-    } else if (identical(rebalance, TRUE)) {
-        rebalance <- function(...)
-            TRUE
-    } else if (identical(rebalance, FALSE)) {
-        rebalance <- function(...)
+    } else if (identical(do.rebalance, FALSE)) {
+        do.rebalance <- function(...)
             FALSE
     }
 
@@ -102,7 +96,7 @@ btest  <- function(prices,              ## matrices
     reservedNames <- c("Open", "High", "Low", "Close",
                        "Wealth", "Cash", "Time", "Portfolio",
                        "SuggestedPortfolio", "Globals")
-    funs <- c("signal", "do.signal", "rebalance", "print.info")
+    funs <- c("signal", "do.signal", "do.rebalance", "print.info")
     for (thisfun in funs) {
         fNames <- names(formals(get(thisfun)))
         for (rname in reservedNames)
@@ -139,8 +133,8 @@ btest  <- function(prices,              ## matrices
     if (db.do.signal)
         debug(do.signal)
     
-    formals(rebalance) <-
-        c(formals(rebalance), alist(Open = Open,
+    formals(do.rebalance) <-
+        c(formals(do.rebalance), alist(Open = Open,
                                       High = High,
                                       Low = Low,
                                       Close = Close,
@@ -151,8 +145,8 @@ btest  <- function(prices,              ## matrices
                                       SuggestedPortfolio = SuggestedPortfolio,
                                       Globals = Globals))
 
-    if (db.rebalance)
-        debug(rebalance)
+    if (db.do.rebalance)
+        debug(do.rebalance)
 
     formals(print.info) <-
         c(formals(print.info), alist(Open = Open,
@@ -171,9 +165,13 @@ btest  <- function(prices,              ## matrices
     
     if (is.null(adjust.signal))
         adjSignal <- FALSE
-    else
+    else {
         adjSignal <- TRUE
+        if ((adjust.signal == "fixedWeight" || adjust.signal == "fixedPosition") &&
+            is.null(size))
+            stop(sQuote("size"), " must be specified")
 
+    }
     ## prepare prices
     if (is.list(prices)) {
         if (length(prices) == 1L) {
@@ -215,17 +213,14 @@ btest  <- function(prices,              ## matrices
     Xs <- array( 0, dim = c(T, nA))
     colnames(X) <- colnames(mC)
     colnames(Xs) <- colnames(mC)
-
-    if (b > 0L)
-        X[b, ] <- initial.position
-    cash <- numeric(T)
-
-    if (b > 0L)
-        cash[b] <- initial.cash
-    v <- numeric(T)
+    v <- cash <- numeric(T)
     v[] <- NA
-    if (b > 0L)
-        v[b] <- initial.cash + ifelse(!identical(0, initial.position), initial.position %*% mC[b, ], 0 )
+    if (b > 0L) {
+        Xs[b,] <- X[b, ] <- initial.position
+        cash[b] <- initial.cash
+        v[b] <- initial.cash + if (initial.position != 0)
+                                   initial.position %*% mC[b, ] else 0
+    }
 
     ## initial wealth
     if (initial.position != 0 && !is.null(prices0)) {
@@ -252,28 +247,26 @@ btest  <- function(prices,              ## matrices
                            Time = Time, Portfolio = Portfolio,
                            SuggestedPortfolio = SuggestedPortfolio,
                            Globals = Globals)
-
-            if (!is.null(adjust.signal)) {
+            
+            if (!is.null(adjust.signal))
                 switch(adjust.signal,
-                       fixedPosition = temp <- size *  temp,
-                       weight = {
-                           if (!is.null(size)) {
-                               temp <- size * sign(temp) * initial.wealth / prices0
-                           } else
-                               temp <- temp * initial.wealth /prices0
-                       },
-                       stop("unknown value for ", sQuote("adjust.signal"))
-                       )
-            }
+                       fixedPosition = {temp <- size *  temp},
+                       fixedWeight   = {temp <- size * sign(temp) * initial.wealth / prices0},
+                       weight        = {temp <- temp * initial.wealth /prices0},
+                       stop("unknown value for ", sQuote("adjust.signal")))
+           
 
-            Xs[t, ] <- temp
+            if (!is.null(temp))
+                Xs[t, ] <- temp
+            else
+                Xs[t, ] <- 0
             computeSignal <- FALSE
         } else {
             Xs[t, ] <- rep.int(0, nA)
         }
 
         ## REBALANCE?
-        rebalance <- rebalance(...,
+        rebalance <- do.rebalance(...,
                                Open = Open, High = High,
                                Low = Low, Close = Close,
                                Wealth = Wealth, Cash = Cash,
@@ -282,7 +275,7 @@ btest  <- function(prices,              ## matrices
                                Globals = Globals)
 
         dXs <- Xs[t, ] - if (any(initial.position != 0))
-            initial.position else 0
+                             initial.position else 0
 
         if (max(abs(dXs)) < tol)
             rebalance <- FALSE
@@ -291,7 +284,9 @@ btest  <- function(prices,              ## matrices
             dx <- phi * dXs
 
             if (tradeOnOpen) ## will convert m(O|C) to vector (drop = TRUE)
-                open <- mO[t, ]  else open <- mC[t, ]
+                open <- mO[t, ]
+            else open <-
+                mC[t, ]
 
             sx <- dx %*% open
             abs_sx <- (abs(dx) * tc) %*% open
@@ -315,39 +310,34 @@ btest  <- function(prices,              ## matrices
     }
     ## end period 1
 
-    for ( t in max(2L, b+1L):T ) {
 
+    
+    for (t in max(2L, b+1L):T) {
         t1 <- t - 1L        
         computeSignal <- do.signal(...,
                                    Open = Open, High = High,
                                    Low = Low, Close = Close,
-                                   Wealth = Wealth, Cash = Cash,
-                                   Time = Time, Portfolio = Portfolio,
+                                   Wealth = Wealth,
+                                   Cash = Cash,
+                                   Time = Time,
+                                   Portfolio = Portfolio,
                                    SuggestedPortfolio = SuggestedPortfolio,
                                    Globals = Globals)
 
         if (computeSignal) {
             temp <- signal(..., Open = Open, High = High,
-                             Low = Low, Close = Close, Wealth = Wealth,
-                             Cash = Cash, Time = Time,
-                             Portfolio = Portfolio,
-                             SuggestedPortfolio = SuggestedPortfolio,
-                             Globals = Globals)
-
-            if (adjSignal) {
+                           Low = Low, Close = Close, Wealth = Wealth,
+                           Cash = Cash, Time = Time,
+                           Portfolio = Portfolio,
+                           SuggestedPortfolio = SuggestedPortfolio,
+                           Globals = Globals)            
+            if (!is.null(adjust.signal))
                 switch(adjust.signal,
-                       fixedPosition = {
-                           temp <- size *  temp
-                       },
-                       weight = {
-                           if (!is.null(size)) {
-                               temp <- size * sign(temp) * v[t1] / mC[t1, ]
-                           } else
-                               temp <- temp * v[t1] / mC[t1, ]
-                       },
-                       stop("unknown value for 'adjust.signal'")
-                       ) ## end switch
-            }
+                       fixedPosition = {temp <- size *  temp},
+                       fixedWeight   = {temp <- size * sign(temp) * v[t1] / mC[t1, ]},
+                       weight        = {temp <- temp * v[t1] / mC[t1, ]},
+                       stop("unknown value for ", sQuote("adjust.signal")))
+
             if (!is.null(temp))
                 Xs[t, ] <- temp
             else
@@ -357,19 +347,19 @@ btest  <- function(prices,              ## matrices
             Xs[t, ] <- Xs[t1, ] ## b0
         }
 
-        ## REBALANCE?
-        rebalanceYN <- rebalance(..., Open = Open, High = High,
-                               Low = Low, Close = Close,
-                               Wealth = Wealth, Cash = Cash,
-                               Time = Time, Portfolio = Portfolio,
-                               SuggestedPortfolio = SuggestedPortfolio,
-                               Globals = Globals)
 
-        dXs <- Xs[t, ] - Xs[t1, ]  ## b0
-        if (max(abs(dXs)) < tol)
-            rebalanceYN <- FALSE
+        rebalance <- do.rebalance(..., Open = Open, High = High,
+                                  Low = Low, Close = Close,
+                                  Wealth = Wealth, Cash = Cash,
+                                  Time = Time, Portfolio = Portfolio,
+                                  SuggestedPortfolio = SuggestedPortfolio,
+                                  Globals = Globals)
         
-        if (rebalanceYN) {
+        dXs <- Xs[t, ] - X[t1, ]  ## b0
+        if (max(abs(dXs)) < tol)
+            rebalance <- FALSE
+        
+        if (rebalance) {
             dx <- phi * dXs
 
             if (tradeOnOpen) ## will convert m(O|C) to vector (drop = TRUE)
@@ -403,18 +393,23 @@ btest  <- function(prices,              ## matrices
                       Globals = Globals)
     } ## end of for loop
 
-    tmp <- list(times = 1:NROW(X), trades = diff(rbind(initial.position,X)))
-    keep <- abs(tmp$trades) > sqrt(.Machine$double.eps) & !is.na(tmp$trades)
-    keep <- apply(as.matrix(keep), 1, function(x) any(x))
-
+    ## TODO multiple assets
+    trades <- diff(rbind(initial.position, X))
+    keep <- abs(trades) > sqrt(.Machine$double.eps) & !is.na(trades)
+    keep <- apply(as.matrix(keep), 1, any)
+    if (sum(keep))
+        jnl <- journal(timestamp = seq_len(NROW(X))[keep],
+                      amount = as.matrix(trades[keep, ]),
+                      price = mC[keep, ])
+    else
+        jnl <- journal()
+    
     list(position = X,
          suggested.position = Xs,
          cash = cash,
          wealth = v,
          cum.tc = tccum,
-         journal = journal(timestamp = tmp$times[keep],
-                              amount = as.matrix(tmp$trades[keep, ]),
-                              price = prices[keep]),
+         journal = jnl,
          initial.wealth = initial.wealth)
 }
 
