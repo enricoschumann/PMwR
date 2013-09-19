@@ -24,6 +24,20 @@ rmrp <- function(s, pattern, ...) {
     s
 }
 
+
+## remove blank lines at beginning/end
+rmbl <- function(s, pattern = "^$| +", ..., leading=TRUE , trailing=TRUE) {
+s <- c("",""," ", "sahs", "jwhd", "", "", "", "", "", "")
+
+    m <- grep(pattern, s)
+    rm <- NULL
+    if (leading && match(1, m, nomatch = 0L))
+        rm <- seq_len(which(diff(m) > 1L)[1L])  
+    if (trailing && match(length(s), m, nomatch = 0L))
+        stop("to be written")
+    s[-rm]    
+}
+
 ## convert from one TeXunit to another
 TeXunits <- function(from, to, from.unit = NULL) {
     if (!is.null(from.unit))
