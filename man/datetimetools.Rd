@@ -174,3 +174,4 @@ d
 ##         shift forward by 3 weeks
 lastWeekday(5, as.Date("2013-02-01"), shift = 3)
 }
+\keyword{chron}

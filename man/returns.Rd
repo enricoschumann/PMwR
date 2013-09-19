@@ -8,7 +8,7 @@
   Convert prices into returns.
 }
 \usage{
-returns(x, t = NULL, period = "month", complete.first = TRUE,
+returns(x, t = NULL, period = NULL, complete.first = TRUE,
         pad = NULL,  position)
 
 \method{print}{preturns}(x, \dots, year.rows)

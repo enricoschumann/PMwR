@@ -38,7 +38,8 @@ will be added)
 }
 \details{
   All algorithms are written in \code{C}. There is no error handling,
-  and no handling of \code{NA}, \code{Inf} or similar values.
+  and no handling of \code{NA}, \code{Inf} or similar values (if such
+  values are in \code{y}, runStats will stop with an error).
   
   For quantiles either \code{h} or \code{q} must be specified, not both.
 }

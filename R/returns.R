@@ -23,46 +23,58 @@ twReturns <- function(price, position, pad = NULL) {
     price <- as.matrix(price)
     n <- dim(price)[1L]
     ap <- position*price
-    rt <- returns(price)        
-    weights <- (price*position/rowSums(price*position))[-n, , drop = FALSE]
-    rt <- rowSums(rt*weights)        
+    rt <- returns(price)
+
+    M <- price * position
+    rsM <- rowSums(M)
+    weights <- (M/rsM)
+    weights[abs(rsM) < 1e-14] <- 0
+    weights <- weights[-n, , drop = FALSE]
+    rt <- rowSums(rt * weights)        
     if (do.pad) 
         rt <- c(pad, rt)
     rt
 }
 
 ## not exported
-pReturns <- function(x, t, period, complete.first = TRUE) {
+pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
+    
+    if (is.null(period)) {
+        ans <- list(returns = returns(x, pad = pad),
+                    t = if (is.null(pad)) t[-1L] else t,
+                    period = period)        
+    } else {        
 
-    if (length(period) > 1L) {
-        by <- period
-    } else if (grepl("da(y|i)", period, ignore.case = TRUE)) {
-        by <- format(t, "%Y%m%d")
-    } else if (grepl("year(ly)?", period, ignore.case = TRUE)) {
-        by <- format(t, "%Y")
-    } else if (grepl("month(ly)?", period, ignore.case = TRUE)) {
-        by <- format(t, "%Y%m")
-    } 
-
-    ii <- last(x, by, TRUE)
-    if (complete.first && by[1L] == by[2L])
-        ii <- c(1, ii)
-
-    ans <- list(returns = returns(x[ii]),
-                t = t[ii][-1L],
-                period = period)
+        if (length(period) > 1L) {
+            by <- period
+        } else if (grepl("da(y|i)", period, ignore.case = TRUE)) {
+            by <- format(t, "%Y%m%d")
+        } else if (grepl("year(ly)?", period, ignore.case = TRUE)) {
+            by <- format(t, "%Y")
+        } else if (grepl("month(ly)?", period, ignore.case = TRUE)) {
+            by <- format(t, "%Y%m")
+        } 
+        
+        ii <- last(x, by, TRUE)
+        if (complete.first && by[1L] == by[2L])
+            ii <- c(1, ii)
+        
+        ans <- list(returns = returns(x[ii], pad = pad),
+                    t = if (is.null(pad)) t[ii][-1L] else t[ii],
+                    period = period)        
+    }
     class(ans) <- "preturns"
     ans
 }
 
-returns <- function(x, t = NULL, period = "month", complete.first = TRUE,
+returns <- function(x, t = NULL, period = NULL, complete.first = TRUE,
                     pad = NULL, position) {
 
     ## TODO: make internal function that checks x and t
     if (is.null(t)) {
         if (inherits(x, "zoo")) {
             t <- index(x)
-            x <- zoo:::coredata(x)
+            x <- coredata(x)
             if (!is.null(dim(x)))
                 stop("with ", sQuote("t"), " supplied, ",
                      sQuote("x"), " must be a vector")                    
@@ -79,11 +91,11 @@ returns <- function(x, t = NULL, period = "month", complete.first = TRUE,
     }
 
     if (is.null(t) &&  missing(position)) {
-        returns0(x, pad)        
+        returns0(x, pad = pad)        
     } else if (!is.null(t)) {
-        pReturns(x, t, period, complete.first)
+        pReturns(x, t, period, complete.first, pad = pad)
     } else {
-        twReturns(x, position, pad)
+        twReturns(x, position, pad = pad)
     }
 }
 
@@ -105,7 +117,7 @@ mtab <- function(x) {
 
 
 print.preturns <- function(x, ..., year.rows = TRUE) {
-    if (x$period == "month") {
+    if (!is.null(x$period) && grepl("month(ly)?", x$period)) {
         if (year.rows)
             print(mtab(x), quote = FALSE, print.gap = 2, right = TRUE)
         else
@@ -118,7 +130,7 @@ print.preturns <- function(x, ..., year.rows = TRUE) {
 }
 
 toLatex.preturns <- function(object, ..., year.rows = TRUE) {
-    if (object$period == "month") {
+    if (grepl("month(ly)?", object$period)) {
         if (year.rows)
             mt <- mtab(object)
         else
@@ -132,16 +144,36 @@ toLatex.preturns <- function(object, ..., year.rows = TRUE) {
     class(mt) <- "Latex"
     mt
 }
-toHTML.preturns <- function(x, ..., year.rows = TRUE, stand.alone = TRUE) {
 
-    .th <- function(x)
-        paste0("<th>", x, "</th>")
-    .td <- function(x)
-        paste0("<td style='text-align:right;padding:0.5em;' >", x, "</td>")
-    .tr <- function(x)
-        paste0("<tr>", x, "</tr>")
+toHTML.preturns <- function(x, ..., year.rows = TRUE, stand.alone = TRUE,
+                            table.style = NULL,
+                            table.class = NULL,
+                            th.style = NULL,
+                            th.class = NULL,
+                            td.style = "text-align:right;padding:0.5em;",
+                            td.class = NULL,
+                            tr.style = NULL, tr.class = NULL) {
+
+    .ctag <- function(value, tag)
+        if (!is.null(value))
+            paste0(" ", tag, "=", value)
+        else
+            character(0L)
     
-    if (x$period == "month") {
+    .th <- function(x, style = th.style, class = th.class){
+        open <- paste0("<th", .ctag(style, "style"), .ctag(class, "class"), ">")
+        paste0(open, x, "</th>")
+    }
+    .td <- function(x, style = td.style, class = td.class){
+        open <- paste0("<td", .ctag(style, "style"), .ctag(class, "class"), ">")
+        paste0(open, x, "</td>")
+    }
+    .tr <- function(x, style = tr.style, class = tr.class){
+        open <- paste0("<tr", .ctag(style, "style"), .ctag(class, "class"), ">")
+        paste0(open, x, "</tr>")
+    }
+    
+    if (grepl("month(ly)?", x$period)) {
         if (year.rows)
             mt <- mtab(x)
         else
@@ -156,8 +188,9 @@ toHTML.preturns <- function(x, ..., year.rows = TRUE, stand.alone = TRUE) {
     mt[-1 ,1] <- .th(mt[-1, 1])
     mt[-1,-1] <- .td(mt[-1,-1])
 
-
-    mt <- paste(.tr(apply(mt, 1, paste, collapse = "")), collapse = "")
-    mt <- paste("<table>", mt, "</table>", sep = "")
+    mt <- .tr(apply(mt, 1, paste, collapse = ""))
+    open <- paste0("<table", .ctag(table.style, "style"),
+                             .ctag(table.class, "class"), ">")
+    mt <- c(open, mt, "</table>")
     mt
 }

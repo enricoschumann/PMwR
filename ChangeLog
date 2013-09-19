@@ -1,3 +1,29 @@
+2013-09-19  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-37
+
+	* R/returns.R (returns): changed default period to NULL (before it
+	was 'month') since this is more robust in case of unusual
+	timestamp classes
+
+	* R/returns.R (print.preturns): fixed -- period 'monthly' (instead
+	of month) is now also accepted
+
+	* R/returns.R (pReturns): 'pad' is now passed also to 'period
+	returns'
+
+	* R/returns.R (.tr): toHTML.preturns allows specification of
+	class/style
+
+	* R/isValidISIN.R (isValidISIN): fixed -- in case all isins were
+	invalid because of length != 12 characters, the function failed
+
+	* R/drawdown.R (drawdown): fixed -- 'summary' argument was ignored
+
+	* R/texttools.R (rmspace): added leading/trailing arguments
+
+	* man/texttools.Rd: added 'rmrp' (remove repeated pattern)
+
 2013-08-08  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-36
