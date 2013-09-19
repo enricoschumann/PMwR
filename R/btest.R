@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2013-09-17 11:24:39 CEST (es)>
+## Time-stamp: <2013-09-17 13:08:14 CEST (es)>
 btest  <- function(prices,              
                    signal,              ## a function
                    do.signal = TRUE,    ## a function
@@ -13,7 +13,6 @@ btest  <- function(prices,
                    ...,
                    add = FALSE,   ## if TRUE, 'position' is flow
                    adjust.signal = NULL,
-                   size = NULL,
                    tradeOnOpen = TRUE,
                    tol = 1e-5,
                    assignInGlobals = list(),
@@ -166,11 +165,9 @@ btest  <- function(prices,
     if (is.null(adjust.signal))
         adjSignal <- FALSE
     else {
+        if (adjust.signal != "weight")
+            stop(sQuote("adjust.signal"), " must be NULL or weight")
         adjSignal <- TRUE
-        if ((adjust.signal == "fixedWeight" || adjust.signal == "fixedPosition") &&
-            is.null(size))
-            stop(sQuote("size"), " must be specified")
-
     }
     ## prepare prices
     if (is.list(prices)) {
@@ -249,13 +246,8 @@ btest  <- function(prices,
                            Globals = Globals)
             
             if (!is.null(adjust.signal))
-                switch(adjust.signal,
-                       fixedPosition = {temp <- size *  temp},
-                       fixedWeight   = {temp <- size * sign(temp) * initial.wealth / prices0},
-                       weight        = {temp <- temp * initial.wealth /prices0},
-                       stop("unknown value for ", sQuote("adjust.signal")))
+                temp <- temp * initial.wealth /prices0
            
-
             if (!is.null(temp))
                 Xs[t, ] <- temp
             else
@@ -332,11 +324,7 @@ btest  <- function(prices,
                            SuggestedPortfolio = SuggestedPortfolio,
                            Globals = Globals)            
             if (!is.null(adjust.signal))
-                switch(adjust.signal,
-                       fixedPosition = {temp <- size *  temp},
-                       fixedWeight   = {temp <- size * sign(temp) * v[t1] / mC[t1, ]},
-                       weight        = {temp <- temp * v[t1] / mC[t1, ]},
-                       stop("unknown value for ", sQuote("adjust.signal")))
+                temp <- temp * v[t1] / mC[t1, ]
 
             if (!is.null(temp))
                 Xs[t, ] <- temp

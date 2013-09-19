@@ -9,9 +9,14 @@
 \usepackage{textcomp}
 \usepackage{ragged2e}
 \usepackage{framed}
-\usepackage{makeidx}
+\usepackage{makeidx}\makeindex
+
+
 \SweaveOpts{keep.source = TRUE, eps = TRUE, pdf = FALSE}
 
+
+\newcommand{\pmwr}{\textsf{PMwR}}
+\newcommand{\R}{\textsf{R}}
 
 \begin{document}
 \pagestyle{empty}
@@ -35,31 +40,31 @@ require("PMwR")
 
 \section{Transactions}
 
-The basis for many computations that PMwR package provides are lists
-of transactions.  Such list are nothing more than dataframes, but
-\texttt{PMwR} provides an S3 class \texttt{journal} for handling such
-transaction data.  A \texttt{journal} is created through the function
-\texttt{journal}, but it is really just a list of atomic vectors with
-a class attribute.  Methods should not rely on this list sorted in any
-particular way; that is, components of a journal should always be
+Many computations that the \pmwr\ package provides are based on lists
+of transactions.  Conceptually, such list are nothing more than
+dataframes, but \texttt{PMwR} provides an S3 class \texttt{journal}
+for handling such transaction data.  A~\texttt{journal} is created
+through the function \texttt{journal}; it is a list of atomic vectors
+with a class attribute.  Methods should not rely on this list being
+sorted in any particular way: components of a journal should always be
 retrieved by name, never by position (which is different for a
 dataframe, for which we can meaningfully speak of the \emph{n}th
-column).  I will often refer to these components, such as
+column).  I will refer to these journal components, such as
 \texttt{amount} or \texttt{timestamp}, as fields.
 
 The simplicity of the class is intended, as it is meant for
-interactive analyses.  Thus, you may and are expected to dissect the
-information in a journal at will (which includes removing the class
-attribute).
+interactive analyses.  Thus, the user may (and is expected to) dissect
+the information in a journal at will; such dissections include
+removing the class attribute.
 
-What is actually stored in a \texttt{journal} is up to you, but a few
-fields are offered by default (and required by some methods):
+What is actually stored in a \texttt{journal} is up to the user, but a
+number of fields are required for certain operations:
 \begin{description}
-\item[\texttt{timestamp}] anything that can be sorted and that fits into an
-  atomic vector (\texttt{POSIXlt} is possible, too, but not
+\item[\texttt{timestamp}] anything that can be sorted and that fits
+  into an atomic vector (\texttt{POSIXlt} is possible, too, but not
   recommended);
 
-\item[\texttt{amount}] notional amount that is transferred;
+\item[\texttt{amount}] the notional amount that is traded;
 
 \item[\texttt{price}] price;
 
@@ -110,11 +115,12 @@ c(J, JJ)
 @ 
 
 \subsection{Subsetting journals}
+
 For interactive use, there is a method for \texttt{subset}.
 <<>>=
 subset(J, amount > 1) 
 @ 
-To extract a field, use its name.
+To extract or change a field, use its name.
 <<>>=
 J$amount
 @ 
@@ -534,6 +540,27 @@ TODO:
 
 - pure FX portfolio
 
+\section{Valuing portfolios}
+
+\subsection{Show value of portfolio over time}
+
+Use position with \texttt{when}: this will return a matrix of
+dimension \texttt{length(when)} times number of assets.
+
+Now create a matrix of prices that corresponds to that matrix.
+
+Multiply both matrices elementwise and take the row sums.
+
+\subsection{Show PL over time}
+
+Do as before.  But then create cashflows and map these to when.  (This
+cashflow vector should have length when.) Add these cashflows to the
+value.
+
+\subsection{Show return over time}
+
+
+
 \chapter{Analysing trades}
 
 \section{Exposure}
@@ -626,80 +653,73 @@ returns(x, t)
 \section{Introduction}
 
 This chapter explains how to test trading strategies with the
-\texttt{backtest} function.
+\texttt{btest}\index{btest@\texttt{btest}} function.
 
 \section{Decisions}
 
-The current instant is time~$t$; in actual life, it's simply
-`now'. We need to answer the following questions:
+At any instant of time (in actual life, `now'), a trader need to
+answer the following questions:
 \begin{enumerate}
-\item Do we want to compute a new target portfolio, yes or no? If yes,
-  compute the new target portfolio.
-\item Given the target portfolio and the actual portfolio, do we
-  want to rebalance (ie, close the gap between the actual
-  portfolio and the target portfolio)? If yes, rebalance.
+\item Do I want to compute a new target portfolio, yes or no? If yes,
+  go ahead and compute the new target portfolio.
+\item Given the target portfolio and the actual portfolio, do I~want
+  to rebalance (ie, close the gap between the actual portfolio and the
+  target portfolio)? If yes, rebalance.
 \end{enumerate}
+If such a decision is not just hypothetical, then the answer to the
+second question may lead to a number of orders sent to a broker.  Note
+that many traders do not think in terms of \emph{stock} (ie, balances)
+as we did here; rather, they think in terms of \emph{flow} (ie,
+orders).  Both approaches are equivalent, but the described one makes
+it easier to handle missed trades and synchronise accounts.
 
-If such a decision is not just hypothetical, then the answer to
-the second question may lead to a number of orders sent to a
-broker. Note that many traders do not think in terms of
-\emph{stock} (ie, balances) as we did here; rather, they think in
-terms of \emph{flow} (ie, orders). Both approaches are
-equivalent, but the described one makes it easier to handle
-missed trades and synchronise accounts.
+During a backtest, we will simulate the decisions of the trader.  How
+precisely we simulate depends on the trading strategy.  The
+\texttt{btest} function is meant as a helper function to simulate
+these decisions.  The logic for the decisions described above is coded
+in the functions \texttt{do.signal}, \texttt{signal} and
+\texttt{do.rebalance}.
 
-During a backtest, we will simulate the decisions of the trader.
-How precisely we simulate depends on the trading strategy. The
-\texttt{backtest} function is meant as a helper function to
-simulate these decisions. The logic for the decisions described
-above is coded in the functions \texttt{signalYN},
-\texttt{signal} and \texttt{rebalanceYN}.
+Implementing \texttt{btest} required a number of decision, too:
+(i)~what to model (ie, how to simulate the trader), and (ii)~how to
+code it.  As an example for point~(i): how precisely do we want to
+model the order process (eg, use limit orders?  Allow partial fills?)
+Example for~(ii): the backbone of \texttt{btest} is a loop that runs
+through the data.  Loops are slow in \R\ when compared with compiled
+languages, so should we vectorise instead?  Vectorisation is indeed
+often possible, namely if trading is not path-dependent.  If we have
+already a list of trades, we can efficiently transform them into a
+profit-and-loss in \R\ without relying on an explicit loop.  Yet, one
+advantage of looping is that the trade logic is more similar to actual
+trading; we may even be able to reuse some code in live trading.
 
-When we implement and use \texttt{backtest}, we need to make a
-number of decisions: (i)~what to model (ie, how to simulate the
-trader), and (ii)~how to code it. Example for (i): how precisely
-do we want to model the order process (eg, use limit orders?
-allow partial fills?) Example for~(ii): the backbone of
-\texttt{backtest} is a loop that runs through the data. Loops are
-slow in \textsf{R} when compared with compiled languages, so why
-not vectorise? Vectorisation is indeed often possible, namely if
-trading is not path-dependent. For instance, if we have a list of
-trades, we can efficiently transform them into a profit-and-loss
-in \textsf{R} without relying on an explicit loop. Yet, one
-advantage of looping is that the trade logic is more similar to
-actual trading; we may even be able to reuse some code in live
-trading.
-
-Altogether, the aim is to stick to the functional paradigm as
-much as possible. Functions receive arguments and evaluate to
-results; but they do not change their arguments, nor do they
-assign or change other variables `outside' their environment, nor
-do the results depend on some variable outside the function. This
-creates a problem, of course: how to keep track of state? If we
-know what variables need to be persistent, we could pass them
-into the function and always return them. But we would like to be
-more flexible, so we can pass an environment; examples are
-below. But functional programming should not be seen as a
-yes-or-no decision, but it is a matter of degree. And a bit more
-of the functional approach can help already.
+Altogether, the aim is to stick to the functional paradigm as much as
+possible.  Functions receive arguments and evaluate to results; but
+they do not change their arguments, nor do they assign or change other
+variables `outside' their environment, nor do the results depend on
+some variable outside the function.  This creates a problem, namely
+how to keep track of state.  If we know what variables need to be
+persistent, we could pass them into the function and always return
+them.  But we would like to be more flexible, so we can pass an
+environment; examples are below.  To make that clear: functional
+programming should not be seen as a yes-or-no decision, but it is a
+matter of degree.  And more of the functional approach can help
+already.
 
 \section{Data}
 
-We have one or several price series of length \texttt{T}. The
-\texttt{backtest} function runs from \texttt{b + 1} to
-\texttt{T}. The variable~\texttt{b} is the burnin,%
-\marginpar{\texttt{b}\qquad burnin} %
-and it needs to be a positive integer (in rare cases it may be
-zero). In the simplest case (`no decision'), we could run a loop
-without any action from \texttt{1:T} (with \texttt{b} equal to
-zero). When we actually take decisions we will always lose at
+We have one or several price series of length~\texttt{T}. The
+\texttt{btest} function runs from \texttt{b + 1} to \texttt{T}. The
+variable~\texttt{b} is the burn-in\index{burn-in},%
+\marginpar{\texttt{b}\qquad burn-in} %
+and it needs to be a positive integer; in rare cases it may be zero.
+When we take decisions that are based on past data, we will lose at
 least one data point.
 
-
-At time \texttt{t}, we can make decision based on information up
-to time \texttt{t - 1}. Suppose that \texttt{t} was 4. We may use
-all information up to time 3, and trade at the \texttt{open} in
-period 4.
+Here is an important default: at time~\texttt{t}, we can use
+information up to time \texttt{t - 1}.  Suppose that \texttt{t}
+were~4.  We may use all information up to time~3, and trade at the
+\texttt{open} in period~4.
 
 %TODO create nice display
 
@@ -724,9 +744,9 @@ t    time      open  high  low   close
 \end{verbatim}
 
 
-(No, we cannot trade at the high or low. But perhaps we could add
-this later as a robustness check -- always buy at the high, sell
-at the low.)
+(No, we cannot trade at the high or low.  But perhaps we could add
+this later as a robustness check -- always buy at the high, sell at
+the low.)
 
 \section{Functions}\label{functions}
 
@@ -1538,6 +1558,8 @@ for (i = 0; i < length(when); i++) {
 \printindex
 \bibliographystyle{plainnat}
 \bibliography{bibliothek}
+
+
 
 \end{document}
 

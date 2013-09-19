@@ -1,3 +1,15 @@
+2013-09-18  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (.tr): toHTML.preturns allows specification of
+	class/style
+
+2013-09-17  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/isValidISIN.R (isValidISIN): fixed -- in case all isins were
+	invalid because of length != 12 characters, the function failed
+
+	* R/drawdown.R (drawdown): fixed -- 'summary' argument was ignored
+
 2013-09-16  Enrico Schumann  <es@enricoschumann.net>
 
 	* updated docs for rmspace

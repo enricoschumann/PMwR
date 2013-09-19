@@ -145,14 +145,33 @@ toLatex.preturns <- function(object, ..., year.rows = TRUE) {
     mt
 }
 
-toHTML.preturns <- function(x, ..., year.rows = TRUE, stand.alone = TRUE) {
+toHTML.preturns <- function(x, ..., year.rows = TRUE, stand.alone = TRUE,
+                            table.style = NULL,
+                            table.class = NULL,
+                            th.style = NULL,
+                            th.class = NULL,
+                            td.style = "text-align:right;padding:0.5em;",
+                            td.class = NULL,
+                            tr.style = NULL, tr.class = NULL) {
 
-    .th <- function(x)
-        paste0("<th>", x, "</th>")
-    .td <- function(x)
-        paste0("<td style='text-align:right;padding:0.5em;' >", x, "</td>")
-    .tr <- function(x)
-        paste0("<tr>", x, "</tr>")
+    .ctag <- function(value, tag)
+        if (!is.null(value))
+            paste0(" ", tag, "=", value)
+        else
+            character(0L)
+    
+    .th <- function(x, style = th.style, class = th.class){
+        open <- paste0("<th", .ctag(style, "style"), .ctag(class, "class"), ">")
+        paste0(open, x, "</th>")
+    }
+    .td <- function(x, style = td.style, class = td.class){
+        open <- paste0("<td", .ctag(style, "style"), .ctag(class, "class"), ">")
+        paste0(open, x, "</td>")
+    }
+    .tr <- function(x, style = tr.style, class = tr.class){
+        open <- paste0("<tr", .ctag(style, "style"), .ctag(class, "class"), ">")
+        paste0(open, x, "</tr>")
+    }
     
     if (grepl("month(ly)?", x$period)) {
         if (year.rows)
@@ -169,8 +188,9 @@ toHTML.preturns <- function(x, ..., year.rows = TRUE, stand.alone = TRUE) {
     mt[-1 ,1] <- .th(mt[-1, 1])
     mt[-1,-1] <- .td(mt[-1,-1])
 
-
-    mt <- paste(.tr(apply(mt, 1, paste, collapse = "")), collapse = "")
-    mt <- paste("<table>", mt, "</table>", sep = "")
+    mt <- .tr(apply(mt, 1, paste, collapse = ""))
+    open <- paste0("<table", .ctag(table.style, "style"),
+                             .ctag(table.class, "class"), ">")
+    mt <- c(open, mt, "</table>")
     mt
 }
