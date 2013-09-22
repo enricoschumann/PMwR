@@ -21,8 +21,8 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
                along.timestamp = FALSE,
                do.sort = FALSE, 
                initial.cash = 0, initial.position = NULL,
-               initial.price, current.price,
-               multiplier,
+               initial.price = NULL, current.price = NULL,
+               multiplier = 1,
                tol = 1e-10, do.warn = TRUE) {
 
     if (inherits(amount, "journal")) {
