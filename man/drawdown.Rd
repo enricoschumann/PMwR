@@ -11,7 +11,7 @@
 }
 \arguments{
   \item{v}{
-    a price series
+    a price series (a numeric vector)
   }
   \item{relative}{
     if \code{TRUE}, maximum drawdown is chosen according to percentage
@@ -30,11 +30,6 @@
   the drawdown is zero.
 
 
-%% \begin{equation}\label{Eeq:portfolio:EqDD} \operatorname{DD}_t =
-%% v^{\max}_t - v_t \end{equation} where $v^{\max}_t$ is the running
-%% maximum, that is $v^{\max}_t=\max\{v_{t'}\,|\,{t'} \in [0,t]\}$.
-
-
 }
 \value{
 
@@ -50,7 +45,7 @@
 \references{
 
   Gilli, M., Maringer, D. and Schumann, E. (2011) \emph{Numerical
-    Methods and Optimization in Finance}. Elsevier.
+    Methods and Optimization in Finance}, Chapter 13. Elsevier.
     \url{http://www.elsevierdirect.com/product.jsp?isbn=9780123756626}
 
 }

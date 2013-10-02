@@ -11,7 +11,7 @@ Authors@R: person(given = "Enrico", family = "Schumann",
 Description: Functions and examples for 'Portfolio Management with R':
   pricing of financial instruments, computing profit-and-loss, 
   reporting, backtesting and more. 
-Imports: tools, utils
+Imports: utils
 Depends: tools
 Suggests: NMOF, RUnit, rbenchmark, zoo
 License: GPL-3
