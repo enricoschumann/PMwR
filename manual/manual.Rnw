@@ -1341,8 +1341,13 @@ sum, abssum, sd, absmean, range, minmax, minmaxrange, mad
 
 
 
-
 \appendix
+\chapter{Tutorials}
+
+\section{Single-entry accounting}
+
+\section{Double-entry accounting}
+
 \chapter{Design}
 
 \section{Requirements}
@@ -1396,8 +1401,9 @@ The simplest case:
 
 \texttt{dots2args.default <- function(x, ...) list(...)}
 
-Note that this will be the default method; notably, a method when
-\texttt{x} is character will be left unspecified (meant for the user).
+Note that this will be the \texttt{default} method; notably, an
+explicit \texttt{character} method is left unspecified (meant for the
+user).
 
 
 A more typical case: collect all market data in a list \texttt{Data}:
