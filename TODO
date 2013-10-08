@@ -12,6 +12,9 @@
      - evaluates to list "value", "delta" etc
      - Instrument[names(result)] <- result
 
+     value(Instrument, Data)
+
+
 * TODO Datetime helpers ? 
    hour(x)
    yday(x)

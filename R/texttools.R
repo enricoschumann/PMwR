@@ -63,3 +63,5 @@ expstr <- function(s, after, width, fill = " ", at) {
     paste(substr(s, 1L, at - 1L), space,
           substr(s, at, ns), sep = "")    
 }
+
+## pretty print a csv file
