@@ -1,5 +1,5 @@
 position <- function(amount, timestamp, instrument, when, 
-                     drop.zero = FALSE) {
+                     drop.zero = FALSE, sort.instruments = TRUE) {
     if (missing(instrument))
         instrument <- NA
         
@@ -53,7 +53,9 @@ position <- function(amount, timestamp, instrument, when,
         instrument[ina] <- "NA"
 
     nw <- length(when)
-    nm <- sort(unique(instrument))
+    nm <- unique(instrument)
+    if (sort.instruments)
+        nm <- sort(nm)
     pos <- array(0, dim = c(nw, length(nm)))
     colnames(pos) <- nm        
     rownames(pos) <- as.character(when)

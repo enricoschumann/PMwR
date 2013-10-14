@@ -32,6 +32,9 @@ isWeekend <- function(x) {
     tmp$wday == 0L | tmp$wday == 6L
 }
 
+isLeapyear <- function(x)
+    x %% 4 == 0 & (x %% 100 != 0 | x %% 400 == 0)
+
 firstOfMonth <- function (x) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
         stop("input must inherit from class Date or POSIXt")

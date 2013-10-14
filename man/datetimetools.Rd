@@ -7,6 +7,7 @@
 \alias{endOfPreviousMonth}
 \alias{firstOfMonth}
 \alias{isWeekend}
+\alias{isLeapyear}
 \alias{lastWeekday}
 \alias{nextBusinessDay}
 \alias{previousBusinessDay}
@@ -31,6 +32,7 @@ roundPOSIXt(t, interval)
 previousBusinessDay(x, holidays = NULL)
 nextBusinessDay(x, holidays = NULL)
 isWeekend(x)
+isLeapyear(x)
 firstOfMonth(x)
 endOfMonth(x, shift = 0L)
 endOfPreviousMonth(x)
@@ -145,7 +147,9 @@ lastWeekday(weekday, x, shift = 0L,
   Enrico Schumann
 }
 \seealso{
-\code{\link{DateTimeClasses}}, \code{\link{plotTradingHours}}
+  \code{\link{DateTimeClasses}}, \code{\link{plotTradingHours}}
+
+  Many useful functions are also in package \pkg{chron}.
 }
 \examples{
 from <- as.POSIXct("2012-04-30 08:00:00")

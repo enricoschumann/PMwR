@@ -6,6 +6,7 @@
 - if timestamp if missing, supply 1:length(...) for every instrument
   (and a warning)
 
+
 * TODO value
 
      Data: evalDate, marketPrices, vols, irates

@@ -1,3 +1,36 @@
+2013-10-14  Enrico Schumann  <es@vipag.com>
+
+	* man/drawdown.Rd: Author: Enrico Schumann <es@enricoschumann.net>
+	--- log message follows this line ---
+	removed drawdown
+
+	* man/datetimetools.Rd: Author: Enrico Schumann
+	<es@enricoschumann.net> --- log message follows this line ---
+
+	* TODO: Author: Enrico Schumann <es@enricoschumann.net> --- log
+	message follows this line ---
+
+	* R/position.R: Author: Enrico Schumann <es@enricoschumann.net>
+	--- log message follows this line ---
+
+	* R/drawdown.R: Author: Enrico Schumann <es@enricoschumann.net>
+	--- log message follows this line ---
+
+	* R/datetimetools.R: Author: Enrico Schumann
+	<es@enricoschumann.net> --- log message follows this line ---
+
+	* NAMESPACE: Author: Enrico Schumann <es@enricoschumann.net> ---
+	log message follows this line ---
+
+2013-10-14  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: removed function 'drawdown': it is now included
+	(unchanged) in the NMOF package
+
+2013-10-10  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/datetimetools.R (isLeapyear): added function
+
 2013-09-28  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/totext.R (toText): added generic
