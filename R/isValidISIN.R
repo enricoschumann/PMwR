@@ -24,3 +24,6 @@ isValidISIN <- function(isin) {
     result[hasValidNC] <- (10L - sapply(v0, sum) %% 10L) == cd
     result
 }
+
+
+.isin.re <- "[^A-Za-z]*([A-Za-z][A-Za-z][A-Za-z0-9]{9,9}[0-9])[^0-9]*"
