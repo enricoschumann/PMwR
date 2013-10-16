@@ -1,3 +1,7 @@
+2013-10-16  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/totext.R (toText.default): coerce to character before write
+
 2013-10-14  Enrico Schumann  <es@enricoschumann.net>
 
 	* NAMESPACE: removed function 'drawdown': it is now included

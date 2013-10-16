@@ -1,5 +1,6 @@
 \name{toText}
 \alias{toText}
+\alias{toText.default}
 \title{
   Convert Objects to Plain Text
 }
@@ -16,17 +17,23 @@ toText(x, \dots)
     an object
 }
   \item{\dots}{
-    further arguments
+     arguments passed to methods
 }
 }
 \details{
-x
+  
+   A generic function.  Method are expected to coerce a given object to
+  lines of text that can be used, for instance, for reports.  There is
+  no restriction on encoding, so plain text does not necessarily mean
+  \acronym{ascii}.  But current methods do not map into
+  markup-representations.
+
 }
 \value{
   a character vector (lines of text)
 }
 \references{
-  ES. PMwR
+  Enrico Schumann -- Portfolio Management with R
 }
 \author{
   Enrico Schumann
@@ -35,5 +42,5 @@ x
   \code{\link{toLatex}}, \code{\link{toHTML}}
 }
 \examples{
-1+1
+toText(c("a", "b", "c"))
 }
