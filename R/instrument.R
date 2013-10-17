@@ -1,3 +1,24 @@
+value <- function(x, ...)
+    UseMethod("value")
+
+value.default <- function(x, ...) 
+    stop("no method for ", class(x))
+
+value.instrument <- function(x, ..., prepareArgs) {
+
+
+
+}
+
+prepareArgs <- function(x, ...)
+    UseMethod("prepareArgs")
+
+prepareArgs.default <- function(x, ...)
+    list(...)
+
+
+
+
 instrument <- function(class, id = NULL, ...) {
 
     properties <- list(...)
