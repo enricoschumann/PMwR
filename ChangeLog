@@ -1,3 +1,7 @@
+2013-10-22  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (cashflows): added function (not exported)
+
 2013-10-16  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/totext.R (toText.default): coerce to character before write
