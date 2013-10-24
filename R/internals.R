@@ -39,9 +39,9 @@ first <- function(x, by, index = FALSE) {
         x[match(unique(by), by)]
 }
 
-x <- c(9,9,10,8,10,11)
-div <- 2
-t <- 4
+## x <- c(9,9,10,8,10,11)
+## div <- 2
+## t <- 4
 
 divAdjust <- function(x, t, div, backward = TRUE, additive = FALSE) {
     if (!is.null(dim(x)))
@@ -113,4 +113,22 @@ avg <- function(amount, price, tol = 1e-8) {
         }
         list(average = av, realised = rd)            
     }
+}
+
+matchOrNext <- function(x, y) {
+    pos <- match(x, y)
+    NApos <- which(is.na(pos))
+    for (i in NApos)
+        if (length(tmp <- which(x[i] <= y)))
+            pos[i] <- min(tmp)
+    pos
+}
+
+matchOrPrevious <- function(x, y) {
+    pos <- match(x, y)
+    NApos <- which(is.na(pos))
+    for (i in NApos)
+        if (length(tmp <- which(x[i] >= y)))
+            pos[i] <- max(tmp)
+    pos
 }

@@ -4,6 +4,8 @@
 \alias{wait}
 \alias{first}
 \alias{last}
+\alias{matchOrNext}
+\alias{matchOrPrevious}
 \title{Internal (non-exported) functions in the PMwR package}
 \description{
 
@@ -22,6 +24,9 @@ last(x, by, index = FALSE)
 divAdjust(x, t, div, backward = TRUE, additive = FALSE)
 
 letter2month(s)
+
+matchOrNext(x, y)
+matchOrPrevious(x, y)
 }
 \details{
 
@@ -35,6 +40,10 @@ letter2month(s)
 
   \code{letter2month} converts a string to an option type and month (eg,
   \code{"A"} means \code{"Call January"}).
+
+  \code{matchOrNext} returns the position of \code{x} in \code{y}, if
+  there is a match.  If not, it reports the next position. \code{y}
+  must be sorted.
   
 }
 \author{
@@ -52,5 +61,11 @@ t <- 3
 PMwR:::divAdjust(x, t, div)
 PMwR:::divAdjust(x, t, div, FALSE)
 
+x <- c(2, 2.5)
+PMwR:::matchOrNext(x, 1:5)
+PMwR:::matchOrPrevious(x, 1:5)
+
+PMwR:::matchOrNext(c(0,6), 1:5)
+PMwR:::matchOrPrevious(c(0,6), 1:5)
 }
 \keyword{internal}
