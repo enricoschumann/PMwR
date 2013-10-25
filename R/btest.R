@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2013-09-17 13:08:14 CEST (es)>
+## Time-stamp: <2013-10-25 14:07:49 CEST (es)>
 btest  <- function(prices,              
                    signal,              ## a function
                    do.signal = TRUE,    ## a function
@@ -16,7 +16,8 @@ btest  <- function(prices,
                    tradeOnOpen = TRUE,
                    tol = 1e-5,
                    assignInGlobals = list(),
-                   prices0 = NULL) {
+                   prices0 = NULL,
+                   include.data = FALSE) {
 
     if (isdebugged(signal))
         db.signal <- TRUE
@@ -392,13 +393,22 @@ btest  <- function(prices,
     else
         jnl <- journal()
     
-    list(position = X,
-         suggested.position = Xs,
-         cash = cash,
-         wealth = v,
-         cum.tc = tccum,
-         journal = jnl,
-         initial.wealth = initial.wealth)
+    ans <- list(position = X,
+                suggested.position = Xs,
+                cash = cash,
+                wealth = v,
+                cum.tc = tccum,
+                journal = jnl,
+                initial.wealth = initial.wealth)
+
+    if (include.data)
+        ans <- c(ans,
+                 prices = prices,              
+                 signal = signal,
+                 do.signal = do.signal,
+                 call = match.call())
+
+    ans
 }
 
 
