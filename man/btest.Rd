@@ -8,7 +8,7 @@
 }
 \usage{
 btest(prices, signal,
-      signalYN = TRUE, rebalanceYN = TRUE, printInfo = NULL,
+      do.signal = TRUE, do.rebalance = TRUE, print.info = NULL,
       b = 1L, phi = 1, x0 = 0, c0 = 100, tc = 0, ...,
       addToPosition = FALSE,
       adjustSignal = NULL, positionSize = NULL,

@@ -8,7 +8,8 @@
   in time.
 }
 \usage{
-position(amount, timestamp, instrument, when, drop.zero = FALSE)
+position(amount, timestamp, instrument, when, drop.zero = FALSE,
+         sort.instruments = TRUE)
 }
 \arguments{
   \item{when}{
@@ -26,7 +27,8 @@ position(amount, timestamp, instrument, when, drop.zero = FALSE)
   \item{drop.zero}{
     logical: drop instruments that have a zero position
   }  
-  \item{\dots}{
+  \item{sort.instruments}{
+    logical: sort instruments alphabetically
   }
 }
 \details{
