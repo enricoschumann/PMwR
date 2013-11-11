@@ -117,7 +117,7 @@ mtab <- function(x) {
 
 
 print.preturns <- function(x, ..., year.rows = TRUE) {
-    if (!is.null(x$period) && grepl("month(ly)?", x$period)) {
+    if (!is.null(x$period) && grepl("month(ly)?", x$period, ignore.case = TRUE)) {
         if (year.rows)
             print(mtab(x), quote = FALSE, print.gap = 2, right = TRUE)
         else
@@ -130,7 +130,7 @@ print.preturns <- function(x, ..., year.rows = TRUE) {
 }
 
 toLatex.preturns <- function(object, ..., year.rows = TRUE) {
-    if (grepl("month(ly)?", object$period)) {
+    if (grepl("month(ly)?", object$period, ignore.case = TRUE)) {
         if (year.rows)
             mt <- mtab(object)
         else

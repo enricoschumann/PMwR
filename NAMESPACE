@@ -41,7 +41,8 @@ export(
     splitTrades,
     timegrid,
     toText,
-    twExposure
+    twExposure,
+    value
     )
 
 ## methods
@@ -62,5 +63,7 @@ S3method(print, preturns)
 S3method(toLatex, preturns)
 S3method(toHTML, preturns)
 S3method(toText, default)
+S3method(value, journal)
+S3method(value, position)
 
 useDynLib(PMwR)
