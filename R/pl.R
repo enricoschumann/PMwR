@@ -8,7 +8,10 @@ print.pl <- function(x, ...) {
     else 
         row.names(df) <- df[["instrument"]]    
     df <- df[ ,-1L]
-    df[is.na(df)] <- "."
+    isna <- is.na(df)
+    for (field in c("pl", "total.amount", "average.buy", "average.sell"))
+         df[[field]] <- prettyNum(df[[field]])
+    df[isna] <- "."
     print(df, na.print = ".", quote = FALSE, print.gap = 2L)
     cat("\n          pl = total PnL in units of instrument\n")
     cat("total.amount = total /absolute/ amount of traded instruments\n")
