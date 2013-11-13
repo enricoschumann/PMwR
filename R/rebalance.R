@@ -60,12 +60,12 @@ print.rebalance <- function(x, ...) {
     invisible(x)
 }
 
-price <- c(a = 1, b = 2, c = 3)
-current <- c(a = 100, b = 20)
-target <- c(a = 0.2, c = 0.3)
-rebalance(current, target, price)
+## price <- c(a = 1, b = 2, c = 3)
+## current <- c(a = 100, b = 20)
+## target <- c(a = 0.2, c = 0.3)
+## rebalance(current, target, price)
 
-price <- c(1,2,3)
-current <- c(100, 20, 0)
-target <- c(0.2, 0, 0.3)
-rebalance(current, target, price, match.names = FALSE)
+## price <- c(1,2,3)
+## current <- c(100, 20, 0)
+## target <- c(0.2, 0, 0.3)
+## rebalance(current, target, price, match.names = FALSE)
