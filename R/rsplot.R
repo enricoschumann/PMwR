@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2013-10-23 13:57:04 CEST (es)>
+## Time-stamp: <2013-11-14 21:45:50 CET (es)>
 
 
 rsplot <- function(x, y, ...,  xlab = NULL, ylab = NULL,
@@ -28,6 +28,3 @@ rsplot <- function(x, y, ...,  xlab = NULL, ylab = NULL,
           bg = bg, fg = fg, pch = 21)
 }
     
-x <- rnorm(100)*0.05
-y <- rnorm(100)*0.02
-rsplot(x,y, bg = "goldenrod3")
