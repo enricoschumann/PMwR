@@ -1,12 +1,12 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2013-10-25 14:07:49 CEST (es)>
+## Time-stamp: <2013-11-16 14:05:01 CET (es)>
 btest  <- function(prices,              
                    signal,              ## a function
                    do.signal = TRUE,    ## a function
                    do.rebalance = TRUE, ## a function
                    print.info = NULL,   ##
                    b = 1L,              ## burnin
-                   phi = 1,             ## how much to rebalance
+                   fraction = 1,             ## how much to rebalance
                    initial.position = 0,## initial portfolio
                    initial.cash = 0, ## initial cash
                    tc = 0,
@@ -274,7 +274,7 @@ btest  <- function(prices,
             rebalance <- FALSE
 
         if (rebalance) {
-            dx <- phi * dXs
+            dx <- fraction * dXs
 
             if (tradeOnOpen) ## will convert m(O|C) to vector (drop = TRUE)
                 open <- mO[t, ]
@@ -349,7 +349,7 @@ btest  <- function(prices,
             rebalance <- FALSE
         
         if (rebalance) {
-            dx <- phi * dXs
+            dx <- fraction * dXs
 
             if (tradeOnOpen) ## will convert m(O|C) to vector (drop = TRUE)
                 open <- mO[t, ]  else open <- mC[t, ]

@@ -1,0 +1,40 @@
+## -*- truncate-lines: t; -*-
+## Time-stamp: <2013-11-16 21:02:38 CET (es)>
+
+## numbers <- sample(1:50,10, replace = TRUE)
+
+## sparklines <- function(x, sep = "[ ,]+") {
+##     if (length(x) == 1L)
+##         x <- as.numeric(unlist(strsplit(x, sep)))
+##     bars <- c("\u2581","\u2582","\u2583","\u2584",
+##               "\u2585","\u2586","\u2587","\u2588")
+##     d <- diff(r <- range(x))/(length(bars)-1)
+##     cat(paste(bars[(x - r[1]) %/% d +1], collapse = ""), "\n")
+## }
+## "1 2 3 4 5 6 7 8 7 6 5 4 3 2 1", "1.5, 0.5 3.5, 2.5 5.5, 4.5 7.5, 6.5"
+## numbers <- "1 2 3 4 5 6 7 8 7 6 5 4 3 2 1"
+## sparklines(numbers)
+## numbers <- "1.5, 0.5 3.5, 2.5 5.5, 4.5 7.5, 6.5"
+## sparklines(numbers)
+
+
+## x <- runif(1500)
+
+sparkplot <- function(x, blocks = 7, xmin = NULL, xmax = NULL, ymin = NULL) {
+    tmp <- hist(x, seq(min(x), max(x), length.out = blocks + 1L), plot = FALSE)
+    bars <- c("\u2581","\u2582","\u2583","\u2584",
+              "\u2585","\u2586","\u2587","\u2588")
+    rx <- range(tmp$counts)
+    if (!is.null(ymin))
+        rx[1L] <- ymin
+    d <- diff(rx)/(length(bars) - 1L)
+    res <- paste(bars[(tmp$counts - rx[1L]) %/% d + 1L], collapse = "")
+    cat(res, "\n")
+    invisible(res)
+}
+
+## x <- runif(100)
+## sparkplot(x)
+## sparkplot(x, ymin = 0)
+
+## sparkplot(rnorm(100))

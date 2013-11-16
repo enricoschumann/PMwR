@@ -1,3 +1,9 @@
+2013-11-16  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/slTable.R (sparkplot): added function (not exportted yet)
+
+	* R/btest.R (btest): renamed 'phi' to 'fraction'
+
 2013-11-12  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/pl.R (print.pl): use prettyNum to format all numeric values
