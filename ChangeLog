@@ -1,6 +1,6 @@
 2013-11-16  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/slTable.R (sparkplot): added function (not exportted yet)
+	* R/slTable.R (sparkplot): added function (not exported yet)
 
 	* R/btest.R (btest): renamed 'phi' to 'fraction'
 
