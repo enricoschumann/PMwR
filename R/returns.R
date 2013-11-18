@@ -100,7 +100,7 @@ returns <- function(x, t = NULL, period = NULL, complete.first = TRUE,
 }
 
 ## not exported
-mtab <- function(x) {
+mtab <- function(x, ytd = "YTD") {
     f <- function(x)
         format(round(100*x, 1), nsmall = 1)    
     years <- as.numeric(format(x$t, "%Y"))
@@ -110,7 +110,7 @@ mtab <- function(x) {
     for (y in sort(unique(years)))
         tb[y - years[1L] + 1L, 13L] <- f(prod(x$returns[years==y] + 1L) - 1L)
     rownames(tb) <- sort(unique(years))
-    colnames(tb) <- c(format(as.Date(paste0("2012-", 1:12, "-1")), "%b"), "YTD")
+    colnames(tb) <- c(format(as.Date(paste0("2012-", 1:12, "-1")), "%b"), ytd)
     tb
 }
 
@@ -129,12 +129,12 @@ print.preturns <- function(x, ..., year.rows = TRUE) {
     invisible(x)
 }
 
-toLatex.preturns <- function(object, ..., year.rows = TRUE) {
+toLatex.preturns <- function(object, ..., year.rows = TRUE, ytd = "YTD") {
     if (grepl("month(ly)?", object$period, ignore.case = TRUE)) {
         if (year.rows)
-            mt <- mtab(object)
+            mt <- mtab(object, ytd = ytd)
         else
-            mt <- t(mtab(object))
+            mt <- t(mtab(object, ytd = ytd))
     } else {
         stop("currently only supported for period ", sQuote("month"))
     }

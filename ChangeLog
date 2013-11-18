@@ -1,3 +1,8 @@
+2013-11-18  Enrico Schumann  <es@vipag.com>
+
+	* R/returns.R (toLatex.preturns): new argument ytd with default
+	"YTD" (in order to specify "\\textsc{ytd}" or similar)
+
 2013-11-16  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/slTable.R (sparkplot): added function (not exported yet)
