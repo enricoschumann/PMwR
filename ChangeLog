@@ -1,4 +1,11 @@
-2013-11-18  Enrico Schumann  <es@vipag.com>
+2013-11-19  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.2-1
+
+	* R/valuation.R (valuation): renamed 'value' to 'valuation' (value
+	is too common; package tseries has a generic of that name)
+
+2013-11-18  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/returns.R (toLatex.preturns): new argument ytd with default
 	"YTD" (in order to specify "\\textsc{ytd}" or similar)

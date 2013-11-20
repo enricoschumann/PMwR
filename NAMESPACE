@@ -42,7 +42,7 @@ export(
     timegrid,
     toText,
     twExposure,
-    value
+    valuation
     )
 
 ## methods
@@ -63,7 +63,7 @@ S3method(print, preturns)
 S3method(toLatex, preturns)
 S3method(toHTML, preturns)
 S3method(toText, default)
-S3method(value, journal)
-S3method(value, position)
+S3method(valuation, journal)
+S3method(valuation, position)
 
 useDynLib(PMwR)

@@ -1,7 +1,7 @@
-\name{value}
-\alias{value}
-\alias{value.journal}
-\alias{value.position}
+\name{valuation}
+\alias{valuation}
+\alias{valuation.journal}
+\alias{valuation.position}
 \title{
   Valuation
 }
@@ -10,24 +10,44 @@
   measured in some unit.
 }
 \usage{
-value(x, ...)
+valuation(x, ...)
 
-\method{value}{journal}(x,  multiplier = 1, cashflow = function(x) x$amount * 
+\method{valuation}{journal}(x,  multiplier = 1, cashflow = function(x) x$amount * 
     x$price, flip.sign = TRUE, \dots)
 
-\method{value}{position}(x, multiplier = 1, price.table, do.sum, unit, \dots)
+\method{valuation}{position}(x, multiplier = 1, price.table, do.sum, unit, \dots)
 
 }
 \arguments{
   \item{x}{
     an object
 }
+  \item{multiplier}{
+    a numeric vector, typically with named elements
+}
+  \item{cashflow}{
+    either a numeric vector or a function that takes on argument (a
+    journal) and transforms it into a numeric vector
+}
+  \item{flip.sign}{
+    logical.  If \code{TRUE} (the default), a positive amount gets
+    mapped into a negative cashflow.
+}
+  \item{price.table}{
+    numeric
+  }
+  \item{do.sum}{
+    logical: sum over positions
+  }
+  \item{unit}{
+    not implemented
+  }
   \item{\dots}{
     other arguments passed to methods
 }
 }
 \details{
-  \emph{value} is a generic function.  Its semantics suggest that an
+  \emph{valuation} is a generic function.  Its semantics suggest that an
   object (eg, a financial instrument or a position) is mapped into a
   concrete cquantity (such as an amount of some currency).
 }

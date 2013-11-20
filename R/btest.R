@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2013-11-16 14:05:01 CET (es)>
+## Time-stamp: <2013-11-19 17:07:22 CET (es)>
 btest  <- function(prices,              
                    signal,              ## a function
                    do.signal = TRUE,    ## a function
@@ -276,10 +276,10 @@ btest  <- function(prices,
         if (rebalance) {
             dx <- fraction * dXs
 
-            if (tradeOnOpen) ## will convert m(O|C) to vector (drop = TRUE)
-                open <- mO[t, ]
+            if (tradeOnOpen) ## will convert m(O|C) to vector
+                open <- mO[t, ,drop = TRUE]
             else open <-
-                mC[t, ]
+                mC[t, ,drop = TRUE]
 
             sx <- dx %*% open
             abs_sx <- (abs(dx) * tc) %*% open

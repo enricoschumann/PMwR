@@ -11,19 +11,19 @@
 ## }
 
 
-value <- function(x, ...) {
-    UseMethod("value")
+valuation <- function(x, ...) {
+    UseMethod("valuation")
 }
 
-value.default <- function(x, ...) {
+valuation.default <- function(x, ...) {
     force(x)
 }
 
-value.journal <- function(x,
-                          cashflow = function(x) x$amount * x$price,
-                          multiplier = 1,                          
-                          flip.sign = TRUE,
-                          ...) {
+valuation.journal <- function(x,
+                              multiplier = 1,                          
+                              cashflow = function(x) x$amount * x$price,
+                              flip.sign = TRUE,
+                              ...) {
 
     if (!is.null(names(multiplier)))
         multiplier <- multiplier[x$instrument]
@@ -36,7 +36,8 @@ value.journal <- function(x,
     ans
 }
 
-value.position <- function(x, price.table, multiplier = 1, do.sum = FALSE, unit) {
+valuation.position <- function(x, multiplier = 1, price.table,
+                               do.sum = FALSE, unit, ...) {
 
     if (!is.null(names(multiplier)))
         multiplier <- multiplier[x$instrument]

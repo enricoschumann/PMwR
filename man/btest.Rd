@@ -9,12 +9,13 @@
 \usage{
 btest(prices, signal,
       do.signal = TRUE, do.rebalance = TRUE, print.info = NULL,
-      b = 1L, phi = 1, x0 = 0, c0 = 100, tc = 0, ...,
-      addToPosition = FALSE,
-      adjustSignal = NULL, positionSize = NULL,
+      b = 1L, fraction = 1,
+      initial.position = 0, initial.cash = 0, tc = 0, ...,
+      add = FALSE,
+      adjust.signal = NULL,
       tradeOnOpen = TRUE,
       tol = 1e-5, assignInGlobals = list(),
-      prices0 = NULL)
+      prices0 = NULL,include.data = FALSE)
 }
 \arguments{
   \item{prices}{
@@ -37,25 +38,26 @@ btest(prices, signal,
     rule; see Details.
 
   }
-  \item{signalYN}{
+  \item{do.signal}{
 
-    a function that evaluates to \code{TRUE} or \code{FALSE}; default is
-    \code{TRUE}.
-
-  }
-  \item{rebalanceYN}{    
-
-    a function that evaluates to \code{TRUE} or \code{FALSE}. If TRUE
-    (the default), the portfolio is rebalanced in any period.
+    logical or a function that evaluates to \code{TRUE} or \code{FALSE};
+    default is \code{TRUE}.
 
   }
-  \item{printInfo}{
+  \item{do.rebalance}{    
+
+    logical or a function that evaluates to \code{TRUE} or
+    \code{FALSE}. If \code{TRUE} (the default), the portfolio is
+    rebalanced in any period.
+
+  }
+  \item{print.info}{
     A function. If \code{NULL}, nothing is printed. See Details.
   }
   \item{b}{
     burnin (an integer). Defaults to 1.
   }
-  \item{phi}{
+  \item{fraction}{
     amount of rebalancing to be done (a scalar between 0 and 1)
   }
   \item{initial.position}{
@@ -72,14 +74,14 @@ btest(prices, signal,
     other named arguments. All functions (signal, signalYN, rebalanceYN,
     printInfo) will have access to these arguments.
   }
-  \item{addToPosition}{
+  \item{add}{
 
     Default is \code{FALSE}. \code{TRUE} is \strong{not implemented}
     (but would mean that \code{signal} should evaluate to changes in
     position, ie, orders).
 
   }
-  \item{adjustSignal}{
+  \item{adjust.signal}{
 
     Default is \code{NULL}. If \code{fixedPosition}, any positive signal
     will be transformed into \code{positionSize}.  If \code{weight} and
@@ -87,12 +89,6 @@ btest(prices, signal,
     considered weights. If positionSize is not \code{NULL}, signals will
     be transformed in fixed weights (\code{positionSize}). See Details.
     
-  }
-  \item{positionSize}{
-
-    default is \code{NULL}. Only used if \code{adjustSignal} is either
-    \code{fixedPosition} or \code{weight}.
-
   }
   \item{tradeOnOpen}{
     A logical vector of length one; default is \code{TRUE}.
@@ -115,6 +111,11 @@ btest(prices, signal,
     A numeric vector (default is \code{NULL}). Only used if \code{b} is 0 and
     an initial portfolio \code{x0} is specified.
 
+  }
+  \item{include.data}{
+
+    logical
+    
   }
 }
 \details{
