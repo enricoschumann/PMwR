@@ -41,24 +41,27 @@ require("PMwR")
 \section{Transactions}
 
 Many computations that the \pmwr\ package provides are based on lists
-of transactions.  Conceptually, such list are nothing more than
-dataframes, but \texttt{PMwR} provides an S3 class \texttt{journal}
-for handling such transaction data.  A~\texttt{journal} is created
-through the function \texttt{journal}; it is a list of atomic vectors
-with a class attribute.  Methods should not rely on this list being
-sorted in any particular way: components of a journal should always be
-retrieved by name, never by position (which is different for a
-dataframe, for which we can meaningfully speak of the \emph{n}th
-column).  I will refer to these journal components, such as
-\texttt{amount} or \texttt{timestamp}, as fields.
+of transactions.  Conceptually, such lists are nothing more than
+dataframes, but \texttt{PMwR} provides an \texttt{S3} class
+\texttt{journal} for handling such transaction data.
+
+A~\texttt{journal} is created through the function \texttt{journal};
+it is a list of atomic vectors with a class attribute.  Methods should
+not rely on this list being sorted in any particular way: components
+of a journal should always be retrieved by name, never by position
+(which is different for a dataframe, for which we can meaningfully
+speak of the \emph{n}th column).  I will refer to these journal
+components, such as \texttt{amount} or \texttt{timestamp}, as fields.%
+\marginpar{Fields} %
 
 The simplicity of the class is intended, as it is meant for
-interactive analyses.  Thus, the user may (and is expected to) dissect
-the information in a journal at will; such dissections include
-removing the class attribute.
+interactive analyses.  Thus, the user may -- and is expected to --
+dissect the information in a \texttt{journal} at will; such
+dissections include removing the class attribute.
 
 What is actually stored in a \texttt{journal} is up to the user, but a
-number of fields are required for certain operations:
+number of fields are required for certain operations and should thus
+always be present:
 \begin{description}
 \item[\texttt{timestamp}] anything that can be sorted and that fits
   into an atomic vector (\texttt{POSIXlt} is possible, too, but not
@@ -77,17 +80,19 @@ number of fields are required for certain operations:
 \item[\texttt{\ldots}] other fields. They must be named, for instance
   like in \texttt{fees = c(1,2,1)}\,.
 \end{description}
-All these can be missing, except \texttt{amount}.
+All these can be missing, except \texttt{amount}.  Missing values will
+be handled as \texttt{NA} except id and account, which will be
+\texttt{NULL}.
 
 Transactions in a journal can be organised in a hierachy
 \begin{verbatim}
-<account>:::<instrument>
+<account> => <instrument>
 \end{verbatim}
 even though currently few functions use this hierarchy.  A simple
-scheme is to use specific character or pattern such as `\texttt{:::}'
+scheme is to use specific character or pattern such as `\texttt{::}'
 to introduce hierarchies into accounts, such as
 \begin{verbatim}
-pension:::equities
+pension::equities
 \end{verbatim}
 
 \section{Handling journals}
@@ -101,17 +106,17 @@ J <- journal(timestamp  = as.Date("2012-01-01") + 0:3,
              instrument = c("EUR", "EUR", "CHF", "CHF"))
 J
 @ 
-For details on the function and methods for journal objects, see
-\texttt{?journal}\,.  A \texttt{print} method defines how to display a
-journal.
+For details about the function and methods for \texttt{journal}
+objects, see \texttt{?journal}\,.  A \texttt{print} method defines how
+to display a journal.
 <<>>=
 print(J, max.print = 2, exclude = "instrument")
 @ 
 Journals can be combined with \texttt{c}.
 <<>>=
-JJ <- J
-JJ$fees <- rep(1,4)
-c(J, JJ)
+J2 <- J
+J2$fees <- rep(1,4)
+c(J, J2)
 @ 
 
 \subsection{Subsetting journals}
@@ -119,8 +124,12 @@ c(J, JJ)
 For interactive use, there is a method for \texttt{subset}.
 <<>>=
 subset(J, amount > 1) 
-@ 
-To extract or change a field, use its name.
+@
+With subset, you need not quote the expression that selects trades and
+you can directly access a journal's fields.
+
+More generally, to extract or change a field, use its name and the
+\texttt{\$} operator (or double brackets \texttt{[[...]]}).
 <<>>=
 J$amount
 @ 
@@ -180,7 +189,7 @@ position(jnl, when = as.Date("2012-01-03"))
 @
 To get a time series of positions, you can use specific keywords for
 \texttt{when}: \texttt{"all"} will print the position at all
-timestamps that were passed.
+timestamps in the journal.
 <<>>=
 position(jnl, when = "all")
 @
@@ -194,21 +203,15 @@ It's actually tedious to enter journals that way, in particular if we
 want to update it over time.  So we write transactions into files,
 like this:
 
-\VerbatimInput{ex1.jnl}
-
-\noindent In case you use Org-mode, such tables should look familiar. An aside:
-if the original file happened to look such
-
 \VerbatimInput{ex1.txt}
 
-then there are many tools to transform it. 
-<<>>=
-system("perl -ne 'print $_ if /^\\s*\\| /;' < ex1.txt > ex1.jnl")
-@ 
+
+\mpar{In case you use Org-mode, such tables should look familiar.}
+
 Here is a simple function to read such journal files.
 <<>>=
 readjnl <- function(file) {
-    ans <- read.table(file, 
+    ans <- read.table(file, skip = 4,
                       header = TRUE, sep = "|", as.is = TRUE)
     ans <- as.list(ans[ ,apply(ans, 2, function(x) !all(is.na(x)))])
     journal(timestamp = ans$timestamp,
@@ -216,6 +219,8 @@ readjnl <- function(file) {
             comment   = ans$comment)
 }
 (jnl <- readjnl("ex1.jnl"))
+file <- "ex1.txt"
+
 @ 
 Some of these transactions may mean a gain or loss to us (such as a
 dividend payment), while others are neutral (such as a transfer
