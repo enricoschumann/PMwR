@@ -1,6 +1,14 @@
 rebalance <- function(current, target, price,
                       notional = NULL, truncate = TRUE,
                       match.names = TRUE) {
+    if (length(current) == 1L) {
+        current <- rep.int(0, length(price))
+        names(current) <- names(price)
+    }
+    if (identical(target,0L)) {
+        target <- rep.int(0, length(price))
+        names(target) <- names(price)
+    }
     if (match.names == TRUE &&
         (is.null(names(price)) ||
          is.null(names(current)) ||
