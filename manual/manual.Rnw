@@ -2,7 +2,10 @@
 \documentclass[a4paper,11pt]{book}
 \usepackage[left = 2.5cm, top = 2cm, bottom = 3cm, right = 4.5cm]{geometry}
 \usepackage[noae,nogin]{Sweave}
-\usepackage{mathptmx}
+\usepackage{libertine}
+\usepackage[scaled=0.8]{DejaVuSansMono}
+\usepackage[T1]{fontenc}
+\renewcommand*\familydefault{\sfdefault} 
 \usepackage{amsmath,amstext}
 \usepackage{hyperref}
 \usepackage{natbib}
@@ -11,6 +14,8 @@
 \usepackage{framed}
 \usepackage{makeidx}\makeindex
 
+\usepackage{marginnote}
+\renewcommand*{\marginfont}{\sffamily\footnotesize}
 
 \SweaveOpts{keep.source = TRUE, eps = TRUE, pdf = FALSE}
 
@@ -45,14 +50,15 @@ of transactions.  Conceptually, such lists are nothing more than
 dataframes, but \texttt{PMwR} provides an \texttt{S3} class
 \texttt{journal} for handling such transaction data.
 
-A~\texttt{journal} is created through the function \texttt{journal};
-it is a list of atomic vectors with a class attribute.  Methods should
-not rely on this list being sorted in any particular way: components
-of a journal should always be retrieved by name, never by position
-(which is different for a dataframe, for which we can meaningfully
-speak of the \emph{n}th column).  I will refer to these journal
-components, such as \texttt{amount} or \texttt{timestamp}, as fields.%
-\marginpar{Fields} %
+A~\texttt{journal} is created through the function
+\texttt{journal};\index{journal!vs data.frame} it is a list of atomic
+vectors with a class attribute.  Methods should not rely on this list
+being sorted in any particular way: components of a journal should
+always be retrieved by name, never by position (which is different for
+a dataframe, for which we can meaningfully speak of the \emph{n}th
+column).  I will refer to these journal components, such as
+\texttt{amount} or \texttt{timestamp}, as
+fields.\index{journal!fields}
 
 The simplicity of the class is intended, as it is meant for
 interactive analyses.  Thus, the user may -- and is expected to --
@@ -206,11 +212,12 @@ transactions into files, like this:
 
 \VerbatimInput{ex1.txt}
 
-(In case you use Org-mode, such tables should look familiar.)
+\noindent (In case you use Org-mode, such tables should look familiar.) % 
+\marginpar{\url{http://orgmode.org/}} %
 <<echo=false>>=
 system("perl -ne 'print $_ if /^\\s*\\| /;' < ex1.txt > ex1.jnl")
 @ 
-We can then functions to read in such journal files.
+We can then write functions to read in such journal files.
 <<echo=false>>=
 readjnl <- function(file) {
     ans <- read.table(file,
@@ -231,7 +238,7 @@ descriptions.
 
 And yet another approach is to use prices.  Whenever you evaluate the
 balances of your cash account, say that the price per unit is one.
-That is reasonable: if I my account has a balance of `120.2', it
+That is reasonable: if my account has a balance of `120.2', it
 actually means `120.2 euros'.  The price of one euro is one euro.
 
 An expense should be a negative amount; income should go with positive
@@ -289,8 +296,7 @@ pl(c(j1, j2))
 
 \subsection{Double-entry accounting}
 
-\emph{to be added
-}
+\emph{to be added}
 
 
 %% \section{A more complicated example.}
@@ -324,49 +330,45 @@ pl(c(j1, j2))
 \section{Several accounts}
 
 There is little difference when we have several accounts. An example:
-<<>>=
+<<echo=false>>=
 trades <- read.table(textConnection(
     "account; ticker; timestamp; amount; price
     private ; A ; 1;   100; 60
     private ; A ; 2;   100; 70
-    private ; A ; 3;  -200; 66
+    private ; A ; 3;  -100; 66
     longterm; A ; 1; 100; 60
     longterm; B ; 1; 100; 5"),
                      sep =";", header = TRUE,
                      strip.white = TRUE, 
                      stringsAsFactors = FALSE)
 
-jnl <- journal(timestamp = trades$timestamp, 
-               amount    = trades$amount,
-               price     = trades$price, 
-               instrument = trades$ticker, account = 
-               trades$account)
-jnl
+(jnl <- journal(timestamp = trades$timestamp, 
+                amount    = trades$amount,
+                price     = trades$price, 
+                instrument = trades$ticker, account = 
+                trades$account))
 @
 Now we also have accounts.
 <<>>=
 table(jnl$account)
 @ 
-Per default, the function will compute the positions without caring
-about the account.  So here, we have asset \texttt{A} in account
-\texttt{longterm} and in \texttt{private}.
+Per default, \texttt{position} does not care about accounts.  
+We have asset \texttt{A} in account \texttt{longterm} and in
+\texttt{private}, but we get the sum over all accounts.
 <<>>=
 position(jnl)
 @
-
+There are at least two ways to deal with this.  One is to concatenate
+\texttt{account} and \texttt{instrument}; \ldots
 <<>>=
 jnl2 <- jnl
 jnl2$instrument <- paste0(jnl$account, ":", jnl$instrument)
-jnl2
-@ 
-
-
-<<>>=
-lapply(split(jnl, jnl$account), position)
 position(jnl2)
 @ 
-
-
+\ldots the other is to use \texttt{split} on the journal.
+<<>>=
+lapply(split(jnl, jnl$account), position)
+@ 
 
 \chapter{Profit and (or) loss}
 
@@ -486,9 +488,9 @@ pl(J)
 pl(J, current.price = 105)
 @ 
 
-
 \section{More complicated cases}
 
+\subsection{Issues}
 Unfortunately, in real life computing profit/loss is often more
 complicated:
 
@@ -518,6 +520,38 @@ TODO:
 - example EUR investor buys INTC
 
 - pure FX portfolio
+
+For a single instrument, computing profit/loss in units of the
+instrument is always meaningful (though sometimes, perhaps, not always
+intuitive).  \emph{Adding up} the profits and losses of several assets
+often does not work because of multipliers or different currencies.
+
+The  simplest and most transparent way is to manipulate the journal
+before pl is computed (eg, multiply 
+
+The function \texttt{pl} has an argument \texttt{multiplier}.
+
+We look at two examples: (i)~computing the pl of several assets in
+currency units; and (ii)~computing time-weighted returns of a
+portfolio of assets.
+
+\subsection{Several assets}
+<<echo=false>>=
+## dput(ISOdatetime(2013,c(11,11,12,12,11,12), c(28,28,2,3,27,2), 
+##                     c(9,12,13,9,9,13),c(35,50,21,57,52,54),0))
+timestamp <- structure(c(1385627700, 1385639400, 1385986860, 1386061020, 1385542320, 
+                         1385988840), class = c("POSIXct", "POSIXt"), tzone = "")
+
+@ 
+<<echo=false>>=
+(J <- journal(amount    = c(100,100,-50,-150, 100,-50),
+             timestamp = timestamp,
+             price = c(11.6, 11.62, 11.67, 11.47, 25.1,26.29),
+             instrument = c(rep("DTE", 4), rep("DPW", 2))))
+@ 
+
+goal: to compute the end-of-day pl 
+
 
 \section{Valuing portfolios}
 
