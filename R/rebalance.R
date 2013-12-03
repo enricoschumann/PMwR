@@ -1,21 +1,43 @@
 rebalance <- function(current, target, price,
                       notional = NULL, truncate = TRUE,
-                      match.names = TRUE) {
-    if (length(current) == 1L) {
-        current <- rep.int(0, length(price))
-        names(current) <- names(price)
+                      match.names = TRUE,
+                      check.match = TRUE) {
+
+
+    
+    if (!match.names && length(current) == 1L && current == 0) {
+        current <- rep.int(current, length(target))
+        names(current) <- names(target)
     }
-    if (identical(target,0L)) {
-        target <- rep.int(0, length(price))
-        names(target) <- names(price)
+
+    if (!match.names && length(target) == 1L) {
+        target <- rep.int(target, length(current))
+        names(target) <- names(current)
     }
-    if (match.names == TRUE &&
-        (is.null(names(price)) ||
-         is.null(names(current)) ||
-         is.null(names(target))))
-        stop(sQuote("match.names"),
-             " is TRUE but vectors are not named")
-        
+
+    if (!match.names &&
+        (length(current) != length(target) ||
+         length(current) != length(price) ||
+         length(target) != length(price))) {
+        stop(sQuote("current"), ", ", sQuote("target"), " and ",
+             sQuote("price"), " must have same length")
+    }
+
+    if (match.names) { 
+        if (is.null(names(price)) ||
+            is.null(names(current)) ||
+            is.null(names(target))) {
+            stop(sQuote("match.names"),
+                 " is TRUE but vectors are not named")
+        }
+        if (check.match) {
+            if (any(is.na(match(names(current), names(price)))))
+                stop("name in current that does not match price")
+            if (any(is.na(match(names(target), names(price)))))
+                stop("name in target that does not match price")
+        }
+    }
+                    
     if (is.null(notional))
         if (match.names)
             notional <- sum(current*price[names(current)])
@@ -40,7 +62,7 @@ rebalance <- function(current, target, price,
     rbl
 }
 
-print.rebalance <- function(x, ...) {
+print.rebalance <- function(x, ..., drop.zero = TRUE) {
     all.names <- names(x$price)
     if (x$match.names) {
         target <- current <- numeric(length(all.names))        
@@ -53,7 +75,7 @@ print.rebalance <- function(x, ...) {
         current <- x$current
         target <- x$target               
     }
-    print(data.frame(price  = x$price,
+    df <- data.frame(price  = x$price,
                      current = current,
                      `value` = current * x$price,
                      `% `  = format(100*current * x$price/x$notional, nsmall = 1, digits=1),
@@ -64,7 +86,15 @@ print.rebalance <- function(x, ...) {
                      `  ` = format("     ", justify = "centre"),
                      order = target - current,
                      row.names = all.names,
-                     check.names = FALSE), ...)
+                     check.names = FALSE)
+
+    if (drop.zero)
+        df <- df[df$current != 0 | df$new != 0, ]
+    print(df, ...)
+
+    cat("\nNotional: ", x$notional, ".  Amount invested: ", sum(target * x$price),
+        ".  Total turnover: ", sum(abs(current - target) * x$price),
+        ".\n", sep = "")
     invisible(x)
 }
 

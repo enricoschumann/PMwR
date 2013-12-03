@@ -2,17 +2,35 @@
 \documentclass[a4paper,11pt]{article}
 \usepackage[left = 3cm, top = 2cm, bottom = 2cm, right = 4cm]{geometry}
 \usepackage[noae,nogin]{Sweave}
-\usepackage{mathptmx}
+\usepackage{libertine}
+\usepackage[scaled=0.8]{DejaVuSansMono}
+\usepackage[T1]{fontenc}
+\renewcommand*\familydefault{\sfdefault} 
 \usepackage{amsmath,amstext}
 \usepackage{hyperref}
 \usepackage{natbib}
-
+\usepackage{xcolor}
+\definecolor{grau2}{rgb}{.2,.2,.2}
+\definecolor{grau7}{rgb}{.7,.7,.7}
+% define *Sweave* layout
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{frame=single,xleftmargin=0em,%
+  formatcom=\color{grau2},rulecolor=\color{grau7}}
+\DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=2em}
+\fvset{listparameters={\setlength{\topsep}{0pt}}}
+\renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
 \SweaveOpts{keep.source = TRUE, eps = TRUE}
 
 \begin{document}
 \title{Plotting irregularly-spaced series during trading hours}
 \author{Enrico Schumann\\\url{es@enricoschumann.net}}
-\maketitle
+
+{\raggedright{\LARGE Plotting irregularly-spaced series during trading hours}}\medskip
+
+\noindent Enrico Schumann\\
+\noindent \url{es@enricoschumann.net}\\
+\bigskip
+
 
 <<echo=false>>=
 require("PMwR")
@@ -191,7 +209,6 @@ values[tmp$map(moretimes)$ix]
 @
 
 
-\newpage
 \appendix
 <<results=tex>>=
 toLatex(sessionInfo())

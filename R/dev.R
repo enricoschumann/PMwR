@@ -522,4 +522,16 @@ if (FALSE) {
     t <- 821.1
     x[bs(x,t)]
 
+
+
+    ## *COMPUTING PL*
+
+    ## 1 computing PL in currency terms
+
+
+    ## 2 computing returns
+
+    ## 3 computing time-weighted returns
+    
+    
 }

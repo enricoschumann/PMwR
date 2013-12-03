@@ -1,3 +1,10 @@
+2013-12-03  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.2-2
+
+	* R/rebalance.R (rebalance): more checks added; length-one values
+	for current/target allowed
+
 2013-11-28  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (split.journal): added method
