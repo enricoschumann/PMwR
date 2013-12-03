@@ -1,5 +1,6 @@
 \name{position}
 \alias{position}
+\alias{print.position}
 \title{
   Aggregate Transactions to Position
 }
@@ -10,6 +11,9 @@
 \usage{
 position(amount, timestamp, instrument, when, drop.zero = FALSE,
          sort.instruments = TRUE)
+
+\method{print}{position}(x, \dots, sep = NA)
+
 }
 \arguments{
   \item{when}{
@@ -30,11 +34,19 @@ position(amount, timestamp, instrument, when, drop.zero = FALSE,
   \item{sort.instruments}{
     logical: sort instruments alphabetically
   }
+  \item{\dots}{
+    arguments passed to \code{\link{print}}
+  }
+  \item{sep}{    
+    A regular expression. Split instruments accordingly. \strong{Not
+    implemented yet.}
+  }
 }
 \details{
 
   Only \code{instrument} can be specified, so to compute positions on an
-  \code{account} basis, paste \code{account} to \code{instrument}.
+  \code{account} basis, paste \code{account} to \code{instrument}, or
+  split the journal.
 
   The function checks if \code{timestamp} is sorted (see
   \code{\link{is.unsorted}}) and sorts by timestamp, if required.
@@ -44,7 +56,7 @@ position(amount, timestamp, instrument, when, drop.zero = FALSE,
   An object of class \code{position}.
 }
 \references{
-  ES -- PMwR
+  Enrico Schumann -- Portfolio Management with R
 }
 \author{
   Enrico Schumann
