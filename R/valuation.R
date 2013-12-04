@@ -43,8 +43,10 @@ valuation.position <- function(x, multiplier = 1, price.table,
         multiplier <- multiplier[x$instrument]
 
     ans <- x$position * price.table
-    if (any(multiplier != 1))
+    if (any(multiplier != 1)) {
         ans <- ans %*% diag(multiplier, length(x$instrument))
+        colnames(ans) <- x$instrument
+    }
     if (do.sum)
         ans <- rowSums(ans)
     ans

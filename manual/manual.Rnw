@@ -21,7 +21,10 @@
 
 
 \newcommand{\pmwr}{\textsf{PMwR}}
+\newcommand{\pl}{\textsc{pl}}
 \newcommand{\R}{\textsf{R}}
+
+
 
 \begin{document}
 \pagestyle{empty}
@@ -37,6 +40,7 @@
 \bigskip
 
 <<echo=false>>=
+options(continue = " ", digits = 3, width = 60)
 require("PMwR")
 @
 
@@ -287,8 +291,8 @@ that the timestamps in the journals have different classes:
 \texttt{1:5} is integer whereas \texttt{6} is numeric.  In the case here,
 the warning could have ignored.)
 
-Since the position is now zero, it is easy to compute the
-profit/loss.  We can use the function \texttt{pl}.  
+Since the position is now zero, it is easy to compute the \pl.  We can
+use the function \texttt{pl}.
 <<>>=
 pl(c(j1, j2))
 @
@@ -377,9 +381,8 @@ lapply(split(jnl, jnl$account), position)
 We have an account, currency is euro.  We buy one asset at a price of
 100~euro and sell it again at 102~euro.  We have made a profit of
 2~euros.  This simple case happens often enough to make the required
-computation simple as well.  Computing profit-or-loss can be handled
+computation simple as well.  Computing profit-or-loss (\pl) can be handled
 through the function \texttt{pl}.
-
 <<>>=
 pl(price  = c(100, 102), 
    amount = c(  1,  -1))
@@ -405,7 +408,7 @@ With no further arguments, the function will compute the
 running position and evaluate it at every trade with the trade's
 price.  This may not be accurate because of bid--ask spreads or other
 transaction costs, but it provides more information than only
-computing the profit/loss for the trades.
+computing the \pl\ for the trades.
 <<>>=
 J <- journal(price     = c( 90, 50, 100), 
              amount    = c(  1,  1,  -2),
@@ -414,7 +417,7 @@ pl(J, along.timestamp = TRUE)
 @ 
 Suppose we also have a time series of the prices between time 1 and
 time 10.  We can evaluate the position at every time
-instant, and then plot position, profit/loss and the price of the traded
+instant, and then plot position, \pl\ and the price of the traded
 instrument.
 
 <<>>=
@@ -432,8 +435,7 @@ executed is useful to value any open position.
 <<>>=
 ## [TODO]
 @ 
-
-We may also want to compute the profit/loss between two points in
+We may also want to compute the \pl\ between two points in
 time.  If our only data source is a journal, this may be impossible
 since we need to evaluate the position at both points in time.  A simple
 example follows; the data first.
@@ -471,7 +473,7 @@ pl(trades,
 @ 
 
 
-You can also use this mechanism if you wish to compute the profit/loss
+You can also use this mechanism if you wish to compute the \pl\
 of a complete journal, but with some positions not closed yet.  The
 simplest example: a journal of just one trade.
 <<>>=
@@ -488,11 +490,16 @@ pl(J)
 pl(J, current.price = 105)
 @ 
 
-\section{More complicated cases}
+\section{More  complicated cases}
 
-\subsection{Issues}
-Unfortunately, in real life computing profit/loss is often more
-complicated:
+
+%% TODO:
+
+%% - example EUR investor buys INTC
+
+%% - pure FX portfolio
+
+Unfortunately, in real life computing \pl\ is often more complicated:
 
 \begin{itemize}
 
@@ -510,67 +517,148 @@ complicated:
 \item Assets may be denominated in various currencies.
   
 \item Currencies themselves may be assets in the portfolio.  Depending
-  on how they are traded (cash, forwards, \emph{\&c.}), computing
-  profit/loss may not be straightforward.
+  on how they are traded (cash, forwards, \emph{\&c.}), computing \pl\ 
+  may not be straightforward.
 \end{itemize}
 
+How (or rather: to what degree) these troubles are handled is, as
+always, up to the user.  For a single instrument, computing
+profit/loss in units of the instrument is always meaningful (though,
+perhaps, not always intuitive).  But \emph{adding up} the profits and
+losses of several assets often does not work because of multipliers or
+different currencies.  The simplest and most transparent way is then
+to manipulate the journal before \pl\ is computed (eg, multiply
+notionals by their multipliers).
 
-TODO:
 
-- example EUR investor buys INTC
 
-- pure FX portfolio
 
-For a single instrument, computing profit/loss in units of the
-instrument is always meaningful (though sometimes, perhaps, not always
-intuitive).  \emph{Adding up} the profits and losses of several assets
-often does not work because of multipliers or different currencies.
-
-The  simplest and most transparent way is to manipulate the journal
-before pl is computed (eg, multiply 
-
-The function \texttt{pl} has an argument \texttt{multiplier}.
-
-We look at two examples: (i)~computing the pl of several assets in
+We look at two examples: (i)~computing the \pl\ of several assets in
 currency units; and (ii)~computing time-weighted returns of a
 portfolio of assets.
 
 \subsection{Several assets}
+
+In this example we compute the \pl\ in currency units of a portfolio
+over time.  We start with the following journal.
+
 <<echo=false>>=
 ## dput(ISOdatetime(2013,c(11,11,12,12,11,12), c(28,28,2,3,27,2), 
 ##                     c(9,12,13,9,9,13),c(35,50,21,57,52,54),0))
 timestamp <- structure(c(1385627700, 1385639400, 1385986860, 1386061020, 1385542320, 
                          1385988840), class = c("POSIXct", "POSIXt"), tzone = "")
 
-@ 
-<<echo=false>>=
 (J <- journal(amount    = c(100,100,-50,-150, 100,-50),
              timestamp = timestamp,
              price = c(11.6, 11.62, 11.67, 11.47, 25.1,26.29),
              instrument = c(rep("DTE", 4), rep("DPW", 2))))
 @ 
+We shall compute end-of-day \pl\ of these trades.  In case you
+wondered: \textsc{dte} stands for Deutsche Telekom and \textsc{dpw} is
+Deutsche Post, both traded on \textsc{xetra}.  Thus, end-of-day is
+17:30 in Frankfurt am Main, Germany.
 
-goal: to compute the end-of-day pl 
+(There is nothing special about end-of-day.  We could just as well
+have decided to have hourly numbers, say.  But I would like to keep
+this example small.)  The prices at these timestamps are stored
+in a matrix \texttt{price.table}.
+<<echo=false>>=
+price.table <- structure(c(25.71, 25.965, 26.03, 26.32, 25.305,
+                           11.65, 11.655, 11.685, 11.62, 11.375), 
+                         .Dim = c(5L, 2L), 
+                         .Dimnames = list(NULL, c("DPW", "DTE")))
+
+## times <- as.POSIXct(c("2013-11-27 17:30:00", "2013-11-28 17:30:00", "2013-11-29 17:30:00", 
+##                       "2013-12-02 17:30:00", "2013-12-03 17:30:00"))
+when <- times <- structure(c(1385569800, 1385656200, 1385742600, 
+                     1386001800, 1386088200), 
+                   class = c("POSIXct", "POSIXt"), 
+                   tzone = "")
+rownames(price.table) <- as.character(times)
+@ 
+<<>>=
+price.table
+@ 
+
+\subsubsection*{Step 1: compute value of portfolio}
+
+We first need the position sizes at the timestamps at which we want to
+compute \pl.  We store them in a vector \texttt{when}.
+<<>>=
+when
+@ 
+The position at \texttt{when} is quickly computed.
+<<>>=
+(pos <- position(J, when = when))
+@ 
+
+Note that each element in the position matrix corresponds to an
+element in the matrix price.table.  That is, the rows refer to the
+timestamps:
+<<>>=
+pos$timestamp
+@ 
+The columns must be ordered like the instruments:
+<<>>= 
+pos$instrument
+@ 
+Thus, we need to multiply both matrices element-by-element, which is
+exactly what the function \texttt{valuation} does.  A warning: the
+function does currently not at all check \texttt{price.table}.
+<<>>=
+valuation(pos, price.table = price.table)
+@ 
+We care about the row sums of the results.
+<<>>= 
+(v <- valuation(pos, price.table = price.table, do.sum = TRUE))
+@
+If the assets have specific multipliers, we can pass them as a named
+vector.  (That is the preferred way, at least.  An unnamed vector will
+do as well, as will a single number, which is recycled.)
+<<>>=
+valuation(pos, price.table = price.table, 
+          multiplier = c(DTE = 5, DPW = 0.5))
+@
+
+\subsubsection*{Step 2: compute cashflows that led to portfolio}
+
+We create a vector \texttt{cf} that will store the cashflows.
+<<>>=
+cf <- numeric(length(pos$timestamp))
+names(cf) <- as.character(pos$timestamp)
+@ 
 
 
-\section{Valuing portfolios}
+<<>>=
+tmp <- valuation(J)
+tmp$timestamp <- pos$timestamp[PMwR:::matchOrNext(tmp$timestamp, pos$timestamp)]
+cash <- aggregate(tmp$amount, list(tmp$timestamp), sum)
+cf[match(cash[[1]], pos$timestamp)] <- cash[[2]]
+(v.net <- v + cumsum(cf))
+@ 
 
-\subsection{Show value of portfolio over time}
+TODO: check -- create interface journal/when/price.table?
 
-Use position with \texttt{when}: this will return a matrix of
-dimension \texttt{length(when)} times number of assets.
+\subsubsection*{Summary}
 
-Now create a matrix of prices that corresponds to that matrix.
+\begin{enumerate}
+\item Fix \texttt{when}; compute position at \texttt{when}.
+\item Prepare a matrix price.table of \texttt{length(when)} rows,
+  whose columns correspond to the assets in the portfolio.
+\item Call \texttt{valuation(position)} and store the result as
+  \texttt{v}.
+\item Call \texttt{valuation(journal)}; map the timestamps of the new
+  journal to \texttt{when}; sum the cashflows by timestamp; subtract
+  the resulting cashflows from \texttt{v}.
+\end{enumerate}
 
-Multiply both matrices elementwise and take the row sums.
+To compute returns, choose a suitable total portfolio value and divide
+by it.
 
-\subsection{Show PL over time}
 
-Do as before.  But then create cashflows and map these to when.  (This
-cashflow vector should have length when.) Add these cashflows to the
-value.
 
-\subsection{Show return over time}
+
+
 
 
 
