@@ -19,11 +19,9 @@
 
 \SweaveOpts{keep.source = TRUE, eps = TRUE, pdf = FALSE}
 
-
-\newcommand{\pmwr}{\textsf{PMwR}}
+\newcommand{\pmwr}{\textsc{pm}w\textsc{R}}
 \newcommand{\pl}{\textsc{pl}}
 \newcommand{\R}{\textsf{R}}
-
 
 
 \begin{document}
@@ -51,20 +49,20 @@ require("PMwR")
 
 Many computations that the \pmwr\ package provides are based on lists
 of transactions.  Conceptually, such lists are nothing more than
-dataframes, but \texttt{PMwR} provides an \texttt{S3} class
-\texttt{journal} for handling such transaction data.
+dataframes, but \pmwr\ provides an \texttt{S3} class \texttt{journal}
+for handling such transaction data.
 
-A~\texttt{journal} is created through the function
-\texttt{journal};\index{journal!vs data.frame} it is a list of atomic
-vectors with a class attribute.  Methods should not rely on this list
-being sorted in any particular way: components of a journal should
-always be retrieved by name, never by position (which is different for
-a dataframe, for which we can meaningfully speak of the \emph{n}th
-column).  I will refer to these journal components, such as
-\texttt{amount} or \texttt{timestamp}, as
-fields.\index{journal!fields}
+A~\texttt{journal} is a list of atomic vectors with a class attribute;
+it is created through the function \texttt{journal}.%
+\index{journal!compared with data.frame} %
+Methods should not rely on this list being sorted in any particular
+way: components of a journal should always be retrieved by name, never
+by position. (In this respect a journal differs from a dataframe, for
+which we can meaningfully speak of the \emph{n}th column.)  I will
+refer to these journal components, such as \texttt{amount} or
+\texttt{timestamp}, as fields.\index{journal!fields}
 
-The simplicity of the class is intended, as it is meant for
+The simplicity of the class is intended, since it is meant for
 interactive analyses.  Thus, the user may -- and is expected to --
 dissect the information in a \texttt{journal} at will; such
 dissections include removing the class attribute.
@@ -88,13 +86,15 @@ always be present:
 \item[\texttt{account}] description of the account;
 
 \item[\texttt{\ldots}] other fields. They must be named, for instance
-  like in \texttt{fees = c(1,2,1)}\,.
+  `\texttt{fees = c(1,2,1)}'\,.
 \end{description}
-All these can be missing, except \texttt{amount}.  Missing values will
-be handled as \texttt{NA} except id and account, which will be
-\texttt{NULL}.
+All fields can be missing, except \texttt{amount}.  Missing values
+will be handled as \texttt{NA} with the exception of \texttt{id} and
+\texttt{account}, which will be \texttt{NULL}.
 
-Transactions in a journal can be organised in a hierachy
+Transactions in a journal can be organised in a hierachy %
+\marginpar{This notation is inspired by the syntax of \texttt{ledger}
+  files. See \url{http://www.ledger-cli.org/}\,.} %
 \begin{verbatim}
 <account> => <instrument>
 \end{verbatim}
@@ -112,17 +112,17 @@ pension::equities
 The function \texttt{journal} creates journal objects.
 <<>>=
 J <- journal(timestamp  = as.Date("2012-01-01") + 0:3, 
-             amount     = c(1, 2, -2, 5),
-             instrument = c("EUR", "EUR", "CHF", "CHF"))
+              amount     = c(1, 2, -2, 5),
+              instrument = c("EUR", "EUR", "CHF", "CHF"))
 J
 @ 
 For details about the function and methods for \texttt{journal}
 objects, see \texttt{?journal}\,.  A \texttt{print} method defines how
-to display a journal.
+to display a journal.\index{journal!print@\texttt{print}}
 <<>>=
 print(J, max.print = 2, exclude = "instrument")
 @ 
-Journals can be combined with \texttt{c}.
+Journals can be combined with \texttt{c}.\index{journal!c@\texttt{c}}
 <<>>=
 J2 <- J
 J2$fees <- rep(1,4)
@@ -131,20 +131,22 @@ c(J, J2)
 
 \subsection{Subsetting journals}
 
-For interactive use, there is a method for \texttt{subset}.
+In interactive sessions, we can use \texttt{subset} to select specific
+transactions. %
+\index{journal!subset@\texttt{subset}}
 <<>>=
 subset(J, amount > 1) 
 @
 With subset, you need not quote the expression that selects trades and
 you can directly access a journal's fields.
 
-More generally, to extract or change a field, use its name and the
-\texttt{\$} operator (or double brackets \texttt{[[...]]}).
+More generally, to extract or change a field, use its name, either
+through the \texttt{\$} operator or double brackets \texttt{[[...]]}.
 <<>>=
 J$amount
 @ 
 <<>>=
-J$amount <- c(1 ,2, -2, 8)
+J[["amount"]] <- c(1 ,2, -2, 8)
 J
 @ 
 The \texttt{`[`} method works with integers or logicals, returning
@@ -159,8 +161,9 @@ available) \texttt{account}.
 <<>>=
 J["eur"]
 @ 
-By default, case is ignored, but you can set \texttt{ignore.case =
-  FALSE}.  You can also specify the fields to match the string against.
+By default, case is ignored, but you can set \texttt{ignore.case} to
+\texttt{FALSE}.  You can also specify the fields to match the string
+against.
 <<>>=
 J <- journal(timestamp  = as.Date("2012-01-01") + 0:5, 
              amount     = rep(1, 6),
@@ -178,37 +181,37 @@ J["[Pp]ension", match.against = "comment"]
 @ 
 
 
-\section{First examples}
+\section{Examples: positions, profits and losses}
 
 \subsection{Single-entry accounting}
 
 For many purposes, single-entry accounting is sufficient.  Suppose you
-kept track of a bank account.
-
+keep track of a bank account.
 <<>>=
-jnl <- journal(timestamp = as.Date("2012-01-01") + 0:3, 
+J <- journal(timestamp = as.Date("2012-01-01") + 0:3, 
                amount    = c(1, 2, -2, 5))
-jnl 
+J 
 @
-The \texttt{position} function gives the current balance of an account.
+The \texttt{position} function gives the current balance of all
+instruments.
 <<>>=
-position(jnl)
+position(J)
 @
 To get the position at a specific date, use the \texttt{when} argument.
 <<>>=
-position(jnl, when = as.Date("2012-01-03"))
+position(J, when = as.Date("2012-01-03"))
 @
 To get a time series of positions, you can use specific keywords for
 \texttt{when}: \texttt{"all"} will print the position at all
 timestamps in the journal.
 <<>>=
-position(jnl, when = "all")
+position(J, when = "all")
 @
 We are not limited to the timestamps that exist in the journal.
 <<>>=
-position(jnl, when = seq(from = as.Date("2011-12-30"), 
-                           to = as.Date("2012-01-06"),
-                           by = "1 day"))
+position(J, when = seq(from = as.Date("2011-12-30"), 
+                          to = as.Date("2012-01-06"),
+                          by = "1 day"))
 @ 
 It's actually tedious to enter journals that way, in particular if
 we want to update it over time.  So, for practical use, we may write
@@ -231,7 +234,7 @@ readjnl <- function(file) {
             amount    = ans$amount,
             comment   = ans$comment)
 }
-(jnl <- readjnl("ex1.jnl"))
+(J <- readjnl("ex1.jnl"))
 @ 
 Some of these transactions may mean a gain or loss to us, such as a
 dividend payment).  Others are neutral, for example a transfer between
@@ -250,89 +253,55 @@ amounts.  When you add such an entry, make its price 0; when you
 compute that value of a position, make its price 1.  An example:
 
 <<>>=
-jnl <- journal(timestamp = c("day 1", "day 2", "day 3"), 
+J <- journal(timestamp = c("day 1", "day 2", "day 3"), 
                amount    = c(100,100,-200), 
                price     = c(  1,  0,   0),
                comment   = c("neutral", "income", "expense"),
                account   = "my account")
-jnl
+J
 @
 The current balance is 0.
 <<>>=
-position(jnl)
+position(J)
 @ 
-In terms of income and expenses we have made a loss of 100.
+In terms of income and expenses we have made a loss of~100, which is
+exactly what the function \texttt{pl} reports.  (There will be more
+examples for computing profit and loss in the next chapter.)
 <<>>=
-pl(jnl, current.price = 1)
+pl(J, current.price = 1)
 @ 
-Let us do some more finance-style transactions.  We buy five times one
-unit of some unspecified asset.
+Let us do some more typical financial transactions.  We buy five
+times 1~unit of some unspecified asset.
 <<>>=
-j1 <- journal(timestamp = 1:5, 
+J1 <- journal(timestamp = 1:5, 
                amount   = 1, 
                price    = c(2,2,2,3,4), 
                account  = "my account")
-j1
+J1
 @
-Now we close the trade.
+We close the trade by selling 5~units.
 <<>>=
-j2 <- journal(timestamp =  6L, 
+J2 <- journal(timestamp =  6L, 
                amount   = -5, 
                price    =  3, 
                account  = "my account")
 @
 We can combine these journals with \texttt{c}.
 <<>>=
-c(j1, j2)
+c(J1, J2)
 @ 
 (Note that I have written \texttt{6L} for the timestamp in
-\texttt{j2}.  If I had not, a warning would have been issued saying
-that the timestamps in the journals have different classes:
-\texttt{1:5} is integer whereas \texttt{6} is numeric.  In the case here,
-the warning could have ignored.)
+\texttt{J2}.  If I had not, a warning would have been issued saying
+that the timestamps in the journals have different classes.
+\texttt{1:5} is integer whereas \texttt{6} is numeric.  In the case
+here, the warning would have been harmless and could have been
+ignored.)
 
 Since the position is now zero, it is easy to compute the \pl.  We can
-use the function \texttt{pl}.
+use the function \texttt{pl}, again.
 <<>>=
-pl(c(j1, j2))
+pl(c(J1, J2))
 @
-
-
-\subsection{Double-entry accounting}
-
-\emph{to be added}
-
-
-%% \section{A more complicated example.}
-
-
-%% We put this all into a journal \texttt{jnl}.
-
-
-
-%% %% What is the current position?
-
-%% %% <<>>=
-%% %% position(jnl)
-%% %% @
-
-
-%% %% What was the positon in 15 January 2013, 11:00:00? 
-
-%% %% <<>>=
-%% %% position(J, when = as.POSIXct("2013-01-15 11:00:00"))
-%% %% @
-
-
-%% This suggests a mechanism to value a portfolio: decide \texttt{when}
-%% to value the portfolio, then get prices for \texttt{when} and take the
-%% inner product of the position at \texttt{when} with these prices.
-
-%% We can also evaluate a portfolio between two points-in-time.
-
-
-\section{Several accounts}
-
 There is little difference when we have several accounts. An example:
 <<echo=false>>=
 trades <- read.table(textConnection(
@@ -346,33 +315,41 @@ trades <- read.table(textConnection(
                      strip.white = TRUE, 
                      stringsAsFactors = FALSE)
 
-(jnl <- journal(timestamp = trades$timestamp, 
+(J <- journal(timestamp = trades$timestamp, 
                 amount    = trades$amount,
                 price     = trades$price, 
                 instrument = trades$ticker, account = 
                 trades$account))
 @
-Now we also have accounts.
+There are two accounts.
 <<>>=
-table(jnl$account)
+table(J$account)
 @ 
 Per default, \texttt{position} does not care about accounts.  
 We have asset \texttt{A} in account \texttt{longterm} and in
 \texttt{private}, but we get the sum over all accounts.
 <<>>=
-position(jnl)
+position(J)
 @
 There are at least two ways to deal with this.  One is to concatenate
-\texttt{account} and \texttt{instrument}; \ldots
+\texttt{account} and \texttt{instrument}.
 <<>>=
-jnl2 <- jnl
-jnl2$instrument <- paste0(jnl$account, ":", jnl$instrument)
-position(jnl2)
+J2 <- J
+J2$instrument <- paste0(J$account, ":", J$instrument)
+position(J2)
 @ 
-\ldots the other is to use \texttt{split} on the journal.
+The other is to use \texttt{split} on the journal. %
+\index{journal!split@\texttt{split}}
 <<>>=
-lapply(split(jnl, jnl$account), position)
+lapply(split(J, J$account), position)
 @ 
+
+\subsection{Double-entry accounting}
+
+\emph{to be added}
+
+
+
 
 \chapter{Profit and (or) loss}
 
