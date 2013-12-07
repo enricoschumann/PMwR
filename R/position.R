@@ -85,13 +85,16 @@ position <- function(amount, timestamp, instrument, when,
     ans
 }
 
-print.position <- function(x, ..., sep = NA){
+print.position <- function(x, ..., sep = NA) {
 
     if (!is.na(sep))
         stop("'sep' is not yet implemented")
-    if (dim(x$position)[1L] > 1L)
+    colnames(x$position) <- x$instrument
+    if (dim(x$position)[1L] > 1L) {
         print(x$position, big.mark = ",")
-    else
+    } else {
+        ##rownames(x$position) <- ""
         print(t(x$position), big.mark = ",")
+    }
     invisible(x)
 }

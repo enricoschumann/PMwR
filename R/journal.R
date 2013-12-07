@@ -299,13 +299,13 @@ tail.journal <- function(x, n = 6L, ..., by = TRUE) {
     }
 }
 
-## cashflows <- function(x, multiplier = 1, ...) {
+cashflows <- function(x, multiplier = 1, ...) {
 
-##     if (!is.null(names(multiplier)))
-##         multiplier <- multiplier[x$instrument]
-##     ans <- x
-##     ans$instrument <- "cash"
-##     ans$amount <- -x$amount * x$price * multiplier
-##     ans$price <- 1
-##     ans
-## }
+    if (!is.null(names(multiplier)))
+        multiplier <- multiplier[x$instrument]
+    ans <- x
+    ans$instrument <- "cash"
+    ans$amount <- -x$amount * x$price * multiplier
+    ans$price <- 1
+    ans
+}
