@@ -11,9 +11,10 @@
 rebalance(current, target, price,
           notional = NULL, 
           truncate = TRUE,
-          match.names = TRUE)
+          match.names = TRUE,
+          check.match = TRUE)
 
-\method{print}{rebalance}(x, \dots)
+\method{print}{rebalance}(x, \dots, drop.zero = TRUE)
 }
 \arguments{
   \item{current}{
@@ -36,11 +37,17 @@ rebalance(current, target, price,
   \item{match.names}{
     logical
   }
+  \item{check.match}{
+    logical
+  }
   \item{x}{
     an object of class \code{rebalance}.
   }
   \item{\dots}{
     arguments passed to \code{\link{print}}
+  }
+  \item{drop.zero}{
+    logical
   }
 }
 \details{

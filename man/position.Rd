@@ -34,6 +34,9 @@ position(amount, timestamp, instrument, when, drop.zero = FALSE,
   \item{sort.instruments}{
     logical: sort instruments alphabetically
   }
+  \item{x}{    
+    An object of type position.
+  }
   \item{\dots}{
     arguments passed to \code{\link{print}}
   }
