@@ -1,6 +1,6 @@
 % \VignetteIndexEntry{PMwR-Manual}
 \documentclass[a4paper,11pt]{book}
-\usepackage[left = 2.5cm, top = 2cm, bottom = 3cm, right = 4.5cm]{geometry}
+\usepackage[left = 2.5cm, top = 2cm, bottom = 3cm, right = 4.7cm]{geometry}
 \usepackage[noae,nogin]{Sweave}
 \usepackage{libertine}
 \usepackage[scaled=0.8]{DejaVuSansMono}
@@ -15,7 +15,7 @@
 \usepackage{makeidx}\makeindex
 
 \usepackage{marginnote}
-\renewcommand*{\marginfont}{\sffamily\footnotesize}
+\renewcommand*{\marginfont}{\RaggedRight\sffamily\footnotesize}
 
 \SweaveOpts{keep.source = TRUE, eps = TRUE, pdf = FALSE}
 
@@ -93,7 +93,7 @@ will be handled as \texttt{NA} with the exception of \texttt{id} and
 \texttt{account}, which will be \texttt{NULL}.
 
 Transactions in a journal can be organised in a hierachy %
-\marginpar{This notation is inspired by the syntax of \texttt{ledger}
+\marginnote{This notation is inspired by the syntax of \texttt{ledger}
   files. See \url{http://www.ledger-cli.org/}\,.} %
 \begin{verbatim}
 <account> => <instrument>
@@ -362,11 +362,11 @@ computation simple as well.  Computing profit-or-loss (\pl) can be handled
 through the function \texttt{pl}.
 <<>>=
 pl(price  = c(100, 102), 
-   amount = c(  1,  -1))
+    amount = c(  1,  -1))
 @ 
-A trader bought one~unit at 50, one~unit at 90 and sold two~units at
-100, resulting in a profit of 60.  But suppose that the actual order
-of the trades was\medskip
+Now suppose that a trader bought one~unit at 50, one~unit at 90 and
+sold two~units at 100, resulting in a profit of 60.  But suppose that
+the actual order of the trades was\medskip
 
 buy at 90 \quad $\Rightarrow$ \quad buy at 50 \quad $\Rightarrow$ \quad
 sell at 100\,.\medskip
@@ -379,7 +379,7 @@ do not provide an actual timestamp, in which case the function will
 implicitly use integers 1, 2, \ldots, \texttt{length(amount)}\,.)
 <<>>=
 pl(price  = c( 90, 50, 100), 
-   amount = c(  1,  1,  -2), along.timestamp = TRUE)
+    amount = c(  1,  1,  -2), along.timestamp = TRUE)
 @ 
 With no further arguments, the function will compute the
 running position and evaluate it at every trade with the trade's
@@ -388,19 +388,25 @@ transaction costs, but it provides more information than only
 computing the \pl\ for the trades.
 <<>>=
 J <- journal(price     = c( 90, 50, 100), 
-             amount    = c(  1,  1,  -2),
-             timestamp = c(  2,  4,   7))
-pl(J, along.timestamp = TRUE)
+              amount    = c(  1,  1,  -2),
+              timestamp = c(  2,  4,   7))
+pl(J, along.timestamp = FALSE)
 @ 
-Suppose we also have a time series of the prices between time 1 and
-time 10.  We can evaluate the position at every time
-instant, and then plot position, \pl\ and the price of the traded
-instrument.
+Suppose we also have a time series of the prices between times 1
+and~10.  We can evaluate the position at every time instant, and then
+plot position, \pl\ and the price of the traded instrument.
 
 <<>>=
 ## [TODO]
 price <- c(100,90,70,50,60,80,100,90,110,105)
+
+## position
 position(J, when = 1:10)
+
+## pl
+## value position at when = 1:10
+## compute value if journal at 1:10 => subtract
+
 @ 
 
 A more-useful example for \texttt{pl} with \texttt{along.timestamp} is
