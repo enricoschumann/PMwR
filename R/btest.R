@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2013-11-19 17:07:22 CET (es)>
+## Time-stamp: <2014-01-16 16:58:34 CET (es)>
 btest  <- function(prices,              
                    signal,              ## a function
                    do.signal = TRUE,    ## a function
@@ -408,7 +408,14 @@ btest  <- function(prices,
                  do.signal = do.signal,
                  call = match.call())
 
+    class(ans) <- "btest"
     ans
+}
+
+print.btest <- function(x, ...) {
+    cat("Initial wealth ", 1, "\n")
+    cat("Final wealth   ", 1, "\n")
+    invisible(x)
 }
 
 

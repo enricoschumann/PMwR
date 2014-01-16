@@ -23,6 +23,7 @@
   input: numeric (vector or matrix)
 
   zoo/t specified -- same as numeric
+
   zoo/t/period specified -- react to monthly etc
             
             position/time.weighted is TRUE -- time-weighted returns

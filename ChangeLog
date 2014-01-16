@@ -1,3 +1,7 @@
+2014-01-16  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (print.btest): added method
+
 2013-12-06  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (print.position): (re)construct colnames from
