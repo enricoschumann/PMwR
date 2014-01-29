@@ -21,8 +21,6 @@ wait(x)
 first(x, by, index = FALSE)
 last(x, by, index = FALSE)
 
-divAdjust(x, t, div, backward = TRUE, additive = FALSE)
-
 letter2month(s)
 
 matchOrNext(x, y)
@@ -53,13 +51,6 @@ matchOrPrevious(x, y)
 dates <- seq(as.Date("2012-01-01"), as.Date("2013-02-05"), by = "1 day")
 PMwR:::last(dates,  by = format(dates, "\%Y\%m"))
 PMwR:::first(dates, by = format(dates, "\%Y\%m"))
-
-x <- c(9.777, 10.04, 9.207, 9.406)
-div <- 0.7
-t <- 3
-
-PMwR:::divAdjust(x, t, div)
-PMwR:::divAdjust(x, t, div, FALSE)
 
 x <- c(2, 2.5)
 PMwR:::matchOrNext(x, 1:5)

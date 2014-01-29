@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-01-16 16:58:34 CET (es)>
+## Time-stamp: <2014-01-16 17:39:54 CET (es)>
 btest  <- function(prices,              
                    signal,              ## a function
                    do.signal = TRUE,    ## a function
@@ -196,7 +196,7 @@ btest  <- function(prices,
         } else
             stop("see documentation on 'prices'")
     }
-    rm(list = "prices")
+    ## rm(list = "prices")
 
     ## param .... settings
     T <- nrow(mC)
@@ -224,7 +224,7 @@ btest  <- function(prices,
     if (initial.position != 0 && !is.null(prices0)) {
         initial.wealth <- sum(prices0 * initial.position) +initial.cash
     } else if (initial.position != 0) {
-        initial.wealth <- initial.cash ## FIXME
+        initial.wealth <- initial.cash ## FIXME: initial position needs be evaluated
     } else
         initial.wealth <- initial.cash
 
@@ -413,8 +413,9 @@ btest  <- function(prices,
 }
 
 print.btest <- function(x, ...) {
-    cat("Initial wealth ", 1, "\n")
-    cat("Final wealth   ", 1, "\n")
+    cat("Initial wealth", tmp0 <- x$wealth[min(which(!is.na(x$wealth)))], "\n")
+    cat("Final wealth  ", tmp1 <- round(x$wealth[max(which(!is.na(x$wealth)))],2), "\n")
+    cat("Total return   ", round(100*(tmp1/tmp0 - 1), 1), "%\n", sep = "")
     invisible(x)
 }
 

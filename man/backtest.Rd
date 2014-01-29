@@ -117,6 +117,9 @@ backtest(prices, signal,
   }
 }
 \details{
+
+  \bold{This function is no longer exported and should be replaced with
+  \code{\link{btest}}.}
   
   The function provides an accounting framework for trading rules. The
   basic ingredients are time series that are supposed to consist of

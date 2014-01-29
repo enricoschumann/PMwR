@@ -1,3 +1,9 @@
+2014-01-21  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: 'backtest' is no longer exported
+
+	* R/divAdjust.R (divAdjust): function is now exported
+
 2014-01-16  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R (print.btest): added method
