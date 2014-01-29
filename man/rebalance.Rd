@@ -67,18 +67,18 @@ rebalance(current, target, price,
   \item{notional}{\ldots}
 
 }
-\references{
-ES - PMwR
-}
+%% \references{
+%% Enrico Schumann - Portfoliomanagement with R
+%% }
 \author{
-ES
+  Enrico Schumann
 }
 \section{Warning }{
   Very experimental. The interface may change.
 }
-\seealso{
-##  \code{\link{journal}}
-}
+%% \seealso{
+%%   \code{\link{journal}}
+%% }
 \examples{
 ## to be added
 }
