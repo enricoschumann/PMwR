@@ -75,7 +75,7 @@ plotTradingHours(x, t = NULL,
 }
 \details{
 
-  This function is still very \bold{experimental}. In in particular, it
+  This function is still very \bold{experimental}. In particular, it
   is recommended that arguments be always named.
 
 }
