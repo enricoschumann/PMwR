@@ -80,5 +80,5 @@ rebalance(current, target, price,
 %%   \code{\link{journal}}
 %% }
 \examples{
-## to be added
+## see the vignette
 }
