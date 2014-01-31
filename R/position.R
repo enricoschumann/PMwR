@@ -89,7 +89,8 @@ print.position <- function(x, ..., sep = NA) {
 
     if (!is.na(sep))
         stop("'sep' is not yet implemented")
-    colnames(x$position) <- x$instrument
+    if (!all(is.na(x$instrument)))
+        colnames(x$position) <- x$instrument
     if (dim(x$position)[1L] > 1L) {
         print(x$position, big.mark = ",")
     } else {
