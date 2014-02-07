@@ -22,10 +22,10 @@
 \SweaveOpts{keep.source = TRUE, eps = TRUE}
 
 \begin{document}
-\title{The function \texttt{rebalance}}
+\title{\texttt{rebalance}}
 \author{Enrico Schumann\\\url{es@enricoschumann.net}}
 
-{\raggedright{\LARGE The function \texttt{rebalance}}}\medskip
+{\raggedright{\LARGE\texttt{rebalance}}}\medskip
 
 \noindent Enrico Schumann\\
 \noindent \url{es@enricoschumann.net}\\
