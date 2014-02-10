@@ -33,8 +33,13 @@
 
 
 {\RaggedLeft{
-\noindent Enrico Schumann\\
-\noindent \texttt{es@enricoschumann.net}\\}}
+
+    \noindent Enrico Schumann
+
+    \noindent \texttt{es@enricoschumann.net}
+  
+    31 January 2014  }}
+
 \bigskip
 
 <<echo=false>>=
@@ -72,8 +77,7 @@ number of fields are required for certain operations and should thus
 always be present:
 \begin{description}
 \item[\texttt{timestamp}] anything that can be sorted and that fits
-  into an atomic vector (\texttt{POSIXlt} is possible, too, but not
-  recommended);
+  into an atomic vector;
 
 \item[\texttt{amount}] the notional amount that is traded;
 
@@ -186,14 +190,8 @@ J["[Pp]ension", match.against = "comment"]
 \subsection{Single-entry accounting}
 
 For many purposes, single-entry accounting is sufficient.  Suppose you
-keep track of a bank account.
-<<>>=
-J <- journal(timestamp = as.Date("2012-01-01") + 0:3, 
-               amount    = c(1, 2, -2, 5))
-J 
-@
-The \texttt{position} function gives the current balance of all
-instruments.
+keep track of a bank account.  The \texttt{position} function gives
+the current balance of all instruments.
 <<>>=
 position(J)
 @
@@ -217,7 +215,14 @@ It's actually tedious to enter journals that way, in particular if
 we want to update it over time.  So, for practical use, we may write
 transactions into files, like this:
 
-\VerbatimInput{ex1.txt}
+\begin{verbatim}
+|  timestamp | amount | comment          |
+|------------+--------+------------------|
+| 2012-01-01 |    100 | a comment        |
+| 2012-01-02 |    200 | another comment  |
+| 2012-01-03 |   -200 | bought something |
+| 2012-02-04 |    500 | got a present    |
+\end{verbatim}
 
 \noindent (In case you use Org-mode, such tables should look familiar.) % 
 \marginpar{\url{http://orgmode.org/}} %
@@ -854,7 +859,7 @@ access certain data; there are no replacement functions.
 \end{description}
 
 All the functions have the argument \texttt{lag} which defaults
-to \texttt{1}.
+to \texttt{1}.rebalanceYN
 
 \subsection{signal}
 
@@ -862,19 +867,19 @@ The \texttt{signal} function uses information until \texttt{t -
   1} and returns the suggested portfolio (a vector) to be held at
 \texttt{t}.
 
-\subsection{signalYN}
+\subsection{do.signal}
 
-\texttt{signalYN} uses information until \texttt{t - 1} and must
-return \texttt{TRUE} or \texttt{FALSE}. If the function is not
+\texttt{do.signal} uses information until \texttt{t - 1} and must
+return \texttt{TRUE} or \texttt{FALSE}.  If the function is not
 specified, it defaults to \texttt{function() TRUE}.
 
-\subsection{rebalanceYN}
+\subsection{do.rebalance}
 
-\texttt{rebalanceYN} uses information until \texttt{t - 1} and
+\texttt{do.rebalance} uses information until \texttt{t - 1} and
 returns \texttt{TRUE} or \texttt{FALSE}. If the function is not
 specified, it defaults to \texttt{function() TRUE}.
 
-\subsection{printInfo}
+\subsection{print.info}
 
 The function is called at the end of an iteration. It should not
 return anything but is called for its side effect: print
@@ -1252,14 +1257,14 @@ signal <- function()
     if (Close() < 100)
         0.05 else 0
 
-rebalanceYN <- function() {
+do.rebalance <- function() {
     if (sum(abs(SuggestedPortfolio(0) - SuggestedPortfolio())) > 0.02)
         TRUE else FALSE
 }
 
 solution <- backtest(prices = prices,
                      signal = signal,
-                     rebalanceYN = rebalanceYN,
+                     do.rebalance = do.rebalance,
                      adjustSignal = "weight")
 
 makeTable(solution, prices)
@@ -1343,7 +1348,7 @@ signal <- function()
     if (Close() < 100)
         1 else 0
 
-printInfo <- function() {
+print.info <- function() {
     cat("period",
         sprintf("%2d", Time(0L)), "...",
         sprintf("%3d", Wealth(0)), "\n")
@@ -1351,7 +1356,7 @@ printInfo <- function() {
 }
 
 solution <- backtest(prices = prices,
-                     printInfo = printInfo,
+                     print.info = print.info,
                      signal = signal)
 
 makeTable(solution, prices)
