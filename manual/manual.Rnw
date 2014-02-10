@@ -2,6 +2,7 @@
 \documentclass[a4paper,11pt]{book}
 \usepackage[left = 2.5cm, top = 2cm, bottom = 3cm, right = 4.7cm]{geometry}
 \usepackage[noae,nogin]{Sweave}
+\usepackage{mathpazo}
 \usepackage{libertine}
 \usepackage[scaled=0.8]{DejaVuSansMono}
 \usepackage[T1]{fontenc}
@@ -954,7 +955,7 @@ If you prefer the trades only, the solution also contains a journal.
 solution$journal
 @
 
-\subsection{A more useful first example}
+\subsection{More useful examples}
 
 Now we make our strategy slightly more selective. The trading
 rule is to buy whenever the last observed price is below 100, and
@@ -1082,184 +1083,42 @@ makeTable(btest(prices = prices, signal = signal,
           prices)
 @
 
-
-
-
-%% \subsubsection{Signals (\texttt{+1}, \texttt{0}, \texttt{-1}) to
-%%   fixed number of units}
-
-%% Suppose we prefer to write rules in terms of \texttt{+1}, \texttt{0},
-%% \texttt{-1}. Then there are a number of settings that help to
-%% translate such signals into holdings. \texttt{btest} takes an
-%% argument \texttt{adjustSignal} which controls this behaviour. Its
-%% default is \texttt{NULL} (do nothing).
-
-%% If we use \texttt{fixedPosition} and specify the argument
-%% \texttt{positionSize}, the algorithm will translate any signal
-%% into \texttt{positionSize} \texttimes{} \texttt{signal}.
-
-%% <<>>=
-%% signal <- function()
-%%     if (Close() < 100)
-%%         1 else 0
-
-%% solution <- btest(prices = prices,
-%%                      signal = signal,
-%%                      initial.position = 0,
-%%                      initial.cash = 100,
-%%                      adjustSignal = "fixedPosition",
-%%                      positionSize = 5)
-
-%% makeTable(solution, prices)
-%% @
-
-
-%% This can be useful when we have an original series of zeros and
-%% ones (eg, following some technical indicator).
-
-%% <<>>=
-%% givenPositions <- c(0, -1, -1, 0, 1, 1, -1, 0, -1, -1)
-
-%% signal <- function(givenPositions)
-%%     givenPositions[Time()]
-
-%% ## fixed position size in units
-%% solution <- btest(prices = prices,
-%%                      signal = signal,
-%%                      initial.position = 0,          ## initial position
-%%                      initial.cash = 100,        ## initial cash
-%%                      givenPositions = givenPositions,
-%%                      adjustSignal   = "fixedPosition",
-%%                      positionSize   = 5)
-
-%% cbind(makeTable(solution, prices), givenPositions)
-%% @
-
-Note again the timelag: we can never trade at the same time instant in
-which we compute a signal.
-
-But if you really think there should be no timelag, you could write
-<<>>=
-signal <- function(givenPositions)
-    givenPositions[Time(0L)]
-
-solution <- btest(prices = prices,
-                     signal = signal,
-                     initial.position = 0,          ## initial position
-                     initial.cash = 100,        ## initial cash
-                     givenPositions = givenPositions,
-                     adjustSignal   = "fixedPosition",
-                     positionSize   = 5)
-cbind(makeTable(solution, prices), givenPositions)
-@
-
-What if we had had a signal in the first period?
-<<>>=
-givenPositions <- c(1, 0, -1, 0, 1, 1, -1, 0, -1, -1)
-@
-
-
-<<>>=
-solution <- btest(prices = prices,
-                     signal = signal,
-                     b = 0,
-                     initial.position = 0,          ## initial position
-                     initial.cash = 100,        ## initial cash
-                     givenPositions = givenPositions,
-                     adjustSignal   = "fixedPosition",
-                     positionSize   = 5)
-cbind(makeTable(solution, prices), givenPositions)
-@
-
-\subsubsection{Signals (\texttt{+1}, \texttt{0}, \texttt{-1}) to fixed weight}
-
-%% TODO: check -- anything pos becomes pos weight, anything neg
-%% becomes nec weight?
-
-Suppose we want to hold a constant weight in an asset. (Note that
-that to keep the weight constant we will -- under the current
-settings -- rebalance in every period.)
-
-<<>>=
-## fixed position size in %
-signal <- function()
-    if (Close() < 100)
-        3 else 0
-solution <- btest(prices = prices,
-                     signal = signal,
-                     adjustSignal = "weight",
-                     positionSize = 0.2)
-makeTable(solution, prices)
-
-signal <- function()
-    if (Close() < 100)
-        -1.2 else 0
-
-solution <- btest(prices = prices,
-                     signal = signal,
-                     adjustSignal = "weight",
-                     positionSize = 0.2)
-
-makeTable(solution, prices)
-
-@
-
-To be fully invested, set \texttt{positionSize} to \texttt{1}.
-<<>>=
-solution <- btest(prices = prices,
-                     signal = signal,
-                     adjustSignal = "weight",
-                     positionSize = 1)
-
-makeTable(solution, prices)
-
-@
-
-
-A more common scenario is probably that \texttt{signal} gives a
-weight; for instance, after a portfolio optimisation.
+A common scenario is also a \texttt{signal} that evaluates to a
+weight; for instance, after a portfolio optimisation. (Be sure to have
+a meaningful initial wealth: 5 percent of nothing is nothing.)
 <<>>=
 signal <- function()
     if (Close() < 100)
         0.05 else 0
 
 solution <- btest(prices = prices,
-                     signal = signal,
-                     adjustSignal = "weight")
+                  signal = signal,
+                  initial.cash = 100,
+                  convert.weights = TRUE)
 makeTable(solution, prices)
 @
-
-Again, we get a weight and now rebalance in every period. Suppose
-we do not want that.
+Note that now we rebalance in every period. Suppose we did not want
+that.
 <<>>=
-signal <- function()
-    if (Close() < 100)
-        0.05 else 0
-
 do.rebalance <- function() {
     if (sum(abs(SuggestedPortfolio(0) - SuggestedPortfolio())) > 0.02)
         TRUE else FALSE
 }
 
 solution <- btest(prices = prices,
-                     signal = signal,
-                     do.rebalance = do.rebalance,
-                     adjustSignal = "weight")
+                  signal = signal,
+                  initial.cash = 100,
+                  do.rebalance = do.rebalance,
+                  convert.weights = TRUE)
 
 makeTable(solution, prices)
 @
 
-A numerical analyst would rather put a tolerance that is more
-closely related to the machine precision. I prefer using meaningful
-tolerance: having invested less than one cent means we are not
-invested.
-
-Note also that with weights, we cannot exactly specify the number of
-assets we buy or sell because we do not know the price at which we
-trade. Practically, this does not matter.
+See also the \texttt{tol} argument.  %% TODO: expand
 
 \subsubsection{Passing environments}
-To keep information persistent, we can use environments
+
+To keep information persistent, we can use environments.
 <<>>=
 external <- new.env()
 external$vec <- numeric(length(prices))
@@ -1280,37 +1139,37 @@ cbind(makeTable(solution, prices), external$vec)
 \section{Multiple assets}
 
 
-\subsection{Again, a simple example}
-
-<<>>=
-prices1 <- c(100,98, 98, 97, 96, 98,97,98,99,101)
-prices2 <- c(100,99,100,102,101,100,96,97,95,82)
-prices <- cbind(prices1, prices2)
-
-signal <- function()
-    if (Close()[1L] > Close()[2L])
-        c(1, 0) else c(0, 1)
-
-
-(solution <- btest(prices = list(prices),
-                     signal = signal,
-                      b=2))
-@
-
-We can also give more useful names to the assets.
-<<>>=
-prices <- cbind(AA = prices1, BB = prices2)
-solution <- btest(prices = list(prices),
-                               signal = signal, b=2)
-makeTable(solution, prices)
-
-@
-
-
+%% \subsection{Again, a simple example}
+%% 
+%% <<>>=
+%% prices1 <- c(100,98, 98, 97, 96, 98,97,98,99,101)
+%% prices2 <- c(100,99,100,102,101,100,96,97,95,82)
+%% prices <- cbind(prices1, prices2)
+%% 
+%% signal <- function()
+%%     if (Close()[1L] > Close()[2L])
+%%         c(1, 0) else c(0, 1)
+%% 
+%% 
+%% (solution <- btest(prices = list(prices),
+%%                    signal = signal,
+%%                    b=2))
+%% @
+%% 
+%% We can also give more useful names to the assets.
+%% <<>>=
+%% prices <- cbind(AA = prices1, BB = prices2)
+%% solution <- btest(prices = list(prices),
+%%                                signal = signal, b=2)
+%% makeTable(solution, prices)
+%% 
+%% @
+%% 
 
 \section{Common tasks}
-There are many ways to do the same thing. I describe how I have
-handled some specific tasks.
+
+There is more than one ways to accomplish a certain task.  I describe
+how I have handled some specific tasks.
 
 \subsection{Remembering an entry price}
 In signal: use the current price and assign in \texttt{Globals}.
@@ -1318,6 +1177,8 @@ In signal: use the current price and assign in \texttt{Globals}.
 \subsection{Delaying signals}
 
 \subsection{Losing signals}
+
+\subsection{Testing rebalancing frequency}
 
 \subsection{Writing a log}
 <<>>=
