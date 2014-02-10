@@ -916,46 +916,43 @@ example, the suggested position always is one unit. It is only a
 \texttt{suggested} portfolio because we can specify rules whether
 or not to trade. Examples follow below.
 
-So \texttt{signal} always recommends to hold one unit of the
-asset. To test this strategy, we call \texttt{btest}. The
-initial cash is 100 (per default). We can change it through the
-argument \texttt{c0}.
+So \texttt{signal} always recommends to hold one unit of the asset. To
+test this strategy, we call \texttt{btest}.  The initial cash is zero
+per default, so initial wealth is also zero in this case.  We can
+change it through the argument \texttt{initial.cash}.
 
 <<>>=
-solution <- btest(prices = prices,
-                     signal = signal)
+(solution <- btest(prices = prices,
+                     signal = signal))
 @
-
-The function returns a list with a number of components. We
-display the results in a \texttt{data.frame}. \texttt{Xs} is the
-suggested portfolio; \texttt{X} is the actual portfolio.
-
+The function returns a list with a number of components. We display
+the results in a \texttt{data.frame}. \texttt{sp} is the suggested
+position; \texttt{p} is the actual position.
 <<>>=
 makeTable <- function(solution, prices)
     data.frame(prices = prices,
-               p     = solution$portfolio,
-               sp      = solution$suggested.portfolio,
+               sp     = solution$suggested.position,
+               p      = solution$position,
                wealth = solution$wealth,
                cash   = solution$cash)
 
-makeTable(solution, prices)
-@
-
-We bought in the second period because the default setting for
-the burnin \texttt{b} is 1; thus, we lose one observation.
-
-Since we do not rely in any way on the past in this trading rule,
-we set \texttt{b} zo zero. With this setting, we buy at the first
-price and hold until the end of the data.
-
+makeTable(unclass(solution), prices)
+@ 
+We bought in the second period because the default setting for the
+burnin \texttt{b} is 1; thus, we lose one observation.  In the case
+here we do not rely in any way on the past; hence, we set \texttt{b}
+to zero. With this setting, we buy at the first price and hold until
+the end of the data.
 <<>>=
 solution <- btest(prices = prices,
-                     signal = signal,
+                  signal = signal,
                      b  = 0)
 makeTable(solution, prices)
-solution$trades
 @
-
+If you prefer the trades only, the solution also contains a journal.
+<<>>=
+solution$journal
+@
 
 \subsection{A more useful first example}
 
@@ -970,30 +967,25 @@ signal <- function()
 
 We call \texttt{btest}.
 <<>>=
-solution <- btest(prices = prices,
-                     signal = signal,
-                     c0 = 100)        ## initial cash
-
+solution <- btest(prices = prices, signal = signal,
+                  initial.cash = 100)
 makeTable(solution, prices)
 @
-
-The argument \texttt{x0} specifies the initial position. (Default
-is no position.) Suppose we had already held one unit of the
+The argument \texttt{initial.position} specifies the initial position;
+default is no position.  Suppose we had already held one unit of the
 asset.
-
 <<>>=
-solution <- btest(prices = prices,
-                     signal = signal,
-                     x0 = 1,          ## initial position
-                     c0 = 100)        ## initial cash
+solution <- btest(prices = prices, signal = signal,
+                     initial.position = 1, initial.cash = 100)
 
 makeTable(solution, prices)
 @
+%% TODO: is this right? should be suggested position not be 1 in t==2?
 
 Internally, \texttt{btest} stores \textsc{ohlc} prices in matrices.
-So even for a single instrument we have four matrices, and each matrix has
-one column. If we were dealing with two assets, we would again have
-four matrices, each with two columns. And so on.
+So even for a single instrument we have four matrices, and each matrix
+has one column. If we were dealing with two assets, we would again
+have four matrices, each with two columns. And so on.
 
 %% TODO: add picture of matrices
 
@@ -1004,10 +996,9 @@ it as a formal argument to \texttt{signal} since this is done
 automatically (in fact, doing it manually would trigger an error
 message):
 <<>>=
-##signal <- function(Close = NULL)
-##    1
-1
-##cat(try(btest(prices = prices, signal = signal)))
+signal <- function(Close = NULL)
+    1
+cat(try(btest(prices = prices, signal = signal)))
 @
 
 Similarly, we have functions \texttt{Open}, \texttt{High} and
@@ -1023,11 +1014,9 @@ signal <- function(threshold)
     if (Close() < threshold)
         1 else 0
 
-solution <- btest(prices = prices,
-                     signal = signal,
-                     threshold = 98,  ## buy if price < threshold
-                     x0 = 0,          ## initial position
-                     c0 = 100)        ## initial cash
+solution <- btest(prices = prices, signal = signal,
+                  threshold = 98,  ## buy if price < threshold
+                  initial.position = 0, initial.cash = 100)      
 
 makeTable(solution, prices)
 @
@@ -1045,11 +1034,9 @@ signal <- function()
 We could also have written \texttt{(Close() < Close(2L))}. We need to
 increase \texttt{b}.
 <<>>=
-solution <- btest(prices = prices,
-                     signal = signal,
-                     b = 2,           ## increase burnin
-                     x0 = 0,          ## initial position
-                     c0 = 100)        ## initial cash
+solution <- btest(prices = prices, signal = signal,
+                  b = 2, ## increase burnin
+                  initial.position = 0, initial.cash = 100)      
 makeTable(solution, prices)
 @
 
@@ -1060,14 +1047,10 @@ signal <- function()
     if (Close() < 100)
         2 else 0
 
-solution <- btest(prices = prices,
-                     signal = signal,
-                     x0 = 0,          ## initial position
-                     c0 = 100)        ## initial cash
-
-makeTable(solution, prices)
+makeTable(btest(prices = prices, signal = signal,
+                initial.position = 0, initial.cash = 100),
+          prices)
 @
-
 A typical way to specify a trading strategy is to map past prices into
 \texttt{+1}, \texttt{0} or \texttt{-1} for long, flat or short. A
 signal is often only given at a specified point (like in `buy one unit
@@ -1077,85 +1060,80 @@ now'). Example: suppose the third day is a Monday, and our rule says
 signal <- function()
     if (Time() == 3)
         1 else 0
-solution <- btest(prices = prices,
-                     signal = signal,
-                     x0 = 0,          ## initial position
-                     c0 = 100)        ## initial cash
 
-makeTable(solution, prices)
+makeTable(btest(prices = prices, signal = signal,
+                initial.position = 0, initial.cash = 100),
+          prices)
 @
 
-But this is probably not what we wanted. If the rule is to
-buy and stay long, we should have written it like this.
+But this is probably not what we wanted. If the rule is to buy and
+then keep the long position, we should have written it like this.
 <<>>=
 signal <- function()
     if (Time() == 3L)
         1 else Portfolio()
 @
-
-The function \texttt{Portfolio} returns last period's
-portfolio. Like \texttt{Close}, it takes an argument \texttt{lag}
-that defaults to one.
+The function \texttt{Portfolio} evaluates to last period's
+portfolio. Like \texttt{Close}, it takes an argument \texttt{lag} that
+defaults to one.
 <<>>=
-solution <- btest(prices = prices,
-                     signal = signal,
-                     x0 = 0,          ### initial position
-                     c0 = 100)        ### initial cash
-
-makeTable(solution, prices)
+makeTable(btest(prices = prices, signal = signal,
+                initial.position = 0, initial.cash = 100),
+          prices)
 @
 
 
 
 
-\subsubsection{Signals (\texttt{+1}, \texttt{0}, \texttt{-1}) to
-  fixed number of units}
+%% \subsubsection{Signals (\texttt{+1}, \texttt{0}, \texttt{-1}) to
+%%   fixed number of units}
 
-Suppose we prefer to write rules in terms of \texttt{+1}, \texttt{0},
-\texttt{-1}. Then there are a number of settings that help to
-translate such signals into holdings. \texttt{btest} takes an
-argument \texttt{adjustSignal} which controls this behaviour. Its
-default is \texttt{NULL} (do nothing).
+%% Suppose we prefer to write rules in terms of \texttt{+1}, \texttt{0},
+%% \texttt{-1}. Then there are a number of settings that help to
+%% translate such signals into holdings. \texttt{btest} takes an
+%% argument \texttt{adjustSignal} which controls this behaviour. Its
+%% default is \texttt{NULL} (do nothing).
 
-If we use \texttt{fixedPosition} and specify the argument
-\texttt{positionSize}, the algorithm will translate any signal
-into \texttt{positionSize} \texttimes{} \texttt{signal}.
+%% If we use \texttt{fixedPosition} and specify the argument
+%% \texttt{positionSize}, the algorithm will translate any signal
+%% into \texttt{positionSize} \texttimes{} \texttt{signal}.
 
-<<>>=
-signal <- function()
-    if (Close() < 100)
-        1 else 0
+%% <<>>=
+%% signal <- function()
+%%     if (Close() < 100)
+%%         1 else 0
 
-solution <- btest(prices = prices,
-                     signal = signal,
-                     x0 = 0,
-                     c0 = 100,
-                     adjustSignal = "fixedPosition",
-                     positionSize = 5)
+%% solution <- btest(prices = prices,
+%%                      signal = signal,
+%%                      initial.position = 0,
+%%                      initial.cash = 100,
+%%                      adjustSignal = "fixedPosition",
+%%                      positionSize = 5)
 
-makeTable(solution, prices)
-@
+%% makeTable(solution, prices)
+%% @
 
-This can be useful when we have an original series of zeros and
-ones (eg, following some technical indicator).
 
-<<>>=
-givenPositions <- c(0, -1, -1, 0, 1, 1, -1, 0, -1, -1)
+%% This can be useful when we have an original series of zeros and
+%% ones (eg, following some technical indicator).
 
-signal <- function(givenPositions)
-    givenPositions[Time()]
+%% <<>>=
+%% givenPositions <- c(0, -1, -1, 0, 1, 1, -1, 0, -1, -1)
 
-## fixed position size in units
-solution <- btest(prices = prices,
-                     signal = signal,
-                     x0 = 0,          ## initial position
-                     c0 = 100,        ## initial cash
-                     givenPositions = givenPositions,
-                     adjustSignal   = "fixedPosition",
-                     positionSize   = 5)
+%% signal <- function(givenPositions)
+%%     givenPositions[Time()]
 
-cbind(makeTable(solution, prices), givenPositions)
-@
+%% ## fixed position size in units
+%% solution <- btest(prices = prices,
+%%                      signal = signal,
+%%                      initial.position = 0,          ## initial position
+%%                      initial.cash = 100,        ## initial cash
+%%                      givenPositions = givenPositions,
+%%                      adjustSignal   = "fixedPosition",
+%%                      positionSize   = 5)
+
+%% cbind(makeTable(solution, prices), givenPositions)
+%% @
 
 Note again the timelag: we can never trade at the same time instant in
 which we compute a signal.
@@ -1167,8 +1145,8 @@ signal <- function(givenPositions)
 
 solution <- btest(prices = prices,
                      signal = signal,
-                     x0 = 0,          ## initial position
-                     c0 = 100,        ## initial cash
+                     initial.position = 0,          ## initial position
+                     initial.cash = 100,        ## initial cash
                      givenPositions = givenPositions,
                      adjustSignal   = "fixedPosition",
                      positionSize   = 5)
@@ -1185,8 +1163,8 @@ givenPositions <- c(1, 0, -1, 0, 1, 1, -1, 0, -1, -1)
 solution <- btest(prices = prices,
                      signal = signal,
                      b = 0,
-                     x0 = 0,          ## initial position
-                     c0 = 100,        ## initial cash
+                     initial.position = 0,          ## initial position
+                     initial.cash = 100,        ## initial cash
                      givenPositions = givenPositions,
                      adjustSignal   = "fixedPosition",
                      positionSize   = 5)
