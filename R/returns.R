@@ -73,7 +73,7 @@ returns <- function(x, t = NULL, period = NULL, complete.first = TRUE,
     ## TODO: make internal function that checks x and t
     if (is.null(t)) {
         if (inherits(x, "zoo")) {
-            t <- index(x)
+            t <- time(x)
             x <- coredata(x)
             if (!is.null(dim(x)))
                 stop("with ", sQuote("t"), " supplied, ",
