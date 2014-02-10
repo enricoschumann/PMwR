@@ -12,7 +12,7 @@ btest(prices, signal,
       b = 1L, fraction = 1,
       initial.position = 0, initial.cash = 0, tc = 0, ...,
       add = FALSE,
-      adjust.signal = NULL,
+      convert.weights = FALSE,
       tradeOnOpen = TRUE,
       tol = 1e-5, assignInGlobals = list(),
       prices0 = NULL,include.data = FALSE)
@@ -81,14 +81,12 @@ btest(prices, signal,
     position, ie, orders).
 
   }
-  \item{adjust.signal}{
+  \item{convert.weights}{
 
-    Default is \code{NULL}. If \code{fixedPosition}, any positive signal
-    will be transformed into \code{positionSize}.  If \code{weight} and
-    \code{positionSize} is \code{NULL}, any output of signal will be
-    considered weights. If positionSize is not \code{NULL}, signals will
-    be transformed in fixed weights (\code{positionSize}). See Details.
-    
+    Default is \code{FALSE}.  If \code{TRUE}, the value of signal will
+    be considered a weight vector and automatically translated into
+    (fractional) position sizes.    
+
   }
   \item{tradeOnOpen}{
     A logical vector of length one; default is \code{TRUE}.

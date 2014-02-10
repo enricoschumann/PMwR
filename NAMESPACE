@@ -1,3 +1,5 @@
+useDynLib(PMwR)
+
 importFrom(utils,toLatex)
 importFrom(utils,head)
 importFrom(utils,tail)
@@ -66,5 +68,3 @@ S3method(toHTML, preturns)
 S3method(toText, default)
 S3method(valuation, journal)
 S3method(valuation, position)
-
-useDynLib(PMwR)

@@ -1,5 +1,12 @@
 2014-02-10  Enrico Schumann  <es@enricoschumann.net>
 
+	* DESCRIPTION (Version): Version: 0.1-41 (will supersede the
+	release branch)
+
+	* R/returns.R (returns): if "x" is of class "zoo": use "time"
+	(stats package) instead of "index" (zoo package); then, zoo needs
+	not be attached
+
 	* R/NAVseries.R (NAVseries): added function
 	(print.NAVseries): added method
 	(plot.NAVseries): added method

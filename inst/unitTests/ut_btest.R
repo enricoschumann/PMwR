@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2013-09-17 11:31:19 CEST (es)>
+## Time-stamp: <2014-02-10 15:32:19 CET (es)>
 test.btest <- function() {
 
     require("PMwR")
@@ -57,26 +57,19 @@ test.btest <- function() {
         0.12
 
     ## ... no position (since wealth is 0)
-    solution <- btest(prices = prices, signal = signal, adjust.signal = "weight")
+    solution <- btest(prices = prices, signal = signal, convert.weights = TRUE)
     checkEquals(drop(solution$position), rep(0, length(prices)))
     checkEquals(drop(solution$wealth), rep(0, length(prices)))
     checkEquals(drop(solution$suggested.position), rep(0, length(prices)))
     checkEquals(solution$journal, journal())
     
 
-    solution <- btest(prices = prices, signal = signal, adjust.signal = "weight",
+    solution <- btest(prices = prices, signal = signal, convert.weights = TRUE,
                       initial.cash = 1000)
     checkEquals((solution$wealth * signal()/prices)[-length(prices)],
                 solution$suggested.position[-1]) 
     checkEquals((solution$wealth * signal()/prices)[-length(prices)],
                 solution$position[-1]) 
-
-    ## ... 'size' missing
-    checkException(solution <- btest(prices = prices, signal = signal,
-                      adjust.signal = "fixedWeight"), silent = TRUE)
-    checkException(solution <- btest(prices = prices, signal = signal,
-                      adjust.signal = "fixedPosition"), silent = TRUE)
-
 
 
     ## signal returns a weight, 2 assets
@@ -85,13 +78,13 @@ test.btest <- function() {
         c(0.2, 0.3)
 
     ## ... no initial wealth, no position
-    solution <- btest(list(prices2), signal = signal, adjust.signal = "weight")
+    solution <- btest(list(prices2), signal = signal, convert.weights = TRUE)
     checkEquals(dim(solution$position), dim(prices2))
     checkTrue(all(solution$position==0))
     checkEquals(solution$journal, journal())
 
     ## ... with initial wealth
-    solution <- btest(list(prices2), signal = signal, adjust.signal = "weight",
+    solution <- btest(list(prices2), signal = signal, convert.weights = TRUE,
                       initial.cash = 1000)
     checkEquals((outer(solution$wealth, signal())/prices2)[-nrow(prices2), ],
                 solution$position[-1L, ])
@@ -100,7 +93,7 @@ test.btest <- function() {
     do.rebalance <- function()
         if (Time() == 3L || Time() == 8L)
             TRUE else FALSE
-    solution <- btest(list(prices2), signal = signal, adjust.signal = "weight",
+    solution <- btest(list(prices2), signal = signal, convert.weights = TRUE,
                       initial.cash = 1000, do.rebalance = do.rebalance)
     checkEquals(solution$position,
                 structure(c(0, 0, 0,
@@ -134,13 +127,13 @@ test.btest <- function() {
         c(0.2, 0.3, 0.25)
 
     ## ... no initial wealth, no position
-    solution <- btest(list(prices3), signal = signal, adjust.signal = "weight")
+    solution <- btest(list(prices3), signal = signal, convert.weights = TRUE)
     checkEquals(dim(solution$position), dim(prices3))
     checkTrue(all(solution$position==0))
     checkEquals(solution$journal, journal())
 
     ## ... no initial wealth, no position
-    solution <- btest(list(prices3), signal = signal, adjust.signal = "weight",
+    solution <- btest(list(prices3), signal = signal, convert.weights = TRUE,
                       initial.cash = 1000)
     checkEquals((outer(solution$wealth, signal())/prices3)[-nrow(prices3), ],
                 solution$position[-1L, ])

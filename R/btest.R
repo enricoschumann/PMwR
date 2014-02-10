@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-01-16 17:39:54 CET (es)>
+## Time-stamp: <2014-02-10 15:17:01 CET (es)>
 btest  <- function(prices,              
                    signal,              ## a function
                    do.signal = TRUE,    ## a function
@@ -12,7 +12,7 @@ btest  <- function(prices,
                    tc = 0,
                    ...,
                    add = FALSE,   ## if TRUE, 'position' is flow
-                   adjust.signal = NULL,
+                   convert.weights = FALSE,
                    tradeOnOpen = TRUE,
                    tol = 1e-5,
                    assignInGlobals = list(),
@@ -163,13 +163,7 @@ btest  <- function(prices,
     if (db.print.info)
         debug(print.info)
     
-    if (is.null(adjust.signal))
-        adjSignal <- FALSE
-    else {
-        if (adjust.signal != "weight")
-            stop(sQuote("adjust.signal"), " must be NULL or weight")
-        adjSignal <- TRUE
-    }
+
     ## prepare prices
     if (is.list(prices)) {
         if (length(prices) == 1L) {
@@ -196,7 +190,6 @@ btest  <- function(prices,
         } else
             stop("see documentation on 'prices'")
     }
-    ## rm(list = "prices")
 
     ## param .... settings
     T <- nrow(mC)
@@ -246,7 +239,7 @@ btest  <- function(prices,
                            SuggestedPortfolio = SuggestedPortfolio,
                            Globals = Globals)
             
-            if (!is.null(adjust.signal))
+            if (convert.weights)
                 temp <- temp * initial.wealth /prices0
            
             if (!is.null(temp))
@@ -324,7 +317,7 @@ btest  <- function(prices,
                            Portfolio = Portfolio,
                            SuggestedPortfolio = SuggestedPortfolio,
                            Globals = Globals)            
-            if (!is.null(adjust.signal))
+            if (convert.weights)
                 temp <- temp * v[t1] / mC[t1, ]
 
             if (!is.null(temp))
@@ -413,9 +406,10 @@ btest  <- function(prices,
 }
 
 print.btest <- function(x, ...) {
-    cat("Initial wealth", tmp0 <- x$wealth[min(which(!is.na(x$wealth)))], "\n")
-    cat("Final wealth  ", tmp1 <- round(x$wealth[max(which(!is.na(x$wealth)))],2), "\n")
-    cat("Total return   ", round(100*(tmp1/tmp0 - 1), 1), "%\n", sep = "")
+    cat("initial wealth", tmp0 <- x$wealth[min(which(!is.na(x$wealth)))], " =>  ")
+    cat("final wealth ", tmp1 <- round(x$wealth[max(which(!is.na(x$wealth)))],2), "\n")
+    if (tmp0 > 0)
+        cat("Total return   ", round(100*(tmp1/tmp0 - 1), 1), "%\n", sep = "")
     invisible(x)
 }
 
