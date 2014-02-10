@@ -13,6 +13,7 @@ export(
     char2num,
     closeOnFirst,
     dayOfMonth,
+    divAdjust,
     mday,
     endOfMonth,
     endOfPreviousMonth,

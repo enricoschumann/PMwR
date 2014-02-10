@@ -28,11 +28,11 @@ valuation.journal <- function(x,
     if (!is.null(names(multiplier)))
         multiplier <- multiplier[x$instrument]
     ans <- x
-    ans$instrument <- "cash"
+    ans$instrument[] <- "cash"
     ans$amount <- cashflow(x) * multiplier
     if (flip.sign)
         ans$amount <- ans$amount * -1    
-    ans$price <- 1
+    ans$price[] <- 1
     ans
 }
 

@@ -91,7 +91,7 @@ print.journal <- function(x, ..., width = 60L, max.print = 100L,
 
     notAllNA <- unlist(lapply(df, function(x) !all(is.na(x))))
     print(head(df[notAllNA], max.print), quote = FALSE,
-          print.gap=2)
+          print.gap = 2)
     if (lx > max.print)
         cat("[ ... ]\n\n") else cat("\n")
 
@@ -234,7 +234,6 @@ summary.journal <- function(x, ...) {
     class(ans) <- "journal"
     ans
 }
-
 
 aggregate.journal <- function(x, by, FUN, ...) {
 

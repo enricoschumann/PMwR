@@ -1,3 +1,14 @@
+2014-02-10  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (NAVseries): added function
+	(print.NAVseries): added method
+	(plot.NAVseries): added method
+
+2014-02-02  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/valuation.R (valuation.journal): fixed -- instrument == "cash"
+	and price == 1 was not recycled to length of journal
+
 2014-01-21  Enrico Schumann  <es@enricoschumann.net>
 
 	* NAMESPACE: 'backtest' is no longer exported

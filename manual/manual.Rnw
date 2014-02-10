@@ -839,7 +839,7 @@ the low.)
 
 \section{Functions}\label{functions}
 
-\texttt{backtest} expects a number of functions. The default is to not
+\texttt{btest} expects a number of functions. The default is to not
 specify arguments to these functions, because they can all access the
 following objects. These objects are themselves functions that can
 access certain data; there are no replacement functions.
@@ -889,7 +889,7 @@ connection.
 
 \section{Single assets}
 
-It is best to describe the \texttt{backtest} function through a number
+It is best to describe the \texttt{btest} function through a number
 of simple examples.
 
 
@@ -901,6 +901,7 @@ buy, and then to hold forever. All we need is the time series of
 the prices and the signal function. To keep this example (and
 also those that follow) simple, we use an artificial series.
 <<>>=
+## TODO: use real example
 prices <- c(100,98,98,97,101,102,101,98,99,101)
 @
 The \texttt{signal} function is very simple indeed.
@@ -910,18 +911,18 @@ signal <- function()
 @
 
 \texttt{signal} must be written so that it returns the suggested
-portfolio (or position) in units of the asset. In this first
-example, the suggested position always is one unit. (It is only a
+portfolio (or position) in units of the asset.  In this first
+example, the suggested position always is one unit. It is only a
 \texttt{suggested} portfolio because we can specify rules whether
-or not to trade. Examples follow below.)
+or not to trade. Examples follow below.
 
 So \texttt{signal} always recommends to hold one unit of the
-asset. To test this strategy, we call \texttt{backtest}. The
+asset. To test this strategy, we call \texttt{btest}. The
 initial cash is 100 (per default). We can change it through the
 argument \texttt{c0}.
 
 <<>>=
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal)
 @
 
@@ -948,7 +949,7 @@ we set \texttt{b} zo zero. With this setting, we buy at the first
 price and hold until the end of the data.
 
 <<>>=
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal,
                      b  = 0)
 makeTable(solution, prices)
@@ -967,9 +968,9 @@ signal <- function()
         1 else 0
 @
 
-We call \texttt{backtest}.
+We call \texttt{btest}.
 <<>>=
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal,
                      c0 = 100)        ## initial cash
 
@@ -981,7 +982,7 @@ is no position.) Suppose we had already held one unit of the
 asset.
 
 <<>>=
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal,
                      x0 = 1,          ## initial position
                      c0 = 100)        ## initial cash
@@ -989,7 +990,7 @@ solution <- backtest(prices = prices,
 makeTable(solution, prices)
 @
 
-Internally, \texttt{backtest} stores \textsc{ohlc} prices in matrices.
+Internally, \texttt{btest} stores \textsc{ohlc} prices in matrices.
 So even for a single instrument we have four matrices, and each matrix has
 one column. If we were dealing with two assets, we would again have
 four matrices, each with two columns. And so on.
@@ -997,7 +998,7 @@ four matrices, each with two columns. And so on.
 %% TODO: add picture of matrices
 
 We do not access these data directly. \texttt{Close} is a
-function that is defined in \texttt{backtest}, and which is
+function that is defined in \texttt{btest}, and which is
 passed as an argument to \texttt{signal}. Note that we do not add
 it as a formal argument to \texttt{signal} since this is done
 automatically (in fact, doing it manually would trigger an error
@@ -1006,7 +1007,7 @@ message):
 ##signal <- function(Close = NULL)
 ##    1
 1
-##cat(try(backtest(prices = prices, signal = signal)))
+##cat(try(btest(prices = prices, signal = signal)))
 @
 
 Similarly, we have functions \texttt{Open}, \texttt{High} and
@@ -1016,13 +1017,13 @@ functions).
 Suppose we wanted to add a variable, like a \texttt{threshold}
 that tells us when to buy. This would need to be an argument to
 \texttt{signal}; but it would also need to be passed with the
-\texttt{\dots} argument of \texttt{backtest}.
+\texttt{\dots} argument of \texttt{btest}.
 <<>>=
 signal <- function(threshold)
     if (Close() < threshold)
         1 else 0
 
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal,
                      threshold = 98,  ## buy if price < threshold
                      x0 = 0,          ## initial position
@@ -1044,7 +1045,7 @@ signal <- function()
 We could also have written \texttt{(Close() < Close(2L))}. We need to
 increase \texttt{b}.
 <<>>=
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal,
                      b = 2,           ## increase burnin
                      x0 = 0,          ## initial position
@@ -1059,7 +1060,7 @@ signal <- function()
     if (Close() < 100)
         2 else 0
 
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal,
                      x0 = 0,          ## initial position
                      c0 = 100)        ## initial cash
@@ -1076,7 +1077,7 @@ now'). Example: suppose the third day is a Monday, and our rule says
 signal <- function()
     if (Time() == 3)
         1 else 0
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal,
                      x0 = 0,          ## initial position
                      c0 = 100)        ## initial cash
@@ -1096,7 +1097,7 @@ The function \texttt{Portfolio} returns last period's
 portfolio. Like \texttt{Close}, it takes an argument \texttt{lag}
 that defaults to one.
 <<>>=
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal,
                      x0 = 0,          ### initial position
                      c0 = 100)        ### initial cash
@@ -1112,7 +1113,7 @@ makeTable(solution, prices)
 
 Suppose we prefer to write rules in terms of \texttt{+1}, \texttt{0},
 \texttt{-1}. Then there are a number of settings that help to
-translate such signals into holdings. \texttt{backtest} takes an
+translate such signals into holdings. \texttt{btest} takes an
 argument \texttt{adjustSignal} which controls this behaviour. Its
 default is \texttt{NULL} (do nothing).
 
@@ -1125,7 +1126,7 @@ signal <- function()
     if (Close() < 100)
         1 else 0
 
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal,
                      x0 = 0,
                      c0 = 100,
@@ -1145,7 +1146,7 @@ signal <- function(givenPositions)
     givenPositions[Time()]
 
 ## fixed position size in units
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal,
                      x0 = 0,          ## initial position
                      c0 = 100,        ## initial cash
@@ -1164,7 +1165,7 @@ But if you really think there should be no timelag, you could write
 signal <- function(givenPositions)
     givenPositions[Time(0L)]
 
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal,
                      x0 = 0,          ## initial position
                      c0 = 100,        ## initial cash
@@ -1181,7 +1182,7 @@ givenPositions <- c(1, 0, -1, 0, 1, 1, -1, 0, -1, -1)
 
 
 <<>>=
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal,
                      b = 0,
                      x0 = 0,          ## initial position
@@ -1206,7 +1207,7 @@ settings -- rebalance in every period.)
 signal <- function()
     if (Close() < 100)
         3 else 0
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal,
                      adjustSignal = "weight",
                      positionSize = 0.2)
@@ -1216,7 +1217,7 @@ signal <- function()
     if (Close() < 100)
         -1.2 else 0
 
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal,
                      adjustSignal = "weight",
                      positionSize = 0.2)
@@ -1227,7 +1228,7 @@ makeTable(solution, prices)
 
 To be fully invested, set \texttt{positionSize} to \texttt{1}.
 <<>>=
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal,
                      adjustSignal = "weight",
                      positionSize = 1)
@@ -1244,7 +1245,7 @@ signal <- function()
     if (Close() < 100)
         0.05 else 0
 
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal,
                      adjustSignal = "weight")
 makeTable(solution, prices)
@@ -1262,7 +1263,7 @@ do.rebalance <- function() {
         TRUE else FALSE
 }
 
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal,
                      do.rebalance = do.rebalance,
                      adjustSignal = "weight")
@@ -1290,7 +1291,7 @@ signal <- function(threshold, external) {
         1 else 0
 }
 
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      signal = signal,
                      threshold = 100,
                      external = external)
@@ -1313,7 +1314,7 @@ signal <- function()
         c(1, 0) else c(0, 1)
 
 
-(solution <- backtest(prices = list(prices),
+(solution <- btest(prices = list(prices),
                      signal = signal,
                       b=2))
 @
@@ -1321,7 +1322,7 @@ signal <- function()
 We can also give more useful names to the assets.
 <<>>=
 prices <- cbind(AA = prices1, BB = prices2)
-solution <- backtest(prices = list(prices),
+solution <- btest(prices = list(prices),
                                signal = signal, b=2)
 makeTable(solution, prices)
 
@@ -1355,7 +1356,7 @@ print.info <- function() {
     flush.console()
 }
 
-solution <- backtest(prices = prices,
+solution <- btest(prices = prices,
                      print.info = print.info,
                      signal = signal)
 
