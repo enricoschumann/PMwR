@@ -43,8 +43,7 @@ export(
     splitTrades,
     timegrid,
     toText,
-    twExposure,
-    valuation
+    twExposure
     )
 
 ## methods
@@ -66,5 +65,3 @@ S3method(print, preturns)
 S3method(toLatex, preturns)
 S3method(toHTML, preturns)
 S3method(toText, default)
-S3method(valuation, journal)
-S3method(valuation, position)

@@ -1,12 +1,12 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-02-10 15:17:01 CET (es)>
+## Time-stamp: <2014-02-10 21:38:48 CET (es)>
 btest  <- function(prices,              
                    signal,              ## a function
                    do.signal = TRUE,    ## a function
                    do.rebalance = TRUE, ## a function
                    print.info = NULL,   ##
                    b = 1L,              ## burnin
-                   fraction = 1,             ## how much to rebalance
+                   fraction = 1,        ## how much to rebalance
                    initial.position = 0,## initial portfolio
                    initial.cash = 0, ## initial cash
                    tc = 0,
@@ -17,7 +17,8 @@ btest  <- function(prices,
                    tol = 1e-5,
                    assignInGlobals = list(),
                    prices0 = NULL,
-                   include.data = FALSE) {
+                   include.data = FALSE,
+                   timestamp, instrument) {
 
     if (isdebugged(signal))
         db.signal <- TRUE
@@ -180,13 +181,13 @@ btest  <- function(prices,
     } else {
         prices <- as.matrix(prices)
         if (ncol(prices) == 1L) {
-            mC <- as.matrix(prices)
+            mC <- prices
             tradeOnOpen <- FALSE
         } else if (ncol(prices) == 4L) {
-            mO <- as.matrix(prices[ ,1L])
-            mH <- as.matrix(prices[ ,2L])
-            mL <- as.matrix(prices[ ,3L])
-            mC <- as.matrix(prices[ ,4L])
+            mO <- prices[ ,1L]
+            mH <- prices[ ,2L]
+            mL <- prices[ ,3L]
+            mC <- prices[ ,4L]
         } else
             stop("see documentation on 'prices'")
     }
@@ -344,8 +345,8 @@ btest  <- function(prices,
         if (rebalance) {
             dx <- fraction * dXs
 
-            if (tradeOnOpen) ## will convert m(O|C) to vector (drop = TRUE)
-                open <- mO[t, ]  else open <- mC[t, ]
+            if (tradeOnOpen) ## will convert m(O|C) to vector (drop == TRUE)
+                open <- mO[t, ] else open <- mC[t, ]
 
             sx <- dx %*% open
             abs_sx <- (abs(dx) * tc) %*% open
@@ -355,8 +356,8 @@ btest  <- function(prices,
             rebalance <- FALSE
         } else {
             tccum[t] <- tccum[t1]## b0
-            cash[t] <- cash[t1]## b0
-            X[t, ] <- X[t1, ]  ## b0
+            cash[t] <- cash[t1]  ## b0
+            X[t, ] <- X[t1, ]    ## b0
         }
 
         ## WEALTH

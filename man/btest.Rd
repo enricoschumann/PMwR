@@ -4,18 +4,14 @@
   Backtest
 }
 \description{
-  Testing trading strategies.
+  Testing trading and investment strategies.
 }
 \usage{
-btest(prices, signal,
-      do.signal = TRUE, do.rebalance = TRUE, print.info = NULL,
-      b = 1L, fraction = 1,
-      initial.position = 0, initial.cash = 0, tc = 0, ...,
-      add = FALSE,
-      convert.weights = FALSE,
-      tradeOnOpen = TRUE,
+btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE, print.info = NULL,
+      b = 1L, fraction = 1, initial.position = 0, initial.cash = 0, tc = 0, ...,
+      add = FALSE, convert.weights = FALSE, tradeOnOpen = TRUE,
       tol = 1e-5, assignInGlobals = list(),
-      prices0 = NULL,include.data = FALSE)
+      prices0 = NULL, include.data = FALSE, timestamp, instrument)
 }
 \arguments{
   \item{prices}{
@@ -115,6 +111,16 @@ btest(prices, signal,
     logical
     
   }
+  \item{timestamp}{
+
+    a vector of timestamps, along prices (only used for print method and journal)
+    
+  }
+  \item{instrument}{
+
+    character vector of instrument names (only used for print method and journal)
+    
+  }
 }
 \details{
   
@@ -123,7 +129,7 @@ btest(prices, signal,
   \acronym{OHLC} bars (these bars need actually not be equally spaced)
   and several functions that map these series into positions.
 
-  \code{backtest} runs a loop from \code{b + 1L} to
+  \code{backtest} runs a loop from \code{b + 1} to
   \code{NROW(prices)}. In a given iteration \code{t} it should should
   use information from periods prior to \code{t} (but nothing will
   ensure this); trading then takes place at the opening price of
@@ -135,15 +141,8 @@ btest(prices, signal,
 
   If no \acronym{ohlc} bar are available, a single series (assumed to be
   close prices) can be passed.  These will then be expanded. In effect, we
-  might then use information up to the close of \code{t-1L}, and trade at
+  might then use information up to the close of \code{t - 1}, and trade at
   the close of \code{t}.
-
-  Precomputed Signals: given a vector of signals -1, 0, and 1, it will
-  typically not be efficient to compute those within the loop (though it
-  is possible and often clearer; in particular, it will mimic the logic
-  needed in a realtime system). Then the signal vector can be passed as an
-  argument, and \code{signalYN} should be a function that returns
-  \code{FALSE}.
 
   Reserved names are currently these: "Open", "High", "Low", "Close",
   "Wealth", "Cash", "Time", "Portfolio", "SuggestedPortfolio",
@@ -166,18 +165,18 @@ btest(prices, signal,
   Enrico Schumann
 }
 \note{
-  This function is still very experimental and will likely change.
+  This function is still very \bold{experimental} and will likely change.
 }
 
 
 \examples{
 ## example 1: MACD on a single asset
-
+## ...
 
 ## example 2: Gamma trading
-
+## ...
 
 ## example 3: portfolio optimisation
-
+## ...
 
 }

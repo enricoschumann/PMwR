@@ -36,6 +36,21 @@ valuation.journal <- function(x,
     ans
 }
 
+## TODO: add to internal documentation
+jcf <- function(x, multiplier = 1,                          
+                cashflow = function(x) x$amount * x$price,
+                flip.sign = TRUE, ...) {
+    if (!is.null(names(multiplier)))
+        multiplier <- multiplier[x$instrument]
+    ans <- x
+    ans$instrument[] <- "cash"
+    ans$amount <- cashflow(x) * multiplier
+    if (flip.sign)
+        ans$amount <- ans$amount * -1    
+    ans$price[] <- 1
+    ans
+}
+
 valuation.position <- function(x, multiplier = 1, price.table,
                                do.sum = FALSE, unit, ...) {
 
@@ -52,3 +67,19 @@ valuation.position <- function(x, multiplier = 1, price.table,
     ans
 }
 
+## TODO: add to internal documentation
+pv <- function(x, multiplier = 1, price.table,
+                               do.sum = FALSE, unit, ...) {
+
+    if (!is.null(names(multiplier)))
+        multiplier <- multiplier[x$instrument]
+
+    ans <- x$position * price.table
+    if (any(multiplier != 1)) {
+        ans <- ans %*% diag(multiplier, length(x$instrument))
+        colnames(ans) <- x$instrument
+    }
+    if (do.sum)
+        ans <- rowSums(ans)
+    ans
+}

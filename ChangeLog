@@ -1,3 +1,15 @@
+2014-02-11  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (print.NAVseries): added stats
+
+2014-02-10  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): new arguments timestamp, instrument
+
+	* inst/unitTests/ut_rebalance.R (test.rebalance): updated tests
+
+	* NAMESPACE: "valuation" (and methods) no longer exported
+
 2014-02-10  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-41 (will supersede the

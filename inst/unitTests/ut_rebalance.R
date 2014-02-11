@@ -1,4 +1,4 @@
-test.pl <- function() {
+test.rebalance <- function() {
 
     require("RUnit")
     require("PMwR")
@@ -17,13 +17,12 @@ test.pl <- function() {
     
     ## liquidate all
     current <- c(0,0,100,100)
-    x <- rebalance(current, target, prices, match.names = FALSE, notional = 100)
+    x <- rebalance(current, target = 0, prices, match.names = FALSE, notional = 100)
     checkEquals(x$target, rep(0,4))
 
     current <- c(0,0,-100,-100)
-    x <- rebalance(current, target, prices, match.names = FALSE, notional = 100)
+    x <- rebalance(current, target = 0, prices, match.names = FALSE, notional = 100)
     checkEquals(x$target, rep(0,4))
-
 
     ## *names*
     prices  <- c(1,1,1,1)
@@ -32,7 +31,7 @@ test.pl <- function() {
     current <- c(b = 10)
     target  <- c(d = 0.1)
 
-    x <- rebalance(current, target, prices, match.names = FALSE)
-    checkEquals(x$target, rep(50,4))
+    x <- rebalance(current, target, prices, match.names = TRUE)
+    checkEquals(x$target, c(d=1))
     
 }
