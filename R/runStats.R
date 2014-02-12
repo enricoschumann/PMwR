@@ -13,6 +13,7 @@ runStats <- function(what, y, N = 5L, pad = NULL, q = NULL, h = NULL) {
            min =  res <- .C("mMin2", y = y, N = N, ny = ny, res = double(ny),DUP = FALSE)$res,
            max =  res <- .C("mMax2", y = y, N = N, ny = ny, res = double(ny),DUP = FALSE)$res,
            sum =  res <- .C("mSum",  y = y, N = N, ny = ny, res = double(ny),DUP = FALSE)$res,
+           sum2 =  res <- .Call("mSum2",  y = y, N = N),
            abssum = res <- .C("mAbsSum",  y = y, N = N, ny = ny, res = double(ny),DUP = FALSE)$res,
            ## if no match
            stop("unknown 'what'") )

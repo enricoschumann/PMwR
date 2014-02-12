@@ -35,8 +35,17 @@ benchmark(runStats("min", y, N),                           ## PM
           columns = c("test", "elapsed", "relative")
           )
 
+y <- rnorm(100000); N <- 20
+benchmark(runStats("sum", y, N),                           ## PM
+          runStats("sum2", y, N),
+          order = "relative",
+          replications = 20,
+          columns = c("test", "elapsed", "relative")
+          )
+
+
 ## randomwalk
-y <- 100*cumprod(1+rnorm(100000,sd=0.01)); N <- 10000
+y <- 100*cumprod(1+rnorm(100000,sd=0.01)); N <- 1000
 benchmark(runStats("min", y, N),                           ## PM
           runmin(x=y, k=N, endrule="NA", align = "right"), ## caTools
           order = "relative",
