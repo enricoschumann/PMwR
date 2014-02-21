@@ -1,3 +1,10 @@
+2014-02-21  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (NAVseries): new arguments "title" and
+	"instrument"
+	(summary.NAVseries): added function and print method (though
+	currently only wrapper for print.NAVseries)
+
 2014-02-11  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/NAVseries.R (print.NAVseries): added stats
