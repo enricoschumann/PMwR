@@ -1,3 +1,9 @@
+2014-02-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-42
+
+	* man/PMwR-package.Rd: corrected title
+
 2014-02-21  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/NAVseries.R (NAVseries): new arguments "title" and

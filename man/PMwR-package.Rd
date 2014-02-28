@@ -3,21 +3,21 @@
 \alias{PMwR}
 \docType{package}
 \title{
-  Tools for the Practical Management of Financial Portfolios
+  Tools for the Management of Financial Portfolios
 }
 \description{
 
   Functions for the practical management of financial portfolios:
-  computing profit-and-loss, accounting, analysing trades, reporting and
-  more.
+  computing profit-and-loss, accounting, analysing trades, reporting,
+  and more.
 
 }
 \details{
 
   The package comprises functions that have been written in various
-  circumstances and for various purposes.  Which is simply an apologetic
-  way of saying that in the current version, the interfaces to functions
-  are not stable (eg, argument names are currently being made consistent
+  circumstances and for various purposes.  Which is an apologetic way of
+  saying that in the current version, the interfaces to functions are
+  not stable (eg, argument names are currently being made consistent
   across functions); in some cases, generics will be introduced.  The
   recommended practice is therefore currently to explicitly name
   arguments in function calls (and not pass arguments by position).  Any
