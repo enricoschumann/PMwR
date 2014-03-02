@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-02-21 17:02:01 CET (es)>
+## Time-stamp: <2014-02-28 17:27:02 CET (es)>
 
 NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
@@ -7,8 +7,6 @@ NAVseries <- function(NAV, timestamp,
                       description = NULL) {
     if (missing(timestamp)) 
         timestamp <- seq_along(NAV)
-    ## if (is.null(title) && !is.null(instrument))
-    ##     title <- instrument
     ans <- list(NAV = NAV, timestamp = timestamp,
                 instrument = instrument,
                 title = as.character(title),
