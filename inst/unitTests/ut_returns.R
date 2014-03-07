@@ -15,6 +15,22 @@ test.returns <- function() {
     checkEqualsNumeric(returns(x, pad = NA)[-1,], x[-1, ]/x[-nrow(x),]-1)
     checkTrue(all(is.na(returns(x, pad = NA)[1L,])))
 
+    ## lagged returns -- numeric vector
+    x <- 101:112; lag <- 4
+    checkEqualsNumeric(returns(x, lag = lag),
+                       x[-(1:lag)]/x[-((length(x)-lag+1):length(x))]-1)
+    checkEqualsNumeric(returns(x, pad = NA, lag = lag)[-(1:lag)],
+                       x[-(1:lag)]/x[-((length(x)-lag+1):length(x))]-1)
+    checkTrue(all(is.na(returns(x, pad = NA, lag = lag)[1:lag])))
+
+    ## lagged returns -- matrix 
+    x <- cbind(x,x)
+    checkEqualsNumeric(returns(x, lag = lag),
+                       x[-(1:lag), ]/x[-((nrow(x)-lag+1):nrow(x)), ] - 1)
+    checkEqualsNumeric(returns(x, pad = NA, lag = lag)[-(1:lag),],
+                       x[-(1:lag), ]/x[-((nrow(x)-lag+1):nrow(x)), ] - 1)
+    checkTrue(all(is.na(returns(x, pad = NA, lag = lag)[1:lag, ])))
+
     ## zoo
     if (require("zoo")) {
         x <- 101:112

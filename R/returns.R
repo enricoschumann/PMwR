@@ -1,17 +1,20 @@
 ## not exported
-returns0 <- function(x, pad = NULL) {
+returns0 <- function(x, pad = NULL, lag) {
     n <- NROW(x)
     do.pad <- !is.null(pad)
+    a <- 1:lag
+    b <- n:(n-lag+1L)
     if (is.null(dim(x))) {
         x <- as.vector(x)
-        rets <- x[-1L]/x[-n] - 1
+        rets <- x[-a] / x[-b] - 1
         if (do.pad)
-            rets <- c(pad, rets)
+            rets <- c(rep.int(NA, lag), rets)
     } else {
         x <- as.matrix(x)
-        rets <- x[2:n, ] / x[seq_len(n - 1L), ] - 1
+        rets <- x[-a, ] / x[-b, ] - 1
         if (do.pad)
-            rets <- rbind(pad, rets)
+            rets <- do.call("rbind",
+                            c(as.list(rep(NA, lag)), list(rets)))
     }
     rets
 }
@@ -68,7 +71,7 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
 }
 
 returns <- function(x, t = NULL, period = NULL, complete.first = TRUE,
-                    pad = NULL, position) {
+                    pad = NULL, position, lag = 1) {
 
     ## TODO: make internal function that checks x and t
     if (is.null(t)) {
@@ -91,10 +94,14 @@ returns <- function(x, t = NULL, period = NULL, complete.first = TRUE,
     }
 
     if (is.null(t) &&  missing(position)) {
-        returns0(x, pad = pad)        
+        returns0(x, pad = pad, lag = lag)        
     } else if (!is.null(t)) {
+        if (lag != 1L)
+            warning(sQuote("lag"), " is ignored")
         pReturns(x, t, period, complete.first, pad = pad)
     } else {
+        if (lag != 1L)
+            warning(sQuote("lag"), " is ignored")
         twReturns(x, position, pad = pad)
     }
 }

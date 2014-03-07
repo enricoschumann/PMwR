@@ -9,7 +9,7 @@
 }
 \usage{
 returns(x, t = NULL, period = NULL, complete.first = TRUE,
-        pad = NULL,  position)
+        pad = NULL,  position, lag = 1)
 
 \method{print}{preturns}(x, \dots, year.rows)
 
@@ -45,11 +45,15 @@ returns(x, t = NULL, period = NULL, complete.first = TRUE,
     logical. If \code{TRUE} (the default), print monthly returns with
     one row per year.
   }  
+  \item{lag}{
+    The lag for computing returns. A positive integer, defaults to one;
+    ignored for time-weighted returns or if \code{t} is supplied.
+  }  
 }
 \details{
 
-  The function calculates simple returns (ie, current prices divided by
-  prior price minus one).
+  The function calculates simple returns: current values divided by
+  prior values minus one.
   
 }
 \value{
@@ -65,7 +69,7 @@ returns(x, t = NULL, period = NULL, complete.first = TRUE,
   Enrico Schumann
 }
 \seealso{
-  backtest % TODO: add link
+  \code{\link{btest}}
 }
 \examples{
 
@@ -73,6 +77,7 @@ require("PMwR")
 x <- 101:112
 returns(x)
 returns(x, pad = NA)
+returns(x, pad = NA, lag = 2)
 
 t <- seq(as.Date("2012-01-05"), as.Date("2012-12-31"), by = "1 day")
 x <- seq_along(t) + 1000
