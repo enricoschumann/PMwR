@@ -43,8 +43,8 @@
       t}\left(t - x \right)^e}{%
     lower partial moment = sum_{x < t}(t - x)^e / n}
 
-  The \code{threshold} is denoted \eqn{t}{\emph{t}}, the exponent is
-  labelled \eqn{e}{\emph{e}}.
+  The \code{threshold} is denoted \eqn{t}{\emph{t}}, the exponent
+  \code{xp} is labelled \eqn{e}{\emph{e}}.
 
   If \code{normalise} is \code{TRUE}, the result is raised to
   \code{1/xp}.  If \code{x} is a matrix, the function will compute the
