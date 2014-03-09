@@ -1,6 +1,6 @@
-2014-03-07  Enrico Schumann  <es@enricoschumann.net>
+2014-03-08  Enrico Schumann  <es@enricoschumann.net>
 
-
+	* R/trades.R (periodObs): removed 'PMwR:::' from last
 
 2014-03-07  Enrico Schumann  <es@enricoschumann.net>
 

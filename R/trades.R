@@ -133,7 +133,7 @@ periodObs <- function(x, t = NULL, period = "month", missing = "NA") {
     else if (period == "hour")
         by <- strftime(t, "%Y%m%d%H")
     
-    i <- PMwR:::last(x, by, TRUE)
+    i <- last(x, by, TRUE)
     if (length(dim(x)))
         x[i, ]
     else
