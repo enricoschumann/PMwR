@@ -100,3 +100,24 @@ matchOrPrevious <- function(x, y) {
             pos[i] <- max(tmp)
     pos
 }
+
+scale0 <- function(x, when = "first.complete", first = 100) {
+    makevec <- FALSE
+    if (!is.matrix(x)) {
+        x <- as.matrix(x)
+        makevec <- TRUE
+    }
+    
+    if (when == "first.complete") {
+        init.p <- min(which(apply(x, 1, function(i) !any(is.na(i)))))
+        ## TODO: add check if all NA        
+    } else if (when == "first") {
+        init.p <- 1
+    } else if (is.numeric(when)) {
+        init.p <- when
+    }
+    for (i in seq_len(ncol(x)))
+        x[,i] <- x[,i]/x[init.p, i]
+    if (makevec)
+        c(first*x) else first*x
+}

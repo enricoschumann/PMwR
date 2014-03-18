@@ -8,13 +8,13 @@ returns0 <- function(x, pad = NULL, lag) {
         x <- as.vector(x)
         rets <- x[-a] / x[-b] - 1
         if (do.pad)
-            rets <- c(rep.int(NA, lag), rets)
+            rets <- c(rep.int(pad, lag), rets)
     } else {
         x <- as.matrix(x)
         rets <- x[-a, ] / x[-b, ] - 1
         if (do.pad)
             rets <- do.call("rbind",
-                            c(as.list(rep(NA, lag)), list(rets)))
+                            c(as.list(rep(pad, lag)), list(rets)))
     }
     rets
 }
@@ -78,12 +78,12 @@ returns <- function(x, t = NULL, period = NULL, complete.first = TRUE,
         if (inherits(x, "zoo")) {
             t <- time(x)
             x <- coredata(x)
-            if (!is.null(dim(x)))
+            if (!is.null(dim(x)) && min(dim(x)) > 1L)
                 stop("with ", sQuote("t"), " supplied, ",
                      sQuote("x"), " must be a vector")                    
         }
     } else {
-        if (!is.null(dim(x)))
+        if (!is.null(dim(x)) && min(dim(x)) > 1L)
             stop("with ", sQuote("t"), " supplied, ",
                  sQuote("x"), " must be a vector")                
         if (is.unsorted(t)) {

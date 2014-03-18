@@ -1,3 +1,23 @@
+2014-03-17  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R: 'instrument' and 'timestamp' is now used for journal
+
+2014-03-13  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (returns0): fixed -- with 'pad' not NULL, missing
+	values were always added as NA; now the value of pad is used
+
+2014-03-12  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/internals.R (scale0): added function
+
+	* NAMESPACE: export NAVseries print, summary methods
+
+2014-03-11  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (returns): accept zoo series with single-column/row
+	matrices
+
 2014-03-08  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/trades.R (periodObs): removed 'PMwR:::' from last

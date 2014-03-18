@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-02-10 21:38:48 CET (es)>
+## Time-stamp: <2014-03-17 15:06:18 CET (es)>
 btest  <- function(prices,              
                    signal,              ## a function
                    do.signal = TRUE,    ## a function
@@ -377,13 +377,17 @@ btest  <- function(prices,
     } ## end of for loop
 
     ## TODO multiple assets
+    if (!missing(instrument))
+        colnames(X) <- instrument
+    if (missing(timestamp))
+        timestamp <- seq_len(NROW(X))
     trades <- diff(rbind(initial.position, X))
     keep <- abs(trades) > sqrt(.Machine$double.eps) & !is.na(trades)
     keep <- apply(as.matrix(keep), 1, any)
     if (sum(keep))
-        jnl <- journal(timestamp = seq_len(NROW(X))[keep],
-                      amount = as.matrix(trades[keep, ]),
-                      price = mC[keep, ])
+        jnl <- journal(timestamp = timestamp[keep],
+                       amount = as.matrix(trades[keep, ]),
+                       price = mC[keep, ])
     else
         jnl <- journal()
     
