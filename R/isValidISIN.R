@@ -21,9 +21,9 @@ isValidISIN <- function(isin) {
     v0 <- lapply(v0, multSecby2)
     v0 <- lapply(v0, pasteAndSplit)
 
-    result[hasValidNC] <- (10L - sapply(v0, sum) %% 10L) == cd
+    result[hasValidNC] <- (10L - sapply(v0, sum) %% 10L) %% 10L == cd
     result
 }
 
 
-.isin.re <- "[^A-Za-z]*([A-Za-z][A-Za-z][A-Za-z0-9]{9,9}[0-9])[^0-9]*"
+.ISIN <- "[^A-Za-z]*([A-Za-z][A-Za-z][A-Za-z0-9]{9,9}[0-9])[^0-9]*"
