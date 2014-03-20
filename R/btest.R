@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-03-17 15:06:18 CET (es)>
+## Time-stamp: <2014-03-20 08:55:47 CET (es)>
 btest  <- function(prices,              
                    signal,              ## a function
                    do.signal = TRUE,    ## a function
@@ -8,7 +8,8 @@ btest  <- function(prices,
                    b = 1L,              ## burnin
                    fraction = 1,        ## how much to rebalance
                    initial.position = 0,## initial portfolio
-                   initial.cash = 0, ## initial cash
+                   initial.cash = 0,    ## initial cash
+                   cashflow = NULL,     ## function to add to cash
                    tc = 0,
                    ...,
                    add = FALSE,   ## if TRUE, 'position' is flow
@@ -58,6 +59,15 @@ btest  <- function(prices,
             FALSE
     }
 
+    if (is.null(cashflow)) {
+        cashflow <- function(...)
+            0
+    } else if (is.numeric(cashflow)) {
+        cashflow <- function(...)
+            cashflow[1L]
+    }
+
+    
     doPrintInfo <- TRUE
     if (is.null(print.info)) {
         doPrintInfo <- FALSE
@@ -97,7 +107,7 @@ btest  <- function(prices,
     reservedNames <- c("Open", "High", "Low", "Close",
                        "Wealth", "Cash", "Time", "Portfolio",
                        "SuggestedPortfolio", "Globals")
-    funs <- c("signal", "do.signal", "do.rebalance", "print.info")
+    funs <- c("signal", "do.signal", "do.rebalance", "print.info", "cashflow")
     for (thisfun in funs) {
         fNames <- names(formals(get(thisfun)))
         for (rname in reservedNames)
@@ -163,10 +173,23 @@ btest  <- function(prices,
 
     if (db.print.info)
         debug(print.info)
-    
 
-    ## prepare prices
+    
+    formals(cashflow) <-
+        c(formals(cashflow), alist(Open = Open,
+                                   High = High,
+                                   Low = Low,
+                                   Close = Close,
+                                   Wealth = Wealth,
+                                   Cash = Cash,
+                                   Time = Time,
+                                   Portfolio = Portfolio,
+                                   SuggestedPortfolio = SuggestedPortfolio,
+                                   Globals = Globals))
+
+
     if (is.list(prices)) {
+
         if (length(prices) == 1L) {
             mC <- as.matrix(prices[[1L]])
             tradeOnOpen <- FALSE
@@ -175,10 +198,11 @@ btest  <- function(prices,
             mH <- as.matrix(prices[[2L]])
             mL <- as.matrix(prices[[3L]])
             mC <- as.matrix(prices[[4L]])
-        } else {
-            stop("see documentation on 'prices'")
-        }
+        } else 
+            stop("see documentation on ", sQuote("prices"))
+
     } else {
+
         prices <- as.matrix(prices)
         if (ncol(prices) == 1L) {
             mC <- prices
@@ -189,7 +213,8 @@ btest  <- function(prices,
             mL <- prices[ ,3L]
             mC <- prices[ ,4L]
         } else
-            stop("see documentation on 'prices'")
+            stop("see documentation on ", sQuote("prices"))
+
     }
 
     ## param .... settings
@@ -287,13 +312,24 @@ btest  <- function(prices,
             X[t, ] <- ifelse(initial.position != 0, initial.position, 0)
         }
 
+        ## cashflow
+        cash[t] <- cash[t] + cashflow(...,
+                                      Open = Open, High = High,
+                                      Low = Low, Close = Close,
+                                      Wealth = Wealth,
+                                      Cash = Cash,
+                                      Time = Time,
+                                      Portfolio = Portfolio,
+                                      SuggestedPortfolio = SuggestedPortfolio,
+                                      Globals = Globals)
+
         v[t] <- X[t, ] %*% mC[t, ] + cash[t]
         if (doPrintInfo)
             print.info(..., Open = Open, High = High, Low = Low,
-                      Close = Close, Wealth = Wealth, Cash = Cash,
-                      Time = Time, Portfolio = Portfolio,
-                      SuggestedPortfolio = SuggestedPortfolio,
-                      Globals = Globals)
+                       Close = Close, Wealth = Wealth, Cash = Cash,
+                       Time = Time, Portfolio = Portfolio,
+                       SuggestedPortfolio = SuggestedPortfolio,
+                       Globals = Globals)
     }
     ## end period 1
 
@@ -360,36 +396,55 @@ btest  <- function(prices,
             X[t, ] <- X[t1, ]    ## b0
         }
 
+        ## cashflow
+        cash[t] <- cash[t] + cashflow(...,
+                                      Open = Open, High = High,
+                                      Low = Low, Close = Close,
+                                      Wealth = Wealth,
+                                      Cash = Cash,
+                                      Time = Time,
+                                      Portfolio = Portfolio,
+                                      SuggestedPortfolio = SuggestedPortfolio,
+                                      Globals = Globals)
+
+        
         ## WEALTH
         v[t] <- X[t, ] %*% mC[t, ] + cash[t]
+
         if (doPrintInfo)
-            print.info(...,
-                      Open = Open,
-                      High = High,
-                      Low = Low,
-                      Close = Close,
-                      Wealth = Wealth,
-                      Cash = Cash,
-                      Time = Time,
-                      Portfolio = Portfolio,
-                      SuggestedPortfolio = SuggestedPortfolio,
-                      Globals = Globals)
+            print.info(..., Open = Open,
+                            High = High,
+                            Low = Low,
+                            Close = Close,
+                            Wealth = Wealth,
+                            Cash = Cash,
+                            Time = Time,
+                            Portfolio = Portfolio,
+                            SuggestedPortfolio = SuggestedPortfolio,
+                            Globals = Globals)
     } ## end of for loop
 
-    ## TODO multiple assets
+
+    
     if (!missing(instrument))
         colnames(X) <- instrument
+    if (is.null(colnames(X)))
+        colnames(X) <- paste("asset", seq_len(ncol(X)))
     if (missing(timestamp))
-        timestamp <- seq_len(NROW(X))
+        timestamp <- seq_len(nrow(X))
     trades <- diff(rbind(initial.position, X))
     keep <- abs(trades) > sqrt(.Machine$double.eps) & !is.na(trades)
-    keep <- apply(as.matrix(keep), 1, any)
-    if (sum(keep))
-        jnl <- journal(timestamp = timestamp[keep],
-                       amount = as.matrix(trades[keep, ]),
-                       price = mC[keep, ])
-    else
-        jnl <- journal()
+    jnl <- journal()
+    for (cc in seq_len(ncol(X))) {
+        ic <- keep[ ,cc]
+        if (!sum(ic))
+            next
+        jnl0 <- journal(timestamp = timestamp[ic],
+                        amount    = unname(trades[ic, cc]),
+                        price     = mC[ic, cc],
+                        instrument = colnames(X)[cc])
+        jnl <- c(jnl, jnl0)
+    }
     
     ans <- list(position = X,
                 suggested.position = Xs,
