@@ -1,18 +1,18 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-03-20 16:03:29 CET (es)>
+## Time-stamp: <2014-03-20 16:35:32 CET (es)>
 btest  <- function(prices,              
-                   signal,              ## a function
-                   do.signal = TRUE,    ## a function
-                   do.rebalance = TRUE, ## a function
-                   print.info = NULL,   ##
-                   b = 1L,              ## burnin
-                   fraction = 1,        ## how much to rebalance
-                   initial.position = 0,## initial portfolio
-                   initial.cash = 0,    ## initial cash
-                   cashflow = NULL,     ## function to add to cash
+                   signal,               ## a function
+                   do.signal = TRUE,     ## a function
+                   do.rebalance = TRUE,  ## a function
+                   print.info = NULL,    ##
+                   b = 1L,               ## burnin
+                   fraction = 1,         ## how much to rebalance
+                   initial.position = 0, ## initial portfolio
+                   initial.cash = 0,     ## initial cash
+                   cashflow = NULL,      ## function to add to cash
                    tc = 0,
                    ...,
-                   add = FALSE,   ## if TRUE, 'position' is flow
+                   add = FALSE,          ## if TRUE, 'position' is flow
                    convert.weights = FALSE,
                    tradeOnOpen = TRUE,
                    tol = 1e-5,
@@ -299,9 +299,8 @@ btest  <- function(prices,
                 open <- mO[t, ,drop = TRUE]
             else
                 open <- mC[t, ,drop = TRUE]
-            valid <- !is.na(open)
-            sx <- dx[valid] %*% open[valid]
-            abs_sx <- (abs(dx[valid]) * tc) %*% open[valid]
+            sx <- dx %*% open
+            abs_sx <- (abs(dx) * tc) %*% open
             tccum[t] <- abs_sx
             cash[t] <- initial.cash - sx - abs_sx
             X[t, ] <- if (any(initial.position != 0)) initial.position else 0  + dx
@@ -386,9 +385,8 @@ btest  <- function(prices,
             else
                 open <- mC[t, ]
 
-            valid <- !is.na(open)
-            sx <- dx[valid] %*% open[valid]
-            abs_sx <- (abs(dx[valid]) * tc) %*% open[valid]
+            sx <- dx %*% open
+            abs_sx <- (abs(dx) * tc) %*% open
             tccum[t] <- tccum[t1] + abs_sx
             cash[t] <- cash[t1] - sx - abs_sx
             X[t, ] <- X[t1, ] + dx  ## b0
@@ -443,9 +441,9 @@ btest  <- function(prices,
             ic <- keep[ ,cc]
             if (!any(ic))
                 next
-            jnl0 <- journal(timestamp = timestamp[ic],
-                            amount    = unname(trades[ic, cc]),
-                            price     = mC[ic, cc],
+            jnl0 <- journal(timestamp  = timestamp[ic],
+                            amount     = unname(trades[ic, cc]),
+                            price      = mC[ic, cc],
                             instrument = colnames(X)[cc])
             jnl <- c(jnl, jnl0)
         }
@@ -471,8 +469,10 @@ btest  <- function(prices,
 }
 
 print.btest <- function(x, ...) {
-    cat("initial wealth", tmp0 <- x$wealth[min(which(!is.na(x$wealth)))], " =>  ")
-    cat("final wealth ", tmp1 <- round(x$wealth[max(which(!is.na(x$wealth)))],2), "\n")
+    cat("initial wealth",
+        tmp0 <- x$wealth[min(which(!is.na(x$wealth)))], " =>  ")
+    cat("final wealth ",
+        tmp1 <- round(x$wealth[max(which(!is.na(x$wealth)))], 2), "\n")
     if (tmp0 > 0)
         cat("Total return   ", round(100*(tmp1/tmp0 - 1), 1), "%\n", sep = "")
     invisible(x)
