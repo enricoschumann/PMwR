@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-03-20 10:28:37 CET (es)>
+## Time-stamp: <2014-03-20 16:03:29 CET (es)>
 btest  <- function(prices,              
                    signal,              ## a function
                    do.signal = TRUE,    ## a function
@@ -297,11 +297,11 @@ btest  <- function(prices,
 
             if (tradeOnOpen) ## will convert m(O|C) to vector
                 open <- mO[t, ,drop = TRUE]
-            else open <-
-                mC[t, ,drop = TRUE]
-
-            sx <- dx %*% open
-            abs_sx <- (abs(dx) * tc) %*% open
+            else
+                open <- mC[t, ,drop = TRUE]
+            valid <- !is.na(open)
+            sx <- dx[valid] %*% open[valid]
+            abs_sx <- (abs(dx[valid]) * tc) %*% open[valid]
             tccum[t] <- abs_sx
             cash[t] <- initial.cash - sx - abs_sx
             X[t, ] <- if (any(initial.position != 0)) initial.position else 0  + dx
@@ -382,10 +382,13 @@ btest  <- function(prices,
             dx <- fraction * dXs
 
             if (tradeOnOpen) ## will convert m(O|C) to vector (drop == TRUE)
-                open <- mO[t, ] else open <- mC[t, ]
+                open <- mO[t, ]
+            else
+                open <- mC[t, ]
 
-            sx <- dx %*% open
-            abs_sx <- (abs(dx) * tc) %*% open
+            valid <- !is.na(open)
+            sx <- dx[valid] %*% open[valid]
+            abs_sx <- (abs(dx[valid]) * tc) %*% open[valid]
             tccum[t] <- tccum[t1] + abs_sx
             cash[t] <- cash[t1] - sx - abs_sx
             X[t, ] <- X[t1, ] + dx  ## b0
