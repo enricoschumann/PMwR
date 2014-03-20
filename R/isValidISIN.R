@@ -25,5 +25,4 @@ isValidISIN <- function(isin) {
     result
 }
 
-
 .ISIN <- "[^A-Za-z]*([A-Za-z][A-Za-z][A-Za-z0-9]{9,9}[0-9])[^0-9]*"
