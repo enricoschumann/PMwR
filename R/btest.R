@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-03-20 08:55:47 CET (es)>
+## Time-stamp: <2014-03-20 10:28:37 CET (es)>
 btest  <- function(prices,              
                    signal,              ## a function
                    do.signal = TRUE,    ## a function
@@ -435,15 +435,17 @@ btest  <- function(prices,
     trades <- diff(rbind(initial.position, X))
     keep <- abs(trades) > sqrt(.Machine$double.eps) & !is.na(trades)
     jnl <- journal()
-    for (cc in seq_len(ncol(X))) {
-        ic <- keep[ ,cc]
-        if (!sum(ic))
-            next
-        jnl0 <- journal(timestamp = timestamp[ic],
-                        amount    = unname(trades[ic, cc]),
-                        price     = mC[ic, cc],
-                        instrument = colnames(X)[cc])
-        jnl <- c(jnl, jnl0)
+    if (any(keep)) {
+        for (cc in seq_len(ncol(X))) {
+            ic <- keep[ ,cc]
+            if (!any(ic))
+                next
+            jnl0 <- journal(timestamp = timestamp[ic],
+                            amount    = unname(trades[ic, cc]),
+                            price     = mC[ic, cc],
+                            instrument = colnames(X)[cc])
+            jnl <- c(jnl, jnl0)
+        }
     }
     
     ans <- list(position = X,
