@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-03-20 16:35:32 CET (es)>
+## Time-stamp: <2014-03-21 10:52:23 CET (es)>
 btest  <- function(prices,              
                    signal,               ## a function
                    do.signal = TRUE,     ## a function
@@ -447,6 +447,7 @@ btest  <- function(prices,
                             instrument = colnames(X)[cc])
             jnl <- c(jnl, jnl0)
         }
+        jnl <- sort(journal)
     }
     
     ans <- list(position = X,
