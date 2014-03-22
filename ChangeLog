@@ -1,3 +1,18 @@
+2014-03-20  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-44
+
+	* R/btest.R: fixed -- journal is set up also for multiple assets
+
+2014-03-19  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): new argument 'cashflow'
+
+	* R/isValidISIN.R (isValidISIN): fixed -- 'isValidISIN' did not
+	take modulo 10 as a last step (thus, when the check digit is 0, it
+	was computed as 10, and the ISIN was flagged as FALSE); also
+	renamed .isin.re to .ISIN
+
 2014-03-17  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R: 'instrument' and 'timestamp' is now used for journal
