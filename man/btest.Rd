@@ -8,7 +8,8 @@
 }
 \usage{
 btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE, print.info = NULL,
-      b = 1L, fraction = 1, initial.position = 0, initial.cash = 0, tc = 0, ...,
+      b = 1L, fraction = 1, initial.position = 0, initial.cash = 0,
+      cashflow = NULL, tc = 0, ...,
       add = FALSE, convert.weights = FALSE, tradeOnOpen = TRUE,
       tol = 1e-5, assignInGlobals = list(),
       prices0 = NULL, include.data = FALSE, timestamp, instrument)
@@ -49,6 +50,9 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE, print.info = NULL,
   }
   \item{print.info}{
     A function. If \code{NULL}, nothing is printed. See Details.
+  }
+  \item{cashflow}{
+    A function. Default is \code{NULL}.
   }
   \item{b}{
     burnin (an integer). Defaults to 1.
