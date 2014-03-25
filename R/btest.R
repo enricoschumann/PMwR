@@ -1,10 +1,10 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-03-24 06:24:17 CET (es)>
+## Time-stamp: <2014-03-24 20:43:47 CET (es)>
 btest  <- function(prices,              
-                   signal,               ## a function
-                   do.signal = TRUE,     ## a function
-                   do.rebalance = TRUE,  ## a function
-                   print.info = NULL,    ##
+                   signal,               ## 
+                   do.signal = TRUE,     ## 
+                   do.rebalance = TRUE,  ## 
+                   print.info = NULL,    ## 
                    b = 1L,               ## burnin
                    fraction = 1,         ## how much to rebalance
                    initial.position = 0, ## initial portfolio
@@ -478,5 +478,3 @@ print.btest <- function(x, ...) {
         cat("Total return   ", round(100*(tmp1/tmp0 - 1), 1), "%\n", sep = "")
     invisible(x)
 }
-
-
