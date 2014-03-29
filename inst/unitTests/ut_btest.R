@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-02-10 15:32:19 CET (es)>
+## Time-stamp: <2014-03-28 06:20:37 CET (es)>
 test.btest <- function() {
 
     require("PMwR")
@@ -40,14 +40,14 @@ test.btest <- function() {
 
     ## ... default settings
     solution <- btest(prices = prices, signal = signal)
-    checkEquals(solution$position,
+    checkEquals(unname(solution$position),
                 structure(c(0, 1, 1, 1, 1, 1, 1, 1, 1, 1), .Dim = c(length(prices), 1L)))
     checkEquals(solution$wealth,
                 c(0, 0, 0, -1, 3, 4, 3, 0, 1, 3))
 
     ## ... with no burnin
     solution <- btest(prices = prices, signal = signal, b = 0)
-    checkEquals(solution$position,
+    checkEquals(unname(solution$position),
                 structure(c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1), .Dim = c(length(prices), 1L)))
     checkEquals(solution$wealth,
                 c(0, -2, -2, -3, 1, 2, 1, -2, -1, 1))

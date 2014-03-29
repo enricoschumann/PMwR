@@ -102,6 +102,12 @@ matchOrPrevious <- function(x, y) {
 }
 
 scale0 <- function(x, when = "first.complete", first = 100) {
+    ZOO <- FALSE
+    if (is.zoo(x)) {
+        ZOO <- TRUE
+        ii <- index(x)
+        x <- coredata(x)
+    }
     makevec <- FALSE
     if (!is.matrix(x)) {
         x <- as.matrix(x)
@@ -120,4 +126,21 @@ scale0 <- function(x, when = "first.complete", first = 100) {
         x[,i] <- x[,i]/x[init.p, i]
     if (makevec)
         c(first*x) else first*x
+}
+
+lag <- function(x, k, pad = NA) {
+    if (!is.null(dim(x))) {
+        stop("please apply columnwise")
+    } else c(rep(pad, k),
+             x[seq_len(length(x)-k)])    
+}
+
+convertDate <- function(x, type) {
+    type <- tolower(type)
+    if (type == "excel"){
+        as.Date(x, origin = "1899-12-30")              
+    } else if (type == "matlab") {
+        as.Date(x, origin = "1970-01-01") - 719529
+    } else
+        stop("unknown type")
 }
