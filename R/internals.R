@@ -103,7 +103,7 @@ matchOrPrevious <- function(x, y) {
 
 scale0 <- function(x, when = "first.complete", first = 100) {
     ZOO <- FALSE
-    if (is.zoo(x)) {
+    if (inherits(x, "zoo")) {
         ZOO <- TRUE
         ii <- index(x)
         x <- coredata(x)
@@ -125,7 +125,10 @@ scale0 <- function(x, when = "first.complete", first = 100) {
     for (i in seq_len(ncol(x)))
         x[,i] <- x[,i]/x[init.p, i]
     if (makevec)
-        c(first*x) else first*x
+        x <- c(first*x) else x <- first*x
+    if (ZOO)
+        x <- zoo(x, ii)
+    x
 }
 
 lag <- function(x, k, pad = NA) {
