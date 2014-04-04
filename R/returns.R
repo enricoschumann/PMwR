@@ -81,6 +81,9 @@ returns <- function(x, t = NULL, period = NULL, complete.first = TRUE,
             if (!is.null(dim(x)) && min(dim(x)) > 1L)
                 stop("with ", sQuote("t"), " supplied, ",
                      sQuote("x"), " must be a vector")                    
+        } else if (inherits(x, "NAVseries")) {
+            t <- x$timestamp
+            x <- x$NAV
         }
     } else {
         if (!is.null(dim(x)) && min(dim(x)) > 1L)
