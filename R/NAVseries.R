@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-04-03 18:21:29 CEST (es)>
+## Time-stamp: <2014-04-04 14:27:38 CEST (es)>
 
 NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
@@ -24,46 +24,52 @@ print.NAVseries <- function(x, ...) {
         cat(x$instrument, "\n")
 
     template <-
-"%from% -- %to%         (%nobs% obs, %nna% NAs)
-Low      %low%  (%low_timestamp%)
-High    %high%  (%high_timestamp%)
+"%from% --> %to%         (%nobs% obs, %nna% NAs)
+Low     %low%  /%low_timestamp%
+High    %high%  /%high_timestamp%
 
-max DD    %dd%
-from    %dd_from%  (%dd_from_timestamp%)
-to      %dd_to%    (%dd_to_timestamp%)
+drawdown    %dd%                     vol  %vol%     
+from        %dd_from%  /%dd_from_timestamp%     up   %vol_up%  
+to          %dd_to%  /%dd_to_timestamp%     down   %vol_down%
+underwater  %uw%\n"
 
-vol       %vol%
-up        %vol_up%
-down      %vol_down%\n"
 
+    datef <- function(x)
+        format(x, "%d %b %Y")
+    percf <- function(x)
+        format(round(100*x, 1), nsmall = 1)
+    
     ## TODO: assuming daily timestamps -- too restrictive
     timestamp <- aggregate(x$timestamp, by = list(as.Date(x$timestamp)), tail, 1L)[[2L]]
     NAV <- aggregate(x$NAV, by = list(as.Date(x$timestamp)), tail, 1L)[[2L]]
 
     stats <- list()
-    stats$from <- as.character(min(timestamp))
-    stats$to   <- as.character(max(timestamp))
-    stats$nobs <- length(timestamp)
+    stats$from <- datef(min(timestamp))
+    stats$to   <- datef(max(timestamp))
+    stats$nobs <- format(length(timestamp), big.mark = ".")
     stats$nna  <- sum(is.na(NAV))
     stats$low  <- min(NAV)
     stats$high <- max(NAV)
-
+    
     tmp <- drawdown(x$NAV)
     stats$dd <- format(round(100*tmp$maximum,1), nsmall = 1)
-    stats$
+    stats$dd_from <- tmp$high
+    stats$dd_to <- tmp$low
+    stats$dd_from_timestamp <- datef(timestamp[tmp$high.position])
+    stats$dd_to_timestamp <- datef(timestamp[tmp$low.position])
+    stats$uw <- percf(1-tail(NAV,1)/max(NAV))
+    
     if (length(ii <- which(NAV == stats$low)) > 1L) {
-        stats$low_timestamp <- paste0(as.character(timestamp[ii][1L]),
-                                      " (several dates)")
+        stats$low_timestamp <- paste0(datef(timestamp[ii][1L]), "*")
         footnote <- TRUE        
     } else
-        stats$low_timestamp <- as.character(timestamp[ii])
+        stats$low_timestamp <- datef(timestamp[ii])
 
     if (length(ii <- which(NAV == stats$high)) > 1L) {
-        stats$high_timestamp <- paste0(as.character(timestamp[ii][1L]),
-                                       " (several dates)")
+        stats$high_timestamp <- paste0(datef(timestamp[ii][1L]), "*")
         footnote <- TRUE        
     } else
-        stats$high_timestamp <- as.character(timestamp[ii])
+        stats$high_timestamp <- datef(timestamp[ii])
 
     stats$vol      <- format(round(sd(returns(NAV))*1600,1), nsmall = 1)
     stats$vol_up   <- format(round(pm(returns(NAV), normalise = TRUE, lower = FALSE)*1600,1), nsmall = 1)
@@ -75,7 +81,7 @@ down      %vol_down%\n"
     cat(template)
     ## cat("\nMonthly returns in %\n")
     cat("\n")
-    print(returns(NAV, timestamp, period = "monthly"), year.rows = FALSE)
+    ##print(returns(NAV, timestamp, period = "monthly"), year.rows = FALSE)
     invisible(x)
 }
 

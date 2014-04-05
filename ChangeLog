@@ -1,3 +1,17 @@
+2014-04-04  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (returns): now treats 'NAVseries' like 'zoo' (ie,
+	use price and timestamp)
+
+2014-04-03  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (print.NAVseries): added method
+
+2014-04-02  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/internals.R (scale0): use 'inherits(x, "zoo")' instead of
+	'is.zoo'
+
 2014-03-24  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R: final journal is sorted
