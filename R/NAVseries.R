@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-04-04 14:27:38 CEST (es)>
+## Time-stamp: <2014-04-08 18:22:29 CEST (es)>
 
 NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
@@ -25,19 +25,22 @@ print.NAVseries <- function(x, ...) {
 
     template <-
 "%from% --> %to%         (%nobs% obs, %nna% NAs)
+
 Low     %low%  /%low_timestamp%
 High    %high%  /%high_timestamp%
 
-drawdown    %dd%                     vol  %vol%     
+drawdown    %dd%                     vol   %vol%     
 from        %dd_from%  /%dd_from_timestamp%     up   %vol_up%  
-to          %dd_to%  /%dd_to_timestamp%     down   %vol_down%
+to          %dd_to%  /%dd_to_timestamp%     down %vol_down%
 underwater  %uw%\n"
 
 
     datef <- function(x)
         format(x, "%d %b %Y")
     percf <- function(x)
-        format(round(100*x, 1), nsmall = 1)
+        format(round(100*x, 1), nsmall = 1, justify = "right", width = 7)
+    numf <- function(x)
+        format(x, justify = "right", width = 7)
     
     ## TODO: assuming daily timestamps -- too restrictive
     timestamp <- aggregate(x$timestamp, by = list(as.Date(x$timestamp)), tail, 1L)[[2L]]
@@ -52,12 +55,12 @@ underwater  %uw%\n"
     stats$high <- max(NAV)
     
     tmp <- drawdown(x$NAV)
-    stats$dd <- format(round(100*tmp$maximum,1), nsmall = 1)
+    stats$dd <- percf(tmp$maximum)
     stats$dd_from <- tmp$high
     stats$dd_to <- tmp$low
     stats$dd_from_timestamp <- datef(timestamp[tmp$high.position])
     stats$dd_to_timestamp <- datef(timestamp[tmp$low.position])
-    stats$uw <- percf(1-tail(NAV,1)/max(NAV))
+    stats$uw <- percf(1 - tail(NAV,1)/max(NAV))
     
     if (length(ii <- which(NAV == stats$low)) > 1L) {
         stats$low_timestamp <- paste0(datef(timestamp[ii][1L]), "*")
@@ -71,15 +74,21 @@ underwater  %uw%\n"
     } else
         stats$high_timestamp <- datef(timestamp[ii])
 
-    stats$vol      <- format(round(sd(returns(NAV))*1600,1), nsmall = 1)
-    stats$vol_up   <- format(round(pm(returns(NAV), normalise = TRUE, lower = FALSE)*1600,1), nsmall = 1)
-    stats$vol_down <- format(round(pm(returns(NAV), normalise = TRUE)*1600,1), nsmall = 1)
+    stats$vol      <- percf(sd(returns(NAV))*16)
+    stats$vol_up   <- percf(pm(returns(NAV), normalise = TRUE, lower = FALSE)*16)
+    stats$vol_down <- percf(pm(returns(NAV), normalise = TRUE)*16)
     
     for (s in names(stats)) {
         template <- gsub(paste0("%", s, "%"), stats[[s]], template)
     }
+    
     cat(template)
+    
     ## cat("\nMonthly returns in %\n")
+
+    ## in_lines <- strsplit(template, "\n", TRUE)[[1L]]
+    ## in_lines[1] <- expstr(in_lines[1], after = "  +", width = 55)
+
     cat("\n")
     ##print(returns(NAV, timestamp, period = "monthly"), year.rows = FALSE)
     invisible(x)
