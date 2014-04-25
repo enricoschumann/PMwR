@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-03-24 20:43:47 CET (es)>
+## Time-stamp: <2014-04-25 14:43:54 CEST (es)>
 btest  <- function(prices,              
                    signal,               ## 
                    do.signal = TRUE,     ## 
