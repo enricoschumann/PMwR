@@ -101,7 +101,7 @@ matchOrPrevious <- function(x, y) {
     pos
 }
 
-scale0 <- function(x, when = "first.complete", first = 100) {
+scale0 <- function(x, when = "first.complete", first = 100, scale = FALSE) {
     ZOO <- FALSE
     if (inherits(x, "zoo")) {
         ZOO <- TRUE
@@ -124,6 +124,14 @@ scale0 <- function(x, when = "first.complete", first = 100) {
     }
     for (i in seq_len(ncol(x)))
         x[,i] <- x[,i]/x[init.p, i]
+    if (scale) {
+        x0 <- returns(x, pad = 0)
+        s <- apply(x0, 2, sd)
+        for (i in seq_len(ncol(x0)))
+            x0[ ,i] <- x0[ ,i]/s[i] * scale
+        for (i in seq_len(ncol(x)))
+            x[,i] <- cumprod(1+x0[ ,i]
+    }
     if (makevec)
         x <- c(first*x) else x <- first*x
     if (ZOO)
