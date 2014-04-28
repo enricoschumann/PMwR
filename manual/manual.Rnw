@@ -859,8 +859,12 @@ access certain data; there are no replacement functions.
 \item[Globals] an environment
 \end{description}
 
-All the functions have the argument \texttt{lag} which defaults
-to \texttt{1}.rebalanceYN
+All the functions have the argument \texttt{lag}, which defaults
+to \texttt{1}.  That can be a vector, too: the expression
+<<eval=false>>=
+Close(Time():1)
+@ 
+for instance will return all available close prices.
 
 \subsection{signal}
 
@@ -1206,8 +1210,62 @@ And since \texttt{cat} has a \texttt{file} argument, we can also write
 such information into a logfile.
 
 
+\subsection{Selecting parameters}
 
+Suppose we have a strategy that depends on a parameter vector~\theta.
 
+A useful idiom is this:
+\begin{verbatim}
+signal = function(\theta, price) {
+    if (not defined \theta) {
+        ## run btest with theta_1, ... \theta_n, select best theta
+        set theta
+    } else
+        set theta
+
+    compute indicator(theta)
+    compute signal
+}
+\end{verbatim}
+
+<<eval=false>>=
+require("tseries")
+require("zoo")
+
+tmp <- get.hist.quote("^GSPC", start = "2011-01-01", end = "2013-12-31", quote = "Close")
+
+signal <- function(Data) {
+    
+    if (is.na(Data$N)) {
+        
+        price <- Close(Data$hist:1)
+        Data0 <- list(N = 10, hist = 50)
+        res1 <- btest(price, signal, Data = Data0, b = 100)
+        Data0 <- list(N = 20, hist = 50)
+        res2 <- btest(price, signal, Data = Data0, b = 100)
+        if (tail(res1$wealth, 1) > tail(res2$wealth, 1))
+            N <- 10 else N <- 20
+        
+    } else 
+        N <- Data$N
+
+    ##browser()
+
+    MA <- runStats("mean", Close(Data$hist:1), N = N)
+    pos <- 0
+    if (Close() > tail(MA, 1))
+        pos <- 1
+    pos
+}
+    
+Data <- list(N = NA, hist = 200)
+res <- btest(tmp$Close, signal, Data = Data, b = 202, initial.cash = 100, 
+             convert.weights = TRUE)    
+par(mfrow = c(2,1))
+plot(index(tmp), res$wealth, type = "s")    
+plot(tmp)
+
+@ 
 
 \chapter{Reporting}
 
