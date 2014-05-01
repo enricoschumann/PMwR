@@ -1212,21 +1212,35 @@ such information into a logfile.
 
 \subsection{Selecting parameters}
 
-Suppose we have a strategy that depends on a parameter vector~\theta.
+Suppose you have a strategy that depends on a parameter
+vector~$\theta$.  For a given $\theta$, the signal for the strategy
+would look like this. 
+\begin{verbatim}
+signal = function(theta) {
+    compute signal(theta)
+}
+\end{verbatim}
+Now suppose we do not know theta.  We might want to test several
+values, and then keep the best one.  For this, we need to call btest
+recursively: at a point in time t, the strategy simulates the results
+for various values for theta and chooses the best theta, according to
+some criterion~$f$.
 
 A useful idiom is this:
 \begin{verbatim}
-signal = function(\theta, price) {
-    if (not defined \theta) {
+signal = function(theta0) {
+    if (not defined theta0) {
         ## run btest with theta_1, ... \theta_n, select best theta
-        set theta
+        theta = argmin_theta f(btest(theta_i))
     } else
-        set theta
+        theta = theta0
 
     compute indicator(theta)
     compute signal
 }
 \end{verbatim}
+
+Let us look at an actual example.
 
 <<eval=false>>=
 require("tseries")
@@ -1248,8 +1262,6 @@ signal <- function(Data) {
         
     } else 
         N <- Data$N
-
-    ##browser()
 
     MA <- runStats("mean", Close(Data$hist:1), N = N)
     pos <- 0
