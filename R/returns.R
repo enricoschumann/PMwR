@@ -11,7 +11,7 @@ returns0 <- function(x, pad = NULL, lag) {
             rets <- c(rep.int(pad, lag), rets)
     } else {
         x <- as.matrix(x)
-        rets <- x[-a, ] / x[-b, ] - 1
+        rets <- x[-a, ,drop = FALSE] / x[-b, ,drop = FALSE] - 1
         if (do.pad)
             rets <- do.call("rbind",
                             c(as.list(rep(pad, lag)), list(rets)))

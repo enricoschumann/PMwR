@@ -1,3 +1,12 @@
+2014-05-08  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-45
+
+	* R/returns.R (returns0): fixed -- padding did not work properly
+	for single-column matrices
+
+	* inst/unitTests/ut_scale0.R: added file/tests
+
 2014-04-28  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (ByteCompile): added ByteCompile: yes and
