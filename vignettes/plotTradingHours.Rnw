@@ -97,8 +97,8 @@ something like this: \medskip
   Monday     & 5                   & 3                          \\
 \end{tabular}\medskip
 
-This mapping is what \texttt{plotTradingHours} provides. And not much
-more: the design goal of the function is to make it as much as
+\noindent This mapping is what \texttt{plotTradingHours} provides. And not 
+much more: the design goal of the function is to make it as much as
 possible an ordinary plot; or more specifically, to make it as similar
 as possible to the \texttt{plot} function. Indeed,
 \texttt{plotTradingHours} calls \texttt{plot} with a small number of
