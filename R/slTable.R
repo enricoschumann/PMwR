@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2013-11-16 21:02:38 CET (es)>
+## Time-stamp: <2014-05-26 17:43:49 CEST (es)>
 
 ## numbers <- sample(1:50,10, replace = TRUE)
 
@@ -22,6 +22,9 @@
 
 sparkplot <- function(x, blocks = 7, xmin = NULL, xmax = NULL, ymin = NULL) {
     tmp <- hist(x, seq(min(x), max(x), length.out = blocks + 1L), plot = FALSE)
+    if (.Platform$OS.type == "windows")
+        warning("Unicode characters will probably not be correctly displayed.")
+    
     bars <- c("\u2581","\u2582","\u2583","\u2584",
               "\u2585","\u2586","\u2587","\u2588")
     rx <- range(tmp$counts)
@@ -38,3 +41,20 @@ sparkplot <- function(x, blocks = 7, xmin = NULL, xmax = NULL, ymin = NULL) {
 ## sparkplot(x, ymin = 0)
 
 ## sparkplot(rnorm(100))
+
+bPlot <- function(x, width = 1, col = NULL) {
+    tmp <- pretty(x)
+    lims <- c(min(tmp), max(tmp))
+    xx <- map01(x, lims[1], lims[2])*width
+    ans <- paste0("\rule[0.1\baselineskip]{", xx, "}{0.3\baselineskip}")
+    if (!is.null(color)) {
+        ans <- paste0("\textcolor{", col, "}{", ans , "}")
+    }
+}
+
+map01 <- function(x, min, max) 
+    (x - min)/(max - min)
+
+## TeXunits(c("1 cm", "0.7 in"), c("in", "cm"))
+## TeXunits(c("1 cm", "0.7 in"), "in")
+## TeXunits("1 cm", c("in", "cm"))

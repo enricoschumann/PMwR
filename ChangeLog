@@ -1,3 +1,9 @@
+2014-05-26  Enrico Schumann  <es@enricoschumann.net>
+
+	* inst/unitTests/ut_TeX.R: added file for tests
+
+	* R/texttools.R (TeXunits): result gets as name its unit
+
 2014-05-08  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-45

@@ -46,8 +46,10 @@ TeXunits <- function(from, to, from.unit = NULL) {
         frU <- gsub("([-+0-9,. ])+([a-z]+) *", "\\2", from)
     fr <- gsub("([-+0-9,. ]+)([a-z]+) *", "\\1", from)
     fr <- as.numeric(gsub(",", ".", fr))
-    fr * .TeXunit.table[frU] / .TeXunit.table[to]
-    
+    ans <- fr * unname(.TeXunit.table[frU]) / .TeXunit.table[to]
+    if (length(ans) > 1L && length(to) == 1L)
+        names(ans) <- rep(to, length(from))
+    ans
 }
 
 
