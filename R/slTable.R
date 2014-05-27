@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-05-26 17:43:49 CEST (es)>
+## Time-stamp: <2014-05-26 18:17:16 CEST (es)>
 
 ## numbers <- sample(1:50,10, replace = TRUE)
 
@@ -43,13 +43,15 @@ sparkplot <- function(x, blocks = 7, xmin = NULL, xmax = NULL, ymin = NULL) {
 ## sparkplot(rnorm(100))
 
 bPlot <- function(x, width = 1, col = NULL) {
+    ## TODO: allow width to be of any tex-unit
+    ## TODO: 
     tmp <- pretty(x)
     lims <- c(min(tmp), max(tmp))
-    xx <- map01(x, lims[1], lims[2])*width
-    ans <- paste0("\rule[0.1\baselineskip]{", xx, "}{0.3\baselineskip}")
-    if (!is.null(color)) {
+    xx <- map01(x, lims[1], lims[2]) * width
+    ans <- paste0("\rule[0.1\baselineskip]{", xx, " cm}{0.3\baselineskip}")
+    if (!is.null(col))
         ans <- paste0("\textcolor{", col, "}{", ans , "}")
-    }
+    ans
 }
 
 map01 <- function(x, min, max) 
