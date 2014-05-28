@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-05-28 19:59:03 CEST (es)>
+## Time-stamp: <2014-05-28 20:03:55 CEST (es)>
 
 ## numbers <- sample(1:50,10, replace = TRUE)
 
@@ -83,9 +83,9 @@ align <- function(s, pattern, sep = " ", justify = "right", fixed = TRUE, at) {
     }
     res
 }
-s <- c("xxxxxxxxxxxxxxx",
-       "1",
-       "1.23|5.2|100000",
-       "100|2|100")
+## s <- c("xxxxxxxxxxxxxxx",
+##        "1",
+##        "1.23|5.2|100000",
+##        "100|2|100")
 
-cat(paste(align(s, "|", " | "), collapse = "\n"))
+## cat(paste(align(s, "|", " | "), collapse = "\n"))
