@@ -139,7 +139,8 @@ print.preturns <- function(x, ..., year.rows = TRUE) {
     invisible(x)
 }
 
-toLatex.preturns <- function(object, ..., year.rows = TRUE, ytd = "YTD") {
+toLatex.preturns <- function(object, ..., year.rows = TRUE,
+                             ytd = "YTD", eol = "\\\\") {
     if (grepl("month(ly)?", object$period, ignore.case = TRUE)) {
         if (year.rows)
             mt <- mtab(object, ytd = ytd)
@@ -150,7 +151,7 @@ toLatex.preturns <- function(object, ..., year.rows = TRUE, ytd = "YTD") {
     }
     mt <- rbind(colnames(mt), mt)
     mt <- cbind(rownames(mt), mt)
-    mt <- paste(apply(mt, 1, function(x) paste(x, collapse = "&")), "\\\\")        
+    mt <- paste(apply(mt, 1, function(x) paste(x, collapse = "&")), eol)        
     class(mt) <- "Latex"
     mt
 }

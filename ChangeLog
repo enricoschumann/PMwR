@@ -1,3 +1,13 @@
+2014-05-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/slTable.R (align): added function (not exported yet)
+
+2014-05-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-46
+
+	* R/returns.R (toLatex.preturns): added argument 'eol'
+
 2014-05-26  Enrico Schumann  <es@enricoschumann.net>
 
 	* inst/unitTests/ut_TeX.R: added file for tests

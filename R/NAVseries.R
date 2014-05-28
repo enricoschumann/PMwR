@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-04-08 18:22:29 CEST (es)>
+## Time-stamp: <2014-05-28 19:58:50 CEST (es)>
 
 NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
@@ -24,16 +24,16 @@ print.NAVseries <- function(x, ...) {
         cat(x$instrument, "\n")
 
     template <-
-"%from% --> %to%         (%nobs% obs, %nna% NAs)
-
-Low     %low%  /%low_timestamp%
-High    %high%  /%high_timestamp%
-
-drawdown    %dd%                     vol   %vol%     
-from        %dd_from%  /%dd_from_timestamp%     up   %vol_up%  
-to          %dd_to%  /%dd_to_timestamp%     down %vol_down%
-underwater  %uw%\n"
-
+        c("%from% --> %to%         (%nobs% obs, %nna% NAs)",
+          "",
+          "Low    |  %low% | /%low_timestamp%",
+          "High   | %high% | /%high_timestamp%",
+          "",
+          "drawdown    %dd%                 vol   %vol%",
+          "from        %dd_from%  /%dd_from_timestamp%     up   %vol_up%",
+          "to          %dd_to%  /%dd_to_timestamp%     down %vol_down%",
+          "underwater  %uw%\n")
+    
 
     datef <- function(x)
         format(x, "%d %b %Y")
@@ -82,7 +82,7 @@ underwater  %uw%\n"
         template <- gsub(paste0("%", s, "%"), stats[[s]], template)
     }
     
-    cat(template)
+    cat(template, fill = TRUE)
     
     ## cat("\nMonthly returns in %\n")
 

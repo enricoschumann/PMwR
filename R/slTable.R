@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-05-26 18:17:16 CEST (es)>
+## Time-stamp: <2014-05-28 19:59:03 CEST (es)>
 
 ## numbers <- sample(1:50,10, replace = TRUE)
 
@@ -36,9 +36,9 @@ sparkplot <- function(x, blocks = 7, xmin = NULL, xmax = NULL, ymin = NULL) {
     invisible(res)
 }
 
-## x <- runif(100)
-## sparkplot(x)
-## sparkplot(x, ymin = 0)
+x <- rnorm(1000)
+sparkplot(x)
+sparkplot(x, ymin = 0)
 
 ## sparkplot(rnorm(100))
 
@@ -60,3 +60,32 @@ map01 <- function(x, min, max)
 ## TeXunits(c("1 cm", "0.7 in"), c("in", "cm"))
 ## TeXunits(c("1 cm", "0.7 in"), "in")
 ## TeXunits("1 cm", c("in", "cm"))
+
+
+
+## align
+## character vector, pattern, at
+
+align <- function(s, pattern, sep = " ", justify = "right", fixed = TRUE, at) {
+    ans <- strsplit(s, pattern, fixed = fixed)
+    nc <- lapply(ans, nchar)
+    len <- max(unlist(lapply(nc, length)))
+    res <- NULL
+    if (length(justify) == 1)
+        justify <- rep(justify, len)
+    for (i in seq_len(len)) {
+        width <- max(unlist(lapply(nc, `[`, i)), na.rm = TRUE)
+        tmp <- unlist(lapply(ans, `[`, i))
+        tmp[is.na(tmp)] <- ""
+        res <- paste0(res, if (is.null(res)) "" else sep,
+                      format(tmp,
+                             width = width, justify = justify[i]))
+    }
+    res
+}
+s <- c("xxxxxxxxxxxxxxx",
+       "1",
+       "1.23|5.2|100000",
+       "100|2|100")
+
+cat(paste(align(s, "|", " | "), collapse = "\n"))
