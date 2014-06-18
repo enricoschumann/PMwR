@@ -1,3 +1,10 @@
+2014-06-18  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: export plot.NAVseries
+
+	* R/NAVseries.R (print.NAVseries): print now only shows minimal
+	information (old print moved to summary)
+
 2014-06-03  Enrico Schumann  <es@enricoschumann.net>
 
 	* NAMESPACE: export scale0
