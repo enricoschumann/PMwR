@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-06-19 18:13:38 CEST (es)>
+## Time-stamp: <2014-06-20 21:20:08 CEST (es)>
 
 NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
@@ -140,34 +140,34 @@ print.summary.NAVseries <- function(x, ...) {
 
 }
 
-print.NAVseries <- function(x, ...) {
+## print.NAVseries <- function(x, ...) {
         
     
-    if (length(ii <- which(NAV == stats$low)) > 1L) {
-        stats$low_timestamp <- paste0(datef(timestamp[ii][1L]), "*")
-        footnote <- TRUE        
-    } else
-        stats$low_timestamp <- datef(timestamp[ii])
+##     if (length(ii <- which(NAV == stats$low)) > 1L) {
+##         stats$low_timestamp <- paste0(datef(timestamp[ii][1L]), "*")
+##         footnote <- TRUE        
+##     } else
+##         stats$low_timestamp <- datef(timestamp[ii])
 
-    if (length(ii <- which(NAV == stats$high)) > 1L) {
-        stats$high_timestamp <- paste0(datef(timestamp[ii][1L]), "*")
-        footnote <- TRUE        
-    } else
-        stats$high_timestamp <- datef(timestamp[ii])
+##     if (length(ii <- which(NAV == stats$high)) > 1L) {
+##         stats$high_timestamp <- paste0(datef(timestamp[ii][1L]), "*")
+##         footnote <- TRUE        
+##     } else
+##         stats$high_timestamp <- datef(timestamp[ii])
 
-    stats$vol      <- percf(sd(returns(NAV))*16)
-    stats$vol_up   <- percf(pm(returns(NAV), normalise = TRUE, lower = FALSE)*16)
-    stats$vol_down <- percf(pm(returns(NAV), normalise = TRUE)*16)
+##     stats$vol      <- percf(sd(returns(NAV))*16)
+##     stats$vol_up   <- percf(pm(returns(NAV), normalise = TRUE, lower = FALSE)*16)
+##     stats$vol_down <- percf(pm(returns(NAV), normalise = TRUE)*16)
     
-    for (s in names(stats)) {
-        template <- gsub(paste0("%", s, "%"), stats[[s]], template)
-    }
+##     for (s in names(stats)) {
+##         template <- gsub(paste0("%", s, "%"), stats[[s]], template)
+##     }
     
-    cat(template, fill = TRUE)
+##     cat(template, fill = TRUE)
     
-    cat("\n")
-    invisible(x)
-}
+##     cat("\n")
+##     invisible(x)
+## }
 
 
 plot.NAVseries <- function(x, y, ...) {

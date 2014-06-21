@@ -1,3 +1,8 @@
+2014-06-20  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: export print method for summary.NAVseries; import
+	function 'drawdown' from package 'NMOF'
+
 2014-06-19  Enrico Schumann  <es@enricoschumann.net>
 
 	* man/NAVseries.Rd: added file

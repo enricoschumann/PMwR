@@ -1,6 +1,7 @@
 useDynLib(PMwR)
 
 ## imports
+importFrom(NMOF, drawdown)
 importFrom(utils, toLatex)
 importFrom(utils, head)
 importFrom(utils, tail)
@@ -67,6 +68,7 @@ S3method(print, position)
 S3method(print, preturns)
 S3method(plot, NAVseries)
 S3method(print, NAVseries)
+S3method(print, summary.NAVseries)
 S3method(summary, NAVseries)
 S3method(toLatex, preturns)
 S3method(toHTML, preturns)

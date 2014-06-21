@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-05-28 20:03:55 CEST (es)>
+## Time-stamp: <2014-06-20 22:22:05 CEST (es)>
 
 ## numbers <- sample(1:50,10, replace = TRUE)
 
@@ -36,9 +36,9 @@ sparkplot <- function(x, blocks = 7, xmin = NULL, xmax = NULL, ymin = NULL) {
     invisible(res)
 }
 
-x <- rnorm(1000)
-sparkplot(x)
-sparkplot(x, ymin = 0)
+## x <- rnorm(1000)
+## sparkplot(x)
+## sparkplot(x, ymin = 0)
 
 ## sparkplot(rnorm(100))
 
