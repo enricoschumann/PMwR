@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-06-20 21:20:08 CEST (es)>
+## Time-stamp: <2014-06-26 09:25:41 CEST (es)>
 
 NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
@@ -63,7 +63,12 @@ summary.NAVseries <- function(object, ...) {
     ans$high <- max(NAV)
     ans$low.when  <- timestamp[which.min(NAV)[1L]]
     ans$high.when <- timestamp[which.max(NAV)[1L]]
-    
+    ans$return <- if ((t <- as.numeric(ans$to - ans$from)) > 365)
+                      ((tail(NAV,1)/head(NAV,1))^(365/t)) - 1
+                  else 
+                      (tail(NAV,1)/head(NAV,1)) - 1
+                  
+    ans$return.annualised <- if (t > 365) TRUE else FALSE
     tmp          <- drawdown(object$NAV)
     ans$mdd      <- tmp$maximum
     ans$mdd.high <- tmp$high
@@ -105,7 +110,7 @@ print.summary.NAVseries <- function(x, ...) {
 
     ## format: %
     fields <- c("mdd", "underwater",
-                "vol", "vol.up", "vol.down")
+                "vol", "vol.up", "vol.down", "return")
     for (f in fields)
         x[[f]] <- percf(x[[f]])
 
@@ -115,6 +120,8 @@ print.summary.NAVseries <- function(x, ...) {
         c("---------------------------------------------------------",
           "High         %high%  (%high.when%)",
           "Low           %low%  (%low.when%)",
+          "---------------------------------------------------------",
+          "return (in %)       %return%",
           "---------------------------------------------------------",
           "max. drawdown (in %)  %mdd%",
           "peak          %mdd.high%  (%mdd.high.when%)",
