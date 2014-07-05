@@ -30,6 +30,7 @@ export(
     limit,
     NAVseries,
     nextBusinessDay,
+    nthWeekday,
     pl,
     pm,
     plotTradingHours,

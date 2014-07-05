@@ -100,6 +100,14 @@ lastWeekday <- function(weekday, x, shift = 0L,
     ldate - (lweekday - weekday)%%7L + (shift*7L)
 }
 
+nthWeekday <- function(weekday, x, n = 1L) {
+    if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
+        stop("input must inherit from class Date or POSIXt")
+    tmp <- as.POSIXlt(x)
+    tmp$mday <- 1L
+    fweekday <- tmp$wday   
+    as.Date(tmp) + (weekday - fweekday) %% 7L + 7L*(n - 1L)
+}
 
 
                                         # TIMES

@@ -8,6 +8,7 @@
 \alias{firstOfMonth}
 \alias{isWeekend}
 \alias{isLeapyear}
+\alias{nthWeekday}
 \alias{lastWeekday}
 \alias{nextBusinessDay}
 \alias{previousBusinessDay}
@@ -40,7 +41,7 @@ dayOfMonth(x)
 dayOfMonth(x) <- value
 lastWeekday(weekday, x, shift = 0L,
             period = "month", before, inclusive = TRUE)
-
+nthWeekday(weekday, x, n = 1L)
 }
 \arguments{
 
@@ -105,6 +106,9 @@ lastWeekday(weekday, x, shift = 0L,
   }
   \item{inclusive}{
     logical. Is \code{before} meant is \sQuote{before but including}? 
+  }
+  \item{n}{
+    an integer
   }
 }
 \details{

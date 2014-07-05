@@ -1,3 +1,7 @@
+2014-07-04  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/datetimetools.R (nthWeekday): added function
+
 2014-06-20  Enrico Schumann  <es@enricoschumann.net>
 
 	* NAMESPACE: export print method for summary.NAVseries; import
