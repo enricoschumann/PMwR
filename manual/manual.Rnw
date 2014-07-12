@@ -20,7 +20,7 @@
 
 \SweaveOpts{keep.source = TRUE, eps = TRUE, pdf = FALSE}
 
-\newcommand{\pmwr}{\textsc{pm}w\textsc{R}}
+\newcommand{\pmwr}{\textsc{pm}w\textsc{r}}
 \newcommand{\pl}{\textsc{pl}}
 \newcommand{\R}{\textsf{R}}
 
@@ -39,7 +39,7 @@
 
     \noindent \texttt{es@enricoschumann.net}
   
-    31 January 2014  }}
+    30 June 2014  }}
 
 \bigskip
 
@@ -97,15 +97,16 @@ All fields can be missing, except \texttt{amount}.  Missing values
 will be handled as \texttt{NA} with the exception of \texttt{id} and
 \texttt{account}, which will be \texttt{NULL}.
 
-Transactions in a journal can be organised in a hierachy %
-\marginnote{This notation is inspired by the syntax of \texttt{ledger}
-  files. See \url{http://www.ledger-cli.org/}\,.} %
+Transactions in a journal can be organised in a hierachy
 \begin{verbatim}
 <account> => <instrument>
 \end{verbatim}
 even though currently few functions use this hierarchy.  A simple
-scheme is to use specific character or pattern such as `\texttt{::}'
-to introduce hierarchies into accounts, such as
+scheme%
+\marginnote{This notation is inspired by the syntax of \texttt{ledger}
+  files. See \url{http://www.ledger-cli.org/}\,.} %
+is to use specific character or pattern such as `\texttt{::}' to
+introduce hierarchies into accounts, such as
 \begin{verbatim}
 pension::equities
 \end{verbatim}
@@ -141,9 +142,11 @@ transactions. %
 \index{journal!subset@\texttt{subset}}
 <<>>=
 subset(J, amount > 1) 
-@
+@ %
 With subset, you need not quote the expression that selects trades and
-you can directly access a journal's fields.
+you can directly access a journal's fields.  Because of the way
+\texttt{subset} evaluates its arguments, it should not be used within 
+functions.
 
 More generally, to extract or change a field, use its name, either
 through the \texttt{\$} operator or double brackets \texttt{[[...]]}.
@@ -190,9 +193,9 @@ J["[Pp]ension", match.against = "comment"]
 
 \subsection{Single-entry accounting}
 
-For many purposes, single-entry accounting is sufficient.  Suppose you
-keep track of a bank account.  The \texttt{position} function gives
-the current balance of all instruments.
+For many purposes, single-entry accounting is sufficient.  The
+\texttt{position} function gives the current balance of all
+instruments.
 <<>>=
 position(J)
 @
@@ -201,7 +204,7 @@ To get the position at a specific date, use the \texttt{when} argument.
 position(J, when = as.Date("2012-01-03"))
 @
 To get a time series of positions, you can use specific keywords for
-\texttt{when}: \texttt{"all"} will print the position at all
+\texttt{when}: `\texttt{all}' will print the position at all
 timestamps in the journal.
 <<>>=
 position(J, when = "all")
@@ -244,7 +247,10 @@ readjnl <- function(file) {
 @ 
 Some of these transactions may mean a gain or loss to us, such as a
 dividend payment).  Others are neutral, for example a transfer between
-bank accounts.  One way to deal with that is to switch to double-entry
+bank accounts.  There are several ways to deal with this.%
+\marginnote{That is very much Perl style.  I like Perl.} %
+
+One way to deal with that is to switch to double-entry
 accounting (see the next section).  A second way is to add
 descriptions like \texttt{"expense"} and then subset by these
 descriptions.
