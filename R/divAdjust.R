@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-01-21 10:22:17 CET (es)>
+## Time-stamp: <2014-07-31 13:23:43 CEST (es)>
 
 ## x <- c(9,9,10,8,10,11)
 ## div <- 2
@@ -30,5 +30,25 @@ divAdjust <- function(x, t, div, backward = TRUE, additive = FALSE) {
         if (backward)
             new.series <- new.series - new.series[n] + x[n]
     }
+    new.series        
+}
+
+splitAdjust <- function(x, t, ratio, backward = TRUE) {
+    if (!is.null(dim(x)))
+        stop(sQuote("x"), " must be a vector")
+    tmp <- t > 1L
+    ratio <- ratio[tmp]
+    t <- t[tmp]
+    if (length(ratio) != length(t))
+        stop("different lengths for ", sQuote("ratio"),
+             " and ", sQuote("t"))
+    n <- length(x)
+    new.series <- x
+    for (s in t) {
+        t1 <- seq_len(t-1L)
+        new.series[t1] <- x[t1]/2
+    }
+    if (!backward)
+        new.series <- x[1L] * new.series/new.series[1L] 
     new.series        
 }

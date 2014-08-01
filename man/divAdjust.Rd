@@ -1,13 +1,15 @@
-\name{divAdjust}
+\name{AdjustSeries}
 \alias{divAdjust}
+\alias{splitAdjust}
 \title{
-  Adjust for Dividends
+  Adjust for Dividends and Splits
 }
 \description{
-  Adjust a time-series for dividends
+  Adjust a time-series for dividends and splits.
 }
 \usage{
 divAdjust(x, t, div, backward = TRUE, additive = FALSE)
+splitAdjust(x, t, ratio, backward = TRUE)
 }
 \arguments{
   \item{x}{
@@ -15,11 +17,20 @@ divAdjust(x, t, div, backward = TRUE, additive = FALSE)
 }
   \item{t}{
     an integer vector, specifying the positions in \code{x} at which
-    dividends were paid (\sQuote{ex-days})
+    dividends were paid (\sQuote{ex-days}) or at which a split occurs
 }
   \item{div}{
     a numeric vector, specifying the dividends.  If necessary, recycled
     to the length of \code{t}.
+}
+\item{ratio}{
+  
+    a numeric vector, specifying the split ratios.  A 2-for-1 stock
+    split, say, has a ratio of 2.  (This \sQuote{American Style}; in
+    some countries, for instance Germany, a 2-for-1 stock split would be
+    called a 1-for-1 split: you keep your shares and receive one new
+    share per share that you own.)
+    
 }
   \item{backward}{
     logical
@@ -43,9 +54,6 @@ divAdjust(x, t, div, backward = TRUE, additive = FALSE)
 %% \note{
 %% %%  ~~further notes~~
 %% }
-
-%% %% ~Make other sections like Warning with \section{Warning }{....} ~
-
 %% \seealso{
 %% %% ~~objects to See Also as \code{\link{help}}, ~~~
 %% }

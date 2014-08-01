@@ -46,6 +46,7 @@ export(
     scaleToUnity,
     scaleTrades,
     splitTrades,
+    splitAdjust,
     timegrid,
     toText,
     twExposure

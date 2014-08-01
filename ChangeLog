@@ -1,3 +1,7 @@
+2014-07-31  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/divAdjust.R (splitAdjust): added function
+
 2014-07-04  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/datetimetools.R (nthWeekday): added function
