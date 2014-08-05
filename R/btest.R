@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-04-25 14:43:54 CEST (es)>
+## Time-stamp: <2014-08-05 07:23:16 CEST (es)>
 btest  <- function(prices,              
                    signal,               ## 
                    do.signal = TRUE,     ## 
@@ -20,6 +20,10 @@ btest  <- function(prices,
                    prices0 = NULL,
                    include.data = FALSE,
                    timestamp, instrument) {
+
+    if (convert.weights && initial.cash == 0)
+        warning(sQuote("convert.weights"), " is TRUE and ",
+                sQuote("initial.cash"), " is zero")
 
     if (isdebugged(signal))
         db.signal <- TRUE
@@ -266,8 +270,8 @@ btest  <- function(prices,
                            Globals = Globals)
             
             if (convert.weights)
-                temp <- temp * initial.wealth /prices0
-           
+                temp <- temp * initial.wealth/prices0
+
             if (!is.null(temp))
                 Xs[t, ] <- temp
             else
