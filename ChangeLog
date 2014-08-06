@@ -1,3 +1,12 @@
+2014-08-06  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-47
+
+2014-08-05  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): added warning for 'isTRUE(convert.weights) &&
+	initial.cash == 0', in which case no trading will take place
+
 2014-07-31  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/divAdjust.R (splitAdjust): added function
