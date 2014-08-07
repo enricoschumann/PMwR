@@ -1,3 +1,10 @@
+2014-08-07  Enrico Schumann  <es@enricoschumann.net>
+
+	* inst/unitTests/ut_text.R (test.expstr): added file
+
+	* R/texttools.R (expstr): fixed -- when 'at' is supplied, 'after'
+	is now ignored
+
 2014-08-06  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-47
