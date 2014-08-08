@@ -58,7 +58,7 @@ expstr <- function(s, after, width, fill = " ", at) {
     space <- character(length(s))
     for (i in seq_along(space))
         space[i] <- paste(rep(" ", width[1L] - ns[i]), collapse = "")
-    if (!missing(after)) {
+    if (missing(at)) {
         rx <- regexpr(after, s)
         at <- as.numeric(rx + attr(rx, "match.length"))
     }
