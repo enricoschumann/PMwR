@@ -101,6 +101,7 @@ matchOrPrevious <- function(x, y) {
     pos
 }
 
+## scale0(x, when = "first.complete", start = 100,  center = TRUE, scale = TRUE)
 scale0 <- function(x, when = "first.complete", first = 100, scale = FALSE) {
     ZOO <- FALSE
     if (inherits(x, "zoo")) {
