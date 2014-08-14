@@ -101,45 +101,6 @@ matchOrPrevious <- function(x, y) {
     pos
 }
 
-## scale0(x, when = "first.complete", start = 100,  center = TRUE, scale = TRUE)
-scale0 <- function(x, when = "first.complete", first = 100, scale = FALSE) {
-    ZOO <- FALSE
-    if (inherits(x, "zoo")) {
-        ZOO <- TRUE
-        ii <- index(x)
-        x <- coredata(x)
-    }
-    makevec <- FALSE
-    if (!is.matrix(x)) {
-        x <- as.matrix(x)
-        makevec <- TRUE
-    }
-    
-    if (when == "first.complete") {
-        init.p <- min(which(apply(x, 1, function(i) !any(is.na(i)))))
-        ## TODO: add check if all NA        
-    } else if (when == "first") {
-        init.p <- 1
-    } else if (is.numeric(when)) {
-        init.p <- when
-    }
-    for (i in seq_len(ncol(x)))
-        x[,i] <- x[,i]/x[init.p, i]
-    if (scale) {
-        x0 <- returns(x, pad = 0)
-        s <- apply(x0, 2, sd)
-        for (i in seq_len(ncol(x0)))
-            x0[ ,i] <- x0[ ,i]/s[i] * scale
-        for (i in seq_len(ncol(x)))
-            x[,i] <- cumprod(1+x0[ ,i])
-    }
-    if (makevec)
-        x <- c(first*x) else x <- first*x
-    if (ZOO)
-        x <- zoo(x, ii)
-    x
-}
-
 lag <- function(x, k, pad = NA) {
     if (!is.null(dim(x))) {
         stop("please apply columnwise")
