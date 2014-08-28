@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-08-28 11:39:36 CEST (es)>
+## Time-stamp: <2014-08-28 13:30:54 CEST (es)>
 
 scale1 <- function (x, ...)
     UseMethod("scale1", x)
@@ -25,13 +25,13 @@ scale1.default <- function (x, ..., when = "first.complete",
         x[,i] <- x[,i]/x[init.p, i]
     if (centre) {
         x0 <- returns(x, pad = 0)
-        m <- colMeans(x0[-1L, ])
+        m <- colMeans(x0[-1L, , drop = FALSE])
         for (i in seq_len(ncol(x0)))
             x[,i] <- cumprod(1+x0[ ,i] - m[i])
     }
     if (scale) {
         x0 <- returns(x, pad = 0)
-        s <- apply(x0[-1L, ], 2, sd)
+        s <- apply(x0[-1L, , drop = FALSE], 2, sd)
         for (i in seq_len(ncol(x0)))
             x[,i] <- cumprod(1+x0[ ,i]/s[i] * scale)
     }
