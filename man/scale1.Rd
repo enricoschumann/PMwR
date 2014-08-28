@@ -11,10 +11,10 @@
 \usage{
 scale1(x, \dots)
 
-\method{scale1}{default}(x, \dots, when = "first.complete", origin = 1,
+\method{scale1}{default}(x, \dots, when = "first.complete", level = 1,
                          centre = FALSE, scale = FALSE)
 
-\method{scale1}{zoo}(x, \dots, when = "first.complete", origin = 1,
+\method{scale1}{zoo}(x, \dots, when = "first.complete", level = 1,
                      centre = FALSE, scale = FALSE)
 }
 \arguments{

@@ -26,8 +26,9 @@ journal(timestamp, amount, price, instrument,
 
 \method{length}{journal}(x)
 
-\method{print}{journal}(x, \dots, width = 60L, max.print = 100,
-                       exclude = NULL, include.only = NULL)
+\method{print}{journal}(x, \dots,
+                        width = getOption("width"), max.print = getOption("max.print"),
+                        exclude = NULL, include.only = NULL)
 
 \method{sort}{journal}(x, decreasing = FALSE, by = "timestamp", \dots, na.last = TRUE)
 

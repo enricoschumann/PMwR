@@ -1,5 +1,10 @@
 2014-08-28  Enrico Schumann  <es@enricoschumann.net>
 
+	* man/journal.Rd: updated docs -- print gets 'width' and
+	'max.print' from '?options'
+
+	* vignettes/scale1.Rnw: added vignette
+
 	* inst/unitTests/ut_text.R (test.expstr): added test function
 
 2014-08-27  Enrico Schumann  <es@enricoschumann.net>
