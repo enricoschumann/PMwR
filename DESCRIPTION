@@ -1,8 +1,8 @@
 Package: PMwR
 Type: Package
 Title: Portfolio Management with R
-Version: 0.1-47
-Date: 2014-08-06
+Version: 0.1-48
+Date: 2014-08-20
 Author: Enrico Schumann
 Maintainer: Enrico Schumann <es@enricoschumann.net>
 Authors@R: person(given = "Enrico", family = "Schumann", 
@@ -13,7 +13,8 @@ Description: Functions and examples for 'Portfolio Management with R':
   reporting, backtesting and more. 
 Imports: utils, NMOF
 Depends: tools
-Suggests: RUnit, rbenchmark, zoo
+Suggests: RUnit, rbenchmark
+Enhances: zoo
 License: GPL-3
 LazyLoad: yes
 LazyData: yes

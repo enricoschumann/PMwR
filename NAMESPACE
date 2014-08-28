@@ -43,6 +43,7 @@ export(
     roundPOSIXt,
     runStats,
     scale0,
+    scale1,
     scaleToUnity,
     scaleTrades,
     splitTrades,
@@ -75,3 +76,5 @@ S3method(summary, NAVseries)
 S3method(toLatex, preturns)
 S3method(toHTML, preturns)
 S3method(toText, default)
+S3method(scale1, default)
+S3method(scale1, zoo)

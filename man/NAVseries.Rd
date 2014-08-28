@@ -1,5 +1,7 @@
 \name{NAVseries}
 \alias{NAVseries}
+\alias{print.NAVseries}
+\alias{summary.NAVseries}
 \title{
   Net-asset-value (NAV) series
 }
@@ -34,6 +36,9 @@ NAVseries(NAV, timestamp,
 }
 \item{object}{
   an \code{NAVseries}
+}
+\item{\dots}{
+  further arguments
 }
 }
 \details{

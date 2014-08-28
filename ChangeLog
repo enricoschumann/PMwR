@@ -1,3 +1,25 @@
+2014-08-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* inst/unitTests/ut_text.R (test.expstr): added test function
+
+2014-08-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/scale0.R (scale1.default): renamed argument 'origin' to
+	'level'; support 'centre' argument
+
+
+2014-08-25  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (print.journal): 'max.print' default is now
+	'getOption("max.print")' (was: 100)
+
+2014-08-20  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-48
+	(Enhances): zoo
+
+	* NAMESPACE: export methods for 'scale1' (default, zoo)
+
 2014-08-07  Enrico Schumann  <es@enricoschumann.net>
 
 	* inst/unitTests/ut_text.R (test.expstr): added file
