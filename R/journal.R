@@ -66,7 +66,8 @@ journal <- function(timestamp, amount, price, instrument,
     ans    
 }
 
-print.journal <- function(x, ..., width = 60L, max.print = getOption("max.print"),
+print.journal <- function(x, ..., width = getOption("width"),
+                          max.print = getOption("max.print"),
                           exclude = NULL, include.only = NULL) {
 
     lx <- length(x)

@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-08-28 13:30:54 CEST (es)>
+## Time-stamp: <2014-08-29 08:21:36 CEST (es)>
 
 scale1 <- function (x, ...)
     UseMethod("scale1", x)
@@ -21,8 +21,6 @@ scale1.default <- function (x, ..., when = "first.complete",
     } else if (is.numeric(when)) {
         init.p <- when
     }
-    for (i in seq_len(ncol(x)))
-        x[,i] <- x[,i]/x[init.p, i]
     if (centre) {
         x0 <- returns(x, pad = 0)
         m <- colMeans(x0[-1L, , drop = FALSE])
@@ -35,6 +33,8 @@ scale1.default <- function (x, ..., when = "first.complete",
         for (i in seq_len(ncol(x0)))
             x[,i] <- cumprod(1+x0[ ,i]/s[i] * scale)
     }
+    for (i in seq_len(ncol(x)))
+        x[,i] <- x[,i]/x[init.p, i]
     x <- level*x
     if (makevec)
         x <- c(x) 

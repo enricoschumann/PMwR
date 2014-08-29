@@ -1,3 +1,8 @@
+2014-08-29  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/scale0.R (scale1.default): fixed -- 'when' was ignored when
+	'scale' was used
+
 2014-08-28  Enrico Schumann  <es@enricoschumann.net>
 
 	* man/journal.Rd: updated docs -- print gets 'width' and

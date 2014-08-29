@@ -24,14 +24,14 @@ scale1(x, \dots)
   \item{when}{
     origin: either character or numeric (integer)
 }
-  \item{origin}{
+  \item{level}{
     numeric
 }
   \item{centre}{
     logical
 }
   \item{scale}{
-    logical
+    logical or numeric
 }
   \item{\dots}{
     other arguments passed to methods
