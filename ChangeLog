@@ -1,5 +1,7 @@
 2014-08-29  Enrico Schumann  <es@enricoschumann.net>
 
+	* inst/unitTests/ut_scale1.R (test.scale1): added test cases
+
 	* R/scale0.R (scale1.default): fixed -- 'when' was ignored when
 	'scale' was used
 
