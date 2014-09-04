@@ -20,7 +20,7 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
     For a single asset, a matrix of prices with four columns: open,
     high, low and close. For \code{n} assets, a list of length four:
     \code{prices[[1]]} is then a matrix with \code{n} columns containing
-    the open prices for the assets; \code{prices[[2L]]} is a matrix with
+    the open prices for the assets; \code{prices[[2]]} is a matrix with
     the high prices, and so on. If only close prices are used, then for
     a single asset, either a matrix of one column or a numeric vector;
     for multiple assets a list of length one, containing the matrix of
@@ -182,5 +182,7 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
 
 ## example 3: portfolio optimisation
 ## ...
+
+## see manual
 
 }
