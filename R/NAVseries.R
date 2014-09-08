@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-06-26 09:25:41 CEST (es)>
+## Time-stamp: <2014-09-08 08:52:35 CEST (es)>
 
 NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
@@ -126,7 +126,7 @@ print.summary.NAVseries <- function(x, ...) {
           "max. drawdown (in %)  %mdd%",
           "peak          %mdd.high%  (%mdd.high.when%)",
           "trough        %mdd.low%  (%mdd.low.when%)",
-          "underwater  %underwater%",
+          "underwater (in %) %underwater%",
           "---------------------------------------------------------",
           "volatility (in %, ann.)  %vol%",
           "upside volatility        %vol.up%",
@@ -134,9 +134,8 @@ print.summary.NAVseries <- function(x, ...) {
           "---------------------------------------------------------\n")
     nx <- names(x)
     nx <- nx[nx != "NAVseries"]
-    for (n in nx) {
+    for (n in nx)
         template <- gsub(paste0("%", n, "%"), x[[n]], template)
-    }
     cat(template, sep = "\n")
     cat("Monthly returns  ")
     sparkplot(returns(x$NAVseries$NAV))
