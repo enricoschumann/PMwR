@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-08-29 08:21:36 CEST (es)>
+## Time-stamp: <2014-09-15 12:43:31 CEST (es)>
 
 scale1 <- function (x, ...)
     UseMethod("scale1", x)
@@ -54,6 +54,7 @@ scale1.zoo <- function(x, ..., when = "first.complete",
 
 
 scale0 <- function(x, when = "first.complete", first = 100, scale = FALSE) {
+    .Deprecated("scale1", package = "PMwR")
     ZOO <- FALSE
     if (inherits(x, "zoo")) {
         ZOO <- TRUE

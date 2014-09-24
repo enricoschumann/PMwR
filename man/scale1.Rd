@@ -6,7 +6,7 @@
   Scale Time Series
 }
 \description{
-  Scale time series.
+  Scale time series so that they can better be compared.
 }
 \usage{
 scale1(x, \dots)

@@ -162,7 +162,7 @@ mytime <- ISOdatetime(2012, 10, 19, 13, 10, 23)
 mytime
 @ 
 
-Now we use \texttt{map} to translate this time into the appropriate
+\noindent Now we use \texttt{map} to translate this time into the appropriate
 $x$-position.
 
 
@@ -176,7 +176,8 @@ abline(h = axTicks(2), v = tmp$axis.pos,
        col = "lightgrey", lty = "dotted")
 abline(v = tmp$map(mytime)$t, col = "red")
 @ 
-The function \texttt{map} returns a list with two components,
+
+\noindent The function \texttt{map} returns a list with two components,
 \texttt{t} and \texttt{ix}.
 <<>>=
 tmp$map(mytime)

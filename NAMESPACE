@@ -7,11 +7,13 @@ importFrom(utils, head)
 importFrom(utils, tail)
 importFrom(tools, toHTML)
 importFrom(stats, aggregate)
+importFrom(zoo, as.zoo)
 
 ## exports
 export(
     "dayOfMonth<-",
     "mday<-",
+    ann,
     journal,
     btest,
     char2num,
@@ -54,27 +56,31 @@ export(
     )
 
 ## methods
+S3method(`[`, journal)
 S3method(aggregate, journal)
+S3method(ann, NAVseries)
+S3method(ann, default)
+S3method(ann, zoo)
+S3method(as.data.frame, journal)
+S3method(as.zoo, NAVseries)
 S3method(c, journal)
 S3method(head, journal)
-S3method(tail, journal)
-S3method(print, journal)
 S3method(length, journal)
-S3method(sort, journal)
-S3method(subset, journal)
-S3method(as.data.frame, journal)
-S3method(`[`, journal)
-S3method(print, btest)
-S3method(print, pl)
-S3method(print, rebalance)
-S3method(print, position)
-S3method(print, preturns)
 S3method(plot, NAVseries)
 S3method(print, NAVseries)
+S3method(print, btest)
+S3method(print, journal)
+S3method(print, pl)
+S3method(print, position)
+S3method(print, preturns)
+S3method(print, rebalance)
 S3method(print, summary.NAVseries)
-S3method(summary, NAVseries)
-S3method(toLatex, preturns)
-S3method(toHTML, preturns)
-S3method(toText, default)
 S3method(scale1, default)
 S3method(scale1, zoo)
+S3method(sort, journal)
+S3method(subset, journal)
+S3method(summary, NAVseries)
+S3method(tail, journal)
+S3method(toHTML, preturns)
+S3method(toLatex, preturns)
+S3method(toText, default)

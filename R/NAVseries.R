@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-09-08 08:52:35 CEST (es)>
+## Time-stamp: <2014-09-24 06:44:07 CEST (es)>
 
 NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
@@ -95,7 +95,7 @@ print.summary.NAVseries <- function(x, ...) {
     percf <- function(x)
         format(round(100*x, 1), nsmall = 1, justify = "right", width = 7)
     numf <- function(x)
-        format(x, justify = "right", width = 7)
+        format(x, justify = "right", width = 7, nsmall = 2)
 
     if (length(x$NAVseries$title))
         cat(x$NAVseries$title, "\n")
@@ -184,3 +184,17 @@ plot.NAVseries <- function(x, y, ...) {
     return(invisible(x))
 }
 
+as.NAVseries <- function(x, ...) {
+    UseMethod("as.NAVseries")
+}
+
+as.NAVseries.zoo <- function(x, ...){
+    dx <- dim(x)
+    if (!is.null(dx) && !any(dx == 1))
+        stop("can only coerce single series")
+    NAVseries(NAV = coredata(x), timestamp = index(x))
+}
+
+as.zoo.NAVseries <- function(x, ...){
+    zoo(x$NAV, x$timestamp)
+}

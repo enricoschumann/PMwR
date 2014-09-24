@@ -2,10 +2,10 @@
 \alias{rebalance}
 \alias{print.rebalance}
 \title{
-  Rebalance portfolio
+  Rebalance Portfolio
 }
 \description{
-  Rebalance portfolio  
+  Compute the differences between two portfolios.  
 }
 \usage{
 rebalance(current, target, price,
@@ -76,9 +76,9 @@ rebalance(current, target, price,
 \section{Warning }{
   Very experimental. The interface may change.
 }
-%% \seealso{
-%%   \code{\link{journal}}
-%% }
+\seealso{
+  \code{\link{journal}}
+}
 \examples{
 ## see the vignette
 }

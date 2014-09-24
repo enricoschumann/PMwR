@@ -14,9 +14,7 @@
 \usage{
 rmspace(s, leading = TRUE, trailing = TRUE)
 char2num(s, dec = ",", big.mark = ".")
-
 expstr(s, after, width, fill = " ", at)
-
 rmrp(s, pattern, \dots)
 }
 \arguments{

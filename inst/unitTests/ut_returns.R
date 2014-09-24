@@ -101,6 +101,32 @@ test.returns <- function() {
 
     p <- position(j, when = 1:10)
     rowSums(p$position*prices)
+
+
+    ## mtab (internal)
+    ## require("database")
+    ## tmp <- fetchTable("daily2", "lu0891409947")
+    ## x <- returns(tmp$close, tmp$timestamp, period = "monthly")
+
+    x <- structure(list(returns = c(-0.0163, 0.00274473924977126, -0.0096309813463098, 
+                        0.0110553792609274, 0.010023286423003, -0.00661587810745801, 
+                        -0.00625630676084754, 0.00781884646628761, 0.0050377833753148, 
+                        0.00511278195488729, 0.0072810692200278, 0.0108921675413407, 
+                        0.00528945048486618, -9.74373964727215e-05, 0.00993958292730457, 
+                        -0.00974527209571596),
+                        t = structure(c(15884L, 15917L, 15947L, 
+                        15978L, 16009L, 16038L, 16069L, 16101L, 16129L, 16160L, 16190L, 
+                        16220L, 16251L, 16282L, 16311L, 16335L), class = "Date"),
+                        period = "monthly"),
+                   .Names = c("returns", "t", "period"),
+                   class = "preturns")
     
+    PMwR:::mtab(x)
+    PMwR:::mtab(x, plus = TRUE)
+    PMwR:::mtab(x, zero.print = "_____")
+    PMwR:::mtab(x, zero.print = "_____", plus = TRUE)
+    PMwR:::mtab(x, month.names = LETTERS[1:12], ytd = "Z")
+    PMwR:::mtab(x, digits = 0)
+    PMwR:::mtab(x, digits = 0, zero.print = "___")
     
 }

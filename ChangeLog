@@ -1,3 +1,44 @@
+2014-09-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-50
+
+	* vignettes/monthly.Rnw: new vignette
+
+	* R/returns.R (mtab): mtab (internal) takes new arguments,
+	'zero.print', 'plus' and 'digits' whose values are to be passed
+	via 'print', 'toLatex' or 'toHTML'
+
+2014-09-23  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: export S3method 'as.zoo.NAVseries'
+
+	* R/NAVseries.R (as.zoo.NAVseries): new method
+
+2014-09-18  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/ann.R (ann): 'annualised return' -- added generic and methods
+	for 'zoo', 'NAVseries'
+
+2014-09-15  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-49
+
+	* man/*: various small updates in documentation.
+
+	* man/returns.Rd: added links to 'toLatex', 'toHTML' and Usage for
+	methods for 'preturns'
+
+	* R/scale0.R (scale0): deprecated (will be removed soon)
+
+	* R/returns.R (toLatex.preturns): new argument 'month.names' to
+	'toLatex' and 'toHTML'
+
+2014-09-11  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (print.preturns): new argument 'zero.print'
+
+	* R/NAVseries.R (as.NAVseries): added generic; method for 'zoo'
+
 2014-08-29  Enrico Schumann  <es@enricoschumann.net>
 
 	* inst/unitTests/ut_scale1.R (test.scale1): added test cases
@@ -10,7 +51,7 @@
 	* man/journal.Rd: updated docs -- print gets 'width' and
 	'max.print' from '?options'
 
-	* vignettes/scale1.Rnw: added vignette
+	* vignettes/scale1.Rnw: added vignette (test cases)
 
 	* inst/unitTests/ut_text.R (test.expstr): added test function
 

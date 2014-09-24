@@ -1,6 +1,9 @@
 \name{returns}
 \alias{returns}
+\alias{preturns}
 \alias{print.preturns}
+\alias{toLatex.preturns}
+\alias{toHTML.preturns}
 \title{
   Compute Returns
 }
@@ -11,7 +14,18 @@
 returns(x, t = NULL, period = NULL, complete.first = TRUE,
         pad = NULL,  position, lag = 1)
 
-\method{print}{preturns}(x, \dots, year.rows)
+\method{print}{preturns}(x, \dots, year.rows, zero.print = "0", plus = FALSE)
+
+\method{toLatex}{preturns}(object, \dots,
+       year.rows = TRUE, ytd = "YTD", month.names = NULL, 
+       eol = "\\\\\\\\")
+
+\method{toHTML}{preturns}(x, \dots,
+    year.rows = TRUE, ytd = "YTD", month.names = NULL, 
+    stand.alone = TRUE, table.style = NULL, table.class = NULL, 
+    th.style = NULL, th.class = NULL,
+    td.style = "text-align:right;padding:0.5em;", 
+    td.class = NULL, tr.style = NULL, tr.class = NULL)
 
 }
 \arguments{
@@ -45,6 +59,13 @@ returns(x, t = NULL, period = NULL, complete.first = TRUE,
     logical. If \code{TRUE} (the default), print monthly returns with
     one row per year.
   }  
+  \item{zero.print}{
+    character.  How to print zero values.
+  }  
+  \item{plus}{
+    logical. Add a \sQuote{\code{+}} before positive numbers? Default is
+    \code{FALSE}.
+  }  
   \item{lag}{
     The lag for computing returns. A positive integer, defaults to one;
     ignored for time-weighted returns or if \code{t} is supplied.
@@ -62,7 +83,9 @@ returns(x, t = NULL, period = NULL, complete.first = TRUE,
 
   If called with a \code{time} argument, an object of class
   \code{"preturns"} (period returns), which is a list of the dates, the
-  returns and the period.
+  returns and the period.  Main use is to have methods that pretty-print
+  such period returns; currently, there are methods for
+  \code{\link{toLatex}} and \code{\link[tools]{toHTML}}.
   
 }
 \author{

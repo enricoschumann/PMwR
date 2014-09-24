@@ -110,28 +110,46 @@ returns <- function(x, t = NULL, period = NULL, complete.first = TRUE,
 }
 
 ## not exported
-mtab <- function(x, ytd = "YTD") {
-    f <- function(x)
-        format(round(100*x, 1), nsmall = 1)    
+mtab <- function(x, ytd = "YTD", month.names = NULL, zero.print = "0", plus = FALSE,
+                 digits = 1) {
+    ## plus
+    f <- function(x, plus) {
+        ans <- format(round(100*x, digits),
+                      nsmall = if (digits < 0) 0 else digits,
+                      trim = TRUE)
+        if (plus)
+            paste0(ifelse(x >= 0, "+", ""), ans)
+        else
+            ans
+    }
     years <- as.numeric(format(x$t, "%Y"))
     mons  <- as.numeric(format(x$t, "%m"))
     tb <- array("", dim = c(length(unique(years)), 13L))
-    tb[cbind(years - years[1L] + 1L, mons)] <- f(x$returns)
+    tb[cbind(years - years[1L] + 1L, mons)] <- f(x$returns, plus)
     for (y in sort(unique(years)))
-        tb[y - years[1L] + 1L, 13L] <- f(prod(x$returns[years==y] + 1L) - 1L)
+        tb[y - years[1L] + 1L, 13L] <- f(prod(x$returns[years==y] + 1L) - 1L, plus)
     rownames(tb) <- sort(unique(years))
-    colnames(tb) <- c(format(as.Date(paste0("2012-", 1:12, "-1")), "%b"), ytd)
+    colnames(tb) <- if (is.null(month.names))
+                        c(format(as.Date(paste0("2012-", 1:12, "-1")), "%b"), ytd)
+                    else
+                        c(month.names, ytd)
+    if (zero.print != "0")
+        tb <- gsub("^ *[+-]?[0.]+$", zero.print, tb)
     tb
 }
 
-
-
-print.preturns <- function(x, ..., year.rows = TRUE) {
+print.preturns <- function(x, ..., year.rows = TRUE,
+                           month.names = NULL, zero.print = "0", plus = FALSE,
+                           digits = 1) {
     if (!is.null(x$period) && grepl("month(ly)?", x$period, ignore.case = TRUE)) {
         if (year.rows)
-            print(mtab(x), quote = FALSE, print.gap = 2, right = TRUE)
+            print(mtab(x, ytd = "YTD", month.names = month.names,
+                       zero.print = zero.print, plus = plus, digits = digits),
+                  quote = FALSE, print.gap = 1, right = TRUE)
         else
-            print(t(mtab(x)), quote = FALSE, print.gap = 2, right = TRUE)
+            print(t(mtab(x, ytd = "YTD", month.names = month.names,
+                       zero.print = zero.print, plus = plus, digits = digits)),
+                  quote = FALSE, print.gap = 2, right = TRUE)
         
     } else {
         print(unclass(x))
@@ -140,12 +158,12 @@ print.preturns <- function(x, ..., year.rows = TRUE) {
 }
 
 toLatex.preturns <- function(object, ..., year.rows = TRUE,
-                             ytd = "YTD", eol = "\\\\") {
+                             ytd = "YTD", month.names = NULL, eol = "\\\\") {
     if (grepl("month(ly)?", object$period, ignore.case = TRUE)) {
         if (year.rows)
-            mt <- mtab(object, ytd = ytd)
+            mt <- mtab(object, ytd = ytd, month.names = month.names)
         else
-            mt <- t(mtab(object, ytd = ytd))
+            mt <- t(mtab(object, ytd = ytd, month.names = month.names))
     } else {
         stop("currently only supported for period ", sQuote("month"))
     }
@@ -156,7 +174,9 @@ toLatex.preturns <- function(object, ..., year.rows = TRUE,
     mt
 }
 
-toHTML.preturns <- function(x, ..., year.rows = TRUE, stand.alone = TRUE,
+toHTML.preturns <- function(x, ..., year.rows = TRUE,
+                            ytd = "YTD", month.names = NULL,
+                            stand.alone = TRUE,
                             table.style = NULL,
                             table.class = NULL,
                             th.style = NULL,
@@ -186,9 +206,9 @@ toHTML.preturns <- function(x, ..., year.rows = TRUE, stand.alone = TRUE,
     
     if (grepl("month(ly)?", x$period)) {
         if (year.rows)
-            mt <- mtab(x)
+            mt <- mtab(x, ytd = ytd, month.names = month.names)
         else
-            mt <- t(mtab(x))
+            mt <- t(mtab(x, ytd = ytd, month.names = month.names))
     } else {
         stop("currently only supported for period ", sQuote("month"))
     }
