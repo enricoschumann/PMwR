@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-09-24 06:44:07 CEST (es)>
+## Time-stamp: <2014-09-29 06:47:44 CEST (es)>
 
 NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
@@ -39,8 +39,8 @@ print.NAVseries <- function(x, ...) {
     cat(mint, "==>", maxt)
     cat("   (", format(n, big.mark = "."), " data points, ", 
         na, " NAs)\n", sep = "")
-    cat(format(first, justify = "right", width = nchar(mint)), "   ",
-        format(last,  justify = "right", width = nchar(maxt)), "\n")
+    cat(format(first, justify = "right", width = nchar(mint), digits = 2), "   ",
+        format(last,  justify = "right", width = nchar(maxt), digits = 2), "\n")
     invisible(x)
     
 }
@@ -95,8 +95,8 @@ print.summary.NAVseries <- function(x, ...) {
     percf <- function(x)
         format(round(100*x, 1), nsmall = 1, justify = "right", width = 7)
     numf <- function(x)
-        format(x, justify = "right", width = 7, nsmall = 2)
-
+        format(x, justify = "right", width = 7, nsmall = 2, digits = 2,
+               scientific = FALSE)
     if (length(x$NAVseries$title))
         cat(x$NAVseries$title, "\n")
     else if (!is.null(x$NAVseries$instrument))
@@ -114,6 +114,12 @@ print.summary.NAVseries <- function(x, ...) {
     for (f in fields)
         x[[f]] <- percf(x[[f]])
 
+    ## format: prices
+    fields <- c("high", "low", "mdd.high", "mdd.low")
+    for (f in fields)
+        x[[f]] <- numf(x[[f]])
+
+    
     cat("---------------------------------------------------------\n")
     print(x$NAVseries)    
     template <-

@@ -1,3 +1,18 @@
+2014-09-29  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (print.summary.NAVseries): print prices (high,
+	low, etc.) to two digits
+	(print.NAVseries): print prices (first, last) to two digits
+
+2014-09-26  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/texttools.R (strexp): new function; will replace 'expstr' to
+	have function naming in line with 'strtrim', 'strwrap')
+
+2014-09-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/plotTradingHours.R: fixed -- 'label.format' had been ignored
+
 2014-09-24  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-50
