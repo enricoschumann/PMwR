@@ -3,6 +3,7 @@
 \alias{rmspace}
 \alias{char2num}
 \alias{expstr}
+\alias{strexp}
 \alias{rmrp}
 \title{
   Manipulating Character Vectors
@@ -15,6 +16,7 @@
 rmspace(s, leading = TRUE, trailing = TRUE)
 char2num(s, dec = ",", big.mark = ".")
 expstr(s, after, width, fill = " ", at)
+strstr(s, after, width, fill = " ", at)
 rmrp(s, pattern, \dots)
 }
 \arguments{
@@ -45,10 +47,12 @@ rmrp(s, pattern, \dots)
   after removing/replacing certain characters: all occurences of
   \code{big.mark} are removed, and \code{dec} is changed to a dot.
 
-  \code{expstr} inserts blanks into the elements of a character vector
+  \code{strexp} inserts blanks into the elements of a character vector
   such that all elements have the same \code{width} (ie,
   \code{\link{nchar}}).  Note that it will (currently) not contract a
   string, only expand it.
+
+  \bold{\code{expstr} is a wrapper, and its use is deprecated.}
 
   \code{rmrp} removes a repeated pattern in a character vector (eg,
   repeated blank lines).

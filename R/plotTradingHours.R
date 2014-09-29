@@ -73,16 +73,20 @@ plotTradingHours <- function(x, t = NULL,
     ## prepare labels
     if (grepl("dayhour", labels, ignore.case = TRUE)) {
         pos <- which(abs(diff(as.POSIXlt(grd)$hour)) > 0) + 1
-        fmt <- "%d.%m. %H:%M"
+        fmt <- if (is.null(label.format))
+                   "%d.%m. %H:%M" else label.format
     } else if (grepl("hour", labels, ignore.case = TRUE)) {
         pos <- which(abs(diff(as.POSIXlt(grd)$hour)) > 0) + 1
-        fmt <- "%H:%M"
+        fmt <- if (is.null(label.format))
+                   "%H:%M" else label.format
     } else if (grepl("day", labels, ignore.case = TRUE)) {
         pos <- which(abs(diff(as.Date(grd))) > 0) + 1
-        fmt <- "%d.%m."
+        fmt <- if (is.null(label.format))
+                   "%d.%m." else label.format
     } else if (grepl("month", labels, ignore.case = TRUE)) {
         pos <- which(abs(diff(as.POSIXlt(grd)$mon)) > 0) + 1
-        fmt <- "%d.%m."
+        fmt <- if (is.null(label.format))
+            "%d.%m." else label.format
     }
     
     if (do.plot) {
