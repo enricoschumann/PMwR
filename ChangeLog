@@ -1,3 +1,8 @@
+2014-10-29  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/ann.R (ann.NAVseries): fixed -- method now coerces to 'zoo'
+	and then calls 'ann'
+
 2014-09-29  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/NAVseries.R (print.summary.NAVseries): print prices (high,

@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; fill-column: 65; comment-column: 50; -*-
-## Time-stamp: <2014-09-18 17:14:56 CEST (es)>
+## Time-stamp: <2014-10-29 13:12:25 CET (es)>
 
 ann <- function(x, ...)
     UseMethod("ann", x)
@@ -17,6 +17,6 @@ ann.zoo <- function(x, ...) {
 
 }
 
-ann.NAVseries <- function(x, t, ...) {
-
+ann.NAVseries <- function(x, ...) {
+    ann(as.zoo.NAVseries(x))
 }
