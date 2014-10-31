@@ -1,3 +1,8 @@
+2014-10-31  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (`[.position`): added method; acts on the
+	underlying position (= a numeric matrix) in 'position' object
+
 2014-10-29  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/ann.R (ann.NAVseries): fixed -- method now coerces to 'zoo'

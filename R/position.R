@@ -99,3 +99,16 @@ print.position <- function(x, ..., sep = NA) {
     }
     invisible(x)
 }
+
+`[.position`  <- function(x, i, j, ...) {
+    if (missing(i))
+        i <- TRUE
+    if (missing(j))
+        j <- TRUE
+    ans <- x$position[i,j, drop = FALSE]
+    ans <- list(position = ans,
+                timestamp = x$timestamp[i],
+                instrument = x$instrument[j])
+    class(ans) <- "position"
+    ans
+}
