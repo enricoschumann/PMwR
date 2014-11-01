@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-03-28 06:20:37 CET (es)>
+## Time-stamp: <2014-10-24 07:57:15 CEST (es)>
 test.btest <- function() {
 
     require("PMwR")
@@ -138,4 +138,12 @@ test.btest <- function() {
     checkEquals((outer(solution$wealth, signal())/prices3)[-nrow(prices3), ],
                 solution$position[-1L, ])
 
+
+
+    ## tests for initial wealth
+    prices <- c(100,98,98,97,101,102,101,98,99,101)
+    signal <- function()
+        0.5
+    solution <- btest(prices, signal = signal, convert.weights = TRUE,
+                      initial.cash = 1000, b = 0, prices0 = 100)
 }
