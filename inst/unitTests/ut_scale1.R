@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-08-29 09:19:30 CEST (es)>
+## Time-stamp: <2014-11-05 16:01:06 CET (es)>
 
 test.scale1 <- function() {
 
@@ -11,4 +11,12 @@ test.scale1 <- function() {
     checkEquals(scale1(p, when = 2), p/108)
     checkEquals(sd(returns(scale1(p, scale = TRUE))), 1)
     checkEquals(scale1(p, when = 2, scale = TRUE)[2L], 1) 
+
+
+    p <- cbind(c(104, 108, 104, 105),
+               c(NA, 108, 104,105))
+    
+
+    scale1(p, scale = 0.01)
+    
 }
