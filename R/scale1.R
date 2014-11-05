@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-11-05 15:59:41 CET (es)>
+## Time-stamp: <2014-11-05 17:09:02 CET (es)>
 
 scale1 <- function (x, ...)
     UseMethod("scale1", x)
@@ -22,16 +22,22 @@ scale1.default <- function (x, ..., when = "first.complete",
         init.p <- when
     }
     if (centre) {
+        NAs <- is.na(x)
         x0 <- returns(x, pad = 0)
-        m <- colMeans(x0[-1L, , drop = FALSE])
+        m <- colMeans(x0[-1L, , drop = FALSE], na.rm = TRUE)
+        x0[is.na(x0)] <- 0
         for (i in seq_len(ncol(x0)))
-            x[,i] <- cumprod(1+x0[ ,i] - m[i])
+            x[,i] <- cumprod(1 + x0[ ,i] - m[i])
+        x[NAs] <- NA
     }
     if (scale) {
-        x0 <- returns(x, pad = 0)
+        NAs <- is.na(x)
+        x0 <- returns(x, pad = NA)
         s <- apply(x0[-1L, , drop = FALSE], 2, sd, na.rm = TRUE)
+        x0[is.na(x0)] <- 0
         for (i in seq_len(ncol(x0)))
             x[,i] <- cumprod(1+x0[ ,i]/s[i] * scale)
+        x[NAs] <- NA
     }
     for (i in seq_len(ncol(x)))
         x[,i] <- x[,i]/x[init.p, i]
