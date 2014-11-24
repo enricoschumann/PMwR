@@ -4,20 +4,16 @@
   Backtesting Trading Strategies
 }
 \description{
-  Testing trading strategies.
-}
-\usage{
-backtest(prices, signal,
-         signalYN = TRUE, rebalanceYN = TRUE, printInfo = NULL,
-         b = 1L, phi = 1, x0 = 0, c0 = 100, tc = 0, ...,
-         addToPosition = FALSE,
-         adjustSignal = NULL, positionSize = NULL,
-         tradeOnOpen = TRUE,
-         tol = 1e-5, assignInGlobals = list(),
-         prices0 = NULL)
-}
-\arguments{
-  \item{prices}{
+
+  Testing trading strategies.  \bold{This function is no longer exported
+  and should be replaced with \code{\link{btest}}.}
+
+} 
+\usage{ backtest(prices, signal, signalYN = TRUE, rebalanceYN = TRUE,
+printInfo = NULL, b = 1L, phi = 1, x0 = 0, c0 = 100, tc = 0, ...,
+addToPosition = FALSE, adjustSignal = NULL, positionSize = NULL,
+tradeOnOpen = TRUE, tol = 1e-5, assignInGlobals = list(), prices0 =
+NULL) } \arguments{ \item{prices}{
     
     For a single asset, a matrix of prices with four columns: open,
     high, low and close. For \code{n} assets, a list of length four:
