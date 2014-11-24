@@ -26,7 +26,7 @@ splitAdjust(x, t, ratio, backward = TRUE)
 \item{ratio}{
   
     a numeric vector, specifying the split ratios.  A 2-for-1 stock
-    split, say, has a ratio of 2.  (This \sQuote{American Style}; in
+    split, say, has a ratio of 2.  (This is \sQuote{American Style}; in
     some countries, for instance Germany, a 2-for-1 stock split would be
     called a 1-for-1 split: you keep your shares and receive one new
     share per share that you own.)
@@ -40,10 +40,14 @@ splitAdjust(x, t, ratio, backward = TRUE)
 }
 }
 \details{
-  Dividends are reinvested.
+
+  With \code{backward} set to \code{TRUE}, which is the default, the
+  final prices in the unadjusted series matches the final prices in the
+  adjusted series.
+
 }
 \value{
-  a  numeric vector of length \code{length(x)}
+  a numeric vector of length \code{length(x)}
 }
 %% \references{
 %% %% ~put references to the literature/web site here ~
