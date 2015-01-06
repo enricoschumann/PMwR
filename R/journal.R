@@ -216,12 +216,23 @@ summary.journal <- function(x, ...) {
     ## number of trades per instrument
     ## level: instrument or account or factor
     ## number of transactions, min/max price, first/last transactions
+    ans <- list()
+    ans$n_transactions <- length(x)
+    ans
 }
+
+print.summary.journal <- function(x, ...) {
+    cat("Journal with ", x$n_transactions, " transactions.")
+    invisible(x)
+}
+
 
 `[.journal`  <- function(x, i, match.against = c("instrument", "account"),
                          ignore.case = TRUE, ..., reverse = FALSE) {
     if (is.character(i)) {
         ii <- logical(length(x))
+        if (length(i) > 1L)
+            i <- paste(i, collapse = "|")
         for (m in match.against) {
             if (is.null(x[[m]]))
                 next
