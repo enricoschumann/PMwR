@@ -47,7 +47,7 @@ export(
     rmspace,
     roundPOSIXt,
     runStats,
-##    scale0,
+##  scale0,
     scale1,
     scaleToUnity,
     scaleTrades,
@@ -78,6 +78,7 @@ S3method(print, pl)
 S3method(print, position)
 S3method(print, preturns)
 S3method(print, rebalance)
+S3method(print, summary.journal)
 S3method(print, summary.NAVseries)
 S3method(scale1, default)
 S3method(scale1, zoo)
