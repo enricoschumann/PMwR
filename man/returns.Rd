@@ -70,6 +70,9 @@ returns(x, t = NULL, period = NULL, complete.first = TRUE,
     The lag for computing returns. A positive integer, defaults to one;
     ignored for time-weighted returns or if \code{t} is supplied.
   }  
+  \item{object}{
+    an object of class \code{preturns} (\sQuote{period returns})
+  }
 }
 \details{
 
@@ -81,7 +84,7 @@ returns(x, t = NULL, period = NULL, complete.first = TRUE,
 
   If called as \code{returns(x)}: a numeric vector or matrix.
 
-  If called with a \code{time} argument, an object of class
+  If called with a \code{period} argument: an object of class
   \code{"preturns"} (period returns), which is a list of the dates, the
   returns and the period.  Main use is to have methods that pretty-print
   such period returns; currently, there are methods for

@@ -69,7 +69,7 @@ plot(x, type = "l")
 plot(scale1(x, scale = 0.02))
 @ 
 
-\section{Handling NAs}
+%% \section{Handling NAs}
 
 
 

@@ -15,8 +15,8 @@
 \usage{
 rmspace(s, leading = TRUE, trailing = TRUE)
 char2num(s, dec = ",", big.mark = ".")
-expstr(s, after, width, fill = " ", at)
-strstr(s, after, width, fill = " ", at)
+expstr(s, after, width, fill = " ", at) ## please use strexp
+strexp(s, after, width, fill = " ", at)
 rmrp(s, pattern, \dots)
 }
 \arguments{

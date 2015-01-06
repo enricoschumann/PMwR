@@ -1,7 +1,7 @@
 \name{btest}
 \alias{btest}
 \title{
-  Backtest
+  Backtesting Investment Strategies
 }
 \description{
   Testing trading and investment strategies.

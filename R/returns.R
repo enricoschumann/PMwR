@@ -110,24 +110,26 @@ returns <- function(x, t = NULL, period = NULL, complete.first = TRUE,
 }
 
 ## not exported
+fmt <- function(x, plus, digits) {
+    ans <- format(round(100*x, digits),
+                  nsmall = if (digits < 0) 0 else digits,
+                  trim = TRUE)
+    if (plus)
+        paste0(ifelse(x >= 0, "+", ""), ans)
+    else
+        ans
+}
+
+## not exported
 mtab <- function(x, ytd = "YTD", month.names = NULL, zero.print = "0", plus = FALSE,
                  digits = 1) {
-    ## plus
-    f <- function(x, plus) {
-        ans <- format(round(100*x, digits),
-                      nsmall = if (digits < 0) 0 else digits,
-                      trim = TRUE)
-        if (plus)
-            paste0(ifelse(x >= 0, "+", ""), ans)
-        else
-            ans
-    }
     years <- as.numeric(format(x$t, "%Y"))
     mons  <- as.numeric(format(x$t, "%m"))
     tb <- array("", dim = c(length(unique(years)), 13L))
-    tb[cbind(years - years[1L] + 1L, mons)] <- f(x$returns, plus)
+    tb[cbind(years - years[1L] + 1L, mons)] <- fmt(x$returns, plus, digits)
     for (y in sort(unique(years)))
-        tb[y - years[1L] + 1L, 13L] <- f(prod(x$returns[years==y] + 1L) - 1L, plus)
+        tb[y - years[1L] + 1L, 13L] <- fmt(prod(x$returns[years==y] + 1L) - 1L,
+                                           plus, digits)
     rownames(tb) <- sort(unique(years))
     colnames(tb) <- if (is.null(month.names))
                         c(format(as.Date(paste0("2012-", 1:12, "-1")), "%b"), ytd)
@@ -151,6 +153,13 @@ print.preturns <- function(x, ..., year.rows = TRUE,
                        zero.print = zero.print, plus = plus, digits = digits)),
                   quote = FALSE, print.gap = 2, right = TRUE)
         
+    } else if (!is.null(x$period) && grepl("year(ly)?", x$period, ignore.case = TRUE)) {
+        tmp <- x$returns
+        names(tmp) <- format(x$t, "%Y")
+        if (year.rows) 
+            print(fmt(tmp, plus, digits), quote = FALSE)
+        else 
+            print(as.matrix(fmt(tmp, plus, digits)), quote = FALSE)
     } else {
         print(unclass(x))
     }

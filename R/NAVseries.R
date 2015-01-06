@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-09-29 06:47:44 CEST (es)>
+## Time-stamp: <2014-11-14 16:14:56 CET (es)>
 
 NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
@@ -127,7 +127,7 @@ print.summary.NAVseries <- function(x, ...) {
           "High         %high%  (%high.when%)",
           "Low           %low%  (%low.when%)",
           "---------------------------------------------------------",
-          "return (in %)       %return%",
+          "return (%)       %return%",
           "---------------------------------------------------------",
           "max. drawdown (in %)  %mdd%",
           "peak          %mdd.high%  (%mdd.high.when%)",

@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-08-05 07:23:16 CEST (es)>
+## Time-stamp: <2014-12-18 06:29:51 CET (es)>
 btest  <- function(prices,              
                    signal,               ## 
                    do.signal = TRUE,     ## 
@@ -53,6 +53,11 @@ btest  <- function(prices,
         do.signal <- function(...)
             FALSE
         warning(sQuote("do.signal"), " is FALSE: strategy will never trade")
+    } else if (is.character(do.signal) && do.signal == "firstofmonth") {
+        tmp <- as.Date(timestamp)
+        ## TODO
+
+        
     }
 
     if (is.null(do.rebalance) || identical(do.rebalance, TRUE)) {

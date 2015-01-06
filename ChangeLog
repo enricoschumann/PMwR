@@ -1,8 +1,32 @@
+2014-12-18  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (do.signal): fixed -- check if 'do.signal' is
+	character
+
+2014-11-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-53
+
+	* man/*.Rd: small updates in documentation
+
+	* NAMESPACE: 'scale0' is no longer exported
+
+2014-11-10  Enrico Schumann  <enrico.schumann@aq-advisors.ch>
+
+	* DESCRIPTION (Version): Version: 0.1-52
+
+	* R/returns.R (print.preturns): period == "year" gets its own
+	print method
+
+	* DESCRIPTION (Imports): moved tools from Depends to Imports;
+	function 'toHTML' is now exported
+
 2014-11-05  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-51
 
-	* R/scale0.R (scale1.default): use na.rm for scaling
+	* R/scale0.R (scale1.default): use 'na.rm' for centring and
+	scaling
 
 2014-10-31  Enrico Schumann  <es@enricoschumann.net>
 

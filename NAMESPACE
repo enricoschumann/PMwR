@@ -8,6 +8,9 @@ importFrom(utils, tail)
 importFrom(tools, toHTML)
 importFrom(stats, aggregate)
 importFrom(zoo, as.zoo)
+importFrom(zoo, index)
+importFrom(zoo, coredata)
+importFrom(zoo, zoo)
 
 ## exports
 export(
@@ -44,13 +47,14 @@ export(
     rmspace,
     roundPOSIXt,
     runStats,
-    scale0,
+##    scale0,
     scale1,
     scaleToUnity,
     scaleTrades,
     splitTrades,
     splitAdjust,
     timegrid,
+    toHTML,
     toText,
     twExposure
     )
