@@ -600,18 +600,18 @@ pos$instrument
 Thus, we need to multiply both matrices element-by-element, which is
 exactly what the function \texttt{valuation} does.  A warning: the
 function does currently not at all check \texttt{price.table}.
-<<>>=
-valuation(pos, price.table = price.table)
+<<eval=false>>=
+PMwR:::valuation(pos, price.table = price.table)
 @ 
 We care about the row sums of the results.
-<<>>= 
-(v <- valuation(pos, price.table = price.table, do.sum = TRUE))
+<<eval=false>>= 
+(v <- PMwR:::valuation(pos, price.table = price.table, do.sum = TRUE))
 @
 If the assets have specific multipliers, we can pass them as a named
 vector.  (That is the preferred way, at least.  An unnamed vector will
 do as well, as will a single number, which is recycled.)
-<<>>=
-valuation(pos, price.table = price.table, 
+<<eval=false>>=
+PMwR:::valuation(pos, price.table = price.table, 
           multiplier = c(DTE = 5, DPW = 0.5))
 @
 
@@ -625,11 +625,11 @@ names(cf) <- as.character(pos$timestamp)
 
 
 <<>>=
-tmp <- valuation(J)
-tmp$timestamp <- pos$timestamp[PMwR:::matchOrNext(tmp$timestamp, pos$timestamp)]
-cash <- aggregate(tmp$amount, list(tmp$timestamp), sum)
-cf[match(cash[[1]], pos$timestamp)] <- cash[[2]]
-(v.net <- v + cumsum(cf))
+## tmp <- PMwR:::valuation(J)
+## tmp$timestamp <- pos$timestamp[PMwR:::matchOrNext(tmp$timestamp, pos$timestamp)]
+## cash <- aggregate(tmp$amount, list(tmp$timestamp), sum)
+## cf[match(cash[[1]], pos$timestamp)] <- cash[[2]]
+## (v.net <- v + cumsum(cf))
 @ 
 
 TODO: check -- create interface journal/when/price.table?
@@ -723,6 +723,12 @@ closeOnFirst(n)
 
 
 \section{Computing returns}
+
+The return of an asset in period~$t$ is defined as
+\begin{align} \label{eq:return}
+  r_t = \frac{P_t}{P_{t-1}}-1 = R_t+1
+\end{align}
+
 
 \subsection{Numeric data}
 A vector.
@@ -1006,7 +1012,7 @@ passed as an argument to \texttt{signal}. Note that we do not add
 it as a formal argument to \texttt{signal} since this is done
 automatically (in fact, doing it manually would trigger an error
 message):
-<<>>=
+<<eval = false>>=
 signal <- function(Close = NULL)
     1
 cat(try(btest(prices = prices, signal = signal)))
