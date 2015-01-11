@@ -1,3 +1,13 @@
+2015-01-06  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: export print method for 'summary.journal'
+
+	* R/journal.R (`[.journal`): when regex-matching takes place, the
+	character vector to be matched against can be of length > 1.  In
+	this case, the vector is collapsed as 'paste(i, collapse = "|")'),
+	thus resulting in an OR rule.
+	(summary.journal): now prints number of transactions
+
 2014-12-18  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R (do.signal): fixed -- check if 'do.signal' is
