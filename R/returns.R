@@ -1,3 +1,42 @@
+returns <- function(x, ...)
+    UseMethod("returns")
+
+returns.zoo <- function(x, ..., period = NULL, complete.first = TRUE,
+                    pad = NULL, position, lag = 1) {
+    t <- time(x)
+    x <- coredata(x)
+    ans <- returns(x, ..., t=t, period=period, complete.first=complete.first,
+                   pad=pad, position, lag=lag)
+
+    zoo(ans$returns, ans$t)
+}
+
+returns.default <- function(x, ..., t = NULL, period = NULL, complete.first = TRUE,
+                    pad = NULL, position, lag = 1) {
+
+    if (is.null(t) &&  missing(position)) {
+        returns0(x, pad = pad, lag = lag)        
+    } else if (!is.null(t)) {
+        if (is.unsorted(t)) {
+            idx <- order(t)
+            t <- t[idx]
+            x <- x[idx]
+        }
+        if (!is.null(dim(x)) && min(dim(x)) > 1L)
+            stop("with ", sQuote("t"), " supplied, ",
+                 sQuote("x"), " must be a vector")                
+
+        if (lag != 1L)
+            warning(sQuote("lag"), " is ignored")
+        pReturns(x, t, period, complete.first, pad = pad)
+    } else {
+        if (lag != 1L)
+            warning(sQuote("lag"), " is ignored")
+        twReturns(x, position, pad = pad)
+    }
+}
+
+
 ## not exported
 returns0 <- function(x, pad = NULL, lag) {
     n <- NROW(x)
@@ -70,44 +109,44 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
     ans
 }
 
-returns <- function(x, t = NULL, period = NULL, complete.first = TRUE,
-                    pad = NULL, position, lag = 1) {
+## returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
+##                     pad = NULL, position, lag = 1) {
 
-    ## TODO: make internal function that checks x and t
-    if (is.null(t)) {
-        if (inherits(x, "zoo")) {
-            t <- time(x)
-            x <- coredata(x)
-            if (!is.null(dim(x)) && min(dim(x)) > 1L)
-                stop("with ", sQuote("t"), " supplied, ",
-                     sQuote("x"), " must be a vector")                    
-        } else if (inherits(x, "NAVseries")) {
-            t <- x$timestamp
-            x <- x$NAV
-        }
-    } else {
-        if (!is.null(dim(x)) && min(dim(x)) > 1L)
-            stop("with ", sQuote("t"), " supplied, ",
-                 sQuote("x"), " must be a vector")                
-        if (is.unsorted(t)) {
-            idx <- order(t)
-            t <- t[idx]
-            x <- x[idx]
-        }
-    }
+##     ## TODO: make internal function that checks x and t
+##     if (is.null(t)) {
+##         if (inherits(x, "zoo")) {
+##             t <- time(x)
+##             x <- coredata(x)
+##             if (!is.null(dim(x)) && min(dim(x)) > 1L)
+##                 stop("with ", sQuote("t"), " supplied, ",
+##                      sQuote("x"), " must be a vector")                    
+##         } else if (inherits(x, "NAVseries")) {
+##             t <- x$timestamp
+##             x <- x$NAV
+##         }
+##     } else {
+##         if (!is.null(dim(x)) && min(dim(x)) > 1L)
+##             stop("with ", sQuote("t"), " supplied, ",
+##                  sQuote("x"), " must be a vector")                
+##         if (is.unsorted(t)) {
+##             idx <- order(t)
+##             t <- t[idx]
+##             x <- x[idx]
+##         }
+##     }
 
-    if (is.null(t) &&  missing(position)) {
-        returns0(x, pad = pad, lag = lag)        
-    } else if (!is.null(t)) {
-        if (lag != 1L)
-            warning(sQuote("lag"), " is ignored")
-        pReturns(x, t, period, complete.first, pad = pad)
-    } else {
-        if (lag != 1L)
-            warning(sQuote("lag"), " is ignored")
-        twReturns(x, position, pad = pad)
-    }
-}
+##     if (is.null(t) &&  missing(position)) {
+##         returns0(x, pad = pad, lag = lag)        
+##     } else if (!is.null(t)) {
+##         if (lag != 1L)
+##             warning(sQuote("lag"), " is ignored")
+##         pReturns(x, t, period, complete.first, pad = pad)
+##     } else {
+##         if (lag != 1L)
+##             warning(sQuote("lag"), " is ignored")
+##         twReturns(x, position, pad = pad)
+##     }
+## }
 
 ## not exported
 fmt <- function(x, plus, digits) {

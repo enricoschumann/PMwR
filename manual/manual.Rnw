@@ -724,6 +724,8 @@ closeOnFirst(n)
 
 \section{Computing returns}
 
+For computing pl (in currency units), see Chapter~XX.
+
 The return of an asset in period~$t$ is defined as
 \begin{align} \label{eq:return}
   r_t = \frac{P_t}{P_{t-1}}-1 = R_t+1
@@ -731,8 +733,10 @@ The return of an asset in period~$t$ is defined as
 
 
 \subsection{Numeric data}
+
 A vector.
 <<>>=
+require("PMwR")
 x <- c(100,101,105)
 returns(x)
 @ 
@@ -740,15 +744,29 @@ A matrix.
 <<>>=
 X <- cbind(x,x,x)
 returns(X)
+returns(X, pad = 0)
 @ 
 
 \subsection{Time series}
 
+We can also supply a timestamp.
 <<>>=
-x
+detach("package:PMwR", unload=TRUE)
+require("PMwR")
+x <- c(100,101,105)
 t <- 1:3
 returns(x, t)
 @ 
+
+<<>>=
+require("zoo")
+returns(zoo(x, t), pad = NA)
+@ 
+
+
+
+
+
 
 \chapter{Backtesting}
 
