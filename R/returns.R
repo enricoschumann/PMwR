@@ -3,14 +3,22 @@ returns <- function(x, ...)
 
 returns.zoo <- function(x, ..., period = NULL, complete.first = TRUE,
                     pad = NULL, position, lag = 1) {
+
     t <- time(x)
     x <- coredata(x)
-    ans <- returns(x, ..., t = t, period = period,
-                   complete.first = complete.first,
-                   pad = pad, position, lag = lag)
-    
-    if (is.null(period))
-        zoo(ans$returns, ans$t) else ans
+
+    if (!is.null(period)) {
+        returns(x, ..., t = t, period = period,
+                       complete.first = complete.first,
+                       pad = pad, position, lag = lag)
+        
+    } else {
+        ans <- returns(x, ..., period = NULL,
+                complete.first = complete.first,
+                pad = pad, position, lag = lag)
+        if (!is.null(pad))
+            zoo(ans, t) else zoo(ans, t[-1L])
+    }
 }
 
 returns.default <- function(x, ..., t = NULL, period = NULL, complete.first = TRUE,

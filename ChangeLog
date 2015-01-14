@@ -1,5 +1,13 @@
 2015-01-14  Enrico Schumann  <es@enricoschumann.net>
 
+	* DESCRIPTION (Version): Version: 0.1-55
+
+	* vignettes/returns.Rnw: added vignette
+
+	* R/returns.R (returns.zoo): now also works for matrices
+
+2015-01-14  Enrico Schumann  <es@enricoschumann.net>
+
 	* DESCRIPTION (Version): Version: 0.1-54
 
 	* R/returns.R (returns): behaviour of 'returns(z)' when 'z' is of

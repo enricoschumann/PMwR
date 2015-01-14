@@ -1,0 +1,112 @@
+%% \VignetteIndexEntry{returns}
+\documentclass[a4paper,11pt]{article}
+\usepackage[left = 3cm, top = 2cm, bottom = 2cm, right = 4cm]{geometry}
+\usepackage[noae,nogin]{Sweave}
+\usepackage{libertine}
+\usepackage[scaled=0.8]{DejaVuSansMono}
+\usepackage[T1]{fontenc}
+\renewcommand*\familydefault{\sfdefault} 
+\usepackage{amsmath,amstext}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{xcolor}
+\definecolor{grau2}{rgb}{.2,.2,.2}
+\definecolor{grau7}{rgb}{.7,.7,.7}
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{frame=single,xleftmargin=0em,%
+  formatcom=\color{grau2},rulecolor=\color{grau7}}
+\DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=2em}
+\fvset{listparameters={\setlength{\topsep}{0pt}}}
+\renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
+\SweaveOpts{keep.source = TRUE, eps = TRUE}
+
+<<echo=false>>=
+options(continue = " ", digits = 3, width = 60, useFancyQuotes = FALSE)
+@
+
+\begin{document}
+\title{Computing returns}
+\author{Enrico Schumann\\\url{es@enricoschumann.net}}
+
+{\raggedright{\LARGE Computing returns}}\medskip
+
+\noindent Enrico Schumann\\
+\noindent \url{es@enricoschumann.net}\\
+\bigskip
+
+<<echo=false>>=
+require("PMwR")
+require("zoo")
+@
+
+\noindent The function \texttt{returns} computes returns for various
+types of objects. 
+
+\section{Numeric vectors and matrices, data frames}
+
+<<>>=
+x <- c(100,102,101,100)
+returns(x)
+@ 
+
+\noindent We can also replace the lost first observation.
+
+<<>>=
+returns(x, pad = 0)
+returns(x, pad = NA)
+@ 
+
+\noindent When \texttt{x} is a matrix, returns are computed for each column.
+
+<<>>=
+X <- cbind(x, x, x)
+returns(X, pad = NA)
+@ 
+
+
+\section{\texttt{zoo} objects}
+
+\noindent  Vectors.
+<<>>=
+z <- zoo(x, as.Date("2015-1-5") + 0:2)
+returns(z)
+returns(z, pad = NA)
+@ 
+
+\noindent Matrices.
+<<>>=
+z <- zoo(X, as.Date("2015-1-5") + 0:2)
+returns(z)
+returns(z, pad = NA)
+@ 
+
+
+\section{Period returns}
+
+\noindent When a timestamp is available, \texttt{returns} can compute period
+returns.
+
+<<>>=
+t <- as.Date("2014-11-1") + 0:80
+x <- cumprod(1 + rnorm(length(t), sd = 0.01))
+returns(x, t = t, period = "month")
+returns(x, t = t, period = "year")
+@ 
+
+\noindent There are methods to \texttt{toLatex} and \texttt{toHTML}
+for monthly returns.  In Sweave documents, need to use
+\texttt{<\/<results = tex,echo = false>\/>=}:
+
+
+\noindent\begin{tabular}{rrrrrrrrrrrrrr}
+<<results=tex,echo=false>>=
+toLatex(returns(x, t = t, period = "month"))
+@ 
+\end{tabular}
+
+
+\appendix
+<<results=tex>>=
+toLatex(sessionInfo())
+@ 
+\end{document}
