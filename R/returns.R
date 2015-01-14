@@ -1,6 +1,12 @@
 returns <- function(x, ...)
     UseMethod("returns")
 
+returns.NAVseries <- function(x, ..., period = NULL, complete.first = TRUE,
+                    pad = NULL, position, lag = 1) {
+    returns(as.zoo(x), ..., period = period, complete.first = complete.first,
+            pad = pad, position, lag = lag)
+}
+
 returns.zoo <- function(x, ..., period = NULL, complete.first = TRUE,
                     pad = NULL, position, lag = 1) {
 
@@ -95,8 +101,12 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         ans <- list(returns = returns(x, pad = pad),
                     t = if (is.null(pad)) t[-1L] else t,
                     period = period)        
-    } else if (grepl("annuali(s|z)ed?", period, ignore.case = TRUE)) {
-        stop("not supported yet")
+    } else if (grepl("ann", period, ignore.case = TRUE)) {
+            xi <- as.Date(t)
+            lx <- length(xi)
+            t <- as.numeric(xi[lx] - xi[1L])/365            
+            ans <- list(returns = (x[lx]/x[1L])^(1/t) - 1,
+                        t = c(xi[1L], xi[lx]), period = period)        
     } else {        
 
         if (length(period) > 1L) {
