@@ -751,8 +751,11 @@ returns(X, pad = 0)
 
 We can also supply a timestamp.
 <<>>=
-detach("package:PMwR", unload=TRUE)
+detach("package:PMwR", unload = TRUE)
 require("PMwR")
+require("zoo")
+require("RUnit")
+
 x <- c(100,101,105)
 t <- 1:3
 returns(x, t)
