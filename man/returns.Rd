@@ -50,7 +50,7 @@ returns(x, t = NULL, period = NULL, complete.first = TRUE,
   }
   \item{position}{
     numeric; the same length/dimension as
-    \code{x}. \strong{Experimental.}
+    \code{x}. \strong{Deprecated: will be removed in the future.}
   }
   \item{\dots}{
     further arguments
