@@ -25,7 +25,7 @@ rebalance <- function(current, target, price,
 
     if (match.names) { 
         if (is.null(names(price)) ||
-            is.null(names(current)) ||
+            (is.null(names(current)) && !identical(unname(current), 0)) ||
             is.null(names(target))) {
             stop(sQuote("match.names"),
                  " is TRUE but vectors are not named")
