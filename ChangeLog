@@ -1,5 +1,9 @@
 2015-01-14  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/returns.R (pReturns): period 'ann' computes annualised returns
+
+2015-01-14  Enrico Schumann  <es@enricoschumann.net>
+
 	* DESCRIPTION (Version): Version: 0.1-55
 
 	* vignettes/returns.Rnw: added vignette

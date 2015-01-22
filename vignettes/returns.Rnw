@@ -1,4 +1,4 @@
-%% \VignetteIndexEntry{returns}
+%% \VignetteIndexEntry{Computing returns}
 \documentclass[a4paper,11pt]{article}
 \usepackage[left = 3cm, top = 2cm, bottom = 2cm, right = 4cm]{geometry}
 \usepackage[noae,nogin]{Sweave}
@@ -91,6 +91,13 @@ t <- as.Date("2014-11-1") + 0:80
 x <- cumprod(1 + rnorm(length(t), sd = 0.01))
 returns(x, t = t, period = "month")
 returns(x, t = t, period = "year")
+@ 
+
+\noindent To get annualised returns, use period \texttt{ann}.
+
+<<>>=
+returns(x, t = t, period = "ann")
+returns(zoo(x, t), period = "ann")
 @ 
 
 \noindent There are methods to \texttt{toLatex} and \texttt{toHTML}

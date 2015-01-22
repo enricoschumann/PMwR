@@ -1,6 +1,8 @@
 \name{returns}
 \alias{returns}
 \alias{preturns}
+\alias{returns.default}
+\alias{returns.zoo}
 \alias{print.preturns}
 \alias{toLatex.preturns}
 \alias{toHTML.preturns}
@@ -11,10 +13,16 @@
   Convert prices into returns.
 }
 \usage{
-returns(x, t = NULL, period = NULL, complete.first = TRUE,
-        pad = NULL,  position, lag = 1)
+returns(x, \dots)
 
-\method{print}{preturns}(x, \dots, year.rows, zero.print = "0", plus = FALSE)
+\method{returns}{default}(x, \dots, t = NULL, period = NULL, complete.first = TRUE,
+                          pad = NULL, position, lag = 1)
+
+\method{returns}{zoo}(x, \dots, period = NULL, complete.first = TRUE,
+                      pad = NULL, position, lag = 1)
+
+\method{print}{preturns}(x, \dots, year.rows = TRUE, month.names = NULL,
+                         zero.print = "0", plus = FALSE, digits = 1)
 
 \method{toLatex}{preturns}(object, \dots,
        year.rows = TRUE, ytd = "YTD", month.names = NULL, 
@@ -76,8 +84,9 @@ returns(x, t = NULL, period = NULL, complete.first = TRUE,
 }
 \details{
 
-  The function calculates simple returns: current values divided by
-  prior values minus one.
+  return is a generic function.  It computes simple returns: current values divided by
+  prior values minus one.  The default method works for numeric
+  vectors/matrices.
   
 }
 \value{
@@ -98,8 +107,6 @@ returns(x, t = NULL, period = NULL, complete.first = TRUE,
   \code{\link{btest}}
 }
 \examples{
-
-require("PMwR")
 x <- 101:112
 returns(x)
 returns(x, pad = NA)
@@ -109,5 +116,4 @@ t <- seq(as.Date("2012-01-05"), as.Date("2012-12-31"), by = "1 day")
 x <- seq_along(t) + 1000
 returns(x, t = t, period = "month")
 returns(x, t = t, period = "month", complete.first = FALSE)
-
 }
