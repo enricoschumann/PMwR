@@ -867,9 +867,14 @@ t    time      open  high  low   close
 \end{verbatim}
 
 
-(No, we cannot trade at the high or low.  But perhaps we could add
-this later as a robustness check -- always buy at the high, sell at
-the low.)
+(No, we cannot trade at the high or low.%
+\footnote{Some people like the idea, as a robustness check -- always
+  buy at the high, sell at the low.  Robustness checks -- forcing a
+  bit of bad luck into the simulation -- are a good idea, notably bad
+  executions.  High/low ranges can inform such checks, but using these
+  ranges does not go far enough, and is more of a good story than a
+  meaningful test.}%
+)
 
 \section{Functions}\label{functions}
 
