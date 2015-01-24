@@ -42,7 +42,8 @@ We are given these prices of the Bund future contract, traded at the
 Eurex in Germany:%
 \footnote{Note that I leave the time zone to the operating system.
   Since my computer is typically located in the time zone that the
-  \texttt{tz database} calls `Europe/Berlin', the first time should be
+  \texttt{tz database} (\url{http://www.iana.org/time-zones}) 
+  calls `Europe/Berlin', the first time should be
   \texttt{2012-10-18 20:00:09}.  Suppose your computer was in
   `America/Chicago' and you recompiled this vignette.  Then the first
   time would become \texttt{2012-10-18 13:00:09}.  Which is right: it
