@@ -18,20 +18,29 @@
 \usepackage{marginnote}
 \renewcommand*{\marginfont}{\RaggedRight\sffamily\footnotesize}
 
+\usepackage{graphics,xcolor}
+\definecolor{grau2}{rgb}{0.2,0.2,0.2}
+\definecolor{grau5}{rgb}{0.5,0.5,0.5}
+\definecolor{grau7}{rgb}{0.7,0.7,0.7}
+
 \SweaveOpts{keep.source = TRUE, eps = TRUE, pdf = FALSE}
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{frame=single,xleftmargin=0em,%
+  formatcom=\color{grau2},rulecolor=\color{grau7}}
+\DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=2em}
+\fvset{listparameters={\setlength{\topsep}{0pt}}}
+\renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
 
 \newcommand{\pmwr}{\textsc{pm}w\textsc{r}}
 \newcommand{\pl}{\textsc{pl}}
 \newcommand{\R}{\textsf{R}}
-
 
 \begin{document}
 \pagestyle{empty}
 
 \vglue 2cm
 
-{\RaggedRight\Huge Portfolio Management with R (PMwR)}\vskip 3cm
-
+{\RaggedRight\Huge Portfolio Management with R (\pmwr)}\vskip 3cm
 
 {\RaggedLeft{
 

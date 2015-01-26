@@ -66,7 +66,7 @@ returns(X, pad = NA)
 
 \section{\texttt{zoo} objects}
 
-\noindent  Vectors.
+\noindent Vectors.
 <<>>=
 z <- zoo(x, as.Date("2015-1-5") + 0:2)
 returns(z)

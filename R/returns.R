@@ -1,36 +1,36 @@
 returns <- function(x, ...)
     UseMethod("returns")
 
-returns.NAVseries <- function(x, ..., period = NULL, complete.first = TRUE,
-                    pad = NULL, position, lag = 1) {
-    returns(as.zoo(x), ..., period = period, complete.first = complete.first,
-            pad = pad, position, lag = lag)
+returns.NAVseries <- function(x, period = NULL, complete.first = TRUE,
+                    pad = NULL, position = NULL, lag = 1, ...) {
+    returns(as.zoo(x), period = period, complete.first = complete.first,
+            pad = pad, position, lag = lag, ...)
 }
 
-returns.zoo <- function(x, ..., period = NULL, complete.first = TRUE,
-                    pad = NULL, position, lag = 1) {
+returns.zoo <- function(x, period = NULL, complete.first = TRUE,
+                    pad = NULL, position = NULL, lag = 1, ...) {
 
     t <- time(x)
     x <- coredata(x)
 
     if (!is.null(period)) {
-        returns(x, ..., t = t, period = period,
-                       complete.first = complete.first,
-                       pad = pad, position, lag = lag)
+        returns(x, t = t, period = period,
+                complete.first = complete.first,
+                pad = pad, position = position, lag = lag, ...)
         
     } else {
-        ans <- returns(x, ..., period = NULL,
-                complete.first = complete.first,
-                pad = pad, position, lag = lag)
+        ans <- returns(x, period = NULL,
+                       complete.first = complete.first,
+                       pad = pad, position = position, lag = lag, ...)
         if (!is.null(pad))
             zoo(ans, t) else zoo(ans, t[-1L])
     }
 }
 
-returns.default <- function(x, ..., t = NULL, period = NULL, complete.first = TRUE,
-                    pad = NULL, position, lag = 1) {
+returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
+                    pad = NULL, position = NULL, lag = 1, ...) {
 
-    if (is.null(t) &&  missing(position)) {
+    if (is.null(t) &&  is.null(position)) {
         returns0(x, pad = pad, lag = lag)        
     } else if (!is.null(t)) {
         if (is.unsorted(t)) {

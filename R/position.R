@@ -1,24 +1,22 @@
-position <- function(amount, timestamp, instrument, when, 
-                     drop.zero = FALSE, sort.instruments = TRUE) {
+position <- function(amount, ...)
+    UseMethod("position")
+
+position.journal <- function(amount, when,
+                             drop.zero = FALSE, sort.instruments = TRUE, ...) {
+
+    instrument <- amount$instrument
+    timestamp  <- amount$timestamp
+    amount     <- amount$amount
+
+    position.default(amount, timestamp, instrument, when, 
+                     drop.zero = FALSE, sort.instruments = TRUE, ...)
+}
+                             
+position.default <- function(amount, timestamp, instrument, when, 
+                             drop.zero = FALSE, sort.instruments = TRUE, ...) {
     if (missing(instrument))
         instrument <- NA
         
-    if (inherits(amount, "journal")) {
-        J <- amount
-        instrument <- J$instrument
-        timestamp  <- J$timestamp
-        amount     <- J$amount
-    } else if (inherits(timestamp, "journal")) {
-        J <- timestamp
-        instrument <- timestamp$instrument
-        amount <- timestamp$amount
-        timestamp <- timestamp$timestamp
-    } else if (inherits(instrument, "journal")) {
-        J <- instrument
-        amount <- instrument$amount
-        timestamp <- instrument$timestamp
-        instrument <- instrument$instrument
-    } 
     if (missing(timestamp) || !length(timestamp)){
         if (!missing(when))
             warning(sQuote("when"), " specified, but no valid timestamp supplied")

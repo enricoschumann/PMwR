@@ -1,5 +1,11 @@
 2015-01-26  Enrico Schumann  <es@enricoschumann.net>
 
+	* NAMESPACE: export methods for 'position'
+
+	* R/position.R (position): 'position' is now generic
+	(position.journal): added methods for numeric vectors (default)
+	and 'journal'
+
 	* NAMESPACE: export `[` method for 'position'
 
 2015-01-22  Enrico Schumann  <es@enricoschumann.net>
