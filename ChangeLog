@@ -1,3 +1,7 @@
+2015-01-26  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: export `[` method for 'position'
+
 2015-01-22  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/rebalance.R (rebalance): even with 'match.names', the current

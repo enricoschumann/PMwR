@@ -47,7 +47,6 @@ export(
     rmspace,
     roundPOSIXt,
     runStats,
-##  scale0,
     scale1,
     scaleToUnity,
     scaleTrades,
@@ -61,6 +60,7 @@ export(
 
 ## methods
 S3method(`[`, journal)
+S3method(`[`, position)
 S3method(aggregate, journal)
 S3method(ann, NAVseries)
 S3method(ann, default)
