@@ -94,7 +94,7 @@ print.journal <- function(x, ..., width = getOption("width"),
     print(head(df[notAllNA], max.print), quote = FALSE,
           print.gap = 2)
     if (lx > max.print)
-        cat("[ ... ]\n\n") else cat("\n")
+        cat("[ .... ]\n\n") else cat("\n")
 
     subs <- ""
     if (!is.null(x$instruments)) {
