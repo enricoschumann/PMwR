@@ -1,3 +1,20 @@
+2015-01-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* vignettes/monthly.Rnw: rm file (now in returns.Rnw)
+
+	* R/returns.R (pReturns): 'period' is now matched via 'grep' and
+	set to a fixed string
+	(pReturns): returns are only 'annualised' if time-series is longer
+	than 1 year (unless 'period' matches 'ann.*!', with final
+	exclamation mark)
+
+2015-01-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-56
+
+	* R/position.R (position.journal): fixed -- 'drop.zero' was not
+	used by 'position.journal'
+
 2015-01-26  Enrico Schumann  <es@enricoschumann.net>
 
 	* NAMESPACE: export methods for 'position'

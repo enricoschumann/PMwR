@@ -104,20 +104,31 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
     } else if (grepl("ann", period, ignore.case = TRUE)) {
             xi <- as.Date(t)
             lx <- length(xi)
-            t <- as.numeric(xi[lx] - xi[1L])/365            
-            ans <- list(returns = (x[lx]/x[1L])^(1/t) - 1,
-                        t = c(xi[1L], xi[lx]), period = period)        
+            t <- as.numeric(xi[lx] - xi[1L])/365
+            ans <- if (t < 1 && !(grepl("!$", period))) {
+                list(returns = (x[lx]/x[1L]) - 1,
+                     t = c(xi[1L], xi[lx]), period = "annualised")
+            } else {
+                list(returns = (x[lx]/x[1L])^(1/t) - 1,
+                     t = c(xi[1L], xi[lx]), period = "annualised")
+            }
+
     } else {        
 
         if (length(period) > 1L) {
             by <- period
         } else if (grepl("da(y|i)", period, ignore.case = TRUE)) {
             by <- format(t, "%Y%m%d")
+            period <- "daily"
         } else if (grepl("year(ly)?", period, ignore.case = TRUE)) {
             by <- format(t, "%Y")
+            period <- "yearly"            
         } else if (grepl("month(ly)?", period, ignore.case = TRUE)) {
             by <- format(t, "%Y%m")
-        } 
+            period <- "monthly"            
+        } else {
+            stop("unknown ", sQuote("period"))
+        }
         
         ii <- last(x, by, TRUE)
         if (complete.first && by[1L] == by[2L])
@@ -169,7 +180,7 @@ mtab <- function(x, ytd = "YTD", month.names = NULL, zero.print = "0", plus = FA
 print.preturns <- function(x, ..., year.rows = TRUE,
                            month.names = NULL, zero.print = "0", plus = FALSE,
                            digits = 1) {
-    if (!is.null(x$period) && grepl("month(ly)?", x$period, ignore.case = TRUE)) {
+    if (!is.null(x$period) && x$period == "monthly") {
         if (year.rows)
             print(mtab(x, ytd = "YTD", month.names = month.names,
                        zero.print = zero.print, plus = plus, digits = digits),
@@ -179,13 +190,21 @@ print.preturns <- function(x, ..., year.rows = TRUE,
                        zero.print = zero.print, plus = plus, digits = digits)),
                   quote = FALSE, print.gap = 2, right = TRUE)
         
-    } else if (!is.null(x$period) && grepl("year(ly)?", x$period, ignore.case = TRUE)) {
+    } else if (!is.null(x$period) && x$period == "yearly") {
         tmp <- x$returns
         names(tmp) <- format(x$t, "%Y")
         if (year.rows) 
             print(fmt(tmp, plus, digits), quote = FALSE)
         else 
             print(as.matrix(fmt(tmp, plus, digits)), quote = FALSE)
+    } else if (!is.null(x$period) && x$period == "annualised") {
+        cat(format(round(x$returns*100,1), nsmall = 1), "% p.a. ",
+            "  [", format(x$t[1], "%d %b %Y"), " -- ",
+                 format(x$t[2], "%d %b %Y"), "", sep = "")
+        if (as.numeric(x$t[2]-x$t[1])/365 < 1)
+            cat(", less than one year]\n", sep = "") else
+            cat("]\n", sep = "")
+        
     } else {
         print(unclass(x))
     }

@@ -48,16 +48,12 @@ types of objects.
 x <- c(100,102,101,100)
 returns(x)
 @ 
-
-\noindent We can also replace the lost first observation.
-
+To replace the  lost first observation, specify \texttt{pad}.
 <<>>=
 returns(x, pad = 0)
 returns(x, pad = NA)
 @ 
-
-\noindent When \texttt{x} is a matrix, returns are computed for each column.
-
+When \texttt{x} is a matrix, returns are computed for each column.
 <<>>=
 X <- cbind(x, x, x)
 returns(X, pad = NA)
@@ -66,20 +62,18 @@ returns(X, pad = NA)
 
 \section{\texttt{zoo} objects}
 
-\noindent Vectors.
+Vectors.
 <<>>=
 z <- zoo(x, as.Date("2015-1-5") + 0:2)
 returns(z)
 returns(z, pad = NA)
 @ 
-
-\noindent Matrices.
+Matrices.
 <<>>=
 z <- zoo(X, as.Date("2015-1-5") + 0:2)
 returns(z)
 returns(z, pad = NA)
 @ 
-
 
 \section{Period returns}
 
@@ -87,20 +81,32 @@ returns(z, pad = NA)
 returns.
 
 <<>>=
+set.seed(45)
 t <- as.Date("2014-11-1") + 0:80
 x <- cumprod(1 + rnorm(length(t), sd = 0.01))
 returns(x, t = t, period = "month")
 returns(x, t = t, period = "year")
 @ 
-
-\noindent To get annualised returns, use period \texttt{ann}.
-
+See \texttt{?print.preturns} for more display options. For instance:
 <<>>=
-returns(x, t = t, period = "ann")
+print(returns(zoo(x, t), period = "month"), 
+      digits = 2, year.rows = FALSE)
+@ 
+To get annualised returns, use period `\texttt{ann}'.
+<<>>=
+returns(x, t = t,  period = "ann")
 returns(zoo(x, t), period = "ann")
 @ 
-
-\noindent There are methods to \texttt{toLatex} and \texttt{toHTML}
+But note that the function did \emph{not} annualise: it does
+not annualise if the time period is shorter than one year.
+<<>>=
+x[length(x)]/x[1] - 1
+@ 
+To force annualising, add a `\texttt{!}'.
+<<>>=
+returns(x, t, period = "ann!")
+@ 
+There are methods to \texttt{toLatex} and \texttt{toHTML}
 for monthly returns.  In Sweave documents, need to use
 \texttt{<\/<results = tex,echo = false>\/>=}:
 
@@ -112,6 +118,7 @@ toLatex(returns(x, t = t, period = "month"))
 \end{tabular}
 
 
+\newpage
 \appendix
 <<results=tex>>=
 toLatex(sessionInfo())
