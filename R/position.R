@@ -9,7 +9,8 @@ position.journal <- function(amount, when,
     amount     <- amount$amount
 
     position.default(amount, timestamp, instrument, when, 
-                     drop.zero = FALSE, sort.instruments = TRUE, ...)
+                     drop.zero = drop.zero,
+                     sort.instruments = sort.instruments, ...)
 }
                              
 position.default <- function(amount, timestamp, instrument, when, 
