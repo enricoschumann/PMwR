@@ -1,5 +1,15 @@
 2015-01-28  Enrico Schumann  <es@enricoschumann.net>
 
+	* DESCRIPTION (Version): Version: 0.1-58
+
+	* R/slTable.R (valign, nspace): new internal functions (not
+	exported)
+
+	* R/NAVseries.R (print.summary.NAVseries): reformated summary
+	output for 'NAVseries'
+
+2015-01-28  Enrico Schumann  <es@enricoschumann.net>
+
 	* DESCRIPTION (Version): Version: 0.1-57
 
 	* man/returns.Rd: added arguments for 'toHTML' ('table.class'

@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-06-20 22:22:05 CEST (es)>
+## Time-stamp: <2015-01-28 13:18:06 CET (es)>
 
 ## numbers <- sample(1:50,10, replace = TRUE)
 
@@ -89,3 +89,28 @@ align <- function(s, pattern, sep = " ", justify = "right", fixed = TRUE, at) {
 ##        "100|2|100")
 
 ## cat(paste(align(s, "|", " | "), collapse = "\n"))
+
+## s <- c("xxx <>  aa|aas",
+##        "adsd dsdjd dd<>a|")
+
+nspace <- function(n) {
+    ans <- character(length(n))
+    for (i in seq_along(n))
+        ans[i] <- paste(rep.int(" ", n[i]), collapse = "")
+    ans[n == 0L] <- ""
+    ans
+}
+
+valign <- function(s, align = "|", insert.at = "<>", replace = TRUE, fixed = TRUE) {
+    pos <- regexpr(align, s, fixed = fixed)
+    ns <- nspace(max(pos) - pos)
+
+    for (i in seq_along(s)) 
+         s[i] <- sub(insert.at, ns[i], s[i], fixed = TRUE)
+    sub(align, "", s, fixed = TRUE)        
+}
+
+## s <- c("Price <>100.23|",
+##        "in % <>1.1|")
+## cat(s, sep = "\n")
+## cat(valign(s), sep = "\n")

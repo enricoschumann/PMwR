@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-11-14 16:14:56 CET (es)>
+## Time-stamp: <2015-01-28 13:20:32 CET (es)>
 
 NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
@@ -39,8 +39,8 @@ print.NAVseries <- function(x, ...) {
     cat(mint, "==>", maxt)
     cat("   (", format(n, big.mark = "."), " data points, ", 
         na, " NAs)\n", sep = "")
-    cat(format(first, justify = "right", width = nchar(mint), digits = 2), "   ",
-        format(last,  justify = "right", width = nchar(maxt), digits = 2), "\n")
+    cat(format(first, justify = "right", width = nchar(mint), digits = 6), "   ",
+        format(last,  justify = "right", width = nchar(maxt), digits = 6), "\n")
     invisible(x)
     
 }
@@ -124,24 +124,25 @@ print.summary.NAVseries <- function(x, ...) {
     print(x$NAVseries)    
     template <-
         c("---------------------------------------------------------",
-          "High         %high%  (%high.when%)",
-          "Low           %low%  (%low.when%)",
+          "High <>%high%|  (%high.when%)",
+          "Low <>%low%|  (%low.when%)",
           "---------------------------------------------------------",
-          "return (%)       %return%",
+          "Return (%) <>%return%|  (annualised)",
           "---------------------------------------------------------",
-          "max. drawdown (in %)  %mdd%",
-          "peak          %mdd.high%  (%mdd.high.when%)",
-          "trough        %mdd.low%  (%mdd.low.when%)",
-          "underwater (in %) %underwater%",
+          "Max. drawdown (%)   <> %mdd%|",
+          "_ peak <>%mdd.high%|  (%mdd.high.when%)",
+          "_ trough <>%mdd.low%|  (%mdd.low.when%)",
+          "_ underwater now (%) <>%underwater%|",
           "---------------------------------------------------------",
-          "volatility (in %, ann.)  %vol%",
-          "upside volatility        %vol.up%",
-          "downside volatility      %vol.down%",
+          "Volatility (%) <>%vol%|  (annualised)",
+          "_ upside <>%vol.up%|",
+          "_ downside <>%vol.down%|",
           "---------------------------------------------------------\n")
     nx <- names(x)
     nx <- nx[nx != "NAVseries"]
     for (n in nx)
         template <- gsub(paste0("%", n, "%"), x[[n]], template)
+    template <- valign(template)
     cat(template, sep = "\n")
     cat("Monthly returns  ")
     sparkplot(returns(x$NAVseries$NAV))
