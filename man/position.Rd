@@ -1,5 +1,6 @@
 \name{position}
 \alias{position}
+\alias{position.default}
 \alias{print.position}
 \title{
   Aggregate Transactions to Position
@@ -9,8 +10,10 @@
   in time.
 }
 \usage{
-position(amount, timestamp, instrument, when, drop.zero = FALSE,
-         sort.instruments = TRUE)
+position(amount, \dots)
+
+\method{position}{default}(amount, timestamp, instrument, when, drop.zero = FALSE,
+            sort.instruments = TRUE, \dots)
 
 \method{print}{position}(x, \dots, sep = NA)
 

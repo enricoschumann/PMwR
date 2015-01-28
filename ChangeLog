@@ -1,4 +1,14 @@
+2015-01-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-57
+
+	* man/returns.Rd: added arguments for 'toHTML' ('table.class'
+	etc.)
+
 2015-01-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/ann.R (ann): added warning to use 'returns(x, t, period =
+	"ann")' instead
 
 	* vignettes/monthly.Rnw: rm file (now in returns.Rnw)
 

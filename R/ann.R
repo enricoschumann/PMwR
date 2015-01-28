@@ -1,9 +1,12 @@
 ## -*- truncate-lines: t; fill-column: 65; comment-column: 50; -*-
-## Time-stamp: <2014-10-29 13:12:25 CET (es)>
+## Time-stamp: <2015-01-27 18:13:22 CET (es)>
 
-ann <- function(x, ...)
+ann <- function(x, ...) {
+    warning(sQuote("ann"), " is deprecated. ",
+            "Use  returns(x, t, period = 'ann')  instead.")
     UseMethod("ann", x)
-
+}
+    
 ann.default <- function(x, t, ...) {
     ann(zoo(x, t))
 }

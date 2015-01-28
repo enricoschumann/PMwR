@@ -75,11 +75,17 @@ strexp <- function(s, after, width, fill = " ", at) {
         rx <- regexpr(after, s)
         at <- as.numeric(rx + attr(rx, "match.length"))
     }
+    ## if (is.character(at)) {}
     paste(substr(s, 1L, at - 1L), space,
           substr(s, at, ns), sep = "")    
 }
 
-## pretty print a csv file
+## s <-  "test | 2"
+## strexp(s, width = 10, at = "##")
 
+## ## pretty print a csv file
 
-##
+## tmp <- gregexpr("##", c(s,s, "a"))
+## unlist(tmp)
+
+## unlist(lapply(tmp, attr, "match.length"))

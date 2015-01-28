@@ -15,11 +15,11 @@
 \usage{
 returns(x, \dots)
 
-\method{returns}{default}(x, \dots, t = NULL, period = NULL, complete.first = TRUE,
-                          pad = NULL, position, lag = 1)
+\method{returns}{default}(x, t = NULL, period = NULL, complete.first = TRUE,
+                          pad = NULL, position = NULL, lag = 1, \dots)
 
-\method{returns}{zoo}(x, \dots, period = NULL, complete.first = TRUE,
-                      pad = NULL, position, lag = 1)
+\method{returns}{zoo}(x, period = NULL, complete.first = TRUE,
+                      pad = NULL, position = NULL, lag = 1, \dots)
 
 \method{print}{preturns}(x, \dots, year.rows = TRUE, month.names = NULL,
                          zero.print = "0", plus = FALSE, digits = 1)
@@ -50,7 +50,8 @@ returns(x, \dots)
        used if \code{t} is not \code{NULL}.
   }
   \item{complete.first}{
-    logical. 
+    logical. For monthly returns, should the first month (if incomplete)
+    be used.
   }
   \item{pad}{    
     either \code{NULL} (no padding of initial lost observation) or a
@@ -81,23 +82,43 @@ returns(x, \dots)
   \item{object}{
     an object of class \code{preturns} (\sQuote{period returns})
   }
+  \item{month.names}{
+    character: names of months
+  }
+  \item{digits}{
+    number of digits in table
+  }
+  \item{ytd}{
+    header for YTD
+  }
+  \item{eol}{character}
+  \item{stand.alone}{logical or character}
+  \item{table.class}{character}
+  \item{table.style}{character}
+  \item{th.class}{character}
+  \item{th.style}{character}
+  \item{td.class}{character}
+  \item{td.style}{character}
+  \item{tr.class}{character}
+  \item{tr.style}{character}
 }
 \details{
 
-  return is a generic function.  It computes simple returns: current values divided by
-  prior values minus one.  The default method works for numeric
-  vectors/matrices.
+  \code{return} is a generic function.  It computes simple returns:
+  current values divided by prior values minus one.  The default method
+  works for numeric vectors/matrices.
   
 }
 \value{
 
-  If called as \code{returns(x)}: a numeric vector or matrix.
+  If called as \code{returns(x)}: a numeric vector or matrix, possibly
+  of class \code{zoo}.
 
   If called with a \code{period} argument: an object of class
-  \code{"preturns"} (period returns), which is a list of the dates, the
-  returns and the period.  Main use is to have methods that pretty-print
-  such period returns; currently, there are methods for
-  \code{\link{toLatex}} and \code{\link[tools]{toHTML}}.
+  \code{"preturns"} (period returns), which is a list of dates,
+  corresponding returns and the period.  Main use is to have methods
+  that pretty-print such period returns; currently, there are methods
+  for \code{\link{toLatex}} and \code{\link[tools]{toHTML}}.
   
 }
 \author{
@@ -107,7 +128,7 @@ returns(x, \dots)
   \code{\link{btest}}
 }
 \examples{
-x <- 101:112
+x <- 101:105
 returns(x)
 returns(x, pad = NA)
 returns(x, pad = NA, lag = 2)
