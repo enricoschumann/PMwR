@@ -133,7 +133,7 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         ii <- last(x, by, TRUE)
         if (complete.first && by[1L] == by[2L])
             ii <- c(1, ii)
-        
+
         ans <- list(returns = returns(x[ii], pad = pad),
                     t = if (is.null(pad)) t[ii][-1L] else t[ii],
                     period = period)        

@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2013-11-14 21:45:50 CET (es)>
+## Time-stamp: <2015-02-04 18:10:17 CET (es)>
 
 
 rsplot <- function(x, y, ...,  xlab = NULL, ylab = NULL,
@@ -12,11 +12,11 @@ rsplot <- function(x, y, ...,  xlab = NULL, ylab = NULL,
         deparse(substitute(y))
     
     par(tck = 0.005, las = 1)
-    plot(x, y, cex = 0.01, asp = 1,
-         xaxt = "n", yaxt = "n", bty = "n", pch = 1,
+    plot(x, y, asp = 1,
+         xaxt = "n", yaxt = "n", bty = "n",
          xlab = xlab, ylab = ylab, ...)
-    abline(v = qx <- quantile(x, c(0.01, 0.99)),
-           h = qy <- quantile(y, c(0.01, 0.99)),
+    abline(v = qx <- quantile(x, c(0.01, 0.95)),
+           h = qy <- quantile(y, c(0.01, 0.95)),
            col = col.lines)
     tmp <- c(0, qx, min(x), max(x))
     axis(1, at = tmp, labels = format(round(100*tmp,1), nsmall = 1),
@@ -24,7 +24,7 @@ rsplot <- function(x, y, ...,  xlab = NULL, ylab = NULL,
     tmp <- c(0, qy, min(y), max(y))
     axis(2, at = tmp, labels = format(round(100*tmp,1), nsmall = 1),
          col = col.axis)
-    lines(x, y, cex = 0.8, type = "p",
-          bg = bg, fg = fg, pch = 21)
+    lines(x, y, type = "p",
+          bg = bg, fg = fg, ...)
 }
     
