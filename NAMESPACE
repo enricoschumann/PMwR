@@ -16,29 +16,29 @@ importFrom(zoo, zoo)
 export(
     "dayOfMonth<-",
     "mday<-",
+    NAVseries,
     ann,
-    journal,
     btest,
     char2num,
     closeOnFirst,
     dayOfMonth,
     divAdjust,
-    mday,
     endOfMonth,
     endOfPreviousMonth,
     expstr,
     firstOfMonth,
+    isLeapyear,
     isValidISIN,
     isWeekend,
-    isLeapyear,
+    journal,
     lastWeekday,
     limit,
-    NAVseries,
+    mday,
     nextBusinessDay,
     nthWeekday,
     pl,
-    pm,
     plotTradingHours,
+    pm,
     position,
     previousBusinessDay,
     rebalance,
@@ -94,3 +94,6 @@ S3method(tail, journal)
 S3method(toHTML, preturns)
 S3method(toLatex, preturns)
 S3method(toText, default)
+S3method(journal, default)
+S3method(journal, position)
+S3method(journal, btest)

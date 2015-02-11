@@ -1,3 +1,12 @@
+2015-02-11  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-59
+
+	* R/journal.R (journal): journal is now a generic function,
+	currently with methods default, which matches the old behaviour,
+	and for 'position' and 'best' (the latter merely extracts the
+	journal from a 'btest' object)
+
 2015-01-28  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-58

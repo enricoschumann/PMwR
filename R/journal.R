@@ -1,30 +1,34 @@
-journal <- function(timestamp, amount, price, instrument,
-                    id = NULL,  account = NULL, ...) {
-
-    ## empty journal
+journal <- function(amount, ...) {
     if (match.call() == "journal()") {
         ans <- list(timestamp = numeric(0),
                     amount = numeric(0),
                     price = numeric(0),
                     instrument = character(0))
         class(ans) <- "journal"
-        return(ans)
-    }
+        ans
+    } else
+        UseMethod("journal")
+}
 
-    ## convert position to journal 
-    if (!missing(timestamp) && inherits(timestamp, "position")) {
+journal.position <- function(amount, price, ...) {
+
         if (!missing(price) && !is.null(names(price))) 
             price <- price[match(timestamp$instrument, names(price))]
         else if (missing(price))
             price <- NA
         if (length(timestamp$timestamp) > 1L)
-            stop("must be position at one point in time")
-        ans <- journal(timestamp  = timestamp$timestamp,
-                       amount     = c(timestamp$position),
-                       price      = price,
-                       instrument = timestamp$instrument)
-        return(ans)
-    }
+            stop("must be position at *one* point in time")
+        journal(timestamp  = timestamp$timestamp,
+                amount     = c(timestamp$position),
+                price      = price,
+                instrument = timestamp$instrument)
+}
+
+journal.btest <- function(amount, ...)
+    amount$journal
+
+journal.default <- function(amount, price, timestamp, instrument,
+                    id = NULL,  account = NULL, ...) {
         
     if (missing(timestamp))
         timestamp <- NA

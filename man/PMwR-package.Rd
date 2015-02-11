@@ -19,8 +19,8 @@
   saying that in the current version, the interfaces to functions are
   not stable (eg, argument names are currently being made consistent
   across functions); in some cases, generics will be introduced.  The
-  recommended practice is therefore currently to explicitly name
-  arguments in function calls (and not pass arguments by position).  Any
+  \bold{recommended practice} is therefore currently to \bold{explicitly name
+  arguments in function calls} (and not pass arguments by position).  Any
   changes in argument names will be documented in the ChangeLog and so
   can be easily followed.
 

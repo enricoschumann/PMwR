@@ -25,7 +25,6 @@ test.journal <- function() {
     checkEquals(length(j$instrument), length(j))
     checkEquals(length(j$price),      length(j))
     
-
     ## empty journal
     checkEquals(journal(),
                 structure(list(timestamp = numeric(0),
@@ -36,24 +35,24 @@ test.journal <- function() {
                                      "price", "instrument"),
                           class = "journal"))
 
-
     ## a more reasonable journal
     timestamp <- 1:5
     amount <- 1
     price <- 101:105
     instrument <- "Stock A"
-    j <- journal(timestamp, amount, price, instrument = instrument)
+    j <- journal(timestamp = timestamp, amount = amount,
+                 price=price, instrument = instrument)
 
     ## method: c
     checkEquals(c(j, journal()) , j)    
+    ## checkEquals(c(journal(), j), j)   ## TODO: sorting of fields
 
     ## subsetting
-    j[1]
+    ## j[1]
     checkEquals(j["stock"], j)
     checkEquals(length(j["bla"]), 0)
-
     
-    
+    ## method: c
     jj <- c(j, j)
 
     ## method: sort
@@ -68,11 +67,9 @@ test.journal <- function() {
     amount <- rep(1, length(timestamp))
     price <- sample(100:110, length(timestamp), replace = TRUE)
     instrument <- rep(letters[1:4], each = 5L)
-    j <- journal(timestamp, amount, price, instrument = instrument)
+    j <- journal(timestamp = timestamp, amount = amount,
+                 price = price, instrument = instrument)
     head(j, 4)
     head(j, 4, by = FALSE)
-
-    
-
-
+   
 }
