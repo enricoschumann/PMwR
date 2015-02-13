@@ -13,15 +13,16 @@ journal <- function(amount, ...) {
 journal.position <- function(amount, price, ...) {
 
         if (!missing(price) && !is.null(names(price))) 
-            price <- price[match(timestamp$instrument, names(price))]
+            price <- price[match(amount$instrument, names(price))]
         else if (missing(price))
             price <- NA
-        if (length(timestamp$timestamp) > 1L)
+        if (length(amount$timestamp) > 1L)
             stop("must be position at *one* point in time")
-        journal(timestamp  = timestamp$timestamp,
-                amount     = c(timestamp$position),
+
+        journal(timestamp  = amount$timestamp,
+                amount     = c(amount$position),
                 price      = price,
-                instrument = timestamp$instrument)
+                instrument = amount$instrument)
 }
 
 journal.btest <- function(amount, ...)

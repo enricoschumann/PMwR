@@ -1,3 +1,11 @@
+2015-02-13  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/price.table.R: added file/function 'price_table' (not exported
+	yet)
+
+	* R/journal.R (journal.position): fixed -- 'position' method did
+	not properly extract data from position
+
 2015-02-11  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-59
