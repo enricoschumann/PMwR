@@ -1433,7 +1433,7 @@ The following classes are implicitly defined (ie, S3 classes):
 
 \section{Valuation}
 
-Valueing a position can mean two things: compute theoretical prices,
+Valuing a position can mean two things: compute theoretical prices,
 or market prices.
 
 Theoretical valuation takes places via the generic function value:
@@ -1506,7 +1506,9 @@ classes: Fund Equity Account Currency Future Index
 %% pricing premium/future
 %% class
 
-\section{Vectorisation}
+\section{Implementation}
+
+\subsection{Vectorisation}
 
 Functions should do vectorisation when they have to.  Example:
 drawdown is interally computed through \texttt{cumsum}, so even for a
@@ -1514,6 +1516,14 @@ matrix of time series, it would need a loop.  This should be left to
 the user. 
 
 The exception is when computations can be accelerated.
+
+\subsection{Named vectors}
+
+
+\subsection{Functional programming}
+
+Do not rely on global options/settings. Exception: \texttt{print}
+methods
 
 \chapter{Frequently-used functions}
 

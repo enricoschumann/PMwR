@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; fill-column: 65; comment-column: 50; -*-
-## Time-stamp: <2015-02-13 17:57:49 CET (es)>
+## Time-stamp: <2015-02-17 17:22:42 CET (es)>
 
 ## require("database")
 ## searchInstruments("siemens")
@@ -11,7 +11,7 @@
 ## series <- list(tmp$close[,1], tmp$timestamp, 
 ##                tmp$close[,2], tmp$timestamp)
 
-price_table(when, instrument, ...) {
+price_table <- function(when, instrument, ...) {
 
     series <- list(...)
     ns <- length(series)

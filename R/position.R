@@ -84,6 +84,11 @@ position.default <- function(amount, timestamp, instrument, when,
     ans
 }
 
+position.btest <- function(amount, when, ...) {
+
+
+}
+
 print.position <- function(x, ..., sep = NA) {
 
     if (!is.na(sep))

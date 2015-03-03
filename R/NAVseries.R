@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2015-01-28 13:20:32 CET (es)>
+## Time-stamp: <2015-02-17 17:42:48 CET (es)>
 
 NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
