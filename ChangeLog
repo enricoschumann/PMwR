@@ -1,3 +1,10 @@
+2015-03-03  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-60
+
+	* NAMESPACE: 'ann' is no longer exported: use 'returns(x, t,
+	period = "ann")' instead
+
 2015-02-17  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R (btest): added meaningful error message for case
@@ -42,7 +49,7 @@
 2015-01-27  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/ann.R (ann): added warning to use 'returns(x, t, period =
-	"ann")' instead
+	"ann")' instead of 'ann'
 
 	* vignettes/monthly.Rnw: rm file (now in returns.Rnw)
 

@@ -17,7 +17,7 @@ export(
     "dayOfMonth<-",
     "mday<-",
     NAVseries,
-    ann,
+    ## ann,
     btest,
     char2num,
     closeOnFirst,
@@ -62,9 +62,9 @@ export(
 S3method(`[`, journal)
 S3method(`[`, position)
 S3method(aggregate, journal)
-S3method(ann, NAVseries)
-S3method(ann, default)
-S3method(ann, zoo)
+## S3method(ann, NAVseries)
+## S3method(ann, default)
+## S3method(ann, zoo)
 S3method(as.data.frame, journal)
 S3method(as.zoo, NAVseries)
 S3method(as.zoo, preturns)
