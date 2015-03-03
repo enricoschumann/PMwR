@@ -145,7 +145,6 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
 as.zoo.preturns <- function (x, ...)
     zoo(x$returns, x$t)
 
-
 ## not exported
 fmt <- function(x, plus, digits) {
     ans <- format(round(100*x, digits),
@@ -212,7 +211,8 @@ print.preturns <- function(x, ..., year.rows = TRUE,
 }
 
 toLatex.preturns <- function(object, ..., year.rows = TRUE,
-                             ytd = "YTD", month.names = NULL, eol = "\\\\") {
+                             ytd = "YTD", month.names = NULL, eol = "\\\\",
+                             stand.alone = FALSE) {
     if (grepl("month(ly)?", object$period, ignore.case = TRUE)) {
         if (year.rows)
             mt <- mtab(object, ytd = ytd, month.names = month.names)

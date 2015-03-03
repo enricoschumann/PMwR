@@ -1,3 +1,10 @@
+2015-02-17  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): added meaningful error message for case
+	'convert.weights && b==0 && is.null(prices0) && lag>0'
+
+	* R/returns.R (toLatex.preturns): added 'stand.alone = FALSE'
+
 2015-02-13  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/price.table.R: added file/function 'price_table' (not exported

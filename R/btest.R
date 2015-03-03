@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-12-18 06:29:51 CET (es)>
+## Time-stamp: <2015-02-17 17:30:12 CET (es)>
 btest  <- function(prices,              
                    signal,               ## 
                    do.signal = TRUE,     ## 
@@ -13,6 +13,7 @@ btest  <- function(prices,
                    tc = 0,
                    ...,
                    add = FALSE,          ## if TRUE, 'position' is flow
+                   lag = 1,
                    convert.weights = FALSE,
                    tradeOnOpen = TRUE,
                    tol = 1e-5,
@@ -25,11 +26,14 @@ btest  <- function(prices,
         warning(sQuote("convert.weights"), " is TRUE and ",
                 sQuote("initial.cash"), " is zero")
 
-    if (isdebugged(signal))
-        db.signal <- TRUE
-    else
-        db.signal <- FALSE
+    if (convert.weights && b==0 && is.null(prices0) && lag>0)
+        stop("to convert weights to positions, either specify ",
+                sQuote("prices0"), " or set ", sQuote("b"), " > 0")
 
+    
+    db.signal <- if (is.function(signal) && isdebugged(signal))
+        TRUE else FALSE
+    
     if (is.function(do.signal) && isdebugged(do.signal))
         db.do.signal <- TRUE
     else
@@ -85,7 +89,7 @@ btest  <- function(prices,
     }
 
     ## variables to be available in functions
-    Open <- function(lag = 1)
+    Open <- function(lag = lag)
         mO[t - lag, , drop = FALSE]
     High <- function(lag = 1)
         mH[t - lag, , drop = FALSE]
