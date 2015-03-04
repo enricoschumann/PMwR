@@ -10,7 +10,7 @@
 btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
       print.info = NULL, b = 1L, fraction = 1, initial.position = 0,
       initial.cash = 0, cashflow = NULL, tc = 0, \dots,
-      add = FALSE, convert.weights = FALSE, tradeOnOpen = TRUE,
+      add = FALSE, lag = 1, convert.weights = FALSE, tradeOnOpen = TRUE,
       tol = 1e-5, assignInGlobals = list(),
       prices0 = NULL, include.data = FALSE, timestamp, instrument)
 }
@@ -81,6 +81,7 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
     position, ie, orders).
 
   }
+  \item{lag}{default is 1}
   \item{convert.weights}{
 
     Default is \code{FALSE}.  If \code{TRUE}, the value of signal will

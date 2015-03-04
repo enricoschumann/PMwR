@@ -26,7 +26,7 @@ returns(x, \dots)
 
 \method{toLatex}{preturns}(object, \dots,
        year.rows = TRUE, ytd = "YTD", month.names = NULL, 
-       eol = "\\\\\\\\")
+       eol = "\\\\\\\\", stand.alone = FALSE)
 
 \method{toHTML}{preturns}(x, \dots,
     year.rows = TRUE, ytd = "YTD", month.names = NULL, 

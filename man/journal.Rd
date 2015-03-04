@@ -1,5 +1,6 @@
 \name{journal}
 \alias{journal}
+\alias{journal.default}
 \alias{aggregate.journal}
 \alias{c.journal}
 \alias{length.journal}
@@ -19,7 +20,9 @@
   Create a journal of financial transactions.
 }
 \usage{
-journal(timestamp, amount, price, instrument,
+journal(amount, \dots)
+
+\method{journal}{default}(amount, price, timestamp, instrument,
         id = NULL, account = NULL, \dots)
 
 \method{c}{journal}(\dots, recursive = FALSE)
