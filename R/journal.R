@@ -220,7 +220,7 @@ summary.journal <- function(x, ...) {
     ## TODO
     ## number of trades per instrument
     ## level: instrument or account or factor
-    ## number of transactions, min/max price, first/last transactions
+    ## number of transactions, first/last transactions, min/max price (if meaningful) 
     ans <- list()
     ans$n_transactions <- length(x)
     ans
@@ -263,15 +263,23 @@ aggregate.journal <- function(x, by, FUN, ...) {
         grp <- grp * nlevels(ind) + (as.integer(ind) - 1L)
     }
     
-    ## TODO
-    if (!missing(FUN))
-        FUN <- match.fun(FUN)
-    j <- journal()
+    if (mode(FUN) ==  "list") {
+        funlist <- FUN
+        FUN <- function(x, ...) {
+            ans <- list()
+            for (i in seq_along(funlist))
+                ans <- c(ans, funlist[[i]](x[[ names(funlist)[i] ]], ...))
+            class(ans) <- "journal"
+            ans
+        }
+    }
+        
+    j <- journal()    
     for (g in sort(unique(grp))) {
         sx <- x[g == grp]
         if (length(sx) == 0L)
             next
-        j <- c(j, FUN(sx))
+        j <- c(j, FUN(sx, ...))
     }
     j
 }

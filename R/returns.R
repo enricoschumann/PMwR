@@ -136,7 +136,11 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
 
         ans <- list(returns = returns(x[ii], pad = pad),
                     t = if (is.null(pad)) t[ii][-1L] else t[ii],
-                    period = period)        
+                    period = period)
+        ## TODO
+        attr(ans, "t") <- if (is.null(pad)) t[ii][-1L] else t[ii]
+        attr(ans, "period") <- "period"
+
     }
     class(ans) <- "preturns"
     ans

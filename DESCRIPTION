@@ -15,6 +15,5 @@ Suggests: RUnit, rbenchmark
 License: GPL-3
 LazyLoad: yes
 LazyData: yes
-ByteCompile: yes
-NeedsCompilation: yes
+ByteCompile: no
 URL: http://enricoschumann.net/R/packages/PMwR/index.htm
