@@ -29,6 +29,8 @@ journal(amount, \dots)
 
 \method{length}{journal}(x)
 
+\method{aggregate}{journal}((x, by, FUN, \dots)
+
 \method{print}{journal}(x, \dots,
       width = getOption("width"), max.print = getOption("max.print"),
       exclude = NULL, include.only = NULL)
@@ -125,7 +127,11 @@ journal(amount, \dots)
   }
   \item{reverse}{
     logical. If \code{TRUE}, select journal entries that do not match
-regular expression.
+    regular expression.
+  }
+  \item{FUN}{
+    either a function that takes as input a journal and evaluates to a
+    journal, or a list of named functions
   }
 }
 \details{
