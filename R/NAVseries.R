@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2015-02-17 17:42:48 CET (es)>
+## Time-stamp: <2015-04-16 15:00:06 CEST (es)>
 
 NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
@@ -19,6 +19,9 @@ NAVseries <- function(NAV, timestamp,
 
 
 print.NAVseries <- function(x, ...) {
+    bm <- function(x)
+        if (x >= 10000)
+            format(x, big.mark = ",") else x
     if (length(x$title))
         cat(x$title, "\n")
     else if (!is.null(x$instrument))
@@ -37,7 +40,7 @@ print.NAVseries <- function(x, ...) {
     last <- x$NAV[n]
 
     cat(mint, "==>", maxt)
-    cat("   (", format(n, big.mark = "."), " data points, ", 
+    cat("   (", bm(n), " data points, ", 
         na, " NAs)\n", sep = "")
     cat(format(first, justify = "right", width = nchar(mint), digits = 6), "   ",
         format(last,  justify = "right", width = nchar(maxt), digits = 6), "\n")
