@@ -2,7 +2,10 @@
 
 	* DESCRIPTION (Version): Version: 0.1-62
 
-	* NAMESPACE: moved 'toText' to new package 'textutils'
+	* R/texttools.R: moved all helper functions that concern character
+	vectors to 'textutils'
+
+	* R/toText.R: moved 'toText' to new package 'textutils'
 
 	* R/datetimetools.R (previousBusinessDay, nextBusinessDay): now
 	also work for POSIXt (and other classes that can be coerced to

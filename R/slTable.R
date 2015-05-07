@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2015-01-28 13:18:06 CET (es)>
+## Time-stamp: <2015-05-07 16:50:45 CEST (es)>
 
 ## numbers <- sample(1:50,10, replace = TRUE)
 
@@ -57,60 +57,3 @@ bPlot <- function(x, width = 1, col = NULL) {
 map01 <- function(x, min, max) 
     (x - min)/(max - min)
 
-## TeXunits(c("1 cm", "0.7 in"), c("in", "cm"))
-## TeXunits(c("1 cm", "0.7 in"), "in")
-## TeXunits("1 cm", c("in", "cm"))
-
-
-
-## align
-## character vector, pattern, at
-
-align <- function(s, pattern, sep = " ", justify = "right", fixed = TRUE, at) {
-    ans <- strsplit(s, pattern, fixed = fixed)
-    nc <- lapply(ans, nchar)
-    len <- max(unlist(lapply(nc, length)))
-    res <- NULL
-    if (length(justify) == 1)
-        justify <- rep(justify, len)
-    for (i in seq_len(len)) {
-        width <- max(unlist(lapply(nc, `[`, i)), na.rm = TRUE)
-        tmp <- unlist(lapply(ans, `[`, i))
-        tmp[is.na(tmp)] <- ""
-        res <- paste0(res, if (is.null(res)) "" else sep,
-                      format(tmp,
-                             width = width, justify = justify[i]))
-    }
-    res
-}
-## s <- c("xxxxxxxxxxxxxxx",
-##        "1",
-##        "1.23|5.2|100000",
-##        "100|2|100")
-
-## cat(paste(align(s, "|", " | "), collapse = "\n"))
-
-## s <- c("xxx <>  aa|aas",
-##        "adsd dsdjd dd<>a|")
-
-nspace <- function(n) {
-    ans <- character(length(n))
-    for (i in seq_along(n))
-        ans[i] <- paste(rep.int(" ", n[i]), collapse = "")
-    ans[n == 0L] <- ""
-    ans
-}
-
-valign <- function(s, align = "|", insert.at = "<>", replace = TRUE, fixed = TRUE) {
-    pos <- regexpr(align, s, fixed = fixed)
-    ns <- nspace(max(pos) - pos)
-
-    for (i in seq_along(s)) 
-         s[i] <- sub(insert.at, ns[i], s[i], fixed = TRUE)
-    sub(align, "", s, fixed = TRUE)        
-}
-
-## s <- c("Price <>100.23|",
-##        "in % <>1.1|")
-## cat(s, sep = "\n")
-## cat(valign(s), sep = "\n")

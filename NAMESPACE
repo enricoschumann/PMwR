@@ -5,12 +5,15 @@ importFrom(NMOF, drawdown)
 importFrom(utils, toLatex)
 importFrom(utils, head)
 importFrom(utils, tail)
-importFrom(tools, toHTML)   ## texttools
 importFrom(stats, aggregate)
 importFrom(zoo, as.zoo)
 importFrom(zoo, index)
 importFrom(zoo, coredata)
 importFrom(zoo, zoo)
+importFrom(textutils, rmspace)
+importFrom(textutils, valign)
+importFrom(textutils, strexp)
+importFrom(textutils, toHTML)  
 
 export(
     "dayOfMonth<-",   ## datetimetools
@@ -18,13 +21,11 @@ export(
     NAVseries,
     as.NAVseries,
     btest,
-    char2num,
     closeOnFirst,
     dayOfMonth,         ## datetimetools
     divAdjust,
     endOfMonth,         ## datetimetools
     endOfPreviousMonth, ## datetimetools
-    expstr, ## texttools
     firstOfMonth,
     isLeapyear,
     isValidISIN,
@@ -43,8 +44,6 @@ export(
     pricetable,
     rebalance,
     returns,
-    rmrp,## texttools
-    rmspace,## texttools
     roundPOSIXt,
     runStats,
     scale1,

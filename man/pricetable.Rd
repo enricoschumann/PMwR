@@ -54,7 +54,7 @@ rownames(price) <- 1:m
 when <- c(0,1.2,3,3,20)
 instrument <- c("a", "c", "x", "z_1", "z_2")
 
-pricetable(instrument, when, price, missing = 1)
+pricetable(instrument, when, price, missing = NA)
 pricetable(instrument, when, price, missing = 1)
 
 }
