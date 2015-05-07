@@ -1,5 +1,6 @@
 \name{NAVseries}
 \alias{NAVseries}
+\alias{as.NAVseries}
 \alias{print.NAVseries}
 \alias{summary.NAVseries}
 \title{
@@ -11,6 +12,8 @@
 \usage{
 NAVseries(NAV, timestamp,
           instrument = NULL, title = NULL, description = NULL)
+
+as.NAVseries(x, ...)
 
 \method{print}{NAVseries}(x, \dots)
 \method{summary}{NAVseries}(object, \dots)
@@ -32,7 +35,7 @@ NAVseries(NAV, timestamp,
     character
 }
 \item{x}{
-  an \code{NAVseries}
+  an \code{NAVseries} or an object to be coerced to NAVseries
 }
 \item{object}{
   an \code{NAVseries}

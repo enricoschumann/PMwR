@@ -5,7 +5,7 @@ importFrom(NMOF, drawdown)
 importFrom(utils, toLatex)
 importFrom(utils, head)
 importFrom(utils, tail)
-importFrom(tools, toHTML)
+importFrom(tools, toHTML)   ## texttools
 importFrom(stats, aggregate)
 importFrom(zoo, as.zoo)
 importFrom(zoo, index)
@@ -14,17 +14,18 @@ importFrom(zoo, zoo)
 
 ## exports
 export(
-    "dayOfMonth<-",
-    "mday<-",
+    "dayOfMonth<-",   ## datetimetools
+    "mday<-",         ## datetimetools
     NAVseries,
+    as.NAVseries,
     btest,
     char2num,
     closeOnFirst,
-    dayOfMonth,
+    dayOfMonth,         ## datetimetools
     divAdjust,
-    endOfMonth,
-    endOfPreviousMonth,
-    expstr,
+    endOfMonth,         ## datetimetools
+    endOfPreviousMonth, ## datetimetools
+    expstr, ## texttools
     firstOfMonth,
     isLeapyear,
     isValidISIN,
@@ -40,10 +41,11 @@ export(
     pm,
     position,
     previousBusinessDay,
+    pricetable,
     rebalance,
     returns,
-    rmrp,
-    rmspace,
+    rmrp,## texttools
+    rmspace,## texttools
     roundPOSIXt,
     runStats,
     scale1,
@@ -52,8 +54,8 @@ export(
     splitTrades,
     splitAdjust,
     timegrid,
-    toHTML,
-    toText,
+    toHTML,## texttools
+    toText,## texttools
     twExposure
     )
 
@@ -62,6 +64,7 @@ S3method(`[`, journal)
 S3method(`[`, position)
 S3method(aggregate, journal)
 S3method(as.data.frame, journal)
+S3method(as.NAVseries, zoo)
 S3method(as.zoo, NAVseries)
 S3method(as.zoo, preturns)
 S3method(c, journal)

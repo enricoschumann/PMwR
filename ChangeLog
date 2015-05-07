@@ -1,3 +1,29 @@
+2015-05-07  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-62
+
+	* man/pricetable.Rd: added manual page
+
+2015-05-06  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/price_table.R (pricetable): 'pricetable' (renamed from
+	'price_table') is now exported
+
+2015-04-30  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/backtest.R (backtest): added warning about removal
+
+	* R/runStats.R (runStats): removed 'DUP = FALSE'
+
+2015-04-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-61
+
+	* NAMESPACE: export as.NAVseries
+
+	* R/NAVseries.R (print.summary.NAVseries): new argument
+	'sparkplot' with default TRUE unless Windows platform
+
 2015-04-16  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/NAVseries.R (print.NAVseries): use big.mark only if 5 or more

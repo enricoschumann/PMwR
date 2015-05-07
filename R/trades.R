@@ -47,6 +47,7 @@ splitTrades <- function(amount, price, timestamp, aggregate = FALSE) {
         list(amount = n, price = p, timestamp = timestamp)
     }
 }
+
 scaleTrades <- function(amount, price, timestamp, aggregate = FALSE,
                         fun = NULL, ...) {
     n <- amount
@@ -76,6 +77,7 @@ scaleToUnity <- function(amount) {
     maxn <- max(abs(cumsum(amount)))
     amount/maxn
 }
+
 closeOnFirst <- function(amount) {
     s <- sign(amount)
     s1 <- s[1L]

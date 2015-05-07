@@ -29,7 +29,7 @@ journal(amount, \dots)
 
 \method{length}{journal}(x)
 
-\method{aggregate}{journal}((x, by, FUN, \dots)
+\method{aggregate}{journal}(x, by, FUN, \dots)
 
 \method{print}{journal}(x, \dots,
       width = getOption("width"), max.print = getOption("max.print"),

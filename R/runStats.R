@@ -9,12 +9,12 @@ runStats <- function(what, y, N = 5L, pad = NULL, q = NULL, h = NULL) {
     } else if (N > ny)
         stop("length of y must be greater than N")
     switch(what,
-           mean = res <- .C("mA",    y = y, N = N, ny = ny, res = double(ny),DUP = FALSE)$res,
-           min =  res <- .C("mMin2", y = y, N = N, ny = ny, res = double(ny),DUP = FALSE)$res,
-           max =  res <- .C("mMax2", y = y, N = N, ny = ny, res = double(ny),DUP = FALSE)$res,
-           sum =  res <- .C("mSum",  y = y, N = N, ny = ny, res = double(ny),DUP = FALSE)$res,
+           mean = res <- .C("mA",    y = y, N = N, ny = ny, res = double(ny))$res,
+           min =  res <- .C("mMin2", y = y, N = N, ny = ny, res = double(ny))$res,
+           max =  res <- .C("mMax2", y = y, N = N, ny = ny, res = double(ny))$res,
+           sum =  res <- .C("mSum",  y = y, N = N, ny = ny, res = double(ny))$res,
            sum2 =  res <- .Call("mSum2",  y = y, N = N),
-           abssum = res <- .C("mAbsSum",  y = y, N = N, ny = ny, res = double(ny),DUP = FALSE)$res,
+           abssum = res <- .C("mAbsSum",  y = y, N = N, ny = ny, res = double(ny))$res,
            ## if no match
            stop("unknown 'what'") )
     if (!is.null(pad) && N > 1L)

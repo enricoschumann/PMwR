@@ -17,8 +17,10 @@ backtest  <- function(prices,             ## matrices
                       assignInGlobals = list(),
                       prices0 = NULL) {
 
+    warning("This function is no longer supported and will be removed soon. Use ",
+            sQuote("btest"), " instead.",
+            immediate.=TRUE)
     ## TODO: checks
-
     ## TODO: write useful tests
 
     ## TXTsignal <- deparse(body(signal))

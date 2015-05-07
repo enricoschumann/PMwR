@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2015-04-16 15:00:06 CEST (es)>
+## Time-stamp: <2015-05-06 06:54:41 CEST (es)>
 
 NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
@@ -21,7 +21,7 @@ NAVseries <- function(NAV, timestamp,
 print.NAVseries <- function(x, ...) {
     bm <- function(x)
         if (x >= 10000)
-            format(x, big.mark = ",") else x
+            format(x, big.mark = ",", decimal.mark = ".") else x
     if (length(x$title))
         cat(x$title, "\n")
     else if (!is.null(x$instrument))
@@ -89,7 +89,7 @@ summary.NAVseries <- function(object, ...) {
 
 }
 
-print.summary.NAVseries <- function(x, ...) {
+print.summary.NAVseries <- function(x, ..., sparkplot = TRUE, monthly.returns = TRUE) {
     datef <- function(x) {
         if (inherits(x[1L], "Date"))
             x <- format(x, "%d %b %Y")
@@ -147,11 +147,15 @@ print.summary.NAVseries <- function(x, ...) {
         template <- gsub(paste0("%", n, "%"), x[[n]], template)
     template <- valign(template)
     cat(template, sep = "\n")
-    cat("Monthly returns  ")
-    sparkplot(returns(x$NAVseries$NAV))
-    cat("\n")
-    print(returns(x$NAVseries$NAV, x$NAVseries$timestamp, period = "month"),
-          year.rows = FALSE)
+    if (monthly.returns) {
+        cat("Monthly returns  ")
+        if (.Platform$OS.type == "unix") 
+            sparkplot(returns(x$NAVseries$NAV))
+        cat("\n")
+        
+        print(returns(x$NAVseries$NAV, x$NAVseries$timestamp, period = "month"),
+              year.rows = TRUE)
+    }
     invisible(x)
 
 }
@@ -208,3 +212,28 @@ as.NAVseries.zoo <- function(x, ...){
 as.zoo.NAVseries <- function(x, ...){
     zoo(x$NAV, x$timestamp)
 }
+
+
+.summary.NAVseries.template <- 
+"\\begin{tabular}{lrl}
+\\multicolumn{3}{l}{NAV series starts %from%, ends %to%}                         \\\\[-0.25ex]
+\\multicolumn{3}{l}{\\footnotesize(%nobs% oberservations, no missing values)}    \\\\[1ex]
+High                   & %high%    & \\footnotesize(%high.when%)                 \\\\
+Low                    & %low%     & \\footnotesize(%low.when%)                  \\\\[1ex]
+Return p.a. in \\%     & %return%  &                                             \\\\[1ex]
+Drawdown                                                                         \\\\
+\\quad maximum         & %mdd%\\%                                                \\\\
+\\quad peak            & %mdd.high%   & \\footnotesize(%mdd.high.when%)          \\\\
+\\quad trough          & %mdd.low%    & \\footnotesize(%mdd.low.when%)           \\\\
+\\quad underwater  now & %underwater% &                                          \\\\[1ex]
+Volatility p.a. in \\% & %vol%        &                                          \\\\
+\\quad upside          & %vol.up%                                                \\\\ 
+\\quad downside        & %vol.down%                                              \\\\
+\\end{tabular}"
+
+toLatex.summary.NAVseries <-
+    function(x, template = .summary.NAVseries.template, ...) {
+
+
+}
+    
