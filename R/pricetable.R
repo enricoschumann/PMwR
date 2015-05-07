@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; fill-column: 65; comment-column: 50; -*-
-## Time-stamp: <2015-05-07 07:43:05 CEST (es)>
+## Time-stamp: <2015-05-07 08:22:12 CEST (es)>
 
 pricetable <- function(instrument, when,
                        price,
@@ -25,7 +25,7 @@ pricetable <- function(instrument, when,
         }
     }
             
-    i <- matchOrPrevious(when, index)
+    i <- matchOrPrevious(when, price.timestamp)
     ans <- price[i, instrument, drop = FALSE]
     colnames(ans) <- instrument
     rownames(ans) <- as.character(when)
@@ -34,9 +34,6 @@ pricetable <- function(instrument, when,
     attr(ans, "timestamp")  <- when
     ans
 }
-
-(x <- pricetable(instrument, when, price, missing = 1))
-
 
 
 ## pricetable <- function(when, instrument, ...) {

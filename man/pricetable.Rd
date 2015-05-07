@@ -49,7 +49,7 @@ m <- 20
 n <- 8
 price <- array(rnorm(m*n), dim = c(m,n))
 colnames(price) <- letters[1:n]
-index <- 1:m
+rownames(price) <- 1:m
 
 when <- c(0,1.2,3,3,20)
 instrument <- c("a", "c", "x", "z_1", "z_2")

@@ -2,6 +2,12 @@
 
 	* DESCRIPTION (Version): Version: 0.1-62
 
+	* NAMESPACE: moved 'toText' to new package 'textutils'
+
+	* R/datetimetools.R (previousBusinessDay, nextBusinessDay): now
+	also work for POSIXt (and other classes that can be coerced to
+	Date)
+
 	* man/pricetable.Rd: added manual page
 
 2015-05-06  Enrico Schumann  <es@enricoschumann.net>

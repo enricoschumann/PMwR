@@ -12,7 +12,6 @@ importFrom(zoo, index)
 importFrom(zoo, coredata)
 importFrom(zoo, zoo)
 
-## exports
 export(
     "dayOfMonth<-",   ## datetimetools
     "mday<-",         ## datetimetools
@@ -55,7 +54,6 @@ export(
     splitAdjust,
     timegrid,
     toHTML,## texttools
-    toText,## texttools
     twExposure
     )
 
@@ -92,7 +90,6 @@ S3method(summary, NAVseries)
 S3method(tail, journal)
 S3method(toHTML, preturns)
 S3method(toLatex, preturns)
-S3method(toText, default)
 S3method(journal, default)
 S3method(journal, position)
 S3method(journal, btest)

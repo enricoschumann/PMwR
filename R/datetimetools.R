@@ -4,6 +4,7 @@
 previousBusinessDay <- function (x, holidays = NULL) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
         stop("input must inherit from class Date or POSIXt")
+    x <- as.Date(x)
     x <- x - 1
     tmp <- as.POSIXlt(x)
     tmpi <- tmp$wday == 6L
@@ -16,7 +17,8 @@ previousBusinessDay <- function (x, holidays = NULL) {
 nextBusinessDay <- function(x, holidays = NULL) {
     if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
         stop("input must inherit from class Date or POSIXt")
-    x <- x + 1L
+    x <- as.Date(x)
+    x <- x + 1
     tmp <- as.POSIXlt(x)
     tmpi <- tmp$wday == 6L
     x[tmpi] <- x[tmpi] + 2L
