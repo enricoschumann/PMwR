@@ -1,8 +1,12 @@
+2015-05-12  Enrico Schumann  <enrico.schumann@aquila-capital.com>
+
+	* inst/unitTests/ut_Datetime.R: moved tests to 'datetimeutils'
+
 2015-05-12  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-63
 
-	* NAMESPACE: moved all helper functions that concern dates and
+	* R/[...]: moved all helper functions that concern dates and
 	times to package 'datetimeutils'
 
 2015-05-08  Enrico Schumann  <es@enricoschumann.net>
