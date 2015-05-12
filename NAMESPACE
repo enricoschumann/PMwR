@@ -14,44 +14,45 @@ importFrom(textutils, rmspace)
 importFrom(textutils, valign)
 importFrom(textutils, strexp)
 importFrom(textutils, toHTML)  
+importFrom(datetimeutils, timegrid)
 
 export(
-    "dayOfMonth<-",   ## datetimetools
-    "mday<-",         ## datetimetools
+    ## "dayOfMonth<-",   ## datetimetools
+    ## "mday<-",         ## datetimetools
     NAVseries,
     as.NAVseries,
     btest,
     closeOnFirst,
-    dayOfMonth,         ## datetimetools
+    ## dayOfMonth,         ## datetimetools
     divAdjust,
-    endOfMonth,         ## datetimetools
-    endOfPreviousMonth, ## datetimetools
-    firstOfMonth,
-    isLeapyear,
+    ## endOfMonth,         ## datetimetools
+    ## endOfPreviousMonth, ## datetimetools
+    ## firstOfMonth,
+    ## isLeapyear,
     isValidISIN,
-    isWeekend,
+    ## isWeekend,
     journal,
-    lastWeekday,
+    ## lastWeekday,
     limit,
-    mday,
-    nextBusinessDay,
-    nthWeekday,
+    ## mday,
+    ## nextBusinessDay,
+    ## nthWeekday,
     pl,
     plotTradingHours,
     pm,
     position,
-    previousBusinessDay,
+    ## previousBusinessDay,
     pricetable,
     rebalance,
     returns,
-    roundPOSIXt,
+    ## roundPOSIXt,
     runStats,
     scale1,
     scaleToUnity,
     scaleTrades,
     splitTrades,
     splitAdjust,
-    timegrid,
+    ## timegrid,
     toHTML,## texttools
     twExposure
     )

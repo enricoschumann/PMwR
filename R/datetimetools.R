@@ -2,7 +2,7 @@
                                         # DATES
 
 previousBusinessDay <- function (x, holidays = NULL) {
-    if (!all(inherits(x,"Date") | inherits(x,"POSIXt")))
+    if (!all(inherits(x, "Date") | inherits(x, "POSIXt")))
         stop("input must inherit from class Date or POSIXt")
     x <- as.Date(x)
     x <- x - 1

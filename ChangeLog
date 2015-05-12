@@ -1,3 +1,15 @@
+2015-05-12  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-63
+
+	* NAMESPACE: moved all helper functions that concern dates and
+	times to package 'datetimeutils'
+
+2015-05-08  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/valuation.R (pv): columns were not named with a (default)
+	multiplier of 1
+
 2015-05-07  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-62

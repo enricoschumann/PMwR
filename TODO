@@ -1,6 +1,7 @@
 # -*- mode: org; -*-
 
-* TODO journal
+* DONE journal
+  CLOSED: [2015-05-11 Mon 16:40]
   input: vectors or position
 
 - if position: make single date to buy (or sell)

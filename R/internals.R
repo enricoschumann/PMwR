@@ -108,12 +108,12 @@ lag <- function(x, k, pad = NA) {
              x[seq_len(length(x)-k)])    
 }
 
-convertDate <- function(x, type) {
-    type <- tolower(type)
-    if (type == "excel"){
-        as.Date(x, origin = "1899-12-30")              
-    } else if (type == "matlab") {
-        as.Date(x, origin = "1970-01-01") - 719529
-    } else
-        stop("unknown type")
-}
+## convertDate <- function(x, type) {
+##     type <- tolower(type)
+##     if (type == "excel"){
+##         as.Date(x, origin = "1899-12-30")              
+##     } else if (type == "matlab") {
+##         as.Date(x, origin = "1970-01-01") - 719529
+##     } else
+##         stop("unknown type")
+## }
