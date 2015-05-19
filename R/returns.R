@@ -283,3 +283,72 @@ toHTML.preturns <- function(x, ..., year.rows = TRUE,
     mt <- c(open, mt, "</table>")
     mt
 }
+
+returns_rebalance <- function(prices, weights, when = NULL, pad = NULL) {
+    nr <- nrow(prices)
+
+    if (is.null(dim(prices)))
+        stop("prices needs to be a matrix")
+
+    if (nr < 2)
+        stop("less than 2 rows in prices: cannot compute returns")
+    
+    if (is.null(dim(weights)) && is.null(when)) {
+        ## TODO faster implementation
+    }
+
+    if (is.null(dim(weights)))
+        weights <- array(1, dim = c(nr, 1)) %*% weights
+
+    if (is.null(when) || isTRUE(when))
+        when <- rep(TRUE, nr)
+
+    val <- numeric(nr)
+    h <- ctb <- array(0, dim = dim(prices))
+
+    val[1] <- 1
+    h[1, ] <- weights[1, ]/prices[1, ]
+
+    for (i in 2:nr) {
+        val[i] <- sum(prices[i, ]*h[i - 1, ])
+        ctb[i,] <- (prices[i,]-prices[i-1,]) * h[i-1,] / val[i-1]
+        if (when[i])
+            h[i, ] <- val[i] * weights[i, ]/prices[i, ]
+        else
+            h[i, ] <- h[i - 1, ]        
+    }
+    ans <- returns(val, pad = pad)
+    attr(ans, "holdings") <- h
+    attr(ans, "contributions") <- ctb
+    ans
+}
+
+if (FALSE) {
+    prices <- c(100 ,102 ,104 ,104 ,104.5 ,
+                2   ,2.2 ,2.4 ,2.3 ,2.5   ,
+                3.5 ,3   ,3.1 ,3.2 ,3.1)
+
+    dim(prices) <- c(5,3)
+    weights <- c(1,0,0)
+    when <- as.logical(c(1,1,1,1,1))
+    when <- TRUE
+
+    ## TESTS
+    weights <- c(1,0,0)
+    all.equal(c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)),
+              c(returns(prices[,1],pad=0)))
+    weights <- c(0,1,0)
+    all.equal(c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)),
+              c(returns(prices[,2],pad=0)))
+    weights <- c(0,0,1)
+    all.equal(c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)),
+              c(returns(prices[,3],pad=0)))
+    weights <- c(.5,.4,.1)
+    all.equal(c(returns(prices,pad=0) %*% weights),
+              c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)))
+
+    when <- as.logical(c(1,0,0,0,0))
+    !isTRUE(all.equal(
+        c(returns(prices,pad=0) %*% weights),
+        c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0))))
+}
