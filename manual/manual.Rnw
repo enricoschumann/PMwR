@@ -663,7 +663,19 @@ by it.
 
 
 
+\chapter{Computing returns}
 
+<<>>=
+  X <- array(c(100,105,110,100,100,100), dim = c(3,2))
+
+  w <- c(0.5,0.5)
+  budget <- 1
+  position <- budget/X[1,]*w
+
+  returns(X %*% position)
+  returns(X) %*% w
+
+@ 
 
 
 \chapter{Analysing trades}
