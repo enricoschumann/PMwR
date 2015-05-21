@@ -2,13 +2,13 @@ returns <- function(x, ...)
     UseMethod("returns")
 
 returns.NAVseries <- function(x, period = NULL, complete.first = TRUE,
-                    pad = NULL, position = NULL, lag = 1, ...) {
+                              pad = NULL, position = NULL, lag = 1, ...) {
     returns(as.zoo(x), period = period, complete.first = complete.first,
             pad = pad, position, lag = lag, ...)
 }
 
 returns.zoo <- function(x, period = NULL, complete.first = TRUE,
-                    pad = NULL, position = NULL, lag = 1, ...) {
+                        pad = NULL, position = NULL, lag = 1, ...) {
 
     t <- time(x)
     x <- coredata(x)
@@ -23,15 +23,37 @@ returns.zoo <- function(x, period = NULL, complete.first = TRUE,
                        complete.first = complete.first,
                        pad = pad, position = position, lag = lag, ...)
         if (!is.null(pad))
-            zoo(ans, t) else zoo(ans, t[-1L])
+            zoo(ans, t)
+        else
+            zoo(ans, t[-1L])
     }
 }
 
-returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
-                    pad = NULL, position = NULL, lag = 1, ...) {
+returns.data.frame <- function(x, t = NULL, period = NULL, complete.first = TRUE,
+                               pad = NULL, position = NULL,
+                               weights = NULL,
+                               rebalance.when = NULL, 
+                               lag = 1, ...) {
+    x <- as.matrix(x)
+    returns(x, t = t, period = period,
+            complete.first = complete.first,
+            pad = pad, position = position,
+            weights = weights,
+            rebalance.when = rebalance.when, 
+            lag = lag, ...)    
+}
 
-    if (is.null(t) &&  is.null(position)) {
+returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
+                            pad = NULL, position = NULL,
+                            weights = NULL,
+                            rebalance.when = NULL, 
+                            lag = 1, ...) {
+
+    if (is.null(t) &&  is.null(position) && is.null(weights)) {
         returns0(x, pad = pad, lag = lag)        
+    } else if (is.null(t) &&  is.null(position) && !is.null(weights)) {
+        returns_rebalance(prices = x, weights = weights,
+                          when = rebalance.when, pad = pad)
     } else if (!is.null(t)) {
         if (is.unsorted(t)) {
             idx <- order(t)
@@ -300,9 +322,18 @@ returns_rebalance <- function(prices, weights, when = NULL, pad = NULL) {
     if (is.null(dim(weights)))
         weights <- array(1, dim = c(nr, 1)) %*% weights
 
+    if (dim(weights)[2L] != ncol(prices))
+        warning("length of weights does not match number of price series")
+    
     if (is.null(when) || isTRUE(when))
         when <- rep(TRUE, nr)
 
+    if (is.numeric(when)) { ## cases such as '1,4,12,23,...'
+        tmp <- logical(nr)
+        tmp[round(when)] <- TRUE
+        when <- tmp
+    }
+        
     val <- numeric(nr)
     h <- ctb <- array(0, dim = dim(prices))
 

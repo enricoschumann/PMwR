@@ -48,15 +48,17 @@ types of objects.
 x <- c(100,102,101,100)
 returns(x)
 @ 
-To replace the  lost first observation, specify \texttt{pad}.
+To replace the lost first observation, specify \texttt{pad}.
 <<>>=
 returns(x, pad = 0)
 returns(x, pad = NA)
 @ 
-When \texttt{x} is a matrix, returns are computed for each column.
+When \texttt{x} is a matrix or a data.frame, returns are computed
+for each column.
 <<>>=
 X <- cbind(x, x, x)
 returns(X, pad = NA)
+returns(as.data.frame(X), pad = NA)
 @ 
 
 
@@ -77,9 +79,10 @@ returns(z, pad = NA)
 
 \section{Period returns}
 
-\noindent When a timestamp is available, \texttt{returns} can compute period
-returns.
-
+\noindent When a timestamp is available, \texttt{returns} can compute
+period returns. The semantics for these computations are somewhat
+different; the result is a vector of returns with attributes and class
+\texttt{preturns}. Most useful is a \texttt{print} method.
 <<>>=
 set.seed(45)
 t <- as.Date("2014-11-1") + 0:80
@@ -102,20 +105,33 @@ not annualise if the time period is shorter than one year.
 <<>>=
 x[length(x)]/x[1] - 1
 @ 
-To force annualising, add a `\texttt{!}'.
+To force annualising, add a `\texttt{!}'. The exclamation mark serves
+as a mnenomic that it is now imperative to annualise.
 <<>>=
 returns(x, t, period = "ann!")
 @ 
 There are methods to \texttt{toLatex} and \texttt{toHTML}
-for monthly returns.  In Sweave documents, need to use
-\texttt{<\/<results = tex,echo = false>\/>=}:
-
+for monthly returns.  In Sweave documents, you need to use
+\texttt{<\/<results = tex,echo = false>\/>=} in the chunk options:
 
 \noindent\begin{tabular}{rrrrrrrrrrrrrr}
 <<results=tex,echo=false>>=
 toLatex(returns(x, t = t, period = "month"))
 @ 
 \end{tabular}
+
+\section{Rebalanced returns}
+
+<<>>=
+  X <- array(c(100,105,110,100,100,100), dim = c(3,2))
+
+  w <- c(0.5,0.5)
+  budget <- 1
+  position <- budget/X[1,]*w
+
+  returns(X %*% position)
+  returns(X) %*% w
+@ 
 
 
 \newpage

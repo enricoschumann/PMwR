@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2015-02-17 17:30:12 CET (es)>
+## Time-stamp: <2015-05-20 17:15:33 CEST (es)>
 btest  <- function(prices,              
                    signal,               ## 
                    do.signal = TRUE,     ## 
@@ -57,11 +57,19 @@ btest  <- function(prices,
         do.signal <- function(...)
             FALSE
         warning(sQuote("do.signal"), " is FALSE: strategy will never trade")
-    } else if (is.character(do.signal) && do.signal == "firstofmonth") {
+    } else if (is.character(do.signal) &&
+               tolower(do.signal) == "firstofmonth") {
         tmp <- as.Date(timestamp)
-        ## TODO
-
-        
+        if (any(is.na(tmp)))
+            stop("timestamp with NAs")
+        i_rdays <- match(aggregate(tmp, by = list(format(tmp, "%Y-%m")),
+                                   FUN = head, 1)[[2L]],
+                         tmp)
+        do.signal <- function()
+            if (Time(0) %in% i_rdays)
+                TRUE
+            else
+                FALSE        
     }
 
     if (is.null(do.rebalance) || identical(do.rebalance, TRUE)) {

@@ -1,0 +1,159 @@
+%% \VignetteIndexEntry{Analysing trades}
+\documentclass[a4paper,11pt]{article}
+\usepackage[left = 3cm, top = 2cm, bottom = 2cm, right = 4cm]{geometry}
+\usepackage[noae,nogin]{Sweave}
+\usepackage{libertine}
+\usepackage[scaled=0.8]{DejaVuSansMono}
+\usepackage[T1]{fontenc}
+\renewcommand*\familydefault{\sfdefault} 
+\usepackage{amsmath,amstext}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{xcolor}
+\definecolor{grau2}{rgb}{.2,.2,.2}
+\definecolor{grau7}{rgb}{.7,.7,.7}
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{frame=single,xleftmargin=0em,%
+  formatcom=\color{grau2},rulecolor=\color{grau7}}
+\DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=2em}
+\fvset{listparameters={\setlength{\topsep}{0pt}}}
+\renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
+\SweaveOpts{keep.source = TRUE, eps = TRUE}
+
+<<echo=false>>=
+options(continue = " ", digits = 3, width = 60, useFancyQuotes = FALSE)
+@
+
+\begin{document}
+\title{Analysing trades}
+\author{Enrico Schumann\\\url{es@enricoschumann.net}}
+
+{\raggedright{\LARGE Analysing trades}}\medskip
+
+\noindent Enrico Schumann\\
+\noindent \url{es@enricoschumann.net}\\
+\bigskip
+
+<<echo=false>>=
+require("PMwR")
+require("zoo")
+@
+
+
+\section{Exposure}
+
+We have the following trades and times.
+<<>>=
+amount <- c(1,3,-3,1,-3,1)
+time <- c(0,1,3,4,7,12)
+@ 
+The holding period (\texttt{duration}) of these trades can be computed
+so:
+<<>>=
+data.frame(position = cumsum(amount)[-length(amount)], 
+           from = time[-length(time)],
+           to   = time[-1L],
+           duration = diff(time))
+@ 
+
+We can plot the exposure.
+<<fig=true, height = 2, width = 5>>=
+par(bty = "n", mar = c(4,4,0,0), tck = 0.005, las = 1, cex = 0.8)
+plot(c(time[1L], time), cumsum(c(0, amount)), type = "s",
+     xlab = "time", ylab = "position")
+@ 
+Thus, we have had a position from time zero to 12 (hours into the
+trading day, say), but its size varied.  The function
+\texttt{twExposure} (time-weighted exposure) computes the average
+absolute exposure.
+<<>>=
+twExposure(amount, time)
+@ 
+To give a simple example: suppose we bought at the open of a trading
+day and sold at noon.  The average exposure for the day is thus half a
+contract.
+<<>>=
+amount <- c(1, -1 , 0)
+time   <- c(0,0.5,1)
+twExposure(amount, time)
+@ 
+
+
+\section{Splitting and rescaling}
+
+Suppose we have the following trades and impose a limit that the
+maximum absolute exposure for the trader should only be 2.
+
+<<>>=
+t <- 1:6
+n <- c(-1,-1,-1,1,1,1)
+p <- c(100,99,98,98,99,100)
+limit(n, p, t, lim = 2)
+@ 
+
+Scaling the trades.
+<<>>=
+scaleToUnity(n)
+@ 
+
+Closing the trade at once.
+<<>>=
+closeOnFirst(n)
+@
+
+
+
+\section{Computing returns}
+
+For computing pl (in currency units), see Chapter~XX.
+
+The return of an asset in period~$t$ is defined as
+\begin{align} \label{eq:return}
+  r_t = \frac{P_t}{P_{t-1}}-1 = R_t+1
+\end{align}
+
+
+\subsection{Numeric data}
+
+A vector.
+<<>>=
+require("PMwR")
+x <- c(100,101,105)
+returns(x)
+@ 
+A matrix.
+<<>>=
+X <- cbind(x,x,x)
+returns(X)
+returns(X, pad = 0)
+@ 
+
+\subsection{Time series}
+
+We can also supply a timestamp.
+<<>>=
+detach("package:PMwR", unload = TRUE)
+require("PMwR")
+require("zoo")
+require("RUnit")
+
+x <- c(100,101,105)
+t <- 1:3
+returns(x, t)
+@ 
+
+<<>>=
+require("zoo")
+returns(zoo(x, t), pad = NA)
+@ 
+
+
+
+
+
+\newpage
+\appendix
+<<results=tex>>=
+toLatex(sessionInfo())
+@ 
+\end{document}

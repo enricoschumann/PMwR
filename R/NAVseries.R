@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2015-05-06 06:54:41 CEST (es)>
+## Time-stamp: <2015-05-20 17:09:06 CEST (es)>
 
 NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
@@ -213,7 +213,6 @@ as.zoo.NAVseries <- function(x, ...){
     zoo(x$NAV, x$timestamp)
 }
 
-
 .summary.NAVseries.template <- 
 "\\begin{tabular}{lrl}
 \\multicolumn{3}{l}{NAV series starts %from%, ends %to%}                         \\\\[-0.25ex]
@@ -234,6 +233,6 @@ Volatility p.a. in \\% & %vol%        &                                         
 toLatex.summary.NAVseries <-
     function(x, template = .summary.NAVseries.template, ...) {
 
-
+.summary.NAVseries.template        
 }
     

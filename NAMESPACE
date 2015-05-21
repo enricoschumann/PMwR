@@ -1,7 +1,7 @@
 useDynLib(PMwR)
 
-## imports
 importFrom(NMOF, drawdown)
+importFrom(NMOF, pm)
 importFrom(utils, toLatex)
 importFrom(utils, head)
 importFrom(utils, tail)
@@ -15,49 +15,32 @@ importFrom(textutils, valign)
 importFrom(textutils, strexp)
 importFrom(textutils, toHTML)  
 importFrom(datetimeutils, timegrid)
+importFrom(datetimeutils, roundPOSIXt)
 
 export(
-    ## "dayOfMonth<-",   ## datetimetools
-    ## "mday<-",         ## datetimetools
     NAVseries,
     as.NAVseries,
     btest,
     closeOnFirst,
-    ## dayOfMonth,         ## datetimetools
     divAdjust,
-    ## endOfMonth,         ## datetimetools
-    ## endOfPreviousMonth, ## datetimetools
-    ## firstOfMonth,
-    ## isLeapyear,
     isValidISIN,
-    ## isWeekend,
     journal,
-    ## lastWeekday,
     limit,
-    ## mday,
-    ## nextBusinessDay,
-    ## nthWeekday,
     pl,
     plotTradingHours,
-    pm,
     position,
-    ## previousBusinessDay,
     pricetable,
     rebalance,
     returns,
-    ## roundPOSIXt,
     runStats,
     scale1,
     scaleToUnity,
     scaleTrades,
     splitTrades,
     splitAdjust,
-    ## timegrid,
-    toHTML,## texttools
     twExposure
     )
 
-## methods
 S3method(`[`, journal)
 S3method(`[`, position)
 S3method(aggregate, journal)
@@ -81,6 +64,7 @@ S3method(print, rebalance)
 S3method(print, summary.journal)
 S3method(print, summary.NAVseries)
 S3method(returns, default)
+S3method(returns, data.frame)
 S3method(returns, zoo)
 S3method(scale1, default)
 S3method(scale1, zoo)

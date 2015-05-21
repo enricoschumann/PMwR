@@ -1,8 +1,7 @@
 rebalance <- function(current, target, price,
-                      notional = NULL, truncate = TRUE,
+                      notional = NULL, multiplier = 1, truncate = TRUE,
                       match.names = TRUE,
                       check.match = TRUE) {
-
 
     
     if (!match.names && length(current) == 1L && current == 0) {
@@ -15,10 +14,11 @@ rebalance <- function(current, target, price,
         names(target) <- names(current)
     }
 
+    
     if (!match.names &&
         (length(current) != length(target) ||
          length(current) != length(price) ||
-         length(target) != length(price))) {
+         length(target)  != length(price))) {
         stop(sQuote("current"), ", ", sQuote("target"), " and ",
              sQuote("price"), " must have same length")
     }
@@ -37,26 +37,30 @@ rebalance <- function(current, target, price,
                 stop("name in target that does not match price")
         }
     }
-                    
+
+    if (!is.null(names(multiplier)))
+        multiplier <- multiplier[x$instrument]
+
     if (is.null(notional))
         if (match.names)
-            notional <- sum(current*price[names(current)])
+            notional <- sum(current * price[names(current)] *
+                                multiplier[names(current)])
         else
-            notional <- sum(current*price)
+            notional <- sum(current * price * multiplier)
     
     if (match.names)
-        ans <- target * notional / price[names(target)]
+        ans <- target * notional / price[names(target)] / multiplier[names(target)]
     else 
-        ans <- target * notional / price
+        ans <- target * notional / price / multiplier
 
     if (truncate)
         ans <- round(trunc(ans/10^(-truncate))*10^(-truncate))
     rbl <- list(current = current,
-                target = ans, 
+                target  = ans, 
                 names.current = names(current),
-                names.target = names(target),
-                price = price,
-                notional = notional,
+                names.target  = names(target),
+                price       = price,
+                notional    = notional,
                 match.names = match.names)
     class(rbl) <- "rebalance"
     rbl
@@ -78,8 +82,8 @@ print.rebalance <- function(x, ..., drop.zero = TRUE) {
     df <- data.frame(price  = x$price,
                      current = current,
                      `value` = current * x$price,
-                     `% `  = format(100*current * x$price/x$notional, nsmall = 1, digits=1),
-                     `  `  = format("     ", justify = "centre"),
+                     `% `   = format(100*current * x$price/x$notional, nsmall = 1, digits=1),
+                     `  `   = format("     ", justify = "centre"),
                      new = target,
                      value = target * x$price,
                      `% `   = format(100*target * x$price / x$notional, nsmall = 1, digits =1),

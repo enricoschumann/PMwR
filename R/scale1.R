@@ -1,7 +1,10 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-11-05 17:09:02 CET (es)>
+## Time-stamp: <2015-05-13 17:13:22 CEST (es)>
 
 scale1 <- function (x, ...)
+    UseMethod("scale1", x)
+
+scale100 <- function (x, ...)
     UseMethod("scale1", x)
 
 scale1.default <- function (x, ..., when = "first.complete",

@@ -1,4 +1,35 @@
+2015-05-21  Enrico Schumann  <es@enricoschumann.net>
+
+	* manual/manual.Rnw: moved most chapters to vignettes
+
+	* R/returns.R (returns.data.frame): new method: coerces via
+	'as.matrix' and then calls 'returns'
+
+2015-05-20  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (do.signal): [experimental] 'do.signal' can be the
+	string 'firstofmonth' to rebalance on first day of month
+
+	* R/returns.R (returns_rebalance): 'when' can also be a numeric
+	vector such as 'c(1,5,11)', which gives the indices when to
+	rebalance; also added warning when 'length(weight)' does not match
+	number of price series
+
+2015-05-19  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (returns.default): [experimental] new arguments
+	'weights' and 'rebalance.when'
+
+	* R/returns.R (returns_rebalance): new function to compute
+	portfolio returns; not exported: will be integrated in 'returns'
+
+2015-05-13  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/rebalance.R (rebalance): added 'multiplier' argument
+
 2015-05-12  Enrico Schumann  <enrico.schumann@aquila-capital.com>
+
+	* NAMESPACE: moved function 'pm' to package NMOF
 
 	* inst/unitTests/ut_Datetime.R: moved tests to 'datetimeutils'
 
