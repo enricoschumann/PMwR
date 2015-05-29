@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2015-05-28 11:02:55 CEST (es)>
+## Time-stamp: <2015-05-29 11:51:51 CEST (es)>
 
 scale1 <- function (x, ...)
     UseMethod("scale1", x)
@@ -8,7 +8,7 @@ scale100 <- function (x, ..., level = 100)
     UseMethod("scale1", x)
 
 scale1.default <- function (x, ..., when = "first.complete",
-                            level = 1, centre = FALSE, scale = FALSE) {
+                            level = 1, centre = FALSE, scale = FALSE, geometric = TRUE) {
 
     makevec <- FALSE
     if (!is.matrix(x)) {
@@ -27,7 +27,9 @@ scale1.default <- function (x, ..., when = "first.complete",
     if (centre) {
         NAs <- is.na(x)
         x0 <- returns(x, pad = 0)
-        m <- colMeans(x0[-1L, , drop = FALSE], na.rm = TRUE)
+        m <- if (geometric)
+                 exp(colMeans(log(x0[-1L, , drop = FALSE]), na.rm = TRUE)) else
+                 colMeans(x0[-1L, , drop = FALSE], na.rm = TRUE)
         x0[is.na(x0)] <- 0
         for (i in seq_len(ncol(x0)))
             x[,i] <- cumprod(1 + x0[ ,i] - m[i])
