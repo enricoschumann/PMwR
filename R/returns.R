@@ -34,13 +34,16 @@ returns.data.frame <- function(x, t = NULL, period = NULL, complete.first = TRUE
                                weights = NULL,
                                rebalance.when = NULL, 
                                lag = 1, ...) {
-    x <- as.matrix(x)
-    returns(x, t = t, period = period,
-            complete.first = complete.first,
-            pad = pad, position = position,
-            weights = weights,
-            rebalance.when = rebalance.when, 
-            lag = lag, ...)    
+
+    ## '.returns', which is called by 'returns', will coerce to
+    ## matrix, hence no explicit coercion is needed here
+    ans <- returns(x, t = t, period = period,
+                   complete.first = complete.first,
+                   pad = pad, position = position,
+                   weights = weights,
+                   rebalance.when = rebalance.when, 
+                   lag = lag, ...)
+    as.data.frame(ans)
 }
 
 returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
@@ -50,7 +53,7 @@ returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
                             lag = 1, ...) {
 
     if (is.null(t) &&  is.null(position) && is.null(weights)) {
-        returns0(x, pad = pad, lag = lag)        
+        .returns(x, pad = pad, lag = lag)        
     } else if (is.null(t) &&  is.null(position) && !is.null(weights)) {
         returns_rebalance(prices = x, weights = weights,
                           when = rebalance.when, pad = pad)
@@ -76,8 +79,10 @@ returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
 
 
 ## not exported
-returns0 <- function(x, pad = NULL, lag) {
+.returns <- function(x, pad = NULL, lag) {
     n <- NROW(x)
+    if (n < 2L)
+        stop("cannot compute returns with less than two observations")
     do.pad <- !is.null(pad)
     a <- 1:lag
     b <- n:(n-lag+1L)
