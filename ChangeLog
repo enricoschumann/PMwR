@@ -1,3 +1,17 @@
+2015-05-29  Enrico Schumann  <es@enricoschumann.net>
+
+	* inst/unitTests/ut_returns.R (test.returns): added test cases for
+	returns.data.frame
+
+	* R/returns.R (.returns): renamed 'returns0' to '.returns' (under
+	neither name is the function exported)
+	(returns.data.frame): fixed -- propagate 'row.names' of dataframe
+
+2015-05-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (returns.data.frame): result is now of class
+	'data.frame' (not numeric matrix)
+
 2015-05-21  Enrico Schumann  <es@enricoschumann.net>
 
 	* manual/manual.Rnw: moved most chapters to vignettes

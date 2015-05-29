@@ -9,12 +9,22 @@ test.returns <- function() {
     checkEqualsNumeric(returns(x, pad = NA)[-1], x[-1]/x[-length(x)]-1)
     checkTrue(is.na(returns(x, pad = NA)[1]))
 
-    ## ... and matrix 
+    ## numeric matrix 
     x <- cbind(x,x)
     checkEqualsNumeric(returns(x), x[-1,]/x[-nrow(x),] - 1)
     checkEqualsNumeric(returns(x, pad = NA)[-1,], x[-1, ]/x[-nrow(x),]-1)
     checkTrue(all(is.na(returns(x, pad = NA)[1L,])))
 
+    ## data.frame
+    y <- as.data.frame(x)
+    checkTrue(inherits(returns(y), "data.frame"))
+    checkEqualsNumeric(returns(y), y[-1,]/y[-nrow(x),] - 1)
+    checkEqualsNumeric(returns(x, pad = NA)[-1,], x[-1, ]/x[-nrow(x),]-1)
+    checkTrue(all(is.na(returns(x, pad = NA)[1L,])))
+    row.names(y) <- letters[1:nrow(y)]
+    checkEquals(returns(y), y[-1,]/y[-nrow(x),] - 1)
+    checkEquals(returns(x, pad = NA)[-1,], x[-1, ]/x[-nrow(x),]-1)
+    
     ## lagged returns -- numeric vector
     x <- 101:112; lag <- 4
     checkEqualsNumeric(returns(x, lag = lag),
