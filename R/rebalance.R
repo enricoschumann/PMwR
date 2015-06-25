@@ -23,7 +23,7 @@ rebalance <- function(current, target, price,
              sQuote("price"), " must have same length")
     }
 
-    if (match.names) { 
+    if (match.names) {
         if (is.null(names(price)) ||
             (is.null(names(current)) && !identical(unname(current), 0)) ||
             is.null(names(target))) {
@@ -38,9 +38,16 @@ rebalance <- function(current, target, price,
         }
     }
 
-    if (!is.null(names(multiplier)))
-        multiplier <- multiplier[x$instrument]
 
+    if (match.names &&
+        is.null(names(multiplier)) &&
+        length(multiplier) == 1L) {
+
+        multiplier <- rep(multiplier, length(price))
+        names(multiplier) <- names(price)
+    }
+
+    
     if (is.null(notional))
         if (match.names)
             notional <- sum(current * price[names(current)] *
