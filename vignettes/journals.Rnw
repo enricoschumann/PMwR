@@ -234,6 +234,7 @@ transactions into files, like this:
 system("perl -ne 'print $_ if /^\\s*\\| /;' < ex1.txt > ex1.jnl")
 @ 
 We can then write functions to read in such journal files.
+%% TODO: replace ex1 with inline code
 <<echo=false>>=
 readjnl <- function(file) {
     ans <- read.table(file,

@@ -45,7 +45,7 @@ types of objects.
 \section{Numeric vectors and matrices, data frames}
 
 <<>>=
-x <- c(100,102,101,100)
+x <- c(100, 102, 101, 100)
 returns(x)
 @ 
 To replace the lost first observation, specify \texttt{pad}.
@@ -60,7 +60,6 @@ X <- cbind(x, x, x)
 returns(X, pad = NA)
 returns(as.data.frame(X), pad = NA)
 @ 
-
 
 \section{\texttt{zoo} objects}
 

@@ -1,4 +1,22 @@
+2015-06-25  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-64
+
+	* R/returns.R (pReturns): match regexp '^ann' (instead of 'ann')
+	for annualised returns
+
+	* NAMESPACE: export '.returns'
+
+	* R/rebalance.R (rebalance): fixed -- when 'multiplier' is unnamed
+	and of length one, it is used for all instruments
+
+	* R/btest.R: include timestamp and instrument in result
+
 2015-05-29  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/scale1.R (scale1.default): new argument 'geometric' (with
+	default TRUE): centre by subtracting the geometric mean; if FALSE,
+	the arithmetic mean is subtracted
 
 	* inst/unitTests/ut_returns.R (test.returns): added test cases for
 	returns.data.frame

@@ -2,10 +2,10 @@ returns <- function(x, ...)
     UseMethod("returns")
 
 returns.NAVseries <- function(x, period = NULL, complete.first = TRUE,
-                              pad = NULL, position = NULL, lag = 1, ...) {
-    returns(as.zoo(x), period = period, complete.first = complete.first,
+                              pad = NULL, position = NULL, lag = 1, ...)
+    returns(as.zoo(x), period = period,
+            complete.first = complete.first,
             pad = pad, position, lag = lag, ...)
-}
 
 returns.zoo <- function(x, period = NULL, complete.first = TRUE,
                         pad = NULL, position = NULL, lag = 1, ...) {
@@ -37,7 +37,8 @@ returns.data.frame <- function(x, t = NULL, period = NULL, complete.first = TRUE
 
     ## '.returns', which is called by 'returns', will coerce to
     ## matrix, hence no explicit coercion is needed here
-    ans <- returns(x, t = t, period = period,
+    ans <- returns.default(x,
+                   t = t, period = period,
                    complete.first = complete.first,
                    pad = pad, position = position,
                    weights = weights,
@@ -64,9 +65,9 @@ returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
             x <- x[idx]
         }
         if (!is.null(dim(x)) && min(dim(x)) > 1L)
+            ## TODO: returns should loop over columns
             stop("with ", sQuote("t"), " supplied, ",
                  sQuote("x"), " must be a vector")                
-
         if (lag != 1L)
             warning(sQuote("lag"), " is ignored")
         pReturns(x, t, period, complete.first, pad = pad)
@@ -77,12 +78,10 @@ returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
     }
 }
 
-
-## not exported
 .returns <- function(x, pad = NULL, lag) {
     n <- NROW(x)
     if (n < 2L)
-        stop("cannot compute returns with less than two observations")
+        stop("less than two observations")
     do.pad <- !is.null(pad)
     a <- 1:lag
     b <- n:(n-lag+1L)
@@ -92,7 +91,7 @@ returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
         if (do.pad)
             rets <- c(rep.int(pad, lag), rets)
     } else {
-        x <- as.matrix(x)
+        ## x <- as.matrix(x)
         rets <- x[-a, ,drop = FALSE] / x[-b, ,drop = FALSE] - 1
         if (do.pad)
             rets <- do.call("rbind",
@@ -128,18 +127,19 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         ans <- list(returns = returns(x, pad = pad),
                     t = if (is.null(pad)) t[-1L] else t,
                     period = period)        
-    } else if (grepl("ann", period, ignore.case = TRUE)) {
+    } else if (grepl("^ann", period, ignore.case = TRUE)) {
             xi <- as.Date(t)
             lx <- length(xi)
             t <- as.numeric(xi[lx] - xi[1L])/365
             ans <- if (t < 1 && !(grepl("!$", period))) {
                 list(returns = (x[lx]/x[1L]) - 1,
                      t = c(xi[1L], xi[lx]), period = "annualised")
+                ## TODO define ans
             } else {
                 list(returns = (x[lx]/x[1L])^(1/t) - 1,
                      t = c(xi[1L], xi[lx]), period = "annualised")
-            }
-
+                ## TODO define ans
+            }            
     } else {        
 
         if (length(period) > 1L) {
@@ -164,11 +164,12 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         ans <- list(returns = returns(x[ii], pad = pad),
                     t = if (is.null(pad)) t[ii][-1L] else t[ii],
                     period = period)
-        ## TODO
+        ## TODO define ans
         attr(ans, "t") <- if (is.null(pad)) t[ii][-1L] else t[ii]
         attr(ans, "period") <- "period"
 
     }
+    ## browser()
     class(ans) <- "preturns"
     ans
 }
