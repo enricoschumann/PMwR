@@ -32,6 +32,7 @@ export(
     pricetable,
     rebalance,
     returns,
+    .returns,
     runStats,
     scale1,
     scaleToUnity,
