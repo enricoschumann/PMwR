@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2015-05-20 17:15:33 CEST (es)>
+## Time-stamp: <2015-06-16 10:20:34 CEST (es)>
 btest  <- function(prices,              
                    signal,               ## 
                    do.signal = TRUE,     ## 
@@ -57,7 +57,11 @@ btest  <- function(prices,
         do.signal <- function(...)
             FALSE
         warning(sQuote("do.signal"), " is FALSE: strategy will never trade")
-    } else if (is.character(do.signal) &&
+    } else if (length(do.signal) > 1L) {
+        ## TODO: when do signal is 1,17,30, set TRUE on those days
+        ## TODO: when logical vector
+        ## TODO: when timestamp is specified, match to timestamp        
+    }  else if (is.character(do.signal) &&
                tolower(do.signal) == "firstofmonth") {
         tmp <- as.Date(timestamp)
         if (any(is.na(tmp)))
@@ -484,6 +488,8 @@ btest  <- function(prices,
                  prices = prices,              
                  signal = signal,
                  do.signal = do.signal,
+                 timestamp = timestamp,
+                 instrument = instrument,
                  call = match.call())
 
     class(ans) <- "btest"
@@ -491,6 +497,7 @@ btest  <- function(prices,
 }
 
 print.btest <- function(x, ...) {
+    ## TODO: check if timestamp exists and can be coerced to Date
     cat("initial wealth",
         tmp0 <- x$wealth[min(which(!is.na(x$wealth)))], " =>  ")
     cat("final wealth ",
