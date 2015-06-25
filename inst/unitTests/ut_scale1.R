@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-11-05 17:19:50 CET (es)>
+## Time-stamp: <2015-06-25 06:42:35 CEST (es)>
 
 test.scale1 <- function() {
 
@@ -20,21 +20,34 @@ test.scale1 <- function() {
 
     checkEquals(scale1(p, level = 100), p/1.08)
 
-    ## de-mean
-    checkEquals(apply(returns(scale1(p, centre = TRUE)),
+    ## de-mean: arithmetic
+    checkEquals(apply(returns(scale1(p, centre = TRUE, geometric=FALSE)),
                       2, mean, na.rm = TRUE), 
                 rep(0, ncol(p)))
+
+    ## TODO: de-mean: geometric
+    ## checkEquals(apply(returns(scale1(p, centre = TRUE, geometric=TRUE)),
+    ##                   2, mean, na.rm = TRUE), 
+    ##             rep(0, ncol(p)))
+    
     ## scale
     checkEquals(apply(returns(scale1(p, scale = 0.01)),
                       2, sd, na.rm = TRUE),
                 rep(0.01, ncol(p)))
 
     ## de-mean & scale 
-    checkEquals(apply(returns(scale1(p, centre = TRUE, scale = 0.01)),
+    checkEquals(apply(returns(scale1(p,
+                                     centre = TRUE,
+                                     scale = 0.01,
+                                     geometric=FALSE)),
                       2, mean, na.rm = TRUE), 
-                rep(0, ncol(p)))
-    checkEquals(apply(returns(scale1(p, centre = TRUE, scale = 0.01)),
+                rep(0, ncol(p))) ## arith. mean is zero
+
+    checkEquals(apply(returns(scale1(p,
+                                     centre = TRUE,
+                                     scale = 0.01,
+                                     geometric=FALSE)),
                       2, sd, na.rm = TRUE), 
-                rep(0.01, ncol(p)))
-    
+                rep(0.01, ncol(p))) ## sd is 0.01
+
 }

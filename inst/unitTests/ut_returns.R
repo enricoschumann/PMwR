@@ -2,6 +2,7 @@ test.returns <- function() {
 
     require("PMwR")
     require("RUnit")
+    require("zoo")
     
     ## numeric vector
     x <- 101:112
@@ -18,9 +19,9 @@ test.returns <- function() {
     ## data.frame
     y <- as.data.frame(x)
     checkTrue(inherits(returns(y), "data.frame"))
-    checkEqualsNumeric(returns(y), y[-1,]/y[-nrow(x),] - 1)
-    checkEqualsNumeric(returns(x, pad = NA)[-1,], x[-1, ]/x[-nrow(x),]-1)
-    checkTrue(all(is.na(returns(x, pad = NA)[1L,])))
+    checkEquals(returns(y), y[-1,]/y[-nrow(x),] - 1)
+    checkEqualsNumeric(as.matrix(returns(y, pad = NA)[-1,]), x[-1, ]/x[-nrow(x),]-1)
+    checkTrue(all(is.na(returns(y, pad = NA)[1L,])))
     row.names(y) <- letters[1:nrow(y)]
     checkEquals(returns(y), y[-1,]/y[-nrow(x),] - 1)
     checkEquals(returns(x, pad = NA)[-1,], x[-1, ]/x[-nrow(x),]-1)
@@ -42,43 +43,41 @@ test.returns <- function() {
     checkTrue(all(is.na(returns(x, pad = NA, lag = lag)[1:lag, ])))
 
     ## zoo
-    if (require("zoo")) {
-        x <- 101:112
-        z <- zoo(x, seq_along(x))
-        checkEquals(returns(as.numeric(z)), returns(x))
-        checkEquals(returns(as.numeric(z), pad = 0), returns(x, pad = 0))
+    x <- 101:112
+    z <- zoo(x, seq_along(x))
+    checkEquals(returns(as.numeric(z)), returns(x))
+    checkEquals(returns(as.numeric(z), pad = 0), returns(x, pad = 0))
+    
+    checkEquals(returns(z),
+                zoo(returns(as.numeric(z)), index(z)[-1]))
+    checkEquals(returns(z, pad = 0),
+                zoo(returns(as.numeric(z), pad = 0), index(z)))
+    
+    ## padding in zoo
+    checkTrue(is.na(returns(z, pad = NA)[1L]))
+    checkTrue(coredata(returns(z, pad = 0)[1L]) == 0)
+    checkTrue(coredata(returns(z, pad = 1)[1L]) == 1)
 
-        checkEquals(returns(z),
-                    zoo(returns(as.numeric(z)), index(z)[-1]))
-        checkEquals(returns(z, pad = 0),
-                    zoo(returns(as.numeric(z), pad = 0), index(z)))
 
-        ## padding in zoo
-        checkTrue(is.na(returns(z, pad = NA)[1L]))
-        checkTrue(coredata(returns(z, pad = 0)[1L]) == 0)
-        checkTrue(coredata(returns(z, pad = 1)[1L]) == 1)
-
-
-        ## with period "monthly"
-        t <- seq(as.Date("2012-01-01"), as.Date("2012-12-31"), by = "1 day")
-        x <- seq_along(t) + 1000
-        z <- zoo(x, t)
-        
-        checkTrue(class(returns(x, t = t, period = "month")) == "preturns")
-        checkTrue(class(returns(z,        period = "month")) == "preturns")
-
-        ## either zoo or specify timestamp separately
-        checkEquals(returns(x, t = t, period = "month"),
-                    returns(z,        period = "month"))
-        checkEquals(returns(x, t = t, period = "month", pad = NA),
-                    returns(z,        period = "month", pad = NA))
-        
-        returns(x, t = t, period = "month", complete.first = FALSE)
-        returns(zoo(x, t), period = "month")
-                
-        returns(z, pad = NA)
-        returns(z)
-    }
+    ## with period "monthly"
+    t <- seq(as.Date("2012-01-01"), as.Date("2012-12-31"), by = "1 day")
+    x <- seq_along(t) + 1000
+    z <- zoo(x, t)
+    
+    checkTrue(class(returns(x, t = t, period = "month")) == "preturns")
+    checkTrue(class(returns(z,        period = "month")) == "preturns")
+    
+    ## either zoo or specify timestamp separately
+    checkEquals(returns(x, t = t, period = "month"),
+                returns(z,        period = "month"))
+    checkEquals(returns(x, t = t, period = "month", pad = NA),
+                returns(z,        period = "month", pad = NA))
+    
+    returns(x, t = t, period = "month", complete.first = FALSE)
+    returns(zoo(x, t), period = "month")
+    
+    returns(z, pad = NA)
+    returns(z)
     
     t <- seq(as.Date("2012-01-01"), as.Date("2013-12-31"), by = "1 day")
     x <- seq_along(t) + 100
