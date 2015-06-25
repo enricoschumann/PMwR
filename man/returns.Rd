@@ -1,5 +1,6 @@
 \name{returns}
 \alias{returns}
+\alias{.returns}
 \alias{preturns}
 \alias{returns.default}
 \alias{returns.zoo}
@@ -35,6 +36,7 @@ returns(x, \dots)
     td.style = "text-align:right;padding:0.5em;", 
     td.class = NULL, tr.style = NULL, tr.class = NULL)
 
+.returns(x, pad = NULL, lag)
 }
 \arguments{
   \item{x}{
@@ -46,9 +48,14 @@ returns(x, \dots)
         timestamps. See argument \code{"period"}.
   }
   \item{period}{
-       typically character: predefined are "month" and "day". Only
-       used if \code{t} is not \code{NULL}.
-  }
+    
+       typically character, currently either "month", "year" or "ann"
+       (for annualised). Returns will not be annualised when the period
+       is less than one year. To force annualising, use "ann!".
+       used when timestamp information is available (eg, \code{t} is not
+       \code{NULL} or with \code{zoo} objects).
+
+     }
   \item{complete.first}{
     logical. For monthly returns, should the first month (if incomplete)
     be used.
