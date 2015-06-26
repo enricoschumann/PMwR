@@ -31,7 +31,7 @@ returns.zoo <- function(x, period = NULL, complete.first = TRUE,
 returns.data.frame <- function(x, t = NULL, period = NULL, complete.first = TRUE,
                                pad = NULL, position = NULL,
                                weights = NULL,
-                               rebalance.when = NULL, 
+                               rebalance.when = NULL,
                                lag = 1, ...) {
 
     ## '.returns', which is called by 'returns', will coerce to
@@ -64,7 +64,7 @@ returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
             x <- x[idx]
         }
         if (!is.null(dim(x)) && min(dim(x)) > 1L)
-            ## TODO: returns should loop over columns
+            TODO: returns should loop over columns
             stop("with ", sQuote("t"), " supplied, ",
                  sQuote("x"), " must be a vector")
         if (lag != 1L)
@@ -101,7 +101,7 @@ returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
 
 ## not exported
 twReturns <- function(price, position, pad = NULL) {
-    do.pad <- !is.null(pad)        
+    do.pad <- !is.null(pad)
     position <- as.matrix(position)
     price <- as.matrix(price)
     n <- dim(price)[1L]
@@ -113,8 +113,8 @@ twReturns <- function(price, position, pad = NULL) {
     weights <- (M/rsM)
     weights[abs(rsM) < 1e-14] <- 0
     weights <- weights[-n, , drop = FALSE]
-    rt <- rowSums(rt * weights)        
-    if (do.pad) 
+    rt <- rowSums(rt * weights)
+    if (do.pad)
         rt <- c(pad, rt)
     rt
 }
@@ -178,8 +178,10 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
     ans
 }
 
-as.zoo.p_returns <- function (x, ...)
+as.zoo.p_returns <- function (x, ...) {
+    ## TODO: if list, warning
     zoo(x, attr(x,"t"))
+}
 
 ## not exported
 fmt <- function(x, plus, digits) {
@@ -215,6 +217,7 @@ fmt <- function(x, plus, digits) {
 print.p_returns <- function(x, ..., year.rows = TRUE,
                            month.names = NULL, zero.print = "0", plus = FALSE,
                            digits = 1) {
+    ## TODO: if list, warning
     period <- attr(x, "period")
     timestamp <- attr(x, "t")
     if (!is.null(period) && period == "monthly") {
@@ -249,6 +252,7 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
 toLatex.p_returns <- function(object, ..., year.rows = TRUE,
                              ytd = "YTD", month.names = NULL, eol = "\\\\",
                               stand.alone = FALSE) {
+    ## TODO: if list, warning
     period <- attr(object, "period")
     if (grepl("month(ly)?", period, ignore.case = TRUE)) {
         if (year.rows)
@@ -276,6 +280,7 @@ toHTML.p_returns <- function(x, ..., year.rows = TRUE,
                             td.class = NULL,
                             tr.style = NULL, tr.class = NULL) {
 
+    ## TODO: if list, warning
     period <- attr(x, "period")
 
     .ctag <- function(value, tag)
@@ -359,7 +364,7 @@ returns_rebalance <- function(prices, weights, when = NULL, pad = NULL) {
         if (when[i])
             h[i, ] <- val[i] * weights[i, ]/prices[i, ]
         else
-            h[i, ] <- h[i - 1, ]        
+            h[i, ] <- h[i - 1, ]
     }
     ans <- returns(val, pad = pad)
     attr(ans, "holdings") <- h
