@@ -33,6 +33,11 @@ scale1(x, \dots)
   \item{scale}{
     logical or numeric
 }
+\item{geometric}{
+  logical: if \code{TRUE} (the default), the geometric mean is
+  deducted with \code{centre} is \code{TRUE}; if \code{FALSE},
+  the arithmetic mean is used
+}
   \item{\dots}{
     other arguments passed to methods
 }
