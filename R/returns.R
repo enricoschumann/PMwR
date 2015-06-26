@@ -145,7 +145,7 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
                 (x[lx]/x[1L])^(1/t) - 1
             }
             attr(ans, "period") <- "annualised"
-            attr(ans, "t", c(xi[1L], xi[lx]))
+            attr(ans, "t") <- c(xi[1L], xi[lx])
     } else {
         if (length(period) > 1L) {
             by <- period
