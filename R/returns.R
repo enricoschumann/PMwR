@@ -64,7 +64,7 @@ returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
             x <- x[idx]
         }
         if (!is.null(dim(x)) && min(dim(x)) > 1L)
-            TODO: returns should loop over columns
+            ## TODO: returns should loop over columns
             stop("with ", sQuote("t"), " supplied, ",
                  sQuote("x"), " must be a vector")
         if (lag != 1L)
