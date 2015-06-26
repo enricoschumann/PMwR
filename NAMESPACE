@@ -13,11 +13,13 @@ importFrom(zoo, zoo)
 importFrom(textutils, rmspace)
 importFrom(textutils, valign)
 importFrom(textutils, strexp)
-importFrom(textutils, toHTML)  
+importFrom(textutils, toHTML)
 importFrom(datetimeutils, timegrid)
 importFrom(datetimeutils, roundPOSIXt)
 
 export(
+    .returns,
+    .mtab,
     NAVseries,
     as.NAVseries,
     btest,
@@ -32,13 +34,12 @@ export(
     pricetable,
     rebalance,
     returns,
-    .returns,
     runStats,
     scale1,
     scaleToUnity,
     scaleTrades,
-    splitTrades,
     splitAdjust,
+    splitTrades,
     twExposure
     )
 
@@ -48,7 +49,7 @@ S3method(aggregate, journal)
 S3method(as.data.frame, journal)
 S3method(as.NAVseries, zoo)
 S3method(as.zoo, NAVseries)
-S3method(as.zoo, preturns)
+S3method(as.zoo, p_returns)
 S3method(c, journal)
 S3method(head, journal)
 S3method(length, journal)
@@ -60,7 +61,7 @@ S3method(print, btest)
 S3method(print, journal)
 S3method(print, pl)
 S3method(print, position)
-S3method(print, preturns)
+S3method(print, p_returns)
 S3method(print, rebalance)
 S3method(print, summary.journal)
 S3method(print, summary.NAVseries)
@@ -73,8 +74,8 @@ S3method(sort, journal)
 S3method(subset, journal)
 S3method(summary, NAVseries)
 S3method(tail, journal)
-S3method(toHTML, preturns)
-S3method(toLatex, preturns)
+S3method(toHTML, p_returns)
+S3method(toLatex, p_returns)
 S3method(journal, default)
 S3method(journal, position)
 S3method(journal, btest)

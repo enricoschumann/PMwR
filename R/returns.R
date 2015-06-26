@@ -17,7 +17,6 @@ returns.zoo <- function(x, period = NULL, complete.first = TRUE,
         returns(x, t = t, period = period,
                 complete.first = complete.first,
                 pad = pad, position = position, lag = lag, ...)
-        
     } else {
         ans <- returns(x, period = NULL,
                        complete.first = complete.first,
@@ -42,7 +41,7 @@ returns.data.frame <- function(x, t = NULL, period = NULL, complete.first = TRUE
                    complete.first = complete.first,
                    pad = pad, position = position,
                    weights = weights,
-                   rebalance.when = rebalance.when, 
+                   rebalance.when = rebalance.when,
                    lag = lag, ...)
     as.data.frame(ans)
 }
@@ -50,11 +49,11 @@ returns.data.frame <- function(x, t = NULL, period = NULL, complete.first = TRUE
 returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
                             pad = NULL, position = NULL,
                             weights = NULL,
-                            rebalance.when = NULL, 
+                            rebalance.when = NULL,
                             lag = 1, ...) {
 
     if (is.null(t) &&  is.null(position) && is.null(weights)) {
-        .returns(x, pad = pad, lag = lag)        
+        .returns(x, pad = pad, lag = lag)
     } else if (is.null(t) &&  is.null(position) && !is.null(weights)) {
         returns_rebalance(prices = x, weights = weights,
                           when = rebalance.when, pad = pad)
@@ -67,7 +66,7 @@ returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
         if (!is.null(dim(x)) && min(dim(x)) > 1L)
             ## TODO: returns should loop over columns
             stop("with ", sQuote("t"), " supplied, ",
-                 sQuote("x"), " must be a vector")                
+                 sQuote("x"), " must be a vector")
         if (lag != 1L)
             warning(sQuote("lag"), " is ignored")
         pReturns(x, t, period, complete.first, pad = pad)
@@ -122,26 +121,32 @@ twReturns <- function(price, position, pad = NULL) {
 
 ## not exported
 pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
-    
     if (is.null(period)) {
-        ans <- list(returns = returns(x, pad = pad),
-                    t = if (is.null(pad)) t[-1L] else t,
-                    period = period)        
+        ## ans <- list(returns = returns(x, pad = pad),
+        ##             t = if (is.null(pad)) t[-1L] else t,
+        ##             period = period)
+        ## TODO
+        ans <- returns(x, pad = pad)
+        attr(ans, "t") <- if (is.null(pad)) t[-1L] else t
+        attr(ans, "period") <- NULL
     } else if (grepl("^ann", period, ignore.case = TRUE)) {
             xi <- as.Date(t)
             lx <- length(xi)
             t <- as.numeric(xi[lx] - xi[1L])/365
             ans <- if (t < 1 && !(grepl("!$", period))) {
-                list(returns = (x[lx]/x[1L]) - 1,
-                     t = c(xi[1L], xi[lx]), period = "annualised")
+                ## list(returns = (x[lx]/x[1L]) - 1,
+                ##      t = c(xi[1L], xi[lx]), period = "annualised")
                 ## TODO define ans
+                (x[lx]/x[1L]) - 1
             } else {
-                list(returns = (x[lx]/x[1L])^(1/t) - 1,
-                     t = c(xi[1L], xi[lx]), period = "annualised")
+                ## list(returns = (x[lx]/x[1L])^(1/t) - 1,
+                ##      t = c(xi[1L], xi[lx]), period = "annualised")
                 ## TODO define ans
-            }            
-    } else {        
-
+                (x[lx]/x[1L])^(1/t) - 1
+            }
+            attr(ans, "period") <- "annualised"
+            attr(ans, "t", c(xi[1L], xi[lx]))
+    } else {
         if (length(period) > 1L) {
             by <- period
         } else if (grepl("da(y|i)", period, ignore.case = TRUE)) {
@@ -149,33 +154,32 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
             period <- "daily"
         } else if (grepl("year(ly)?", period, ignore.case = TRUE)) {
             by <- format(t, "%Y")
-            period <- "yearly"            
+            period <- "yearly"
         } else if (grepl("month(ly)?", period, ignore.case = TRUE)) {
             by <- format(t, "%Y%m")
-            period <- "monthly"            
+            period <- "monthly"
         } else {
             stop("unknown ", sQuote("period"))
         }
-        
         ii <- last(x, by, TRUE)
         if (complete.first && by[1L] == by[2L])
             ii <- c(1, ii)
 
-        ans <- list(returns = returns(x[ii], pad = pad),
-                    t = if (is.null(pad)) t[ii][-1L] else t[ii],
-                    period = period)
+        ## ans <- list(returns = returns(x[ii], pad = pad),
+        ##             t = if (is.null(pad)) t[ii][-1L] else t[ii],
+        ##             period = period)
         ## TODO define ans
+        ans <- returns(x[ii], pad = pad)
         attr(ans, "t") <- if (is.null(pad)) t[ii][-1L] else t[ii]
-        attr(ans, "period") <- "period"
-
+        attr(ans, "period") <- period
     }
     ## browser()
-    class(ans) <- "preturns"
+    class(ans) <- "p_returns"
     ans
 }
 
-as.zoo.preturns <- function (x, ...)
-    zoo(x$returns, x$t)
+as.zoo.p_returns <- function (x, ...)
+    zoo(x, attr(x,"t"))
 
 ## not exported
 fmt <- function(x, plus, digits) {
@@ -189,14 +193,14 @@ fmt <- function(x, plus, digits) {
 }
 
 ## not exported
-mtab <- function(x, ytd = "YTD", month.names = NULL, zero.print = "0", plus = FALSE,
+.mtab <- function(x, ytd = "YTD", month.names = NULL, zero.print = "0", plus = FALSE,
                  digits = 1) {
-    years <- as.numeric(format(x$t, "%Y"))
-    mons  <- as.numeric(format(x$t, "%m"))
+    years <- as.numeric(format(attr(x, "t"), "%Y"))
+    mons  <- as.numeric(format(attr(x, "t"), "%m"))
     tb <- array("", dim = c(length(unique(years)), 13L))
-    tb[cbind(years - years[1L] + 1L, mons)] <- fmt(x$returns, plus, digits)
+    tb[cbind(years - years[1L] + 1L, mons)] <- fmt(x, plus, digits)
     for (y in sort(unique(years)))
-        tb[y - years[1L] + 1L, 13L] <- fmt(prod(x$returns[years==y] + 1L) - 1L,
+        tb[y - years[1L] + 1L, 13L] <- fmt(prod(x[years==y] + 1L) - 1L,
                                            plus, digits)
     rownames(tb) <- sort(unique(years))
     colnames(tb) <- if (is.null(month.names))
@@ -208,59 +212,60 @@ mtab <- function(x, ytd = "YTD", month.names = NULL, zero.print = "0", plus = FA
     tb
 }
 
-print.preturns <- function(x, ..., year.rows = TRUE,
+print.p_returns <- function(x, ..., year.rows = TRUE,
                            month.names = NULL, zero.print = "0", plus = FALSE,
                            digits = 1) {
-    if (!is.null(x$period) && x$period == "monthly") {
+    period <- attr(x, "period")
+    timestamp <- attr(x, "t")
+    if (!is.null(period) && period == "monthly") {
         if (year.rows)
-            print(mtab(x, ytd = "YTD", month.names = month.names,
+            print(.mtab(x, ytd = "YTD", month.names = month.names,
                        zero.print = zero.print, plus = plus, digits = digits),
                   quote = FALSE, print.gap = 1, right = TRUE)
         else
-            print(t(mtab(x, ytd = "YTD", month.names = month.names,
+            print(t(.mtab(x, ytd = "YTD", month.names = month.names,
                        zero.print = zero.print, plus = plus, digits = digits)),
                   quote = FALSE, print.gap = 2, right = TRUE)
-        
-    } else if (!is.null(x$period) && x$period == "yearly") {
-        tmp <- x$returns
-        names(tmp) <- format(x$t, "%Y")
-        if (year.rows) 
+    } else if (!is.null(period) && period == "yearly") {
+        tmp <- x
+        names(tmp) <- format(timestamp, "%Y")
+        if (year.rows)
             print(fmt(tmp, plus, digits), quote = FALSE)
-        else 
+        else
             print(as.matrix(fmt(tmp, plus, digits)), quote = FALSE)
-    } else if (!is.null(x$period) && x$period == "annualised") {
-        cat(format(round(x$returns*100,1), nsmall = 1), "% p.a. ",
-            "  [", format(x$t[1], "%d %b %Y"), " -- ",
-                 format(x$t[2], "%d %b %Y"), "", sep = "")
-        if (as.numeric(x$t[2]-x$t[1])/365 < 1)
+    } else if (!is.null(period) && period == "annualised") {
+        cat(format(round(x*100,1), nsmall = 1), "% p.a. ",
+            "  [", format(timestamp[1], "%d %b %Y"), " -- ",
+                 format(timestamp[2], "%d %b %Y"), "", sep = "")
+        if (as.numeric(timestamp[2L]-timestamp[1L])/365 < 1)
             cat(", less than one year]\n", sep = "") else
             cat("]\n", sep = "")
-        
     } else {
         print(unclass(x))
     }
     invisible(x)
 }
 
-toLatex.preturns <- function(object, ..., year.rows = TRUE,
+toLatex.p_returns <- function(object, ..., year.rows = TRUE,
                              ytd = "YTD", month.names = NULL, eol = "\\\\",
-                             stand.alone = FALSE) {
-    if (grepl("month(ly)?", object$period, ignore.case = TRUE)) {
+                              stand.alone = FALSE) {
+    period <- attr(object, "period")
+    if (grepl("month(ly)?", period, ignore.case = TRUE)) {
         if (year.rows)
-            mt <- mtab(object, ytd = ytd, month.names = month.names)
+            mt <- .mtab(object, ytd = ytd, month.names = month.names)
         else
-            mt <- t(mtab(object, ytd = ytd, month.names = month.names))
+            mt <- t(.mtab(object, ytd = ytd, month.names = month.names))
     } else {
         stop("currently only supported for period ", sQuote("month"))
     }
     mt <- rbind(colnames(mt), mt)
     mt <- cbind(rownames(mt), mt)
-    mt <- paste(apply(mt, 1, function(x) paste(x, collapse = "&")), eol)        
+    mt <- paste(apply(mt, 1, function(x) paste(x, collapse = "&")), eol)
     class(mt) <- "Latex"
     mt
 }
 
-toHTML.preturns <- function(x, ..., year.rows = TRUE,
+toHTML.p_returns <- function(x, ..., year.rows = TRUE,
                             ytd = "YTD", month.names = NULL,
                             stand.alone = TRUE,
                             table.style = NULL,
@@ -271,12 +276,14 @@ toHTML.preturns <- function(x, ..., year.rows = TRUE,
                             td.class = NULL,
                             tr.style = NULL, tr.class = NULL) {
 
+    period <- attr(x, "period")
+
     .ctag <- function(value, tag)
         if (!is.null(value))
             paste0(" ", tag, "=", value)
         else
             character(0L)
-    
+
     .th <- function(x, style = th.style, class = th.class){
         open <- paste0("<th", .ctag(style, "style"), .ctag(class, "class"), ">")
         paste0(open, x, "</th>")
@@ -289,12 +296,12 @@ toHTML.preturns <- function(x, ..., year.rows = TRUE,
         open <- paste0("<tr", .ctag(style, "style"), .ctag(class, "class"), ">")
         paste0(open, x, "</tr>")
     }
-    
-    if (grepl("month(ly)?", x$period)) {
+
+    if (grepl("month(ly)?", period)) {
         if (year.rows)
-            mt <- mtab(x, ytd = ytd, month.names = month.names)
+            mt <- .mtab(x, ytd = ytd, month.names = month.names)
         else
-            mt <- t(mtab(x, ytd = ytd, month.names = month.names))
+            mt <- t(.mtab(x, ytd = ytd, month.names = month.names))
     } else {
         stop("currently only supported for period ", sQuote("month"))
     }
@@ -320,7 +327,7 @@ returns_rebalance <- function(prices, weights, when = NULL, pad = NULL) {
 
     if (nr < 2)
         stop("less than 2 rows in prices: cannot compute returns")
-    
+
     if (is.null(dim(weights)) && is.null(when)) {
         ## TODO faster implementation
     }
@@ -330,7 +337,7 @@ returns_rebalance <- function(prices, weights, when = NULL, pad = NULL) {
 
     if (dim(weights)[2L] != ncol(prices))
         warning("length of weights does not match number of price series")
-    
+
     if (is.null(when) || isTRUE(when))
         when <- rep(TRUE, nr)
 

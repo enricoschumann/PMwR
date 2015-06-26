@@ -1,3 +1,15 @@
+2015-06-26  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (pReturns): renamed class 'preturns' to 'p_returns'.
+	The class is now a numeric vector/matrix with attributes 't' and
+	'period'. Before, it had been a list with elements 'returns', 't'
+	and 'period'. So, when 'x' is of class 'p_returns':
+
+        WHAT                  NEW                  OLD
+        retrieve returns      x                    x$returns
+        retrieve timestamp    attr(x, "t")         x$t
+        retrieve period       attr(x, "period")    x$period
+
 2015-06-25  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-64
