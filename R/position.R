@@ -79,9 +79,12 @@ position.default <- function(amount, timestamp, instrument, when,
     }
     if (allna)
         nm[] <- NA
-    ans <- list(position = pos, timestamp = when, instrument = nm)
-    class(ans) <- "position"
-    ans
+    ## ans <- list(position = pos, timestamp = when, instrument = nm)
+    ## ans <- pos
+    attr(pos, "timestamp") <- when
+    attr(pos, "instrument") <- nm    
+    class(pos) <- "position"
+    pos
 }
 
 position.btest <- function(amount, when, ...) {
@@ -93,26 +96,27 @@ print.position <- function(x, ..., sep = NA) {
 
     if (!is.na(sep))
         stop("'sep' is not yet implemented")
-    if (!all(is.na(x$instrument)))
-        colnames(x$position) <- x$instrument
-    if (dim(x$position)[1L] > 1L) {
-        print(x$position, big.mark = ",")
+    instrument <- attr(x, "instrument")
+    
+    if (!all(is.na(instrument)))
+        colnames(x) <- instrument
+    if (dim(x)[1L] > 1L) {
+        print(unclass(x), big.mark = ",")
     } else {
-        ##rownames(x$position) <- ""
-        print(t(x$position), big.mark = ",")
+        print(t(unclass(x)), big.mark = ",")
     }
     invisible(x)
 }
 
-`[.position`  <- function(x, i, j, ...) {
-    if (missing(i))
-        i <- TRUE
-    if (missing(j))
-        j <- TRUE
-    ans <- x$position[i,j, drop = FALSE]
-    ans <- list(position = ans,
-                timestamp = x$timestamp[i],
-                instrument = x$instrument[j])
-    class(ans) <- "position"
-    ans
-}
+## `[.position`  <- function(x, i, j, ...) {
+##     if (missing(i))
+##         i <- TRUE
+##     if (missing(j))
+##         j <- TRUE
+##     ans <- x$position[i,j, drop = FALSE]
+##     ans <- list(position = ans,
+##                 timestamp = x$timestamp[i],
+##                 instrument = x$instrument[j])
+##     class(ans) <- "position"
+##     ans
+## }

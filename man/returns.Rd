@@ -1,12 +1,12 @@
 \name{returns}
 \alias{returns}
 \alias{.returns}
-\alias{preturns}
+\alias{p_returns}
 \alias{returns.default}
 \alias{returns.zoo}
-\alias{print.preturns}
-\alias{toLatex.preturns}
-\alias{toHTML.preturns}
+\alias{print.p_returns}
+\alias{toLatex.p_returns}
+\alias{toHTML.p_returns}
 \title{
   Compute Returns
 }
@@ -22,14 +22,14 @@ returns(x, \dots)
 \method{returns}{zoo}(x, period = NULL, complete.first = TRUE,
                       pad = NULL, position = NULL, lag = 1, \dots)
 
-\method{print}{preturns}(x, \dots, year.rows = TRUE, month.names = NULL,
+\method{print}{p_returns}(x, \dots, year.rows = TRUE, month.names = NULL,
                          zero.print = "0", plus = FALSE, digits = 1)
 
-\method{toLatex}{preturns}(object, \dots,
+\method{toLatex}{p_returns}(object, \dots,
        year.rows = TRUE, ytd = "YTD", month.names = NULL, 
        eol = "\\\\\\\\", stand.alone = FALSE)
 
-\method{toHTML}{preturns}(x, \dots,
+\method{toHTML}{p_returns}(x, \dots,
     year.rows = TRUE, ytd = "YTD", month.names = NULL, 
     stand.alone = TRUE, table.style = NULL, table.class = NULL, 
     th.style = NULL, th.class = NULL,
@@ -60,7 +60,7 @@ returns(x, \dots)
     logical. For monthly returns, should the first month (if incomplete)
     be used.
   }
-  \item{pad}{    
+  \item{pad}{
     either \code{NULL} (no padding of initial lost observation) or a
     value used for padding (reasonable values might be \link{NA} or 0)
   }
@@ -74,20 +74,20 @@ returns(x, \dots)
   \item{year.rows}{
     logical. If \code{TRUE} (the default), print monthly returns with
     one row per year.
-  }  
+  }
   \item{zero.print}{
     character.  How to print zero values.
-  }  
+  }
   \item{plus}{
     logical. Add a \sQuote{\code{+}} before positive numbers? Default is
     \code{FALSE}.
-  }  
+  }
   \item{lag}{
     The lag for computing returns. A positive integer, defaults to one;
     ignored for time-weighted returns or if \code{t} is supplied.
-  }  
+  }
   \item{object}{
-    an object of class \code{preturns} (\sQuote{period returns})
+    an object of class \code{p_returns} (\sQuote{period returns})
   }
   \item{month.names}{
     character: names of months
@@ -114,7 +114,7 @@ returns(x, \dots)
   \code{return} is a generic function.  It computes simple returns:
   current values divided by prior values minus one.  The default method
   works for numeric vectors/matrices.
-  
+
 }
 \value{
 
@@ -122,11 +122,12 @@ returns(x, \dots)
   of class \code{zoo}.
 
   If called with a \code{period} argument: an object of class
-  \code{"preturns"} (period returns), which is a list of dates,
-  corresponding returns and the period.  Main use is to have methods
-  that pretty-print such period returns; currently, there are methods
+  \code{"p_returns"} (period returns), which is a numeric vector of
+  returns with attributes \code{t} (timestamp) and \code{period}.
+  Main use is to have methods that pretty-print such period returns;
+  currently, there are methods
   for \code{\link{toLatex}} and \code{\link[tools]{toHTML}}.
-  
+
 }
 \author{
   Enrico Schumann

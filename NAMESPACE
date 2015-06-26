@@ -44,7 +44,7 @@ export(
     )
 
 S3method(`[`, journal)
-S3method(`[`, position)
+## S3method(`[`, position)
 S3method(aggregate, journal)
 S3method(as.data.frame, journal)
 S3method(as.NAVseries, zoo)
