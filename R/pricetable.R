@@ -1,5 +1,4 @@
 ## -*- truncate-lines: t; fill-column: 65; comment-column: 50; -*-
-## Time-stamp: <2015-05-07 08:22:12 CEST (es)>
 
 pricetable <- function(instrument, when,
                        price,
