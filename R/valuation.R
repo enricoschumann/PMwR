@@ -1,3 +1,5 @@
+## -*- truncate-lines: t; fill-column: 65; comment-column: 50; -*-
+
 ## valuation <- function(x, ...) {
 ##     UseMethod("valuation")
 ## }
@@ -71,14 +73,16 @@ valuation.position <- function(x, multiplier = 1, price.table,
 pv <- function(x, multiplier = 1, price.table,
                                do.sum = FALSE, unit, ...) {
 
+    instrument <- attr(x, "instrument")
+    
     if (!is.null(names(multiplier)))
-        multiplier <- multiplier[x$instrument]
+        multiplier <- multiplier[instrument]
 
-    ans <- x$position * price.table
-    if (any(multiplier != 1)) {
-        ans <- ans %*% diag(multiplier, length(x$instrument))
-    }
-    colnames(ans) <- x$instrument
+    ans <- x * price.table
+    if (any(multiplier != 1))
+        ans <- ans %*% diag(multiplier, length(instrument))
+
+    colnames(ans) <- instrument
     if (do.sum)
         ans <- rowSums(ans)
     ans

@@ -1,3 +1,8 @@
+2015-06-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/valuation.R (pv): the function now uses the new format of
+	position objects (see ChangeLog of 2015-06-26)
+
 2015-06-26  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (position): An object of that class is now a
