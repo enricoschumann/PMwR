@@ -218,6 +218,8 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
                            month.names = NULL, zero.print = "0", plus = FALSE,
                            digits = 1) {
     ## TODO: if list, warning
+    if (is.list(x))
+        warning("format of 'p_returns' objects has changed: see ChangeLog")
     period <- attr(x, "period")
     timestamp <- attr(x, "t")
     if (!is.null(period) && period == "monthly") {

@@ -1,5 +1,4 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2015-06-16 10:20:34 CEST (es)>
 btest  <- function(prices,              
                    signal,               ## 
                    do.signal = TRUE,     ## 
@@ -57,10 +56,26 @@ btest  <- function(prices,
         do.signal <- function(...)
             FALSE
         warning(sQuote("do.signal"), " is FALSE: strategy will never trade")
-    } else if (length(do.signal) > 1L) {
-        ## TODO: when do signal is 1,17,30, set TRUE on those days
-        ## TODO: when logical vector
-        ## TODO: when timestamp is specified, match to timestamp        
+    } else if (!missing(timestamp) && inherits(do.signal, class(timestamp))) {
+        ## TODO: when timestamp is specified, match to timestamp
+        stop("not implemented")
+    } else if (is.numeric(do.signal)) {
+        ## TODO: what if Date?
+        rebalancing_times <- do.signal
+        do.signal <- function(...)
+            if (Time(0L) %in% rebalancing_times)
+                TRUE
+            else
+                FALSE        
+        
+    } else if (is.logical(do.signal)) {
+        ## tests on identical to TRUE,FALSE above, so length > 1
+        rebalancing_times <- which(do.signal)
+        do.signal <- function(...)
+            if (Time(0L) %in% rebalancing_times)
+                TRUE
+            else
+                FALSE                                
     }  else if (is.character(do.signal) &&
                tolower(do.signal) == "firstofmonth") {
         tmp <- as.Date(timestamp)
@@ -69,7 +84,21 @@ btest  <- function(prices,
         i_rdays <- match(aggregate(tmp, by = list(format(tmp, "%Y-%m")),
                                    FUN = head, 1)[[2L]],
                          tmp)
-        do.signal <- function()
+        do.signal <- function(...)
+            if (Time(0) %in% i_rdays)
+                TRUE
+            else
+                FALSE        
+    } else if (is.character(do.signal) &&
+               (tolower(do.signal) == "lastofmonth" ||
+                tolower(do.signal) == "endofmonth")) {
+        tmp <- as.Date(timestamp)
+        if (any(is.na(tmp)))
+            stop("timestamp with NAs")
+        i_rdays <- match(aggregate(tmp, by = list(format(tmp, "%Y-%m")),
+                                   FUN = tail, 1)[[2L]],
+                         tmp)
+        do.signal <- function(...)
             if (Time(0) %in% i_rdays)
                 TRUE
             else
