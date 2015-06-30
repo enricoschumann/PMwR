@@ -1,37 +1,6 @@
 %% \VignetteIndexEntry{Journals}
 \documentclass[a4paper,11pt]{article}
-\usepackage[left = 3cm, top = 2cm, bottom = 2cm, right = 4cm]{geometry}
-\usepackage[noae,nogin]{Sweave}
-\usepackage{libertine}
-\usepackage[scaled=0.8]{DejaVuSansMono}
-\usepackage[T1]{fontenc}
-%% \renewcommand*\familydefault{\sfdefault} 
-\newcommand{\pmwr}{\textsc{pm}w\textsc{r}}
-\newcommand{\pl}{\textsc{pl}}
-\newcommand{\R}{\textsf{R}}
-
-\usepackage{marginnote}
-\renewcommand*{\marginfont}{\RaggedRight\sffamily\footnotesize}
-\usepackage{ragged2e}
-
-\usepackage{amsmath,amstext}
-\usepackage{hyperref}
-\usepackage{natbib}
-\usepackage{xcolor}
-\definecolor{grau2}{rgb}{.2,.2,.2}
-\definecolor{grau7}{rgb}{.7,.7,.7}
-\DefineVerbatimEnvironment{Sinput}{Verbatim}{}
-\DefineVerbatimEnvironment{Soutput}{Verbatim}{frame=single,xleftmargin=0em,%
-  formatcom=\color{grau2},rulecolor=\color{grau7}}
-\DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=2em}
-\fvset{listparameters={\setlength{\topsep}{0pt}}}
-\renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
-\SweaveOpts{keep.source = TRUE, eps = TRUE}
-
-<<echo=false>>=
-options(continue = " ", digits = 3, width = 60, useFancyQuotes = FALSE)
-@
-
+\SweaveInput{pre.tex}
 \begin{document}
 \title{Journals}
 \author{Enrico Schumann\\\url{es@enricoschumann.net}}
@@ -48,7 +17,6 @@ require("zoo")
 @
 
 
-\chapter{Journals}
 \pagestyle{plain}
 
 \section{Transactions}
@@ -137,7 +105,7 @@ c(J, J2)
 
 \subsection{Subsetting journals}
 
-In interactive sessions, we can use \texttt{subset} to select specific
+In interactive sessions, we can use \texttt{subset} to select particular
 transactions. %
 \index{journal!subset@\texttt{subset}}
 <<>>=
@@ -188,7 +156,6 @@ J["[Pp]ension"]
 J["[Pp]ension", match.against = "comment"]
 @ 
 
-
 \section{Examples: positions, profits and losses}
 
 \subsection{Single-entry accounting}
@@ -230,12 +197,13 @@ transactions into files, like this:
 
 \noindent (In case you use Org-mode, such tables should look familiar.) % 
 \marginpar{\url{http://orgmode.org/}} %
-<<echo=false>>=
+<<echo=false, eval = false>>=
 system("perl -ne 'print $_ if /^\\s*\\| /;' < ex1.txt > ex1.jnl")
 @ 
 We can then write functions to read in such journal files.
 %% TODO: replace ex1 with inline code
-<<echo=false>>=
+%% TODO: reference to org package
+<<echo=false,eval=false,results=hide>>=
 readjnl <- function(file) {
     ans <- read.table(file,
                       header = TRUE, sep = "|", as.is = TRUE)
@@ -245,6 +213,13 @@ readjnl <- function(file) {
             comment   = ans$comment)
 }
 (J <- readjnl("ex1.jnl"))
+J <- structure(list(instrument = c(NA_character_, NA_character_, NA_character_, 
+NA_character_), 
+                    timestamp = structure(c(15340, 15341, 15342, 
+                    15374), class = "Date"), amount = c(100, 200, -200, 500), price = c(NA, 
+                                                                              NA, NA, NA), comment = c(" a comment        ", " another comment  ", 
+" bought something ", " got a present    ")), .Names = c("instrument", 
+"timestamp", "amount", "price", "comment"), class = "journal")    
 @ 
 Some of these transactions may mean a gain or loss to us, such as a
 dividend payment).  Others are neutral, for example a transfer between

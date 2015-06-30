@@ -1,37 +1,6 @@
 %% \VignetteIndexEntry{Profit and (or) loss}
 \documentclass[a4paper,11pt]{article}
-\usepackage[left = 3cm, top = 2cm, bottom = 2cm, right = 4cm]{geometry}
-\usepackage[noae,nogin]{Sweave}
-\usepackage{libertine}
-\usepackage[scaled=0.8]{DejaVuSansMono}
-\usepackage[T1]{fontenc}
-%% \renewcommand*\familydefault{\sfdefault} 
-\newcommand{\pmwr}{\textsc{pm}w\textsc{r}}
-\newcommand{\pl}{\textsc{pl}}
-\newcommand{\R}{\textsf{R}}
-
-\usepackage{marginnote}
-\renewcommand*{\marginfont}{\RaggedRight\sffamily\footnotesize}
-\usepackage{ragged2e}
-
-\usepackage{amsmath,amstext}
-\usepackage{hyperref}
-\usepackage{natbib}
-\usepackage{xcolor}
-\definecolor{grau2}{rgb}{.2,.2,.2}
-\definecolor{grau7}{rgb}{.7,.7,.7}
-\DefineVerbatimEnvironment{Sinput}{Verbatim}{}
-\DefineVerbatimEnvironment{Soutput}{Verbatim}{frame=single,xleftmargin=0em,%
-  formatcom=\color{grau2},rulecolor=\color{grau7}}
-\DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=2em}
-\fvset{listparameters={\setlength{\topsep}{0pt}}}
-\renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
-\SweaveOpts{keep.source = TRUE, eps = TRUE}
-
-<<echo=false>>=
-options(continue = " ", digits = 3, width = 60, useFancyQuotes = FALSE)
-@
-
+\SweaveInput{pre.tex}
 \begin{document}
 \title{Profit and (or) loss}
 \author{Enrico Schumann\\\url{es@enricoschumann.net}}
@@ -46,7 +15,6 @@ options(continue = " ", digits = 3, width = 60, useFancyQuotes = FALSE)
 require("PMwR")
 require("zoo")
 @
-
 
 \section{The simple case}
 
@@ -269,16 +237,15 @@ The position at \texttt{when} is quickly computed.
 <<>>=
 (pos <- position(J, when = when))
 @ 
-
 Note that each element in the position matrix corresponds to an
-element in the matrix price.table.  That is, the rows refer to the
-timestamps:
+element in the matrix \texttt{price.table}.  That is, the rows refer
+to the timestamps:
 <<>>=
-pos$timestamp
+attr(pos, "timestamp")
 @ 
 The columns must be ordered like the instruments:
 <<>>= 
-pos$instrument
+attr(pos, "instrument")
 @ 
 Thus, we need to multiply both matrices element-by-element, which is
 exactly what the function \texttt{valuation} does.  A warning: the
@@ -302,8 +269,8 @@ PMwR:::valuation(pos, price.table = price.table,
 
 We create a vector \texttt{cf} that will store the cashflows.
 <<>>=
-cf <- numeric(length(pos$timestamp))
-names(cf) <- as.character(pos$timestamp)
+cf <- numeric(length(attr(pos, "timestamp")))
+names(cf) <- as.character(attr(pos, "timestamp"))
 @ 
 
 
