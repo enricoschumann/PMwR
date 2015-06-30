@@ -17,7 +17,9 @@
 returns(x, \dots)
 
 \method{returns}{default}(x, t = NULL, period = NULL, complete.first = TRUE,
-                          pad = NULL, position = NULL, lag = 1, \dots)
+                          pad = NULL,
+                          position = NULL, weights = NULL, rebalance.when = NULL,
+                          lag = 1, \dots)
 
 \method{returns}{zoo}(x, period = NULL, complete.first = TRUE,
                       pad = NULL, position = NULL, lag = 1, \dots)

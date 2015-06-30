@@ -9,7 +9,8 @@
 }
 \usage{
 rebalance(current, target, price,
-          notional = NULL, 
+          notional = NULL,
+          multiplier = 1,
           truncate = TRUE,
           match.names = TRUE,
           check.match = TRUE)
@@ -30,6 +31,9 @@ rebalance(current, target, price,
   }
   \item{notional}{
     the value of the portfolio; if missing, replaced by \code{sum(current*prices)}
+  }
+  \item{multiplier}{
+    numeric vector, possibly named
   }
   \item{truncate}{
     truncate computed positions? Default is \code{TRUE}.
