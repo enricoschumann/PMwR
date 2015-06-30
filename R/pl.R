@@ -68,13 +68,13 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
         }
     }
 
-    if (!is.null(initial.position) && length(initial.position$position)) {
+    if (!is.null(initial.position) && length(initial.position)) {
         if (!is.null(names(initial.price)))
-            initial.price <- initial.price[match(initial.position$instrument,
+            initial.price <- initial.price[match(attr(initial.position, "instrument"),
                                                  names(initial.price))]        
-        amount0 <- c(initial.position$position)
-        instrument0 <- initial.position$instrument
-        timestamp0 <- rep(initial.position$timestamp, length(amount0))
+        amount0 <- c(initial.position)
+        instrument0 <- attr(initial.position, "instrument")
+        timestamp0 <- rep(attr(initial.position, "timestamp"), length(amount0))
     } else {
         initial.price <- timestamp0 <- amount0 <- numeric(0)
         instrument0 <- character(0)
@@ -87,12 +87,12 @@ pl <- function(amount, price, instrument = NULL, timestamp = NULL,
     ## open position?
     p1 <- position(amount, timestamp, instrument,
                    drop.zero = TRUE)
-    if (length(p1$position) && !missing(current.price)) {
+    if (length(p1) && !missing(current.price)) {
         if (!is.null(names(current.price))) 
-            current.price <- current.price[match(p1$instrument, names(current.price))]
-        amount1 <- c(-p1$position)  ## revert position
-        instrument1 <- p1$instrument
-        timestamp1 <- p1$timestamp            
+            current.price <- current.price[match(attr(p1, "instrument"), names(current.price))]
+        amount1 <- c(-p1)  ## revert position
+        instrument1 <- attr(p1, "instrument")
+        timestamp1 <- attr(p1, "timestamp") 
     } else {
         current.price <- timestamp1 <- amount1 <- numeric(0)
         instrument1 <- character(0)            
