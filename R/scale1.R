@@ -70,15 +70,16 @@ scale1.default <- function (x, ..., when = "first.complete",
 }
 
 scale1.zoo <- function(x, ..., when = "first.complete",
-                            level = 1, centre = FALSE, scale = FALSE) {
+                       level = 1, centre = FALSE, scale = FALSE,
+                       geometric = TRUE) {
 
     ii <- index(x)
     x <- coredata(x)
     ans <- scale1.default(x, when = when, level = level,
-                          centre = centre, scale = scale)
+                          centre = centre, scale = scale,
+                          geometric = geometric)
     zoo(ans, ii)
 }
-
 
 scale0 <- function(x, when = "first.complete", first = 100, scale = FALSE) {
     .Deprecated("scale1", package = "PMwR")

@@ -1,3 +1,11 @@
+2015-06-30  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/scale1.R (scale1.zoo): fixed -- the method did not pass on the
+	'geometric' argument
+
+	* R/journal.R (journal.position): fixed -- journal.position did
+	not properly use position attributes
+
 2015-06-29  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R (do.signal): 'do.signal' can be a numeric vector of
