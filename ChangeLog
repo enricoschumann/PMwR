@@ -1,5 +1,9 @@
 2015-06-30  Enrico Schumann  <es@enricoschumann.net>
 
+	* DESCRIPTION (Version): Version: 0.1-65
+
+	* man/btest.Rd: update doc for 'do.signal'
+
 	* R/scale1.R (scale1.zoo): fixed -- the method did not pass on the
 	'geometric' argument
 
@@ -101,13 +105,11 @@
 
 	* R/rebalance.R (rebalance): added 'multiplier' argument
 
-2015-05-12  Enrico Schumann  <enrico.schumann@aquila-capital.com>
+2015-05-12  Enrico Schumann  <es@enricoschumann.net>
 
 	* NAMESPACE: moved function 'pm' to package NMOF
 
 	* inst/unitTests/ut_Datetime.R: moved tests to 'datetimeutils'
-
-2015-05-12  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-63
 
@@ -314,7 +316,7 @@
 
 	* NAMESPACE: 'scale0' is no longer exported
 
-2014-11-10  Enrico Schumann  <enrico.schumann@aq-advisors.ch>
+2014-11-10  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-52
 
