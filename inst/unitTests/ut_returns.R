@@ -1,8 +1,8 @@
 test.returns <- function() {
 
-    require("PMwR")
-    require("RUnit")
-    require("zoo")
+    require("PMwR", quietly = TRUE)
+    require("RUnit", quietly = TRUE)
+    require("zoo", quietly = TRUE, warn.conflicts = FALSE)
     
     ## numeric vector
     x <- 101:112
@@ -133,7 +133,7 @@ test.returns <- function() {
                  price      = c(100.5,104.1,203,105,205.2,108))
 
     p <- position(j, when = 1:10)
-    rowSums(p$position*prices)
+    rowSums(p*prices)
 
 
     ## mtab (internal)
