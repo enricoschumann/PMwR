@@ -8,8 +8,9 @@
 }
 \usage{
 btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
-      print.info = NULL, b = 1L, fraction = 1, initial.position = 0,
-      initial.cash = 0, cashflow = NULL, tc = 0, \dots,
+      print.info = NULL, b = 1L, fraction = 1,
+      initial.position = 0, initial.cash = 0,
+      cashflow = NULL, tc = 0, \dots,
       add = FALSE, lag = 1, convert.weights = FALSE, tradeOnOpen = TRUE,
       tol = 1e-5, assignInGlobals = list(),
       prices0 = NULL, include.data = FALSE, timestamp, instrument)
@@ -37,8 +38,14 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
   }
   \item{do.signal}{
 
-    logical or a function that evaluates to \code{TRUE} or \code{FALSE};
-    default is \code{TRUE}.
+    Logical/numeric vector or function that evaluates to \code{TRUE} or
+    \code{FALSE}. Default is \code{TRUE}: a signal is then computed in
+    every period.  If a logical vector, then it needs to have as many
+    elements as rows in \code{prices}. If a numeric vector, its elements
+    give the rows in \code{prices} at which a signal is computed.  Can
+    also be the string \dQuote{firstofmonth} or \dQuote{lastofmonth}; in
+    this case, \code{timestamp} needs to specified and must be coercable
+    to \code{\link{Date}}.
 
   }
   \item{do.rebalance}{    
