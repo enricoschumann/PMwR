@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-10-24 07:57:15 CEST (es)>
+
 test.btest <- function() {
 
     require("PMwR")
@@ -146,4 +146,25 @@ test.btest <- function() {
         0.5
     solution <- btest(prices, signal = signal, convert.weights = TRUE,
                       initial.cash = 1000, b = 0, prices0 = 100)
+
+
+
+    ## with timestamp
+    require("datetimeutils")
+    timestamp <- seq(from = as.Date("2015-01-01"),
+                to   = as.Date("2015-04-15"),
+                by   = "1 day")
+    timestamp <- timestamp[!isWeekend(timestamp)]
+    ## prices <- c(100+)
+
+    prices <- cbind(as.numeric(paste0("1.", format(timestamp, "%m%d"))),
+                    as.numeric(paste0("2.", format(timestamp, "%m%d"))))
+
+    res <- btest(list(prices), function() 1)
+    res$position
+    res$journal
+    res <- btest(list(prices), function() 1, b=0)
+    res$position
+    res$journal
+
 }

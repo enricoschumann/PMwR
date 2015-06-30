@@ -70,6 +70,12 @@ returns(x, \dots)
     numeric; the same length/dimension as
     \code{x}. \strong{Deprecated: will be removed in the future.}
   }
+  \item{weights}{
+    numeric
+  }
+  \item{rebalance.when}{
+    numeric
+  }
   \item{\dots}{
     further arguments
   }
