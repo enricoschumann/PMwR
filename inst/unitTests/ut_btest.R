@@ -167,4 +167,11 @@ test.btest <- function() {
     res$position
     res$journal
 
+    res <- btest(list(prices),
+                 signal = function() c(0.5,0.5),
+                 convert.weights = TRUE,
+                 do.signal = "firstofmonth",
+                 initial.cash = 100,
+                 timestamp = timestamp)
+    res$journal
 }

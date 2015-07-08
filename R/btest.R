@@ -1,6 +1,6 @@
 ## -*- truncate-lines: t; -*-
-btest  <- function(prices,              
-                   signal,               ## 
+btest  <- function(prices,               ## 
+                   signal,               ## function
                    do.signal = TRUE,     ## 
                    do.rebalance = TRUE,  ## 
                    print.info = NULL,    ## 
@@ -47,6 +47,9 @@ btest  <- function(prices,
         db.print.info <- TRUE
     else
         db.print.info <- FALSE
+
+    db.cashflow <-  if (is.function(cashflow) && isdebugged(cashflow))
+                        TRUE else FALSE
 
     
     if (is.null(do.signal) || identical(do.signal, TRUE)) {
@@ -214,20 +217,14 @@ btest  <- function(prices,
         debug(do.rebalance)
 
     formals(print.info) <-
-        c(formals(print.info), alist(Open = Open,
-                                     High = High,
-                                     Low = Low,
-                                     Close = Close,
-                                     Wealth = Wealth,
-                                     Cash = Cash,
-                                     Time = Time,
-                                     Portfolio = Portfolio,
-                                     SuggestedPortfolio = SuggestedPortfolio,
-                                     Globals = Globals))
+        c(formals(print.info),
+          alist(Open = Open, High = High, Low = Low, Close = Close,
+                Wealth = Wealth, Cash = Cash, Time = Time,
+                Portfolio = Portfolio, SuggestedPortfolio = SuggestedPortfolio,
+                Globals = Globals))
 
     if (db.print.info)
         debug(print.info)
-
     
     formals(cashflow) <-
         c(formals(cashflow), alist(Open = Open,
@@ -240,8 +237,9 @@ btest  <- function(prices,
                                    Portfolio = Portfolio,
                                    SuggestedPortfolio = SuggestedPortfolio,
                                    Globals = Globals))
-
-
+    if (db.cashflow)
+        debug(cashflow)
+    
     if (is.list(prices)) {
 
         if (length(prices) == 1L) {
@@ -510,7 +508,8 @@ btest  <- function(prices,
                 wealth = v,
                 cum.tc = tccum,
                 journal = jnl,
-                initial.wealth = initial.wealth)
+                initial.wealth = initial.wealth,
+                b = b)
 
     if (include.data)
         ans <- c(ans,
@@ -534,4 +533,12 @@ print.btest <- function(x, ...) {
     if (tmp0 > 0)
         cat("Total return   ", round(100*(tmp1/tmp0 - 1), 1), "%\n", sep = "")
     invisible(x)
+}
+
+plot.btest <- function(x, y = NULL, ...) {
+    if (!is.null(x$timestamp))
+        plot(x$timestamp[-seq_len(x$b)], x$wealth[-seq_len(x$b)], ...)
+    else
+        plot(x$wealth[-seq_len(x$b)], y, ...)
+    invisible()
 }
