@@ -39,13 +39,22 @@ first <- function(x, by, index = FALSE) {
         x[match(unique(by), by)]
 }
 
-letter2month <- function(s){
+letter2month <- function(s, instrument = "option"){
     s <- toupper(s)
-    meaning <- c("C 1", "C 2", "C 3", "C 4",  "C 5",  "C 6",
-                 "C 7", "C 8", "C 9", "C 10", "C 11", "C 12",
-                 "P 1", "P 2", "P 3", "P 4",  "P 5" , "P 6",
-                 "P 7", "P 8", "P 9", "P 10", "P 11", "P 12")
-    meaning[match(s, LETTERS[1:24])]
+    if (instrument == "option") {
+        meaning <- c("C 1", "C 2", "C 3", "C 4",  "C 5",  "C 6",
+                     "C 7", "C 8", "C 9", "C 10", "C 11", "C 12",
+                     "P 1", "P 2", "P 3", "P 4",  "P 5" , "P 6",
+                     "P 7", "P 8", "P 9", "P 10", "P 11", "P 12")
+        meaning[match(s, LETTERS[1:24])]
+    } else (instrument == "future") {
+        meaning <- c("January", "February", "March", "April",
+                     "May", "June", "July", "August", "September",
+                     "October", "November", "December")
+        meaning[match(s, c("F", "G", "H", "J", "K", "M",
+                           "N", "Q", "U", "V", "X", "Z"))]
+    } else
+        stop("unknown instrument")
 }
 
 insert <- function(x, list, values) {

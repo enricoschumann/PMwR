@@ -1,3 +1,18 @@
+2015-07-08  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/internals.R (letter2month): new argument 'instrument': allows
+	'future', 'option'
+
+2015-07-07  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-66
+
+	* R/btest.R (plot.btest): new function
+
+2015-07-01  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): propagate debugging for 'cashflow'
+
 2015-06-30  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-65
