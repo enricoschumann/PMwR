@@ -1,4 +1,5 @@
 ## -*- truncate-lines: t; -*-
+
 btest  <- function(prices,               ## 
                    signal,               ## function
                    do.signal = TRUE,     ## 
@@ -517,7 +518,7 @@ btest  <- function(prices,               ##
                  signal = signal,
                  do.signal = do.signal,
                  timestamp = timestamp,
-                 instrument = instrument,
+                 instrument = if (missing(instrument)) NULL else instrument,
                  call = match.call())
 
     class(ans) <- "btest"
