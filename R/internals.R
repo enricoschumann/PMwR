@@ -47,7 +47,7 @@ letter2month <- function(s, instrument = "option"){
                      "P 1", "P 2", "P 3", "P 4",  "P 5" , "P 6",
                      "P 7", "P 8", "P 9", "P 10", "P 11", "P 12")
         meaning[match(s, LETTERS[1:24])]
-    } else (instrument == "future") {
+    } else if (instrument == "future") {
         meaning <- c("January", "February", "March", "April",
                      "May", "June", "July", "August", "September",
                      "October", "November", "December")

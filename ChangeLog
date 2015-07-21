@@ -1,3 +1,11 @@
+2015-07-21  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/internals.R (letter2month): fixed -- 'letter2month': allow
+	'future' or 'option' as 'instrument'; default is 'option'
+
+	* R/btest.R: with 'include.data' and 'missing(instrument)',
+	'instrument' is set to NULL
+
 2015-07-08  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/internals.R (letter2month): new argument 'instrument': allows
