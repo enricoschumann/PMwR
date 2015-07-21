@@ -16,9 +16,6 @@ prepareArgs <- function(x, ...)
 prepareArgs.default <- function(x, ...)
     list(...)
 
-
-
-
 instrument <- function(class, id = NULL, ...) {
 
     properties <- list(...)
