@@ -1,3 +1,7 @@
+2015-08-18  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (toText.p_returns): new 'toText' method
+
 2015-07-21  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/internals.R (letter2month): fixed -- 'letter2month': allow

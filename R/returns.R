@@ -194,7 +194,6 @@ fmt <- function(x, plus, digits) {
         ans
 }
 
-## not exported
 .mtab <- function(x, ytd = "YTD", month.names = NULL, zero.print = "0", plus = FALSE,
                  digits = 1) {
     years <- as.numeric(format(attr(x, "t"), "%Y"))
@@ -326,13 +325,40 @@ toHTML.p_returns <- function(x, ..., year.rows = TRUE,
     mt
 }
 
+toText.p_returns <- function(x, ..., year.rows = TRUE,
+                            ytd = "YTD", month.names = NULL) {
+
+    ## TODO: if list, warning
+    period <- attr(x, "period")
+
+    if (grepl("month(ly)?", period)) {
+        if (year.rows)
+            mt <- .mtab(x, ytd = ytd, month.names = month.names)
+        else
+            mt <- t(.mtab(x, ytd = ytd, month.names = month.names))
+    } else {
+        stop("currently only supported for period ", sQuote("month"))
+    }
+    mt <- rbind(colnames(mt), mt)
+    mt <- cbind(rownames(mt), mt)
+    mt <- unname(mt)
+    mt <- apply(mt, 2, function(x) {format(x,
+                                           width = max(5, nchar(x)),
+                                           justify = "right")})
+    mt <- apply(mt, 1, paste0, collapse = "")
+    class(mt) <- "text"
+    mt
+}
+
+
+
 returns_rebalance <- function(prices, weights, when = NULL, pad = NULL) {
     nr <- nrow(prices)
 
     if (is.null(dim(prices)))
         stop("prices needs to be a matrix")
 
-    if (nr < 2)
+    if (nr < 2L)
         stop("less than 2 rows in prices: cannot compute returns")
 
     if (is.null(dim(weights)) && is.null(when)) {
@@ -374,6 +400,15 @@ returns_rebalance <- function(prices, weights, when = NULL, pad = NULL) {
     ans
 }
 
+
+returns_rebalance2 <- function(prices, weights, when = NULL, pad = NULL) {
+    nr <- nrow(prices)
+    pos <- array(NA, dim = dim(prices))
+    weights <- array(NA, dim = dim(prices))
+    ans
+}
+
+
 if (FALSE) {
     prices <- c(100 ,102 ,104 ,104 ,104.5 ,
                 2   ,2.2 ,2.4 ,2.3 ,2.5   ,
@@ -381,6 +416,7 @@ if (FALSE) {
 
     dim(prices) <- c(5,3)
     weights <- c(1,0,0)
+    when <- as.logical(c(1,0,1,0,1))
     when <- as.logical(c(1,1,1,1,1))
     when <- TRUE
 
