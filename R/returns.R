@@ -201,7 +201,7 @@ fmt <- function(x, plus, digits) {
     tb <- array("", dim = c(length(unique(years)), 13L))
     tb[cbind(years - years[1L] + 1L, mons)] <- fmt(x, plus, digits)
     for (y in sort(unique(years)))
-        tb[y - years[1L] + 1L, 13L] <- fmt(prod(x[years==y] + 1L) - 1L,
+        tb[y - years[1L] + 1L, 13L] <- fmt(prod(x[years==y & !is.na(x)] + 1L) - 1L,
                                            plus, digits)
     rownames(tb) <- sort(unique(years))
     colnames(tb) <- if (is.null(month.names))
@@ -213,6 +213,7 @@ fmt <- function(x, plus, digits) {
     tb
 }
 
+## not exported
 print.p_returns <- function(x, ..., year.rows = TRUE,
                            month.names = NULL, zero.print = "0", plus = FALSE,
                            digits = 1) {
@@ -250,6 +251,7 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
     invisible(x)
 }
 
+## not exported
 toLatex.p_returns <- function(object, ..., year.rows = TRUE,
                              ytd = "YTD", month.names = NULL, eol = "\\\\",
                               stand.alone = FALSE) {
@@ -270,6 +272,7 @@ toLatex.p_returns <- function(object, ..., year.rows = TRUE,
     mt
 }
 
+## not exported
 toHTML.p_returns <- function(x, ..., year.rows = TRUE,
                             ytd = "YTD", month.names = NULL,
                             stand.alone = TRUE,
@@ -325,6 +328,7 @@ toHTML.p_returns <- function(x, ..., year.rows = TRUE,
     mt
 }
 
+## not exported
 toText.p_returns <- function(x, ..., year.rows = TRUE,
                             ytd = "YTD", month.names = NULL) {
 
@@ -350,8 +354,7 @@ toText.p_returns <- function(x, ..., year.rows = TRUE,
     mt
 }
 
-
-
+## not exported
 returns_rebalance <- function(prices, weights, when = NULL, pad = NULL) {
     nr <- nrow(prices)
 
@@ -401,6 +404,7 @@ returns_rebalance <- function(prices, weights, when = NULL, pad = NULL) {
 }
 
 
+## not exported
 returns_rebalance2 <- function(prices, weights, when = NULL, pad = NULL) {
     nr <- nrow(prices)
     pos <- array(NA, dim = dim(prices))
