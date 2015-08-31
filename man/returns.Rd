@@ -51,13 +51,15 @@ returns(x, \dots)
   }
   \item{period}{
     
-       typically character, currently either "month", "year" or "ann"
-       (for annualised). Returns will not be annualised when the period
-       is less than one year. To force annualising, use "ann!".
-       used when timestamp information is available (eg, \code{t} is not
-       \code{NULL} or with \code{zoo} objects).
+    Typically \code{character}; supported are "month", "year" or "ann"
+    (annualised), "ytd" (year-to-date) and "mtd" (month-to-date).
+    Returns will not be annualised when the length of the time series is
+    less than one year. To force annualising in such a case, use
+    \sQuote{\code{ann!}}. The value of \sQuote{period} is used only when
+    timestamp information is available: for instance, when \code{t} is
+    not \code{NULL} or with \code{zoo} objects.
 
-     }
+  }
   \item{complete.first}{
     logical. For monthly returns, should the first month (if incomplete)
     be used.

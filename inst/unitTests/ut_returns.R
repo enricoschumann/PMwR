@@ -83,6 +83,18 @@ test.returns <- function() {
     returns(x, t = t, period = "month")
     returns(x, t = t, period = "month", complete.first = FALSE)
     returns(zoo(x, t), period = "month")
+
+    ## ytd
+    returns(x, t = t, period = "ytd")
+    returns(x, t = t, period = "ytd", complete.first = FALSE)
+    returns(zoo(x, t), period = "ytd")
+
+    ## ytd
+    returns(x, t = t, period = "mtd")
+    returns(x, t = t, period = "mtd", complete.first = FALSE)
+    returns(zoo(x, t), period = "mtd")
+
+
     
     ## time-weighted returns
     x <- 101:105

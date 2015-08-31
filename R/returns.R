@@ -30,19 +30,18 @@ returns.zoo <- function(x, period = NULL, complete.first = TRUE,
 
 returns.data.frame <- function(x, t = NULL, period = NULL, complete.first = TRUE,
                                pad = NULL, position = NULL,
-                               weights = NULL,
-                               rebalance.when = NULL,
+                               weights = NULL, rebalance.when = NULL,
                                lag = 1, ...) {
 
     ## '.returns', which is called by 'returns', will coerce to
     ## matrix, hence no explicit coercion is needed here
     ans <- returns.default(x,
-                   t = t, period = period,
-                   complete.first = complete.first,
-                   pad = pad, position = position,
-                   weights = weights,
-                   rebalance.when = rebalance.when,
-                   lag = lag, ...)
+                           t = t, period = period,
+                           complete.first = complete.first,
+                           pad = pad, position = position,
+                           weights = weights,
+                           rebalance.when = rebalance.when,
+                           lag = lag, ...)
     as.data.frame(ans)
 }
 
@@ -122,30 +121,36 @@ twReturns <- function(price, position, pad = NULL) {
 ## not exported
 pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
     if (is.null(period)) {
-        ## ans <- list(returns = returns(x, pad = pad),
-        ##             t = if (is.null(pad)) t[-1L] else t,
-        ##             period = period)
-        ## TODO
         ans <- returns(x, pad = pad)
         attr(ans, "t") <- if (is.null(pad)) t[-1L] else t
         attr(ans, "period") <- NULL
     } else if (grepl("^ann", period, ignore.case = TRUE)) {
-            xi <- as.Date(t)
-            lx <- length(xi)
-            t <- as.numeric(xi[lx] - xi[1L])/365
-            ans <- if (t < 1 && !(grepl("!$", period))) {
-                ## list(returns = (x[lx]/x[1L]) - 1,
-                ##      t = c(xi[1L], xi[lx]), period = "annualised")
-                ## TODO define ans
-                (x[lx]/x[1L]) - 1
-            } else {
-                ## list(returns = (x[lx]/x[1L])^(1/t) - 1,
-                ##      t = c(xi[1L], xi[lx]), period = "annualised")
-                ## TODO define ans
-                (x[lx]/x[1L])^(1/t) - 1
-            }
-            attr(ans, "period") <- "annualised"
-            attr(ans, "t") <- c(xi[1L], xi[lx])
+        xi <- as.Date(t)
+        lx <- length(xi)
+        t <- as.numeric(xi[lx] - xi[1L])/365
+        ans <- if (t < 1 && !(grepl("!$", period))) {
+            (x[lx]/x[1L]) - 1
+               } else {
+                   (x[lx]/x[1L])^(1/t) - 1
+               }
+        attr(ans, "period") <- "annualised"
+        attr(ans, "t") <- c(xi[1L], xi[lx])
+    } else if (tolower(period) == "ytd") {
+        years <- as.numeric(format(t, "%Y"))
+        i <- which(years < max(years))
+        i <- if (!length(i)) 1 else max(i) 
+        ii <- c(i, length(t))
+        ans <- returns(x[ii], pad = pad)
+        attr(ans, "t") <- if (is.null(pad)) t[ii][-1L] else t[ii]
+        attr(ans, "period") <- "ytd"
+    } else if (tolower(period) == "mtd") {
+        ymon <- as.numeric(format(t, "%Y%m"))
+        i <- which(ymon < max(ymon))
+        i <- if (!length(i)) 1 else max(i) 
+        ii <- c(i, length(t))
+        ans <- returns(x[ii], pad = pad)
+        attr(ans, "t") <- if (is.null(pad)) t[ii][-1L] else t[ii]
+        attr(ans, "period") <- "mtd"
     } else {
         if (length(period) > 1L) {
             by <- period
@@ -165,15 +170,10 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         if (complete.first && by[1L] == by[2L])
             ii <- c(1, ii)
 
-        ## ans <- list(returns = returns(x[ii], pad = pad),
-        ##             t = if (is.null(pad)) t[ii][-1L] else t[ii],
-        ##             period = period)
-        ## TODO define ans
         ans <- returns(x[ii], pad = pad)
         attr(ans, "t") <- if (is.null(pad)) t[ii][-1L] else t[ii]
         attr(ans, "period") <- period
     }
-    ## browser()
     class(ans) <- "p_returns"
     ans
 }

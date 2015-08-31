@@ -1,3 +1,14 @@
+2015-08-31  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-67
+
+	* NAMESPACE: import 'toText' from package textutils
+
+	* R/returns.R (pReturns): 'period' can now also be 'mtd' and
+	'ytd'.
+
+	* man/returns.Rd: updated docs
+
 2015-08-18  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/returns.R (.mtab): fixed -- withs NAs in months during a year,
