@@ -126,11 +126,7 @@ twReturns <- function(price, position, pad = NULL) {
 
 ## not exported
 pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
-    if (is.null(period)) {
-        ans <- returns(x, pad = pad)
-        attr(ans, "t") <- if (is.null(pad)) t[-1L] else t
-        attr(ans, "period") <- NULL
-    } else if (grepl("^ann", period, ignore.case = TRUE)) {
+    if (grepl("^ann", period, ignore.case = TRUE)) {
         xi <- as.Date(t)
         lx <- length(xi)
         t <- as.numeric(xi[lx] - xi[1L])/365

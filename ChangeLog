@@ -2,9 +2,9 @@
 
 	* R/returns.R (returns.default): without timestamp 't', 'period'
 	of mode character (eg, 'monthly') is now always ignored
-
-	* R/returns.R (print.p_returns): added print methods for "ytd"
-	and "mtd"
+	(pReturns): remove test for 'is.null(period)' (which can no longer
+	happen)
+	(print.p_returns): added print methods for "ytd" and "mtd"
 
 	* vignettes/An_overview.Rnw: added file
 
