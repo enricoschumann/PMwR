@@ -51,6 +51,12 @@ returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
                             rebalance.when = NULL,
                             lag = 1, ...) {
 
+    if (is.null(t) && is.character(period)) {
+        warning("no timestamp information available, so ",
+                sQuote("period"), " is ignored")
+        period <- NULL
+    }
+    
     if (is.null(t) &&  is.null(position) && is.null(weights)) {
         .returns(x, pad = pad, lag = lag)
     } else if (is.null(t) &&  is.null(position) && !is.null(weights)) {
@@ -245,6 +251,18 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
         if (as.numeric(timestamp[2L]-timestamp[1L])/365 < 1)
             cat(", less than one year]\n", sep = "") else
             cat("]\n", sep = "")
+    } else if (!is.null(period) && period == "ytd") {
+        cat(format(round(x * 100, digits), nsmall = digits), "%", 
+            "  [", format(tail(timestamp,1), "%d %b %Y"), "]\n", 
+            sep = "")        
+        ## print(unclass(x))
+
+    } else if (!is.null(period) && period == "mtd") {
+        cat(format(round(x * 100, digits), nsmall = digits), "%", 
+            "  [", format(tail(timestamp,1), "%d %b %Y"), "]\n", 
+            sep = "")        
+        ## print(unclass(x))
+
     } else {
         print(unclass(x))
     }
