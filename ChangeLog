@@ -1,5 +1,11 @@
 2015-09-02  Enrico Schumann  <es@enricoschumann.net>
 
+	* vignettes/Valuation.Rnw: added file
+
+	* vignettes/FAQ.Rnw: added file
+
+2015-09-02  Enrico Schumann  <es@enricoschumann.net>
+
 	* DESCRIPTION (Version): Version: 0.1-67
 
 	* R/position.R (print.position): fixed -- 'print' method returned

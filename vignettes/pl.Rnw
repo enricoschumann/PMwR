@@ -1,8 +1,8 @@
-%% \VignetteIndexEntry{Profit and (or) loss}
+%% \VignetteIndexEntry{Computing profit and loss}
 \documentclass[a4paper,11pt]{article}
 \SweaveInput{pre.tex}
 \begin{document}
-\title{Profit and (or) loss}
+\title{Computing profit and (or) loss}
 \author{Enrico Schumann\\\url{es@enricoschumann.net}}
 
 {\raggedright{\LARGE Profit and (or) loss}}\medskip
