@@ -69,9 +69,6 @@ returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
             x <- x[idx]
         }
         if (!is.null(dim(x)) && min(dim(x)) > 1L)
-            ## TODO: returns should loop over columns
-            stop("with ", sQuote("t"), " supplied, ",
-                 sQuote("x"), " must be a vector")
         if (lag != 1L)
             warning(sQuote("lag"), " is ignored")
         pReturns(x, t, period, complete.first, pad = pad)
@@ -95,7 +92,6 @@ returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
         if (do.pad)
             rets <- c(rep.int(pad, lag), rets)
     } else {
-        ## x <- as.matrix(x)
         rets <- x[-a, ,drop = FALSE] / x[-b, ,drop = FALSE] - 1
         if (do.pad)
             rets <- do.call("rbind",
@@ -126,6 +122,7 @@ twReturns <- function(price, position, pad = NULL) {
 
 ## not exported
 pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
+    x <- as.matrix(x)
     if (grepl("^ann", period, ignore.case = TRUE)) {
         xi <- as.Date(t)
         lx <- length(xi)
@@ -142,7 +139,7 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         i <- which(years < max(years))
         i <- if (!length(i)) 1 else max(i) 
         ii <- c(i, length(t))
-        ans <- returns(x[ii], pad = pad)
+        ans <- drop(returns(x[ii, ], pad = pad))
         attr(ans, "t") <- if (is.null(pad)) t[ii][-1L] else t[ii]
         attr(ans, "period") <- "ytd"
     } else if (tolower(period) == "mtd") {
@@ -150,7 +147,7 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         i <- which(ymon < max(ymon))
         i <- if (!length(i)) 1 else max(i) 
         ii <- c(i, length(t))
-        ans <- returns(x[ii], pad = pad)
+        ans <- drop(returns(x[ii, ], pad = pad))
         attr(ans, "t") <- if (is.null(pad)) t[ii][-1L] else t[ii]
         attr(ans, "period") <- "mtd"
     } else {
@@ -172,7 +169,7 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         if (complete.first && by[1L] == by[2L])
             ii <- c(1, ii)
 
-        ans <- returns(x[ii], pad = pad)
+        ans <- returns(x[ii, ], pad = pad)
         attr(ans, "t") <- if (is.null(pad)) t[ii][-1L] else t[ii]
         attr(ans, "period") <- period
     }
@@ -219,12 +216,11 @@ fmt <- function(x, plus, digits) {
 print.p_returns <- function(x, ..., year.rows = TRUE,
                            month.names = NULL, zero.print = "0", plus = FALSE,
                            digits = 1) {
-    ## TODO: if list, warning
     if (is.list(x))
-        warning("format of 'p_returns' objects has changed: see ChangeLog")
+        warning("format of 'p_returns' objects has changed: see ChangeLog 2015-06-26")
     period <- attr(x, "period")
     timestamp <- attr(x, "t")
-    if (!is.null(period) && period == "monthly") {
+    if (period == "monthly" && is.null(dim(x))) {
         if (year.rows)
             print(.mtab(x, ytd = "YTD", month.names = month.names,
                        zero.print = zero.print, plus = plus, digits = digits),
@@ -233,32 +229,33 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
             print(t(.mtab(x, ytd = "YTD", month.names = month.names,
                        zero.print = zero.print, plus = plus, digits = digits)),
                   quote = FALSE, print.gap = 2, right = TRUE)
-    } else if (!is.null(period) && period == "yearly") {
+    } else if (period == "monthly") {
+        tmp <- x
+        tmp <- format(round(tmp*100,1), nsmall = digits)
+        row.names(tmp) <- as.character(timestamp)
+        print(unclass(tmp), quote = FALSE, print.gap = 2)
+    } else if (period == "yearly") {
         tmp <- x
         names(tmp) <- format(timestamp, "%Y")
         if (year.rows)
             print(fmt(tmp, plus, digits), quote = FALSE)
         else
             print(as.matrix(fmt(tmp, plus, digits)), quote = FALSE)
-    } else if (!is.null(period) && period == "annualised") {
+    } else if (period == "annualised") {
         cat(format(round(x*100,1), nsmall = 1), "% p.a. ",
             "  [", format(timestamp[1], "%d %b %Y"), " -- ",
                  format(timestamp[2], "%d %b %Y"), "", sep = "")
         if (as.numeric(timestamp[2L]-timestamp[1L])/365 < 1)
             cat(", less than one year]\n", sep = "") else
             cat("]\n", sep = "")
-    } else if (!is.null(period) && period == "ytd") {
-        cat(format(round(x * 100, digits), nsmall = digits), "%", 
-            "  [", format(tail(timestamp,1), "%d %b %Y"), "]\n", 
-            sep = "")        
-        ## print(unclass(x))
-
-    } else if (!is.null(period) && period == "mtd") {
-        cat(format(round(x * 100, digits), nsmall = digits), "%", 
-            "  [", format(tail(timestamp,1), "%d %b %Y"), "]\n", 
-            sep = "")        
-        ## print(unclass(x))
-
+    } else if (period == "ytd") {
+        cat(paste(format(round(x * 100, digits), nsmall = digits), "%", 
+            "  [", format(tail(timestamp,1), "%d %b %Y"), "]"), 
+            sep = "\n")        
+    } else if (period == "mtd") {
+        cat(paste(format(round(x * 100, digits), nsmall = digits), "%", 
+            "  [", format(tail(timestamp,1), "%d %b %Y"), "]"), 
+            sep = "\n")        
     } else {
         print(unclass(x))
     }

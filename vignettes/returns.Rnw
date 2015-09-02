@@ -40,7 +40,14 @@ require("zoo")
 @
 
 \noindent The function \texttt{returns} computes returns for various
-types of objects. 
+types of objects. The return of an asset in period~$t$ is defined as
+\begin{align} \label{eq:return} 
+  r_t = \frac{P_t}{P_{t-1}}-1 = R_t+1\,.
+\end{align}
+
+
+For computing pl (in currency units), see Chapter~XX.
+
 
 \section{Numeric vectors and matrices, data frames}
 

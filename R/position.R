@@ -93,19 +93,20 @@ position.btest <- function(amount, when, ...) {
 }
 
 print.position <- function(x, ..., sep = NA) {
-
+    original.x <- x
     if (!is.na(sep))
-        stop("'sep' is not yet implemented")
+        stop(sQuote("sep"), " is not yet implemented")
     instrument <- attr(x, "instrument")
-    
     if (!all(is.na(instrument)))
         colnames(x) <- instrument
+    attr(x, "instrument") <- NULL
+    attr(x, "timestamp") <- NULL
     if (dim(x)[1L] > 1L) {
         print(unclass(x), big.mark = ",")
     } else {
         print(t(unclass(x)), big.mark = ",")
     }
-    invisible(x)
+    invisible(original.x)
 }
 
 ## `[.position`  <- function(x, i, j, ...) {

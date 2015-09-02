@@ -77,8 +77,13 @@ test.returns <- function() {
     
     returns(z, pad = NA)
     returns(z)
+
+
+    require("PMwR", quietly = TRUE)
+    require("RUnit", quietly = TRUE)
+    require("zoo", quietly = TRUE, warn.conflicts = FALSE)
     
-    t <- seq(as.Date("2012-01-01"), as.Date("2013-12-31"), by = "1 day")
+    t <- seq(as.Date("2012-01-01"), as.Date("2013-12-15"), by = "1 day")
     x <- seq_along(t) + 100
     returns(x, t = t, period = "month")
     returns(x, t = t, period = "month", complete.first = FALSE)
@@ -89,12 +94,18 @@ test.returns <- function() {
     returns(x, t = t, period = "ytd", complete.first = FALSE)
     returns(zoo(x, t), period = "ytd")
 
+    returns(cbind(x, x), t = t, period = "month")
+    returns(cbind(x, x), t = t, period = "mtd")
+    
+    
     ## ytd
     returns(x, t = t, period = "mtd")
     returns(x, t = t, period = "mtd", complete.first = FALSE)
     returns(zoo(x, t), period = "mtd")
 
 
+
+    
     
     ## time-weighted returns
     x <- 101:105

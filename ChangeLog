@@ -1,3 +1,14 @@
+2015-09-02  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-67
+
+	* R/position.R (print.position): fixed -- 'print' method returned
+	a changed object
+	(print.position): attributes instrument and timestamp are dropped
+	before printing
+
+	* vignettes/trades.Rnw: removed section on 'returns'
+
 2015-09-01  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/returns.R (returns.default): without timestamp 't', 'period'
@@ -9,8 +20,6 @@
 	* vignettes/An_overview.Rnw: added file
 
 2015-08-31  Enrico Schumann  <es@enricoschumann.net>
-
-	* DESCRIPTION (Version): Version: 0.1-67
 
 	* NAMESPACE: import 'toText' from package textutils
 
