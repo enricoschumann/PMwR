@@ -1,5 +1,9 @@
 2015-09-03  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-68
+
+2015-09-03  Enrico Schumann  <es@enricoschumann.net>
+
         * inst/unitTests/ut_returns.R (test.returns): cleaned up tests for
         'period'
 

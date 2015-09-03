@@ -1,8 +1,8 @@
 Package: PMwR
 Type: Package
 Title: Portfolio Management with R
-Version: 0.1-67
-Date: 2015-08-31
+Version: 0.1-68
+Date: 2015-09-03
 Maintainer: Enrico Schumann <es@enricoschumann.net>
 Authors@R: person(given = "Enrico", family = "Schumann", 
                   role  = c("aut", "cre"),
