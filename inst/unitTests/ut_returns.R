@@ -4,17 +4,20 @@ test.returns <- function() {
     require("RUnit", quietly = TRUE)
     require("zoo", quietly = TRUE, warn.conflicts = FALSE)
     
+
     ## numeric vector
     x <- 101:112
     checkEqualsNumeric(returns(x), x[-1]/x[-length(x)]-1)
     checkEqualsNumeric(returns(x, pad = NA)[-1], x[-1]/x[-length(x)]-1)
     checkTrue(is.na(returns(x, pad = NA)[1]))
 
+
     ## numeric matrix 
     x <- cbind(x,x)
     checkEqualsNumeric(returns(x), x[-1,]/x[-nrow(x),] - 1)
     checkEqualsNumeric(returns(x, pad = NA)[-1,], x[-1, ]/x[-nrow(x),]-1)
     checkTrue(all(is.na(returns(x, pad = NA)[1L,])))
+
 
     ## data.frame
     y <- as.data.frame(x)
@@ -26,6 +29,7 @@ test.returns <- function() {
     checkEquals(returns(y), y[-1,]/y[-nrow(x),] - 1)
     checkEquals(returns(x, pad = NA)[-1,], x[-1, ]/x[-nrow(x),]-1)
     
+
     ## lagged returns -- numeric vector
     x <- 101:112; lag <- 4
     checkEqualsNumeric(returns(x, lag = lag),
@@ -33,6 +37,7 @@ test.returns <- function() {
     checkEqualsNumeric(returns(x, pad = NA, lag = lag)[-(1:lag)],
                        x[-(1:lag)]/x[-((length(x)-lag+1):length(x))]-1)
     checkTrue(all(is.na(returns(x, pad = NA, lag = lag)[1:lag])))
+
 
     ## lagged returns -- matrix 
     x <- cbind(x,x)
@@ -42,7 +47,8 @@ test.returns <- function() {
                        x[-(1:lag), ]/x[-((nrow(x)-lag+1):nrow(x)), ] - 1)
     checkTrue(all(is.na(returns(x, pad = NA, lag = lag)[1:lag, ])))
 
-    ## zoo
+
+    ## zoo -- numeric vector
     x <- 101:112
     z <- zoo(x, seq_along(x))
     checkEquals(returns(as.numeric(z)), returns(x))
@@ -52,58 +58,51 @@ test.returns <- function() {
                 zoo(returns(as.numeric(z)), index(z)[-1]))
     checkEquals(returns(z, pad = 0),
                 zoo(returns(as.numeric(z), pad = 0), index(z)))
+
     
-    ## padding in zoo
+    ## padding in zoo -- numeric vector
     checkTrue(is.na(returns(z, pad = NA)[1L]))
     checkTrue(coredata(returns(z, pad = 0)[1L]) == 0)
     checkTrue(coredata(returns(z, pad = 1)[1L]) == 1)
 
-    ## with period "monthly"
-    t <- seq(as.Date("2012-01-01"), as.Date("2012-12-31"), by = "1 day")
-    x <- seq_along(t) + 1000
-    z <- zoo(x, t)
     
+    ## period, but no timestamp: period is ignored
+    x <- 101:112
+    suppressWarnings(checkEquals(returns(x, period="month"), returns(x)))
+
+    
+    ## period -- check class
+    t <- seq(as.Date("2012-01-01"), as.Date("2012-12-31"), by = "1 day")
+    x <- seq_along(t)/10 + 100
+    z <- zoo(x, t)    
     checkTrue(class(returns(x, t = t, period = "month")) == "p_returns")
     checkTrue(class(returns(z,        period = "month")) == "p_returns")
-    
-    ## either zoo or specify timestamp separately
+
+
+    ## period -- zoo or specify t
     checkEquals(returns(x, t = t, period = "month"),
                 returns(z,        period = "month"))
     checkEquals(returns(x, t = t, period = "month", pad = NA),
                 returns(z,        period = "month", pad = NA))
+
+
+    ## period -- month end
+    ti <- match(aggregate(t, by = list(format(t, "%Y%m")), FUN = tail, 1)[[2]], t)
+    checkEquals(c(returns(x, t = t, period = "month", complete.first = FALSE)),
+                returns(x[ti]))
+    checkEquals(c(returns(x, t = t, period = "month", complete.first = TRUE)),
+                returns(x[c(1,ti)]))
+    checkEquals(c(returns(x, t = t, period = "month")),
+                returns(x[c(1,ti)]))
+
     
-    returns(x, t = t, period = "month", complete.first = FALSE)
-    returns(zoo(x, t), period = "month")
+    ## period -- ytd
+    checkEquals(c(returns(x, t = t, period = "ytd")),
+                tail(x,1)/head(x,1) - 1)
     
-    returns(z, pad = NA)
-    returns(z)
-
-
-    require("PMwR", quietly = TRUE)
-    require("RUnit", quietly = TRUE)
-    require("zoo", quietly = TRUE, warn.conflicts = FALSE)
-    
-    t <- seq(as.Date("2012-01-01"), as.Date("2013-12-15"), by = "1 day")
-    x <- seq_along(t) + 100
-    returns(x, t = t, period = "month")
-    returns(x, t = t, period = "month", complete.first = FALSE)
-    returns(zoo(x, t), period = "month")
-
-    ## ytd
-    returns(x, t = t, period = "ytd")
-    returns(x, t = t, period = "ytd", complete.first = FALSE)
-    returns(zoo(x, t), period = "ytd")
-
-    returns(cbind(x, x), t = t, period = "month")
-    returns(cbind(x, x), t = t, period = "mtd")
-    
-    
-    ## ytd
-    returns(x, t = t, period = "mtd")
-    returns(x, t = t, period = "mtd", complete.first = FALSE)
-    returns(zoo(x, t), period = "mtd")
-
-
+    ## period -- mtd
+    checkEquals(c(returns(x, t = t, period = "mtd")),
+                tail(x, 1) / x[match(as.Date("2012-11-30"),t)] - 1)
 
     
     

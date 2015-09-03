@@ -1,3 +1,10 @@
+2015-09-03  Enrico Schumann  <es@enricoschumann.net>
+
+	* inst/unitTests/ut_returns.R (test.returns): cleaned up tests for
+	'period'
+
+	* R/returns.R (pReturns): added 'itd' (inception to date)
+
 2015-09-02  Enrico Schumann  <es@enricoschumann.net>
 
 	* vignettes/Valuation.Rnw: added file

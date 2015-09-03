@@ -33,8 +33,6 @@ returns.data.frame <- function(x, t = NULL, period = NULL, complete.first = TRUE
                                weights = NULL, rebalance.when = NULL,
                                lag = 1, ...) {
 
-    ## '.returns', which is called by 'returns', will coerce to
-    ## matrix, hence no explicit coercion is needed here
     ans <- returns.default(x,
                            t = t, period = period,
                            complete.first = complete.first,
@@ -134,6 +132,11 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
                }
         attr(ans, "period") <- "annualised"
         attr(ans, "t") <- c(xi[1L], xi[lx])
+    } else if (tolower(period) == "itd") {
+        lx <- length(x)
+        (x[lx]/x[1L]) - 1
+        attr(ans, "period") <- "itd"
+        attr(ans, "t") <- if (is.null(t)) NULL else c(t[1], t[lx])
     } else if (tolower(period) == "ytd") {
         years <- as.numeric(format(t, "%Y"))
         i <- which(years < max(years))
