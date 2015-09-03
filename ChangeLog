@@ -3,6 +3,8 @@
 	* inst/unitTests/ut_returns.R (test.returns): cleaned up tests for
 	'period'
 
+	* man/returns.Rd: updated doc for 'itd'
+
 	* R/returns.R (pReturns): added 'itd' (inception to date)
 
 2015-09-02  Enrico Schumann  <es@enricoschumann.net>

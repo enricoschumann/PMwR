@@ -52,12 +52,17 @@ returns(x, \dots)
   \item{period}{
     
     Typically \code{character}; supported are "month", "year" or "ann"
-    (annualised), "ytd" (year-to-date) and "mtd" (month-to-date).
-    Returns will not be annualised when the length of the time series is
-    less than one year. To force annualising in such a case, use
-    \sQuote{\code{ann!}}. The value of \sQuote{period} is used only when
+    (annualised), "ytd" (year-to-date), "mtd" (month-to-date) or "itd"
+    (month-to-date). The value of \sQuote{period} is used only when
     timestamp information is available: for instance, when \code{t} is
     not \code{NULL} or with \code{zoo} objects.
+
+    All returns are computed as simple returns. They will only be
+    annualised with option "ann"; they will not be annualised when the
+    length of the time series is less than one year. To force
+    annualising in such a case, use \sQuote{\code{ann!}}. Annualisation
+    can only work when the timestamp \code{t} can be coerced to class
+    \code{\link{Date}}.
 
   }
   \item{complete.first}{
