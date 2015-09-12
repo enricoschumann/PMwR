@@ -1,3 +1,8 @@
+2015-09-12  Enrico Schumann  <es@enricoschumann.net>
+
+	* vignettes/An_overview.Rnw: updated description on basic data
+	stuctures (journal, position, ...)
+
 2015-09-03  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-68
