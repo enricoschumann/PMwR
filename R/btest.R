@@ -140,8 +140,12 @@ btest  <- function(prices,               ##
         mH[t - lag, , drop = FALSE]
     Low <- function(lag = 1)
         mL[t - lag, , drop = FALSE]
-    Close <- function(lag = 1)
-        mC[t - lag, , drop = FALSE]
+    Close <- function(lag = 1, n = NA) {
+        if (!is.na(n))
+            mC[t - (n:1), , drop = FALSE]
+        else
+            mC[t - lag, , drop = FALSE]
+    }
     Wealth <- function(lag = 1)
         v[t - lag]
     Cash <- function(lag = 1)

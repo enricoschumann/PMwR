@@ -1,3 +1,10 @@
+2015-09-16  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (Close): [experimental] 'Close' gets a new argument
+	'n', which specifies the number of observations that are
+	retrieved. Example: 'Close(100:1)' is equivalent to 'Close(n =
+	100)'
+
 2015-09-12  Enrico Schumann  <es@enricoschumann.net>
 
 	* vignettes/An_overview.Rnw: updated description on basic data
