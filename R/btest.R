@@ -133,30 +133,61 @@ btest  <- function(prices,               ##
             NULL
     }
 
-    ## variables to be available in functions
-    Open <- function(lag = lag)
-        mO[t - lag, , drop = FALSE]
-    High <- function(lag = 1)
-        mH[t - lag, , drop = FALSE]
-    Low <- function(lag = 1)
-        mL[t - lag, , drop = FALSE]
+    ## functions available in functions such as 'signal'
+    Open <- function(lag = lag, n = NA) {
+        if (!is.na(n))
+            mO[t - (n:1), , drop = FALSE]
+        else
+            mO[t - lag, , drop = FALSE]            
+    }
+    High <- function(lag = 1, n = NA) {
+        if (!is.na(n))
+            mH[t - (n:1), , drop = FALSE]
+        else
+            mH[t - lag, , drop = FALSE]            
+    }
+    Low <- function(lag = 1, n = NA) {
+        if (!is.na(n))
+            mL[t - (n:1), , drop = FALSE]
+        else
+            mL[t - lag, , drop = FALSE]            
+    }
     Close <- function(lag = 1, n = NA) {
         if (!is.na(n))
             mC[t - (n:1), , drop = FALSE]
         else
             mC[t - lag, , drop = FALSE]
     }
-    Wealth <- function(lag = 1)
-        v[t - lag]
-    Cash <- function(lag = 1)
-        cash[t - lag]
-    Time <- function(lag = 1)
-        t - lag
-    Portfolio <- function(lag = 1)
-        X[t - lag, , drop = FALSE]
-    SuggestedPortfolio <- function(lag = 1)
-        Xs[t - lag, , drop = FALSE]
-
+    Wealth <- function(lag = 1, n = NA) {
+        if (!is.na(n))
+            v[t - (n:1)]
+        else
+            v[t - lag]
+    }
+    Cash <- function(lag = 1, n = NA) {
+        if (!is.na(n))
+            cash[t - (n:1)]
+        else
+            cash[t - lag]
+    }
+    Time <- function(lag = 1, n = NA) {
+        if (!is.na(n))
+            t - (n:1)
+        else
+            t - lag
+    }
+    Portfolio <- function(lag = 1, n = NA) {
+        if (!is.na(n))
+            X[t - (n:1), , drop = FALSE]
+        else
+            X[t - lag, , drop = FALSE]
+    }
+    SuggestedPortfolio <- function(lag = 1, n = NA) {
+        if (!is.na(n))
+            Xs[t - (n:1), , drop = FALSE]
+        else
+            Xs[t - lag, , drop = FALSE]
+    }
     
     ## create Globals
     Globals <- new.env()
@@ -175,8 +206,7 @@ btest  <- function(prices,               ##
         for (rname in reservedNames)
             if (rname %in% fNames)
                 stop(sQuote(rname), " cannot be used as an argument name for ",
-                     sQuote("signal"))
-    }
+                     sQuote("signal"))}
 
     formals(signal) <-
         c(formals(signal), alist(Open = Open,
