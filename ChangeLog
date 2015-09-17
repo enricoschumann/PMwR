@@ -1,5 +1,9 @@
 2015-09-17  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-69
+
+2015-09-17  Enrico Schumann  <es@enricoschumann.net>
+
         * R/btest.R (Open, ...): added new argument 'n' to other
         functions, such as Open, High, etc. (see ChangeLog of 2015-09-16)
 
