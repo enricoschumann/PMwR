@@ -13,7 +13,8 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
       cashflow = NULL, tc = 0, \dots,
       add = FALSE, lag = 1, convert.weights = FALSE, tradeOnOpen = TRUE,
       tol = 1e-5, assignInGlobals = list(),
-      prices0 = NULL, include.data = FALSE, timestamp, instrument)
+      prices0 = NULL, include.data = FALSE, timestamp, instrument,
+      progressBar = FALSE)
 }
 \arguments{
   \item{prices}{
@@ -133,6 +134,10 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
     character vector of instrument names (only used for print method and journal)
     
   }
+  \item{progressBar}{      
+    logical: display \code{\link{txtProgressBar}}?
+  }
+
 }
 \details{
   
@@ -177,7 +182,7 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
   Enrico Schumann
 }
 \note{
-  This function is still very \bold{experimental} and will likely change.
+  This function is still very \strong{experimental} and will likely change.
 }
 
 

@@ -20,7 +20,8 @@ btest  <- function(prices,               ##
                    assignInGlobals = list(),
                    prices0 = NULL,
                    include.data = FALSE,
-                   timestamp, instrument) {
+                   timestamp, instrument,
+                   progressBar = FALSE) {
 
     if (convert.weights && initial.cash == 0)
         warning(sQuote("convert.weights"), " is TRUE and ",
@@ -419,9 +420,16 @@ btest  <- function(prices,               ##
     }
     ## end period 1
 
-
+    if (progressBar)
+        progr <- txtProgressBar(min = max(2L, b+1L), max = T,
+                                initial = max(2L, b+1L),
+                                char = if (.Platform$OS.type == "unix") "\u2588" else "|",
+                                width = ceiling(getOption("width")*0.8),
+                                title, label, style = 3, file = "")
     
     for (t in max(2L, b+1L):T) {
+        if (progressBar)
+            setTxtProgressBar(progr, t)
         t1 <- t - 1L        
         computeSignal <- do.signal(...,
                                    Open = Open, High = High,
@@ -512,6 +520,8 @@ btest  <- function(prices,               ##
                             Globals = Globals)
     } ## end of for loop
 
+    if (progressBar)
+        close(progr)
 
     
     if (!missing(instrument))

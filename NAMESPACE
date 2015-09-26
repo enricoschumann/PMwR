@@ -41,7 +41,8 @@ export(
     scaleTrades,
     splitAdjust,
     splitTrades,
-    twExposure
+    twExposure,
+    valuation
     )
 
 S3method(`[`, journal)
@@ -82,3 +83,5 @@ S3method(toText, p_returns)
 S3method(journal, default)
 S3method(journal, position)
 S3method(journal, btest)
+S3method(valuation, default)
+S3method(valuation, journal)
