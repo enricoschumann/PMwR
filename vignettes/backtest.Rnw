@@ -172,7 +172,17 @@ to \texttt{1}.  That can be a vector, too: the expression
 <<eval=false>>=
 Close(Time():1)
 @ 
-for instance will return all available close prices.
+for instance will return all available close prices. Alternatively, we
+can use the argument \texttt{n} to retrieve a number of past data
+points. So the above example is equivalent to
+<<eval=false>>=
+Close(n = Time())
+@ 
+and
+<<eval=false>>=
+Close(n = 5)
+@ 
+returns the last five closing prices.
 
 \subsection{signal}
 
@@ -199,48 +209,50 @@ return anything but is called for its side effect: print
 information to the screen, into a file or into some other
 connection.
 
-
 \section{Single assets}
 
-It is best to describe the \texttt{btest} function through a number
-of simple examples.
-
+It is best to describe the \texttt{btest} function through a number of
+simple examples.
 
 \subsection{A useless first example}
 
 I really like simple examples. Suppose we have a single
 instrument, and we use only close prices. The trading rule is to
 buy, and then to hold forever. All we need is the time series of
-the prices and the signal function. To keep this example (and
-also those that follow) simple, we use an artificial series.
+the prices and the signal function. As an instrument we use the EURO
+STOXX 50 future with expiry September 2015.
 <<>>=
-## TODO: use real example
-prices <- c(100,98,98,97,101,102,101,98,99,101)
+timestamp <- structure(c(16679L, 16680L, 16681L, 16682L, 
+                         16685L, 16686L, 16687L, 16688L, 
+                         16689L, 16692L, 16693L), 
+                       class = "Date")
+prices <- c(3182, 3205, 3272, 3185, 3201, 
+            3236, 3272, 3224, 3194, 3188, 3213)
 @
 The \texttt{signal} function is very simple indeed.
 <<>>=
 signal <- function()
     1
 @
-
 \texttt{signal} must be written so that it returns the suggested
-portfolio (or position) in units of the asset.  In this first
-example, the suggested position always is one unit. It is only a
-\texttt{suggested} portfolio because we can specify rules whether
-or not to trade. Examples follow below.
+position in units of the asset. In this first example, the suggested
+position always is one unit. It is only a \texttt{suggested} portfolio
+because we can specify rules whether or not to trade. Examples follow
+below.
 
-So \texttt{signal} always recommends to hold one unit of the asset. To
-test this strategy, we call \texttt{btest}.  The initial cash is zero
-per default, so initial wealth is also zero in this case.  We can
+To test this strategy, we call \texttt{btest}.  The initial cash is
+zero per default, so initial wealth is also zero in this case. We can
 change it through the argument \texttt{initial.cash}.
 
 <<>>=
-(solution <- btest(prices = prices,
-                     signal = signal))
-@
-The function returns a list with a number of components. We display
-the results in a \texttt{data.frame}. \texttt{sp} is the suggested
-position; \texttt{p} is the actual position.
+(solution <- btest(prices = prices, signal = signal))
+@ 
+The function returns a list with a number of components, but they
+are not printed. Instead, a simple print method displays some
+information about the results.
+
+We arrange more details into a \texttt{data.frame}. \texttt{sp} is the
+suggested position; \texttt{p} is the actual position.
 <<>>=
 makeTable <- function(solution, prices)
     data.frame(prices = prices,
@@ -252,62 +264,71 @@ makeTable <- function(solution, prices)
 makeTable(unclass(solution), prices)
 @ 
 We bought in the second period because the default setting for the
-burnin \texttt{b} is 1; thus, we lose one observation.  In the case
+burnin \texttt{b} is 1. Thus, we lose one observation. In the case
 here we do not rely in any way on the past; hence, we set \texttt{b}
 to zero. With this setting, we buy at the first price and hold until
 the end of the data.
 <<>>=
-solution <- btest(prices = prices,
-                  signal = signal,
-                     b  = 0)
+solution <- btest(prices = prices, signal = signal, b  = 0)
 makeTable(solution, prices)
-@
-If you prefer the trades only, the solution also contains a journal.
+@ 
+If you prefer the trades only, the solution also contains a
+\texttt{journal}.
 <<>>=
-solution$journal
+journal(solution)
 @
+To make the journal more informative, we can pass timestamp and
+instrument information.
+<<>>=
+journal(btest(prices = prices, signal = signal, b  = 0,
+              timestamp = timestamp, instrument = "FESX SEP 2015"))
+@ 
+
 
 \subsection{More useful examples}
 
-Now we make our strategy slightly more selective. The trading
-rule is to buy whenever the last observed price is below 100, and
-sell when it is above. The signal function could look like this.
+Now we make our strategy slightly more selective. The trading rule is
+to have a position of 1 unit of the asset whenever the last observed
+price is below 3200 and to have no position when it the price is above
+3200. The \texttt{signal} function could look like this.
 <<>>=
 signal <- function()
-    if (Close() < 100)
+    if (Close() < 3200)
         1 else 0
 @
 
 We call \texttt{btest}.
 <<>>=
-solution <- btest(prices = prices, signal = signal,
-                  initial.cash = 100)
-makeTable(solution, prices)
+solution <- btest(prices = prices, signal = signal)
 @
+<<echo=false>>=
+makeTable(solution, prices)
+@ 
 The argument \texttt{initial.position} specifies the initial position;
-default is no position.  Suppose we had already held one unit of the
+default is no position. Suppose we had already held one unit of the
 asset.
 <<>>=
 solution <- btest(prices = prices, signal = signal,
-                     initial.position = 1, initial.cash = 100)
-
-makeTable(solution, prices)
+                  initial.position = 1)
 @
+<<echo=false>>=
+makeTable(solution, prices)
+@ 
 %% TODO: is this right? should be suggested position not be 1 in t==2?
 
 Internally, \texttt{btest} stores \textsc{ohlc} prices in matrices.
-So even for a single instrument we have four matrices, and each matrix
-has one column. If we were dealing with two assets, we would again
-have four matrices, each with two columns. And so on.
+So even for a single instrument we have four matrices: one for open
+prices, one for high prices, and so on. In the single asset case, each
+matrix has one column. If we were dealing with two assets, we would
+again have four matrices, each with two columns. And so on.
 
 %% TODO: add picture of matrices
 
-We do not access these data directly. \texttt{Close} is a
-function that is defined in \texttt{btest}, and which is
-passed as an argument to \texttt{signal}. Note that we do not add
-it as a formal argument to \texttt{signal} since this is done
-automatically (in fact, doing it manually would trigger an error
-message):
+We do not access these data directly. A function \texttt{Close} is
+defined by \texttt{btest} and passed as an argument to
+\texttt{signal}. Note that we do not add it as a formal argument to
+\texttt{signal} since this is done automatically. In fact, doing it
+manually would trigger an error message:
 <<eval = false>>=
 signal <- function(Close = NULL)
     1
@@ -328,8 +349,7 @@ signal <- function(threshold)
         1 else 0
 
 solution <- btest(prices = prices, signal = signal,
-                  threshold = 98,  ## buy if price < threshold
-                  initial.position = 0, initial.cash = 100)      
+                  threshold = 3200)      
 
 makeTable(solution, prices)
 @
@@ -348,8 +368,7 @@ We could also have written \texttt{(Close() < Close(2L))}. We need to
 increase \texttt{b}.
 <<>>=
 solution <- btest(prices = prices, signal = signal,
-                  b = 2, ## increase burnin
-                  initial.position = 0, initial.cash = 100)      
+                  b = 2)      
 makeTable(solution, prices)
 @
 
@@ -357,21 +376,19 @@ If we wanted to trade any other size, we would change our signal as
 follows.
 <<>>=
 signal <- function()
-    if (Close() < 100)
+    if (Close() < 3200)
         2 else 0
 
-makeTable(btest(prices = prices, signal = signal,
-                initial.position = 0, initial.cash = 100),
-          prices)
+makeTable(btest(prices = prices, signal = signal), prices)
 @
 A typical way to specify a trading strategy is to map past prices into
 \texttt{+1}, \texttt{0} or \texttt{-1} for long, flat or short. A
 signal is often only given at a specified point (like in `buy one unit
-now'). Example: suppose the third day is a Monday, and our rule says
-`buy after Monday'.
+now'). Example: suppose the third day is a Thursday, and our rule says
+`buy after Thursday.
 <<>>=
 signal <- function()
-    if (Time() == 3)
+    if (Time() == 3L)
         1 else 0
 
 makeTable(btest(prices = prices, signal = signal,
@@ -390,9 +407,7 @@ The function \texttt{Portfolio} evaluates to last period's
 portfolio. Like \texttt{Close}, it takes an argument \texttt{lag} that
 defaults to one.
 <<>>=
-makeTable(btest(prices = prices, signal = signal,
-                initial.position = 0, initial.cash = 100),
-          prices)
+makeTable(btest(prices = prices, signal = signal), prices)
 @
 
 A common scenario is also a \texttt{signal} that evaluates to a
@@ -400,7 +415,7 @@ weight; for instance, after a portfolio optimisation. (Be sure to have
 a meaningful initial wealth: 5 percent of nothing is nothing.)
 <<>>=
 signal <- function()
-    if (Close() < 100)
+    if (Close() < 3200)
         0.05 else 0
 
 solution <- btest(prices = prices,
