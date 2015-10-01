@@ -47,18 +47,21 @@ The following classes are implicitly defined (ie, S3 classes):
 
 \begin{itemize}
 \item \texttt{journal}: keeps transactions. Internally, a object of
-  class journal is named list of atomic vector.
-\item \texttt{position}: comprises the numerical positions of
-  different accounts/instruments, the timestamps and the description
-  of the instruments. Internally, it is always a numeric matrix with
-  attributes timestamp and instrument; points in time are in rows,
-  instruments in columns.
+  class \texttt{journal} is named list of atomic vectors.
+\item \texttt{position}: the numerical positions of different
+  accounts/instruments at specific points in time. Always stored in a
+  numeric matrix with attributes timestamp and instrument; points in
+  time are in rows, instruments in columns.
 \item \texttt{p\_returns}: numeric vector (potentially a matrix) with
   attributes timestamp and period.
 \item instrument: term sheet (description etc); it does know nothing
   about market data -- not yet implemented
 \item cashflow: internal -- not yet implemented
 \item NAVseries
+\item \texttt{pricetable}: a matrix of NAVs (or prices); each column
+  corresponds to one asset. Additional attributes instrument and
+  timestamp. Often, pricetables will be created corresponding to
+  positions.
 \end{itemize}
 
 

@@ -1,5 +1,7 @@
 2015-10-01  Enrico Schumann  <es@enricoschumann.net>
 
+	* vignettes/An_overview.Rnw: added info on 'pricetable'
+
 	* R/btest.R (btest): 'do.rebalance' gets same options 'do.signal',
 	such as 'endofmonth'
 
