@@ -1,3 +1,8 @@
+2015-10-01  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): 'do.rebalance' gets same options 'do.signal',
+	such as 'endofmonth'
+
 2015-09-26  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/valuation.R (valuation): export generic and method for

@@ -67,12 +67,12 @@ btest  <- function(prices,               ##
     } else if (is.numeric(do.signal)) {
         ## TODO: what if Date?
         rebalancing_times <- do.signal
-        do.signal <- function(...)
+        do.signal <- function(...) {
             if (Time(0L) %in% rebalancing_times)
                 TRUE
             else
                 FALSE        
-        
+        }
     } else if (is.logical(do.signal)) {
         ## tests on identical to TRUE,FALSE above, so length > 1
         rebalancing_times <- which(do.signal)
@@ -110,13 +110,73 @@ btest  <- function(prices,               ##
                 FALSE        
     }
 
+
+
+
     if (is.null(do.rebalance) || identical(do.rebalance, TRUE)) {
         do.rebalance <- function(...)
             TRUE
     } else if (identical(do.rebalance, FALSE)) {
         do.rebalance <- function(...)
             FALSE
+        warning(sQuote("do.rebalance"), " is FALSE: strategy will never trade")
+    } else if (!missing(timestamp) && inherits(do.rebalance, class(timestamp))) {
+        ## TODO: when timestamp is specified, match to timestamp
+        stop("not implemented")
+    } else if (is.numeric(do.rebalance)) {
+        ## TODO: what if Date?
+        rebalancing_times <- do.rebalance
+        do.rebalance <- function(...) {
+            if (Time(0L) %in% rebalancing_times)
+                TRUE
+            else
+                FALSE        
+        }
+    } else if (is.logical(do.rebalance)) {
+        ## tests on identical to TRUE,FALSE above, so length > 1
+        rebalancing_times <- which(do.rebalance)
+        do.rebalance <- function(...)
+            if (Time(0L) %in% rebalancing_times)
+                TRUE
+            else
+                FALSE                                
+    }  else if (is.character(do.rebalance) &&
+               tolower(do.rebalance) == "firstofmonth") {
+        tmp <- as.Date(timestamp)
+        if (any(is.na(tmp)))
+            stop("timestamp with NAs")
+        i_rdays <- match(aggregate(tmp, by = list(format(tmp, "%Y-%m")),
+                                   FUN = head, 1)[[2L]],
+                         tmp)
+        do.rebalance <- function(...)
+            if (Time(0) %in% i_rdays)
+                TRUE
+            else
+                FALSE        
+    } else if (is.character(do.rebalance) &&
+               (tolower(do.rebalance) == "lastofmonth" ||
+                tolower(do.rebalance) == "endofmonth")) {
+        tmp <- as.Date(timestamp)
+        if (any(is.na(tmp)))
+            stop("timestamp with NAs")
+        i_rdays <- match(aggregate(tmp, by = list(format(tmp, "%Y-%m")),
+                                   FUN = tail, 1)[[2L]],
+                         tmp)
+        do.rebalance <- function(...)
+            if (Time(0) %in% i_rdays)
+                TRUE
+            else
+                FALSE        
     }
+
+    
+    ## if (is.null(do.rebalance) || identical(do.rebalance, TRUE)) {
+    ##     do.rebalance <- function(...)
+    ##         TRUE
+    ## } else if (identical(do.rebalance, FALSE)) {
+    ##     do.rebalance <- function(...)
+    ##         FALSE
+    ## }
 
     if (is.null(cashflow)) {
         cashflow <- function(...)
