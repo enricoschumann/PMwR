@@ -1,5 +1,9 @@
 2015-10-01  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-70
+
+2015-10-01  Enrico Schumann  <es@enricoschumann.net>
+
         * R/btest.R: new function 'Timestamp': defaults to 'Time'; but
         when timestamp is specified, it allows to access it analogously to
         'Close', 'Time', etc.
