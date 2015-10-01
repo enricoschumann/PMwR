@@ -25,7 +25,7 @@
 \newcommand{\R}{\textsf{R}}
 
 <<echo=false>>=
-options(continue = " ", digits = 3, width = 60, useFancyQuotes = FALSE)
+options(continue = "  ", digits = 3, width = 60, useFancyQuotes = FALSE)
 @
 
 \begin{document}
@@ -229,6 +229,14 @@ timestamp <- structure(c(16679L, 16680L, 16681L, 16682L,
 prices <- c(3182, 3205, 3272, 3185, 3201, 
             3236, 3272, 3224, 3194, 3188, 3213)
 @
+
+\begin{center}  
+<<fig=true, width = 5, height = 1.8>>=
+par(mar=c(3,3,1,1), las = 1, mgp = c(2.5,0.5,0), tck = 0.005, bty = "n",
+    ps = 11)
+plot(timestamp, prices, type = "l", xlab = "", ylab = "")
+@ 
+\end{center}
 The \texttt{signal} function is very simple indeed.
 <<>>=
 signal <- function()
@@ -362,16 +370,13 @@ second-to-last close. \texttt{signal} could look like this.
 signal <- function()
     if (Close(1L) < Close(2L))
         1 else 0
-@
-
-We could also have written \texttt{(Close() < Close(2L))}. We need to
-increase \texttt{b}.
+@ 
+We could also have written \texttt{(Close() < Close(2L))}. This rule
+rule needs the close price of yesterday and of the day before
+yesterday, so we need to increase \texttt{b}.
 <<>>=
-solution <- btest(prices = prices, signal = signal,
-                  b = 2)      
-makeTable(solution, prices)
+makeTable(btest(prices = prices, signal = signal, b = 2), prices)
 @
-
 If we wanted to trade any other size, we would change our signal as
 follows.
 <<>>=
@@ -385,7 +390,7 @@ A typical way to specify a trading strategy is to map past prices into
 \texttt{+1}, \texttt{0} or \texttt{-1} for long, flat or short. A
 signal is often only given at a specified point (like in `buy one unit
 now'). Example: suppose the third day is a Thursday, and our rule says
-`buy after Thursday.
+`buy after Thursday'.
 <<>>=
 signal <- function()
     if (Time() == 3L)
@@ -395,7 +400,6 @@ makeTable(btest(prices = prices, signal = signal,
                 initial.position = 0, initial.cash = 100),
           prices)
 @
-
 But this is probably not what we wanted. If the rule is to buy and
 then keep the long position, we should have written it like this.
 <<>>=
@@ -404,12 +408,11 @@ signal <- function()
         1 else Portfolio()
 @
 The function \texttt{Portfolio} evaluates to last period's
-portfolio. Like \texttt{Close}, it takes an argument \texttt{lag} that
-defaults to one.
+portfolio. Like \texttt{Close}, its first argument sets the time
+\texttt{lag}, which defaults to~1.
 <<>>=
 makeTable(btest(prices = prices, signal = signal), prices)
 @
-
 A common scenario is also a \texttt{signal} that evaluates to a
 weight; for instance, after a portfolio optimisation. (Be sure to have
 a meaningful initial wealth: 5 percent of nothing is nothing.)
@@ -440,7 +443,6 @@ solution <- btest(prices = prices,
 
 makeTable(solution, prices)
 @
-
 See also the \texttt{tol} argument.  %% TODO: expand
 
 \subsubsection{Passing environments}
@@ -505,14 +507,114 @@ In signal: use the current price and assign in \texttt{Globals}.
 
 \subsection{Losing signals}
 
+\subsection{Various ways to specify when to do something}
+
+btest takes two functions, do.signal and do.rebalance, that tell the
+algorithm when to compute a new portfolio and when to rebalance. There
+are a number of shortcuts.
+
+<<>>=
+tmp <- structure(c(3490, 3458, 3434, 3358, 3287, 3321, 3419, 3535, 3589, 
+                   3603, 3626, 3677, 3672, 3689, 3646, 3633, 3631, 3599, 3517, 3549, 
+                   3572, 3578, 3598, 3634, 3618, 3680, 3669, 3640, 3675, 3604, 3492, 
+                   3513, 3495, 3503, 3497, 3433, 3356, 3256, 3067, 3228, 3182, 3286, 
+                   3279, 3269, 3182, 3205, 3272, 3185, 3201, 3236, 3272, 3224, 3194, 
+                   3188, 3213, 3255, 3261), .Dim = c(57L, 1L), 
+                 .Dimnames = list(
+                     NULL, "fesx201509"), 
+                 index = structure(c(16617L, 16618L, 
+                                     16619L, 16622L, 16623L, 16624L, 16625L, 
+                                     16626L, 16629L, 16630L, 
+                                     16631L, 16632L, 16633L, 16636L, 16637L, 
+                                     16638L, 16639L, 16640L, 
+                                     16643L, 16644L, 16645L, 16646L, 16647L, 16650L, 
+                                     16651L, 16652L, 
+                                     16653L, 16654L, 16657L, 16658L, 16659L, 16660L, 
+                                     16661L, 16664L, 
+                                     16665L, 16666L, 16667L, 16668L, 16671L, 16672L, 
+                                     16673L, 16674L, 
+                                     16675L, 16678L, 16679L, 16680L, 16681L, 16682L, 
+                                     16685L, 16686L, 
+                                     16687L, 16688L, 16689L, 16692L, 16693L, 16694L, 
+                                     16695L), class = "Date"), class = "zoo")
+
+prices <- coredata(tmp)
+timestamp <- index(tmp)
+signal <- function()
+    Time()
+journal(btest(prices = prices, signal = signal))
+@ 
+
+<<>>=
+journal(btest(prices = prices, signal = signal, 
+              do.signal = c(10, 20, 30)))
+@ 
+
+<<>>=
+journal(btest(prices = prices, signal = signal, 
+              do.signal = prices > 3600))
+@ 
+
+<<>>=
+journal(btest(prices = prices, signal = signal, 
+              do.signal = prices > 3600,
+              do.rebalance = FALSE))
+@ 
+
+<<>>=
+journal(btest(prices = prices, signal = signal, 
+              do.signal = prices > 3600,
+              do.rebalance = c(26, 30)))
+@ 
+When \texttt{timestamp} is specified, certain calendar times are also
+supported; \texttt{timestamp} must of a type that can be coerced to
+\texttt{Date}.
+<<>>=
+cat(try(journal(btest(prices = prices, signal = signal, 
+                      do.signal = "firstofmonth"))))
+@ 
+<<>>=
+journal(btest(prices = prices, signal = signal, 
+              do.signal = "firstofmonth",
+              timestamp = timestamp))
+@ 
+
+<<>>=
+journal(btest(prices = prices, signal = signal, 
+              do.signal = "lastofmonth",
+              timestamp = timestamp))
+@ 
+
+<<>>=
+journal(btest(prices = prices, signal = signal, 
+              do.signal = TRUE,
+              do.rebalance = "lastofmonth",
+              timestamp = timestamp))
+@ 
+There is also a function Timestamp.
+<<>>=
+signal <- function(timestamp) {
+    if (Close() > 3500) {
+        cat("Lagged price is > 3600 on", as.character(Timestamp()), "\n") 
+        1
+    } else 
+        0
+    
+}
+journal(btest(prices = prices, 
+              signal = signal,
+              ##signal = function() if (Close() > 3500) 1 else 0, 
+              do.signal = TRUE,
+              do.rebalance = "lastofmonth",
+              timestamp = timestamp))
+@ 
+
 \subsection{Testing rebalancing frequency}
 
 \subsection{Writing a log}
 <<>>=
-prices <- c(100,98,98,97,101,102,101,98,99,101)
-
 signal <- function()
-    if (Close() < 100)
+    if (Close() < 3200)
         1 else 0
 
 print.info <- function() {

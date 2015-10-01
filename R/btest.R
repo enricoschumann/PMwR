@@ -249,6 +249,16 @@ btest  <- function(prices,               ##
         else
             Xs[t - lag, , drop = FALSE]
     }
+
+    if (!missing(timestamp)) {
+        Timestamp <- function(lag = 1, n = NA) {
+            if (!is.na(n))
+                timestamp[t - (n:1)]
+            else
+                timestamp[t - lag]
+        }
+    } else
+        Timestamp <- Time
     
     ## create Globals
     Globals <- new.env()
@@ -269,70 +279,35 @@ btest  <- function(prices,               ##
                 stop(sQuote(rname), " cannot be used as an argument name for ",
                      sQuote("signal"))}
 
-    formals(signal) <-
-        c(formals(signal), alist(Open = Open,
-                                 High = High,
-                                 Low = Low,
-                                 Close = Close,
-                                 Wealth = Wealth,
-                                 Cash = Cash,
-                                 Time = Time,
-                                 Portfolio = Portfolio,
-                                 SuggestedPortfolio = SuggestedPortfolio,
-                                 Globals = Globals))
+    ## TODO abstract alist
+    add.args <- alist(Open = Open,
+                      High = High,
+                      Low = Low,
+                      Close = Close,
+                      Wealth = Wealth,
+                      Cash = Cash,
+                      Time = Time,
+                      Timestamp = Timestamp,
+                      Portfolio = Portfolio,
+                      SuggestedPortfolio = SuggestedPortfolio,
+                      Globals = Globals)
+    formals(signal) <- c(formals(signal), add.args)
     if (db.signal)
         debug(signal)
     
-    formals(do.signal) <-
-        c(formals(do.signal), alist(Open = Open,
-                                   High = High,
-                                   Low = Low,
-                                   Close = Close,
-                                   Wealth = Wealth,
-                                   Cash = Cash,
-                                   Time = Time,
-                                   Portfolio = Portfolio,
-                                   SuggestedPortfolio = SuggestedPortfolio,
-                                   Globals = Globals))
+    formals(do.signal) <- c(formals(do.signal), add.args)
     if (db.do.signal)
         debug(do.signal)
     
-    formals(do.rebalance) <-
-        c(formals(do.rebalance), alist(Open = Open,
-                                      High = High,
-                                      Low = Low,
-                                      Close = Close,
-                                      Wealth = Wealth,
-                                      Cash = Cash,
-                                      Time = Time,
-                                      Portfolio = Portfolio,
-                                      SuggestedPortfolio = SuggestedPortfolio,
-                                      Globals = Globals))
-
+    formals(do.rebalance) <- c(formals(do.rebalance), add.args)
     if (db.do.rebalance)
         debug(do.rebalance)
 
-    formals(print.info) <-
-        c(formals(print.info),
-          alist(Open = Open, High = High, Low = Low, Close = Close,
-                Wealth = Wealth, Cash = Cash, Time = Time,
-                Portfolio = Portfolio, SuggestedPortfolio = SuggestedPortfolio,
-                Globals = Globals))
-
+    formals(print.info) <- c(formals(print.info), add.args)
     if (db.print.info)
         debug(print.info)
     
-    formals(cashflow) <-
-        c(formals(cashflow), alist(Open = Open,
-                                   High = High,
-                                   Low = Low,
-                                   Close = Close,
-                                   Wealth = Wealth,
-                                   Cash = Cash,
-                                   Time = Time,
-                                   Portfolio = Portfolio,
-                                   SuggestedPortfolio = SuggestedPortfolio,
-                                   Globals = Globals))
+    formals(cashflow) <- c(formals(cashflow), add.args)
     if (db.cashflow)
         debug(cashflow)
     
@@ -402,14 +377,16 @@ btest  <- function(prices,               ##
                                    Open = Open, High = High,
                                    Low = Low, Close = Close,
                                    Wealth = Wealth, Cash = Cash,
-                                   Time = Time, Portfolio = Portfolio,
+                                   Time = Time, Timestamp = Timestamp,
+                                   Portfolio = Portfolio,
                                    SuggestedPortfolio = SuggestedPortfolio,
                                    Globals = Globals)
 
         if (computeSignal) {
             temp <- signal(..., Open = Open, High = High, Low = Low,
                            Close = Close, Wealth = Wealth, Cash = Cash,
-                           Time = Time, Portfolio = Portfolio,
+                           Time = Time, Timestamp = Timestamp,
+                           Portfolio = Portfolio,
                            SuggestedPortfolio = SuggestedPortfolio,
                            Globals = Globals)
             
@@ -430,7 +407,8 @@ btest  <- function(prices,               ##
                                Open = Open, High = High,
                                Low = Low, Close = Close,
                                Wealth = Wealth, Cash = Cash,
-                               Time = Time, Portfolio = Portfolio,
+                               Time = Time, Timestamp = Timestamp,
+                               Portfolio = Portfolio,
                                SuggestedPortfolio = SuggestedPortfolio,
                                Globals = Globals)
 
@@ -465,7 +443,7 @@ btest  <- function(prices,               ##
                                       Low = Low, Close = Close,
                                       Wealth = Wealth,
                                       Cash = Cash,
-                                      Time = Time,
+                                      Time = Time, Timestamp = Timestamp,
                                       Portfolio = Portfolio,
                                       SuggestedPortfolio = SuggestedPortfolio,
                                       Globals = Globals)
@@ -474,7 +452,8 @@ btest  <- function(prices,               ##
         if (doPrintInfo)
             print.info(..., Open = Open, High = High, Low = Low,
                        Close = Close, Wealth = Wealth, Cash = Cash,
-                       Time = Time, Portfolio = Portfolio,
+                       Time = Time, Timestamp = Timestamp,
+                       Portfolio = Portfolio,
                        SuggestedPortfolio = SuggestedPortfolio,
                        Globals = Globals)
     }
@@ -497,6 +476,7 @@ btest  <- function(prices,               ##
                                    Wealth = Wealth,
                                    Cash = Cash,
                                    Time = Time,
+                                   Timestamp = Timestamp,
                                    Portfolio = Portfolio,
                                    SuggestedPortfolio = SuggestedPortfolio,
                                    Globals = Globals)
@@ -505,6 +485,7 @@ btest  <- function(prices,               ##
             temp <- signal(..., Open = Open, High = High,
                            Low = Low, Close = Close, Wealth = Wealth,
                            Cash = Cash, Time = Time,
+                           Timestamp = Timestamp,
                            Portfolio = Portfolio,
                            SuggestedPortfolio = SuggestedPortfolio,
                            Globals = Globals)            
@@ -524,7 +505,8 @@ btest  <- function(prices,               ##
         rebalance <- do.rebalance(..., Open = Open, High = High,
                                   Low = Low, Close = Close,
                                   Wealth = Wealth, Cash = Cash,
-                                  Time = Time, Portfolio = Portfolio,
+                                  Time = Time, Timestamp = Timestamp,
+                                  Portfolio = Portfolio,
                                   SuggestedPortfolio = SuggestedPortfolio,
                                   Globals = Globals)
         
@@ -558,7 +540,7 @@ btest  <- function(prices,               ##
                                       Low = Low, Close = Close,
                                       Wealth = Wealth,
                                       Cash = Cash,
-                                      Time = Time,
+                                      Time = Time, Timestamp = Timestamp,
                                       Portfolio = Portfolio,
                                       SuggestedPortfolio = SuggestedPortfolio,
                                       Globals = Globals)
@@ -574,7 +556,7 @@ btest  <- function(prices,               ##
                             Close = Close,
                             Wealth = Wealth,
                             Cash = Cash,
-                            Time = Time,
+                            Time = Time, Timestamp = Timestamp,
                             Portfolio = Portfolio,
                             SuggestedPortfolio = SuggestedPortfolio,
                             Globals = Globals)

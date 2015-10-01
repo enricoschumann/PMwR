@@ -1,23 +1,27 @@
 2015-10-01  Enrico Schumann  <es@enricoschumann.net>
 
-	* vignettes/backtest.Rnw: various smaller updates
+        * R/btest.R: new function 'Timestamp': defaults to 'Time'; but
+        when timestamp is specified, it allows to access it analogously to
+        'Close', 'Time', etc.
 
-	* vignettes/An_overview.Rnw: added info on 'pricetable'
+        * vignettes/backtest.Rnw: various smaller updates
 
-	* R/btest.R (btest): 'do.rebalance' gets same options 'do.signal',
-	such as 'endofmonth'
+        * vignettes/An_overview.Rnw: added info on 'pricetable'
+
+        * R/btest.R (btest): 'do.rebalance' gets same options 'do.signal',
+        such as 'endofmonth'
 
 2015-09-26  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/valuation.R (valuation): export generic and method for
-	'position'
+        * R/valuation.R (valuation): export generic and method for
+        'position'
 
-	* man/btest.Rd: updated for 'progressBar'
+        * man/btest.Rd: updated for 'progressBar'
 
 2015-09-20  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R (btest): new argument 'progressBar': when TRUE, print
-	as txtProgressBar during computation; default is FALSE
+        * R/btest.R (btest): new argument 'progressBar': when TRUE, print
+        as txtProgressBar during computation; default is FALSE
 
 2015-09-17  Enrico Schumann  <es@enricoschumann.net>
 
