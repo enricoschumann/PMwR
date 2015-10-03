@@ -1,3 +1,7 @@
+2015-10-03  Enrico Schumann  <es@enricoschumann.net>
+
+	* vignettes/backtest.Rnw: added description of 'Timestamp'
+
 2015-10-01  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-70

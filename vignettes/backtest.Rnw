@@ -162,6 +162,8 @@ access certain data; there are no replacement functions.
   point in time
 \item[Cash] cash (in accounting currency)
 \item[Time] current time (an integer)
+\item[Timestamp] access \texttt{timestamp} when it is specified; if
+  not, it defaults to \texttt{Time}
 \item[Portfolio] the current portfolio
 \item[SuggestedPortfolio] the currenly-suggested portfolio
 \item[Globals] an environment
