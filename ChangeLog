@@ -1,5 +1,9 @@
 2015-10-03  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-71
+
+2015-10-03  Enrico Schumann  <es@enricoschumann.net>
+
 	* R/btest.R: removed 'title' and 'label' from 'txtProgressBar'
 	invocation
 
