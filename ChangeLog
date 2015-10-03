@@ -1,5 +1,8 @@
 2015-10-03  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/btest.R: removed 'title' and 'label' from 'txtProgressBar'
+	invocation
+
 	* vignettes/backtest.Rnw: added description of 'Timestamp'
 
 2015-10-01  Enrico Schumann  <es@enricoschumann.net>

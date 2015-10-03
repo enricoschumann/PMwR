@@ -423,7 +423,7 @@ returns_rebalance2 <- function(prices, weights, when = NULL, pad = NULL) {
     nr <- nrow(prices)
     pos <- array(NA, dim = dim(prices))
     weights <- array(NA, dim = dim(prices))
-    ans
+    ## ans
 }
 
 

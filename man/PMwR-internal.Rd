@@ -21,7 +21,7 @@ wait(x)
 first(x, by, index = FALSE)
 last(x, by, index = FALSE)
 
-letter2month(s)
+letter2month(s, instrument = "option")
 
 matchOrNext(x, y)
 matchOrPrevious(x, y)
@@ -37,7 +37,8 @@ matchOrPrevious(x, y)
   \code{max(x)} is passed to \code{\link{Sys.sleep}}.  
 
   \code{letter2month} converts a string to an option type and month (eg,
-  \code{"A"} means \code{"Call January"}).
+  \code{"A"} means \code{"Call January"}) or to an expiry month (with
+  \code{instrument} set to \code{future}).
 
   \code{matchOrNext} returns the position of \code{x} in \code{y}, if
   there is a match.  If not, it reports the next position. \code{y}

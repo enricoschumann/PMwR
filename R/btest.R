@@ -464,7 +464,7 @@ btest  <- function(prices,               ##
                                 initial = max(2L, b+1L),
                                 char = if (.Platform$OS.type == "unix") "\u2588" else "|",
                                 width = ceiling(getOption("width")*0.8),
-                                title, label, style = 3, file = "")
+                                style = 3, file = "")
     
     for (t in max(2L, b+1L):T) {
         if (progressBar)
