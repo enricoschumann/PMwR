@@ -165,7 +165,7 @@ access certain data; there are no replacement functions.
 \item[Timestamp] access \texttt{timestamp} when it is specified; if
   not, it defaults to \texttt{Time}
 \item[Portfolio] the current portfolio
-\item[SuggestedPortfolio] the currenly-suggested portfolio
+\item[SuggestedPortfolio] the currently-suggested portfolio
 \item[Globals] an environment
 \end{description}
 
