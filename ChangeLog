@@ -1,5 +1,9 @@
 2015-10-08  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-72
+
+2015-10-08  Enrico Schumann  <es@enricoschumann.net>
+
 	* R/returns.R (returns.zoo): directly invoke 'returns.default' for
 	speedup
 	(returns.NAVseries): invoke 'returns.default' (before, it invoked
