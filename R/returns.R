@@ -5,7 +5,7 @@ returns <- function(x, ...)
 ## 
 ## Methods are responsible for 'stripping' the input down do x and t,
 ## calling 'returns.default' (or some other method) and then to
-## re-assemble the original class's structure. Wwen there is no
+## re-assemble the original class's structure. When there is no
 ## period, methods should keep timestamp information for themselves,
 ## not pass it on.
 
