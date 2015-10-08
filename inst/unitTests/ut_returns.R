@@ -53,7 +53,7 @@ test.returns <- function() {
     z <- zoo(x, seq_along(x))
     checkEquals(returns(as.numeric(z)), returns(x))
     checkEquals(returns(as.numeric(z), pad = 0), returns(x, pad = 0))
-    
+
     checkEquals(returns(z),
                 zoo(returns(as.numeric(z)), index(z)[-1]))
     checkEquals(returns(z, pad = 0),
@@ -67,9 +67,15 @@ test.returns <- function() {
 
     
     ## period, but no timestamp: period is ignored
+    ## timestamp, but no period: timestamp is ignored
+    ##
+    ## (when there is no period, methods are required to keep
+    ## timestamp information for themselves and then to re-assemble
+    ## the necessary class structure)
     x <- 101:112
-    suppressWarnings(checkEquals(returns(x, period="month"), returns(x)))
-
+    t <- seq_along(x)
+    suppressWarnings(checkEquals(returns(x, period = "month"), returns(x)))
+    suppressWarnings(checkEquals(returns(x, t = t),            returns(x)))
     
     ## period -- check class
     t <- seq(as.Date("2012-01-01"), as.Date("2012-12-31"), by = "1 day")
@@ -77,7 +83,7 @@ test.returns <- function() {
     z <- zoo(x, t)    
     checkTrue(class(returns(x, t = t, period = "month")) == "p_returns")
     checkTrue(class(returns(z,        period = "month")) == "p_returns")
-
+    checkTrue(class(returns(z)) == "zoo")
 
     ## period -- zoo or specify t
     checkEquals(returns(x, t = t, period = "month"),
@@ -85,9 +91,12 @@ test.returns <- function() {
     checkEquals(returns(x, t = t, period = "month", pad = NA),
                 returns(z,        period = "month", pad = NA))
 
+    ## as.zoo for p_returns
+    ti <- match(aggregate(t, by = list(format(t, "%Y%m")), FUN = tail, 1)[[2]], t)
+    checkEquals(as.zoo(returns(x, t = t, period = "month")),
+                zoo(returns(x[c(1, ti)]), t[c(ti)]))
 
     ## period -- month end
-    ti <- match(aggregate(t, by = list(format(t, "%Y%m")), FUN = tail, 1)[[2]], t)
     checkEquals(c(returns(x, t = t, period = "month", complete.first = FALSE)),
                 returns(x[ti]))
     checkEquals(c(returns(x, t = t, period = "month", complete.first = TRUE)),

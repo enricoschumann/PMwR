@@ -2,6 +2,13 @@
 
 	* R/returns.R (returns.zoo): directly invoke 'returns.default' for
 	speedup
+	(returns.NAVseries): invoke 'returns.default' (before, it invoked
+	'returns.zoo')
+	(returns.default): drop timestamp information (with a warning)
+	when 'period' is not specified
+
+	* inst/unitTests/ut_returns.R (test.returns): added test for
+	'as.zoo.p_returns'
 
 2015-10-05  Enrico Schumann  <es@enricoschumann.net>
 
