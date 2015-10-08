@@ -2,23 +2,32 @@ returns <- function(x, ...)
     UseMethod("returns")
 
 returns.NAVseries <- function(x, period = NULL, complete.first = TRUE,
-                              pad = NULL, position = NULL, lag = 1, ...)
-    returns(as.zoo(x), period = period,
-            complete.first = complete.first,
-            pad = pad, position, lag = lag, ...)
+                              pad = NULL, position = NULL, lag = 1, ...) {
+
+    ## does *not* returns a NAVseries since it is not defined for
+    ## returns, only for NAVs (levels)
+    
+    returns.zoo(as.zoo(x), period = period,
+                complete.first = complete.first,
+                pad = pad, position, lag = lag, ...)
+}
 
 returns.zoo <- function(x, period = NULL, complete.first = TRUE,
                         pad = NULL, position = NULL, lag = 1, ...) {
 
+    ## a method is responsible for 'stripping' the input down do x and
+    ## t, calling returns.default and then re-assemble the original
+    ## class's structure
+    
     t <- time(x)
     x <- coredata(x)
 
     if (!is.null(period)) {
-        returns(x, t = t, period = period,
+        returns.default(x, t = t, period = period,
                 complete.first = complete.first,
                 pad = pad, position = position, lag = lag, ...)
     } else {
-        ans <- returns(x, period = NULL,
+        ans <- returns.default(x, period = NULL,
                        complete.first = complete.first,
                        pad = pad, position = position, lag = lag, ...)
         if (!is.null(pad))

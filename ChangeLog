@@ -1,3 +1,8 @@
+2015-10-08  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (returns.zoo): directly invoke 'returns.default' for
+	speedup
+
 2015-10-05  Enrico Schumann  <es@enricoschumann.net>
 
 	* vignettes/backtest.Rnw: fixed typo
