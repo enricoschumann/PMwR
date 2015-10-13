@@ -1,8 +1,10 @@
 2015-10-13  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): 0.1-74
+	* vignettes/An_overview.Rnw: added to `for developers' section
 
 2015-10-13  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 0.1-74
 
 	* R/NAVseries.R (summary.NAVseries): remove NAs before any
 	computation takes place
