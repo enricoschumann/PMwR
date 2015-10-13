@@ -1,5 +1,9 @@
 2015-10-13  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-74
+
+2015-10-13  Enrico Schumann  <es@enricoschumann.net>
+
 	* R/NAVseries.R (summary.NAVseries): remove NAs before any
 	computation takes place
 	(print.NAVseries): remove NAs
