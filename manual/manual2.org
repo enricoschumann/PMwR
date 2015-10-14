@@ -1,0 +1,428 @@
+#+TITLE: Portfolio Management with R
+#+AUTHOR: Enrico Schumann
+#+BIND: org-latex-default-packages-alist nil
+#+BIND: org-use-sub-superscripts {}
+#+PROPERTY: tangle yes
+# ------------------ LATEX ------------------
+#+LATEX_CLASS: scrbook
+#+LATEX_HEADER: \addtokomafont{disposition}{\rmfamily}
+#+LATEX_HEADER: \addtokomafont{descriptionlabel}{\rmfamily}
+#+LATEX_HEADER: \usepackage[backend=bibtex,citestyle=authoryear]{biblatex}
+#+LATEX_HEADER: \addbibresource{Library.bib}
+#+LATEX_HEADER: \usepackage{fontspec}
+#+LATEX_HEADER: \setmainfont{EB Garamond}
+#+LATEX_HEADER: \setmonofont[Scale=0.91]{inconsolata}
+#+LATEX_HEADER: \usepackage{graphicx}
+#+LATEX_HEADER: \usepackage{xcolor}
+#+LATEX_HEADER: \usepackage{listings}
+#+LATEX_HEADER: \lstset{language=R,basicstyle=\ttfamily,frame=single,
+#+LATEX_HEADER:         numberstyle=\ttfamily\footnotesize\color{gray}}
+#+LATEX_HEADER: \usepackage{mdframed}
+#+LATEX_HEADER: \usepackage{hyperref}
+#+PROPERTY: header-args:R :session *R*
+
+#+BEGIN_SRC R :exports none :results none
+options(continue = " ", digits = 3, width = 60, useFancyQuotes = FALSE)
+require("PMwR")
+require("zoo")
+#+END_SRC
+
+
+
+* Using R in portfolio management -- Two examples
+
+** Monthly returns
+
+
+** Min and max: idea, algorithm, implementation
+
+
+* An Overview of the PMwR Package
+
+** The goals of writing the package
+
+- Store a portfolio of assets and compute the value -- or other
+  quantities such as Greeks -- for different data. Data may be market
+  data, but also theoretical data (prices).
+- Reevaluate a portfolio for specific scenarios (i.e., new market or
+  artificial data).
+- Read in transactions from various sources. That is done via a
+  journal class.
+- Show portfolio on certain day/time: create a /position/, evaluate
+  this position $\to$ position class
+- testing portfolios of options --> show payoff, simulate *paths*
+  of underlier and vol surface
+- run simulations for VaR
+- various ways to compute pnl: weighted average, first-in-first-out
+  and last-in-last-out
+
+
+** Classes and Data structures
+
+The following classes are implicitly defined (ie, S3 classes):
+
+- journal :: keeps transactions. Internally, a object of
+  class \texttt{journal} is named list of atomic vectors.
+- position :: the numerical positions of different
+  accounts/instruments at specific points in time. Always stored in a
+  numeric matrix with attributes timestamp and instrument; points in
+  time are in rows, instruments in columns.
+- period returns :: numeric vector (potentially a matrix) with
+  attributes timestamp and period. The class is called =p_returns=
+- instrument :: term sheet (description etc); it does know notyhing
+  about market data -- not yet implemented
+- cashflow :: internal -- not yet implemented
+- NAVseries :: store 
+- pricetable :: a matrix of NAVs (or prices); each column
+  corresponds to one asset. Additional attributes instrument and
+  timestamp. Often, pricetables will be created corresponding to
+  positions.
+
+
+
+
+** Notes for developers
+
+*** Methods for =returns=
+
+Methods are responsible for `stripping' the input down do \texttt{x}
+and \texttt{t}, calling `\texttt{returns.default}' or some other
+method, and then to re-assemble the original class's structure. When
+\texttt{period} is not specified, methods should keep timestamp
+information for themselves and not pass it on. (That is,
+\texttt{returns.default} should only ever receive a \texttt{timestamp}
+when \texttt{period} is specified.)
+
+*** Vectorisation
+
+Functions should do vectorisation when it is beneficial in terms of
+speed or clarity of code. An example should clarify this:
+\texttt{drawdown} is internally computed through \texttt{cumsum}, so
+even for a matrix of time series, it would need a loop. Such looping
+should be left to the user. However, vectorisation should be used when
+it makes computations faster.
+
+*** Named vectors
+
+In many instances, vectors that store scalar information of
+instruments (such as price or multiplier) should be named by
+instrument.
+
+*** Functional programming
+
+Do not rely on global options/settings. Exception are interative
+functions, which essentially means \texttt{print} methods.
+
+
+
+
+
+-------------------
+
+
+#+CAPTION: A test table.
+#+NAME: tab:test
+| test | Another |
+|------+---------|
+|    1 |       2 |
+|      |     2.2 |
+
+
+
+* Keeping track of transactions
+
+* 
+
+* Backtesting
+
+
+* Valuation
+
+#+BEGIN_COMMENT
+
+Valuing a position can mean two things: compute theoretical prices, or
+market prices.
+
+Theoretical valuation takes places via the generic function value:
+
+\texttt{value(x, ..., dots2args = NULL) } 
+
+The simplest case:
+\texttt{x} is character, then a call will be generated as
+
+\texttt{do.call(x, list(...))}
+
+\texttt{dots2args.default <- function(x, ...) list(...)}
+
+Note that this will be the \texttt{default} method; notably, an
+explicit \texttt{character} method is left unspecified (meant for the
+user).
+
+
+A more typical case: collect all market data in a list \texttt{Data}:
+EvaluationDate, Prices, Vols, Irates.
+
+dots2args will react on \texttt{x}, retrieve the required information,
+and 
+
+
+\begin{itemize}
+\item evaluates to list \texttt{"value"}, \texttt{"delta"} etc
+\item \texttt{Instrument[names(result)] <- result}
+\end{itemize}
+
+
+%% <<>>=
+%% Time   <- as.Date("2013-05-28")
+%% Prices <- list(DAX = 8472)
+%% Irates <- list(EUR = function(t) 0.1)
+%% Vols   <- list(DAX = function(x,t) 0.2)
+
+%% DATA <- list(Time = Time, 
+%%              Prices = Prices, 
+%%              IRates = Irates, 
+%%              Vols = Vols)
+%% DATA
+%% DATA$Vols$DAX(8000, 0.2)
+%% DATA$IRates$EUR(0.5)
+
+%% @      
+
+
+\section{Instruments and portfolios}
+
+
+
+\subsubsection{Instrument}
+
+classes: Fund Equity Account Currency Future Index
+
+
+%% fields:
+
+%% id
+%% isin
+%% description
+%% underlier
+%% expirydate
+%% expirytime
+%% strike
+%% type c/p
+%% exercise e/a
+%% pricing premium/future
+%% class
+
+#+END_COMMENT
+
+* Rebalacing a portfolio
+
+
+
+* Analysing trades
+
+** Exposure
+
+We have the following trades and times.
+
+#+BEGIN_SRC R -n :exports code :results none
+amount <- c(1,3,-3,1,-3,1)
+time <- c(0,1,3,4,7,12)
+#+END_SRC
+
+The holding period (duration) of these trades can be computed
+so:
+#+BEGIN_SRC R -n :exports both :colnames yes :results output
+data.frame(position = cumsum(amount)[-length(amount)], 
+           from = time[-length(time)],
+           to   = time[-1L],
+           duration = diff(time))
+#+END_SRC
+
+#+RESULTS:
+:   position from to duration
+: 1        1    0  1        1
+: 2        4    1  3        2
+: 3        1    3  4        1
+: 4        2    4  7        3
+: 5       -1    7 12        5
+
+
+We can plot the exposure.
+
+#+BEGIN_SRC R -n :results graphics :file exposure.pdf :width 4 :height 3 :exports both
+par(bty = "n", mar = c(4, 4, 0, 0), tck = 0.005, 
+    las = 1, cex = 0.8)
+plot(c(time[1], time), cumsum(c(0, amount)), 
+     type = "s", xlab = "time", ylab = "position")
+#+END_SRC
+
+#+RESULTS:
+[[file:exposure.pdf]]
+
+Thus, we have had a position from time zero to 12 (hours into the
+trading day, say), but its size varied.  The function
+=twExposure= (time-weighted exposure) computes the average
+absolute exposure.
+#+BEGIN_SRC R -n :exports both
+twExposure(amount, time)
+#+END_SRC
+
+#+RESULTS:
+: 1.75
+
+To give a simple example: suppose we bought at the open of a trading
+day and sold at noon.  The average exposure for the day is thus half a
+contract.
+
+#+BEGIN_SRC R -n :exports both
+amount <- c(1, -1 , 0)
+time   <- c(0,0.5,1)
+twExposure(amount, time)
+#+END_SRC
+
+#+RESULTS:
+: 0.5
+
+ 
+
+
+** Splitting and rescaling
+
+Suppose we have the following trades and impose a limit that the
+maximum absolute exposure for the trader should only be 2.
+
+
+#+BEGIN_SRC R -n :exports both :results output
+t <- 1:6
+n <- c(-1,-1,-1,1,1,1)
+p <- c(100,99,98,98,99,100)
+limit(n, p, t, lim = 2)
+#+END_SRC
+
+#+RESULTS:
+: $amount
+: [1] -1 -1  1  1
+: 
+: $price
+: [1] 100  99  99 100
+: 
+: $timestamp
+: [1] 1 2 5 6
+
+
+Scaling the trades.
+
+#+BEGIN_SRC R -n :exports both :results output
+scaleToUnity(n)
+#+END_SRC
+
+#+RESULTS:
+: [1] -0.3333333 -0.3333333 -0.3333333  0.3333333  0.3333333  0.3333333
+
+Closing the trade at once.
+#+BEGIN_SRC R -n :exports both :results output
+closeOnFirst(n)
+#+END_SRC
+
+#+RESULTS:
+: [1] -1 -1 -1  3  0  0
+
+
+* Math
+
+\begin{equation}
+1+1
+\end{equation}
+
+
+
+* Plotting irregularly-spaced series during trading hours
+
+
+
+* A graphic
+
+#+BEGIN_SRC R :results graphics :file test.pdf :width 7 :height 6 :exports results
+  plot(1:10)
+#+END_SRC
+
+#+ATTR_LATEX: :width 4cm :height 2.5cm
+#+RESULTS:
+[[file:test.pdf]]
+
+#+ATTR_HTML: :width 20% :height 20%
+#+BEGIN_HTML
+<object data="test.pdf" type="application/pdf">Your browser cannot display embedded pdfs. Please follow the link above.</object>
+#+END_HTML
+
+
+#+BEGIN_LATEX
+\nocite{Gilli2011b}
+\printbibliography
+#+END_LATEX
+
+
+* FAQ/@@latex:\,@@FRC (Frequently-required computations)
+
+** I need to value a financial instrument
+
+** I have a list of trades (bought or sold what, when and at what price) and I need to compute the profit or loss.
+
+\begin{mdframed}
+  If all trades are closed (ie, the current positions are all zero),
+  use \texttt{pl}.
+\end{mdframed}
+
+\begin{mdframed}
+  \emph{I have a list of trades in an instrument and want to plot
+    these trades against the price of the traded instrument.}
+\end{mdframed}
+
+\begin{mdframed}
+  \emph{I have a signal series (\texttt{+1}, \texttt{0}, \texttt{0},
+    \texttt{+1}, \ldots{}) and need to transform it into a
+    profit-and-loss series.}
+\end{mdframed}
+
+\begin{mdframed}
+  \emph{I have a list of trades and need to determine the
+    profit-and-loss between two timestamps.}
+\end{mdframed}
+
+Call the two timestamps \texttt{t0} and \texttt{t1}.  Unless the
+position was zero at t0 and t1, we can compute the profit/loss only if
+we have prices for the positions at these points in time.  In case the
+position was indeed zero, you can use \texttt{pl}; the transactions
+are stored in a journal \texttt{j}.
+
+<<eval=false>>=
+subset(j, timestamp >= t0 & timestamp <=t1)
+@
+
+But even the more general case is not so complicated, after all.
+
+\begin{enumerate}
+\item Compute the position at \texttt{t0} and make it a journal j0.
+
+\item Take all transactions at $t > t_\mathrm{0}$ and $t \leq
+   t_\mathrm{1}$ and put them into a journal $J$.
+
+\item Compute the position at $t_\mathrm{1}$, and make it a journal
+   $J_1$, but \emph{multiply all amounts by $-1$}.
+
+\item Combine $J_0$, $J$, and $J_1$ and compute the PL.
+\end{enumerate}
+
+\begin{mdframed}
+  \emph{I need to determine the month-to-date profit-and-loss.}
+\end{mdframed}
+
+1) compute position on last day of last month
+
+2) make journal from position (add prices)
+
+3) combine with journal since month start
+
+4) use average (\texttt{avg}) on all instruments
+
+
