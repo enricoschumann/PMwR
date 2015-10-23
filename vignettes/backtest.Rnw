@@ -20,6 +20,8 @@
 \renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
 \SweaveOpts{keep.source = TRUE, eps = TRUE}
 
+%% in manual: *do* *not* *edit*
+
 \newcommand{\pmwr}{\textsc{pm}w\textsc{r}}
 \newcommand{\pl}{\textsc{pl}}
 \newcommand{\R}{\textsf{R}}
