@@ -1,6 +1,8 @@
 *eps
 *fls
+*pdf
 /.#ex1.jnl
+/Rplots.pdf
 /auto
 /ex1.jnl
 /manual.aux
@@ -13,6 +15,10 @@
 /manual.ind
 /manual.log
 /manual.out
-/manual.pdf
 /manual.ps
 /manual.tex
+/manual2-blx.bib
+/manual2.bbl
+/manual2.html
+/manual2.pdf
+/manual2.tex
