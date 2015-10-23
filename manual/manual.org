@@ -12,6 +12,7 @@
 #+LATEX_HEADER: \newcommand{\R}{\textsf{R}}
 #+LATEX_HEADER: \usepackage[backend=bibtex,citestyle=authoryear]{biblatex}
 #+LATEX_HEADER: \addbibresource{Library.bib}
+#+LATEX_HEADER: \usepackage{amsmath}
 #+LATEX_HEADER: \usepackage{fontspec}
 #+LATEX_HEADER: \setmainfont{EB Garamond}
 #+LATEX_HEADER: \setmonofont[Scale=0.91]{inconsolata}
@@ -28,7 +29,7 @@
 #+HTML_HEAD:     html,body {
 #+HTML_HEAD:       padding: 0;
 #+HTML_HEAD:       margin: 0;
-#+HTML_HEAD:       line-height: 110%;
+#+HTML_HEAD:       line-height: 140%;
 #+HTML_HEAD:     }
 #+HTML_HEAD:     #content {
 #+HTML_HEAD:       font-family: "localEBG", serif;
@@ -39,9 +40,9 @@
 #+HTML_HEAD:       padding: 1em;
 #+HTML_HEAD:       margin-left: auto;
 #+HTML_HEAD:       margin-right: auto;    
-#+HTML_HEAD:       width: 800px;
+#+HTML_HEAD:       width: 700px;
 #+HTML_HEAD:     }
-#+HTML_HEAD:     @media (max-device-width: 800px) {
+#+HTML_HEAD:     @media (max-device-width: 700px) {
 #+HTML_HEAD:         html,body {
 #+HTML_HEAD:             width: 98%;
 #+HTML_HEAD:         }
@@ -68,16 +69,19 @@
 #+HTML_HEAD:     dt {
 #+HTML_HEAD:       font-weight: bold;
 #+HTML_HEAD:     }
+#+HTML_HEAD:     li {
+#+HTML_HEAD:       margin-bottom: 0.5ex;
+#+HTML_HEAD:     }
+#+HTML_HEAD:     code {
+#+HTML_HEAD:       font-size: 115%;
+#+HTML_HEAD:     }
 #+HTML_HEAD: </style>
-
 
 #+BEGIN_SRC R :exports none :results none
   options(continue = " ", digits = 3, width = 60, useFancyQuotes = FALSE)
   require("PMwR")
   require("zoo")
 #+END_SRC
-
-
 
 * Using R in portfolio management -- Two examples
 
@@ -147,19 +151,19 @@ The following classes are implicitly defined (ie, S3 classes):
 
 *** Methods for =returns=
 
-Methods are responsible for `stripping' the input down do \texttt{x}
-and \texttt{t}, calling `\texttt{returns.default}' or some other
+Methods are responsible for `stripping' the input down do =x=
+and =t=, calling `=returns.default=' or some other
 method, and then to re-assemble the original class's structure. When
-\texttt{period} is not specified, methods should keep timestamp
+=period= is not specified, methods should keep timestamp
 information for themselves and not pass it on. (That is,
-\texttt{returns.default} should only ever receive a \texttt{timestamp}
-when \texttt{period} is specified.)
+=returns.default= should only ever receive a =timestamp=
+when =period= is specified.)
 
 *** Vectorisation
 
 Functions should do vectorisation when it is beneficial in terms of
 speed or clarity of code. An example should clarify this:
-\texttt{drawdown} is internally computed through \texttt{cumsum}, so
+=drawdown= is internally computed through =cumsum=, so
 even for a matrix of time series, it would need a loop. Such looping
 should be left to the user. However, vectorisation should be used when
 it makes computations faster.
@@ -173,147 +177,131 @@ instrument.
 *** Functional programming
 
 Do not rely on global options/settings. Exception are interative
-functions, which essentially means \texttt{print} methods.
+functions, which essentially means =print= methods.
 
 
 
-
-
--------------------
-
-
-#+CAPTION: A test table.
-#+NAME: tab:test
-| test | Another |
-|------+---------|
-|    1 |       2 |
-|      |     2.2 |
-
-
-
-* Keeping track of transactions: Journals
-
+* Keeping track of transactions: journals
 
 Many computations that the PMwR package provides are based on lists
 of transactions.  Conceptually, such lists are nothing more than
-dataframes, but PMwR provides an \texttt{S3} class =journal=
+dataframes, but PMwR provides an =S3= class =journal=
 for handling such transaction data.
 
-A~\texttt{journal} is a list of atomic vectors with a class attribute;
-it is created through the function \texttt{journal}.%
+A =journal= is a list of atomic vectors with a class attribute;
+it is created through the function =journal=.%
 \index{journal!compared with data.frame} %
 Methods should not rely on this list being sorted in any particular
 way: components of a journal should always be retrieved by name, never
 by position. (In this respect a journal differs from a dataframe, for
 which we can meaningfully speak of the \emph{n}th column.)  I will
-refer to these journal components, such as \texttt{amount} or
-\texttt{timestamp}, as fields.\index{journal!fields}
+refer to these journal components, such as =amount= or
+=timestamp=, as fields.\index{journal!fields}
 
 The simplicity of the class is intended, since it is meant for
-interactive analyses.  Thus, the user may -- and is expected to --
-dissect the information in a \texttt{journal} at will; such
+interactive analyses. Thus, the user may -- and is expected to --
+dissect the information in a =journal= at will; such
 dissections include removing the class attribute.
 
-What is actually stored in a \texttt{journal} is up to the user, but a
+What is actually stored in a =journal= is up to the user, but a
 number of fields are required for certain operations and should thus
 always be present:
-\begin{description}
-\item[\texttt{timestamp}] anything that can be sorted and that fits
-  into an atomic vector;
 
-\item[\texttt{amount}] the notional amount that is traded;
+- =timestamp= :: anything that can be sorted and that fits into an
+     atomic vector
 
-\item[\texttt{price}] price;
+- =amount= :: the notional amount that is traded;
 
-\item[\texttt{instrument}] description of the financial instrument;
+- =price= :: price;
 
-\item[\texttt{id}] (possibly unique) id;
+- =instrument= :: description of the financial instrument;
 
-\item[\texttt{account}] description of the account;
+- =id= :: (possibly unique) id;
 
-\item[\texttt{\ldots}] other fields. They must be named, for instance
-  `\texttt{fees = c(1,2,1)}'\,.
-\end{description}
-All fields can be missing, except \texttt{amount}.  Missing values
-will be handled as \texttt{NA} with the exception of \texttt{id} and
-\texttt{account}, which will be \texttt{NULL}.
+- =account= :: description of the account;
+
+- =\ldots= :: other fields. They must be named, for instance
+=fees = c(1,2,1)=
+
+All fields can be missing, except =amount=.  Missing values will be
+handled as =NA= with the exception of =id= and =account=, which will
+be =NULL=.
 
 Transactions in a journal can be organised in a hierachy
-\begin{verbatim}
+#+BEGIN_EXAMPLE
 <account> => <instrument>
-\end{verbatim}
+#+END_EXAMPLE
 even though currently few functions use this hierarchy.  A simple
-scheme%
-\marginnote{This notation is inspired by the syntax of \texttt{ledger}
-  files. See \url{http://www.ledger-cli.org/}\,.} %
-is to use specific character or pattern such as `\texttt{::}' to
+scheme[fn:1]
+is to use specific characters or a pattern such as =::= to
 introduce hierarchies into accounts, such as
-\begin{verbatim}
+#+BEGIN_EXAMPLE
 pension::equities
-\end{verbatim}
+#+END_EXAMPLE
 
-\section{Handling journals}
+** Creating journals
 
-\subsection{Creating journals}
 
-The function \texttt{journal} creates journal objects.
-<<>>=
+The function =journal= creates journal objects.
+#+BEGIN_SRC R -n :exports both
 J <- journal(timestamp  = as.Date("2012-01-01") + 0:3, 
               amount     = c(1, 2, -2, 5),
               instrument = c("EUR", "EUR", "CHF", "CHF"))
 J
-@ 
-For details about the function and methods for \texttt{journal}
-objects, see \texttt{?journal}\,.  A \texttt{print} method defines how
-to display a journal.\index{journal!print@\texttt{print}}
-<<>>=
+#+END_SRC
+
+For details about the function and methods for =journal=
+objects, see =?journal=\,.  A =print= method defines how
+to display a journal.\index{journal!print@=print=}
+#+BEGIN_SRC R -n :exports both
 print(J, max.print = 2, exclude = "instrument")
-@ 
-Journals can be combined with \texttt{c}.\index{journal!c@\texttt{c}}
-<<>>=
+#+END_SRC
+Journals can be combined with =c=.\index{journal!c@=c=}
+#+BEGIN_SRC R -n :exports both
 J2 <- J
 J2$fees <- rep(1,4)
 c(J, J2)
-@ 
+#+END_SRC
 
-\subsection{Subsetting journals}
 
-In interactive sessions, we can use \texttt{subset} to select particular
+** Subsetting journals
+
+In interactive sessions, we can use =subset= to select particular
 transactions. %
-\index{journal!subset@\texttt{subset}}
-<<>>=
+\index{journal!subset@=subset=}
+#+BEGIN_SRC R -n :exports both
 subset(J, amount > 1) 
-@ %
+#+END_SRC
 With subset, you need not quote the expression that selects trades and
 you can directly access a journal's fields.  Because of the way
-\texttt{subset} evaluates its arguments, it should not be used within 
+=subset= evaluates its arguments, it should not be used within
 functions.
 
 More generally, to extract or change a field, use its name, either
-through the \texttt{\$} operator or double brackets \texttt{[[...]]}.
-<<>>=
+through the =\$= operator or double brackets =[[...]]=.
+#+BEGIN_SRC R -n :exports both
 J$amount
-@ 
-<<>>=
+#+END_SRC 
+#+BEGIN_SRC R -n :exports both
 J[["amount"]] <- c(1 ,2, -2, 8)
 J
-@ 
-The \texttt{`[`} method works with integers or logicals, returning
+#+END_SRC 
+The =`[`= method works with integers or logicals, returning
 the respective transactions.
-<<>>=
+#+BEGIN_SRC R -n :exports both
 J[2:3]
 J[J$amount < 0]
-@ 
+#+END_SRC 
 You can also pass a string, which is then interpreted as a regular
-expression that is matched against fields \texttt{instrument} and (if
-available) \texttt{account}.
-<<>>=
+expression that is matched against fields =instrument= and (if
+available) =account=.
+#+BEGIN_SRC R -n :exports both
 J["eur"]
-@ 
-By default, case is ignored, but you can set \texttt{ignore.case} to
-\texttt{FALSE}.  You can also specify the fields to match the string
+#+END_SRC 
+By default, case is ignored, but you can set =ignore.case= to
+=FALSE=.  You can also specify the fields to match the string
 against.
-<<>>=
+#+BEGIN_SRC R -n :exports both
 J <- journal(timestamp  = as.Date("2012-01-01") + 0:5, 
              amount     = rep(1, 6),
              instrument = c("Equity A", "Equity A", 
@@ -327,34 +315,34 @@ J["equ", ignore.case = FALSE]
 J["equ", ignore.case = TRUE]
 J["[Pp]ension"]
 J["[Pp]ension", match.against = "comment"]
-@ 
+#+END_SRC 
 
 \section{Examples: positions, profits and losses}
 
 \subsection{Single-entry accounting}
 
 For many purposes, single-entry accounting is sufficient.  The
-\texttt{position} function gives the current balance of all
+=position= function gives the current balance of all
 instruments.
-<<>>=
+#+BEGIN_SRC R -n :exports both
 position(J)
-@
-To get the position at a specific date, use the \texttt{when} argument.
-<<>>=
+#+END_SRC
+To get the position at a specific date, use the =when= argument.
+#+BEGIN_SRC R -n :exports both
 position(J, when = as.Date("2012-01-03"))
-@
+#+END_SRC
 To get a time series of positions, you can use specific keywords for
-\texttt{when}: `\texttt{all}' will print the position at all
+=when=: `=all=' will print the position at all
 timestamps in the journal.
-<<>>=
+#+BEGIN_SRC R -n :exports both
 position(J, when = "all")
-@
+#+END_SRC
 We are not limited to the timestamps that exist in the journal.
-<<>>=
+#+BEGIN_SRC R -n :exports both
 position(J, when = seq(from = as.Date("2011-12-30"), 
                           to = as.Date("2012-01-06"),
                           by = "1 day"))
-@ 
+#+END_SRC 
 It's actually tedious to enter journals that way, in particular if
 we want to update it over time.  So, for practical use, we may write
 transactions into files, like this:
@@ -370,38 +358,46 @@ transactions into files, like this:
 
 \noindent (In case you use Org-mode, such tables should look familiar.) % 
 \marginpar{\url{http://orgmode.org/}} %
-<<echo=false, eval = false>>=
+#+BEGIN_SRC perl :eval never
 system("perl -ne 'print $_ if /^\\s*\\| /;' < ex1.txt > ex1.jnl")
-@ 
+#+END_SRC 
 We can then write functions to read in such journal files.
 %% TODO: replace ex1 with inline code
 %% TODO: reference to org package
-<<echo=false,eval=false,results=hide>>=
-readjnl <- function(file) {
-    ans <- read.table(file,
-                      header = TRUE, sep = "|", as.is = TRUE)
-    ans <- as.list(ans[ ,apply(ans, 2, function(x) !all(is.na(x)))])
-    journal(timestamp = ans$timestamp,
-            amount    = ans$amount,
-            comment   = ans$comment)
-}
-(J <- readjnl("ex1.jnl"))
-J <- structure(list(instrument = c(NA_character_, NA_character_, NA_character_, 
-NA_character_), 
-                    timestamp = structure(c(15340, 15341, 15342, 
-                    15374), class = "Date"), amount = c(100, 200, -200, 500), price = c(NA, 
-                                                                              NA, NA, NA), comment = c(" a comment        ", " another comment  ", 
-" bought something ", " got a present    ")), .Names = c("instrument", 
-"timestamp", "amount", "price", "comment"), class = "journal")    
-@ 
+#+BEGIN_SRC R -n :exports both :eval never
+  readjnl <- function(file) {
+      ans <- read.table(file,
+                        header = TRUE, sep = "|", as.is = TRUE)
+      ans <- as.list(ans[ ,apply(ans, 2, function(x) !all(is.na(x)))])
+      journal(timestamp = ans$timestamp,
+              amount    = ans$amount,
+              comment   = ans$comment)
+  }
+  (J <- readjnl("ex1.jnl"))
+  J <- structure(list(instrument = c(NA_character_, NA_character_,
+                                     NA_character_, NA_character_), 
+                      timestamp = structure(c(15340, 15341, 15342, 
+                                              15374),
+                                            class = "Date"),
+                      amount = c(100, 200, -200, 500),
+                      price = c(NA, NA, NA, NA),
+                      comment = c(" a comment", " another comment  ", 
+                                  " bought something ", " got a present")),
+                 .Names = c("instrument", 
+                            "timestamp", "amount", "price", "comment"),
+                 class = "journal")    
+#+END_SRC 
 Some of these transactions may mean a gain or loss to us, such as a
 dividend payment).  Others are neutral, for example a transfer between
-bank accounts.  There are several ways to deal with this.%
-\marginnote{That is very much Perl style.  I like Perl.} %
+bank accounts.  There are several ways to deal with this.
+
+
+
+FN{That is very much Perl style.  I like Perl.}
 
 One way to deal with that is to switch to double-entry
 accounting (see the next section).  A second way is to add
-descriptions like \texttt{"expense"} and then subset by these
+descriptions like ="expense"= and then subset by these
 descriptions.
 
 And yet another approach is to use prices.  Whenever you evaluate the
@@ -413,58 +409,58 @@ An expense should be a negative amount; income should go with positive
 amounts.  When you add such an entry, make its price 0; when you
 compute that value of a position, make its price 1.  An example:
 
-<<>>=
+#+BEGIN_SRC R -n :exports both
 J <- journal(timestamp = c("day 1", "day 2", "day 3"), 
                amount    = c(100,100,-200), 
                price     = c(  1,  0,   0),
                comment   = c("neutral", "income", "expense"),
                account   = "my account")
 J
-@
+#+END_SRC
 The current balance is 0.
-<<>>=
+#+BEGIN_SRC R -n :exports both
 position(J)
-@ 
+#+END_SRC 
 In terms of income and expenses we have made a loss of~100, which is
-exactly what the function \texttt{pl} reports.  (There will be more
+exactly what the function =pl= reports.  (There will be more
 examples for computing profit and loss in the next chapter.)
-<<>>=
+#+BEGIN_SRC R -n :exports both
 pl(J, current.price = 1)
-@ 
+#+END_SRC 
 Let us do some more typical financial transactions.  We buy five
 times 1~unit of some unspecified asset.
-<<>>=
+#+BEGIN_SRC R -n :exports both
 J1 <- journal(timestamp = 1:5, 
                amount   = 1, 
                price    = c(2,2,2,3,4), 
                account  = "my account")
 J1
-@
+#+END_SRC
 We close the trade by selling 5~units.
-<<>>=
+#+BEGIN_SRC R -n :exports both
 J2 <- journal(timestamp =  6L, 
                amount   = -5, 
                price    =  3, 
                account  = "my account")
-@
-We can combine these journals with \texttt{c}.
-<<>>=
+#+END_SRC
+We can combine these journals with =c=.
+#+BEGIN_SRC R -n :exports both
 c(J1, J2)
-@ 
-(Note that I have written \texttt{6L} for the timestamp in
-\texttt{J2}.  If I had not, a warning would have been issued saying
+#+END_SRC 
+(Note that I have written =6L= for the timestamp in
+=J2=.  If I had not, a warning would have been issued saying
 that the timestamps in the journals have different classes.
-\texttt{1:5} is integer whereas \texttt{6} is numeric.  In the case
+=1:5= is integer whereas =6= is numeric.  In the case
 here, the warning would have been harmless and could have been
 ignored.)
 
 Since the position is now zero, it is easy to compute the \pl.  We can
-use the function \texttt{pl}, again.
-<<>>=
+use the function =pl=, again.
+#+BEGIN_SRC R -n :exports both
 pl(c(J1, J2))
-@
+#+END_SRC
 There is little difference when we have several accounts. An example:
-<<echo=false>>=
+#+BEGIN_SRC R -n :exports both
 trades <- read.table(textConnection(
     "account; ticker; timestamp; amount; price
     private ; A ; 1;   100; 60
@@ -481,29 +477,28 @@ trades <- read.table(textConnection(
                 price     = trades$price, 
                 instrument = trades$ticker, account = 
                 trades$account))
-@
+#+END_SRC
 There are two accounts.
-<<>>=
+#+BEGIN_SRC R -n :exports both
 table(J$account)
-@ 
-Per default, \texttt{position} does not care about accounts.  
-We have asset \texttt{A} in account \texttt{longterm} and in
-\texttt{private}, but we get the sum over all accounts.
-<<>>=
+#+END_SRC 
+Per default, =position= does not care about accounts.  
+We have asset =A= in account =longterm= and in
+=private=, but we get the sum over all accounts.
+#+BEGIN_SRC R -n :exports both
 position(J)
-@
+#+END_SRC
 There are at least two ways to deal with this.  One is to concatenate
-\texttt{account} and \texttt{instrument}.
-<<>>=
+=account= and =instrument=.
+#+BEGIN_SRC R -n :exports both
 J2 <- J
 J2$instrument <- paste0(J$account, ":", J$instrument)
 position(J2)
-@ 
-The other is to use \texttt{split} on the journal. %
-\index{journal!split@\texttt{split}}
-<<>>=
+#+END_SRC 
+The other is to use =split= on the journal.
+#+BEGIN_SRC R -n :exports both
 lapply(split(J, J$account), position)
-@ 
+#+END_SRC 
 
 \subsection{Double-entry accounting}
 
@@ -538,16 +533,16 @@ it easier to handle missed trades and synchronise accounts.
 
 During a backtest, we will simulate the decisions of the trader.  How
 precisely we simulate depends on the trading strategy.  The
-\texttt{btest} function is meant as a helper function to simulate
+=btest= function is meant as a helper function to simulate
 these decisions.  The logic for the decisions described above is coded
-in the functions \texttt{do.signal}, \texttt{signal} and
-\texttt{do.rebalance}.
+in the functions =do.signal=, =signal= and
+=do.rebalance=.
 
-Implementing \texttt{btest} required a number of decision, too:
+Implementing =btest= required a number of decision, too:
 (i)~what to model (ie, how to simulate the trader), and (ii)~how to
 code it.  As an example for point~(i): how precisely do we want to
 model the order process (eg, use limit orders?  Allow partial fills?)
-Example for~(ii): the backbone of \texttt{btest} is a loop that runs
+Example for~(ii): the backbone of =btest= is a loop that runs
 through the data.  Loops are slow in \R\ when compared with compiled
 languages, so should we vectorise instead?  Vectorisation is indeed
 often possible, namely if trading is not path-dependent.  If we have
@@ -571,18 +566,18 @@ already.
 
 ** Data structure
 
-We have one or several price series of length~\texttt{T}. The
-\texttt{btest} function runs from \texttt{b + 1} to \texttt{T}. The
-variable~\texttt{b} is the burn-in\index{burn-in},%
-\marginpar{\texttt{b}\qquad burn-in} %
+We have one or several price series of length~=T=. The
+=btest= function runs from =b + 1= to =T=. The
+variable~=b= is the burn-in\index{burn-in},%
+\marginpar{=b=\qquad burn-in} %
 and it needs to be a positive integer; in rare cases it may be zero.
 When we take decisions that are based on past data, we will lose at
 least one data point.
 
-Here is an important default: at time~\texttt{t}, we can use
-information up to time \texttt{t - 1}.  Suppose that \texttt{t}
+Here is an important default: at time~=t=, we can use
+information up to time =t - 1=.  Suppose that =t=
 were~4.  We may use all information up to time~3, and trade at the
-\texttt{open} in period~4.
+=open= in period~4.
 
 ## TODO create nice display
 
@@ -595,7 +590,7 @@ t    time      open  high  low   close
 5    HH:MM:SS
 #+END_EXAMPLE
 
-We could also trade at the \texttt{close}.
+We could also trade at the =close=.
 
 #+BEGIN_EXAMPLE
 t    time      open  high  low   close
@@ -616,7 +611,7 @@ more of a good story than a meaningful test.)
 
 ** Functions
 
-\texttt{btest} expects a number of functions. The default is to not
+=btest= expects a number of functions. The default is to not
 specify arguments to these functions, because they can all access the
 following objects. These objects are themselves functions that can
 access certain data; there are no replacement functions.
@@ -629,19 +624,19 @@ access certain data; there are no replacement functions.
      time
 - Cash :: cash (in accounting currency)
 - Time :: current time (an integer)
-- Timestamp :: access \texttt{timestamp} when it is specified; if not,
-     it defaults to \texttt{Time}
+- Timestamp :: access =timestamp= when it is specified; if not,
+     it defaults to =Time=
 - Portfolio :: the current portfolio
 - SuggestedPortfolio :: the currently-suggested portfolio
 - Globals :: an environment
 
-All the functions have the argument \texttt{lag}, which defaults
-to \texttt{1}.  That can be a vector, too: the expression
+All the functions have the argument =lag=, which defaults
+to =1=.  That can be a vector, too: the expression
 #+BEGIN_SRC R :eval never :output none
 Close(Time():1)
 #+END_SRC
 for instance will return all available close prices. Alternatively, we
-can use the argument \texttt{n} to retrieve a number of past data
+can use the argument =n= to retrieve a number of past data
 points. So the above example is equivalent to
 #+BEGIN_SRC R :eval never :output none
 Close(n = Time())
@@ -655,21 +650,21 @@ returns the last five closing prices.
 
 *** signal
 
-The \texttt{signal} function uses information until \texttt{t -
+The =signal= function uses information until \texttt{t -
   1} and returns the suggested portfolio (a vector) to be held at
-\texttt{t}.
+=t=.
 
 *** do.signal
 
-\texttt{do.signal} uses information until \texttt{t - 1} and must
-return \texttt{TRUE} or \texttt{FALSE}.  If the function is not
-specified, it defaults to \texttt{function() TRUE}.
+=do.signal= uses information until =t - 1= and must
+return =TRUE= or =FALSE=.  If the function is not
+specified, it defaults to =function() TRUE=.
 
 *** do.rebalance
 
-\texttt{do.rebalance} uses information until \texttt{t - 1} and
-returns \texttt{TRUE} or \texttt{FALSE}. If the function is not
-specified, it defaults to \texttt{function() TRUE}.
+=do.rebalance= uses information until =t - 1= and
+returns =TRUE= or =FALSE=. If the function is not
+specified, it defaults to =function() TRUE=.
 
 *** print.info
 
@@ -680,7 +675,7 @@ connection.
 
 ** Examples: Single assets
 
-It is best to describe the \texttt{btest} function through a number of
+It is best to describe the =btest= function through a number of
 simple examples.
 
 *** A useless first example
@@ -699,27 +694,27 @@ prices <- c(3182, 3205, 3272, 3185, 3201,
             3236, 3272, 3224, 3194, 3188, 3213)
 #+END_SRC
 
-\begin{center}  
-<<fig=true, width = 5, height = 1.8>>=
+
+#+BEGIN_SRC R -n :exports both
 par(mar=c(3,3,1,1), las = 1, mgp = c(2.5,0.5,0), tck = 0.005, bty = "n",
     ps = 11)
 plot(timestamp, prices, type = "l", xlab = "", ylab = "")
-@
-\end{center}
-The \texttt{signal} function is very simple indeed.
+#+END_SRC
+
+The =signal= function is very simple indeed.
 #+BEGIN_SRC R -n :exports both
 signal <- function()
     1
 #+END_SRC
-\texttt{signal} must be written so that it returns the suggested
+=signal= must be written so that it returns the suggested
 position in units of the asset. In this first example, the suggested
-position always is one unit. It is only a \texttt{suggested} portfolio
+position always is one unit. It is only a =suggested= portfolio
 because we can specify rules whether or not to trade. Examples follow
 below.
 
-To test this strategy, we call \texttt{btest}.  The initial cash is
+To test this strategy, we call =btest=.  The initial cash is
 zero per default, so initial wealth is also zero in this case. We can
-change it through the argument \texttt{initial.cash}.
+change it through the argument =initial.cash=.
 
 #+BEGIN_SRC R -n :exports both
 (solution <- btest(prices = prices, signal = signal))
@@ -728,8 +723,8 @@ The function returns a list with a number of components, but they
 are not printed. Instead, a simple print method displays some
 information about the results.
 
-We arrange more details into a \texttt{data.frame}. \texttt{sp} is the
-suggested position; \texttt{p} is the actual position.
+We arrange more details into a =data.frame=. =sp= is the
+suggested position; =p= is the actual position.
 #+BEGIN_SRC R -n :exports both
 makeTable <- function(solution, prices)
     data.frame(prices = prices,
@@ -741,8 +736,8 @@ makeTable <- function(solution, prices)
 makeTable(unclass(solution), prices)
 #+END_SRC 
 We bought in the second period because the default setting for the
-burnin \texttt{b} is 1. Thus, we lose one observation. In the case
-here we do not rely in any way on the past; hence, we set \texttt{b}
+burnin =b= is 1. Thus, we lose one observation. In the case
+here we do not rely in any way on the past; hence, we set =b=
 to zero. With this setting, we buy at the first price and hold until
 the end of the data.
 #+BEGIN_SRC R -n :exports both
@@ -750,7 +745,7 @@ solution <- btest(prices = prices, signal = signal, b  = 0)
 makeTable(solution, prices)
 #+END_SRC 
 If you prefer the trades only, the solution also contains a
-\texttt{journal}.
+=journal=.
 #+BEGIN_SRC R -n :exports both
 journal(solution)
 #+END_SRC
@@ -767,33 +762,33 @@ journal(btest(prices = prices, signal = signal, b  = 0,
 Now we make our strategy slightly more selective. The trading rule is
 to have a position of 1 unit of the asset whenever the last observed
 price is below 3200 and to have no position when it the price is above
-3200. The \texttt{signal} function could look like this.
+3200. The =signal= function could look like this.
 #+BEGIN_SRC R -n :exports both
 signal <- function()
     if (Close() < 3200)
         1 else 0
 #+END_SRC
 
-We call \texttt{btest}.
+We call =btest=.
 #+BEGIN_SRC R -n :exports both
 solution <- btest(prices = prices, signal = signal)
 #+END_SRC
-<<echo=false>>=
+#+BEGIN_SRC R -n :exports both
 makeTable(solution, prices)
-@ 
-The argument \texttt{initial.position} specifies the initial position;
+#+END_SRC 
+The argument =initial.position= specifies the initial position;
 default is no position. Suppose we had already held one unit of the
 asset.
 #+BEGIN_SRC R -n :exports both
 solution <- btest(prices = prices, signal = signal,
                   initial.position = 1)
 #+END_SRC
-<<echo=false>>=
+#+BEGIN_SRC R -n :exports both
 makeTable(solution, prices)
-@ 
+#+END_SRC 
 %% TODO: is this right? should be suggested position not be 1 in t==2?
 
-Internally, \texttt{btest} stores \textsc{ohlc} prices in matrices.
+Internally, =btest= stores \textsc{ohlc} prices in matrices.
 So even for a single instrument we have four matrices: one for open
 prices, one for high prices, and so on. In the single asset case, each
 matrix has one column. If we were dealing with two assets, we would
@@ -801,25 +796,25 @@ again have four matrices, each with two columns. And so on.
 
 %% TODO: add picture of matrices
 
-We do not access these data directly. A function \texttt{Close} is
-defined by \texttt{btest} and passed as an argument to
-\texttt{signal}. Note that we do not add it as a formal argument to
-\texttt{signal} since this is done automatically. In fact, doing it
+We do not access these data directly. A function =Close= is
+defined by =btest= and passed as an argument to
+=signal=. Note that we do not add it as a formal argument to
+=signal= since this is done automatically. In fact, doing it
 manually would trigger an error message:
-<<eval = false>>=
+#+BEGIN_SRC R -n :exports both :eval never
 signal <- function(Close = NULL)
     1
 cat(try(btest(prices = prices, signal = signal)))
-@
+#+END_SRC
 
-Similarly, we have functions \texttt{Open}, \texttt{High} and
-\texttt{Low} (see Section~\ref{functions} above for a available
+Similarly, we have functions =Open=, =High= and
+=Low= (see Section~\ref{functions} above for a available
 functions).
 
-Suppose we wanted to add a variable, like a \texttt{threshold}
+Suppose we wanted to add a variable, like a =threshold=
 that tells us when to buy. This would need to be an argument to
-\texttt{signal}; but it would also need to be passed with the
-\texttt{\dots} argument of \texttt{btest}.
+=signal=; but it would also need to be passed with the
+=\dots= argument of =btest=.
 #+BEGIN_SRC R -n :exports both
 signal <- function(threshold)
     if (Close() < threshold)
@@ -829,20 +824,20 @@ solution <- btest(prices = prices, signal = signal,
                   threshold = 3200)      
 
 makeTable(solution, prices)
-@
+#+END_SRC
 
-So far we have treated \texttt{Close} as a function without arguments,
-but actually it has an argument \texttt{lag} that defaults to
-\texttt{1}. Suppose the rule were to buy if the last close is below the
-second-to-last close. \texttt{signal} could look like this.
+So far we have treated =Close= as a function without arguments,
+but actually it has an argument =lag= that defaults to
+=1=. Suppose the rule were to buy if the last close is below the
+second-to-last close. =signal= could look like this.
 #+BEGIN_SRC R -n :exports both
 signal <- function()
     if (Close(1L) < Close(2L))
         1 else 0
 #+END_SRC 
-We could also have written \texttt{(Close() < Close(2L))}. This rule
+We could also have written =(Close() < Close(2L))=. This rule
 rule needs the close price of yesterday and of the day before
-yesterday, so we need to increase \texttt{b}.
+yesterday, so we need to increase =b=.
 #+BEGIN_SRC R -n :exports both
 makeTable(btest(prices = prices, signal = signal, b = 2), prices)
 #+END_SRC
@@ -856,7 +851,7 @@ signal <- function()
 makeTable(btest(prices = prices, signal = signal), prices)
 #+END_SRC
 A typical way to specify a trading strategy is to map past prices into
-\texttt{+1}, \texttt{0} or \texttt{-1} for long, flat or short. A
+=+1=, =0= or =-1= for long, flat or short. A
 signal is often only given at a specified point (like in `buy one unit
 now'). Example: suppose the third day is a Thursday, and our rule says
 `buy after Thursday'.
@@ -876,13 +871,13 @@ signal <- function()
     if (Time() == 3L)
         1 else Portfolio()
 #+END_SRC
-The function \texttt{Portfolio} evaluates to last period's
-portfolio. Like \texttt{Close}, its first argument sets the time
-\texttt{lag}, which defaults to~1.
+The function =Portfolio= evaluates to last period's
+portfolio. Like =Close=, its first argument sets the time
+=lag=, which defaults to~1.
 #+BEGIN_SRC R -n :exports both
 makeTable(btest(prices = prices, signal = signal), prices)
 #+END_SRC
-A common scenario is also a \texttt{signal} that evaluates to a
+A common scenario is also a =signal= that evaluates to a
 weight; for instance, after a portfolio optimisation. (Be sure to have
 a meaningful initial wealth: 5 percent of nothing is nothing.)
 #+BEGIN_SRC R -n :exports both
@@ -912,7 +907,7 @@ solution <- btest(prices = prices,
 
 makeTable(solution, prices)
 #+END_SRC
-See also the \texttt{tol} argument.  %% TODO: expand
+See also the =tol= argument.  %% TODO: expand
 
 **** Passing environments
 
@@ -937,32 +932,34 @@ cbind(makeTable(solution, prices), external$vec)
 ** Examples: Multiple assets
 
 
-%% \subsection{Again, a simple example}
-%% 
-%% <<>>=
-%% prices1 <- c(100,98, 98, 97, 96, 98,97,98,99,101)
-%% prices2 <- c(100,99,100,102,101,100,96,97,95,82)
-%% prices <- cbind(prices1, prices2)
-%% 
-%% signal <- function()
-%%     if (Close()[1L] > Close()[2L])
-%%         c(1, 0) else c(0, 1)
-%% 
-%% 
-%% (solution <- btest(prices = list(prices),
-%%                    signal = signal,
-%%                    b=2))
-%% @
-%% 
-%% We can also give more useful names to the assets.
-%% <<>>=
-%% prices <- cbind(AA = prices1, BB = prices2)
-%% solution <- btest(prices = list(prices),
-%%                                signal = signal, b=2)
-%% makeTable(solution, prices)
-%% 
-%% @
-%% 
+#+BEGIN_COMMENT
+##%% \subsection{Again, a simple example}
+##%% 
+##%% <<>>=
+##%% prices1 <- c(100,98, 98, 97, 96, 98,97,98,99,101)
+##%% prices2 <- c(100,99,100,102,101,100,96,97,95,82)
+##%% prices <- cbind(prices1, prices2)
+##%% 
+##%% signal <- function()
+##%%     if (Close()[1L] > Close()[2L])
+##%%         c(1, 0) else c(0, 1)
+##%% 
+##%% 
+##%% (solution <- btest(prices = list(prices),
+##%%                    signal = signal,
+##%%                    b=2))
+##%% #+END_SRC
+##%% 
+##%% We can also give more useful names to the assets.
+##%% <<>>=
+##%% prices <- cbind(AA = prices1, BB = prices2)
+##%% solution <- btest(prices = list(prices),
+##%%                                signal = signal, b=2)
+##%% makeTable(solution, prices)
+##%% 
+##%% #+END_SRC
+##%% 
+#+END_COMMENT
 
 ** Common tasks
 
@@ -970,7 +967,7 @@ There is more than one ways to accomplish a certain task.  I describe
 how I have handled some specific tasks.
 
 *** Remembering an entry price
-In signal: use the current price and assign in \texttt{Globals}.
+In signal: use the current price and assign in =Globals=.
 
 *** Delaying signals
 
@@ -1035,9 +1032,9 @@ journal(btest(prices = prices, signal = signal,
               do.signal = prices > 3600,
               do.rebalance = c(26, 30)))
 #+END_SRC 
-When \texttt{timestamp} is specified, certain calendar times are also
-supported; \texttt{timestamp} must of a type that can be coerced to
-\texttt{Date}.
+When =timestamp= is specified, certain calendar times are also
+supported; =timestamp= must of a type that can be coerced to
+=Date=.
 #+BEGIN_SRC R -n :exports both
 cat(try(journal(btest(prices = prices, signal = signal, 
                       do.signal = "firstofmonth"))))
@@ -1100,7 +1097,7 @@ solution <- btest(prices = prices,
 makeTable(solution, prices)
 
 #+END_SRC
-And since \texttt{cat} has a \texttt{file} argument, we can also write
+And since =cat= has a =file= argument, we can also write
 such information into a logfile.
 
 
@@ -1136,7 +1133,9 @@ signal = function(theta0) {
 
 Let us look at an actual example.
 
-<<eval=false>>=
+
+#+BEGIN_SRC R :eval never
+
 require("tseries")
 require("zoo")
 
@@ -1184,11 +1183,11 @@ We have an account, currency is euro.  We buy one asset at a price of
 100~euro and sell it again at 102~euro.  We have made a profit of
 2~euros.  This simple case happens often enough to make the required
 computation simple as well.  Computing profit-or-loss (\pl) can be handled
-through the function \texttt{pl}.
-<<>>=
+through the function =pl=.
+#+BEGIN_SRC R -n :exports both
 pl(price  = c(100, 102), 
     amount = c(  1,  -1))
-@ 
+#+END_SRC 
 Now suppose that a trader bought one~unit at 50, one~unit at 90 and
 sold two~units at 100, resulting in a profit of 60.  But suppose that
 the actual order of the trades was\medskip
@@ -1199,29 +1198,29 @@ sell at 100\,.\medskip
 \noindent Even if we know nothing about what was traded and when, some
 information is provided by the order of the trades: the position had a
 drawdown of at least~40 before it recovered.  For situations like
-this, the argument \texttt{along.timestamp} can be used. (Note that we
+this, the argument =along.timestamp= can be used. (Note that we
 do not provide an actual timestamp, in which case the function will
-implicitly use integers 1, 2, \ldots, \texttt{length(amount)}\,.)
-<<>>=
+implicitly use integers 1, 2, \ldots, =length(amount)=\,.)
+#+BEGIN_SRC R -n :exports both
 pl(price  = c( 90, 50, 100), 
     amount = c(  1,  1,  -2), along.timestamp = TRUE)
-@ 
+#+END_SRC 
 With no further arguments, the function will compute the
 running position and evaluate it at every trade with the trade's
 price.  This may not be accurate because of bid--ask spreads or other
 transaction costs, but it provides more information than only
 computing the \pl\ for the trades.
-<<>>=
+#+BEGIN_SRC R -n :exports both
 J <- journal(price     = c( 90, 50, 100), 
               amount    = c(  1,  1,  -2),
               timestamp = c(  2,  4,   7))
 pl(J, along.timestamp = FALSE)
-@ 
+#+END_SRC 
 Suppose we also have a time series of the prices between times 1
 and~10.  We can evaluate the position at every time instant, and then
 plot position, \pl\ and the price of the traded instrument.
 
-<<>>=
+#+BEGIN_SRC R -n :exports both
 ## [TODO]
 price <- c(100,90,70,50,60,80,100,90,110,105)
 
@@ -1232,22 +1231,22 @@ position(J, when = 1:10)
 ## value position at when = 1:10
 ## compute value if journal at 1:10 => subtract
 
-@ 
+#+END_SRC 
 
-A more-useful example for \texttt{pl} with \texttt{along.timestamp} is
+A more-useful example for =pl= with =along.timestamp= is
 a trading history of a high-frequency strategy.  Suppose for example
 we had traded EURUSD 200~times in single day and wished to plot the
 result.  At such a frequency, the prices at which the trades were
 executed is useful to value any open position.
 
-<<>>=
+#+BEGIN_SRC R -n :exports both
 ## [TODO]
-@ 
+#+END_SRC 
 We may also want to compute the \pl\ between two points in
 time.  If our only data source is a journal, this may be impossible
 since we need to evaluate the position at both points in time.  A simple
 example follows; the data first.
-<<echo=false>>=
+#+BEGIN_SRC R -n :exports both
 timestamp <- 1:20
 amount <- c(-5, 5, 5, -5, -5, 5, 5, 5, 5, 
             -5, 5, 5, -5, 5, 5, -5, -5, -5, 
@@ -1255,7 +1254,7 @@ amount <- c(-5, 5, 5, -5, -5, 5, 5, 5, 5,
 price <- c(106, 101, 110, 110, 105, 105, 105, 104, 110, 104, 
            103, 108, 106, 102, 108, 107, 103, 104, 109, 104)
 (J <- journal(timestamp = timestamp, amount = amount, price = price))
-@ 
+#+END_SRC 
 
 Suppose we want the pl between times 5 and~8. Conceptually, it is
 simple: we first compute the position at~5 and treat it as a trade.
@@ -1265,8 +1264,8 @@ than 5, up to 8.  The final position, again, would be treated as a
 trade, but with signs reversed. That, we close the position, if any
 exists.  Here, again, we need the prices of the instruments.
 
-The function \texttt{pl} does (most of) these tasks for us.
-<<>>=
+The function =pl= does (most of) these tasks for us.
+#+BEGIN_SRC R -n :exports both
 from <- 5
 to   <- 8
 price.from <- 106
@@ -1278,25 +1277,25 @@ pl(trades,
    initial.position = position.from, 
    initial.price = price.from,
    current.price = price.to)   
-@ 
+#+END_SRC 
 
 
 You can also use this mechanism if you wish to compute the \pl\
 of a complete journal, but with some positions not closed yet.  The
 simplest example: a journal of just one trade.
-<<>>=
+#+BEGIN_SRC R -n :exports both
 (J <- J[1])
-@ 
+#+END_SRC 
 
 There is no way to tell the pl of this trades\ldots 
-<<>>=
+#+BEGIN_SRC R -n :exports both
 pl(J)
-@ 
+#+END_SRC 
 
 \ldots unless the current price is supplied.
-<<>>=
+#+BEGIN_SRC R -n :exports both
 pl(J, current.price = 105)
-@ 
+#+END_SRC 
 
 \section{More  complicated cases}
 
@@ -1350,7 +1349,7 @@ portfolio of assets.
 In this example we compute the \pl\ in currency units of a portfolio
 over time.  We start with the following journal.
 
-<<echo=false>>=
+#+BEGIN_SRC R
 ## dput(ISOdatetime(2013,c(11,11,12,12,11,12), c(28,28,2,3,27,2), 
 ##                     c(9,12,13,9,9,13),c(35,50,21,57,52,54),0))
 timestamp <- structure(c(1385627700, 1385639400, 1385986860, 1386061020, 1385542320, 
@@ -1360,7 +1359,7 @@ timestamp <- structure(c(1385627700, 1385639400, 1385986860, 1386061020, 1385542
              timestamp = timestamp,
              price = c(11.6, 11.62, 11.67, 11.47, 25.1,26.29),
              instrument = c(rep("DTE", 4), rep("DPW", 2))))
-@ 
+#+END_SRC 
 We shall compute end-of-day \pl\ of these trades.  In case you
 wondered: \textsc{dte} stands for Deutsche Telekom and \textsc{dpw} is
 Deutsche Post, both traded on \textsc{xetra}.  Thus, end-of-day is
@@ -1369,8 +1368,8 @@ Deutsche Post, both traded on \textsc{xetra}.  Thus, end-of-day is
 (There is nothing special about end-of-day.  We could just as well
 have decided to have hourly numbers, say.  But I would like to keep
 this example small.)  The prices at these timestamps are stored
-in a matrix \texttt{price.table}.
-<<echo=false>>=
+in a matrix =price.table=.
+#+BEGIN_SRC R
 price.table <- structure(c(25.71, 25.965, 26.03, 26.32, 25.305,
                            11.65, 11.655, 11.685, 11.62, 11.375), 
                          .Dim = c(5L, 2L), 
@@ -1383,80 +1382,80 @@ when <- times <- structure(c(1385569800, 1385656200, 1385742600,
                    class = c("POSIXct", "POSIXt"), 
                    tzone = "")
 rownames(price.table) <- as.character(times)
-@ 
-<<>>=
+#+END_SRC 
+#+BEGIN_SRC R -n :exports both
 price.table
-@ 
+#+END_SRC 
 
 \subsubsection*{Step 1: compute value of portfolio}
 
 We first need the position sizes at the timestamps at which we want to
-compute \pl.  We store them in a vector \texttt{when}.
-<<>>=
+compute \pl.  We store them in a vector =when=.
+#+BEGIN_SRC R -n :exports both
 when
-@ 
-The position at \texttt{when} is quickly computed.
-<<>>=
+#+END_SRC 
+The position at =when= is quickly computed.
+#+BEGIN_SRC R -n :exports both
 (pos <- position(J, when = when))
-@ 
+#+END_SRC 
 Note that each element in the position matrix corresponds to an
-element in the matrix \texttt{price.table}.  That is, the rows refer
+element in the matrix =price.table=.  That is, the rows refer
 to the timestamps:
-<<>>=
+#+BEGIN_SRC R -n :exports both
 attr(pos, "timestamp")
-@ 
+#+END_SRC 
 The columns must be ordered like the instruments:
-<<>>= 
+#+BEGIN_SRC R -n :exports both 
 attr(pos, "instrument")
-@ 
+#+END_SRC 
 Thus, we need to multiply both matrices element-by-element, which is
-exactly what the function \texttt{valuation} does.  A warning: the
-function does currently not at all check \texttt{price.table}.
-<<eval=false>>=
+exactly what the function =valuation= does.  A warning: the
+function does currently not at all check =price.table=.
+#+BEGIN_SRC R :eval never
 PMwR:::valuation(pos, price.table = price.table)
-@ 
+#+END_SRC 
 We care about the row sums of the results.
-<<eval=false>>= 
+#+BEGIN_SRC R :eval never
 (v <- PMwR:::valuation(pos, price.table = price.table, do.sum = TRUE))
-@
+#+END_SRC
 If the assets have specific multipliers, we can pass them as a named
 vector.  (That is the preferred way, at least.  An unnamed vector will
 do as well, as will a single number, which is recycled.)
-<<eval=false>>=
+#+BEGIN_SRC R :eval never
 PMwR:::valuation(pos, price.table = price.table, 
           multiplier = c(DTE = 5, DPW = 0.5))
-@
+#+END_SRC
 
 \subsubsection*{Step 2: compute cashflows that led to portfolio}
 
-We create a vector \texttt{cf} that will store the cashflows.
-<<>>=
+We create a vector =cf= that will store the cashflows.
+#+BEGIN_SRC R -n :exports both
 cf <- numeric(length(attr(pos, "timestamp")))
 names(cf) <- as.character(attr(pos, "timestamp"))
-@ 
+#+END_SRC 
 
 
-<<>>=
+#+BEGIN_SRC R -n :exports both
 ## tmp <- PMwR:::valuation(J)
 ## tmp$timestamp <- pos$timestamp[PMwR:::matchOrNext(tmp$timestamp, pos$timestamp)]
 ## cash <- aggregate(tmp$amount, list(tmp$timestamp), sum)
 ## cf[match(cash[[1]], pos$timestamp)] <- cash[[2]]
 ## (v.net <- v + cumsum(cf))
-@ 
+#+END_SRC 
 
 TODO: check -- create interface journal/when/price.table?
 
 \subsubsection*{Summary}
 
 \begin{enumerate}
-\item Fix \texttt{when}; compute position at \texttt{when}.
-\item Prepare a matrix price.table of \texttt{length(when)} rows,
+\item Fix =when=; compute position at =when=.
+\item Prepare a matrix price.table of =length(when)= rows,
   whose columns correspond to the assets in the portfolio.
-\item Call \texttt{valuation(position)} and store the result as
-  \texttt{v}.
-\item Call \texttt{valuation(journal)}; map the timestamps of the new
-  journal to \texttt{when}; sum the cashflows by timestamp; subtract
-  the resulting cashflows from \texttt{v}.
+\item Call =valuation(position)= and store the result as
+  =v=.
+\item Call =valuation(journal)=; map the timestamps of the new
+  journal to =when=; sum the cashflows by timestamp; subtract
+  the resulting cashflows from =v=.
 \end{enumerate}
 
 To compute returns, choose a suitable total portfolio value and divide
@@ -1466,7 +1465,7 @@ by it.
 
 * Computing returns
 
-\noindent The function \texttt{returns} computes returns for various
+\noindent The function =returns= computes returns for various
 types of objects. The return of an asset in period~$t$ is defined as
 \begin{align} \label{eq:return} 
   r_t = \frac{P_t}{P_{t-1}}-1 = R_t+1\,.
@@ -1478,84 +1477,84 @@ For computing pl (in currency units), see Chapter~XX.
 
 \section{Numeric vectors and matrices, data frames}
 
-<<>>=
+#+BEGIN_SRC R -n :exports both
 x <- c(100, 102, 101, 100)
 returns(x)
-@ 
-To replace the lost first observation, specify \texttt{pad}.
-<<>>=
+#+END_SRC 
+To replace the lost first observation, specify =pad=.
+#+BEGIN_SRC R -n :exports both
 returns(x, pad = 0)
 returns(x, pad = NA)
-@ 
-When \texttt{x} is a matrix or a data.frame, returns are computed
+#+END_SRC 
+When =x= is a matrix or a data.frame, returns are computed
 for each column.
-<<>>=
+#+BEGIN_SRC R -n :exports both
 X <- cbind(x, x, x)
 returns(X, pad = NA)
 returns(as.data.frame(X), pad = NA)
-@ 
+#+END_SRC 
 
-\section{\texttt{zoo} objects}
+\section{=zoo= objects}
 
 Vectors.
-<<>>=
+#+BEGIN_SRC R -n :exports both
 z <- zoo(x, as.Date("2015-1-5") + 0:2)
 returns(z)
 returns(z, pad = NA)
-@ 
+#+END_SRC 
 Matrices.
-<<>>=
+#+BEGIN_SRC R -n :exports both
 z <- zoo(X, as.Date("2015-1-5") + 0:2)
 returns(z)
 returns(z, pad = NA)
-@ 
+#+END_SRC 
 
 \section{Period returns}
 
-\noindent When a timestamp is available, \texttt{returns} can compute
+\noindent When a timestamp is available, =returns= can compute
 period returns. The semantics for these computations are somewhat
 different; the result is a vector of returns with attributes and class
-\texttt{preturns}. Most useful is a \texttt{print} method.
-<<>>=
+=preturns=. Most useful is a =print= method.
+#+BEGIN_SRC R -n :exports both
 set.seed(45)
 t <- as.Date("2014-11-1") + 0:80
 x <- cumprod(1 + rnorm(length(t), sd = 0.01))
 returns(x, t = t, period = "month")
 returns(x, t = t, period = "year")
-@ 
-See \texttt{?print.preturns} for more display options. For instance:
-<<>>=
+#+END_SRC 
+See =?print.preturns= for more display options. For instance:
+#+BEGIN_SRC R -n :exports both
 print(returns(zoo(x, t), period = "month"), 
       digits = 2, year.rows = FALSE)
-@ 
-To get annualised returns, use period `\texttt{ann}'.
-<<>>=
+#+END_SRC 
+To get annualised returns, use period `=ann='.
+#+BEGIN_SRC R -n :exports both
 returns(x, t = t,  period = "ann")
 returns(zoo(x, t), period = "ann")
-@ 
+#+END_SRC 
 But note that the function did \emph{not} annualise: it does
 not annualise if the time period is shorter than one year.
-<<>>=
+#+BEGIN_SRC R -n :exports both
 x[length(x)]/x[1] - 1
-@ 
-To force annualising, add a `\texttt{!}'. The exclamation mark serves
+#+END_SRC 
+To force annualising, add a `=!='. The exclamation mark serves
 as a mnenomic that it is now imperative to annualise.
-<<>>=
+#+BEGIN_SRC R -n :exports both
 returns(x, t, period = "ann!")
-@ 
-There are methods to \texttt{toLatex} and \texttt{toHTML}
+#+END_SRC 
+There are methods to =toLatex= and =toHTML=
 for monthly returns.  In Sweave documents, you need to use
-\texttt{<\/<results = tex,echo = false>\/>=} in the chunk options:
+=<\/<results = tex,echo = false>\/>== in the chunk options:
 
 \noindent\begin{tabular}{rrrrrrrrrrrrrr}
 <<results=tex,echo=false>>=
 toLatex(returns(x, t = t, period = "month"))
-@ 
+#+END_SRC 
 \end{tabular}
 
 \section{Rebalanced returns}
 
-<<>>=
+#+BEGIN_SRC R -n :exports both
   X <- array(c(100,105,110,100,100,100), dim = c(3,2))
 
   w <- c(0.5,0.5)
@@ -1564,7 +1563,7 @@ toLatex(returns(x, t = t, period = "month"))
 
   returns(X %*% position)
   returns(X) %*% w
-@ 
+#+END_SRC 
 
 
 
@@ -1577,34 +1576,34 @@ market prices.
 
 Theoretical valuation takes places via the generic function value:
 
-\texttt{value(x, ..., dots2args = NULL) } 
+=value(x, ..., dots2args = NULL) = 
 
 The simplest case:
-\texttt{x} is character, then a call will be generated as
+=x= is character, then a call will be generated as
 
-\texttt{do.call(x, list(...))}
+=do.call(x, list(...))=
 
-\texttt{dots2args.default <- function(x, ...) list(...)}
+=dots2args.default <- function(x, ...) list(...)=
 
-Note that this will be the \texttt{default} method; notably, an
-explicit \texttt{character} method is left unspecified (meant for the
+Note that this will be the =default= method; notably, an
+explicit =character= method is left unspecified (meant for the
 user).
 
 
-A more typical case: collect all market data in a list \texttt{Data}:
+A more typical case: collect all market data in a list =Data=:
 EvaluationDate, Prices, Vols, Irates.
 
-dots2args will react on \texttt{x}, retrieve the required information,
+dots2args will react on =x=, retrieve the required information,
 and 
 
 
 \begin{itemize}
-\item evaluates to list \texttt{"value"}, \texttt{"delta"} etc
-\item \texttt{Instrument[names(result)] <- result}
+\item evaluates to list ="value"=, ="delta"= etc
+\item =Instrument[names(result)] <- result=
 \end{itemize}
 
 
-%% <<>>=
+%% #+BEGIN_SRC R -n :exports both
 %% Time   <- as.Date("2013-05-28")
 %% Prices <- list(DAX = 8472)
 %% Irates <- list(EUR = function(t) 0.1)
@@ -1618,7 +1617,7 @@ and
 %% DATA$Vols$DAX(8000, 0.2)
 %% DATA$IRates$EUR(0.5)
 
-%% @      
+%% #+END_SRC      
 
 
 \section{Instruments and portfolios}
@@ -1649,32 +1648,32 @@ classes: Fund Equity Account Currency Future Index
 
 * Rebalacing a portfolio
 
-\noindent The function \texttt{rebalance} computes the transactions
+\noindent The function =rebalance= computes the transactions
 necessary for moving from one portfolio to another.
 
 \section{Usage with unnamed vectors}
 
-The \texttt{current} portfolio is given in currency units; the
-\texttt{target} portfolio is given in weights.  To compute the
+The =current= portfolio is given in currency units; the
+=target= portfolio is given in weights.  To compute the
 required order sizes, we also need the current prices of the assets.
 When current, target and price are unnamed, the assets' positions in
 the vectors need to match.
 
-<<>>=
+#+BEGIN_SRC R -n :exports both
 current <- c(0,0,100,100)
 prices  <- c(1,1,1,1)
 target  <- c(0.25, 0.25, 0.25, 0.25)
 rebalance(current, target, prices, match.names = FALSE)
-@ 
+#+END_SRC 
 The current portfolio may also be empty, in which case
-\texttt{current} can be set to 0.  Then, of course, we need to specify
-the \texttt{notional} of the target portfolio.
-<<>>=
+=current= can be set to 0.  Then, of course, we need to specify
+the =notional= of the target portfolio.
+#+BEGIN_SRC R -n :exports both
 current <- 0
 rebalance(current, target, prices, match.names = FALSE, notional = 100)
-@
+#+END_SRC
 We may also specify the target portfolio as a single number.  
-<<>>=
+#+BEGIN_SRC R -n :exports both
 current <- c(5,5,100,100)
 
 target <- 0    ## liquidate the portfolio
@@ -1682,25 +1681,25 @@ rebalance(current, target, prices, match.names = FALSE)
 
 target <- 0.2  ## every assets gets a weight of 20% 
 rebalance(current, target, prices, match.names = FALSE, notional = 100)
-@ 
+#+END_SRC 
 
 \section{Usage with named vectors}
 
-More usefully, \texttt{rebalance} can also use the names of the
-vectors current etc.  The argument \texttt{match.names} must be set to
-\texttt{TRUE} for this (the default, actually).
-<<>>=
+More usefully, =rebalance= can also use the names of the
+vectors current etc.  The argument =match.names= must be set to
+=TRUE= for this (the default, actually).
+#+BEGIN_SRC R -n :exports both
 names(prices) <- letters[1:4]
 current <- c(b = 10)
 target  <- c(d = 0.5)
 
 rebalance(current, target, prices)
-@ 
-To also show all instruments, specify \texttt{drop.zero} as
-\texttt{FALSE}.
-<<>>=
+#+END_SRC 
+To also show all instruments, specify =drop.zero= as
+=FALSE=.
+#+BEGIN_SRC R -n :exports both
 print(rebalance(current, target, prices), drop.zero = FALSE)
-@ 
+#+END_SRC 
 
 
 
@@ -1838,14 +1837,14 @@ We are given these prices of the Bund future contract, traded at the
 Eurex in Germany:%
 \footnote{Note that I leave the time zone to the operating system.
   Since my computer is typically located in the time zone that the
-  \texttt{tz database} (\url{http://www.iana.org/time-zones}) 
+  =tz database= (\url{http://www.iana.org/time-zones}) 
   calls `Europe/Berlin', the first time should be
-  \texttt{2012-10-18 20:00:09}.  Suppose your computer was in
+  =2012-10-18 20:00:09=.  Suppose your computer was in
   `America/Chicago' and you recompiled this vignette.  Then the first
-  time would become \texttt{2012-10-18 13:00:09}.  Which is right: it
+  time would become =2012-10-18 13:00:09=.  Which is right: it
   is the correct time, only translated into Chicago local time.} %
 
-<<>>=
+#+BEGIN_SRC R -n :exports both
 prices <- c(139.82, 139.82, 139.8, 139.81, 139.77, 139.85, 
             139.76, 139.76, 139.77, 139.8, 139.86, 140.46, 
             140.39, 140.14, 140.15)
@@ -1857,19 +1856,19 @@ times <- structure(c(1350583209, 1350583271, 1350583319,
                      1350675751, 1350888315, 1350889533), 
                    class = c("POSIXct", "POSIXt"), tzone = "")
 data.frame(times, prices)
-@
+#+END_SRC
 
-A \texttt{plot} of price against time looks like this.
+A =plot= of price against time looks like this.
 
 <<fig=true, width = 5, height = 3.5>>=
 plot(times, prices, type = "s")
-@
+#+END_SRC
 
 Such a plot is fine for many purposes, but the contract for which we
 have prices is only traded from Monday to Friday (not on weekends),
 and only from 08:00 to 22:00 Europe/Berlin time.  So the plot should
 omit those times at which no trading takes place.  This is what the
-function \texttt{plotTradingHours} does.
+function =plotTradingHours= does.
 
 <<fig=true, width = 5, height = 3.5>>=
 tmp <- plotTradingHours(x = prices, t = times, 
@@ -1878,7 +1877,7 @@ tmp <- plotTradingHours(x = prices, t = times,
                         fromHHMMSS = "080000", 
                         toHHMMSS = "220000",
                         type = "s")
-@
+#+END_SRC
 
 What we need for such a plot is a function that maps actual time to a
 point on the \mbox{$x$-scale}, while the \mbox{$y$-scale} stays
@@ -1889,47 +1888,47 @@ something like this: \medskip
   \emph{day} & \emph{$x$-position} & \emph{mapped $x$-position} \\
   Thursday   & 1                   & 1                          \\
   Friday     & 2                   & 2                          \\
-  Saturday   & 3                   & \texttt{<removed>}         \\
-  Sunday     & 4                   & \texttt{<removed>}         \\
+  Saturday   & 3                   & =<removed>=         \\
+  Sunday     & 4                   & =<removed>=         \\
   Monday     & 5                   & 3                          \\
 \end{tabular}\medskip
 
-\noindent This mapping is what \texttt{plotTradingHours} provides. And not 
+\noindent This mapping is what =plotTradingHours= provides. And not 
 much more: the design goal of the function is to make it as much as
 possible an ordinary plot; or more specifically, to make it as similar
-as possible to the \texttt{plot} function. Indeed,
-\texttt{plotTradingHours} calls \texttt{plot} with a small number of
+as possible to the =plot= function. Indeed,
+=plotTradingHours= calls =plot= with a small number of
 default settings:
 <<eval = FALSE>>=
 list(type = "l", xaxt = "n", xlab = "", ylab = "")
-@ 
-These settings can all be overridden: \texttt{\ldots} arguments are
-passed to \texttt{plot} (note that we already set \texttt{s} as the
-plot's \texttt{type} in the last code chunk).  The only required
-setting is suppressing the \mbox{$x$-axis} with \texttt{xaxt = "n"},
-because \texttt{plotTradingHours} will create its own $x$-axis via a
-call to \texttt{axis(1, \ldots)}.  In case you wish to use your own
-axis specification, either set \texttt{do.plotAxis} to \texttt{FALSE}
-or pass settings to \texttt{axis} through the argument
-\texttt{axis1.par}.
+#+END_SRC 
+These settings can all be overridden: =\ldots= arguments are
+passed to =plot= (note that we already set =s= as the
+plot's =type= in the last code chunk).  The only required
+setting is suppressing the \mbox{$x$-axis} with =xaxt = "n"=,
+because =plotTradingHours= will create its own $x$-axis via a
+call to =axis(1, \ldots)=.  In case you wish to use your own
+axis specification, either set =do.plotAxis= to =FALSE=
+or pass settings to =axis= through the argument
+=axis1.par=.
 
 
 \section{More examples}
 
-Like \texttt{plot}, \texttt{plotTradingHours} is typically called for
+Like =plot=, =plotTradingHours= is typically called for
 its side effect: creating a plot.  But it also returns useful
-information (invisibly, unless called with \texttt{do.plot = FALSE}).
+information (invisibly, unless called with =do.plot = FALSE=).
 
-<<>>=
+#+BEGIN_SRC R -n :exports both
 str(tmp)
-@ 
+#+END_SRC 
 This information can be used to add elements to plots.
 
 \subsection{Adding grid lines}
 
-We can add grid lines with \texttt{abline}.  The $y$-axis poses no
+We can add grid lines with =abline=.  The $y$-axis poses no
 special problem.  The positions of the $x$-axis ticks are returned
-from \texttt{plotTradingHours}.
+from =plotTradingHours=.
 
 <<fig=true, width = 5, height = 3.5>>=
 tmp <- plotTradingHours(x = prices, t = times, 
@@ -1940,14 +1939,14 @@ tmp <- plotTradingHours(x = prices, t = times,
                         type = "s")
 abline(h = axTicks(2), v = tmp$axis.pos, 
        col = "lightgrey", lty = "dotted")
-@ 
+#+END_SRC 
 
 If we wan to add to a specific time, say 19 October, 13:10:23, we can
-use the function \texttt{map} that the call to
-\texttt{plotTradingHours} returns.  We first create the specific time
-with, for example, \texttt{ISOdatetime} or \texttt{strptime}.
+use the function =map= that the call to
+=plotTradingHours= returns.  We first create the specific time
+with, for example, =ISOdatetime= or =strptime=.
 
-<<>>=
+#+BEGIN_SRC R -n :exports both
 ## Again, I do not specify a time zone since time zones depend on the 
 ## operating system. To reproduce the example, you may also use this
 ## representation:
@@ -1957,9 +1956,9 @@ with, for example, \texttt{ISOdatetime} or \texttt{strptime}.
 
 mytime <- ISOdatetime(2012, 10, 19, 13, 10, 23)
 mytime
-@ 
+#+END_SRC 
 
-\noindent Now we use \texttt{map} to translate this time into the appropriate
+\noindent Now we use =map= to translate this time into the appropriate
 $x$-position.
 
 
@@ -1972,20 +1971,20 @@ tmp <- plotTradingHours(x = prices, t = times,
 abline(h = axTicks(2), v = tmp$axis.pos, 
        col = "lightgrey", lty = "dotted")
 abline(v = tmp$map(mytime)$t, col = "red")
-@ 
+#+END_SRC 
 
-\noindent The function \texttt{map} returns a list with two components,
-\texttt{t} and \texttt{ix}.
-<<>>=
+\noindent The function =map= returns a list with two components,
+=t= and =ix=.
+#+BEGIN_SRC R -n :exports both
 tmp$map(mytime)
-@ 
+#+END_SRC 
 The first component is the appropriate position on the
-\mbox{$x$-axis}; since it is a time it is called \texttt{t}.  The
+\mbox{$x$-axis}; since it is a time it is called =t=.  The
 second component gives the subscripts to values that should actually
 be plotted. Example: suppose that, for whatever reason, we wish to
 plot points at several prices at 21:00:00 for several days.
 
-<<>>=
+#+BEGIN_SRC R -n :exports both
 ## moretimes <- structure(c(1350586800, 1350673200, 1350759600), 
 ##                        class = c("POSIXct", "POSIXt"), tzone = "")
 ##
@@ -1995,16 +1994,16 @@ values <- seq(140, 140.20, length.out = length(moretimes))
 data.frame(times = moretimes, 
            weekday = format(moretimes, "%A"), 
            values)
-@ 
+#+END_SRC 
 But 20 October 2012 falls on a Saturday, and so it does not appear in the plot. 
-<<>>=
+#+BEGIN_SRC R -n :exports both
 tmp$map(moretimes)
-@ 
+#+END_SRC 
 The values that should be plotted can conveniently be found by use
-\texttt{ix}.
-<<>>=
+=ix=.
+#+BEGIN_SRC R -n :exports both
 values[tmp$map(moretimes)$ix]
-@
+#+END_SRC
 
 
 
@@ -2032,13 +2031,13 @@ values[tmp$map(moretimes)$ix]
 
 * Scaling series
 
-\noindent The function \texttt{scale1} rescales time-series.  It is a
+\noindent The function =scale1= rescales time-series.  It is a
 generic function; currently there are methods for numeric vectors and
-for \texttt{zoo} objects.
+for =zoo= objects.
 
 \section{Numeric matrices}
 
-<<>>=
+#+BEGIN_SRC R -n :exports both
 x <- c(9400.04, 9435.15, 9428, 9506.2, 9497.84, 9421.61, 9473.24, 
        9510.17, 9540.51, 9733.81, 9717.71, 9742.96, 9715.9, 9730.12, 
        9720.11, 9631.04, 9392.02, 9349.22, 9406.91, 9336.73, 9373.48, 
@@ -2051,20 +2050,20 @@ t <- structure(c(16072, 16073, 16076, 16077, 16078,
                class = "Date")
 
 scale1(x)
-@ 
+#+END_SRC 
 
-With \texttt{centre}, the daily mean \emph{return} is subtracted.
-<<>>=
+With =centre=, the daily mean \emph{return} is subtracted.
+#+BEGIN_SRC R -n :exports both
 scale1(x, centre = TRUE)
-@ 
+#+END_SRC 
 
-With \texttt{scale}, the daily \emph{returns} are rescaled to to that
+With =scale=, the daily \emph{returns} are rescaled to to that
 standard deviation.
-<<>>=
+#+BEGIN_SRC R -n :exports both
 sd(returns(scale1(x, scale = 0.02)))
 plot(x, type = "l")
 plot(scale1(x, scale = 0.02))
-@ 
+#+END_SRC 
 
 %% \section{Handling NAs}
 
@@ -2079,7 +2078,7 @@ plot(scale1(x, scale = 0.02))
 
 \begin{mdframed}
   If all trades are closed (ie, the current positions are all zero),
-  use \texttt{pl}.
+  use =pl=.
 \end{mdframed}
 
 \begin{mdframed}
@@ -2088,8 +2087,8 @@ plot(scale1(x, scale = 0.02))
 \end{mdframed}
 
 \begin{mdframed}
-  \emph{I have a signal series (\texttt{+1}, \texttt{0}, \texttt{0},
-    \texttt{+1}, \ldots{}) and need to transform it into a
+  \emph{I have a signal series (=+1=, =0=, =0=,
+    =+1=, \ldots{}) and need to transform it into a
     profit-and-loss series.}
 \end{mdframed}
 
@@ -2098,11 +2097,11 @@ plot(scale1(x, scale = 0.02))
     profit-and-loss between two timestamps.}
 \end{mdframed}
 
-Call the two timestamps \texttt{t0} and \texttt{t1}.  Unless the
+Call the two timestamps =t0= and =t1=.  Unless the
 position was zero at t0 and t1, we can compute the profit/loss only if
 we have prices for the positions at these points in time.  In case the
-position was indeed zero, you can use \texttt{pl}; the transactions
-are stored in a journal \texttt{j}.
+position was indeed zero, you can use =pl=; the transactions
+are stored in a journal =j=.
 
 <<eval=false>>=
 subset(j, timestamp >= t0 & timestamp <=t1)
@@ -2111,7 +2110,7 @@ subset(j, timestamp >= t0 & timestamp <=t1)
 But even the more general case is not so complicated, after all.
 
 \begin{enumerate}
-\item Compute the position at \texttt{t0} and make it a journal j0.
+\item Compute the position at =t0= and make it a journal j0.
 
 \item Take all transactions at $t > t_\mathrm{0}$ and $t \leq
    t_\mathrm{1}$ and put them into a journal $J$.
@@ -2132,13 +2131,13 @@ But even the more general case is not so complicated, after all.
 
 3) combine with journal since month start
 
-4) use average (\texttt{avg}) on all instruments
+4) use average (=avg=) on all instruments
 
 
 
-* Appendix: R-version
+* Appendix: Output of =sessionInfo()=
 
-#+BEGIN_SRC R :results output :exports both
+#+BEGIN_SRC R :results output :exports results
 sessionInfo()
 #+END_SRC
 
@@ -2159,7 +2158,22 @@ locale:
 attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
+other attached packages:
+ [1] portfolioTools_0.0-5 pstplots_0.1-1       NMOF_0.36-2         
+ [4] zoo_1.7-12           textutils_0.0-5      org_0.0-2           
+ [7] mailtools_0.1-3      datetimeutils_0.0-5  RODBC_1.3-11        
+[10] PMwR_0.1-74          database_0.1-37     
+
 loaded via a namespace (and not attached):
-[1] compiler_3.2.1 tools_3.2.1
+[1] lattice_0.20-33 grid_3.2.1      xts_0.9-7       fastmatch_1.0-4
+[5] tools_3.2.1     parallel_3.2.1  compiler_3.2.1  base64enc_0.1-2
+[9] IBrokers_0.9-12
 #+end_example
+
+* Footnotes
+
+[fn:1] This notation is inspired by the syntax of =ledger=
+  files. See [[http://www.ledger-cli.org/]] .
+
+
 
