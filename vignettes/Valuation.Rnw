@@ -42,6 +42,11 @@ require("zoo")
 @
 
 
+\begin{framed}
+  \noindent This file is no longer updated and will be removed in a
+  future release of the package. Please see the Manual.
+\end{framed}
+
 Valuing a position can mean two things: compute theoretical prices,
 or market prices.
 

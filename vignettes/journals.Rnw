@@ -16,6 +16,11 @@ require("PMwR")
 require("zoo")
 @
 
+\begin{framed}
+  \noindent This file is no longer updated and will be removed in a
+  future release of the package. Please see the Manual.
+\end{framed}
+
 
 \pagestyle{plain}
 

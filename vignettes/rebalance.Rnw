@@ -35,6 +35,12 @@
 require("PMwR")
 @
 
+\begin{framed}
+  \noindent This file is no longer updated and will be removed in a
+  future release of the package. Please see the Manual.
+\end{framed}
+
+
 \noindent The function \texttt{rebalance} computes the transactions
 necessary for moving from one portfolio to another.
 

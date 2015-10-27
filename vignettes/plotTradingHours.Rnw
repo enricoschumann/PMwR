@@ -36,6 +36,12 @@
 require("PMwR")
 @
 
+\begin{framed}
+  \noindent This file is no longer updated and will be removed in a
+  future release of the package. Please see the Manual.
+\end{framed}
+
+
 \section{An example}
 
 We are given these prices of the Bund future contract, traded at the

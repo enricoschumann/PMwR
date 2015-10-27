@@ -45,6 +45,11 @@ require("PMwR")
 require("zoo")
 @
 
+\begin{framed}
+  \noindent This file is no longer updated and will be removed in a
+  future release of the package. Please see the Manual.
+\end{framed}
+
 \section{Introduction}
 
 This chapter explains how to test trading strategies with the

@@ -39,6 +39,11 @@ require("PMwR")
 require("zoo")
 @
 
+\begin{framed}
+  \noindent This file is no longer updated and will be removed in a
+  future release of the package. Please see the Manual.
+\end{framed}
+
 \noindent The function \texttt{returns} computes returns for various
 types of objects. The return of an asset in period~$t$ is defined as
 \begin{align} \label{eq:return} 
