@@ -1,5 +1,7 @@
 2015-10-13  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/backtest.R, man/backtest.Rd: removed files
+
 	* vignettes/An_overview.Rnw: added to `for developers' section
 
 2015-10-13  Enrico Schumann  <es@enricoschumann.net>
