@@ -566,20 +566,54 @@ already.
 
 ** Data structure
 
-We have one or several price series of length~=T=. The
-=btest= function runs from =b + 1= to =T=. The
-variable~=b= is the burn-in\index{burn-in},%
-\marginpar{=b=\qquad burn-in} %
-and it needs to be a positive integer; in rare cases it may be zero.
-When we take decisions that are based on past data, we will lose at
-least one data point.
+We have one or several price series of length =T=. Internally, these
+prices are stored in numeric matrices.
 
-Here is an important default: at time~=t=, we can use
-information up to time =t - 1=.  Suppose that =t=
-were~4.  We may use all information up to time~3, and trade at the
-=open= in period~4.
+For a single asset, it is a matrix of prices with four columns: open,
+high, low and close. For \code{n} assets, a list of length four:
+\code{prices[[1]\]} is then a matrix with \code{n} columns containing
+the open prices for the assets; \code{prices[[]]} is a matrix with
+the high prices, and so on. If only close prices are used, then for
+a single asset, either a matrix of one column or a numeric vector;
+for multiple assets a list of length one, containing the matrix of
+close prices. (For example, with 100 close prices of 5 assets, the
+prices should be arranged in a matrix \code{p} of size 100 times 5;
+and \code{prices = list(p)}.)
 
-## TODO create nice display
+For a single asset:
+#+BEGIN_EXAMPLE
+open  high   low  close
+ +-+   +-+   +-+   +-+
+ | |   | |   | |   | |
+ | |   | |   | |   | |
+ | |   | |   | |   | |
+ | |   | |   | |   | |
+ | |   | |   | |   | |
+ +-+   +-+   +-+   +-+
+#+END_EXAMPLE
+
+With two assets:
+
+#+BEGIN_EXAMPLE
+ open    high    low    close
++-+-+   +-+-+   +-+-+   +-+-+  
+| | |   | | |   | | |   | | |
+| | |   | | |   | | |   | | |
+| | |   | | |   | | |   | | |
+| | |   | | |   | | |   | | |
+| | |   | | |   | | |   | | |
++-+-+   +-+-+   +-+-+   +-+-+
+#+END_EXAMPLE
+
+The =btest= function runs from =b + 1= to =T=. The variable~=b= is the
+burn-in\index{burn-in},% \marginpar{=b=\qquad burn-in} % and it needs
+to be a positive integer; in rare cases it may be zero.  When we take
+decisions that are based on past data, we will lose at least one data
+point.
+
+Here is an important default: at time~=t=, we can use information up
+to time =t - 1=.  Suppose that =t= were~4.  We may use all information
+up to time~3, and trade at the =open= in period~4.
 
 #+BEGIN_EXAMPLE
 t    time      open  high  low   close
