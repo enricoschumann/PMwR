@@ -1,15 +1,15 @@
 \name{AdjustSeries}
-\alias{divAdjust}
-\alias{splitAdjust}
+\alias{div_adjust}
+\alias{split_adjust}
 \title{
-  Adjust for Dividends and Splits
+  Adjust Time-Series for Dividends and Splits
 }
 \description{
   Adjust a time-series for dividends and splits.
 }
 \usage{
-divAdjust(x, t, div, backward = TRUE, additive = FALSE)
-splitAdjust(x, t, ratio, backward = TRUE)
+div_adjust(x, t, div, backward = TRUE, additive = FALSE)
+split_adjust(x, t, ratio, backward = TRUE)
 }
 \arguments{
   \item{x}{
@@ -32,11 +32,11 @@ splitAdjust(x, t, ratio, backward = TRUE)
     share per share that you own.)
     
 }
-  \item{backward}{
-    logical
+\item{backward}{
+  logical
 }
-  \item{additive}{
-    logical
+\item{additive}{
+  logical
 }
 }
 \details{
@@ -66,6 +66,6 @@ x <- c(9.777, 10.04, 9.207, 9.406)
 div <- 0.7
 t <- 3
 
-divAdjust(x, t, div)
-divAdjust(x, t, div, FALSE)
+div_adjust(x, t, div)
+div_adjust(x, t, div, FALSE)
 }

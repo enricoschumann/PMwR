@@ -10,7 +10,7 @@ importFrom(zoo, as.zoo)
 importFrom(zoo, index)
 importFrom(zoo, coredata)
 importFrom(zoo, zoo)
-importFrom(textutils, rmspace)
+importFrom(textutils, trim)
 importFrom(textutils, valign)
 importFrom(textutils, strexp)
 importFrom(textutils, toHTML)
@@ -25,7 +25,7 @@ export(
     as.NAVseries,
     btest,
     closeOnFirst,
-    divAdjust,
+    div_adjust,
     isValidISIN,
     journal,
     limit,
@@ -39,7 +39,7 @@ export(
     scale1,
     scaleToUnity,
     scaleTrades,
-    splitAdjust,
+    split_adjust,
     splitTrades,
     twExposure,
     valuation

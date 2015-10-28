@@ -80,7 +80,8 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
   }
   \item{\dots}{
     other named arguments. All functions (signal, signalYN, rebalanceYN,
-    printInfo) will have access to these arguments.
+    printInfo) will have access to these arguments. See Details for
+    reserved argument names.
   }
   \item{add}{
 
@@ -142,28 +143,29 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
 \details{
   
   The function provides an accounting framework for trading rules. The
-  basic ingredients are time series that are supposed to consist of
-  \acronym{OHLC} bars (these bars need actually not be equally spaced)
-  and several functions that map these series into positions.
-
+  basic ingredients are time series in the form of \acronym{OHLC} bars
+  (which need not be equally spaced) and several functions that map
+  these series into positions.
+  
   \code{backtest} runs a loop from \code{b + 1} to
   \code{NROW(prices)}. In a given iteration \code{t} it should should
   use information from periods prior to \code{t} (but nothing will
-  ensure this); trading then takes place at the opening price of
+  ensure this). Trading then takes place at the opening price of
   \code{t}. For slow-to-compute signals this is reasonable if there is
-  time lag between close and open (eg, for daily prices). For higher
-  frequencies such as every second, the signal function should be fast to
-  compute; alternatively, it may be better to use a larger time offset
-  (ie, use information from periods \code{<< t}).
+  time lag between close and open. For daily prices, for instance,
+  signals could be computed overnight. For higher frequencies, such as
+  every second, the signal function should be fast to compute;
+  alternatively, it may be better to use a larger time offset (i.e., use
+  information from periods \code{<< t}).
 
   If no \acronym{ohlc} bar are available, a single series (assumed to be
   close prices) can be passed.  These will then be expanded. In effect, we
   might then use information up to the close of \code{t - 1}, and trade at
   the close of \code{t}.
-
+  
   Reserved names are currently these: "Open", "High", "Low", "Close",
-  "Wealth", "Cash", "Time", "Portfolio", "SuggestedPortfolio",
-  "Globals".
+  "Wealth", "Cash", "Time", "Timestamp", "Portfolio",
+  "SuggestedPortfolio", "Globals".
 
 }
 \value{
@@ -176,7 +178,7 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
   and  cumTC, trades, initial.wealth
 }
 \references{
-  Enrico Schumann. Portfolio Managemnt with R.
+  Enrico Schumann.\emph{Portfolio Managemnt with R.}
 }
 \author{
   Enrico Schumann
@@ -184,18 +186,6 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
 \note{
   This function is still very \strong{experimental} and will likely change.
 }
-
-
 \examples{
-## example 1: MACD on a single asset
-## ...
-
-## example 2: Gamma trading
-## ...
-
-## example 3: portfolio optimisation
-## ...
-
-## see manual
-
+## For examples, please see Manual.
 }

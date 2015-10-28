@@ -48,7 +48,6 @@ pl(amount, price, instrument = NULL, timestamp = NULL,
 
   Computes profit and/or loss.
   
-
 }
 \value{
 
@@ -60,7 +59,7 @@ pl(amount, price, instrument = NULL, timestamp = NULL,
   Enrico Schumann
 }
 \seealso{
-  \code{\link{backtest}}
+  \code{\link{btest}},   \code{\link{returns}}
 }
 \examples{
 J <- journal(timestamp = c(1, 2, 3),
@@ -74,5 +73,4 @@ J <- journal(timestamp  = c(1,2,3,1,2,3),
              amount     = c(1, 1, -2, 1,1,-2),
              price      = c(100, 102, 101, 100, 102, 105),
              instrument = c(rep("A", 3), rep("B", 3)))
-pl(J)
-}
+pl(J)}

@@ -1,11 +1,9 @@
 ## -*- truncate-lines: t; -*-
-## Time-stamp: <2014-07-31 13:23:43 CEST (es)>
-
 ## x <- c(9,9,10,8,10,11)
 ## div <- 2
 ## t <- 4
 
-divAdjust <- function(x, t, div, backward = TRUE, additive = FALSE) {
+div_adjust <- function(x, t, div, backward = TRUE, additive = FALSE) {
     if (!is.null(dim(x)))
         stop(sQuote("x"), " must be a vector")
     tmp <- t > 1L
@@ -33,7 +31,7 @@ divAdjust <- function(x, t, div, backward = TRUE, additive = FALSE) {
     new.series        
 }
 
-splitAdjust <- function(x, t, ratio, backward = TRUE) {
+split_adjust <- function(x, t, ratio, backward = TRUE) {
     if (!is.null(dim(x)))
         stop(sQuote("x"), " must be a vector")
     tmp <- t > 1L

@@ -31,6 +31,8 @@ btest  <- function(prices,               ##
         stop("to convert weights to positions, either specify ",
                 sQuote("prices0"), " or set ", sQuote("b"), " > 0")
 
+    if (add)
+        .NotYetUsed("add", FALSE)
     
     db.signal <- if (is.function(signal) && isdebugged(signal))
         TRUE else FALSE

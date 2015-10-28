@@ -1,6 +1,25 @@
-2015-10-13  Enrico Schumann  <es@enricoschumann.net>
+2015-10-28  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/backtest.R, man/backtest.Rd: removed files
+	* R/position.R (print.position): print nothing (instead of empty
+	string) when timestamp is missing
+
+	* man/tradeanalysis.Rd, man/pl.Rd: doc update
+
+	* manual/manual.org: various updates
+
+2015-10-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/backtest.R, man/backtest.Rd: removed files ('backtest' has not
+	been exported for almost two years now; the function has been
+	superseded by 'btest')
+
+	* man/divAdjust.Rd: renamed 'divAdjust' (now 'div_adjust') and
+	'splitAdjust' (now 'split_adjust')
+
+	* NAMESPACE: import 'trim' (instead of 'rmspace') from package
+	textutils
+
+	* man/btest.Rd: doc update
 
 	* vignettes/An_overview.Rnw: added to `for developers' section
 

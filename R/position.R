@@ -23,7 +23,12 @@ position.default <- function(amount, timestamp, instrument, when,
             warning(sQuote("when"), " specified, but no valid timestamp supplied")
         timestamp <- rep(1, length(amount))        
     }
-    if (missing(when)) {
+
+    if (missing(when) && all(is.na(timestamp))) {
+        when <- ""
+        timestamp <- rep("", length(amount))        
+    } else if (missing(when)) {
+        ## TODO: if 'when' is missing, we can simply sum the amounts
         when <- max(timestamp)
     } else if (is.character(when)) {
         if (when[1L] == "last" || when[1L] == "newest" || when[1L] == "latest")
@@ -39,6 +44,10 @@ position.default <- function(amount, timestamp, instrument, when,
         timestamp <- timestamp[io]
         amount  <- amount[io]
         instrument <- instrument[io]
+    }
+
+    if (any(is.na(timestamp)) && is.unsorted(timestamp,na.rm = TRUE)) {
+        stop("cannot compute position: journal is not sorted and timestamp has NA values ")
     }
 
     if (is.null(instrument) || !length(instrument)) 
@@ -95,9 +104,12 @@ position.btest <- function(amount, when, ...) {
 print.position <- function(x, ..., sep = NA) {
     original.x <- x
     if (!is.na(sep))
-        stop(sQuote("sep"), " is not yet implemented")
+        .NotYetUsed("sep")
     instrument <- attr(x, "instrument")
-    if (!all(is.na(instrument)))
+    timestamp <- attr(x, "timestamp")
+    if (all(is.na(timestamp)) || (is.character(timestamp) && all(timestamp == "")))
+        rownames(x) <- NULL
+    if (all(is.na(instrument)))
         colnames(x) <- instrument
     attr(x, "instrument") <- NULL
     attr(x, "timestamp") <- NULL

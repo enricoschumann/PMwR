@@ -104,7 +104,7 @@ print.journal <- function(x, ..., width = getOption("width"),
     subs <- ""
     if (!is.null(x$instruments)) {
         insts <- sort(unique(x$instrument))
-        insts <- as.character(rmspace(insts))
+        insts <- as.character(trim(insts))
         if (length(insts))
             subs <- paste0(" in ", paste(insts, sep = "", collapse = ", "))
     } 
