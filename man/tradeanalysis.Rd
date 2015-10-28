@@ -79,7 +79,7 @@ zero position.
   Enrico Schumann
 }
 \seealso{
-  \code{\link{backtest}}
+  \code{\link{btest}}
 }
 \examples{
 n <- c(1,1,-3,-1,2)
