@@ -7,7 +7,9 @@
   Create price table
 }
 \usage{
-pricetable(instrument, when, price, price.instrument = NULL, price.timestamp = NULL, missing = "error")
+pricetable(instrument, when, price,
+           price.instrument = NULL, price.timestamp = NULL,
+           missing = "error")
 }
 \arguments{
   \item{instrument}{
@@ -36,10 +38,11 @@ pricetable(instrument, when, price, price.instrument = NULL, price.timestamp = N
   A matrix with class attribute pricetable
 }
 \references{
-  ES
+  Schumann, E. (2015) \emph{Portfolio Management with
+    R}. \url{http://enricoschumann.net/R/packages/PMwR/}
 }
 \author{
-  ES
+  Enrico Schumann
 }
 \seealso{
   \code{\link{match}}

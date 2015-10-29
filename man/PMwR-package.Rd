@@ -17,14 +17,14 @@
   The package comprises functions that have been written in various
   circumstances and for various purposes.  Which is an apologetic way of
   saying that in the current version, the interfaces to functions are
-  not stable (eg, argument names are currently being made consistent
-  across functions); in some cases, generics will be introduced.  The
-  \bold{recommended practice} is therefore currently to \bold{explicitly name
-  arguments in function calls} (and not pass arguments by position).  Any
-  changes in argument names will be documented in the ChangeLog and so
-  can be easily followed.
+  not stable (e.g., argument names are currently being made consistent
+  across functions); in some cases, generic functions will be
+  introduced.  The currently \bold{recommended practice} is therefore to
+  \bold{explicitly name arguments in function calls} (and not pass
+  arguments by position).  Any changes in argument names will be
+  documented in the ChangeLog and so can be easily followed.
 
-  For more details see the Manual.
+  The Manual provides more details.
 }
 \author{
 Enrico Schumann
@@ -37,10 +37,8 @@ Gilli, M., Maringer, D. and Schumann, E. (2011) \emph{Numerical Methods
 and Optimization in Finance}. Elsevier.
 \url{http://www.elsevierdirect.com/product.jsp?isbn=9780123756626}
 
-Schumann, E. (2013) \emph{Portfolio Management with R}.
+Schumann, E. (2015) \emph{Portfolio Management with
+R}. \url{http://enricoschumann.net/R/packages/PMwR/}
 
 } 
-\examples{
-## see the Manual
-}
 \keyword{package}

@@ -51,7 +51,8 @@ journal(amount, \dots)
 }
 \arguments{
   \item{timestamp}{
-    An atomic vector. Timestamps should typically be sortable.
+    An atomic vector of mode numeric or character. Timestamps should
+    typically be sortable.
   }
   \item{amount}{
     numeric

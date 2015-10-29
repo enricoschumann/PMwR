@@ -23,7 +23,7 @@ as.NAVseries(x, ...)
     numeric
 }
   \item{timestamp}{
-    time stamp (typically \code{\link{Date}} or \code{\link{POSIXct}}
+    time stamp (typically \code{\link{Date}} or \code{\link{POSIXct}})
 }
   \item{instrument}{
     character
@@ -51,7 +51,10 @@ as.NAVseries(x, ...)
 A \code{NAVseries}
 }
 \references{
-  ES - PMwR
+
+  Schumann, E. (2015) \emph{Portfolio Management
+  withR}. \url{http://enricoschumann.net/R/packages/PMwR/}
+
 }
 \author{
   Enrico Schumann

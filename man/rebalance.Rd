@@ -71,9 +71,12 @@ rebalance(current, target, price,
   \item{notional}{\ldots}
 
 }
-%% \references{
-%% Enrico Schumann - Portfoliomanagement with R
-%% }
+\references{
+
+  Schumann, E. (2015) \emph{Portfolio Management with
+    R}. \url{http://enricoschumann.net/R/packages/PMwR/}
+
+}
 \author{
   Enrico Schumann
 }
@@ -84,5 +87,5 @@ rebalance(current, target, price,
   \code{\link{journal}}
 }
 \examples{
-## see the vignette
+## see Manual
 }
