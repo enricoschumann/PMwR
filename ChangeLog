@@ -1,5 +1,7 @@
 2015-11-01  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-76
+
 	* R/journal.R (`[.journal`): default for 'match.against' is now
 	all character fields in journal. For the old behaviour, specify
 	'match.against = c("instrument", "account")'.
