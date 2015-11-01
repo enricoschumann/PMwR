@@ -1,6 +1,6 @@
 #+TITLE: Portfolio Management with R
 #+AUTHOR: Enrico Schumann
-#+DATE: 1 NOVEMBER 2015
+#+DATE: 1 November 2015
 #+OPTIONS: toc:nil
 #+BIND: org-latex-default-packages-alist nil
 #+BIND: org-use-sub-superscripts {}
@@ -2709,7 +2709,7 @@ so:
 
 We can plot the exposure.
 
-#+BEGIN_SRC R -n :results graphics :file ~/Packages/PMwR/manual/exposure.png :width 400 :height 300 :exports both :type cairo :family EBGaramond
+#+BEGIN_SRC R -n :results graphics :file ~/Packages/PMwR/manual/exposure.pdf :width 4 :height 3 :exports both
 par(bty = "n", mar = c(4, 4, 0, 0), tck = 0.005, 
     las = 1, ps = 12)
 plot(c(time[1], time), cumsum(c(0, amount)), 
@@ -2717,7 +2717,7 @@ plot(c(time[1], time), cumsum(c(0, amount)),
 #+END_SRC
 
 #+RESULTS:
-[[file:~/Packages/PMwR/manual/exposure.png]]
+[[file:~/Packages/PMwR/manual/exposure.pdf]]
 
 #+ATTR_HTML: :width 20% :height 20%
 #+BEGIN_HTML
@@ -2821,7 +2821,6 @@ local time.)
                        1350675751, 1350888315, 1350889533), 
                      class = c("POSIXct", "POSIXt"), tzone = "")
   data.frame(times, prices)
-  '
 #+END_SRC
 
 #+RESULTS:
@@ -2846,12 +2845,12 @@ local time.)
 
 A =plot= of price against time looks like this.
 
-#+BEGIN_SRC R :results graphics :file iplot1.pdf :width 6 :height 5 :exports both
+#+BEGIN_SRC R :results graphics :file ~/Packages/PMwR/manual/iplot1.pdf :width 6 :height 5 :exports both
 plot(times, prices, type = "s")
 #+END_SRC
 
 #+RESULTS:
-[[file:iplot1.pdf]]
+[[file:~/Packages/PMwR/manual/iplot1.pdf]]
 
 #+ATTR_HTML: :width 50% :height 20%
 #+BEGIN_HTML
@@ -2865,7 +2864,7 @@ and only from 08:00 to 22:00 Europe/Berlin time. So the plot should
 omit those times at which no trading takes place. This is what the
 function =plotTradingHours= does.
 
-#+BEGIN_SRC R :results graphics :file iplot2.pdf :width 6 :height 5 :exports both
+#+BEGIN_SRC R :results graphics :file ~/Packages/PMwR/manual/iplot2.pdf :width 6 :height 5 :exports both
 tmp <- plotTradingHours(x = prices, t = times, 
                         interval = "1 sec", 
                         labels = "day",
@@ -2875,7 +2874,7 @@ tmp <- plotTradingHours(x = prices, t = times,
 #+END_SRC
 
 #+RESULTS:
-[[file:iplot2.pdf]]
+[[file:~/Packages/PMwR/manual/iplot2.pdf]]
 
 What we need for such a plot is a function that maps actual time to a
 point on the /x/-scale, while the /y/-scale stays unchanged. If we
@@ -2937,7 +2936,7 @@ problem.  The positions of the $x$-axis ticks are returned from
 =plotTradingHours=.
 
 
-#+BEGIN_SRC R :results graphics :file iplot3.pdf :width 6 :height 5 :exports both
+#+BEGIN_SRC R :results graphics :file ~/Packages/PMwR/manual/iplot3.pdf :width 6 :height 5 :exports both
 tmp <- plotTradingHours(x = prices, t = times, 
                         interval = "1 sec", 
                         labels = "day",
@@ -2949,7 +2948,7 @@ abline(h = axTicks(2), v = tmp$axis.pos,
 #+END_SRC 
 
 #+RESULTS:
-[[file:iplot3.pdf]]
+[[file:~/Packages/PMwR/manual/iplot3.pdf]]
 
 If we wan to add to a specific time, say 19 October, 13:10:23, we can
 use the function =map= that the call to =plotTradingHours= returns.
@@ -2975,7 +2974,7 @@ Now we use =map= to translate this time into the appropriate
 /x/-position.
 
 
-#+BEGIN_SRC R :results graphics :file iplot4.pdf :width 6 :height 5 :exports both
+#+BEGIN_SRC R :results graphics :file ~/Packages/PMwR/manual/iplot4.pdf :width 6 :height 5 :exports both
 tmp <- plotTradingHours(x = prices, t = times, 
                         interval = "1 sec", labels = "day",
                         fromHHMMSS="080000", 
@@ -2987,7 +2986,7 @@ abline(v = tmp$map(mytime)$t, col = "red")
 #+END_SRC 
 
 #+RESULTS:
-[[file:iplot4.pdf]]
+[[file:~/Packages/PMwR/manual/iplot4.pdf]]
 
 The function =map= returns a list with two components, =t= and =ix=.
 #+BEGIN_SRC R -n :exports both :results output
@@ -3050,7 +3049,7 @@ values[tmp$map(moretimes)$ix]
 
 # * A graphic
 
-# #+BEGIN_SRC R :results graphics :file test.pdf :width 7 :height 6 :exports results
+# #+BEGIN_SRC R :results graphics :file ~/Packages/PMwR/manual/test.pdf :width 7 :height 6 :exports results
 #   plot(1:10)
 # #+END_SRC
 
