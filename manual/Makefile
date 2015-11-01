@@ -1,5 +1,3 @@
-pdf : 
-	R CMD Sweave manual.Rnw
-	latexmk -pdfps manual.tex
-clean :
-	latexmk -C
+release:
+	cp PMwR.pdf /home/es/ESdotnet/R/packages/PMwR/manual/
+	cp PMwR.html /home/es/ESdotnet/R/packages/PMwR/manual/

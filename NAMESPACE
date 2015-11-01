@@ -27,6 +27,8 @@ export(
     closeOnFirst,
     div_adjust,
     isValidISIN,
+    as.journal,
+    is.journal,
     journal,
     limit,
     pl,
@@ -48,8 +50,9 @@ export(
 S3method(`[`, journal)
 ## S3method(`[`, position)
 S3method(aggregate, journal)
-S3method(as.data.frame, journal)
 S3method(as.NAVseries, zoo)
+S3method(as.data.frame, journal)
+S3method(as.journal, data.frame)
 S3method(as.zoo, NAVseries)
 S3method(as.zoo, p_returns)
 S3method(c, journal)

@@ -1,16 +1,20 @@
 ## -*- truncate-lines: t; fill-column: 65; comment-column: 50; -*-
 
-pricetable <- function(instrument, when,
-                       price,
+pricetable <- function(instrument, when, price,
                        price.instrument = NULL, price.timestamp = NULL,
                        missing = "error") {
 
-    if (is.null(price.instrument))
-        price.instrument <- colnames(price)
-    if (is.null(price.timestamp))
-        price.timestamp <- rownames(price)
-
-    if (length(miss <- setdiff(instrument,price.instrument))) {
+    if (is.matrix(price)) {
+        if (is.null(price.instrument))
+            price.instrument <- colnames(price)
+        if (is.null(price.timestamp))
+            price.timestamp <- rownames(price)
+    } else {
+        stop("not supported yet")
+        ## TODO: construct price
+    }
+    
+    if (length(miss <- setdiff(instrument, price.instrument))) {
         if (is.na(missing) || missing == "NA") {
             tmp <- array(NA, dim = c(nrow(price), length(miss)))
             colnames(tmp) <- miss
@@ -23,7 +27,7 @@ pricetable <- function(instrument, when,
             price <- cbind(price, tmp)
         }
     }
-            
+        
     i <- matchOrPrevious(when, price.timestamp)
     ans <- price[i, instrument, drop = FALSE]
     colnames(ans) <- instrument

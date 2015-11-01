@@ -40,12 +40,13 @@ valuation.journal <- function(x,
 
 ## TODO: add to internal documentation
 jcf <- function(x, multiplier = 1,                          
-                cashflow = function(x) x$amount * x$price,
-                flip.sign = TRUE, ...) {
+                cashflow   = function(x) x$amount * x$price,
+                instrument = function(x) "cash",
+                flip.sign  = TRUE, ...) {
     if (!is.null(names(multiplier)))
         multiplier <- multiplier[x$instrument]
     ans <- x
-    ans$instrument[] <- "cash"
+    ans$instrument[] <- instrument(x)
     ans$amount <- cashflow(x) * multiplier
     if (flip.sign)
         ans$amount <- ans$amount * -1    

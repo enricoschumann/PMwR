@@ -1,7 +1,7 @@
 \name{pricetable}
 \alias{pricetable}
 \title{
-  Price table
+  Price Table
 }
 \description{
   Create price table
@@ -13,10 +13,13 @@ pricetable(instrument, when, price,
 }
 \arguments{
   \item{instrument}{
-    character
+    character: what instruments to extract from \code{price}
 }
   \item{when}{
-    timestamps
+    The timestamps at which to extract prices. Timestamps that
+    correspond to the rows of price are either the rownames or the
+    values of \code{price.timestamp}. If the latter is specified, the
+    rownames are ignored.
 }
   \item{price}{
     a matrix
@@ -32,7 +35,8 @@ pricetable(instrument, when, price,
 }
 }
 \details{
-  Experimental: interface may change; may become generic.
+  Experimental: interface may change; may become generic. A helper
+  function for pv.
 }
 \value{
   A matrix with class attribute pricetable
@@ -59,5 +63,9 @@ instrument <- c("a", "c", "x", "z_1", "z_2")
 
 pricetable(instrument, when, price, missing = NA)
 pricetable(instrument, when, price, missing = 1)
+
+pricetable(c("a", "c"), when, price, missing = 1)
+pricetable(c("c", "c"), when, price, missing = 1)
+pricetable(c("c", "a"), when, price, missing = 1)
 
 }
