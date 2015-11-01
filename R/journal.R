@@ -232,9 +232,10 @@ print.summary.journal <- function(x, ...) {
 }
 
 
-`[.journal`  <- function(x, i, match.against = c("instrument", "account"),
+`[.journal`  <- function(x, i, match.against = NULL,
                          ignore.case = TRUE, ..., reverse = FALSE) {
     if (is.character(i)) {
+        match.against  <- names(x)[unlist(lapply(x, mode)) == "character"]
         ii <- logical(length(x))
         if (length(i) > 1L)
             i <- paste(i, collapse = "|")
@@ -333,3 +334,12 @@ cashflows <- function(x, multiplier = 1, ...) {
     ans$price <- 1
     ans
 }
+
+is.journal <- function (x) 
+    inherits(x, "journal")
+
+as.journal <- function(x, ...)
+    UseMethod("as.journal")
+
+as.journal.data.frame <- function(x, ...)
+    do.call("journal", as.list(x))

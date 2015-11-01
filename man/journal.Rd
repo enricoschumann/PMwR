@@ -39,7 +39,7 @@ journal(amount, \dots)
 
 \method{subset}{journal}(x, \dots)
 
-\method{[}{journal}(x, i, match.against = c("instrument", "account"),
+\method{[}{journal}(x, i, match.against = NULL,
                     ignore.case = TRUE, \dots, reverse = FALSE)
 
 \method{as.data.frame}{journal}(x, row.names = NULL, optional = FALSE, \dots)
@@ -124,7 +124,8 @@ journal(amount, \dots)
     integer.
   }
   \item{match.against}{
-    character vector
+    character vector of field names. Default is \code{NULL}, which
+    means to match against all character fields.
   }
   \item{reverse}{
     logical. If \code{TRUE}, select journal entries that do not match
