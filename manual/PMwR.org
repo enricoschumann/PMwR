@@ -97,7 +97,7 @@
   require("zoo")
 #+END_SRC
 
-* Using R in portfolio management -- Two examples
+* Using R in portfolio management -- Two examples                  :noexport:
   :PROPERTIES:
   :CUSTOM_ID: ch:intro
   :END:
@@ -110,7 +110,7 @@
 Idea, algorithm, implementation.
 
 
-* An Overview of the PMwR Package
+* An Overview of the PMwR Package                                  :noexport:
 
 ** The goals of writing the package
 
@@ -596,11 +596,10 @@ We can then write functions to read in such journal files.
 #+END_SRC 
 Some of these transactions may mean a gain or loss to us, such as a
 dividend payment).  Others are neutral, for example a transfer between
-bank accounts.  There are several ways to deal with this.
+bank accounts.  There are several ways to deal with this.[fn:2]
 
 
 
-FN{That is very much Perl style.  I like Perl.}
 
 One way to deal with that is to switch to double-entry
 accounting (see the next section).  A second way is to add
@@ -647,8 +646,8 @@ pl(J, current.price = 1)
 
 #+RESULTS:
 
-Let us do some more typical financial transactions.  We buy five
-times 1~unit of some unspecified asset.
+Let us do some more typical financial transactions. We buy five
+times 1 unit of some unspecified asset.
 #+BEGIN_SRC R -n :exports both :results output :colnames yes
 J1 <- journal(timestamp = 1:5, 
                amount   = 1, 
@@ -785,14 +784,17 @@ lapply(split(J, J$account), position)
 
 
 * Computing profit and (or) loss
+  :PROPERTIES:
+  :CUSTOM_ID: ch:pl
+  :END:
 
 ** The simple case
 
-We have an account, currency is euro.  We buy one asset at a price of
-100~euro and sell it again at 102~euro.  We have made a profit of
-2~euros.  This simple case happens often enough to make the required
-computation simple as well.  Computing profit-or-loss (\pl) can be handled
-through the function =pl=.
+We have an account, currency is euro. We buy one asset at a price of
+100 euro and sell it again at 102euro. We have made a profit of
+2~euros. This simple case happens often enough to make the required
+computation simple as well.  Computing profit-or-loss (\pl) can be
+handled through the function =pl=.
 #+BEGIN_SRC R -n :exports both :results output
 pl(price  = c(100, 102), 
    amount = c(  1,  -1))
@@ -819,31 +821,50 @@ information is provided by the order of the trades: the position had a
 drawdown of at least~40 before it recovered.  For situations like
 this, the argument =along.timestamp= can be used. (Note that we
 do not provide an actual timestamp, in which case the function will
-implicitly use integers 1, 2, \ldots, =length(amount)=\,.)
-#+BEGIN_SRC R -n :exports both
+implicitly use integers 1, 2, ..., =length(amount)= .)
+#+BEGIN_SRC R -n :exports both :results output
 pl(price  = c( 90, 50, 100), 
-    amount = c(  1,  1,  -2), along.timestamp = TRUE)
+   amount = c(  1,  1,  -2), along.timestamp = TRUE)
 #+END_SRC 
 
 #+RESULTS:
+#+begin_example
+ $value
+[1]   0 -40  60
 
-With no further arguments, the function will compute the
-running position and evaluate it at every trade with the trade's
-price.  This may not be accurate because of bid--ask spreads or other
-transaction costs, but it provides more information than only
-computing the \pl\ for the trades.
-#+BEGIN_SRC R -n :exports both
+$position
+[1] 1 2 0
+
+$cash
+[1]  -90 -140   60
+
+attr(,"class")
+[1] "plsorted"
+#+end_example
+With no further arguments, the function will compute the running
+position and evaluate it at every trade with the trade's price. This
+may not be accurate because of bid--ask spreads or other transaction
+costs, but it provides more information than only computing the /pl/
+for the trades.
+#+BEGIN_SRC R -n :exports both :results output
 J <- journal(price     = c( 90, 50, 100), 
-              amount    = c(  1,  1,  -2),
-              timestamp = c(  2,  4,   7))
+             amount    = c(  1,  1,  -2),
+             timestamp = c(  2,  4,   7))
 pl(J, along.timestamp = FALSE)
 #+END_SRC 
 
 #+RESULTS:
+:   pl  total.amount  average.buy  average.sell
+:   60             4           70           100
+: 
+:           pl = total PnL in units of instrument
+: total.amount = total /absolute/ amount of traded instruments
+:  average.buy = average buy price
+: average.sell = average sell price
 
 Suppose we also have a time series of the prices between times 1
-and~10.  We can evaluate the position at every time instant, and then
-plot position, \pl\ and the price of the traded instrument.
+and10. We can evaluate the position at every time instant, and then
+plot position, /pl/ and the price of the traded instrument.
 
 #+BEGIN_SRC R -n :exports both :results output
 ## [TODO]
@@ -886,10 +907,10 @@ executed is useful to value any open position.
 #+RESULTS:
 
 We may also want to compute the \pl\ between two points in
-time.  If our only data source is a journal, this may be impossible
+time. If our only data source is a journal, this may be impossible
 since we need to evaluate the position at both points in time.  A simple
 example follows; the data first.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output
 timestamp <- 1:20
 amount <- c(-5, 5, 5, -5, -5, 5, 5, 5, 5, 
             -5, 5, 5, -5, 5, 5, -5, -5, -5, 
@@ -900,26 +921,31 @@ price <- c(106, 101, 110, 110, 105, 105, 105, 104, 110, 104,
 #+END_SRC 
 
 #+RESULTS:
-| nil |  1 | -5 | 106 |
-| nil |  2 |  5 | 101 |
-| nil |  3 |  5 | 110 |
-| nil |  4 | -5 | 110 |
-| nil |  5 | -5 | 105 |
-| nil |  6 |  5 | 105 |
-| nil |  7 |  5 | 105 |
-| nil |  8 |  5 | 104 |
-| nil |  9 |  5 | 110 |
-| nil | 10 | -5 | 104 |
-| nil | 11 |  5 | 103 |
-| nil | 12 |  5 | 108 |
-| nil | 13 | -5 | 106 |
-| nil | 14 |  5 | 102 |
-| nil | 15 |  5 | 108 |
-| nil | 16 | -5 | 107 |
-| nil | 17 | -5 | 103 |
-| nil | 18 | -5 | 104 |
-| nil | 19 | -5 | 109 |
-| nil | 20 | -5 | 104 |
+#+begin_example
+    timestamp  amount  price
+1           1      -5    106
+2           2       5    101
+3           3       5    110
+4           4      -5    110
+5           5      -5    105
+6           6       5    105
+7           7       5    105
+8           8       5    104
+9           9       5    110
+10         10      -5    104
+11         11       5    103
+12         12       5    108
+13         13      -5    106
+14         14       5    102
+15         15       5    108
+16         16      -5    107
+17         17      -5    103
+18         18      -5    104
+19         19      -5    109
+20         20      -5    104
+
+20 transactions
+#+end_example
 
 Suppose we want the pl between times 5 and~8. Conceptually, it is
 simple: we first compute the position at~5 and treat it as a trade.
@@ -930,7 +956,7 @@ trade, but with signs reversed. That, we close the position, if any
 exists.  Here, again, we need the prices of the instruments.
 
 The function =pl= does (most of) these tasks for us.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output
 from <- 5
 to   <- 8
 price.from <- 106
@@ -945,62 +971,87 @@ pl(trades,
 #+END_SRC 
 
 #+RESULTS:
+:   pl  total.amount  average.buy  average.sell
+:   10            15     104.6667      105.3333
+: 
+:           pl = total PnL in units of instrument
+: total.amount = total /absolute/ amount of traded instruments
+:  average.buy = average buy price
+: average.sell = average sell price
 
 
 You can also use this mechanism if you wish to compute the \pl\
 of a complete journal, but with some positions not closed yet.  The
 simplest example: a journal of just one trade.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output
 (J <- J[1])
 #+END_SRC 
 
 #+RESULTS:
-| nil | 1 | -5 | 106 |
+:    timestamp  amount  price
+: 1          1      -5    106
+: 
+: 1 transaction
 
-There is no way to tell the pl of this trades\ldots 
-#+BEGIN_SRC R -n :exports both
-pl(J)
+There is no way to tell the pl of this trades ...
+#+BEGIN_SRC R -n :exports both :results output
+  pl(J)
 #+END_SRC 
 
 #+RESULTS:
+:             5            .           106
+: 
+:           pl = total PnL in units of instrument
+: total.amount = total /absolute/ amount of traded instruments
+:  average.buy = average buy price
+: average.sell = average sell price
+: Warning message:
+: In plfun(amount, price) :
+:   sum of amount is not zero; cannot compute profit/loss.
 
-\ldots unless the current price is supplied.
-#+BEGIN_SRC R -n :exports both
+
+... unless the current price is supplied.
+#+BEGIN_SRC R -n :exports both :results output
 pl(J, current.price = 105)
 #+END_SRC 
 
 #+RESULTS:
+:   pl  total.amount  average.buy  average.sell
+:    5             5          105           106
+: 
+:           pl = total PnL in units of instrument
+: total.amount = total /absolute/ amount of traded instruments
+:  average.buy = average buy price
+: average.sell = average sell price
 
-\section{More  complicated cases}
+## \section{More  complicated cases}
 
 
-%% TODO:
+##%% TODO:
 
-%% - example EUR investor buys INTC
+##%% - example EUR investor buys INTC
 
-%% - pure FX portfolio
+## %% - pure FX portfolio
 
-Unfortunately, in real life computing \pl\ is often more complicated:
+Unfortunately, in real life computing /pl/ is often more complicated:
 
-\begin{itemize}
-
-\item One asset-price unit may not translate into one currency unit:
-  we have multipliers or contract factors.  That is easy to solve by
+- One asset-price unit may not translate into one currency unit: we
+  have multipliers or contract factors.  That is easy to solve by
   computing effective position sizes, but it may take some thinking to
   come up with a reusable scheme (eg, looking up multipliers in a
   table).
     
-\item Asset positions may map into cashflows in non-obvious ways.  The
+- Asset positions may map into cashflows in non-obvious ways.  The
   simple case is the delay in actual payment and delivery of an asset,
   which is often two or three days.  The more problematic cases are
   derivatives with daily adjustments of margins.
 
-\item Assets may be denominated in various currencies.
+- Assets may be denominated in various currencies.
   
-\item Currencies themselves may be assets in the portfolio.  Depending
-  on how they are traded (cash, forwards, \emph{\&c.}), computing \pl\ 
+- Currencies themselves may be assets in the portfolio.  Depending on
+  how they are traded (cash, forwards, \emph{\&c.}), computing \pl\
   may not be straightforward.
-\end{itemize}
+
 
 How (or rather: to what degree) these troubles are handled is, as
 always, up to the user.  For a single instrument, computing
@@ -1011,9 +1062,6 @@ different currencies.  The simplest and most transparent way is then
 to manipulate the journal before \pl\ is computed (eg, multiply
 notionals by their multipliers).
 
-
-
-
 We look at two examples: (i)~computing the \pl\ of several assets in
 currency units; and (ii)~computing time-weighted returns of a
 portfolio of assets.
@@ -1023,7 +1071,7 @@ portfolio of assets.
 In this example we compute the \pl\ in currency units of a portfolio
 over time.  We start with the following journal.
 
-#+BEGIN_SRC R
+#+BEGIN_SRC R R -n :exports both :results output
 ## dput(ISOdatetime(2013,c(11,11,12,12,11,12), c(28,28,2,3,27,2), 
 ##                     c(9,12,13,9,9,13),c(35,50,21,57,52,54),0))
 timestamp <- structure(c(1385627700, 1385639400, 1385986860, 1386061020, 1385542320, 
@@ -1036,12 +1084,15 @@ timestamp <- structure(c(1385627700, 1385639400, 1385986860, 1386061020, 1385542
 #+END_SRC 
 
 #+RESULTS:
-| DTE | 2013-11-28 09:35:00 |  100 |  11.6 |
-| DTE | 2013-11-28 12:50:00 |  100 | 11.62 |
-| DTE | 2013-12-02 13:21:00 |  -50 | 11.67 |
-| DTE | 2013-12-03 09:57:00 | -150 | 11.47 |
-| DPW | 2013-11-27 09:52:00 |  100 |  25.1 |
-| DPW | 2013-12-02 13:54:00 |  -50 | 26.29 |
+:    instrument            timestamp  amount  price
+: 1         DTE  2013-11-28 09:35:00     100  11.60
+: 2         DTE  2013-11-28 12:50:00     100  11.62
+: 3         DTE  2013-12-02 13:21:00     -50  11.67
+: 4         DTE  2013-12-03 09:57:00    -150  11.47
+: 5         DPW  2013-11-27 09:52:00     100  25.10
+: 6         DPW  2013-12-02 13:54:00     -50  26.29
+: 
+: 6 transactions
 
 We shall compute end-of-day \pl\ of these trades.  In case you
 wondered: \textsc{dte} stands for Deutsche Telekom and \textsc{dpw} is
@@ -1052,7 +1103,7 @@ Deutsche Post, both traded on \textsc{xetra}.  Thus, end-of-day is
 have decided to have hourly numbers, say.  But I would like to keep
 this example small.)  The prices at these timestamps are stored
 in a matrix =price.table=.
-#+BEGIN_SRC R
+#+BEGIN_SRC R -n :exports both :results output
 price.table <- structure(c(25.71, 25.965, 26.03, 26.32, 25.305,
                            11.65, 11.655, 11.685, 11.62, 11.375), 
                          .Dim = c(5L, 2L), 
@@ -1068,22 +1119,18 @@ rownames(price.table) <- as.character(times)
 #+END_SRC 
 
 #+RESULTS:
-| 2013-11-27 17:30:00 |
-| 2013-11-28 17:30:00 |
-| 2013-11-29 17:30:00 |
-| 2013-12-02 17:30:00 |
-| 2013-12-03 17:30:00 |
 
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output
 price.table
 #+END_SRC 
 
 #+RESULTS:
-|  25.71 |  11.65 |
-| 25.965 | 11.655 |
-|  26.03 | 11.685 |
-|  26.32 |  11.62 |
-| 25.305 | 11.375 |
+:                        DPW    DTE
+: 2013-11-27 17:30:00 25.710 11.650
+: 2013-11-28 17:30:00 25.965 11.655
+: 2013-11-29 17:30:00 26.030 11.685
+: 2013-12-02 17:30:00 26.320 11.620
+: 2013-12-03 17:30:00 25.305 11.375
 
 \subsubsection*{Step 1: compute value of portfolio}
 
@@ -1202,141 +1249,185 @@ by it.
 * Computing returns
 
 The function =returns= computes returns for various types of
-objects. The return of an asset in period~$t$ is defined as
+objects. The return of an asset in period /t/ is defined as
 \begin{align} \label{eq:return}
-  r_t = \frac{P_t}{P_{t-1}}-1 = R_t+1\,.
+  r_t = \frac{P_t}{P_{t-1}}-1 = R_t-1\,.
 \end{align}
 
 
-For computing pl (in currency units), see Chapter~XX.
+For computing pl (in currency units), see  [[#ch:pl][Computing profit and (or)
+loss]].
 
 
 ** Numeric vectors and matrices, data frames
 
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output
 x <- c(100, 102, 101, 100)
 returns(x)
 #+END_SRC 
 
 #+RESULTS:
-|                 0.02 |
-| -0.00980392156862742 |
-| -0.00990099009900991 |
+: [1]  0.020000000 -0.009803922 -0.009900990
 
 To replace the lost first observation, specify =pad=.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output
 returns(x, pad = 0)
 returns(x, pad = NA)
 #+END_SRC 
 
 #+RESULTS:
-|                  nil |
-|                 0.02 |
-| -0.00980392156862742 |
-| -0.00990099009900991 |
+: [1]  0.000000000  0.020000000 -0.009803922 -0.009900990
+: [1]           NA  0.020000000 -0.009803922 -0.009900990
 
 When =x= is a matrix or a data.frame, returns are computed
 for each column.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output
 X <- cbind(x, x, x)
 returns(X, pad = NA)
 returns(as.data.frame(X), pad = NA)
 #+END_SRC 
 
 #+RESULTS:
-|                  nil |                  nil |                  nil |
-|                 0.02 |                 0.02 |                 0.02 |
-| -0.00980392156862742 | -0.00980392156862742 | -0.00980392156862742 |
-| -0.00990099009900991 | -0.00990099009900991 | -0.00990099009900991 |
+#+begin_example
+                x            x            x
+[1,]           NA           NA           NA
+[2,]  0.020000000  0.020000000  0.020000000
+[3,] -0.009803922 -0.009803922 -0.009803922
+[4,] -0.009900990 -0.009900990 -0.009900990
+             x            x            x
+1           NA           NA           NA
+2  0.020000000  0.020000000  0.020000000
+3 -0.009803922 -0.009803922 -0.009803922
+4 -0.009900990 -0.009900990 -0.009900990
+#+end_example
 
-\section{=zoo= objects}
+
+** =zoo= objects
 
 Vectors.
-#+BEGIN_SRC R -n :exports both
-z <- zoo(x, as.Date("2015-1-5") + 0:2)
-returns(z)
-returns(z, pad = NA)
+#+BEGIN_SRC R -n :exports both :results output
+  require("zoo", quietly = TRUE, warn.conflicts = FALSE)
+  z <- zoo(x, as.Date("2015-1-5") + 0:2)
+  returns(z)
+  returns(z, pad = NA)
 #+END_SRC 
 
 #+RESULTS:
-|                  nil |
-|                 0.02 |
-| -0.00980392156862742 |
+:   2015-01-06   2015-01-07 
+:  0.020000000 -0.009803922
+:   2015-01-05   2015-01-06   2015-01-07 
+:           NA  0.020000000 -0.009803922
+
 
 Matrices.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output
 z <- zoo(X, as.Date("2015-1-5") + 0:2)
 returns(z)
 returns(z, pad = NA)
 #+END_SRC 
 
 #+RESULTS:
-|                  nil |                  nil |                  nil |
-|                 0.02 |                 0.02 |                 0.02 |
-| -0.00980392156862742 | -0.00980392156862742 | -0.00980392156862742 |
+:                       x            x            x
+: 2015-01-06  0.020000000  0.020000000  0.020000000
+: 2015-01-07 -0.009803922 -0.009803922 -0.009803922
+:                       x            x            x
+: 2015-01-05           NA           NA           NA
+: 2015-01-06  0.020000000  0.020000000  0.020000000
+: 2015-01-07 -0.009803922 -0.009803922 -0.009803922
 
-\section{Period returns}
+** Period returns
 
 When a timestamp is available, =returns= can compute
 period returns. The semantics for these computations are somewhat
 different; the result is a vector of returns with attributes and class
 =preturns=. Most useful is a =print= method.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output
 set.seed(45)
 t <- as.Date("2014-11-1") + 0:80
 x <- cumprod(1 + rnorm(length(t), sd = 0.01))
 returns(x, t = t, period = "month")
+#+END_SRC 
+
+#+RESULTS:
+:       Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec  YTD
+: 2014                                          0.7 7.7  8.4
+: 2015 -1.4                                             -1.4
+
+
+#+BEGIN_SRC R -n :exports both :results output
 returns(x, t = t, period = "year")
 #+END_SRC 
 
 #+RESULTS:
+: 2014 2015 
+:  8.4 -1.4
+
 
 See =?print.preturns= for more display options. For instance:
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output
 print(returns(zoo(x, t), period = "month"), 
       digits = 2, year.rows = FALSE)
 #+END_SRC 
 
 #+RESULTS:
+#+begin_example
+     2014   2015
+Jan        -1.37
+Feb             
+Mar             
+Apr             
+May             
+Jun             
+Jul             
+Aug             
+Sep             
+Oct             
+Nov  0.68       
+Dec  7.66       
+YTD  8.39  -1.37
+#+end_example
 
 To get annualised returns, use period `=ann='.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output
 returns(x, t = t,  period = "ann")
 returns(zoo(x, t), period = "ann")
 #+END_SRC 
 
 #+RESULTS:
+: 6.9% p.a.   [01 Nov 2014 -- 20 Jan 2015, less than one year]
+: 6.9% p.a.   [01 Nov 2014 -- 20 Jan 2015, less than one year]
 
-But note that the function did \emph{not} annualise: it does
-not annualise if the time period is shorter than one year.
-#+BEGIN_SRC R -n :exports both
+But note that the function did /not/ annualise: it does not annualise
+if the time period is shorter than one year.
+#+BEGIN_SRC R -n :exports both :results output
 x[length(x)]/x[1] - 1
 #+END_SRC 
 
 #+RESULTS:
-: 0.0690193782880717
+: [1] 0.06901938
 
 To force annualising, add a `=!='. The exclamation mark serves
 as a mnenomic that it is now imperative to annualise.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output
 returns(x, t, period = "ann!")
 #+END_SRC 
 
 #+RESULTS:
+: 35.6% p.a.   [01 Nov 2014 -- 20 Jan 2015, less than one year]
 
 There are methods to =toLatex= and =toHTML=
 for monthly returns.  In Sweave documents, you need to use
 =<\/<results = tex,echo = false>\/>== in the chunk options:
 
-\noindent\begin{tabular}{rrrrrrrrrrrrrr}
-<<results=tex,echo=false>>=
-toLatex(returns(x, t = t, period = "month"))
-#+END_SRC 
-\end{tabular}
+##\noindent\begin{tabular}{rrrrrrrrrrrrrr}
+##<<results=tex,echo=false>>=
+##toLatex(returns(x, t = t, period = "month"))
+###+END_SRC 
+##\end{tabular}
 
 ** Rebalanced returns
 
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output
   X <- array(c(100,105,110,100,100,100), dim = c(3,2))
 
   w <- c(0.5,0.5)
@@ -1348,8 +1439,12 @@ toLatex(returns(x, t = t, period = "month"))
 #+END_SRC 
 
 #+RESULTS:
-|              0.025 |
-| 0.0238095238095238 |
+:            [,1]
+: [1,] 0.02500000
+: [2,] 0.02439024
+:            [,1]
+: [1,] 0.02500000
+: [2,] 0.02380952
 
 
 
@@ -2614,15 +2709,15 @@ so:
 
 We can plot the exposure.
 
-#+BEGIN_SRC R -n :results graphics :file exposure.pdf :width 4 :height 3 :exports both
+#+BEGIN_SRC R -n :results graphics :file ~/Packages/PMwR/manual/exposure.png :width 400 :height 300 :exports both :type cairo :family EBGaramond
 par(bty = "n", mar = c(4, 4, 0, 0), tck = 0.005, 
-    las = 1, cex = 0.8)
+    las = 1, ps = 12)
 plot(c(time[1], time), cumsum(c(0, amount)), 
      type = "s", xlab = "time", ylab = "position")
 #+END_SRC
 
 #+RESULTS:
-[[file:exposure.pdf]]
+[[file:~/Packages/PMwR/manual/exposure.png]]
 
 #+ATTR_HTML: :width 20% :height 20%
 #+BEGIN_HTML
@@ -2715,17 +2810,18 @@ Which is right: it is the correct time, only translated into Chicago
 local time.)
 
 #+BEGIN_SRC R -n :exports both :results output :colnames yes
-prices <- c(139.82, 139.82, 139.8, 139.81, 139.77, 139.85, 
-            139.76, 139.76, 139.77, 139.8, 139.86, 140.46, 
-            140.39, 140.14, 140.15)
+  prices <- c(139.82, 139.82, 139.8, 139.81, 139.77, 139.85, 
+              139.76, 139.76, 139.77, 139.8, 139.86, 140.46, 
+              140.39, 140.14, 140.15)
 
-times <- structure(c(1350583209, 1350583271, 1350583319, 
-                     1350583289, 1350584209, 1350586249, 
-                     1350588199, 1350589299, 1350590399, 
-                     1350630970, 1350632971, 1350673969, 
-                     1350675751, 1350888315, 1350889533), 
-                   class = c("POSIXct", "POSIXt"), tzone = "")
-data.frame(times, prices)
+  times <- structure(c(1350583209, 1350583271, 1350583319, 
+                       1350583289, 1350584209, 1350586249, 
+                       1350588199, 1350589299, 1350590399, 
+                       1350630970, 1350632971, 1350673969, 
+                       1350675751, 1350888315, 1350889533), 
+                     class = c("POSIXct", "POSIXt"), tzone = "")
+  data.frame(times, prices)
+  '
 #+END_SRC
 
 #+RESULTS:
@@ -3010,7 +3106,7 @@ plot(scale1(x, scale = 0.02))
 
 
 
-* FAQ/@@latex:\,@@FRC (Frequently-required computations)
+* FAQ/@@latex:\,@@FRC (Frequently-required computations)           :noexport:
 
 ** I need to value a financial instrument
 
@@ -3098,18 +3194,16 @@ locale:
 [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 
 attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
+[1] stats     graphics  grDevices utils     datasets  methods  
+[7] base     
 
 other attached packages:
- [1] portfolioTools_0.0-5 pstplots_0.1-1       NMOF_0.36-2         
- [4] zoo_1.7-12           textutils_0.0-5      org_0.0-2           
- [7] mailtools_0.1-3      datetimeutils_0.0-5  RODBC_1.3-11        
-[10] PMwR_0.1-74          database_0.1-37     
+[1] zoo_1.7-12  PMwR_0.1-75
 
 loaded via a namespace (and not attached):
-[1] lattice_0.20-33 grid_3.2.1      xts_0.9-7       fastmatch_1.0-4
-[5] tools_3.2.1     parallel_3.2.1  compiler_3.2.1  base64enc_0.1-2
-[9] IBrokers_0.9-12
+[1] datetimeutils_0.0-5 compiler_3.2.1      parallel_3.2.1     
+[4] tools_3.2.1         NMOF_0.36-2         grid_3.2.1         
+[7] textutils_0.0-5     lattice_0.20-33
 #+end_example
 
 
@@ -3119,11 +3213,12 @@ loaded via a namespace (and not attached):
 \printindex
 #+END_LATEX
 
-
 * Footnotes
 
 [fn:1] This notation is inspired by the syntax of =ledger=
   files. See [[http://www.ledger-cli.org/]] .
+
+[fn:2] We could even do it in [[https://www.perl.org/][Perl]]. =:-)= 
 
 
 
