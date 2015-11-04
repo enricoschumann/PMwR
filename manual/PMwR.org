@@ -1,6 +1,7 @@
-#+TITLE: Portfolio Management with R
+#+COMMENT: -*- fill-column: 65; -*-
+#+TITLE: Portfolio Management with R 
 #+AUTHOR: Enrico Schumann
-#+DATE: 1 November 2015
+#+DATE: 4 November 2015
 #+OPTIONS: toc:nil
 #+BIND: org-latex-default-packages-alist nil
 #+BIND: org-use-sub-superscripts {}
@@ -85,7 +86,7 @@
 #+BEGIN_HTML
 <p>
 <a href = "http://enricoschumann.net">Enrico Schumann</a>&nbsp;&nbsp;&nbsp;
-<time datetime="2015-11-02">2 Nov 2015</time>&nbsp;&nbsp;&nbsp;
+<time datetime="2015-11-04">4 Nov 2015</time>&nbsp;&nbsp;&nbsp;
 <a href = "PMwR.pdf">[PDF]</a>
 </p>
 #+END_HTML
@@ -116,15 +117,16 @@ Idea, algorithm, implementation.
 
 ** The goals of writing the package
 
-- Store a portfolio of assets and compute the value -- or other
-  quantities such as Greeks -- for different data. Data may be market
-  data, but also theoretical data (prices).
+- Store a portfolio of assets and compute the value --
+  or other quantities such as Greeks -- for different
+  data. Data may be market data, but also theoretical
+  data (prices).
 
-- Reevaluate a portfolio for specific scenarios (i.e., new market or
-  artificial data).
+- Reevaluate a portfolio for specific scenarios (i.e.,
+  new market or artificial data).
 
-- Read in transactions from various sources. That is done via a
-  journal class.
+- Read in transactions from various sources. That is
+  done via a journal class.
 
 - Show portfolio on certain day/time: create a /position/, evaluate
   this position --> position class
@@ -210,24 +212,26 @@ The following classes are implicitly defined (ie, S3 classes):
   dataframes, but PMwR provides an =S3= class =journal= for handling
   such transaction data.
 
-  A =journal= is a list of atomic vectors with a class attribute. Such
-  a list is created through the function =journal=. Methods should not
-  rely on this list being sorted in any particular way: components of
-  a journal should always be retrieved by name, never by position. (In
-  this respect a journal differs from a dataframe, where we can
-  meaningfully refer to the nth column.)
+  A =journal= is a list of atomic vectors with a class
+  attribute. Such a list is created through the function
+  =journal=. Methods should not rely on this list being
+  sorted in any particular way: components of a journal
+  should always be retrieved by name, never by position. (In
+  this respect a journal differs from a dataframe, where we
+  can meaningfully refer to the /n/-th column.)
   #+INDEX: journal!comparison with dataframe
   I will call to these journal components, such as =amount= or
   =timestamp=, fields.
   
-  The simplicity of the class is intended, because it is meant for
-  interactive analyses. The user may -- and is expected to -- dissect
-  the information in a =journal= at will; such dissections include
-  removing the class attribute.
+  The simplicity of the class is intended, because it is
+  meant for interactive analyses. The user may -- and is
+  expected to -- dissect the information in a =journal= at
+  will; such dissections include removing the class
+  attribute.
 
-  What is actually stored in a =journal= is up to the user, but a
-  number of fields are required for certain operations and should thus
-  always be present:
+  What is actually stored in a =journal= is up to the user,
+  but a number of fields are required for certain operations
+  and should thus always be present:
 
 - =amount= :: the notional amount that is transacted
 
@@ -708,7 +712,7 @@ position(J)
 :      day 3
 : [1,]     0
 
-In terms of income and expenses we have made a loss of\nbsp100, which is
+In terms of income and expenses we have made a loss of\nbsp{}100, which is
 exactly what the function =pl= reports.  (There will be more examples
 for using this function in [[#ch:pl][Computing profit and (or) loss]].)
 #+BEGIN_SRC R -n :exports both :results output
@@ -746,7 +750,7 @@ J1
 
 
 
-We close the trade by selling 5\nbspunits.
+We close the trade by selling 5\nbsp{}units.
 #+BEGIN_SRC R -n :exports code :results none :colnames yes
   J2 <- journal(timestamp =  6L, 
                  amount   = -5, 
@@ -1028,10 +1032,10 @@ price <- c(106, 101, 110, 110, 105, 105, 105, 104, 110, 104,
 20 transactions
 #+end_example
 
-Suppose we want the pl between times 5 and\nbsp8. Conceptually, it is
-simple: we first compute the position at\nbsp5 and treat it as a trade.
+Suppose we want the pl between times 5 and\nbsp{}8. Conceptually, it is
+simple: we first compute the position at\nbsp{}5 and treat it as a trade.
 Clearly, for this we need the price of the instruments in the position
-at timestamp\nbsp5.  Then we extract all the trades that occured later
+at timestamp\nbsp{}5.  Then we extract all the trades that occured later
 than 5, up to 8.  The final position, again, would be treated as a
 trade, but with signs reversed. That, we close the position, if any
 exists.  Here, again, we need the prices of the instruments.
@@ -1145,8 +1149,8 @@ different currencies.  The simplest and most transparent way is then
 to manipulate the journal before /pl/ is computed (eg, multiply
 notionals by their multipliers).
 
-We look at two examples: (i)\nbspcomputing the /pl/ of several assets in
-currency units; and (ii)\nbspcomputing time-weighted returns of a
+We look at two examples: (i)\nbsp{}computing the /pl/ of several assets in
+currency units; and (ii)\nbsp{}computing time-weighted returns of a
 portfolio of assets.
 
 ** Several assets
@@ -1416,6 +1420,8 @@ returns(z, pad = NA)
 
 ** Period returns
 
+#+INDEX: returns!for calendar period
+#+INDEX: returns!monthly
 When a timestamp is available, =returns= can compute
 period returns. The semantics for these computations are somewhat
 different; the result is a vector of returns with attributes and class
@@ -1433,6 +1439,8 @@ returns(x, t = t, period = "month")
 : 2015 -1.4                                             -1.4
 
 
+#+INDEX: returns!yearly
+
 #+BEGIN_SRC R -n :exports both :results output
 returns(x, t = t, period = "year")
 #+END_SRC 
@@ -1440,7 +1448,6 @@ returns(x, t = t, period = "year")
 #+RESULTS:
 : 2014 2015 
 :  8.4 -1.4
-
 
 See =?print.preturns= for more display options. For instance:
 #+BEGIN_SRC R -n :exports both :results output
@@ -1467,6 +1474,8 @@ YTD  8.39  -1.37
 #+end_example
 
 To get annualised returns, use period `=ann='.
+#+INDEX: returns!annualised
+#+INDEX: annualised returns
 #+BEGIN_SRC R -n :exports both :results output
 returns(x, t = t,  period = "ann")
 returns(zoo(x, t), period = "ann")
@@ -1505,7 +1514,7 @@ for monthly returns.  In Sweave documents, you need to use
 ##\end{tabular}
 
 
-** Rebalanced returns
+** Rebalanced returns                                              :noexport:
 
 #+BEGIN_SRC R -n :exports both :results output
   X <- array(c(100,105,110,100,100,100), dim = c(3,2))
@@ -1536,40 +1545,39 @@ function.
 
 ** Decisions
 
-At any instant of time (in actual life, `now'), a trader need to
+At any instant of time (in actual life, `now'), a trader needs to
 answer the following questions:
 
 - Do I want to compute a new target portfolio, yes or no? If yes,
   go ahead and compute the new target portfolio.
 
-- Given the target portfolio and the actual portfolio, do I\nbspwant
+- Given the target portfolio and the actual portfolio, do I\nbsp{}want
   to rebalance (ie, close the gap between the actual portfolio and the
   target portfolio)? If yes, rebalance.
 
 If such a decision is not just hypothetical, then the answer to the
 second question may lead to a number of orders sent to a broker.  Note
-that many traders do not think in terms of \emph{stock} (ie, balances)
-as we did here; rather, they think in terms of \emph{flow} (ie,
-orders).  Both approaches are equivalent, but the described one makes
+that many traders do not think in terms of /stock/ (i.e. balances) as
+we did here; rather, they think in terms of /flow/ (i.e.
+orders). Both approaches are equivalent, but the described one makes
 it easier to handle missed trades and synchronise accounts.
 
 During a backtest, we will simulate the decisions of the trader.  How
-precisely we simulate depends on the trading strategy.  The
-=btest= function is meant as a helper function to simulate
-these decisions.  The logic for the decisions described above is coded
-in the functions =do.signal=, =signal= and
-=do.rebalance=.
+precisely we simulate depends on the trading strategy.  The =btest=
+function is meant as a helper function to simulate these decisions.
+The logic for the decisions described above is coded in the functions
+=do.signal=, =signal= and =do.rebalance=.
 
-Implementing =btest= required a number of decision, too:
-(i)\nbspwhat to model (ie, how to simulate the trader), and (ii)\nbsphow to
-code it.  As an example for point\nbsp(i): how precisely do we want to
+Implementing =btest= required a number of decision, too: (i)\nbsp{}what
+to model (ie, how to simulate the trader), and (ii)\nbsp{}how to code
+it.  As an example for point\nbsp{}(i): how precisely do we want to
 model the order process (eg, use limit orders?  Allow partial fills?)
-Example for\nbsp(ii): the backbone of =btest= is a loop that runs
-through the data.  Loops are slow in \R\ when compared with compiled
+Example for\nbsp{}(ii): the backbone of =btest= is a loop that runs
+through the data.  Loops are slow in R when compared with compiled
 languages, so should we vectorise instead?  Vectorisation is indeed
 often possible, namely if trading is not path-dependent.  If we have
 already a list of trades, we can efficiently transform them into a
-profit-and-loss in \R\ without relying on an explicit loop.  Yet, one
+profit-and-loss in R without relying on an explicit loop.  Yet, one
 advantage of looping is that the trade logic is more similar to actual
 trading; we may even be able to reuse some code in live trading.
 
@@ -1602,40 +1610,40 @@ close prices. (For example, with 100 close prices of 5 assets, the
 prices should be arranged in a matrix =p= of size 100 times 5;
 and =prices = list(p)=.)
 
-For a single asset:
+For a single asset, there is one matrix with one column each:
 #+BEGIN_EXAMPLE
-open  high   low  close
- +-+   +-+   +-+   +-+
- | |   | |   | |   | |
- | |   | |   | |   | |
- | |   | |   | |   | |
- | |   | |   | |   | |
- | |   | |   | |   | |
- +-+   +-+   +-+   +-+
+open   high    low   close
+ +-+    +-+    +-+    +-+
+ | |    | |    | |    | |
+ | |    | |    | |    | |
+ | |    | |    | |    | |
+ | |    | |    | |    | |
+ | |    | |    | |    | |
+ +-+    +-+    +-+    +-+
 #+END_EXAMPLE
 
-With two assets:
-
+With two assets, there are four matrices with two columns each:
 #+BEGIN_EXAMPLE
- open    high    low    close
-+-+-+   +-+-+   +-+-+   +-+-+  
-| | |   | | |   | | |   | | |
-| | |   | | |   | | |   | | |
-| | |   | | |   | | |   | | |
-| | |   | | |   | | |   | | |
-| | |   | | |   | | |   | | |
-+-+-+   +-+-+   +-+-+   +-+-+
+ open     high     low     close
++-+-+    +-+-+    +-+-+    +-+-+  
+| | |    | | |    | | |    | | |
+| | |    | | |    | | |    | | |
+| | |    | | |    | | |    | | |
+| | |    | | |    | | |    | | |
+| | |    | | |    | | |    | | |
++-+-+    +-+-+    +-+-+    +-+-+
 #+END_EXAMPLE
 
-The =btest= function runs from =b + 1= to =T=. The variable\nbsp=b= is the
-burn-in\index{burn-in},% \marginpar{=b=\qquad burn-in} % and it needs
+The =btest= function runs from =b + 1= to =T=. The variable\nbsp{}=b= is
+the burn-in and it needs
+#+INDEX: burn-in
 to be a positive integer; in rare cases it may be zero.  When we take
 decisions that are based on past data, we will lose at least one data
 point.
 
-Here is an important default: at time\nbsp=t=, we can use information up
-to time =t - 1=.  Suppose that =t= were\nbsp4.  We may use all information
-up to time\nbsp3, and trade at the =open= in period\nbsp4.
+Here is an important default: at time\nbsp{}=t=, we can use information up
+to time =t - 1=.  Suppose that =t= were\nbsp{}4.  We may use all information
+up to time\nbsp{}3, and trade at the =open= in period\nbsp{}4.
 
 #+BEGIN_EXAMPLE
 t    time      open  high  low   close
@@ -1657,9 +1665,8 @@ t    time      open  high  low   close
 5    HH:MM:SS
 #+END_EXAMPLE
 
-
 No, we cannot trade at the high or low. (Some people like the idea, as
-a robustness check -- always buy at the high, sell at the low.
+a robustness check, to always buy at the high, sell at the low.
 Robustness checks -- forcing a bit of bad luck into the simulation --
 are a good idea, notably bad executions.  High/low ranges can inform
 such checks, but using these ranges does not go far enough, and is
@@ -1712,9 +1719,9 @@ The =signal= function uses information until \texttt{t -
 
 *** do.signal
 
-=do.signal= uses information until =t - 1= and must
-return =TRUE= or =FALSE=.  If the function is not
-specified, it defaults to =function() TRUE=.
+=do.signal= uses information until =t - 1= and must return
+=TRUE= or =FALSE=.  If the function is not specified, it
+defaults to =function() TRUE=.
 
 *** do.rebalance
 
@@ -1956,7 +1963,7 @@ cat(try(btest(prices = prices, signal = signal)))
 #+END_SRC
 
 Similarly, we have functions =Open=, =High= and
-=Low= (see Section\nbsp\ref{functions} above for a available
+=Low= (see Section\nbsp{}\ref{functions} above for a available
 functions).
 
 Suppose we wanted to add a variable, like a =threshold=
@@ -2082,7 +2089,7 @@ signal <- function()
 
 The function =Portfolio= evaluates to last period's
 portfolio. Like =Close=, its first argument sets the time
-=lag=, which defaults to\nbsp1.
+=lag=, which defaults to\nbsp{}1.
 #+BEGIN_SRC R -n :exports both
 makeTable(btest(prices = prices, signal = signal), prices)
 #+END_SRC
@@ -2537,7 +2544,7 @@ such information into a logfile.
 *** Selecting parameters
 
 Suppose you have a strategy that depends on a parameter
-vector\nbsp$\theta$.  For a given $\theta$, the signal for the strategy
+vector\nbsp{}$\theta$.  For a given $\theta$, the signal for the strategy
 would look like this. 
 \begin{verbatim}
 signal = function(theta) {
@@ -2548,7 +2555,7 @@ Now suppose we do not know theta.  We might want to test several
 values, and then keep the best one.  For this, we need to call btest
 recursively: at a point in time t, the strategy simulates the results
 for various values for theta and chooses the best theta, according to
-some criterion\nbsp$f$.
+some criterion\nbsp{}$f$.
 
 A useful idiom is this:
 \begin{verbatim}
@@ -2879,17 +2886,10 @@ closeOnFirst(n)
 
 ** An example
 
-We are given these prices of the Bund future contract, traded at the
-Eurex in Germany. (Note that I leave the time zone to the operating
-system. Since my computer is typically located in the time zone that
-the =tz database= [[http://www.iana.org/time-zones]] calls
-`Europe/Berlin', the first time should be =2012-10-18 20:00:09=.
-Suppose your computer was in `America/Chicago' and you recompiled this
-vignette. Then the first time would become =2012-10-18 13:00:09=.
-Which is right: it is the correct time, only translated into Chicago
-local time.)
+We have the following sample of prices of the Bund future contract,
+traded at the [[http://www.eurexchange.com][Eurex]] in Germany. 
 
-#+BEGIN_SRC R -n :exports both :results output :colnames yes
+#+BEGIN_SRC R -n :exports both :colnames yes
   prices <- c(139.82, 139.82, 139.8, 139.81, 139.77, 139.85, 
               139.76, 139.76, 139.77, 139.8, 139.86, 140.46, 
               140.39, 140.14, 140.15)
@@ -2904,24 +2904,35 @@ local time.)
 #+END_SRC
 
 #+RESULTS:
-#+begin_example
-                 times prices
-1  2012-10-18 20:00:09 139.82
-2  2012-10-18 20:01:11 139.82
-3  2012-10-18 20:01:59 139.80
-4  2012-10-18 20:01:29 139.81
-5  2012-10-18 20:16:49 139.77
-6  2012-10-18 20:50:49 139.85
-7  2012-10-18 21:23:19 139.76
-8  2012-10-18 21:41:39 139.76
-9  2012-10-18 21:59:59 139.77
-10 2012-10-19 09:16:10 139.80
-11 2012-10-19 09:49:31 139.86
-12 2012-10-19 21:12:49 140.46
-13 2012-10-19 21:42:31 140.39
-14 2012-10-22 08:45:15 140.14
-15 2012-10-22 09:05:33 140.15
-#+end_example
+| times               | prices |
+|---------------------+--------|
+| 2012-10-18 20:00:09 | 139.82 |
+| 2012-10-18 20:01:11 | 139.82 |
+| 2012-10-18 20:01:59 |  139.8 |
+| 2012-10-18 20:01:29 | 139.81 |
+| 2012-10-18 20:16:49 | 139.77 |
+| 2012-10-18 20:50:49 | 139.85 |
+| 2012-10-18 21:23:19 | 139.76 |
+| 2012-10-18 21:41:39 | 139.76 |
+| 2012-10-18 21:59:59 | 139.77 |
+| 2012-10-19 09:16:10 |  139.8 |
+| 2012-10-19 09:49:31 | 139.86 |
+| 2012-10-19 21:12:49 | 140.46 |
+| 2012-10-19 21:42:31 | 140.39 |
+| 2012-10-22 08:45:15 | 140.14 |
+| 2012-10-22 09:05:33 | 140.15 |
+
+
+Note that I have left the time zone to the operating
+system. Since my computer is typically located in the time zone
+that the =tz database= ([[http://www.iana.org/time-zones]]) 
+#+INDEX: tz database
+#+INDEX: timezones
+calls 'Europe/Berlin', the first time should be =2012-10-18
+20:00:09=.  If, for instance, your computer is in
+'America/Chicago' instead and you run the above code, the first
+time would be =2012-10-18 13:00:09=. Which is right: it is the
+correct time, only translated into Chicago local time.
 
 A =plot= of price against time looks like this.
 
@@ -2932,17 +2943,17 @@ plot(times, prices, type = "s")
 #+RESULTS:
 [[file:~/Packages/PMwR/manual/iplot1.pdf]]
 
-#+ATTR_HTML: :width 50% :height 20%
+#+ATTR_HTML: :width 50% :height 50%
 #+BEGIN_HTML
 <object data="iplot1.pdf" type="application/pdf"><i>Your browser cannot display embedded pdfs. Please follow the link above.</i></object>
 #+END_HTML
 
-
-Such a plot is fine for many purposes, but the contract for which we
-have prices is only traded from Monday to Friday (not on weekends),
-and only from 08:00 to 22:00 Europe/Berlin time. So the plot should
-omit those times at which no trading takes place. This is what the
-function =plotTradingHours= does.
+Such a plot is fine for many purposes. But the contract for which
+we have prices is only traded from Monday to Friday, not on
+weekends, and it istraded only from 08:00 to 22:00 Europe/Berlin
+time. So the plot should omit those times at which no trading
+takes place. This is what the function =plotTradingHours= does.
+#+INDEX: =plotTradingHours=
 
 #+BEGIN_SRC R :results graphics :file ~/Packages/PMwR/manual/iplot2.pdf :width 6 :height 5 :exports both
 tmp <- plotTradingHours(x = prices, t = times, 
@@ -2956,10 +2967,10 @@ tmp <- plotTradingHours(x = prices, t = times,
 #+RESULTS:
 [[file:~/Packages/PMwR/manual/iplot2.pdf]]
 
-What we need for such a plot is a function that maps actual time to a
-point on the /x/-scale, while the /y/-scale stays unchanged. If we
-were talking only about days, not times, we needed something like
-this: 
+What we need for such a plot is a function that maps actual time
+to a point on the /x/-scale, while the /y/-scale stays
+unchanged. If we were talking only about days, not times, we
+needed something like this:
 
 | day      | /x/-position | mapped /x/-position |
 |----------+--------------+---------------------|
@@ -2969,22 +2980,23 @@ this:
 | Sunday   |            4 |         =<removed>= |
 | Monday   |            5 |                   3 |
 
-This mapping is what =plotTradingHours= provides. And not much more:
-the design goal of the function is to make it as much as possible an
-ordinary plot; or more specifically, to make it as similar as possible
-to the =plot= function. Indeed, =plotTradingHours= calls =plot= with a
-small number of default settings:
+This mapping is what =plotTradingHours= provides. And not much
+more: the design goal of the function is to make it as much as
+possible an ordinary plot; or more specifically, to make it as
+similar as possible to the =plot= function. Indeed,
+=plotTradingHours= calls =plot= with a small number of default
+settings:
 #+BEGIN_SRC R :exports code :eval never
 list(type = "l", xaxt = "n", xlab = "", ylab = "")
 #+END_SRC 
-These settings can all be overridden: =...= arguments are passed to
-=plot= (note that we already set =s= as the plot's =type= in the last
-code chunk).  The only required setting is suppressing the
-$x$-axis with =xaxt = "n"=, because =plotTradingHours= will
-create its own /x/-axis via a call to =axis(1, ...)=.  In case you
-wish to use your own axis specification, either set =do.plotAxis= to
-=FALSE= or pass settings to =axis= through the argument =axis1.par=.
-
+These settings can all be overridden through the =...= argument,
+which is passed to =plot=. Note that we already set =s= as the
+plot's =type= in the last code chunk. The only required setting
+is suppressing the /x/-axis with setting =xaxt= to 'n', because
+=plotTradingHours= will create its own /x/-axis via a call to
+=axis(1, ...)=. In case you wish to use your own axis
+specification, either set =do.plotAxis= to =FALSE= or pass
+settings to =axis= through the list =axis1.par=.
 
 ** More examples
 
@@ -3007,14 +3019,13 @@ str(tmp)
 :  $ timegrid   : POSIXct[1:61527], format: "2012-10-18 20:00:09" "2012-10-18 20:00:10" ...
 :  $ map        :function (t)
 
-This information can be used to add elements to plots.
+This information can be used to add elements to plots. An example follows.
 
 *** Adding grid lines
 
-We can add grid lines with =abline=.  The $y$-axis poses no special
-problem.  The positions of the $x$-axis ticks are returned from
-=plotTradingHours=.
-
+We can add grid lines with =abline=. The /y/-axis poses no
+special problem. The positions of the /x/-axis ticks are returned
+from =plotTradingHours=.
 
 #+BEGIN_SRC R :results graphics :file ~/Packages/PMwR/manual/iplot3.pdf :width 6 :height 5 :exports both
 tmp <- plotTradingHours(x = prices, t = times, 
@@ -3030,10 +3041,10 @@ abline(h = axTicks(2), v = tmp$axis.pos,
 #+RESULTS:
 [[file:~/Packages/PMwR/manual/iplot3.pdf]]
 
-If we wan to add to a specific time, say 19 October, 13:10:23, we can
-use the function =map= that the call to =plotTradingHours= returns.
-We first create the specific time with, for example, =ISOdatetime= or
-=strptime=.
+If we wan to add to a specific time, say 19 October, 13:10:23, we
+can use the function =map= that the call to =plotTradingHours=
+returns.  We first create the specific time with, for example,
+=ISOdatetime= or =strptime=.
 
 #+BEGIN_SRC R -n :exports both :results output
 ## Again, I do not specify a time zone since time zones depend on the 
@@ -3052,7 +3063,6 @@ mytime
 
 Now we use =map= to translate this time into the appropriate
 /x/-position.
-
 
 #+BEGIN_SRC R :results graphics :file ~/Packages/PMwR/manual/iplot4.pdf :width 6 :height 5 :exports both
 tmp <- plotTradingHours(x = prices, t = times, 
@@ -3080,10 +3090,10 @@ tmp$map(mytime)
 : $ix
 : [1] 1
 
-The first component is the appropriate position on the /x/-axis; since
-it is a time it is called =t=. The second component gives the
-subscripts to values that should actually be plotted. Example: suppose
-that, for whatever reason, we wish to plot points at several prices at
+The first component is the appropriate position on the /x/-axis;
+since it is a time it is called =t=. The second component gives
+the subscripts to values that should actually be plotted. As an
+example, suppose that we wish to plot points at several prices at
 21:00:00 for several days.
 
 #+BEGIN_SRC R -n :exports both :results output
