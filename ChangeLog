@@ -1,3 +1,11 @@
+2015-11-02  Enrico Schumann  <enrico.schumann@aq-investment.ch>
+
+	* R/journal.R (`[.journal`): fixed -- 'match.against' was ignored
+	after the changes of 2015-11-01
+
+	* R/position.R (print.position): when instrument is NA, suppress
+	instrument names
+
 2015-11-01  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-76

@@ -59,7 +59,10 @@ position(amount, \dots)
   
 }
 \value{
-  An object of class \code{position}.
+  An object of class \code{position}, which  is a numeric matrix with
+  \code{instrument} and \code{timestamp} attributes. Note that \code{position}
+  will never drop the result's \code{dim} attribute; it will always be a matrix.
+  
 }
 \references{
   Enrico Schumann -- Portfolio Management with R

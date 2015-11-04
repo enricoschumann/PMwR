@@ -235,7 +235,8 @@ print.summary.journal <- function(x, ...) {
 `[.journal`  <- function(x, i, match.against = NULL,
                          ignore.case = TRUE, ..., reverse = FALSE) {
     if (is.character(i)) {
-        match.against  <- names(x)[unlist(lapply(x, mode)) == "character"]
+        if (is.null(match.against))
+            match.against  <- names(x)[unlist(lapply(x, mode)) == "character"]
         ii <- logical(length(x))
         if (length(i) > 1L)
             i <- paste(i, collapse = "|")

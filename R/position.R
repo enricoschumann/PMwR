@@ -109,7 +109,9 @@ print.position <- function(x, ..., sep = NA) {
     timestamp <- attr(x, "timestamp")
     if (all(is.na(timestamp)) || (is.character(timestamp) && all(timestamp == "")))
         rownames(x) <- NULL
-    if (all(is.na(instrument)))
+    if (all(is.na(instrument)) || (is.character(instrument) && all(instrument == "")))
+        colnames(x) <- NULL
+    if (!all(is.na(instrument)))
         colnames(x) <- instrument
     attr(x, "instrument") <- NULL
     attr(x, "timestamp") <- NULL

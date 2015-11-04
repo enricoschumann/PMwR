@@ -59,7 +59,7 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
     A function. Default is \code{NULL}.
   }
   \item{b}{
-    burnin (an integer). Defaults to 1.
+    burn-in (an integer). Defaults to 1.
   }
   \item{fraction}{
     amount of rebalancing to be done (a scalar between 0 and 1)
