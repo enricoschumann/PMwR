@@ -65,15 +65,19 @@ print.NAVseries <- function(x, ...) {
 
 summary.NAVseries <- function(object, ...) {
 
-    ## FIXME: assuming daily timestamps -- too restrictive? hourly?
+    ## TODO: assuming daily timestamps -- too restrictive? hourly?
+    ## TODO: timestamp can also be numeric 1 .. n_obs
     isna <- is.na(object$NAV)
     nna <- sum(isna)
     timestamp <- object$timestamp[!isna]
     NAV <- object$NAV[!isna]
-    NAV <- aggregate(NAV, by = list(as.Date(timestamp)), tail, 1L)[[2L]]
-    timestamp <- aggregate(timestamp,
-                           by = list(as.Date(timestamp)), tail, 1L)[[2L]]
-
+    if (!is.null(timestamp) &&
+        !inherits(try(as.Date(timestamp), silent = TRUE), "try-error") && 
+        !any(is.na(as.Date(timestamp)))) {
+        NAV <- aggregate(NAV, by = list(as.Date(timestamp)), tail, 1L)[[2L]]
+        timestamp <- aggregate(timestamp,
+                               by = list(as.Date(timestamp)), tail, 1L)[[2L]]
+    }
     
     ans <- list()
     ans$NAVseries <- object
@@ -169,7 +173,7 @@ print.summary.NAVseries <- function(x, ..., sparkplot = TRUE, monthly.returns = 
         template <- gsub(paste0("%", n, "%"), x[[n]], template)
     template <- valign(template)
     cat(template, sep = "\n")
-    if (monthly.returns) {        
+    if (monthly.returns && inherits(x$timestamp, "Date")) {        
         cat("Monthly returns  ")
         if (.Platform$OS.type == "unix") 
             sparkplot(returns(x=x$NAV, t=x$timestamp, period = "month"))
@@ -228,6 +232,18 @@ as.NAVseries.zoo <- function(x, ...){
     if (!is.null(dx) && !any(dx == 1))
         stop("can only coerce single series")
     NAVseries(NAV = coredata(x), timestamp = index(x))
+}
+
+as.NAVseries.btest <- function(x, ...){
+    ## browser()
+    NAV <- x$wealth
+    if (any(na <- is.na(NAV)))
+        NAV <- NAV[-c(1:max(which(na)))]
+    timestamp <- if(!is.null(x$timestamp))
+                     timestamp else seq_along(NAV)
+    ## TODO: scale1 method for NAVseries
+    NAVseries(NAV = scale1(NAV, level = 100),
+              timestamp = timestamp)
 }
 
 as.zoo.NAVseries <- function(x, ...){

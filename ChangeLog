@@ -1,4 +1,14 @@
-2015-11-02  Enrico Schumann  <enrico.schumann@aq-investment.ch>
+2015-11-12  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 0.1-77
+
+	* R/NAVseries.R (as.NAVseries.btest): new 'as.NAVseries' method
+	for 'btest' objects
+	(summary.NAVseries): the timestamp of a NAVseries can now also be
+	numeric (typically integer 1:n_obs). Before, it had to inherit
+	from 'Date' or had to be coercable to 'Date'.
+
+2015-11-02  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (`[.journal`): fixed -- 'match.against' was ignored
 	after the changes of 2015-11-01
