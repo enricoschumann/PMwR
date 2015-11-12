@@ -1,5 +1,7 @@
 \name{journal}
 \alias{journal}
+\alias{as.journal}
+\alias{is.journal}
 \alias{journal.default}
 \alias{aggregate.journal}
 \alias{c.journal}
@@ -21,6 +23,10 @@
 }
 \usage{
 journal(amount, \dots)
+
+as.journal(x, \dots)
+
+is.journal(x)
 
 \method{journal}{default}(amount, price, timestamp, instrument,
         id = NULL, account = NULL, \dots)
@@ -81,7 +87,11 @@ journal(amount, \dots)
     For \code{sort}: arguments passed to \code{\link{sort}}.
   }
   \item{x}{    
-    a \code{journal}
+
+    a \code{journal} or an object to be coerced to class \code{journal} (for
+    \code{as.journal}) or to be checked if it inherits from journal (for
+    \code{is.journal})
+
   }
   \item{width}{
     integer. See \code{\link{options}}.
