@@ -81,12 +81,15 @@
 #+HTML_HEAD:     code {
 #+HTML_HEAD:       font-size: 115%;
 #+HTML_HEAD:     }
+#+HTML_HEAD:     .org-right {
+#+HTML_HEAD:       text-align: right;
+#+HTML_HEAD:     }
 #+HTML_HEAD: </style>
 
 #+BEGIN_HTML
 <p>
 <a href = "http://enricoschumann.net">Enrico Schumann</a>&nbsp;&nbsp;&nbsp;
-<time datetime="2015-11-16">4 Nov 2015</time>&nbsp;&nbsp;&nbsp;
+<time datetime="2015-11-16">16 Nov 2015</time>&nbsp;&nbsp;&nbsp;
 <a href = "PMwR.pdf">[PDF]</a>
 </p>
 #+END_HTML
@@ -3005,10 +3008,8 @@ takes place. This is what the function =plotTradingHours= does.
 
 #+BEGIN_SRC R :results graphics :file ~/Packages/PMwR/manual/iplot2.pdf :width 6 :height 5 :exports both
 tmp <- plotTradingHours(x = prices, t = times, 
-                        interval = "1 sec", 
-                        labels = "day",
-                        fromHHMMSS = "080000", 
-                        toHHMMSS = "220000",
+                        interval = "1 sec", labels = "day",
+                        fromHHMMSS = "080000", toHHMMSS = "220000",
                         type = "s")
 #+END_SRC
 
@@ -3021,6 +3022,7 @@ unchanged. If we were talking only about days, not times, we
 needed something like this:
 
 | day      | /x/-position | mapped /x/-position |
+| <l>      |          <r> |                 <r> |
 |----------+--------------+---------------------|
 | Thursday |            1 |                   1 |
 | Friday   |            2 |                   2 |
