@@ -2691,18 +2691,18 @@ classes: Fund Equity Account Currency Future Index
 
 * Rebalancing a portfolio
 
-\noindent The function =rebalance= computes the transactions
-necessary for moving from one portfolio to another.
+The function =rebalance= computes the transactions necessary for
+moving from one portfolio to another.
 
-\section{Usage with unnamed vectors}
+** Usage with unnamed vectors
 
-The =current= portfolio is given in currency units; the
-=target= portfolio is given in weights.  To compute the
-required order sizes, we also need the current prices of the assets.
-When current, target and price are unnamed, the assets' positions in
+The =current= portfolio is given in currency units; the =target=
+portfolio is given in weights. To compute the required order
+sizes, we also need the current prices of the assets. When
+=current=, =target= and =price= are unnamed, the assets' positions in
 the vectors need to match.
 
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output
 current <- c(0,0,100,100)
 prices  <- c(1,1,1,1)
 target  <- c(0.25, 0.25, 0.25, 0.25)
@@ -2710,36 +2710,72 @@ rebalance(current, target, prices, match.names = FALSE)
 #+END_SRC 
 
 #+RESULTS:
+:   price current value   %        new value   %        order
+: 1     1       0     0  0.0        50    50 25.0          50
+: 2     1       0     0  0.0        50    50 25.0          50
+: 3     1     100   100 50.0        50    50 25.0         -50
+: 4     1     100   100 50.0        50    50 25.0         -50
+: 
+: Notional: 200.  Amount invested: 200.  Total turnover: 200.
 
-The current portfolio may also be empty, in which case
-=current= can be set to 0.  Then, of course, we need to specify
-the =notional= of the target portfolio.
-#+BEGIN_SRC R -n :exports both
+The current portfolio may also be empty, in which case =current=
+can be set to 0. Then, of course, we need to specify a =notional=
+for the target portfolio.
+#+BEGIN_SRC R -n :exports both :results output
 current <- 0
-rebalance(current, target, prices, match.names = FALSE, notional = 100)
+rebalance(current, target, prices, 
+          match.names = FALSE, notional = 100)
 #+END_SRC
 
 #+RESULTS:
+:   price current value  %        new value   %        order
+: 1     1       0     0 0.0        25    25 25.0          25
+: 2     1       0     0 0.0        25    25 25.0          25
+: 3     1       0     0 0.0        25    25 25.0          25
+: 4     1       0     0 0.0        25    25 25.0          25
+: 
+: Notional: 100.  Amount invested: 100.  Total turnover: 100.
 
 We may also specify the target portfolio as a single number.  
-#+BEGIN_SRC R -n :exports both
-current <- c(5,5,100,100)
+#+BEGIN_SRC R -n :exports both :results output
+current <- c(5, 5, 100, 100)
 
 target <- 0    ## liquidate the portfolio
 rebalance(current, target, prices, match.names = FALSE)
+#+END_SRC 
 
-target <- 0.2  ## every assets gets a weight of 20% 
+#+RESULTS:
+:   price current value   %        new value  %        order
+: 1     1       5     5  2.4         0     0 0.0          -5
+: 2     1       5     5  2.4         0     0 0.0          -5
+: 3     1     100   100 47.6         0     0 0.0        -100
+: 4     1     100   100 47.6         0     0 0.0        -100
+: 
+: Notional: 210.  Amount invested: 0.  Total turnover: 210.
+
+#+BEGIN_SRC R -n :exports both :results output
+## every assets gets a weight of 20% 
+target <- 0.2  
 rebalance(current, target, prices, match.names = FALSE, notional = 100)
 #+END_SRC 
 
 #+RESULTS:
+:   price current value    %        new value   %        order
+: 1     1       5     5   5.0        20    20 20.0          15
+: 2     1       5     5   5.0        20    20 20.0          15
+: 3     1     100   100 100.0        20    20 20.0         -80
+: 4     1     100   100 100.0        20    20 20.0         -80
+: 
+: Notional: 100.  Amount invested: 80.  Total turnover: 190.
 
-\section{Usage with named vectors}
 
-More usefully, =rebalance= can also use the names of the
-vectors current etc.  The argument =match.names= must be set to
-=TRUE= for this (the default, actually).
-#+BEGIN_SRC R -n :exports both
+
+** Usage with named vectors
+
+More usefully, =rebalance= can also use the names of the vectors
+current etc. The argument =match.names= must be set to =TRUE=
+for this (which is the default, actually).
+#+BEGIN_SRC R -n :exports both :results output
 names(prices) <- letters[1:4]
 current <- c(b = 10)
 target  <- c(d = 0.5)
@@ -2748,14 +2784,26 @@ rebalance(current, target, prices)
 #+END_SRC 
 
 #+RESULTS:
+:   price current value    %        new value   %        order
+: b     1      10    10 100.0         0     0  0.0         -10
+: d     1       0     0   0.0         5     5 50.0           5
+: 
+: Notional: 10.  Amount invested: 5.  Total turnover: 15.
 
-To also show all instruments, specify =drop.zero= as
+To also show all instruments, set the argument =drop.zero= to
 =FALSE=.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output
 print(rebalance(current, target, prices), drop.zero = FALSE)
 #+END_SRC 
 
 #+RESULTS:
+:   price current value    %        new value   %        order
+: a     1       0     0   0.0         0     0  0.0           0
+: b     1      10    10 100.0         0     0  0.0         -10
+: c     1       0     0   0.0         0     0  0.0           0
+: d     1       0     0   0.0         5     5 50.0           5
+: 
+: Notional: 10.  Amount invested: 5.  Total turnover: 15.
 
 
 
