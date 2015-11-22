@@ -1,17 +1,27 @@
 \name{pl}
 \alias{pl}
+\alias{.pl}
+\alias{pl.default}
+\alias{pl.journal}
 \title{
   Profit and Loss
 }
 \description{
-  Profit and (or) loss of financial transactions. 
+  Compute profit and (or) loss of financial transactions. 
 }
 \usage{
-pl(amount, price, instrument = NULL, timestamp = NULL,
-   along.timestamp = FALSE, do.sort = FALSE,
-   initial.cash = 0, initial.position = NULL,
-   initial.price, current.price, multiplier,
-   tol = 1e-10, do.warn = TRUE)
+pl(amount, \dots)
+
+\method{pl}{default}(amount, price, timestamp = NULL,
+                     instrument = NULL, multiplier = 1,
+                     along.timestamp = FALSE, approx = FALSE,
+                     eval.price = NULL, \dots)
+
+\method{pl}{journal}(amount, multiplier = 1,
+                     along.timestamp = FALSE, approx = FALSE,
+                     eval.price = NULL, \dots)
+
+.pl(amount, price, tol = 1e-10, do.warn = TRUE)
 }
 \arguments{
   \item{amount}{
@@ -51,9 +61,12 @@ pl(amount, price, instrument = NULL, timestamp = NULL,
 }
 \value{
 
-  \code{pl}: an object of class \code{pl}, which is a list of five
-  elements (and the class attribute).
+  For \code{pl}, an object of class \code{pl}, which is a list of lists:
+  one list for each instrument. Each such list contains numeric vectors:
+  \code{pnl}, \code{realised}, \code{unrealised}, \code{buy},
+  \code{sell}, \code{volume}.
 
+  
 }
 \author{
   Enrico Schumann
@@ -62,9 +75,9 @@ pl(amount, price, instrument = NULL, timestamp = NULL,
   \code{\link{btest}},   \code{\link{returns}}
 }
 \examples{
-J <- journal(timestamp = c(1, 2, 3),
-                amount = c(1, 1, -2),
-                price  = c(100,102, 101))
+J <- journal(timestamp = c(  1,   2,   3),
+             amount    = c(  1,   1,  -2),
+             price     = c(100, 102, 101))
 pl(J)
 pl(c(1, 1, -2), c(100,102, 101)) ## without a 'journal'
 
@@ -72,5 +85,5 @@ pl(c(1, 1, -2), c(100,102, 101)) ## without a 'journal'
 J <- journal(timestamp  = c(1,2,3,1,2,3),
              amount     = c(1, 1, -2, 1,1,-2),
              price      = c(100, 102, 101, 100, 102, 105),
-             instrument = c(rep("A", 3), rep("B", 3)))
+             instrument = c(rep("Bond A", 3), rep("Bond B", 3)))
 pl(J)}

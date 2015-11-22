@@ -322,7 +322,8 @@ toHTML.p_returns <- function(x, ..., year.rows = TRUE,
                             th.class = NULL,
                             td.style = "text-align:right;padding:0.5em;",
                             td.class = NULL,
-                            tr.style = NULL, tr.class = NULL) {
+                            tr.style = NULL, tr.class = NULL,
+                            browse = FALSE) {
 
     ## TODO: if list, warning
     period <- attr(x, "period")
@@ -365,7 +366,16 @@ toHTML.p_returns <- function(x, ..., year.rows = TRUE,
     open <- paste0("<table", .ctag(table.style, "style"),
                              .ctag(table.class, "class"), ">")
     mt <- c(open, mt, "</table>")
-    mt
+
+    if (browse) {
+        tmp <- tempfile("PMwR_", fileext = ".html")
+        writeLines(mt, con= file(tmp), sep = "\n")
+        browseURL(paste0("file://", tmp))
+        invisible(mt)
+    } else
+        mt
+
+    
 }
 
 ## not exported

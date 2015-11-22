@@ -21,6 +21,7 @@ importFrom(datetimeutils, roundPOSIXt)
 export(
     .returns,
     .mtab,
+    .pl,
     NAVseries,
     as.NAVseries,
     btest,
@@ -59,6 +60,8 @@ S3method(as.zoo, p_returns)
 S3method(c, journal)
 S3method(head, journal)
 S3method(length, journal)
+S3method(pl, default)
+S3method(pl, journal)
 S3method(plot, btest)
 S3method(plot, NAVseries)
 S3method(position, default)

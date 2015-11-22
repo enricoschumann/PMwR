@@ -1,3 +1,18 @@
+2015-11-22  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-78
+
+	* R/pl.R (pl): 'pl' is now a generic function; methods 'default'
+	and 'journal' are available. The function returns now always
+	objects of class 'pl' (before, when 'along.timestamp' was TRUE,
+	the class was 'plsorted'). See ?pl for working examples.
+
+	* R/internals.R (avg): moved function 'avg' to file 'pl.R'
+
+2015-11-20  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (toHTML.p_returns): new argument 'browse'
+
 2015-11-12  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-77
