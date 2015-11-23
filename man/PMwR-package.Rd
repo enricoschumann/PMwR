@@ -24,7 +24,9 @@
   arguments by position).  Any changes in argument names will be
   documented in the ChangeLog and so can be easily followed.
 
-  The Manual provides more details.
+  The Manual provides more details. It is available from
+  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html} .
+
 }
 \author{
 Enrico Schumann
@@ -37,8 +39,8 @@ Gilli, M., Maringer, D. and Schumann, E. (2011) \emph{Numerical Methods
 and Optimization in Finance}. Elsevier.
 \url{http://www.elsevierdirect.com/product.jsp?isbn=9780123756626}
 
-Schumann, E. (2015) \emph{Portfolio Management with
-R}. \url{http://enricoschumann.net/R/packages/PMwR/}
+Schumann, E. (2015) \emph{Portfolio Management with R}.
+\url{http://enricoschumann.net/#Books}
 
 } 
 \keyword{package}

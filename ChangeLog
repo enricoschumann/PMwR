@@ -1,9 +1,13 @@
 2015-11-23  Enrico Schumann  <es@enricoschumann.net>
 
+	* man/PMwR-package.Rd: added link to manual
+
+2015-11-23  Enrico Schumann  <es@enricoschumann.net>
+
         * DESCRIPTION (Version): 0.1-79
 
-	* R/pl.R (pl.default): argument 'eval.price' to compute the p/l of
-	unclosed positions. See ?pl for examples.
+	* R/pl.R (pl.default): new argument 'eval.price' to compute the
+	p/l of unclosed positions. See ?pl for examples.
 	(print.pl): experimental -- use package 'crayon' to highlight p/l
 
 2015-11-22  Enrico Schumann  <es@enricoschumann.net>
