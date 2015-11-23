@@ -1,8 +1,8 @@
 Package: PMwR
 Type: Package
 Title: Portfolio Management with R
-Version: 0.1-78
-Date: 2015-11-22
+Version: 0.1-79
+Date: 2015-11-23
 Maintainer: Enrico Schumann <es@enricoschumann.net>
 Authors@R: person(given = "Enrico", family = "Schumann", 
                   role  = c("aut", "cre"),
@@ -10,7 +10,7 @@ Authors@R: person(given = "Enrico", family = "Schumann",
 Description: Functions and examples for 'Portfolio Management with R':
   pricing of financial instruments, computing profit-and-loss, 
   reporting, backtesting and more. 
-Imports: NMOF, datetimeutils, textutils, utils, zoo
+Imports: NMOF, datetimeutils, textutils, utils, zoo, crayon
 Suggests: RUnit, rbenchmark
 License: GPL-3
 LazyLoad: yes

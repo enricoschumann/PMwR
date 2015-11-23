@@ -36,7 +36,7 @@ returns(x, \dots)
     stand.alone = TRUE, table.style = NULL, table.class = NULL, 
     th.style = NULL, th.class = NULL,
     td.style = "text-align:right;padding:0.5em;", 
-    td.class = NULL, tr.style = NULL, tr.class = NULL)
+    td.class = NULL, tr.style = NULL, tr.class = NULL, browse = FALSE)
 
 .returns(x, pad = NULL, lag)
 }
@@ -123,6 +123,9 @@ returns(x, \dots)
   \item{td.style}{character}
   \item{tr.class}{character}
   \item{tr.style}{character}
+  \item{browse}{
+    logical: open table in browser?
+  }
 }
 \details{
 

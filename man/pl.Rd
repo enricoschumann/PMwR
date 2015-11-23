@@ -42,15 +42,17 @@ pl(amount, \dots)
   \item{do.sort}{
     sort all by time
   }
-  \item{initial.cash}{
-    a numeric vector of length one
-  }
   \item{initial.position}{
     a \code{\link{position}}
   }
-  \item{current.price}{price.from}
+  \item{eval.price}{
+
+    numeric vector. With several instruments, the prices should be
+    named, e.g. \code{c(stock1 = 100, stock2 = 101)}.
+
+  }
   \item{initial.price}{price.to}
-  \item{multiplier}{not supported}
+  \item{multiplier}{not supported yet}
   \item{tol}{numeric}
   \item{do.warn}{logical}
 }
@@ -82,8 +84,29 @@ pl(J)
 pl(c(1, 1, -2), c(100,102, 101)) ## without a 'journal'
 
 
-J <- journal(timestamp  = c(1,2,3,1,2,3),
-             amount     = c(1, 1, -2, 1,1,-2),
+J <- journal(timestamp  = c(  1,   2,   3,   1,   2,   3),
+             amount     = c(  1,   1,  -2,   1,   1,  -2),
              price      = c(100, 102, 101, 100, 102, 105),
              instrument = c(rep("Bond A", 3), rep("Bond B", 3)))
-pl(J)}
+pl(J)
+
+
+## Example for 'eval.price'
+instrument  <- c(rep("Bond A", 2), rep("Bond B", 2))
+amount <- c(1, -2, 2, -1)
+price <- c(100, 101, 100, 105)
+
+## ... no p/l + warning because positions not closed:
+pl(amount, price, instrument = instrument) 
+
+## ... but with eval.price specified, p/l is computed:
+pl(amount, price, instrument = instrument, ## p/l + no warning
+   eval.price = c("Bond A" = 103, "Bond B" = 100)) 
+
+### ... and is, except for volume, the same as here:
+instrument  <- c(rep("Bond A", 3), rep("Bond B", 3))
+amount <- c(1, -2, 1, 2, -1, -1)
+price <- c(100, 101, 103, 100, 105, 100)
+pl(amount, price, instrument = instrument) ## no p/l + warning
+
+}

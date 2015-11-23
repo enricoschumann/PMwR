@@ -1,4 +1,4 @@
-print.pl <- function(x, ...) {
+print.pl <- function(x, ..., use.crayon = TRUE) {
     ## lapply(x, `[[`, "realised")
 
     oo <- getOption("scipen")
@@ -17,13 +17,18 @@ print.pl <- function(x, ...) {
             cat(attr(x, "instrument")[[i]], "\n")
             ind <- "  "
         }
-        cat(ind, "PnL total      ", numrow(x[[i]]$pnl), "\n",
+        BUY <- if (is.finite(x[[i]]$buy))
+                   x[[i]]$buy else "."
+        SELL <- if (is.finite(x[[i]]$sell))
+                   x[[i]]$sell else "."
+        cat(ind, "PnL total    ",
+            if (use.crayon) bold(numrow(x[[i]]$pnl)) else numrow(x[[i]]$pnl) , "\n",
             if (any(!is.na(x[[i]]$realised)))
                 paste0(ind, "    realised   ", numrow(x[[i]]$realised), "\n"),
             if (any(!is.na(x[[i]]$unrealised)))
                 paste0(ind, "    unrealised ", numrow(x[[i]]$unrealised), "\n"),
-            ind, "average buy  ", x[[i]]$buy, "\n",
-            ind, "average sell ", x[[i]]$sell, "\n",
+            ind, "average buy  ", BUY, "\n",
+            ind, "average sell ", SELL, "\n",
             ind, "volume       ",
             numrow(x[[i]]$volume), "\n", sep = "")
 
@@ -167,7 +172,8 @@ pl <- function(amount, ...)
 
 pl.journal <- function(amount, multiplier = 1,
                        along.timestamp = FALSE, approx = FALSE,
-                       eval.price = NULL, ...) {
+                       eval.price = NULL,
+                       tol = 1e-10, ...) {
     J <- amount
     price <- J$price
     instrument <- J$instrument
@@ -175,22 +181,29 @@ pl.journal <- function(amount, multiplier = 1,
     timestamp <- J$timestamp
     pl.default(amount, price, timestamp,
                instrument,
-               multiplier = 1,
+               multiplier = multiplier,
                along.timestamp = along.timestamp,
-               approx = FALSE,
-               eval.price = NULL, ...)
+               approx = approx,
+               eval.price = eval.price,
+               tol = tol, ...)
 }
 
 pl.default <- function(amount, price, timestamp = NULL,
                        instrument = NULL, multiplier = 1,
                        along.timestamp = FALSE, approx = FALSE,
-                       eval.price = NULL, ...) {
-
+                       eval.price = NULL,
+                       tol = 1e-10, ...) {
+    if (multiplier != 1)
+        .NotYetUsed("multiplier")
+    if (approx)
+        .NotYetUsed("approx")
     if (is.null(instrument) || all(is.na(instrument))) {
         no.i <- TRUE
         instrument  <- rep("", length(amount))
         uniq.i <- ""
         ni <- 1L
+        if (!is.null(eval.price))
+            names(eval.price) <- ""
     } else {
         no.i <- FALSE
         uniq.i <- sort(unique(instrument))
@@ -202,7 +215,23 @@ pl.default <- function(amount, price, timestamp = NULL,
         ii <- uniq.i[i] == instrument
         amount1 <- amount[ii]
         price1 <- price[ii]
-        pl1 <- .pl(amount1, price1)
+        if (!is.null(eval.price) && no.i)
+            eval.price1 <- eval.price
+        if (!is.null(eval.price) && !no.i)
+            eval.price1 <- eval.price[[ uniq.i[i] ]]
+        
+        open <- abs(sum(amount1)) > tol
+        if (open && is.null(eval.price)) {
+            warning(sQuote("sum(amount)"), " is not zero",
+                    if (!no.i) " for ",  uniq.i[i], 
+                    "; specify ",
+                    sQuote("eval.price")," to compute p/l.")
+        }
+        if (open && !is.null(eval.price)) {
+            amount1 <- c(amount1, -sum(amount1))
+            price1  <- c(price1, eval.price1)
+        }
+        pl1 <- .pl(amount1, price1, tol = tol, do.warn = FALSE)
         if (!along.timestamp) {
             tmp <- list(pnl = pl1[1L],
                         realised = NA,
@@ -210,6 +239,9 @@ pl.default <- function(amount, price, timestamp = NULL,
                         buy = pl1[3L],
                         sell = pl1[4L],
                         volume = pl1[2L])
+            if (open && !is.null(eval.price))
+                tmp[["volume"]] <- tmp[["volume"]] -
+                                   abs(sum(amount[ii]))
         } else {
             cumcash <- cumsum(-price1 * amount1)
             cumpos  <- cumsum(amount1)
@@ -237,7 +269,8 @@ pl.default <- function(amount, price, timestamp = NULL,
 .pl <- function(amount, price, tol = 1e-10, do.warn = TRUE) {
     open <- abs(sum(amount)) > tol
     if (open && do.warn)
-        warning(sQuote("sum(amount)"), " is not zero; cannot compute p/l.")
+        warning(sQuote("sum(amount)"),
+                " is not zero; cannot compute p/l.")
     i <- amount > 0
     c(if (open)
           NA
@@ -251,11 +284,19 @@ pl.default <- function(amount, price, timestamp = NULL,
 
 }
 
+## debug(pl.default)
+ 
 ## instrument  <- c("FGBL", "FGBL", "Bond", "Bond")
-## amount <- c(1, -1, 2, -2)
+## amount <- c(1, -2, 2, -1)
 ## price <- c(100,101, 1, 5)
-## .pl(amount, price)
-## x <- pl(amount, price, instrument=instrument)
+## ## .pl(amount, price)
+## pl.default(amount, price, instrument=instrument)
+## pl.default(amount, price, instrument=instrument, eval.price=c(FGBL=103, Bond = 2))
+
+## amount <- c(1, -2)
+## price <- c(100,101)
+## pl.default(amount, price)
+## pl.default(amount, price, eval.price=100)
 
 ## require("rbenchmark")
 

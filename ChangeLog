@@ -1,3 +1,11 @@
+2015-11-23  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 0.1-79
+
+	* R/pl.R (pl.default): argument 'eval.price' to compute the p/l of
+	unclosed positions. See ?pl for examples.
+	(print.pl): experimental -- use package 'crayon' to highlight p/l
+
 2015-11-22  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.1-78
@@ -5,7 +13,7 @@
 	* R/pl.R (pl): 'pl' is now a generic function; methods 'default'
 	and 'journal' are available. The function returns now always
 	objects of class 'pl' (before, when 'along.timestamp' was TRUE,
-	the class was 'plsorted'). See ?pl for working examples.
+	the class was 'plsorted'). See ?pl for examples.
 
 	* R/internals.R (avg): moved function 'avg' to file 'pl.R'
 

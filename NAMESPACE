@@ -17,6 +17,7 @@ importFrom(textutils, toHTML)
 importFrom(textutils, toText)
 importFrom(datetimeutils, timegrid)
 importFrom(datetimeutils, roundPOSIXt)
+importFrom(crayon, bold)
 
 export(
     .returns,
