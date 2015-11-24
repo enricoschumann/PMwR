@@ -1,5 +1,7 @@
 2015-11-24  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-80
+
 	* vignettes/An_overview.Rnw: added summary
 
 	* vignettes/: removed all other vignettes: all examples are
