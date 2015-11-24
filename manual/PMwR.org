@@ -308,8 +308,12 @@ pension::equities
 
 ** Creating journals and combining
 
-The function =journal= creates journal objects. At is very minimum, a
-journal must contain amounts of something.
+The function =journal= creates journal objects. For details about
+the function and methods for =journal= objects, see =?journal=.
+@@latex:\index{journal@\texttt{journal} (function)}@@
+
+
+At is very minimum, a journal must contain amounts of something.
 #+BEGIN_SRC R -n :exports both :results output
   amount <- c(+1, +2, -2, +3)
   jnl <- journal(amount = amount)
@@ -325,12 +329,17 @@ journal must contain amounts of something.
 : 
 : 4 transactions
 
-(Actually, that is not true. On occasion it is useful to create an empty
+Actually, that is not true. On occasion it is useful to create an empty
 journal, one with no entries at all. You can do this by saying
-=journal()=.)
+#+BEGIN_SRC R -n :exports both :results output
+journal()
+#+END_SRC
 
-To see the current position, which is nothing more than the sum over
-all amounts, we can use =position=.
+#+RESULTS:
+: no transactions
+
+To see the current balance, which is nothing more than the sum
+over all amounts, we can use =position=.
 #+BEGIN_SRC R -n :exports both :results output
   position(jnl)
 #+END_SRC
@@ -350,7 +359,7 @@ we can at least track positions over time.
 
 Suppose you wanted to note how many bottles of milk and wine you have
 stored in your basement. Whenever you add to your storage, you have a
-positive amount; whenever you retrieve bottles, but have a negative
+positive amount; whenever you retrieve bottles, you have a negative
 amount.
 
 #+name: tab_wine
@@ -424,8 +433,7 @@ perhaps we better switch to a financial example.
 : 
 : 4 transactions
 
-For details about the function and methods for =journal= objects, see
-=?journal=. A =print= method defines how to display a journal.
+A =print= method defines how to display a journal.
 #+INDEX: journal!print journals (print method)
 #+BEGIN_SRC R -n :exports both :results output
 print(J, max.print = 2, exclude = "instrument")
@@ -464,7 +472,7 @@ c(J, J2)
 #+end_example
 
 
-** Subsetting journals
+** Selecting transactions
 
 In an interactive session, you can use =subset= to select particular
 transactions.
@@ -480,11 +488,11 @@ subset(J, amount > 1)
 : 
 : 2 transactions
 
-With subset, you need not quote the expression that selects trades and
-you can directly access a journal's fields. Because of the way
-=subset= evaluates its arguments, it should not be used within
-functions. (See the Examples section in =?journal= for what can happen
-then.)
+With =subset=, you need not quote the expression that selects
+trades and you can directly access a journal's fields. Because of
+the way =subset= evaluates its arguments, it should not be used
+within functions. (See the Examples section in =?journal= for
+what can happen then.)
 
 More generally, to extract or change a field, use its name, either
 through the =$= operator or double brackets =[[...]]=.
@@ -582,9 +590,13 @@ J["eur", match.against = "comment"]
 : 2 transactions
 
 
-** Computing positions
+** Computing balances
 
-The function =position= gives the current balance of all instruments.
+As already mentioned, the function =position= gives the current
+balance of all instruments.
+@@latex:\index{position@\texttt{position} (function)}@@
+
+
 #+BEGIN_SRC R -n :exports both :results output
 position(J)
 #+END_SRC
@@ -672,7 +684,7 @@ required computation simple as well. Computing profit-or-loss
 #+END_SRC 
 
 #+RESULTS:
-: PnL total    2
+:  PnL total    2
 : average buy  100
 : average sell 102
 : volume       2
@@ -750,7 +762,7 @@ volume       1
 ‘total PnL’ is in units of instrument;
 ‘volume’ is total /absolute/ amount of traded instruments.
 Warning message:
-In pl.default(amount, price, timestamp, instrument, multiplier = 1,  :
+In pl.default(amount, price, timestamp, instrument, multiplier = multiplier,  :
   ‘sum(amount)’ is not zero; specify ‘eval.price’ to compute p/l.
 #+end_example
 
@@ -887,7 +899,7 @@ pl(J, current.price = 1)
 #+END_SRC 
 
 #+RESULTS:
-: PnL total    [1m-100[22m
+: PnL total    -100
 : average buy  0.5
 : average sell 0
 : volume       400
@@ -1413,6 +1425,7 @@ toLatex(returns(x, t = t, period = "month"))
 
 This chapter explains how to test trading strategies with the =btest=
 function.
+@@latex:\index{btest@\texttt{btest} (function)}@@
 
 ** Decisions
 
@@ -2589,7 +2602,7 @@ classes: Fund Equity Account Currency Future Index
 * Rebalancing a portfolio
 
 #+INDEX: rebalance!a portfolio
-@@latex:\index{rebalance@\texttt{rebalance}}@@
+@@latex:\index{rebalance@\texttt{rebalance} (function)}@@
 
 The function =rebalance= computes the transactions necessary for
 moving from one portfolio to another.
