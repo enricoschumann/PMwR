@@ -14,17 +14,15 @@
 \definecolor{grau2}{rgb}{.2,.2,.2}
 \definecolor{grau7}{rgb}{.7,.7,.7}
 \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
-\DefineVerbatimEnvironment{Soutput}{Verbatim}{frame=single,xleftmargin=0em,%
-  formatcom=\color{grau2},rulecolor=\color{grau7}}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{frame=single,
+  xleftmargin=0em, formatcom=\color{grau2},rulecolor=\color{grau7}}
 \DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=2em}
 \fvset{listparameters={\setlength{\topsep}{0pt}}}
 \renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
 \SweaveOpts{keep.source = TRUE, eps = TRUE}
 
-%% in manual: *do* *not* *edit*
-
 <<echo=false>>=
-options(continue = " ", digits = 3, width = 60, useFancyQuotes = FALSE)
+options(continue = "  ", digits = 3, width = 60, useFancyQuotes = FALSE)
 @
 
 \begin{document}
@@ -42,91 +40,55 @@ require("PMwR")
 require("zoo")
 @
 
-\section{Generic functions and classes}
+\noindent The \textsc{pm}w\textsc{r} package grew out of various
+pieces of software that I have written since 2008. The package is
+currently under development and changes frequently. This is mainly
+because the code has been written over many years and is in need of
+being groomed for general use. Specifically, the interfaces to
+functions are not stable (e.g., argument names are currently being
+made consistent across functions); in some cases, generic functions
+will be introduced. The \textbf{recommended practice} is therefore to
+\textbf{explicitly name arguments in function calls} (and not pass
+arguments by position). Any changes in argument names will be
+documented in the ChangeLog
+\url{http://enricoschumann.net/R/packages/PMwR/ChangeLog} and so can
+be easily followed.
 
-\subsection{Classes/Data structures}
+Consequently, this manual is only a draft, and it will change as
+frequently as the package. I am grateful for comments and suggestions.
 
-The following classes are implicitly defined (ie, S3 classes):
+The latest version of the package is available from
+\url{http://enricoschumann.net/R/packages/PMwR/}. To install the
+package from within R, type
 
-\begin{itemize}
-\item \texttt{journal}: keeps transactions. Internally, a object of
-  class \texttt{journal} is named list of atomic vectors.
-\item \texttt{position}: the numerical positions of different
-  accounts/instruments at specific points in time. Always stored in a
-  numeric matrix with attributes timestamp and instrument; points in
-  time are in rows, instruments in columns.
-\item \texttt{p\_returns}: numeric vector (potentially a matrix) with
-  attributes timestamp and period.
-\item instrument: term sheet (description etc); it does know nothing
-  about market data -- not yet implemented
-\item cashflow: internal -- not yet implemented
-\item NAVseries
-\item \texttt{pricetable}: a matrix of NAVs (or prices); each column
-  corresponds to one asset. Additional attributes instrument and
-  timestamp. Often, pricetables will be created corresponding to
-  positions.
-\end{itemize}
-
-
-\section{Writing the package}
-
-\subsection{Goals}
-
-\begin{itemize}
-\item Store a 'portfolio' of assets and compute the value (or other
-  quantities, like Greeks) for different data.  Data can refer to
-  market prices, but also to theoretical prices.
-\item Reevaluate a portfolio for scenario (= new market data or
-  artificial data).
-\item Read in transactions from various sources. $\to$ done via a
-  journal class.
-\item Show portfolio on certain day/time: create a position, evaluate
-  this position $\to$ position class
-\item testing portfolios of options --> show payoff, simulate *paths*
-  of underlier and vol surface
-\item run simulations for VaR
-\item various ways to compute pnl: weighted average,
-  first-in-first-out and last-in-last-out
-\end{itemize}
-
-
-\section{Notes for developers}
-
-\subsection{Methods for \texttt{returns}}
-
-Methods are responsible for `stripping' the input down do \texttt{x}
-and \texttt{t}, calling `\texttt{returns.default}' or some other
-method, and then to re-assemble the original class's structure. When
-\texttt{period} is not specified, methods should keep timestamp
-information for themselves and not pass it on. (That is,
-\texttt{returns.default} should only ever receive a \texttt{timestamp}
-when \texttt{period} is specified.)
-
-\subsection{Vectorisation}
-
-Functions should do vectorisation when it is beneficial in terms of
-speed or clarity of code. An example should clarify this:
-\texttt{drawdown} is internally computed through \texttt{cumsum}, so
-even for a matrix of time series, it would need a loop. Such looping
-should be left to the user. However, vectorisation should be used when
-it makes computations faster.
-
-\subsection{Named vectors}
-
-In many instances, vectors that store scalar information of
-instruments (such as price or multiplier) should be named by
-instrument.
-
-\subsection{Functional programming}
-
-Do not rely on global options/settings. Exception are interative
-functions, which essentially means \texttt{print} methods.
-
-
-
-\newpage
-\appendix
-<<results=tex>>=
-toLatex(sessionInfo())
+<<eval=false, results=hide>>=
+install.packages("PMwR", 
+                 repos = "http://enricoschumann.net/R/", 
+                 type  = "source")
 @ 
+The package depends on several other packages, which can be obtained
+from the same repository.
+
+There is currently no automatic build for Windows. If you wish to use
+the package on Windows and have problems building it, then please
+contact me and I will provide you with a Windows version.
+
+\section{What the package provides}
+
+The package provides functions that can serve as building blocks for
+many activities in portfolio management.
+
+\begin{description}
+\item[Testing strategies] See \texttt{?btest}.
+\item[Keeping track of transactions] The package provides functions
+  that work with journals (sometimes called blotters). See
+  \texttt{?journal} and \texttt{?position}.
+\item[Computing \textsc{p}\&\textsc{l} and returns] See
+  \texttt{?returns} and \texttt{?pl}.
+\end{description}
+
+\noindent More details are in the manual:
+
+\url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}\,.
+
 \end{document}

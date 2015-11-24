@@ -1,3 +1,11 @@
+2015-11-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* vignettes/An_overview.Rnw: added summary
+
+	* vignettes/: removed all other vignettes: all examples are
+	included in the Manual, available here:
+	http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+
 2015-11-23  Enrico Schumann  <es@enricoschumann.net>
 
 	* man/PMwR-package.Rd: added link to manual
