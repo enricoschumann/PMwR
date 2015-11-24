@@ -106,10 +106,17 @@
 * About PMwR
   
   This manual describes how to use the PMwR package. The package
-  is currently under development and changes frequently. So, the
-  manual is a draft, so be please do not quote it. I am grateful
-  for comments.
+  grew out of various pieces of software that I have written
+  since 2008 or so, first at the University of Geneva, later at
+  during my work at financial firms.
 
+  The package is currently under development and changes
+  frequently. This is mainly because the code has been written
+  over many years and is in need of being groomed for general use.
+
+  Consequently, this manual is only a draft, and it will change
+  as frequently as the package. I am grateful for comments and
+  suggestions.
 
   The latest version of the package is available from
   [[http://enricoschumann.net/R/packages/PMwR/index.htm]].  To
@@ -118,13 +125,15 @@
 #+BEGIN_SRC R :eval never :results silent :export code
 install.packages("PMwR", 
                  repos = "http://enricoschumann.net/R", 
-                 type = "source")
+                 type  = "source")
 #+END_SRC
-
 
 to download and install it. The package depends on several other
 packages, which can be obtained from the same repository.
 
+(There is currently no automatic build for Windows. If you wish
+to use the package on Windows and have problems building it, then
+please contact me and I will provide you with a Windows version.)
 
 
 * Using R in portfolio management -- Two examples                  :noexport:
@@ -237,10 +246,10 @@ The following classes are implicitly defined (ie, S3 classes):
 
 #+INDEX: journal!definition
 
-  Many computations that the PMwR package provides are based on lists
-  of transactions. Conceptually, such lists are nothing more than
-  dataframes, but PMwR provides an =S3= class =journal= for handling
-  such transaction data.
+  Many computations that the PMwR package provides are based on
+  lists of transactions. Conceptually, you can think of such
+  lists as dataframes, but PMwR provides an =S3= class =journal=
+  for handling them.
 
   A =journal= is a list of atomic vectors with a class
   attribute. Such a list is created through the function
@@ -259,9 +268,9 @@ The following classes are implicitly defined (ie, S3 classes):
   will; such dissections include removing the class
   attribute.
 
-  What is actually stored in a =journal= is up to the user,
-  but a number of fields are required for certain operations
-  and should thus always be present:
+  What is actually stored in a =journal= is up to the user. A
+  number of fields are, however, required for certain operations
+  and should always be present:
 
 - =amount= :: the notional amount that is transacted
 
@@ -374,19 +383,6 @@ NA, NA, NA, NA, NA, NA, NA, NA), what = c("wine", "wine", "milk",
 "timestamp", "amount", "price", "what"), class = "journal")
 #+END_SRC
 
-#+RESULTS:
-| nil | nil |  1 | nil | wine |
-| nil | nil |  4 | nil | wine |
-| nil | nil |  1 | nil | milk |
-| nil | nil | -2 | nil | wine |
-| nil | nil | -1 | nil | milk |
-| nil | nil |  1 | nil | milk |
-| nil | nil | -1 | nil | milk |
-| nil | nil |  1 | nil | milk |
-| nil | nil | -1 | nil | wine |
-
-
-
 The journal would look like this.
 
 #+BEGIN_SRC R :results output :exports both :colnames yes
@@ -409,25 +405,14 @@ jnl
 9 transactions
 #+end_example
 
-You could check your drinking habits for patterns, say.
-
-#+BEGIN_SRC R :results output :exports both
-cumsum(jnl["wine"]$amount)
-cumsum(jnl["milk"]$amount)
-#+END_SRC
-
-#+RESULTS:
-: [1] 1 5 3 2
-: [1] 1 0 1 0 1
-
-But we should switch to a financial example.
+You could check your drinking habits for patterns, say. But
+perhaps we better switch to a financial example.
 
 
 #+BEGIN_SRC R -n :exports both :results output
-  (J <- journal(timestamp  = 
-                     as.Date("2012-01-01") + 0:3, 
-                 amount     = c(1, 2, -2, 5),
-                 instrument = c("EUR", "EUR", "CHF", "CHF")))
+  (J <- journal(timestamp  = as.Date("2012-01-01") + 0:3, 
+                amount     = c(1, 2, -2, 5),
+                instrument = c("EUR", "EUR", "CHF", "CHF")))
 #+END_SRC
 
 #+RESULTS:
@@ -439,9 +424,9 @@ But we should switch to a financial example.
 : 
 : 4 transactions
 
-
 For details about the function and methods for =journal= objects, see
 =?journal=. A =print= method defines how to display a journal.
+#+INDEX: journal!print journals (print method)
 #+BEGIN_SRC R -n :exports both :results output
 print(J, max.print = 2, exclude = "instrument")
 #+END_SRC
@@ -529,7 +514,6 @@ The =`[`= method works with integers or logicals, returning
 the respective transactions.
 #+BEGIN_SRC R -n :exports both :results output
 J[2:3]
-J[J$amount < 0]
 #+END_SRC 
 
 #+RESULTS:
@@ -538,10 +522,17 @@ J[J$amount < 0]
 : 2         CHF  2012-01-03      -2
 : 
 : 2 transactions
+
+#+BEGIN_SRC R -n :exports both :results output
+J[J$amount < 0]
+#+END_SRC 
+
+#+RESULTS:
 :    instrument   timestamp  amount
 : 1         CHF  2012-01-03      -2
 : 
 : 1 transaction
+
 
 You can also pass a string, which is then interpreted as a regular
 expression that is matched against all character fields in the
@@ -557,72 +548,41 @@ J["eur"]
 : 
 : 2 transactions
 
-By default, case is ignored, but you can set =ignore.case= to =FALSE=.
-You can also specify the fields to match the string against. Examples
-follow.
+By default, case is ignored, but you can set =ignore.case= to
+=FALSE=.  You can also specify the fields to match the string
+against.
 #+BEGIN_SRC R -n :exports both :results output
-  J <- journal(timestamp  = as.Date("2012-01-01") + 0:5, 
-               amount     = rep(1, 6),
-               instrument = c("Equity A", "Equity A", 
-                              "Equity B", 
-                              "Bond exp 2019", "Bond exp 2017", 
-                              "Bond exp 2021"),
-               comment = c("pension plan", "pension plan", 
-                            "", "", "", ""))
-  J
-#+END_SRC 
-
-#+RESULTS:
-:       instrument   timestamp  amount       comment
-: 1       Equity A  2012-01-01       1  pension plan
-: 2       Equity A  2012-01-02       1  pension plan
-: 3       Equity B  2012-01-03       1              
-: 4  Bond exp 2019  2012-01-04       1              
-: 5  Bond exp 2017  2012-01-05       1              
-: 6  Bond exp 2021  2012-01-06       1              
-: 
-: 6 transactions
-
-
-#+BEGIN_SRC R -n :exports both :results output
-J["equ", ignore.case = FALSE]
+J["eur", ignore.case = FALSE]
 #+END_SRC 
 
 #+RESULTS:
 : no transactions
 
 #+BEGIN_SRC R -n :exports both :results output
-J["equ", ignore.case = TRUE]
+J["eur", ignore.case = TRUE]
 #+END_SRC 
 
 #+RESULTS:
-:    instrument   timestamp  amount       comment
-: 1    Equity A  2012-01-01       1  pension plan
-: 2    Equity A  2012-01-02       1  pension plan
-: 3    Equity B  2012-01-03       1              
-: 
-: 3 transactions
-
-#+BEGIN_SRC R -n :exports both :results output
-J["[Pp]ension"]
-#+END_SRC 
-
-#+RESULTS:
-:    instrument   timestamp  amount       comment
-: 1    Equity A  2012-01-01       1  pension plan
-: 2    Equity A  2012-01-02       1  pension plan
+:    instrument   timestamp  amount
+: 1         EUR  2012-01-01       1
+: 2         EUR  2012-01-02       2
 : 
 : 2 transactions
 
 #+BEGIN_SRC R -n :exports both :results output
-J["[Pp]ension", match.against = "instrument"]
+J$comment <- c("", "", "EUR", "EUR")
+J["eur", match.against = "comment"]
 #+END_SRC 
 
 #+RESULTS:
-: no transactions
+:    instrument   timestamp  amount  comment
+: 1         CHF  2012-01-03      -2      EUR
+: 2         CHF  2012-01-04       5      EUR
+: 
+: 2 transactions
 
 
-** Computing positions and P&L
+** Computing positions
 
 The function =position= gives the current balance of all instruments.
 #+BEGIN_SRC R -n :exports both :results output
@@ -630,12 +590,9 @@ position(J)
 #+END_SRC
 
 #+RESULTS:
-:               2012-01-06
-: Bond exp 2017          1
-: Bond exp 2019          1
-: Bond exp 2021          1
-: Equity A               2
-: Equity B               1
+:     2012-01-04
+: CHF          3
+: EUR          3
 
 To get the position at a specific date, use the =when= argument.
 #+BEGIN_SRC R -n :exports both :results output
@@ -643,12 +600,26 @@ position(J, when = as.Date("2012-01-03"))
 #+END_SRC
 
 #+RESULTS:
-:               2012-01-03
-: Bond exp 2017          0
-: Bond exp 2019          0
-: Bond exp 2021          0
-: Equity A               2
-: Equity B               1
+:     2012-01-03
+: CHF         -2
+: EUR          3
+
+If you don't like that view, consider splitting the journal.
+#+INDEX: journal!splitting
+#+BEGIN_SRC R -n :exports both :results output
+lapply(split(J, J$instrument), 
+       position, when = as.Date("2012-01-03"))
+#+END_SRC 
+
+#+RESULTS:
+: $CHF
+:     2012-01-03
+: CHF         -2
+: 
+: $EUR
+:     2012-01-03
+: EUR          3
+
 
 To get a time series of positions, you can use specific keywords for
 =when=: =all= will print the position at all timestamps in the
@@ -658,13 +629,11 @@ position(J, when = "all")
 #+END_SRC
 
 #+RESULTS:
-:            Bond exp 2017 Bond exp 2019 Bond exp 2021 Equity A Equity B
-: 2012-01-01             0             0             0        1        0
-: 2012-01-02             0             0             0        2        0
-: 2012-01-03             0             0             0        2        1
-: 2012-01-04             0             1             0        2        1
-: 2012-01-05             1             1             0        2        1
-: 2012-01-06             1             1             1        2        1
+:            CHF EUR
+: 2012-01-01   0   1
+: 2012-01-02   0   3
+: 2012-01-03  -2   3
+: 2012-01-04   3   3
 
 We are not limited to the timestamps that exist in the journal.
 #+BEGIN_SRC R -n :exports both :results output
@@ -674,268 +643,15 @@ position(J, when = seq(from = as.Date("2011-12-30"),
 #+END_SRC 
 
 #+RESULTS:
-:            Bond exp 2017 Bond exp 2019 Bond exp 2021 Equity A Equity B
-: 2011-12-30             0             0             0        0        0
-: 2011-12-31             0             0             0        0        0
-: 2012-01-01             0             0             0        1        0
-: 2012-01-02             0             0             0        2        0
-: 2012-01-03             0             0             0        2        1
-: 2012-01-04             0             1             0        2        1
-: 2012-01-05             1             1             0        2        1
-: 2012-01-06             1             1             1        2        1
-
-It's actually tedious to enter journals that way, in particular if
-we want to update it over time.  So, for practical use, we may write
-transactions into files, like this:
-
-#+BEGIN_EXAMPLE
-|  timestamp | amount | comment          |
-|------------+--------+------------------|
-| 2012-01-01 |    100 | a comment        |
-| 2012-01-02 |    200 | another comment  |
-| 2012-01-03 |   -200 | bought something |
-| 2012-02-04 |    500 | got a present    |
-#+END_EXAMPLE
-
-(In case you use [[http://orgmode.org/][Org-mode]], such tables should look familiar.)
-#+BEGIN_SRC perl :eval never
-system("perl -ne 'print $_ if /^\\s*\\| /;' < ex1.txt > ex1.jnl")
-#+END_SRC 
-The org package http://enricoschumann.net/R/packages/org/index.htm
-provides a function readOrg to read such tables.
-#+BEGIN_SRC R -n :exports both :eval never
-  J <- structure(list(instrument = c(NA_character_, NA_character_,
-                                     NA_character_, NA_character_), 
-                      timestamp = structure(c(15340, 15341, 15342, 
-                                              15374),
-                                            class = "Date"),
-                      amount = c(100, 200, -200, 500),
-                      price = c(NA, NA, NA, NA),
-                      comment = c(" a comment", " another comment  ", 
-                                  " bought something ", " got a present")),
-                 .Names = c("instrument", 
-                            "timestamp", "amount", "price", "comment"),
-                 class = "journal")    
-#+END_SRC 
-Some of these transactions may mean a gain or loss to us, such as a
-dividend payment). Others are neutral, for example a transfer between
-bank accounts. There are several ways to deal with this.[fn:2]
-
-One way to deal with that is to switch to double-entry accounting. A
-second way is to add descriptions like =expense= and then subset by
-these descriptions.
-
-And yet another approach is to use prices. Whenever you evaluate the
-balances of your cash account, say that the price per unit is one.
-That is reasonable: if my account has a balance of 120.2, it actually
-means `120.2 euros'. The price of one euro is one euro.
-
-An expense should be a negative amount; income should go with positive
-amounts.  When you add such an entry, make its price 0; when you
-compute that value of a position, make its price 1.  An example:
-
-#+BEGIN_SRC R -n :exports both :results output
-J <- journal(timestamp = c("day 1", "day 2", "day 3"), 
-               amount    = c(100,100,-200), 
-               price     = c(  1,  0,   0),
-               comment   = c("neutral", "income", "expense"),
-               account   = "my account")
-J
-#+END_SRC
-
-#+RESULTS:
-:    timestamp  amount  price     account  comment
-: 1      day 1     100      1  my account  neutral
-: 2      day 2     100      0  my account   income
-: 3      day 3    -200      0  my account  expense
-: 
-: 3 transactions
-
-The current balance is 0.
-#+BEGIN_SRC R -n :exports both :results output
-position(J)
-#+END_SRC 
-
-#+RESULTS:
-:      day 3
-: [1,]     0
-
-In terms of income and expenses we have made a loss of\nbsp{}100, which is
-exactly what the function =pl= reports.  (There will be more examples
-for using this function in [[#ch:pl][Computing profit and (or) loss]].)
-#+BEGIN_SRC R -n :exports both :results output
-pl(J, current.price = 1)
-#+END_SRC 
-
-#+RESULTS:
-:     pl  total.amount  average.buy  average.sell
-:   -100           400          0.5             0
-: 
-:           pl = total PnL in units of instrument
-: total.amount = total /absolute/ amount of traded instruments
-:  average.buy = average buy price
-: average.sell = average sell price
-
-Let us do some more typical financial transactions. We buy five
-times 1 unit of some unspecified asset.
-#+BEGIN_SRC R -n :exports both :results output :colnames yes
-J1 <- journal(timestamp = 1:5, 
-               amount   = 1, 
-               price    = c(2,2,2,3,4), 
-               account  = "my account")
-J1
-#+END_SRC
-
-#+RESULTS:
-:    timestamp  amount  price     account
-: 1          1       1      2  my account
-: 2          2       1      2  my account
-: 3          3       1      2  my account
-: 4          4       1      3  my account
-: 5          5       1      4  my account
-: 
-: 5 transactions
-
-
-
-We close the trade by selling 5\nbsp{}units.
-#+BEGIN_SRC R -n :exports code :results none :colnames yes
-  J2 <- journal(timestamp =  6L, 
-                 amount   = -5, 
-                 price    =  3, 
-                 account  = "my account")
-#+END_SRC
-
-#+RESULTS:
-
-We can combine these journals with =c=.
-#+BEGIN_SRC R -n :exports both :results output :colnames yes
-c(J1, J2)
-#+END_SRC 
-
-#+RESULTS:
-:    timestamp  amount  price     account
-: 1          1       1      2  my account
-: 2          2       1      2  my account
-: 3          3       1      2  my account
-: 4          4       1      3  my account
-: 5          5       1      4  my account
-: 6          6      -5      3  my account
-: 
-: 6 transactions
-
-(Note that I have written =6L= for the timestamp in
-=J2=.  If I had not, a warning would have been issued saying
-that the timestamps in the journals have different classes.
-=1:5= is integer whereas =6= is numeric.  In the case
-here, the warning would have been harmless and could have been
-ignored.)
-
-Since the position is now zero, it is easy to compute the \pl.  We can
-use the function =pl=, again.
-#+BEGIN_SRC R -n :exports both :results output :colnames yes
-pl(c(J1, J2))
-#+END_SRC
-
-#+RESULTS:
-:   pl  total.amount  average.buy  average.sell
-:    2            10          2.6             3
-: 
-:           pl = total PnL in units of instrument
-: total.amount = total /absolute/ amount of traded instruments
-:  average.buy = average buy price
-: average.sell = average sell price
-
-There is little difference when we have several accounts. An example:
-#+BEGIN_SRC R -n :exports both :results output
-trades <- read.table(textConnection(
-    "account; ticker; timestamp; amount; price
-    private ; A ; 1;   100; 60
-    private ; A ; 2;   100; 70
-    private ; A ; 3;  -100; 66
-    longterm; A ; 1; 100; 60
-    longterm; B ; 1; 100; 5"),
-                     sep =";", header = TRUE,
-                     strip.white = TRUE, 
-                     stringsAsFactors = FALSE)
-
-(J <- journal(timestamp = trades$timestamp, 
-                amount    = trades$amount,
-                price     = trades$price, 
-                instrument = trades$ticker, account = 
-                trades$account))
-#+END_SRC
-
-#+RESULTS:
-:    instrument  timestamp  amount  price   account
-: 1           A          1     100     60   private
-: 2           A          2     100     70   private
-: 3           A          3    -100     66   private
-: 4           A          1     100     60  longterm
-: 5           B          1     100      5  longterm
-: 
-: 5 transactions
-
-There are two accounts.
-#+BEGIN_SRC R -n :exports both :results output
-table(J$account)
-#+END_SRC 
-
-#+RESULTS:
-: 
-: longterm  private 
-:        2        3
-
-Per default, =position= does not care about accounts.  
-We have asset =A= in account =longterm= and in
-=private=, but we get the sum over all accounts.
-#+BEGIN_SRC R -n :exports both :results output
-position(J)
-#+END_SRC
-
-#+RESULTS:
-:     3
-: A 200
-: B 100
-
-There are at least two ways to deal with this.  One is to concatenate
-=account= and =instrument=.
-#+BEGIN_SRC R -n :exports both :results output
-J2 <- J
-J2$instrument <- paste0(J$account, ":", J$instrument)
-position(J2)
-#+END_SRC 
-
-#+RESULTS:
-:              3
-: longterm:A 100
-: longterm:B 100
-: private:A  100
-
-The other is to use =split= on the journal.
-#+BEGIN_SRC R -n :exports both :results output
-lapply(split(J, J$account), position)
-#+END_SRC 
-
-#+RESULTS:
-: $longterm
-:     1
-: A 100
-: B 100
-: 
-: $private
-:     3
-: A 100
-
-
-#+BEGIN_SRC sh :export none :results none
-  notify-send "Chapter Journals" "done"
-#+END_SRC
-
-
-#+BEGIN_SRC sh :export none :results none
-  notify-send "Chapter Journals" "done"
-#+END_SRC
+:            CHF EUR
+: 2011-12-30   0   0
+: 2011-12-31   0   0
+: 2012-01-01   0   1
+: 2012-01-02   0   3
+: 2012-01-03  -2   3
+: 2012-01-04   3   3
+: 2012-01-05   3   3
+: 2012-01-06   3   3
 
 
 * Computing profit and (or) loss
@@ -943,7 +659,7 @@ lapply(split(J, J$account), position)
   :CUSTOM_ID: ch:pl
   :END:
 
-** The simple case
+** Simple cases
 
 We have an account, currency is euro. We buy one asset at a price
 of 100 euro and sell it again at 102 euro. We have made a profit
@@ -1056,6 +772,128 @@ specify =eval.price=.
 Note that /average buy/ and /average sell/ reflect the specified
 evaluation price; but /volume/ does not since nothing is actually
 traded.
+
+
+
+** More complicated cases
+
+   Unfortunately, in real life computing P/L is often more
+   complicated:
+
+- One asset-price unit may not translate into one currency unit:
+  we have multipliers or contract factors. That is easy to solve
+  by computing effective position sizes, but it may take some
+  thinking to come up with a reusable scheme (e.g., looking up
+  multipliers in a table).
+    
+- Asset positions may map into cashflows in non-obvious ways. The
+  simple case is the delay in actual payment and delivery of an
+  asset, which is often two or three days. The more problematic
+  cases are derivatives with daily adjustments of margins. In
+  such cases, one may need to model (i.e. keep track of) the
+  actual account balances.
+
+- Assets may be denominated in various currencies.
+  
+- Currencies themselves may be assets in the portfolio.
+  Depending on how they are traded (cash, forwards, /&c./),
+  computing P/L may not be straightforward.
+
+How -- or rather, to what degree -- these troubles are handled
+is, as always, up to the user. For a single instrument, computing
+P/L in units of the instrument is always meaningful, though
+perhaps not always intuitive.  But /adding up/ the profits and
+losses of several assets often will often not work because of
+multipliers or different currencies. A simple and transparent way
+is then to manipulate the journal before P/L is computed (e.g.,
+multiply notionals by their multipliers).
+
+## We look at two examples: (i)\nbsp{}computing the /pl/ of
+## several assets in currency units; and (ii)\nbsp{}computing
+## time-weighted returns of a portfolio of assets.
+
+*** An example: P/L for lists of incomes and expenses
+
+Suppose you keep a journal just to keep track of your personal
+income and expenses. An aside: it's tedious to enter journals by
+hand, in particular if we want to update them over time.  So, for
+practical use, we may write transactions into files, like this:
+
+#+BEGIN_EXAMPLE
+|  timestamp | amount | comment          |
+|------------+--------+------------------|
+| 2012-01-01 |    100 | a comment        |
+| 2012-01-02 |    200 | another comment  |
+| 2012-01-03 |   -200 | bought something |
+| 2012-02-04 |    500 | got a present    |
+#+END_EXAMPLE
+
+In case you use [[http://orgmode.org/][Org-mode]], such tables should look familiar.  The
+org package http://enricoschumann.net/R/packages/org/index.htm
+provides a function =readOrg= to read such tables.
+
+Some of these transactions may mean a gain or loss to us, such as
+a dividend payment. Others are neutral, for example a transfer
+between bank accounts. There are several ways to deal with
+this.[fn:2]
+
+One way to deal with that is to switch to double-entry accounting. A
+second way is to add descriptions like =expense= and then subset by
+these descriptions.
+
+And yet another approach is to use prices. Whenever we evaluate
+the balances of a cash account, we say that the price per unit is
+one. That is actually reasonable: if my account has a balance of
+120.2, it actually means `120.2 euros'. The price of one euro --
+no surprise here -- is one euro.
+
+An expense should be a negative amount; income should go with
+positive amounts.  When we add such an entry that is supposed to
+mean gain or loss to us, we make its price 0. Then, when we
+compute that value of a position, we make its price 1.  An
+example:
+
+#+BEGIN_SRC R -n :exports both :results output
+J <- journal(timestamp = c("day 1", "day 2", "day 3"), 
+               amount    = c(100,100,-200), 
+               price     = c(  1,  0,   0),
+               comment   = c("neutral", "income", "expense"),
+               account   = "my account")
+J
+#+END_SRC
+
+#+RESULTS:
+:    timestamp  amount  price     account  comment
+: 1      day 1     100      1  my account  neutral
+: 2      day 2     100      0  my account   income
+: 3      day 3    -200      0  my account  expense
+: 
+: 3 transactions
+
+The current balance is 0.
+#+BEGIN_SRC R -n :exports both :results output
+position(J)
+#+END_SRC 
+
+#+RESULTS:
+:      day 3
+: [1,]     0
+
+In terms of income and expenses we have made a loss of\nbsp{}100, which is
+exactly what the function =pl= reports.  (There will be more examples
+for using this function in [[#ch:pl][Computing profit and (or) loss]].)
+#+BEGIN_SRC R -n :exports both :results output
+pl(J, current.price = 1)
+#+END_SRC 
+
+#+RESULTS:
+: PnL total    [1m-100[22m
+: average buy  0.5
+: average sell 0
+: volume       400
+: 
+: ‘total PnL’ is in units of instrument;
+: ‘volume’ is total /absolute/ amount of traded instruments.
 
 
 
@@ -1177,39 +1015,6 @@ pl(trades,
 ##%% - example EUR investor buys INTC
 
 ## %% - pure FX portfolio
-
-Unfortunately, in real life computing /pl/ is often more complicated:
-
-- One asset-price unit may not translate into one currency unit: we
-  have multipliers or contract factors.  That is easy to solve by
-  computing effective position sizes, but it may take some thinking to
-  come up with a reusable scheme (eg, looking up multipliers in a
-  table).
-    
-- Asset positions may map into cashflows in non-obvious ways.  The
-  simple case is the delay in actual payment and delivery of an asset,
-  which is often two or three days.  The more problematic cases are
-  derivatives with daily adjustments of margins.
-
-- Assets may be denominated in various currencies.
-  
-- Currencies themselves may be assets in the portfolio.  Depending on
-  how they are traded (cash, forwards, /&c./), computing /pl/
-  may not be straightforward.
-
-
-How (or rather: to what degree) these troubles are handled is, as
-always, up to the user.  For a single instrument, computing
-profit/loss in units of the instrument is always meaningful (though,
-perhaps, not always intuitive).  But \emph{adding up} the profits and
-losses of several assets often does not work because of multipliers or
-different currencies.  The simplest and most transparent way is then
-to manipulate the journal before /pl/ is computed (eg, multiply
-notionals by their multipliers).
-
-We look at two examples: (i)\nbsp{}computing the /pl/ of several assets in
-currency units; and (ii)\nbsp{}computing time-weighted returns of a
-portfolio of assets.
 
 
 ** Several assets                                                  :noexport:
@@ -3412,9 +3217,9 @@ sessionInfo()
 
 #+RESULTS:
 #+begin_example
-R version 3.2.1 (2015-06-18)
+R version 3.2.2 (2015-08-14)
 Platform: x86_64-pc-linux-gnu (64-bit)
-Running under: Ubuntu 15.04
+Running under: Ubuntu 15.10
 
 locale:
  [1] LC_CTYPE=en_GB.UTF-8       LC_NUMERIC=C              
@@ -3425,16 +3230,16 @@ locale:
 [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 
 attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods  
-[7] base     
+[1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] zoo_1.7-12  PMwR_0.1-75
+[1] PMwR_0.1-79
 
 loaded via a namespace (and not attached):
-[1] datetimeutils_0.0-5 compiler_3.2.1      parallel_3.2.1     
-[4] tools_3.2.1         NMOF_0.36-2         grid_3.2.1         
-[7] textutils_0.0-5     lattice_0.20-33
+ [1] datetimeutils_0.0-5 zoo_1.7-12          compiler_3.2.2     
+ [4] parallel_3.2.2      tools_3.2.2         memoise_0.2.1      
+ [7] crayon_1.3.1        NMOF_0.36-4         grid_3.2.2         
+[10] digest_0.6.8        textutils_0.0-6     lattice_0.20-33
 #+end_example
 
 
