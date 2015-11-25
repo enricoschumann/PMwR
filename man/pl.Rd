@@ -3,6 +3,7 @@
 \alias{.pl}
 \alias{pl.default}
 \alias{pl.journal}
+\alias{print.pl}
 \title{
   Profit and Loss
 }
@@ -22,6 +23,8 @@ pl(amount, \dots)
                      eval.price = NULL, \dots)
 
 .pl(amount, price, tol = 1e-10, do.warn = TRUE)
+
+\method{print}{x, \dots, use.crayon = NULL}
 }
 \arguments{
   \item{amount}{
@@ -55,10 +58,16 @@ pl(amount, \dots)
   \item{multiplier}{not supported yet}
   \item{tol}{numeric}
   \item{do.warn}{logical}
+  \item{use.crayon}{logical}
 }
 \details{
 
   Computes profit and/or loss.
+
+  To use package crayon -- which is only sensible in interactive use --,
+   either explicitly set it to \code{TRUE} or set an option
+   \code{PMwR.use.crayon} to \code{TRUE}.
+
   
 }
 \value{

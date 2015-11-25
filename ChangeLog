@@ -1,5 +1,13 @@
 2015-11-24  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/pl.R (print.pl): if an option 'PMwR.use.crayon' is set to
+	TRUE, argument 'use.crayon' is set to TRUE; if the option is not
+	set, 'use.crayon' defaults to FALSE
+
+	* vignettes/An_overview.Rnw: small corrections
+
+2015-11-24  Enrico Schumann  <es@enricoschumann.net>
+
         * DESCRIPTION (Version): 0.1-80
 
 	* vignettes/An_overview.Rnw: added summary

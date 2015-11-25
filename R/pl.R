@@ -1,6 +1,10 @@
-print.pl <- function(x, ..., use.crayon = TRUE) {
+print.pl <- function(x, ..., use.crayon = NULL) {
     ## lapply(x, `[[`, "realised")
 
+    use.crayon  <- if (is.null(use.crayon) &&
+                       !is.null(uc <- getOption("PMwR.use.crayon")))
+                       uc else FALSE
+    
     oo <- getOption("scipen")
     options(scipen = 1e8)
     on.exit(options(scipen = oo))
