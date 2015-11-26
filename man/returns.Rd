@@ -16,10 +16,9 @@
 \usage{
 returns(x, \dots)
 
-\method{returns}{default}(x, t = NULL, period = NULL, complete.first = TRUE,
-                          pad = NULL,
-                          position = NULL, weights = NULL, rebalance.when = NULL,
-                          lag = 1, \dots)
+\method{returns}{default}(x, t = NULL, period = NULL, complete.first = TRUE, pad = NULL,
+        position = NULL, weights = NULL, rebalance.when = NULL,
+        lag = 1, \dots)
 
 \method{returns}{zoo}(x, period = NULL, complete.first = TRUE,
                       pad = NULL, position = NULL, lag = 1, \dots)
@@ -163,4 +162,6 @@ t <- seq(as.Date("2012-01-05"), as.Date("2012-12-31"), by = "1 day")
 x <- seq_along(t) + 1000
 returns(x, t = t, period = "month")
 returns(x, t = t, period = "month", complete.first = FALSE)
+
+
 }

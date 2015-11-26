@@ -1,7 +1,7 @@
 #+COMMENT: -*- fill-column: 65; -*-
 #+TITLE: Portfolio Management with R 
 #+AUTHOR: Enrico Schumann
-#+DATE: 23 November 2015
+#+DATE: 24 November 2015
 #+OPTIONS: toc:nil
 #+BIND: org-latex-default-packages-alist nil
 #+BIND: org-use-sub-superscripts {}
@@ -90,7 +90,7 @@
 #+BEGIN_HTML
 <p>
     <a href = "http://enricoschumann.net">Enrico Schumann</a>&nbsp;&nbsp;&nbsp;
-    <time datetime="2015-11-23">23 November 2015</time>&nbsp;&nbsp;&nbsp;
+    <time datetime="2015-11-24">24 November 2015</time>&nbsp;&nbsp;&nbsp;
     <a href = "PMwR.pdf">[PDF]</a>
 </p>
 #+END_HTML
@@ -242,7 +242,11 @@ The following classes are implicitly defined (ie, S3 classes):
 
 
 
+
 * Keeping track of transactions: journals
+  :PROPERTIES:
+  :CUSTOM_ID: ch:journals
+  :END:
 
 #+INDEX: journal!definition
 
@@ -321,7 +325,8 @@ At is very minimum, a journal must contain amounts of something.
 #+END_SRC
 
 #+RESULTS:
-:    amount
+:  
+:   amount
 : 1       1
 : 2       2
 : 3      -2
@@ -392,6 +397,17 @@ NA, NA, NA, NA, NA, NA, NA, NA), what = c("wine", "wine", "milk",
 "timestamp", "amount", "price", "what"), class = "journal")
 #+END_SRC
 
+#+RESULTS:
+| nil | nil |  1 | nil | wine |
+| nil | nil |  4 | nil | wine |
+| nil | nil |  1 | nil | milk |
+| nil | nil | -2 | nil | wine |
+| nil | nil | -1 | nil | milk |
+| nil | nil |  1 | nil | milk |
+| nil | nil | -1 | nil | milk |
+| nil | nil |  1 | nil | milk |
+| nil | nil | -1 | nil | wine |
+
 The journal would look like this.
 
 #+BEGIN_SRC R :results output :exports both :colnames yes
@@ -425,7 +441,7 @@ perhaps we better switch to a financial example.
 #+END_SRC
 
 #+RESULTS:
-:    instrument   timestamp  amount
+:      instrument   timestamp  amount
 : 1         EUR  2012-01-01       1
 : 2         EUR  2012-01-02       2
 : 3         CHF  2012-01-03      -2
@@ -458,7 +474,8 @@ c(J, J2)
 
 #+RESULTS:
 #+begin_example
-   instrument   timestamp  amount  fees
+ 
+  instrument   timestamp  amount  fees
 1         EUR  2012-01-01       1    NA
 2         EUR  2012-01-02       2    NA
 3         CHF  2012-01-03      -2    NA
@@ -585,7 +602,7 @@ J["eur", match.against = "comment"]
 #+RESULTS:
 :    instrument   timestamp  amount  comment
 : 1         CHF  2012-01-03      -2      EUR
-: 2         CHF  2012-01-04       5      EUR
+: 2         CHF  2012-01-04       8      EUR
 : 
 : 2 transactions
 
@@ -603,7 +620,7 @@ position(J)
 
 #+RESULTS:
 :     2012-01-04
-: CHF          3
+: CHF          6
 : EUR          3
 
 To get the position at a specific date, use the =when= argument.
@@ -624,7 +641,7 @@ lapply(split(J, J$instrument),
 #+END_SRC 
 
 #+RESULTS:
-: $CHF
+:  $CHF
 :     2012-01-03
 : CHF         -2
 : 
@@ -645,7 +662,7 @@ position(J, when = "all")
 : 2012-01-01   0   1
 : 2012-01-02   0   3
 : 2012-01-03  -2   3
-: 2012-01-04   3   3
+: 2012-01-04   6   3
 
 We are not limited to the timestamps that exist in the journal.
 #+BEGIN_SRC R -n :exports both :results output
@@ -655,15 +672,23 @@ position(J, when = seq(from = as.Date("2011-12-30"),
 #+END_SRC 
 
 #+RESULTS:
-:            CHF EUR
+:              CHF EUR
 : 2011-12-30   0   0
 : 2011-12-31   0   0
 : 2012-01-01   0   1
 : 2012-01-02   0   3
 : 2012-01-03  -2   3
-: 2012-01-04   3   3
-: 2012-01-05   3   3
-: 2012-01-06   3   3
+: 2012-01-04   6   3
+: 2012-01-05   6   3
+: 2012-01-06   6   3
+
+
+
+#+BEGIN_SRC sh :results output :exports none
+  notify-send "Chapter 1" "Finished"
+#+END_SRC
+
+#+RESULTS:
 
 
 * Computing profit and (or) loss
@@ -689,8 +714,8 @@ required computation simple as well. Computing profit-or-loss
 : average sell 102
 : volume       2
 : 
-: ‘total PnL’ is in units of instrument;
-: ‘volume’ is total /absolute/ amount of traded instruments.
+: 'total PnL' is in units of instrument;
+: 'volume' is total /absolute/ amount of traded instruments.
 
 Suppose that a trader bought one unit at 50, one unit at 90 and sold
 two units at 100, resulting in a profit of 60. 
@@ -701,13 +726,13 @@ pl(jnl)
 #+END_SRC 
 
 #+RESULTS:
-: PnL total    60
+:  PnL total    60
 : average buy  70
 : average sell 100
 : volume       4
 : 
-: ‘total PnL’ is in units of instrument;
-: ‘volume’ is total /absolute/ amount of traded instruments.
+: 'total PnL' is in units of instrument;
+: 'volume' is total /absolute/ amount of traded instruments.
 
 
 But suppose that the actual order of the trades was
@@ -730,15 +755,15 @@ pl(jnl, along.timestamp = TRUE)
 #+END_SRC 
 
 #+RESULTS:
-: PnL total      0 -40 60
-:     realised   0   0 60
-:     unrealised 0 -40  0
+: PnL total    0 -40 60
+:     realised   0 0 60
+:     unrealised 0 -40 0
 : average buy  70
 : average sell 100
 : volume       1 2 4
 : 
-: ‘total PnL’ is in units of instrument;
-: ‘volume’ is total /absolute/ amount of traded instruments.
+: 'total PnL' is in units of instrument;
+: 'volume' is total /absolute/ amount of traded instruments.
 
 With no further arguments, the function will compute the running
 position and evaluate it at every trade with the trade's
@@ -759,11 +784,11 @@ average buy  100
 average sell .
 volume       1
 
-‘total PnL’ is in units of instrument;
-‘volume’ is total /absolute/ amount of traded instruments.
+'total PnL' is in units of instrument;
+'volume' is total /absolute/ amount of traded instruments.
 Warning message:
 In pl.default(amount, price, timestamp, instrument, multiplier = multiplier,  :
-  ‘sum(amount)’ is not zero; specify ‘eval.price’ to compute p/l.
+  'sum(amount)' is not zero; specify 'eval.price' to compute p/l.
 #+end_example
 
 To close the trade, only for the purpose of computing P/L,
@@ -778,8 +803,8 @@ specify =eval.price=.
 : average sell 101
 : volume       1
 : 
-: ‘total PnL’ is in units of instrument;
-: ‘volume’ is total /absolute/ amount of traded instruments.
+: 'total PnL' is in units of instrument;
+: 'volume' is total /absolute/ amount of traded instruments.
 
 Note that /average buy/ and /average sell/ reflect the specified
 evaluation price; but /volume/ does not since nothing is actually
@@ -904,8 +929,8 @@ pl(J, current.price = 1)
 : average sell 0
 : volume       400
 : 
-: ‘total PnL’ is in units of instrument;
-: ‘volume’ is total /absolute/ amount of traded instruments.
+: 'total PnL' is in units of instrument;
+: 'volume' is total /absolute/ amount of traded instruments.
 
 
 
@@ -927,6 +952,22 @@ position(J, when = 1:10)
 ## compute value if journal at 1:10 => subtract
 
 #+END_SRC 
+
+#+RESULTS:
+#+begin_example
+ 
+  [,1]
+1     0
+2     0
+3     0
+4     0
+5     0
+6     0
+7     0
+8     0
+9     0
+10    0
+#+end_example
 
 A more-useful example for =pl= with =along.timestamp= is a trading
 history of a high-frequency strategy.  Suppose for example we had
@@ -1007,15 +1048,19 @@ pl(trades,
 #+END_SRC 
 
 #+RESULTS:
-: PnL total      NA
-: average buy  104.6667
-: average sell NaN
-: volume       15
-: 
-: ‘total PnL’ is in units of instrument;
-: ‘volume’ is total /absolute/ amount of traded instruments.
-: Warning message:
-: In .pl(amount1, price1) : ‘sum(amount)’ is not zero; cannot compute p/l.
+#+begin_example
+ 
+  PnL total    NA
+average buy  105
+average sell .
+volume       15
+
+'total PnL' is in units of instrument;
+'volume' is total /absolute/ amount of traded instruments.
+Warning message:
+In pl.default(amount, price, timestamp, instrument, multiplier = multiplier,  :
+  'sum(amount)' is not zero; specify 'eval.price' to compute p/l.
+#+end_example
 
 
 
@@ -1047,13 +1092,13 @@ timestamp <- structure(c(1385627700, 1385639400, 1385986860, 1386061020, 1385542
 #+END_SRC 
 
 #+RESULTS:
-:    instrument            timestamp  amount  price
-: 1         DTE  2013-11-28 09:35:00     100  11.60
-: 2         DTE  2013-11-28 12:50:00     100  11.62
-: 3         DTE  2013-12-02 13:21:00     -50  11.67
-: 4         DTE  2013-12-03 09:57:00    -150  11.47
-: 5         DPW  2013-11-27 09:52:00     100  25.10
-: 6         DPW  2013-12-02 13:54:00     -50  26.29
+:       instrument            timestamp  amount  price
+: 1         DTE  2013-11-28 09:35:00     100   11.6
+: 2         DTE  2013-11-28 12:50:00     100   11.6
+: 3         DTE  2013-12-02 13:21:00     -50   11.7
+: 4         DTE  2013-12-03 09:57:00    -150   11.5
+: 5         DPW  2013-11-27 09:52:00     100   25.1
+: 6         DPW  2013-12-02 13:54:00     -50   26.3
 : 
 : 6 transactions
 
@@ -1088,12 +1133,12 @@ price.table
 #+END_SRC 
 
 #+RESULTS:
-:                        DPW    DTE
-: 2013-11-27 17:30:00 25.710 11.650
-: 2013-11-28 17:30:00 25.965 11.655
-: 2013-11-29 17:30:00 26.030 11.685
-: 2013-12-02 17:30:00 26.320 11.620
-: 2013-12-03 17:30:00 25.305 11.375
+:                      DPW  DTE
+: 2013-11-27 17:30:00 25.7 11.7
+: 2013-11-28 17:30:00 26.0 11.7
+: 2013-11-29 17:30:00 26.0 11.7
+: 2013-12-02 17:30:00 26.3 11.6
+: 2013-12-03 17:30:00 25.3 11.4
 
 
 *** Step 1: compute value of portfolio
@@ -1172,10 +1217,10 @@ cf
 #+END_SRC 
 
 #+RESULTS:
-: 2013-11-27 17:30:00 2013-11-28 17:30:00 2013-11-29 17:30:00 2013-12-02 17:30:00 
-:                   0                   0                   0                   0 
-: 2013-12-03 17:30:00 
-:                   0
+: 2013-11-27 17:30:00 2013-11-28 17:30:00 2013-11-29 17:30:00 
+:                   0                   0                   0 
+: 2013-12-02 17:30:00 2013-12-03 17:30:00 
+:                   0                   0
 
 
 #+BEGIN_SRC R -n :exports both
@@ -1204,7 +1249,17 @@ cf
 by it.)
 
 
+#+BEGIN_SRC sh :results output :exports none
+  notify-send "Chapter PL" "Finished"
+#+END_SRC
+
+#+RESULTS:
+
+
 * Computing returns
+  :PROPERTIES:
+  :CUSTOM_ID: ch:returns
+  :END:
 
 The function =returns= computes returns for various types of
 objects. The return of an asset in period /t/ is defined as
@@ -1224,7 +1279,7 @@ returns(x)
 #+END_SRC 
 
 #+RESULTS:
-: [1]  0.020000000 -0.009803922 -0.009900990
+: [1]  0.0200 -0.0098 -0.0099
 
 To replace the lost first observation, specify =pad=.
 #+BEGIN_SRC R -n :exports both :results output
@@ -1233,8 +1288,8 @@ returns(x, pad = NA)
 #+END_SRC 
 
 #+RESULTS:
-: [1]  0.000000000  0.020000000 -0.009803922 -0.009900990
-: [1]           NA  0.020000000 -0.009803922 -0.009900990
+: [1]  0.0000  0.0200 -0.0098 -0.0099
+: [1]      NA  0.0200 -0.0098 -0.0099
 
 When =x= is a matrix or a data.frame, returns are computed
 for each column.
@@ -1246,16 +1301,17 @@ returns(as.data.frame(X), pad = NA)
 
 #+RESULTS:
 #+begin_example
-                x            x            x
-[1,]           NA           NA           NA
-[2,]  0.020000000  0.020000000  0.020000000
-[3,] -0.009803922 -0.009803922 -0.009803922
-[4,] -0.009900990 -0.009900990 -0.009900990
-             x            x            x
-1           NA           NA           NA
-2  0.020000000  0.020000000  0.020000000
-3 -0.009803922 -0.009803922 -0.009803922
-4 -0.009900990 -0.009900990 -0.009900990
+           x       x       x
+[1,]      NA      NA      NA
+[2,]  0.0200  0.0200  0.0200
+[3,] -0.0098 -0.0098 -0.0098
+[4,] -0.0099 -0.0099 -0.0099
+ 
+       x       x       x
+1      NA      NA      NA
+2  0.0200  0.0200  0.0200
+3 -0.0098 -0.0098 -0.0098
+4 -0.0099 -0.0099 -0.0099
 #+end_example
 
 =returns= is a generic function, which goes along with some
@@ -1278,10 +1334,10 @@ workhorse that performs the raw returns calculation.
 #+END_SRC 
 
 #+RESULTS:
-:   2015-01-06   2015-01-07 
-:  0.020000000 -0.009803922
-:   2015-01-05   2015-01-06   2015-01-07 
-:           NA  0.020000000 -0.009803922
+: 2015-01-06 2015-01-07 
+:     0.0200    -0.0098
+: 2015-01-05 2015-01-06 2015-01-07 
+:         NA     0.0200    -0.0098
 
 
 Matrices work as well.
@@ -1292,13 +1348,14 @@ returns(z, pad = NA)
 #+END_SRC 
 
 #+RESULTS:
-:                       x            x            x
-: 2015-01-06  0.020000000  0.020000000  0.020000000
-: 2015-01-07 -0.009803922 -0.009803922 -0.009803922
-:                       x            x            x
-: 2015-01-05           NA           NA           NA
-: 2015-01-06  0.020000000  0.020000000  0.020000000
-: 2015-01-07 -0.009803922 -0.009803922 -0.009803922
+:                  x       x       x
+: 2015-01-06  0.0200  0.0200  0.0200
+: 2015-01-07 -0.0098 -0.0098 -0.0098
+:  
+:                 x       x       x
+: 2015-01-05      NA      NA      NA
+: 2015-01-06  0.0200  0.0200  0.0200
+: 2015-01-07 -0.0098 -0.0098 -0.0098
 
 
 ** Period returns
@@ -1315,9 +1372,10 @@ returns(x, t = t, period = "month")
 #+END_SRC 
 
 #+RESULTS:
-:      Jan Feb Mar Apr May Jun Jul Aug Sep Oct  Nov Dec  YTD
-: 2014                                         -9.1 3.4 -6.0
-: 2015 0.8                                               0.8
+:  
+:     Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov  Dec  YTD
+: 2014                                         6.0 -5.9 -0.3
+: 2015 0.3                                               0.3
 
 
 #+INDEX: returns!yearly
@@ -1328,7 +1386,7 @@ returns(x, t = t, period = "year")
 
 #+RESULTS:
 : 2014 2015 
-:  8.4 -1.4
+: -0.3  0.3
 
 See =?print.preturns= for more display options. For instance:
 #+BEGIN_SRC R -n :exports both :results output
@@ -1338,8 +1396,8 @@ print(returns(zoo(x, t), period = "month"),
 
 #+RESULTS:
 #+begin_example
-     2014   2015
-Jan        -1.37
+       2014  2015
+Jan         0.26
 Feb             
 Mar             
 Apr             
@@ -1349,9 +1407,9 @@ Jul
 Aug             
 Sep             
 Oct             
-Nov  0.68       
-Dec  7.66       
-YTD  8.39  -1.37
+Nov   5.99      
+Dec  -5.93      
+YTD  -0.30  0.26
 #+end_example
 
 To get annualised returns, use period `=ann='.
@@ -1363,8 +1421,8 @@ returns(zoo(x, t), period = "ann")
 #+END_SRC 
 
 #+RESULTS:
-: 6.9% p.a.   [01 Nov 2014 -- 20 Jan 2015, less than one year]
-: 6.9% p.a.   [01 Nov 2014 -- 20 Jan 2015, less than one year]
+: 0.0% p.a.   [01 Nov 2014 -- 20 Jan 2015, less than one year]
+: 0.0% p.a.   [01 Nov 2014 -- 20 Jan 2015, less than one year]
 
 But note that the function did /not/ annualise: it does not annualise
 if the time period is shorter than one year.
@@ -1373,7 +1431,7 @@ x[length(x)]/x[1] - 1
 #+END_SRC 
 
 #+RESULTS:
-: [1] 0.06901938
+: [1] -0.000374
 
 To force annualising, add a `=!='. The exclamation mark serves
 as a mnenomic that it is now imperative to annualise.
@@ -1382,7 +1440,7 @@ returns(x, t, period = "ann!")
 #+END_SRC 
 
 #+RESULTS:
-: 35.6% p.a.   [01 Nov 2014 -- 20 Jan 2015, less than one year]
+: -0.2% p.a.   [01 Nov 2014 -- 20 Jan 2015, less than one year]
 
 There are methods to =toLatex= and =toHTML=
 for monthly returns.  In Sweave documents, you need to use
@@ -1397,9 +1455,11 @@ toLatex(returns(x, t = t, period = "month"))
 #+END_SRC
 
 
-** Rebalanced returns                                              :noexport:
+** Rebalanced returns                                             
 
-#+BEGIN_SRC R -n :exports both :results output
+
+#+BEGIN_SRC R -n :exports none :results output 
+## TODO simple example: difference holdings, weights
   X <- array(c(100,105,110,100,100,100), dim = c(3,2))
 
   w <- c(0.5,0.5)
@@ -1410,18 +1470,80 @@ toLatex(returns(x, t = t, period = "month"))
   returns(X) %*% w
 #+END_SRC 
 
+
+   We can also compute returns from fixed weights and assumptions
+   when the portfolio is rebalanced. For instance, we may want to
+   see how a constant allocation [0.1, 0.5, 0.4] to three funds
+   would have done, assuming that a portfolio is rebalanced once
+   a month.
+
+   If more detail is necessary, then =btest= can be used; see
+   [[#ch:backtesting][Backtesting]]. But the simple case can be done with
+   =returns= already. Here is an example.
+
+#+BEGIN_SRC R -n :exports both :results output 
+  prices <- c(100, 102, 104, 104, 104.5,
+                2, 2.2, 2.4, 2.3,   2.5,
+              3.5,   3, 3.1, 3.2,   3.1)
+
+  dim(prices) <- c(5, 3)
+  prices
+
+#+END_SRC
+
 #+RESULTS:
-:            [,1]
-: [1,] 0.02500000
-: [2,] 0.02439024
-:            [,1]
-: [1,] 0.02500000
-: [2,] 0.02380952
+:      [,1] [,2] [,3]
+: [1,]  100  2.0  3.5
+: [2,]  102  2.2  3.0
+: [3,]  104  2.4  3.1
+: [4,]  104  2.3  3.2
+: [5,]  104  2.5  3.1
+
+Now suppose we want a constant weight vector, [0.2, 0.5, 0.3],
+but only rebalance at times 1 and 4.
+
+#+BEGIN_SRC R -n :exports both :results output 
+  returns(prices,
+          weights = c(10, 50, 40)/100,
+          rebalance.when = c(1, 4))
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+  [1] -0.00514  0.06376 -0.01282  0.03146
+attr(,"holdings")
+      [,1]  [,2]  [,3]
+[1,] 0.001 0.250 0.114
+[2,] 0.001 0.250 0.114
+[3,] 0.001 0.250 0.114
+[4,] 0.001 0.227 0.131
+[5,] 0.001 0.227 0.131
+attr(,"contributions")
+         [,1]    [,2]    [,3]
+[1,] 0.000000  0.0000  0.0000
+[2,] 0.002000  0.0500 -0.0571
+[3,] 0.002010  0.0503  0.0115
+[4,] 0.000000 -0.0236  0.0108
+[5,] 0.000481  0.0435 -0.0125
+#+end_example
+
+The result is the actual return series plus two additional pieces
+of information.
+
+- holdings :: A matrix whose dimensions correspond to those of
+     =x=, and which gives the hypothetical holdings were used to
+     compute the returns.
+- contributions :: Another matrix; it procides the return
+     contributions of the single assets.
+ 
+
 
 
 
 * Backtesting
-
+  :PROPERTIES:
+  :CUSTOM_ID: ch:backtesting
+  :END:
 
 This chapter explains how to test trading strategies with the =btest=
 function.
@@ -1633,27 +1755,31 @@ instrument, and we use only close prices. The trading rule is to
 buy, and then to hold forever. All we need is the time series of
 the prices and the signal function. As an instrument we use the EURO
 STOXX 50 future with expiry September 2015.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 timestamp <- structure(c(16679L, 16680L, 16681L, 16682L, 
                          16685L, 16686L, 16687L, 16688L, 
                          16689L, 16692L, 16693L), 
                        class = "Date")
 prices <- c(3182, 3205, 3272, 3185, 3201, 
             3236, 3272, 3224, 3194, 3188, 3213)
+data.frame(timestamp, prices)
 #+END_SRC
 
 #+RESULTS:
-| 3182 |
-| 3205 |
-| 3272 |
-| 3185 |
-| 3201 |
-| 3236 |
-| 3272 |
-| 3224 |
-| 3194 |
-| 3188 |
-| 3213 |
+#+begin_example
+    timestamp prices
+1  2015-09-01   3182
+2  2015-09-02   3205
+3  2015-09-03   3272
+4  2015-09-04   3185
+5  2015-09-07   3201
+6  2015-09-08   3236
+7  2015-09-09   3272
+8  2015-09-10   3224
+9  2015-09-11   3194
+10 2015-09-14   3188
+11 2015-09-15   3213
+#+end_example
 
 
 #+BEGIN_SRC R -n :exports both
@@ -1682,11 +1808,12 @@ To test this strategy, we call =btest=.  The initial cash is
 zero per default, so initial wealth is also zero in this case. We can
 change it through the argument =initial.cash=.
 
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 (solution <- btest(prices = prices, signal = signal))
 #+END_SRC 
 
 #+RESULTS:
+: initial wealth 0  =>  final wealth  8
 
 The function returns a list with a number of components, but they
 are not printed. Instead, a simple print method displays some
@@ -1694,7 +1821,7 @@ information about the results.
 
 We arrange more details into a =data.frame=. =sp= is the
 suggested position; =p= is the actual position.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 makeTable <- function(solution, prices)
     data.frame(prices = prices,
                sp     = solution$suggested.position,
@@ -1706,59 +1833,73 @@ makeTable(unclass(solution), prices)
 #+END_SRC 
 
 #+RESULTS:
-| 3182 | 0 | 0 |   0 |     0 |
-| 3205 | 1 | 1 |   0 | -3205 |
-| 3272 | 1 | 1 |  67 | -3205 |
-| 3185 | 1 | 1 | -20 | -3205 |
-| 3201 | 1 | 1 |  -4 | -3205 |
-| 3236 | 1 | 1 |  31 | -3205 |
-| 3272 | 1 | 1 |  67 | -3205 |
-| 3224 | 1 | 1 |  19 | -3205 |
-| 3194 | 1 | 1 | -11 | -3205 |
-| 3188 | 1 | 1 | -17 | -3205 |
-| 3213 | 1 | 1 |   8 | -3205 |
+#+begin_example
+   prices sp asset.1 wealth  cash
+1    3182  0       0      0     0
+2    3205  1       1      0 -3205
+3    3272  1       1     67 -3205
+4    3185  1       1    -20 -3205
+5    3201  1       1     -4 -3205
+6    3236  1       1     31 -3205
+7    3272  1       1     67 -3205
+8    3224  1       1     19 -3205
+9    3194  1       1    -11 -3205
+10   3188  1       1    -17 -3205
+11   3213  1       1      8 -3205
+#+end_example
 
 We bought in the second period because the default setting for the
 burnin =b= is 1. Thus, we lose one observation. In the case
 here we do not rely in any way on the past; hence, we set =b=
 to zero. With this setting, we buy at the first price and hold until
 the end of the data.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 solution <- btest(prices = prices, signal = signal, b  = 0)
 makeTable(solution, prices)
 #+END_SRC 
 
 #+RESULTS:
-| 3182 | 1 | 1 |  0 | -3182 |
-| 3205 | 1 | 1 | 23 | -3182 |
-| 3272 | 1 | 1 | 90 | -3182 |
-| 3185 | 1 | 1 |  3 | -3182 |
-| 3201 | 1 | 1 | 19 | -3182 |
-| 3236 | 1 | 1 | 54 | -3182 |
-| 3272 | 1 | 1 | 90 | -3182 |
-| 3224 | 1 | 1 | 42 | -3182 |
-| 3194 | 1 | 1 | 12 | -3182 |
-| 3188 | 1 | 1 |  6 | -3182 |
-| 3213 | 1 | 1 | 31 | -3182 |
+#+begin_example
+   prices sp asset.1 wealth  cash
+1    3182  1       1      0 -3182
+2    3205  1       1     23 -3182
+3    3272  1       1     90 -3182
+4    3185  1       1      3 -3182
+5    3201  1       1     19 -3182
+6    3236  1       1     54 -3182
+7    3272  1       1     90 -3182
+8    3224  1       1     42 -3182
+9    3194  1       1     12 -3182
+10   3188  1       1      6 -3182
+11   3213  1       1     31 -3182
+#+end_example
 
 If you prefer the trades only, the solution also contains a
 =journal=.
-#+BEGIN_SRC R -n :exports both
+#+INDEX: journal!backtest
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 journal(solution)
 #+END_SRC
 
 #+RESULTS:
-| 1 | 1 | 3182 | asset 1 |
+:    instrument  timestamp  amount  price
+: 1     asset 1          1       1   3182
+: 
+: 1 transaction
 
 To make the journal more informative, we can pass timestamp and
 instrument information.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 journal(btest(prices = prices, signal = signal, b  = 0,
               timestamp = timestamp, instrument = "FESX SEP 2015"))
 #+END_SRC 
 
 #+RESULTS:
-| 2015-09-01 | 1 | 3182 | FESX SEP 2015 |
+:        instrument   timestamp  amount  price
+: 1  FESX SEP 2015  2015-09-01       1   3182
+: 
+: 1 transaction
+
 
 
 *** More useful examples
@@ -1776,55 +1917,61 @@ signal <- function()
 #+RESULTS:
 
 We call =btest=.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 solution <- btest(prices = prices, signal = signal)
 #+END_SRC
 
 #+RESULTS:
 
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 makeTable(solution, prices)
 #+END_SRC 
 
 #+RESULTS:
-| 3182 | 0 | 0 |   0 |     0 |
-| 3205 | 1 | 1 |   0 | -3205 |
-| 3272 | 0 | 0 |  67 |    67 |
-| 3185 | 0 | 0 |  67 |    67 |
-| 3201 | 1 | 1 |  67 | -3134 |
-| 3236 | 0 | 0 | 102 |   102 |
-| 3272 | 0 | 0 | 102 |   102 |
-| 3224 | 0 | 0 | 102 |   102 |
-| 3194 | 0 | 0 | 102 |   102 |
-| 3188 | 1 | 1 | 102 | -3086 |
-| 3213 | 1 | 1 | 127 | -3086 |
+#+begin_example
+   prices sp asset.1 wealth  cash
+1    3182  0       0      0     0
+2    3205  1       1      0 -3205
+3    3272  0       0     67    67
+4    3185  0       0     67    67
+5    3201  1       1     67 -3134
+6    3236  0       0    102   102
+7    3272  0       0    102   102
+8    3224  0       0    102   102
+9    3194  0       0    102   102
+10   3188  1       1    102 -3086
+11   3213  1       1    127 -3086
+#+end_example
 
 The argument =initial.position= specifies the initial position;
 default is no position. Suppose we had already held one unit of the
 asset.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both 
 solution <- btest(prices = prices, signal = signal,
                   initial.position = 1)
 #+END_SRC
 
 #+RESULTS:
 
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 makeTable(solution, prices)
 #+END_SRC 
 
 #+RESULTS:
-| 3182 | 1 | 1 | 3182 |    0 |
-| 3205 | 1 | 1 | 3205 |    0 |
-| 3272 | 0 | 0 | 3272 | 3272 |
-| 3185 | 0 | 0 | 3272 | 3272 |
-| 3201 | 1 | 1 | 3272 |   71 |
-| 3236 | 0 | 0 | 3307 | 3307 |
-| 3272 | 0 | 0 | 3307 | 3307 |
-| 3224 | 0 | 0 | 3307 | 3307 |
-| 3194 | 0 | 0 | 3307 | 3307 |
-| 3188 | 1 | 1 | 3307 |  119 |
-| 3213 | 1 | 1 | 3332 |  119 |
+#+begin_example
+   prices sp asset.1 wealth cash
+1    3182  1       1   3182    0
+2    3205  1       1   3205    0
+3    3272  0       0   3272 3272
+4    3185  0       0   3272 3272
+5    3201  1       1   3272   71
+6    3236  0       0   3307 3307
+7    3272  0       0   3307 3307
+8    3224  0       0   3307 3307
+9    3194  0       0   3307 3307
+10   3188  1       1   3307  119
+11   3213  1       1   3332  119
+#+end_example
 
 %% TODO: is this right? should be suggested position not be 1 in t==2?
 
@@ -1834,7 +1981,6 @@ prices, one for high prices, and so on. In the single asset case, each
 matrix has one column. If we were dealing with two assets, we would
 again have four matrices, each with two columns. And so on.
 
-%% TODO: add picture of matrices
 
 We do not access these data directly. A function =Close= is
 defined by =btest= and passed as an argument to
@@ -1855,7 +2001,7 @@ Suppose we wanted to add a variable, like a =threshold=
 that tells us when to buy. This would need to be an argument to
 =signal=; but it would also need to be passed with the
 =\dots= argument of =btest=.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 signal <- function(threshold)
     if (Close() < threshold)
         1 else 0
@@ -1867,17 +2013,20 @@ makeTable(solution, prices)
 #+END_SRC
 
 #+RESULTS:
-| 3182 | 0 | 0 |   0 |     0 |
-| 3205 | 1 | 1 |   0 | -3205 |
-| 3272 | 0 | 0 |  67 |    67 |
-| 3185 | 0 | 0 |  67 |    67 |
-| 3201 | 1 | 1 |  67 | -3134 |
-| 3236 | 0 | 0 | 102 |   102 |
-| 3272 | 0 | 0 | 102 |   102 |
-| 3224 | 0 | 0 | 102 |   102 |
-| 3194 | 0 | 0 | 102 |   102 |
-| 3188 | 1 | 1 | 102 | -3086 |
-| 3213 | 1 | 1 | 127 | -3086 |
+#+begin_example
+   prices sp asset.1 wealth  cash
+1    3182  0       0      0     0
+2    3205  1       1      0 -3205
+3    3272  0       0     67    67
+4    3185  0       0     67    67
+5    3201  1       1     67 -3134
+6    3236  0       0    102   102
+7    3272  0       0    102   102
+8    3224  0       0    102   102
+9    3194  0       0    102   102
+10   3188  1       1    102 -3086
+11   3213  1       1    127 -3086
+#+end_example
 
 So far we have treated =Close= as a function without arguments,
 but actually it has an argument =lag= that defaults to
@@ -1894,26 +2043,29 @@ signal <- function()
 We could also have written =(Close() < Close(2L))=. This rule
 rule needs the close price of yesterday and of the day before
 yesterday, so we need to increase =b=.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 makeTable(btest(prices = prices, signal = signal, b = 2), prices)
 #+END_SRC
 
 #+RESULTS:
-| 3182 | 0 | nil | nil |     0 |
-| 3205 | 0 |   0 |   0 |     0 |
-| 3272 | 0 |   0 |   0 |     0 |
-| 3185 | 0 |   0 |   0 |     0 |
-| 3201 | 1 |   1 |   0 | -3201 |
-| 3236 | 0 |   0 |  35 |    35 |
-| 3272 | 0 |   0 |  35 |    35 |
-| 3224 | 0 |   0 |  35 |    35 |
-| 3194 | 1 |   1 |  35 | -3159 |
-| 3188 | 1 |   1 |  29 | -3159 |
-| 3213 | 1 |   1 |  54 | -3159 |
+#+begin_example
+   prices sp asset.1 wealth  cash
+1    3182  0      NA     NA     0
+2    3205  0       0      0     0
+3    3272  0       0      0     0
+4    3185  0       0      0     0
+5    3201  1       1      0 -3201
+6    3236  0       0     35    35
+7    3272  0       0     35    35
+8    3224  0       0     35    35
+9    3194  1       1     35 -3159
+10   3188  1       1     29 -3159
+11   3213  1       1     54 -3159
+#+end_example
 
 If we wanted to trade any other size, we would change our signal as
 follows.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 signal <- function()
     if (Close() < 3200)
         2 else 0
@@ -1922,24 +2074,27 @@ makeTable(btest(prices = prices, signal = signal), prices)
 #+END_SRC
 
 #+RESULTS:
-| 3182 | 0 | 0 |   0 |     0 |
-| 3205 | 2 | 2 |   0 | -6410 |
-| 3272 | 0 | 0 | 134 |   134 |
-| 3185 | 0 | 0 | 134 |   134 |
-| 3201 | 2 | 2 | 134 | -6268 |
-| 3236 | 0 | 0 | 204 |   204 |
-| 3272 | 0 | 0 | 204 |   204 |
-| 3224 | 0 | 0 | 204 |   204 |
-| 3194 | 0 | 0 | 204 |   204 |
-| 3188 | 2 | 2 | 204 | -6172 |
-| 3213 | 2 | 2 | 254 | -6172 |
+#+begin_example
+   prices sp asset.1 wealth  cash
+1    3182  0       0      0     0
+2    3205  2       2      0 -6410
+3    3272  0       0    134   134
+4    3185  0       0    134   134
+5    3201  2       2    134 -6268
+6    3236  0       0    204   204
+7    3272  0       0    204   204
+8    3224  0       0    204   204
+9    3194  0       0    204   204
+10   3188  2       2    204 -6172
+11   3213  2       2    254 -6172
+#+end_example
 
 A typical way to specify a trading strategy is to map past prices into
 =+1=, =0= or =-1= for long, flat or short. A
 signal is often only given at a specified point (like in `buy one unit
 now'). Example: suppose the third day is a Thursday, and our rule says
 `buy after Thursday'.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 signal <- function()
     if (Time() == 3L)
         1 else 0
@@ -1950,17 +2105,20 @@ makeTable(btest(prices = prices, signal = signal,
 #+END_SRC
 
 #+RESULTS:
-| 3182 | 0 | 0 | 100 |   100 |
-| 3205 | 0 | 0 | 100 |   100 |
-| 3272 | 0 | 0 | 100 |   100 |
-| 3185 | 1 | 1 | 100 | -3085 |
-| 3201 | 0 | 0 | 116 |   116 |
-| 3236 | 0 | 0 | 116 |   116 |
-| 3272 | 0 | 0 | 116 |   116 |
-| 3224 | 0 | 0 | 116 |   116 |
-| 3194 | 0 | 0 | 116 |   116 |
-| 3188 | 0 | 0 | 116 |   116 |
-| 3213 | 0 | 0 | 116 |   116 |
+#+begin_example
+     prices sp asset.1 wealth  cash
+1    3182  0       0    100   100
+2    3205  0       0    100   100
+3    3272  0       0    100   100
+4    3185  1       1    100 -3085
+5    3201  0       0    116   116
+6    3236  0       0    116   116
+7    3272  0       0    116   116
+8    3224  0       0    116   116
+9    3194  0       0    116   116
+10   3188  0       0    116   116
+11   3213  0       0    116   116
+#+end_example
 
 But this is probably not what we wanted. If the rule is to buy and
 then keep the long position, we should have written it like this.
@@ -1975,27 +2133,30 @@ signal <- function()
 The function =Portfolio= evaluates to last period's
 portfolio. Like =Close=, its first argument sets the time
 =lag=, which defaults to\nbsp{}1.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 makeTable(btest(prices = prices, signal = signal), prices)
 #+END_SRC
 
 #+RESULTS:
-| 3182 | 0 | 0 |  0 |     0 |
-| 3205 | 0 | 0 |  0 |     0 |
-| 3272 | 0 | 0 |  0 |     0 |
-| 3185 | 1 | 1 |  0 | -3185 |
-| 3201 | 1 | 1 | 16 | -3185 |
-| 3236 | 1 | 1 | 51 | -3185 |
-| 3272 | 1 | 1 | 87 | -3185 |
-| 3224 | 1 | 1 | 39 | -3185 |
-| 3194 | 1 | 1 |  9 | -3185 |
-| 3188 | 1 | 1 |  3 | -3185 |
-| 3213 | 1 | 1 | 28 | -3185 |
+#+begin_example
+   prices sp asset.1 wealth  cash
+1    3182  0       0      0     0
+2    3205  0       0      0     0
+3    3272  0       0      0     0
+4    3185  1       1      0 -3185
+5    3201  1       1     16 -3185
+6    3236  1       1     51 -3185
+7    3272  1       1     87 -3185
+8    3224  1       1     39 -3185
+9    3194  1       1      9 -3185
+10   3188  1       1      3 -3185
+11   3213  1       1     28 -3185
+#+end_example
 
 A common scenario is also a =signal= that evaluates to a
 weight; for instance, after a portfolio optimisation. (Be sure to have
 a meaningful initial wealth: 5 percent of nothing is nothing.)
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 signal <- function()
     if (Close() < 3200)
         0.05 else 0
@@ -2008,21 +2169,25 @@ makeTable(solution, prices)
 #+END_SRC
 
 #+RESULTS:
-| 3182 |                   0 |                   0 |              100 |              100 |
-| 3205 | 0.00157133878064111 | 0.00157133878064111 |              100 | 94.9638592080452 |
-| 3272 |                   0 |                   0 | 100.105279698303 | 100.105279698303 |
-| 3185 |                   0 |                   0 | 100.105279698303 | 100.105279698303 |
-| 3201 | 0.00157151145523239 | 0.00157151145523239 | 100.105279698303 | 95.0748715301041 |
-| 3236 |                   0 |                   0 | 100.160282599236 | 100.160282599236 |
-| 3272 |                   0 |                   0 | 100.160282599236 | 100.160282599236 |
-| 3224 |                   0 |                   0 | 100.160282599236 | 100.160282599236 |
-| 3194 |                   0 |                   0 | 100.160282599236 | 100.160282599236 |
-| 3188 | 0.00156794431119656 | 0.00156794431119656 | 100.160282599236 | 95.1616761351415 |
-| 3213 | 0.00157089527288639 | 0.00156794431119656 | 100.199481207016 | 95.1616761351415 |
+#+begin_example
+ 
+  prices      sp asset.1 wealth  cash
+1    3182 0.00000 0.00000    100 100.0
+2    3205 0.00157 0.00157    100  95.0
+3    3272 0.00000 0.00000    100 100.1
+4    3185 0.00000 0.00000    100 100.1
+5    3201 0.00157 0.00157    100  95.1
+6    3236 0.00000 0.00000    100 100.2
+7    3272 0.00000 0.00000    100 100.2
+8    3224 0.00000 0.00000    100 100.2
+9    3194 0.00000 0.00000    100 100.2
+10   3188 0.00157 0.00157    100  95.2
+11   3213 0.00157 0.00157    100  95.2
+#+end_example
 
 Note that now we rebalance in every period. Suppose we did not want
 that.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 do.rebalance <- function() {
     if (sum(abs(SuggestedPortfolio(0) - SuggestedPortfolio())) > 0.02)
         TRUE else FALSE
@@ -2038,24 +2203,28 @@ makeTable(solution, prices)
 #+END_SRC
 
 #+RESULTS:
-| 3182 |                   0 | 0 | 100 | 100 |
-| 3205 | 0.00157133878064111 | 0 | 100 | 100 |
-| 3272 |                   0 | 0 | 100 | 100 |
-| 3185 |                   0 | 0 | 100 | 100 |
-| 3201 | 0.00156985871271586 | 0 | 100 | 100 |
-| 3236 |                   0 | 0 | 100 | 100 |
-| 3272 |                   0 | 0 | 100 | 100 |
-| 3224 |                   0 | 0 | 100 | 100 |
-| 3194 |                   0 | 0 | 100 | 100 |
-| 3188 | 0.00156543519098309 | 0 | 100 | 100 |
-| 3213 | 0.00156838143036386 | 0 | 100 | 100 |
+#+begin_example
+ 
+  prices      sp asset.1 wealth cash
+1    3182 0.00000       0    100  100
+2    3205 0.00157       0    100  100
+3    3272 0.00000       0    100  100
+4    3185 0.00000       0    100  100
+5    3201 0.00157       0    100  100
+6    3236 0.00000       0    100  100
+7    3272 0.00000       0    100  100
+8    3224 0.00000       0    100  100
+9    3194 0.00000       0    100  100
+10   3188 0.00157       0    100  100
+11   3213 0.00157       0    100  100
+#+end_example
 
 See also the =tol= argument.  %% TODO: expand
 
 **** Passing environments
 
 To keep information persistent, we can use environments.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 external <- new.env()
 external$vec <- numeric(length(prices))
 signal <- function(threshold, external) {
@@ -2073,17 +2242,20 @@ cbind(makeTable(solution, prices), external$vec)
 #+END_SRC
 
 #+RESULTS:
-| 3182 | 0 | 0 | 0 | 0 | 3182 |
-| 3205 | 0 | 0 | 0 | 0 | 3205 |
-| 3272 | 0 | 0 | 0 | 0 | 3272 |
-| 3185 | 0 | 0 | 0 | 0 | 3185 |
-| 3201 | 0 | 0 | 0 | 0 | 3201 |
-| 3236 | 0 | 0 | 0 | 0 | 3236 |
-| 3272 | 0 | 0 | 0 | 0 | 3272 |
-| 3224 | 0 | 0 | 0 | 0 | 3224 |
-| 3194 | 0 | 0 | 0 | 0 | 3194 |
-| 3188 | 0 | 0 | 0 | 0 | 3188 |
-| 3213 | 0 | 0 | 0 | 0 |    0 |
+#+begin_example
+   prices sp asset.1 wealth cash external$vec
+1    3182  0       0      0    0         3182
+2    3205  0       0      0    0         3205
+3    3272  0       0      0    0         3272
+4    3185  0       0      0    0         3185
+5    3201  0       0      0    0         3201
+6    3236  0       0      0    0         3236
+7    3272  0       0      0    0         3272
+8    3224  0       0      0    0         3224
+9    3194  0       0      0    0         3194
+10   3188  0       0      0    0         3188
+11   3213  0       0      0    0            0
+#+end_example
 
 ** Examples: Multiple assets
 
@@ -2136,7 +2308,7 @@ In signal: use the current price and assign in =Globals=.
 the algorithm when to compute a new portfolio and when to
 rebalance. There are a number of shortcuts for specifying these dates.
 
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 tmp <- structure(c(3490, 3458, 3434, 3358, 3287, 3321, 3419, 3535, 3589, 
                    3603, 3626, 3677, 3672, 3689, 3646, 3633, 3631, 3599, 3517, 3549, 
                    3572, 3578, 3598, 3634, 3618, 3680, 3669, 3640, 3675, 3604, 3492, 
@@ -2169,145 +2341,175 @@ journal(btest(prices = prices, signal = signal))
 #+END_SRC 
 
 #+RESULTS:
-|  2 | 1 | 3458 | fesx201509 |
-|  3 | 1 | 3434 | fesx201509 |
-|  4 | 1 | 3358 | fesx201509 |
-|  5 | 1 | 3287 | fesx201509 |
-|  6 | 1 | 3321 | fesx201509 |
-|  7 | 1 | 3419 | fesx201509 |
-|  8 | 1 | 3535 | fesx201509 |
-|  9 | 1 | 3589 | fesx201509 |
-| 10 | 1 | 3603 | fesx201509 |
-| 11 | 1 | 3626 | fesx201509 |
-| 12 | 1 | 3677 | fesx201509 |
-| 13 | 1 | 3672 | fesx201509 |
-| 14 | 1 | 3689 | fesx201509 |
-| 15 | 1 | 3646 | fesx201509 |
-| 16 | 1 | 3633 | fesx201509 |
-| 17 | 1 | 3631 | fesx201509 |
-| 18 | 1 | 3599 | fesx201509 |
-| 19 | 1 | 3517 | fesx201509 |
-| 20 | 1 | 3549 | fesx201509 |
-| 21 | 1 | 3572 | fesx201509 |
-| 22 | 1 | 3578 | fesx201509 |
-| 23 | 1 | 3598 | fesx201509 |
-| 24 | 1 | 3634 | fesx201509 |
-| 25 | 1 | 3618 | fesx201509 |
-| 26 | 1 | 3680 | fesx201509 |
-| 27 | 1 | 3669 | fesx201509 |
-| 28 | 1 | 3640 | fesx201509 |
-| 29 | 1 | 3675 | fesx201509 |
-| 30 | 1 | 3604 | fesx201509 |
-| 31 | 1 | 3492 | fesx201509 |
-| 32 | 1 | 3513 | fesx201509 |
-| 33 | 1 | 3495 | fesx201509 |
-| 34 | 1 | 3503 | fesx201509 |
-| 35 | 1 | 3497 | fesx201509 |
-| 36 | 1 | 3433 | fesx201509 |
-| 37 | 1 | 3356 | fesx201509 |
-| 38 | 1 | 3256 | fesx201509 |
-| 39 | 1 | 3067 | fesx201509 |
-| 40 | 1 | 3228 | fesx201509 |
-| 41 | 1 | 3182 | fesx201509 |
-| 42 | 1 | 3286 | fesx201509 |
-| 43 | 1 | 3279 | fesx201509 |
-| 44 | 1 | 3269 | fesx201509 |
-| 45 | 1 | 3182 | fesx201509 |
-| 46 | 1 | 3205 | fesx201509 |
-| 47 | 1 | 3272 | fesx201509 |
-| 48 | 1 | 3185 | fesx201509 |
-| 49 | 1 | 3201 | fesx201509 |
-| 50 | 1 | 3236 | fesx201509 |
-| 51 | 1 | 3272 | fesx201509 |
-| 52 | 1 | 3224 | fesx201509 |
-| 53 | 1 | 3194 | fesx201509 |
-| 54 | 1 | 3188 | fesx201509 |
-| 55 | 1 | 3213 | fesx201509 |
-| 56 | 1 | 3255 | fesx201509 |
-| 57 | 1 | 3261 | fesx201509 |
+#+begin_example
+    instrument  timestamp  amount  price
+1   fesx201509          2       1   3458
+2   fesx201509          3       1   3434
+3   fesx201509          4       1   3358
+4   fesx201509          5       1   3287
+5   fesx201509          6       1   3321
+6   fesx201509          7       1   3419
+7   fesx201509          8       1   3535
+8   fesx201509          9       1   3589
+9   fesx201509         10       1   3603
+10  fesx201509         11       1   3626
+11  fesx201509         12       1   3677
+12  fesx201509         13       1   3672
+13  fesx201509         14       1   3689
+14  fesx201509         15       1   3646
+15  fesx201509         16       1   3633
+16  fesx201509         17       1   3631
+17  fesx201509         18       1   3599
+18  fesx201509         19       1   3517
+19  fesx201509         20       1   3549
+20  fesx201509         21       1   3572
+21  fesx201509         22       1   3578
+22  fesx201509         23       1   3598
+23  fesx201509         24       1   3634
+24  fesx201509         25       1   3618
+25  fesx201509         26       1   3680
+26  fesx201509         27       1   3669
+27  fesx201509         28       1   3640
+28  fesx201509         29       1   3675
+29  fesx201509         30       1   3604
+30  fesx201509         31       1   3492
+31  fesx201509         32       1   3513
+32  fesx201509         33       1   3495
+33  fesx201509         34       1   3503
+34  fesx201509         35       1   3497
+35  fesx201509         36       1   3433
+36  fesx201509         37       1   3356
+37  fesx201509         38       1   3256
+38  fesx201509         39       1   3067
+39  fesx201509         40       1   3228
+40  fesx201509         41       1   3182
+41  fesx201509         42       1   3286
+42  fesx201509         43       1   3279
+43  fesx201509         44       1   3269
+44  fesx201509         45       1   3182
+45  fesx201509         46       1   3205
+46  fesx201509         47       1   3272
+47  fesx201509         48       1   3185
+48  fesx201509         49       1   3201
+49  fesx201509         50       1   3236
+50  fesx201509         51       1   3272
+51  fesx201509         52       1   3224
+52  fesx201509         53       1   3194
+53  fesx201509         54       1   3188
+54  fesx201509         55       1   3213
+55  fesx201509         56       1   3255
+56  fesx201509         57       1   3261
 
-#+BEGIN_SRC R -n :exports both
+56 transactions
+#+end_example
+
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 journal(btest(prices = prices, signal = signal, 
               do.signal = c(10, 20, 30)))
 #+END_SRC 
 
 #+RESULTS:
-| 10 |  9 | 3603 | fesx201509 |
-| 20 | 10 | 3549 | fesx201509 |
-| 30 | 10 | 3604 | fesx201509 |
+:     instrument  timestamp  amount  price
+: 1  fesx201509         10       9   3603
+: 2  fesx201509         20      10   3549
+: 3  fesx201509         30      10   3604
+: 
+: 3 transactions
 
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 journal(btest(prices = prices, signal = signal, 
               do.signal = prices > 3600))
 #+END_SRC 
 
 #+RESULTS:
-| 10 | 9 | 3603 | fesx201509 |
-| 11 | 1 | 3626 | fesx201509 |
-| 12 | 1 | 3677 | fesx201509 |
-| 13 | 1 | 3672 | fesx201509 |
-| 14 | 1 | 3689 | fesx201509 |
-| 15 | 1 | 3646 | fesx201509 |
-| 16 | 1 | 3633 | fesx201509 |
-| 17 | 1 | 3631 | fesx201509 |
-| 24 | 7 | 3634 | fesx201509 |
-| 25 | 1 | 3618 | fesx201509 |
-| 26 | 1 | 3680 | fesx201509 |
-| 27 | 1 | 3669 | fesx201509 |
-| 28 | 1 | 3640 | fesx201509 |
-| 29 | 1 | 3675 | fesx201509 |
-| 30 | 1 | 3604 | fesx201509 |
+#+begin_example
+     instrument  timestamp  amount  price
+1   fesx201509         10       9   3603
+2   fesx201509         11       1   3626
+3   fesx201509         12       1   3677
+4   fesx201509         13       1   3672
+5   fesx201509         14       1   3689
+6   fesx201509         15       1   3646
+7   fesx201509         16       1   3633
+8   fesx201509         17       1   3631
+9   fesx201509         24       7   3634
+10  fesx201509         25       1   3618
+11  fesx201509         26       1   3680
+12  fesx201509         27       1   3669
+13  fesx201509         28       1   3640
+14  fesx201509         29       1   3675
+15  fesx201509         30       1   3604
 
-#+BEGIN_SRC R -n :exports both
+15 transactions
+#+end_example
+
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 journal(btest(prices = prices, signal = signal, 
               do.signal = prices > 3600,
               do.rebalance = FALSE))
 #+END_SRC 
 
 #+RESULTS:
+:   no transactions
+: Warning message:
+: In btest(prices = prices, signal = signal, do.signal = prices >  :
+:   'do.rebalance' is FALSE: strategy will never trade
 
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 journal(btest(prices = prices, signal = signal, 
               do.signal = prices > 3600,
               do.rebalance = c(26, 30)))
 #+END_SRC 
 
 #+RESULTS:
-| 26 | 25 | 3680 | fesx201509 |
-| 30 |  4 | 3604 | fesx201509 |
+:      instrument  timestamp  amount  price
+: 1  fesx201509         26      25   3680
+: 2  fesx201509         30       4   3604
+: 
+: 2 transactions
 
 When =timestamp= is specified, certain calendar times are also
 supported; =timestamp= must of a type that can be coerced to
 =Date=.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 cat(try(journal(btest(prices = prices, signal = signal, 
                       do.signal = "firstofmonth"))))
 #+END_SRC 
 
 #+RESULTS:
+:  Error in as.Date(timestamp) : 
+:   argument "timestamp" is missing, with no default
+: Error in as.Date(timestamp) : 
+:   argument "timestamp" is missing, with no default
 
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 journal(btest(prices = prices, signal = signal, 
               do.signal = "firstofmonth",
               timestamp = timestamp))
 #+END_SRC 
 
 #+RESULTS:
-| 2015-08-03 | 23 | 3634 | fesx201509 |
-| 2015-09-01 | 21 | 3182 | fesx201509 |
+:      instrument   timestamp  amount  price
+: 1  fesx201509  2015-08-03      23   3634
+: 2  fesx201509  2015-09-01      21   3182
+: 
+: 2 transactions
 
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 journal(btest(prices = prices, signal = signal, 
               do.signal = "lastofmonth",
               timestamp = timestamp))
 #+END_SRC 
 
 #+RESULTS:
-| 2015-07-31 | 22 | 3598 | fesx201509 |
-| 2015-08-31 | 21 | 3269 | fesx201509 |
-| 2015-09-17 | 13 | 3261 | fesx201509 |
+:      instrument   timestamp  amount  price
+: 1  fesx201509  2015-07-31      22   3598
+: 2  fesx201509  2015-08-31      21   3269
+: 3  fesx201509  2015-09-17      13   3261
+: 
+: 3 transactions
 
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 journal(btest(prices = prices, signal = signal, 
               do.signal = TRUE,
               do.rebalance = "lastofmonth",
@@ -2315,12 +2517,15 @@ journal(btest(prices = prices, signal = signal,
 #+END_SRC 
 
 #+RESULTS:
-| 2015-07-31 | 22 | 3598 | fesx201509 |
-| 2015-08-31 | 21 | 3269 | fesx201509 |
-| 2015-09-17 | 13 | 3261 | fesx201509 |
+:       instrument   timestamp  amount  price
+: 1  fesx201509  2015-07-31      22   3598
+: 2  fesx201509  2015-08-31      21   3269
+: 3  fesx201509  2015-09-17      13   3261
+: 
+: 3 transactions
 
 There is also a function Timestamp.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 signal <- function(timestamp) {
     if (Close() > 3500) {
         cat("Lagged price is > 3600 on", as.character(Timestamp()), "\n") 
@@ -2338,13 +2543,43 @@ journal(btest(prices = prices,
 #+END_SRC 
 
 #+RESULTS:
-| 2015-07-31 |  1 | 3598 | fesx201509 |
-| 2015-08-31 | -1 | 3269 | fesx201509 |
+#+begin_example
+Lagged price is > 3600 on 2015-07-10 
+Lagged price is > 3600 on 2015-07-13 
+Lagged price is > 3600 on 2015-07-14 
+Lagged price is > 3600 on 2015-07-15 
+Lagged price is > 3600 on 2015-07-16 
+Lagged price is > 3600 on 2015-07-17 
+Lagged price is > 3600 on 2015-07-20 
+Lagged price is > 3600 on 2015-07-21 
+Lagged price is > 3600 on 2015-07-22 
+Lagged price is > 3600 on 2015-07-23 
+Lagged price is > 3600 on 2015-07-24 
+Lagged price is > 3600 on 2015-07-27 
+Lagged price is > 3600 on 2015-07-28 
+Lagged price is > 3600 on 2015-07-29 
+Lagged price is > 3600 on 2015-07-30 
+Lagged price is > 3600 on 2015-07-31 
+Lagged price is > 3600 on 2015-08-03 
+Lagged price is > 3600 on 2015-08-04 
+Lagged price is > 3600 on 2015-08-05 
+Lagged price is > 3600 on 2015-08-06 
+Lagged price is > 3600 on 2015-08-07 
+Lagged price is > 3600 on 2015-08-10 
+Lagged price is > 3600 on 2015-08-11 
+Lagged price is > 3600 on 2015-08-13 
+Lagged price is > 3600 on 2015-08-17 
+   instrument   timestamp  amount  price
+1  fesx201509  2015-07-31       1   3598
+2  fesx201509  2015-08-31      -1   3269
+
+2 transactions
+#+end_example
 
 *** Testing rebalancing frequency
 
 *** Writing a log
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output :colnames yes
 signal <- function()
     if (Close() < 3200)
         1 else 0
@@ -2365,63 +2600,123 @@ makeTable(solution, prices)
 #+END_SRC
 
 #+RESULTS:
-| 3490 | 0 | 0 |   0 |     0 |
-| 3458 | 0 | 0 |   0 |     0 |
-| 3434 | 0 | 0 |   0 |     0 |
-| 3358 | 0 | 0 |   0 |     0 |
-| 3287 | 0 | 0 |   0 |     0 |
-| 3321 | 0 | 0 |   0 |     0 |
-| 3419 | 0 | 0 |   0 |     0 |
-| 3535 | 0 | 0 |   0 |     0 |
-| 3589 | 0 | 0 |   0 |     0 |
-| 3603 | 0 | 0 |   0 |     0 |
-| 3626 | 0 | 0 |   0 |     0 |
-| 3677 | 0 | 0 |   0 |     0 |
-| 3672 | 0 | 0 |   0 |     0 |
-| 3689 | 0 | 0 |   0 |     0 |
-| 3646 | 0 | 0 |   0 |     0 |
-| 3633 | 0 | 0 |   0 |     0 |
-| 3631 | 0 | 0 |   0 |     0 |
-| 3599 | 0 | 0 |   0 |     0 |
-| 3517 | 0 | 0 |   0 |     0 |
-| 3549 | 0 | 0 |   0 |     0 |
-| 3572 | 0 | 0 |   0 |     0 |
-| 3578 | 0 | 0 |   0 |     0 |
-| 3598 | 0 | 0 |   0 |     0 |
-| 3634 | 0 | 0 |   0 |     0 |
-| 3618 | 0 | 0 |   0 |     0 |
-| 3680 | 0 | 0 |   0 |     0 |
-| 3669 | 0 | 0 |   0 |     0 |
-| 3640 | 0 | 0 |   0 |     0 |
-| 3675 | 0 | 0 |   0 |     0 |
-| 3604 | 0 | 0 |   0 |     0 |
-| 3492 | 0 | 0 |   0 |     0 |
-| 3513 | 0 | 0 |   0 |     0 |
-| 3495 | 0 | 0 |   0 |     0 |
-| 3503 | 0 | 0 |   0 |     0 |
-| 3497 | 0 | 0 |   0 |     0 |
-| 3433 | 0 | 0 |   0 |     0 |
-| 3356 | 0 | 0 |   0 |     0 |
-| 3256 | 0 | 0 |   0 |     0 |
-| 3067 | 0 | 0 |   0 |     0 |
-| 3228 | 1 | 1 |   0 | -3228 |
-| 3182 | 0 | 0 | -46 |   -46 |
-| 3286 | 1 | 1 | -46 | -3332 |
-| 3279 | 0 | 0 | -53 |   -53 |
-| 3269 | 0 | 0 | -53 |   -53 |
-| 3182 | 0 | 0 | -53 |   -53 |
-| 3205 | 1 | 1 | -53 | -3258 |
-| 3272 | 0 | 0 |  14 |    14 |
-| 3185 | 0 | 0 |  14 |    14 |
-| 3201 | 1 | 1 |  14 | -3187 |
-| 3236 | 0 | 0 |  49 |    49 |
-| 3272 | 0 | 0 |  49 |    49 |
-| 3224 | 0 | 0 |  49 |    49 |
-| 3194 | 0 | 0 |  49 |    49 |
-| 3188 | 1 | 1 |  49 | -3139 |
-| 3213 | 1 | 1 |  74 | -3139 |
-| 3255 | 0 | 0 | 116 |   116 |
-| 3261 | 0 | 0 | 116 |   116 |
+#+begin_example
+period  2 ...   0 
+period  3 ...   0 
+period  4 ...   0 
+period  5 ...   0 
+period  6 ...   0 
+period  7 ...   0 
+period  8 ...   0 
+period  9 ...   0 
+period 10 ...   0 
+period 11 ...   0 
+period 12 ...   0 
+period 13 ...   0 
+period 14 ...   0 
+period 15 ...   0 
+period 16 ...   0 
+period 17 ...   0 
+period 18 ...   0 
+period 19 ...   0 
+period 20 ...   0 
+period 21 ...   0 
+period 22 ...   0 
+period 23 ...   0 
+period 24 ...   0 
+period 25 ...   0 
+period 26 ...   0 
+period 27 ...   0 
+period 28 ...   0 
+period 29 ...   0 
+period 30 ...   0 
+period 31 ...   0 
+period 32 ...   0 
+period 33 ...   0 
+period 34 ...   0 
+period 35 ...   0 
+period 36 ...   0 
+period 37 ...   0 
+period 38 ...   0 
+period 39 ...   0 
+period 40 ...   0 
+period 41 ... -46 
+period 42 ... -46 
+period 43 ... -53 
+period 44 ... -53 
+period 45 ... -53 
+period 46 ... -53 
+period 47 ...  14 
+period 48 ...  14 
+period 49 ...  14 
+period 50 ...  49 
+period 51 ...  49 
+period 52 ...  49 
+period 53 ...  49 
+period 54 ...  49 
+period 55 ...  74 
+period 56 ... 116 
+period 57 ... 116
+ 
+  fesx201509 fesx201509.1 fesx201509.2 wealth  cash
+1        3490            0            0      0     0
+2        3458            0            0      0     0
+3        3434            0            0      0     0
+4        3358            0            0      0     0
+5        3287            0            0      0     0
+6        3321            0            0      0     0
+7        3419            0            0      0     0
+8        3535            0            0      0     0
+9        3589            0            0      0     0
+10       3603            0            0      0     0
+11       3626            0            0      0     0
+12       3677            0            0      0     0
+13       3672            0            0      0     0
+14       3689            0            0      0     0
+15       3646            0            0      0     0
+16       3633            0            0      0     0
+17       3631            0            0      0     0
+18       3599            0            0      0     0
+19       3517            0            0      0     0
+20       3549            0            0      0     0
+21       3572            0            0      0     0
+22       3578            0            0      0     0
+23       3598            0            0      0     0
+24       3634            0            0      0     0
+25       3618            0            0      0     0
+26       3680            0            0      0     0
+27       3669            0            0      0     0
+28       3640            0            0      0     0
+29       3675            0            0      0     0
+30       3604            0            0      0     0
+31       3492            0            0      0     0
+32       3513            0            0      0     0
+33       3495            0            0      0     0
+34       3503            0            0      0     0
+35       3497            0            0      0     0
+36       3433            0            0      0     0
+37       3356            0            0      0     0
+38       3256            0            0      0     0
+39       3067            0            0      0     0
+40       3228            1            1      0 -3228
+41       3182            0            0    -46   -46
+42       3286            1            1    -46 -3332
+43       3279            0            0    -53   -53
+44       3269            0            0    -53   -53
+45       3182            0            0    -53   -53
+46       3205            1            1    -53 -3258
+47       3272            0            0     14    14
+48       3185            0            0     14    14
+49       3201            1            1     14 -3187
+50       3236            0            0     49    49
+51       3272            0            0     49    49
+52       3224            0            0     49    49
+53       3194            0            0     49    49
+54       3188            1            1     49 -3139
+55       3213            1            1     74 -3139
+56       3255            0            0    116   116
+57       3261            0            0    116   116
+#+end_example
 
 And since =cat= has a =file= argument, we can also write
 such information into a logfile.
@@ -2623,7 +2918,8 @@ rebalance(current, target, prices, match.names = FALSE)
 #+END_SRC 
 
 #+RESULTS:
-:   price current value   %        new value   %        order
+:  
+:  price current value   %        new value   %        order
 : 1     1       0     0  0.0        50    50 25.0          50
 : 2     1       0     0  0.0        50    50 25.0          50
 : 3     1     100   100 50.0        50    50 25.0         -50
@@ -2641,6 +2937,7 @@ rebalance(current, target, prices,
 #+END_SRC
 
 #+RESULTS:
+:  
 :   price current value  %        new value   %        order
 : 1     1       0     0 0.0        25    25 25.0          25
 : 2     1       0     0 0.0        25    25 25.0          25
@@ -2673,13 +2970,20 @@ rebalance(current, target, prices, match.names = FALSE, notional = 100)
 #+END_SRC 
 
 #+RESULTS:
-:   price current value    %        new value   %        order
-: 1     1       5     5   5.0        20    20 20.0          15
-: 2     1       5     5   5.0        20    20 20.0          15
-: 3     1     100   100 100.0        20    20 20.0         -80
-: 4     1     100   100 100.0        20    20 20.0         -80
-: 
-: Notional: 100.  Amount invested: 80.  Total turnover: 190.
+#+begin_example
+  price current value    %        new value   %       
+1     1       5     5   5.0        20    20 20.0      
+2     1       5     5   5.0        20    20 20.0      
+3     1     100   100 100.0        20    20 20.0      
+4     1     100   100 100.0        20    20 20.0      
+  order
+1    15
+2    15
+3   -80
+4   -80
+
+Notional: 100.  Amount invested: 80.  Total turnover: 190.
+#+end_example
 
 
 
@@ -2697,9 +3001,12 @@ rebalance(current, target, prices)
 #+END_SRC 
 
 #+RESULTS:
-:   price current value    %        new value   %        order
-: b     1      10    10 100.0         0     0  0.0         -10
-: d     1       0     0   0.0         5     5 50.0           5
+:   price current value    %        new value   %       
+: b     1      10    10 100.0         0     0  0.0      
+: d     1       0     0   0.0         5     5 50.0      
+:   order
+: b   -10
+: d     5
 : 
 : Notional: 10.  Amount invested: 5.  Total turnover: 15.
 
@@ -2710,13 +3017,20 @@ print(rebalance(current, target, prices), drop.zero = FALSE)
 #+END_SRC 
 
 #+RESULTS:
-:   price current value    %        new value   %        order
-: a     1       0     0   0.0         0     0  0.0           0
-: b     1      10    10 100.0         0     0  0.0         -10
-: c     1       0     0   0.0         0     0  0.0           0
-: d     1       0     0   0.0         5     5 50.0           5
-: 
-: Notional: 10.  Amount invested: 5.  Total turnover: 15.
+#+begin_example
+  price current value    %        new value   %       
+a     1       0     0   0.0         0     0  0.0      
+b     1      10    10 100.0         0     0  0.0      
+c     1       0     0   0.0         0     0  0.0      
+d     1       0     0   0.0         5     5 50.0      
+  order
+a     0
+b   -10
+c     0
+d     5
+
+Notional: 10.  Amount invested: 5.  Total turnover: 15.
+#+end_example
 
 
 
@@ -2743,7 +3057,7 @@ so:
 #+END_SRC
 
 #+RESULTS:
-:   position from to duration
+:      position from to duration
 : 1        1    0  1        1
 : 2        4    1  3        2
 : 3        1    3  4        1
@@ -2827,7 +3141,7 @@ scaleToUnity(n)
 #+END_SRC
 
 #+RESULTS:
-: [1] -0.3333333 -0.3333333 -0.3333333  0.3333333  0.3333333  0.3333333
+: [1] -0.333 -0.333 -0.333  0.333  0.333  0.333
 
 Closing the trade at once.
 #+BEGIN_SRC R -n :exports both :results output
@@ -2976,7 +3290,7 @@ str(tmp)
 :  $ x          : num [1:15] 140 140 140 140 140 ...
 :  $ axis.pos   : num [1:2] 7193 57594
 :  $ axis.labels: chr [1:2] "19.10." "22.10."
-:  $ timegrid   : POSIXct[1:61527], format: "2012-10-18 20:00:09" "2012-10-18 20:00:10" ...
+:  $ timegrid   : POSIXct[1:61527], format: "2012-10-18 20:00:09" ...
 :  $ map        :function (t)
 
 This information can be used to add elements to plots. An example follows.
@@ -3069,10 +3383,11 @@ data.frame(times = moretimes,
 #+END_SRC 
 
 #+RESULTS:
-:                 times  weekday values
-: 1 2012-10-18 21:00:00 Thursday  140.0
-: 2 2012-10-19 21:00:00   Friday  140.1
-: 3 2012-10-20 21:00:00 Saturday  140.2
+:  
+:                  times  weekday values
+: 1 2012-10-18 21:00:00 Thursday    140
+: 2 2012-10-19 21:00:00   Friday    140
+: 3 2012-10-20 21:00:00 Saturday    140
 
 But 20 October 2012 falls on a Saturday, and so it does not appear in the plot. 
 #+BEGIN_SRC R -n :exports both :results output
@@ -3093,7 +3408,7 @@ values[tmp$map(moretimes)$ix]
 #+END_SRC
 
 #+RESULTS:
-: [1] 140.0 140.1
+: [1] 140 140
 
 
 
@@ -3137,10 +3452,58 @@ t <- structure(c(16072, 16073, 16076, 16077, 16078,
 scale1(x)
 #+END_SRC 
 
+#+RESULTS:
+|                 1 |
+|  1.00373509048898 |
+|  1.00297445542785 |
+|  1.01129356896354 |
+|  1.01040421104591 |
+|  1.00229467108651 |
+|  1.00778720090553 |
+|  1.01171590759188 |
+|  1.01494355343169 |
+|  1.03550729571364 |
+|  1.03379453704452 |
+|  1.03648069582683 |
+|  1.03360198467241 |
+|  1.03511474419258 |
+|    1.034049855107 |
+|  1.02457436351335 |
+| 0.999146812141225 |
+| 0.994593640027064 |
+|  1.00073084795384 |
+| 0.993264922276926 |
+| 0.997174480108595 |
+| 0.990046850864464 |
+
 With =centre=, the daily mean \emph{return} is subtracted.
 #+BEGIN_SRC R -n :exports both
 scale1(x, centre = TRUE)
 #+END_SRC 
+
+#+RESULTS:
+|                 1 |
+|  1.00421331747428 |
+|  1.00393041227059 |
+|  1.01273974237873 |
+|  1.01233120554868 |
+|  1.00468465090715 |
+|  1.01067158025088 |
+|  1.01509494029324 |
+|  1.01881854845208 |
+|  1.03995605030523 |
+|  1.03873059809138 |
+|  1.04192576891034 |
+|  1.03952697873954 |
+|  1.04154441478418 |
+|  1.04096864170791 |
+|  1.03192117200964 |
+|  1.00679074435658 |
+|   1.0026802352837 |
+|  1.00934801433163 |
+|  1.00229511401331 |
+|   1.0067196358352 |
+| 0.999999999999999 |
 
 With =scale=, the daily \emph{returns} are rescaled to to that
 standard deviation.
@@ -3150,12 +3513,25 @@ plot(x, type = "l")
 plot(scale1(x, scale = 0.02))
 #+END_SRC 
 
+#+RESULTS:
+
 ## %% \section{Handling NAs}
 
 
 
 
 * FAQ/@@latex:\,@@FRC (Frequently-required computations)           :noexport:
+
+** Rebalancing weights
+
+#+BEGIN_EXAMPLE
+I want to compute =returns= when a portfolio (specified as weights) 
+is rebalanced at specific times. However, I only have returns for the assets 
+in the portfolio, not prices.
+#+END_EXAMPLE
+
+Answer: compute artificial prices.
+
 
 ** I need to value a financial instrument
 
@@ -3243,21 +3619,27 @@ locale:
 [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 
 attached base packages:
-[1] stats     graphics  grDevices utils     datasets  methods   base     
+[1] stats     graphics  grDevices utils     datasets 
+[6] methods   base     
 
 other attached packages:
-[1] PMwR_0.1-79
+[1] PMwR_0.1-80     org_0.0-2       IBrokers_0.9-12
+[4] xts_0.9-7       zoo_1.7-12      RODBC_1.3-12   
+[7] database_0.1-39
 
 loaded via a namespace (and not attached):
- [1] datetimeutils_0.0-5 zoo_1.7-12          compiler_3.2.2     
- [4] parallel_3.2.2      tools_3.2.2         memoise_0.2.1      
- [7] crayon_1.3.1        NMOF_0.36-4         grid_3.2.2         
-[10] digest_0.6.8        textutils_0.0-6     lattice_0.20-33
+ [1] lattice_0.20-33     digest_0.6.8       
+ [3] crayon_1.3.1        datetimeutils_0.0-5
+ [5] grid_3.2.2          fastmatch_1.0-4    
+ [7] tools_3.2.2         NMOF_0.36-4        
+ [9] parallel_3.2.2      compiler_3.2.2     
+[11] textutils_0.0-6     memoise_0.2.1
 #+end_example
 
 
 #+BEGIN_LATEX
 \nocite{Gilli2011b}
+\nocite{nmof2012}
 \printbibliography
 \printindex
 #+END_LATEX
