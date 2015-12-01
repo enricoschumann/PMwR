@@ -1,7 +1,7 @@
 #+COMMENT: -*- fill-column: 65; -*-
 #+TITLE: Portfolio Management with R 
 #+AUTHOR: Enrico Schumann
-#+DATE: 24 November 2015
+#+DATE: 30 November 2015
 #+OPTIONS: toc:nil
 #+BIND: org-latex-default-packages-alist nil
 #+BIND: org-use-sub-superscripts {}
@@ -90,7 +90,7 @@
 #+BEGIN_HTML
 <p>
     <a href = "http://enricoschumann.net">Enrico Schumann</a>&nbsp;&nbsp;&nbsp;
-    <time datetime="2015-11-24">24 November 2015</time>&nbsp;&nbsp;&nbsp;
+    <time datetime="2015-11-30">30 November 2015</time>&nbsp;&nbsp;&nbsp;
     <a href = "PMwR.pdf">[PDF]</a>
 </p>
 #+END_HTML
@@ -107,7 +107,7 @@
   
   This manual describes how to use the PMwR package. The package
   grew out of various pieces of software that I have written
-  since 2008 or so, first at the University of Geneva, later at
+  since 2008 or so, first at the University of Geneva, later
   during my work at financial firms.
 
   The package is currently under development and changes
@@ -257,20 +257,19 @@ The following classes are implicitly defined (ie, S3 classes):
 
   A =journal= is a list of atomic vectors with a class
   attribute. Such a list is created through the function
-  =journal=. Methods should not rely on this list being
-  sorted in any particular way: components of a journal
-  should always be retrieved by name, never by position. (In
-  this respect a journal differs from a dataframe, where we
-  can meaningfully refer to the /n/-th column.)
+  =journal=. Methods should not rely on this list being sorted in
+  any particular way: components of a journal should always be
+  retrieved by name, never by position. (In this respect a
+  journal differs from a dataframe, where we can meaningfully
+  refer to the /n/-th column.)
   #+INDEX: journal!comparison with dataframe
   I will call to these journal components, such as =amount= or
   =timestamp=, fields.
   
-  The simplicity of the class is intended, because it is
-  meant for interactive analyses. The user may -- and is
-  expected to -- dissect the information in a =journal= at
-  will; such dissections include removing the class
-  attribute.
+  The simplicity of the class is intended, because it is meant
+  for interactive analyses. The user may -- and is expected to --
+  dissect the information in a =journal= at will; such
+  dissections include removing the class attribute.
 
   What is actually stored in a =journal= is up to the user. A
   number of fields are, however, required for certain operations
@@ -397,16 +396,6 @@ NA, NA, NA, NA, NA, NA, NA, NA), what = c("wine", "wine", "milk",
 "timestamp", "amount", "price", "what"), class = "journal")
 #+END_SRC
 
-#+RESULTS:
-| nil | nil |  1 | nil | wine |
-| nil | nil |  4 | nil | wine |
-| nil | nil |  1 | nil | milk |
-| nil | nil | -2 | nil | wine |
-| nil | nil | -1 | nil | milk |
-| nil | nil |  1 | nil | milk |
-| nil | nil | -1 | nil | milk |
-| nil | nil |  1 | nil | milk |
-| nil | nil | -1 | nil | wine |
 
 The journal would look like this.
 
@@ -689,6 +678,20 @@ position(J, when = seq(from = as.Date("2011-12-30"),
 #+END_SRC
 
 #+RESULTS:
+
+
+** Appendix: Tutorials                                             :noexport:
+
+*** Double-entry accounting
+
+    Double-entry account builds on the identity 
+#+BEGIN_EXAMPLE
+assets + expenses = liabilities + income + equity
+#+END_EXAMPLE
+
+    The left-hand side states what you did with your capital; the
+    right-hand side tells you where it came from.
+
 
 
 * Computing profit and (or) loss
@@ -3619,21 +3622,18 @@ locale:
 [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
 
 attached base packages:
-[1] stats     graphics  grDevices utils     datasets 
-[6] methods   base     
+[1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] PMwR_0.1-80     org_0.0-2       IBrokers_0.9-12
-[4] xts_0.9-7       zoo_1.7-12      RODBC_1.3-12   
-[7] database_0.1-39
+[1] datetimeutils_0.0-5  mailtools_0.1-3      textutils_0.0-6     
+[4] PMwR_0.1-80          NMOF_0.36-4          portfolioTools_0.0-5
+[7] esutils_0.1-3        zoo_1.7-12           database_0.1-39     
 
 loaded via a namespace (and not attached):
- [1] lattice_0.20-33     digest_0.6.8       
- [3] crayon_1.3.1        datetimeutils_0.0-5
- [5] grid_3.2.2          fastmatch_1.0-4    
- [7] tools_3.2.2         NMOF_0.36-4        
- [9] parallel_3.2.2      compiler_3.2.2     
-[11] textutils_0.0-6     memoise_0.2.1
+ [1] lattice_0.20-33 digest_0.6.8    crayon_1.3.1    grid_3.2.2     
+ [5] xts_0.9-7       fastmatch_1.0-4 RODBC_1.3-12    tools_3.2.2    
+ [9] parallel_3.2.2  compiler_3.2.2  base64enc_0.1-3 IBrokers_0.9-12
+[13] memoise_0.2.1
 #+end_example
 
 
