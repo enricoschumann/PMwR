@@ -509,10 +509,10 @@ if (FALSE) {
         pos <- array(NA, dim = dim(prices))
         ## w <- array(NA, dim = dim(prices))
         
-        if (is.null(when && identical(when, TRUE))
+        if (is.null(when && identical(when, TRUE)))
             when <- seq_len(nc)
-    else if (is.logical(when))
-        when <- which(when)
+        else if (is.logical(when))
+            when <- which(when)
     
     
     for (i in when)
@@ -526,14 +526,14 @@ if (FALSE) {
     
     rowSums(returns(prices) * w[-nr,])
     }
-            
-            returns_rebalance2(prices, weights, when = TRUE)
-        returns_rebalance(prices, weights, when = TRUE)
-        
-        require("rbenchmark")
-        benchmark(returns_rebalance2(prices, weights, when = TRUE),
-                  returns_rebalance(prices, weights, when = TRUE),
-                  columns = c("test", "relative", "elapsed"))
-        
+    
+    returns_rebalance2(prices, weights, when = TRUE)
+    returns_rebalance(prices, weights, when = TRUE)
+    
+    require("rbenchmark")
+    benchmark(returns_rebalance2(prices, weights, when = TRUE),
+              returns_rebalance(prices, weights, when = TRUE),
+              columns = c("test", "relative", "elapsed"))
+    
 
 }
