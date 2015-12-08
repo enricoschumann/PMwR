@@ -16,15 +16,17 @@ pl(amount, \dots)
 \method{pl}{default}(amount, price, timestamp = NULL,
                      instrument = NULL, multiplier = 1,
                      along.timestamp = FALSE, approx = FALSE,
-                     eval.price = NULL, \dots)
+                     initial.position = NULL, initial.price = NULL,
+                     eval.price = NULL, tol = 1e-10, \dots)
 
 \method{pl}{journal}(amount, multiplier = 1,
                      along.timestamp = FALSE, approx = FALSE,
-                     eval.price = NULL, \dots)
+                     initial.position = NULL, initial.price = NULL,
+                     eval.price = NULL, tol = 1e-10, \dots)
 
 .pl(amount, price, tol = 1e-10, do.warn = TRUE)
 
-\method{print}{x, \dots, use.crayon = NULL}
+\method{print}{pl}(x, \dots, use.crayon = NULL)
 }
 \arguments{
   \item{amount}{
@@ -42,11 +44,14 @@ pl(amount, \dots)
   \item{along.timestamp}{
     a logical
   }
-  \item{do.sort}{
-    sort all by time
-  }
+  %% \item{do.sort}{
+  %%   sort all by time
+  %% }
   \item{initial.position}{
-    a \code{\link{position}}
+    a \code{\link{position}}. \bold{Not yet supported}.
+  }
+  \item{initial.price}{
+    prices to evaluate initial position. \bold{Not yet supported}
   }
   \item{eval.price}{
 
@@ -54,10 +59,12 @@ pl(amount, \dots)
     named, e.g. \code{c(stock1 = 100, stock2 = 101)}.
 
   }
-  \item{initial.price}{price.to}
   \item{multiplier}{not supported yet}
-  \item{tol}{numeric}
+  \item{approx}{logical}
+  \item{tol}{numeric: threshold to consider a position zero.}
   \item{do.warn}{logical}
+  \item{x}{a pl object to be printed}
+  \item{\dots}{further argument}
   \item{use.crayon}{logical}
 }
 \details{

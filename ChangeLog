@@ -1,3 +1,9 @@
+2015-12-08  Enrico Schumann  <es@enricoschumann.net>
+
+	* man/pl.Rd: various updates
+
+	* inst/unitTests/ut_pl.R (test.pl): updated unit test
+
 2015-11-24  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/pl.R (print.pl): if an option 'PMwR.use.crayon' is set to

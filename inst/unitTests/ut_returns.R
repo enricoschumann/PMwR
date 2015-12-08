@@ -195,5 +195,8 @@ test.returns <- function() {
     .mtab(x, month.names = LETTERS[1:12], ytd = "Z")
     .mtab(x, digits = 0)
     .mtab(x, digits = 0, zero.print = "___")
+
+
+    ## rebalanced returns
     
 }

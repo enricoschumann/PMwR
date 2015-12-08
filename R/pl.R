@@ -176,6 +176,7 @@ pl <- function(amount, ...)
 
 pl.journal <- function(amount, multiplier = 1,
                        along.timestamp = FALSE, approx = FALSE,
+                       initial.position = NULL, initial.price = NULL,
                        eval.price = NULL,
                        tol = 1e-10, ...) {
     J <- amount
@@ -195,6 +196,7 @@ pl.journal <- function(amount, multiplier = 1,
 pl.default <- function(amount, price, timestamp = NULL,
                        instrument = NULL, multiplier = 1,
                        along.timestamp = FALSE, approx = FALSE,
+                       initial.position = NULL, initial.price = NULL,
                        eval.price = NULL,
                        tol = 1e-10, ...) {
     if (multiplier != 1)
@@ -223,6 +225,9 @@ pl.default <- function(amount, price, timestamp = NULL,
             eval.price1 <- eval.price
         if (!is.null(eval.price) && !no.i)
             eval.price1 <- eval.price[[ uniq.i[i] ]]
+
+        ## TODO initial position
+
         
         open <- abs(sum(amount1)) > tol
         if (open && is.null(eval.price)) {
