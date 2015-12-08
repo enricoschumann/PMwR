@@ -1,5 +1,7 @@
 2015-12-08  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-81
+
 	* man/pl.Rd: various updates
 
 	* inst/unitTests/ut_pl.R (test.pl): updated unit test
