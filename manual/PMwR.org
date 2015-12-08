@@ -28,6 +28,10 @@
 #+LATEX_HEADER: \lstset{language=R,basicstyle=\ttfamily,frame=single,
 #+LATEX_HEADER:         numberstyle=\ttfamily\footnotesize\color{gray}}
 #+LATEX_HEADER: \usepackage{mdframed}
+#+LATEX_HEADER: \newenvironment{FAQ}
+#+LATEX_HEADER:  {\begin{mdframed}}{\end{mdframed}}
+#+LATEX_HEADER: \newenvironment{FAA}
+#+LATEX_HEADER:  {\begin{mdframed}}{\end{mdframed}}
 #+LATEX_HEADER: \usepackage{makeidx}\makeindex
 #+LATEX_HEADER: \usepackage{hyperref}
 #+PROPERTY: header-args:R :session *R*
@@ -36,7 +40,7 @@
 #+HTML_HEAD:     html,body {
 #+HTML_HEAD:       padding: 0;
 #+HTML_HEAD:       margin: 0;
-#+HTML_HEAD:       line-height: 140%;
+#+HTML_HEAD:       line-height: 120%;
 #+HTML_HEAD:     }
 #+HTML_HEAD:     #content {
 #+HTML_HEAD:       font-family: "localEBG", serif;
@@ -49,7 +53,7 @@
 #+HTML_HEAD:       margin-right: auto;    
 #+HTML_HEAD:       width: 700px;
 #+HTML_HEAD:     }
-#+HTML_HEAD:     @media (max-device-width: 700px) {
+#+HTML_HEAD:     @media (max-width: 700px) {
 #+HTML_HEAD:         html,body {
 #+HTML_HEAD:             width: 98%;
 #+HTML_HEAD:         }
@@ -86,7 +90,6 @@
 #+HTML_HEAD:       text-align: right;
 #+HTML_HEAD:     }
 #+HTML_HEAD: </style>
-
 #+BEGIN_HTML
 <p>
     <a href = "http://enricoschumann.net">Enrico Schumann</a>&nbsp;&nbsp;&nbsp;
@@ -3523,7 +3526,21 @@ plot(scale1(x, scale = 0.02))
 
 
 
-* FAQ/@@latex:\,@@FRC (Frequently-required computations)           :noexport:
+* FAQ/@@latex:\,@@FRC (Frequently-required computations)       
+
+** PnL for a given period
+
+#+BEGIN_FAQ
+I need to compute PnL for between two points in time, for
+instance between yesterday's evening close and now (intraday).
+#+END_FAQ
+
+#+BEGIN_FAA
+You need the position at $t_1$ and the journal of trades between
+$t_1$ and $t_2$. Also, you will need the valuation prices for all
+instruments at both points in time.
+#+END_FAA
+
 
 ** Rebalancing weights
 
