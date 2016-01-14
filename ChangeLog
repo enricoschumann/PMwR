@@ -1,4 +1,6 @@
-2016-01-13  Enrico Schumann  <es@enricoschumann.net>
+2016-01-14  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 0.1-82
 
 	* R/returns.R (pReturns): with 'period = "ann"', the result gets a
 	new attribute 'annualised' (TRUE or FALSE)
