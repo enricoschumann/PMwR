@@ -150,12 +150,14 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         lx <- length(xi)
         t <- as.numeric(xi[lx] - xi[1L])/365
         ans <- if (t < 1 && !(grepl("!$", period))) {
-            (x[lx]/x[1L]) - 1
+                   (x[lx]/x[1L]) - 1
                } else {
                    (x[lx]/x[1L])^(1/t) - 1
                }
         attr(ans, "period") <- "annualised"
         attr(ans, "t") <- c(xi[1L], xi[lx])
+        attr(ans, "annualised") <- if (t < 1 && !(grepl("!$", period)))
+                                       FALSE else TRUE
     } else if (tolower(period) == "itd") {
         lx <- length(x)
         (x[lx]/x[1L]) - 1
@@ -329,7 +331,7 @@ toHTML.p_returns <- function(x, ..., year.rows = TRUE,
     period <- attr(x, "period")
 
     .ctag <- function(value, tag)
-        if (!is.null(value))
+        if (!is.null(value) && value != "")
             paste0(" ", tag, "=", value)
         else
             character(0L)

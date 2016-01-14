@@ -55,13 +55,7 @@
 #+HTML_HEAD:     }
 #+HTML_HEAD:     @media (max-width: 700px) {
 #+HTML_HEAD:         html,body {
-#+HTML_HEAD:             width: 98%;
-#+HTML_HEAD:         }
-#+HTML_HEAD:         .coauthors {
-#+HTML_HEAD:             font-size: 90%;
-#+HTML_HEAD:         }
-#+HTML_HEAD:         nav {
-#+HTML_HEAD:             display: none;
+#+HTML_HEAD:             width: 92%;
 #+HTML_HEAD:         }
 #+HTML_HEAD:     }
 #+HTML_HEAD:     .example {
