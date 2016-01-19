@@ -279,17 +279,17 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
         else
             print(as.matrix(fmt(tmp, plus, digits)), quote = FALSE)
     } else if (period == "annualised") {
-        cat(format(round(x*100, digits), nsmall = digits), "% p.a. ",
+        cat(format(round(x*100, digits), nsmall = digits), "% p.a.  ",
             "  [", format(timestamp[1], "%d %b %Y"), " -- ",
                  format(timestamp[2], "%d %b %Y"), "", sep = "")
         if (as.numeric(timestamp[2L]-timestamp[1L])/365 < 1)
             cat(", less than one year]\n", sep = "") else
             cat("]\n", sep = "")
     } else if (period == "ytd" || period == "mtd") {
-        cat(paste0(format(round(x * 100, digits), nsmall = digits), "%", 
-                   "  [ ", format(tail(timestamp,1), "%d %b %Y"),
-                   " -- ", format(tail(timestamp,1), "%d %b %Y"), " ]"), 
-            sep = "\n")        
+        tmp <- paste0("[ ",   format(head(timestamp, 1), "%d %b %Y"),
+                      " -- ", format(tail(timestamp, 1), "%d %b %Y"), " ]")
+        cat(paste0(format(round(x * 100, digits), nsmall = digits), "%   ", 
+                   tmp), sep = "\n")
     } else {
         print(unclass(x))
     }
