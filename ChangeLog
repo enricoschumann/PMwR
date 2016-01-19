@@ -1,134 +1,152 @@
+2016-01-19  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/returns.R (returns): argument 'pad' is ignored for
+        periods 'mtd' and 'ytd' (with a warning); the 'print'
+        method shows the period (not just the end date) for which
+        returns were computed
+
+        * R/returns.R (print.p_returns): fixed -- print with
+        period 'annualised' now also used the 'digits' argument
+
 2016-01-14  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-82
 
-	* R/returns.R (pReturns): with 'period = "ann"', the result gets a
-	new attribute 'annualised' (TRUE or FALSE)
+        * R/returns.R (pReturns): with 'period = "ann"', the
+        result gets a new attribute 'annualised' (TRUE or FALSE)
 
-	* R/returns.R (toHTML.p_returns): 'style' information is now
-	ignored if either NULL or "" (before, only NULL was ignored)
+        * R/returns.R (toHTML.p_returns): 'style' information is
+        now ignored if either NULL or "" (before, only NULL was
+        ignored)
 
 2015-12-08  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-81
 
-	* man/pl.Rd: various updates
+        * man/pl.Rd: various updates
 
-	* inst/unitTests/ut_pl.R (test.pl): updated unit test
+        * inst/unitTests/ut_pl.R (test.pl): updated unit test
 
 2015-11-24  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pl.R (print.pl): if an option 'PMwR.use.crayon' is set to
-	TRUE, argument 'use.crayon' is set to TRUE; if the option is not
-	set, 'use.crayon' defaults to FALSE
+        * R/pl.R (print.pl): if an option 'PMwR.use.crayon' is
+        set to TRUE, argument 'use.crayon' is set to TRUE; if the
+        option is not set, 'use.crayon' defaults to FALSE
 
-	* vignettes/An_overview.Rnw: small corrections
+        * vignettes/An_overview.Rnw: small corrections
 
 2015-11-24  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-80
 
-	* vignettes/An_overview.Rnw: added summary
+        * vignettes/An_overview.Rnw: added summary
 
-	* vignettes/: removed all other vignettes: all examples are
-	included in the Manual, available here:
-	http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+        * vignettes/: removed all other vignettes: all examples
+        are included in the Manual, available here:
+        http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
 
 2015-11-23  Enrico Schumann  <es@enricoschumann.net>
 
-	* man/PMwR-package.Rd: added link to manual
+        * man/PMwR-package.Rd: added link to manual
 
 2015-11-23  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-79
 
-	* R/pl.R (pl.default): new argument 'eval.price' to compute the
-	p/l of unclosed positions. See ?pl for examples.
-	(print.pl): experimental -- use package 'crayon' to highlight p/l
+        * R/pl.R (pl.default): new argument 'eval.price' to
+        compute the p/l of unclosed positions. See ?pl for
+        examples.
+        (print.pl): experimental -- use package 'crayon' to
+        highlight p/l
 
 2015-11-22  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): Version: 0.1-78
+        * DESCRIPTION (Version): Version: 0.1-78
 
-	* R/pl.R (pl): 'pl' is now a generic function; methods 'default'
-	and 'journal' are available. The function returns now always
-	objects of class 'pl' (before, when 'along.timestamp' was TRUE,
-	the class was 'plsorted'). See ?pl for examples.
+        * R/pl.R (pl): 'pl' is now a generic function; methods
+        'default' and 'journal' are available. The function
+        returns now always objects of class 'pl' (before, when
+        'along.timestamp' was TRUE, the class was
+        'plsorted'). See ?pl for examples.
 
-	* R/internals.R (avg): moved function 'avg' to file 'pl.R'
+        * R/internals.R (avg): moved function 'avg' to file
+        'pl.R'
 
 2015-11-20  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (toHTML.p_returns): new argument 'browse'
+        * R/returns.R (toHTML.p_returns): new argument 'browse'
 
 2015-11-12  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-77
 
-	* R/NAVseries.R (as.NAVseries.btest): new 'as.NAVseries' method
-	for 'btest' objects
-	(summary.NAVseries): the timestamp of a NAVseries can now also be
-	numeric (typically integer 1:n_obs). Before, it had to inherit
-	from 'Date' or had to be coercable to 'Date'.
+        * R/NAVseries.R (as.NAVseries.btest): new 'as.NAVseries'
+        method for 'btest' objects
+        (summary.NAVseries): the timestamp of a NAVseries can now
+        also be numeric (typically integer 1:n_obs). Before, it
+        had to inherit from 'Date' or had to be coercable to
+        'Date'.
 
 2015-11-02  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/journal.R (`[.journal`): fixed -- 'match.against' was ignored
-	after the changes of 2015-11-01
+        * R/journal.R (`[.journal`): fixed -- 'match.against' was
+        ignored after the changes of 2015-11-01
 
-	* R/position.R (print.position): when instrument is NA, suppress
-	instrument names
+        * R/position.R (print.position): when instrument is NA)
+        (suppress instrument names
 
 2015-11-01  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-76
 
-	* R/journal.R (`[.journal`): default for 'match.against' is now
-	all character fields in journal. For the old behaviour, specify
-	'match.against = c("instrument", "account")'.
+        * R/journal.R (`[.journal`): default for 'match.against'
+        is now all character fields in journal. For the old
+        behaviour, specify 'match.against = c("instrument",
+        "account")'.
 
 2015-10-29  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/journal.R (is.journal, as.journal): new functions
+        * R/journal.R (is.journal, as.journal): new functions
 
 2015-10-29  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-75
 
-	* man/PMwR-package.Rd: various updates in docs
+        * man/PMwR-package.Rd: various updates in docs
 
 2015-10-28  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (print.position): print nothing (instead of empty
-	string) when timestamp is missing
+        * R/position.R (print.position): print nothing (instead
+        of empty string) when timestamp is missing
 
-	* man/tradeanalysis.Rd, man/pl.Rd: doc update
+        * man/tradeanalysis.Rd, man/pl.Rd: doc update
 
-	* manual/manual.org: various updates
+        * manual/manual.org: various updates
 
 2015-10-27  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/backtest.R, man/backtest.Rd: removed files ('backtest' has not
-	been exported for almost two years now; the function has been
-	superseded by 'btest')
+        * R/backtest.R, man/backtest.Rd: removed files:
+        'backtest' has not been exported for almost two years
+        now; the function has been superseded by 'btest'
 
-	* man/divAdjust.Rd: renamed 'divAdjust' (now 'div_adjust') and
-	'splitAdjust' (now 'split_adjust')
+        * man/divAdjust.Rd: renamed 'divAdjust' (now
+        'div_adjust') and 'splitAdjust' (now 'split_adjust')
 
-	* NAMESPACE: import 'trim' (instead of 'rmspace') from package
-	textutils
+        * NAMESPACE: import 'trim' (instead of 'rmspace') from
+        package textutils
 
-	* man/btest.Rd: doc update
+        * man/btest.Rd: doc update
 
-	* vignettes/An_overview.Rnw: added to `for developers' section
+        * vignettes/An_overview.Rnw: added to `for developers'
+        section
 
 2015-10-13  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-74
 
-	* R/NAVseries.R (summary.NAVseries): remove NAs before any
-	computation takes place
-	(print.NAVseries): remove NAs
+        * R/NAVseries.R (summary.NAVseries): remove NAs before
+        any computation takes place
+        (print.NAVseries): remove NAs
 
 2015-10-08  Enrico Schumann  <es@enricoschumann.net>
 
@@ -140,19 +158,19 @@
 
 2015-10-08  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (returns.zoo): directly invoke 'returns.default' for
-	speedup
-	(returns.NAVseries): invoke 'returns.default' (before, it invoked
-	'returns.zoo')
-	(returns.default): drop timestamp information (with a warning)
-	when 'period' is not specified
+        * R/returns.R (returns.zoo): directly invoke
+        'returns.default' for speedup
+        (returns.NAVseries): invoke 'returns.default' (before, it
+        invoked 'returns.zoo')
+        (returns.default): drop timestamp information (with a
+        warning) when 'period' is not specified
 
-	* inst/unitTests/ut_returns.R (test.returns): added test for
-	'as.zoo.p_returns'
+        * inst/unitTests/ut_returns.R (test.returns): added test
+        for 'as.zoo.p_returns'
 
 2015-10-05  Enrico Schumann  <es@enricoschumann.net>
 
-	* vignettes/backtest.Rnw: fixed typo
+        * vignettes/backtest.Rnw: fixed typo
 
 2015-10-03  Enrico Schumann  <es@enricoschumann.net>
 
@@ -160,10 +178,11 @@
 
 2015-10-03  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R: removed 'title' and 'label' from 'txtProgressBar'
-	invocation
+        * R/btest.R: removed 'title' and 'label' from
+        'txtProgressBar' invocation
 
-	* vignettes/backtest.Rnw: added description of 'Timestamp'
+        * vignettes/backtest.Rnw: added description of
+        'Timestamp'
 
 2015-10-01  Enrico Schumann  <es@enricoschumann.net>
 
@@ -171,28 +190,29 @@
 
 2015-10-01  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/btest.R: new function 'Timestamp': defaults to 'Time'; but
-        when timestamp is specified, it allows to access it analogously to
-        'Close', 'Time', etc.
+        * R/btest.R: new function 'Timestamp': defaults to
+        'Time'; but when timestamp is specified, it allows to
+        access it analogously to 'Close', 'Time', etc.
 
         * vignettes/backtest.Rnw: various smaller updates
 
         * vignettes/An_overview.Rnw: added info on 'pricetable'
 
-        * R/btest.R (btest): 'do.rebalance' gets same options 'do.signal',
-        such as 'endofmonth'
+        * R/btest.R (btest): 'do.rebalance' gets same options
+        'do.signal', such as 'endofmonth'
 
 2015-09-26  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/valuation.R (valuation): export generic and method for
-        'position'
+        * R/valuation.R (valuation): export generic and method
+        for 'position'
 
         * man/btest.Rd: updated for 'progressBar'
 
 2015-09-20  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/btest.R (btest): new argument 'progressBar': when TRUE, print
-        as txtProgressBar during computation; default is FALSE
+        * R/btest.R (btest): new argument 'progressBar': when
+        TRUE, print as txtProgressBar during computation; default
+        is FALSE
 
 2015-09-17  Enrico Schumann  <es@enricoschumann.net>
 
@@ -201,19 +221,20 @@
 2015-09-17  Enrico Schumann  <es@enricoschumann.net>
 
         * R/btest.R (Open, ...): added new argument 'n' to other
-        functions, such as Open, High, etc. (see ChangeLog of 2015-09-16)
+        functions, such as Open, High, etc. (see ChangeLog of
+        2015-09-16)
 
 2015-09-16  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/btest.R (Close): [experimental] 'Close' gets a new argument
-        'n', which specifies the number of observations that are
-        retrieved.
-        Example: 'Close(100:1)' is equivalent to 'Close(n = 100)'
+        * R/btest.R (Close): [experimental] 'Close' gets a new
+        argument 'n', which specifies the number of observations
+        that are retrieved.  Example: 'Close(100:1)' is
+        equivalent to 'Close(n = 100)'
 
 2015-09-12  Enrico Schumann  <es@enricoschumann.net>
 
-        * vignettes/An_overview.Rnw: updated description on basic data
-        stuctures (journal, position, ...)
+        * vignettes/An_overview.Rnw: updated description on basic
+        data stuctures (journal, position, ...)
 
 2015-09-03  Enrico Schumann  <es@enricoschumann.net>
 
@@ -221,8 +242,8 @@
 
 2015-09-03  Enrico Schumann  <es@enricoschumann.net>
 
-        * inst/unitTests/ut_returns.R (test.returns): cleaned up tests for
-        'period'
+        * inst/unitTests/ut_returns.R (test.returns): cleaned up
+        tests for 'period'
 
         * man/returns.Rd: updated doc for 'itd'
 
@@ -238,20 +259,22 @@
 
         * DESCRIPTION (Version): Version: 0.1-67
 
-        * R/position.R (print.position): fixed -- 'print' method returned
-        a changed object
-        (print.position): attributes instrument and timestamp are dropped
-        before printing
+        * R/position.R (print.position): fixed -- 'print' method
+        returned a changed object
+        (print.position): attributes instrument and timestamp are
+        dropped before printing
 
         * vignettes/trades.Rnw: removed section on 'returns'
 
 2015-09-01  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/returns.R (returns.default): without timestamp 't', 'period'
-        of mode character (eg, 'monthly') is now always ignored
-        (pReturns): remove test for 'is.null(period)' (which can no longer
-        happen)
-        (print.p_returns): added print methods for "ytd" and "mtd"
+        * R/returns.R (returns.default): without timestamp 't')
+        ('period' of mode character (eg, 'monthly') is now always
+        ignored
+        (pReturns): remove test for 'is.null(period)' (which can
+        no longer happen)
+        (print.p_returns): added print methods for "ytd" and
+        "mtd"
 
         * vignettes/An_overview.Rnw: added file
 
@@ -259,30 +282,31 @@
 
         * NAMESPACE: import 'toText' from package textutils
 
-        * R/returns.R (pReturns): 'period' can now also be 'mtd' and
-        'ytd'.
+        * R/returns.R (pReturns): 'period' can now also be 'mtd'
+        and 'ytd'.
 
         * man/returns.Rd: updated docs
 
 2015-08-18  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/returns.R (.mtab): fixed -- withs NAs in months during a year,
-        the YTD return would become NA as well
+        * R/returns.R (.mtab): fixed -- withs NAs in months
+        during a year, the YTD return would become NA as well
 
         * R/returns.R (toText.p_returns): new 'toText' method
 
 2015-07-21  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/internals.R (letter2month): fixed -- 'letter2month': allow
-        'future' or 'option' as 'instrument'; default is 'option'
+        * R/internals.R (letter2month): fixed -- 'letter2month':
+        allow 'future' or 'option' as 'instrument'; default is
+        'option'
 
-        * R/btest.R: with 'include.data' and 'missing(instrument)',
-        'instrument' is set to NULL
+        * R/btest.R: with 'include.data' and
+        'missing(instrument)', 'instrument' is set to NULL
 
 2015-07-08  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/internals.R (letter2month): new argument 'instrument': allows
-        'future', 'option'
+        * R/internals.R (letter2month): new argument
+        'instrument': allows 'future', 'option'
 
 2015-07-07  Enrico Schumann  <es@enricoschumann.net>
 
@@ -300,102 +324,105 @@
 
         * man/btest.Rd: update doc for 'do.signal'
 
-        * R/scale1.R (scale1.zoo): fixed -- the method did not pass on the
-        'geometric' argument
+        * R/scale1.R (scale1.zoo): fixed -- the method did not
+        pass on the 'geometric' argument
 
-        * R/journal.R (journal.position): fixed -- journal.position did
-        not properly use position attributes
+        * R/journal.R (journal.position): fixed --
+        journal.position did not properly use position attributes
 
 2015-06-29  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/btest.R (do.signal): 'do.signal' can be a numeric vector of
-        times (i.e., row numbers) or a logical vector (indicating the
-        rows); 'do.signal' can also be the string 'endofmonth' to
-        rebalance on last day of month
+        * R/btest.R (do.signal): 'do.signal' can be a numeric
+        vector of times (i.e., row numbers) or a logical vector
+        (indicating the rows); 'do.signal' can also be the string
+        'endofmonth' to rebalance on last day of month
 
-        * R/scale1.R (scale1.default): fixed -- scale1 did not scale
-        correctly with 'geometric = TRUE'
+        * R/scale1.R (scale1.default): fixed -- scale1 did not
+        scale correctly with 'geometric = TRUE'
 
 2015-06-27  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/valuation.R (pv): the function now uses the new format of
-        position objects (see ChangeLog of 2015-06-26)
+        * R/valuation.R (pv): the function now uses the new
+        format of position objects (see ChangeLog of 2015-06-26)
 
 2015-06-26  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/position.R (position): An object of that class is now a
-        numeric matrix (even with only one row or column) and attributes
-        'instrument' and 'timestamp'.
+        * R/position.R (position): An object of that class is now
+        a numeric matrix (even with only one row or column) and
+        attributes 'instrument' and 'timestamp'.
 
         * man/scale1.Rd: describe argument 'geometric'
 
-        * R/returns.R (pReturns): renamed class 'preturns' to 'p_returns'.
-        An object of that class is now a numeric vector/matrix with
-        attributes 't' and 'period'. Before, it had been a list with
-        elements 'returns', 't' and 'period'. So, when 'x' is of class
-        'p_returns':
+        * R/returns.R (pReturns): renamed class 'preturns' to
+        'p_returns'.  An object of that class is now a numeric
+        vector/matrix with attributes 't' and 'period'. Before)
+        (it had been a list with elements 'returns', 't' and
+        'period'. So, when 'x' is of class 'p_returns':
 
-        WHAT                  NEW                  OLD
-        retrieve returns      x                    x$returns
-        retrieve timestamp    attr(x, "t")         x$t
-        retrieve period       attr(x, "period")    x$period
+        WHAT NEW OLD retrieve returns x x$returns retrieve
+        timestamp attr(x, "t") x$t retrieve period attr(x,
+        "period") x$period
 
 2015-06-25  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): Version: 0.1-64
 
-        * R/returns.R (pReturns): match regexp '^ann' (instead of 'ann')
-        for annualised returns
+        * R/returns.R (pReturns): match regexp '^ann' (instead of
+        'ann') for annualised returns
 
         * NAMESPACE: export '.returns'
 
-        * R/rebalance.R (rebalance): fixed -- when 'multiplier' is unnamed
-        and of length one, it is used for all instruments
+        * R/rebalance.R (rebalance): fixed -- when 'multiplier'
+        is unnamed and of length one, it is used for all
+        instruments
 
         * R/btest.R: include timestamp and instrument in result
 
 2015-05-29  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/scale1.R (scale1.default): new argument 'geometric' (with
-        default TRUE): centre by subtracting the geometric mean; if FALSE,
-        the arithmetic mean is subtracted
+        * R/scale1.R (scale1.default): new argument 'geometric'
+        (with default TRUE): centre by subtracting the geometric
+        mean; if FALSE, the arithmetic mean is subtracted
 
-        * inst/unitTests/ut_returns.R (test.returns): added test cases for
-        returns.data.frame
+        * inst/unitTests/ut_returns.R (test.returns): added test
+        cases for returns.data.frame
 
-        * R/returns.R (.returns): renamed 'returns0' to '.returns' (under
-        neither name is the function exported)
-        (returns.data.frame): fixed -- propagate 'row.names' of dataframe
+        * R/returns.R (.returns): renamed 'returns0' to
+        '.returns' (under neither name is the function exported)
+        (returns.data.frame): fixed -- propagate 'row.names' of
+        dataframe
 
 2015-05-28  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/returns.R (returns.data.frame): result is now of class
-        'data.frame' (not numeric matrix)
+        * R/returns.R (returns.data.frame): result is now of
+        class 'data.frame' (not numeric matrix)
 
 2015-05-21  Enrico Schumann  <es@enricoschumann.net>
 
         * manual/manual.Rnw: moved most chapters to vignettes
 
-        * R/returns.R (returns.data.frame): new method: coerces via
-        'as.matrix' and then calls 'returns'
+        * R/returns.R (returns.data.frame): new method: coerces
+        via 'as.matrix' and then calls 'returns'
 
 2015-05-20  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/btest.R (do.signal): [experimental] 'do.signal' can be the
-        string 'firstofmonth' to rebalance on first day of month
+        * R/btest.R (do.signal): [experimental] 'do.signal' can
+        be the string 'firstofmonth' to rebalance on first day of
+        month
 
-        * R/returns.R (returns_rebalance): 'when' can also be a numeric
-        vector such as 'c(1,5,11)', which gives the indices when to
-        rebalance; also added warning when 'length(weight)' does not match
-        number of price series
+        * R/returns.R (returns_rebalance): 'when' can also be a
+        numeric vector such as 'c(1,5,11)', which gives the
+        indices when to rebalance; also added warning when
+        'length(weight)' does not match number of price series
 
 2015-05-19  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/returns.R (returns.default): [experimental] new arguments
-        'weights' and 'rebalance.when'
+        * R/returns.R (returns.default): [experimental] new
+        arguments 'weights' and 'rebalance.when'
 
-        * R/returns.R (returns_rebalance): new function to compute
-        portfolio returns; not exported: will be integrated in 'returns'
+        * R/returns.R (returns_rebalance): new function to
+        compute portfolio returns; not exported: will be
+        integrated in 'returns'
 
 2015-05-13  Enrico Schumann  <es@enricoschumann.net>
 
@@ -405,37 +432,38 @@
 
         * NAMESPACE: moved function 'pm' to package NMOF
 
-        * inst/unitTests/ut_Datetime.R: moved tests to 'datetimeutils'
+        * inst/unitTests/ut_Datetime.R: moved tests to
+        'datetimeutils'
 
         * DESCRIPTION (Version): Version: 0.1-63
 
-        * R/[...]: moved all helper functions that concern dates and
-        times to package 'datetimeutils'
+        * R/[...]: moved all helper functions that concern dates
+        and times to package 'datetimeutils'
 
 2015-05-08  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/valuation.R (pv): columns were not named with a (default)
-        multiplier of 1
+        * R/valuation.R (pv): columns were not named with a
+        (default) multiplier of 1
 
 2015-05-07  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): Version: 0.1-62
 
-        * R/texttools.R: moved all helper functions that concern character
-        vectors to 'textutils'
+        * R/texttools.R: moved all helper functions that concern
+        character vectors to 'textutils'
 
         * R/toText.R: moved 'toText' to new package 'textutils'
 
-        * R/datetimetools.R (previousBusinessDay, nextBusinessDay): now
-        also work for POSIXt (and other classes that can be coerced to
-        Date)
+        * R/datetimetools.R (previousBusinessDay)
+        (nextBusinessDay): now also work for POSIXt (and other
+        classes that can be coerced to Date)
 
         * man/pricetable.Rd: added manual page
 
 2015-05-06  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/price_table.R (pricetable): 'pricetable' (renamed from
-        'price_table') is now exported
+        * R/price_table.R (pricetable): 'pricetable' (renamed
+        from 'price_table') is now exported
 
 2015-04-30  Enrico Schumann  <es@enricoschumann.net>
 
@@ -454,14 +482,14 @@
 
 2015-04-16  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/NAVseries.R (print.NAVseries): use big.mark only if 5 or more
-        digits ("1000" instead of "1,000")
+        * R/NAVseries.R (print.NAVseries): use big.mark only if 5
+        or more digits ("1000" instead of "1,000")
 
 2015-04-04  Enrico Schumann  <es@enricoschumann.net>
 
         * R/journal.R (aggregate.journal): argument 'FUN' in
-        'aggregate.journal' can be either a function, mapping a journal
-        into a journal, or a list of named functions
+        'aggregate.journal' can be either a function, mapping a
+        journal into a journal, or a list of named functions
 
 2015-03-15  Enrico Schumann  <es@enricoschumann.net>
 
@@ -471,88 +499,91 @@
 
         * DESCRIPTION (Version): Version: 0.1-60
 
-        * NAMESPACE: 'ann' is no longer exported: use 'returns(x, t,
-        period = "ann")' instead
+        * NAMESPACE: 'ann' is no longer exported: use 'returns(x,
+        t, period = "ann")' instead
 
 2015-02-17  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/btest.R (btest): added meaningful error message for case
-        'convert.weights && b==0 && is.null(prices0) && lag>0'
+        * R/btest.R (btest): added meaningful error message for
+        case 'convert.weights && b==0 && is.null(prices0) &&
+        lag>0'
 
-        * R/returns.R (toLatex.preturns): added 'stand.alone = FALSE'
+        * R/returns.R (toLatex.preturns): added 'stand.alone =
+        FALSE'
 
 2015-02-13  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/price.table.R: added file/function 'price_table' (not exported
-        yet)
+        * R/price.table.R: added file/function 'price_table' (not
+        exported yet)
 
-        * R/journal.R (journal.position): fixed -- 'position' method did
-        not properly extract data from position
+        * R/journal.R (journal.position): fixed -- 'position'
+        method did not properly extract data from position
 
 2015-02-11  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): Version: 0.1-59
 
-        * R/journal.R (journal): journal is now a generic function,
-        currently with methods default, which matches the old behaviour,
-        and for 'position' and 'best' (the latter merely extracts the
-        journal from a 'btest' object)
+        * R/journal.R (journal): journal is now a generic
+        function, currently with methods default, which matches
+        the old behaviour, and for 'position' and 'best' (the
+        latter merely extracts the journal from a 'btest' object)
 
 2015-01-28  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): Version: 0.1-58
 
-        * R/slTable.R (valign, nspace): new internal functions (not
-        exported)
+        * R/slTable.R (valign, nspace): new internal functions
+        (not exported)
 
-        * R/NAVseries.R (print.summary.NAVseries): reformated summary
-        output for 'NAVseries'
+        * R/NAVseries.R (print.summary.NAVseries): reformated
+        summary output for 'NAVseries'
 
 2015-01-28  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): Version: 0.1-57
 
-        * man/returns.Rd: added arguments for 'toHTML' ('table.class'
-        etc.)
+        * man/returns.Rd: added arguments for 'toHTML'
+        ('table.class' etc.)
 
 2015-01-27  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/ann.R (ann): added warning to use 'returns(x, t, period =
-        "ann")' instead of 'ann'
+        * R/ann.R (ann): added warning to use 'returns(x, t,
+        period = "ann")' instead of 'ann'
 
         * vignettes/monthly.Rnw: rm file (now in returns.Rnw)
 
-        * R/returns.R (pReturns): 'period' is now matched via 'grep' and
-        set to a fixed string
-        (pReturns): returns are only 'annualised' if time-series is longer
-        than 1 year (unless 'period' matches 'ann.*!', with final
-        exclamation mark)
+        * R/returns.R (pReturns): 'period' is now matched via
+        'grep' and set to a fixed string
+        (pReturns): returns are only 'annualised' if time-series
+        is longer than 1 year (unless 'period' matches 'ann.*!',
+        with final exclamation mark)
 
 2015-01-27  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): Version: 0.1-56
 
-        * R/position.R (position.journal): fixed -- 'drop.zero' was not
-        used by 'position.journal'
+        * R/position.R (position.journal): fixed -- 'drop.zero'
+        was not used by 'position.journal'
 
 2015-01-26  Enrico Schumann  <es@enricoschumann.net>
 
         * NAMESPACE: export methods for 'position'
 
         * R/position.R (position): 'position' is now generic
-        (position.journal): added methods for numeric vectors (default)
-        and 'journal'
+        (position.journal): added methods for numeric vectors
+        (default) and 'journal'
 
         * NAMESPACE: export `[` method for 'position'
 
 2015-01-22  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/rebalance.R (rebalance): even with 'match.names', the current
-        position can be '0'
+        * R/rebalance.R (rebalance): even with 'match.names', the
+        current position can be '0'
 
 2015-01-14  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/returns.R (pReturns): period 'ann' computes annualised returns
+        * R/returns.R (pReturns): period 'ann' computes
+        annualised returns
 
 2015-01-14  Enrico Schumann  <es@enricoschumann.net>
 
@@ -566,19 +597,21 @@
 
         * DESCRIPTION (Version): Version: 0.1-54
 
-        * R/returns.R (returns): behaviour of 'returns(z)' when 'z' is of
-        class 'zoo' has changed: the returned object now has class zoo. To
-        get the old behaviour, use something like
+        * R/returns.R (returns): behaviour of 'returns(z)' when
+        'z' is of class 'zoo' has changed: the returned object
+        now has class zoo. To get the old behaviour, use
+        something like
 
-            r <- return(z)  ##  r is of class 'zoo'
-            r <- list(returns = coredata(r), t = index(r))
+            r <- return(z) ## r is of class 'zoo' r <-
+        list(returns = coredata(r), t = index(r))
 
-        * R/returns.R (returns.zoo): fixed -- when 'period' is specified,
-        the returned object should not be of class 'zoo', but 'preturns'.
-        Conversion is possible with 'as.zoo(x)'.
+        * R/returns.R (returns.zoo): fixed -- when 'period' is
+        specified, the returned object should not be of class
+        'zoo', but 'preturns'.  Conversion is possible with
+        'as.zoo(x)'.
 
-        * inst/unitTests/ut_returns.R (test.returns): added more tests for
-        'returns.zoo'
+        * inst/unitTests/ut_returns.R (test.returns): added more
+        tests for 'returns.zoo'
 
 2015-01-13  Enrico Schumann  <es@enricoschumann.net>
 
@@ -586,17 +619,18 @@
 
 2015-01-11  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/returns.R (returns): 'returns' is now a generic function; old
-        implementation has become default method
+        * R/returns.R (returns): 'returns' is now a generic
+        function; old implementation has become default method
 
 2015-01-06  Enrico Schumann  <es@enricoschumann.net>
 
         * NAMESPACE: export print method for 'summary.journal'
 
-        * R/journal.R (`[.journal`): when regex-matching takes place, the
-        character vector to be matched against can be of length > 1.  In
-        this case, the vector is collapsed as 'paste(i, collapse = "|")'),
-        thus resulting in an OR rule.
+        * R/journal.R (`[.journal`): when regex-matching takes
+        place, the character vector to be matched against can be
+        of length > 1.  In this case, the vector is collapsed as
+        'paste(i, collapse = "|")'), thus resulting in an OR
+        rule.
         (summary.journal): now prints number of transactions
 
 2014-12-18  Enrico Schumann  <es@enricoschumann.net>
@@ -616,43 +650,47 @@
 
         * DESCRIPTION (Version): Version: 0.1-52
 
-        * R/returns.R (print.preturns): period == "year" gets its own
-        print method
+        * R/returns.R (print.preturns): period == "year" gets its
+        own print method
 
-        * DESCRIPTION (Imports): moved tools from Depends to Imports;
-        function 'toHTML' is now exported
+        * DESCRIPTION (Imports): moved tools from Depends to
+        Imports; function 'toHTML' is now exported
 
 2014-11-05  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): Version: 0.1-51
 
-        * R/scale0.R (scale1.default): use 'na.rm' for centring and
-        scaling
+        * R/scale0.R (scale1.default): use 'na.rm' for centring
+        and scaling
 
 2014-10-31  Enrico Schumann  <es@enricoschumann.net>
 
         * R/position.R (`[.position`): added method; acts on the
-        underlying position (= a numeric matrix) in 'position' object
+        underlying position (= a numeric matrix) in 'position'
+        object
 
 2014-10-29  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/ann.R (ann.NAVseries): fixed -- method now coerces to 'zoo'
-        and then calls 'ann'
+        * R/ann.R (ann.NAVseries): fixed -- method now coerces to
+        'zoo' and then calls 'ann'
 
 2014-09-29  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/NAVseries.R (print.summary.NAVseries): print prices (high,
-        low, etc.) to two digits
-        (print.NAVseries): print prices (first, last) to two digits
+        * R/NAVseries.R (print.summary.NAVseries): print prices
+        (high, low, etc.) to two digits
+        (print.NAVseries): print prices (first, last) to two
+        digits
 
 2014-09-26  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/texttools.R (strexp): new function; will replace 'expstr' to
-        have function naming in line with 'strtrim', 'strwrap')
+        * R/texttools.R (strexp): new function; will replace
+        'expstr' to have function naming in line with 'strtrim')
+        ('strwrap')
 
 2014-09-24  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/plotTradingHours.R: fixed -- 'label.format' had been ignored
+        * R/plotTradingHours.R: fixed -- 'label.format' had been
+        ignored
 
 2014-09-24  Enrico Schumann  <es@enricoschumann.net>
 
@@ -660,9 +698,9 @@
 
         * vignettes/monthly.Rnw: new vignette
 
-        * R/returns.R (mtab): mtab (internal) takes new arguments,
-        'zero.print', 'plus' and 'digits' whose values are to be passed
-        via 'print', 'toLatex' or 'toHTML'
+        * R/returns.R (mtab): mtab (internal) takes new
+        arguments, 'zero.print', 'plus' and 'digits' whose values
+        are to be passed via 'print', 'toLatex' or 'toHTML'
 
 2014-09-23  Enrico Schumann  <es@enricoschumann.net>
 
@@ -672,8 +710,8 @@
 
 2014-09-18  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/ann.R (ann): 'annualised return' -- added generic and methods
-        for 'zoo', 'NAVseries'
+        * R/ann.R (ann): 'annualised return' -- added generic and
+        methods for 'zoo', 'NAVseries'
 
 2014-09-15  Enrico Schumann  <es@enricoschumann.net>
 
@@ -681,26 +719,28 @@
 
         * man/*: various small updates in documentation.
 
-        * man/returns.Rd: added links to 'toLatex', 'toHTML' and Usage for
-        methods for 'preturns'
+        * man/returns.Rd: added links to 'toLatex', 'toHTML' and
+        Usage for methods for 'preturns'
 
         * R/scale0.R (scale0): deprecated (will be removed soon)
 
-        * R/returns.R (toLatex.preturns): new argument 'month.names' to
-        'toLatex' and 'toHTML'
+        * R/returns.R (toLatex.preturns): new argument
+        'month.names' to 'toLatex' and 'toHTML'
 
 2014-09-11  Enrico Schumann  <es@enricoschumann.net>
 
         * R/returns.R (print.preturns): new argument 'zero.print'
 
-        * R/NAVseries.R (as.NAVseries): added generic; method for 'zoo'
+        * R/NAVseries.R (as.NAVseries): added generic; method for
+        'zoo'
 
 2014-08-29  Enrico Schumann  <es@enricoschumann.net>
 
-        * inst/unitTests/ut_scale1.R (test.scale1): added test cases
+        * inst/unitTests/ut_scale1.R (test.scale1): added test
+        cases
 
-        * R/scale0.R (scale1.default): fixed -- 'when' was ignored when
-        'scale' was used
+        * R/scale0.R (scale1.default): fixed -- 'when' was
+        ignored when 'scale' was used
 
 2014-08-28  Enrico Schumann  <es@enricoschumann.net>
 
@@ -709,12 +749,13 @@
 
         * vignettes/scale1.Rnw: added vignette (test cases)
 
-        * inst/unitTests/ut_text.R (test.expstr): added test function
+        * inst/unitTests/ut_text.R (test.expstr): added test
+        function
 
 2014-08-27  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/scale0.R (scale1.default): renamed argument 'origin' to
-        'level'; support 'centre' argument
+        * R/scale0.R (scale1.default): renamed argument 'origin'
+        to 'level'; support 'centre' argument
 
 
 2014-08-25  Enrico Schumann  <es@enricoschumann.net>
@@ -733,8 +774,8 @@
 
         * inst/unitTests/ut_text.R (test.expstr): added file
 
-        * R/texttools.R (expstr): fixed -- when 'at' is supplied, 'after'
-        is now ignored
+        * R/texttools.R (expstr): fixed -- when 'at' is supplied,
+        'after' is now ignored
 
 2014-08-06  Enrico Schumann  <es@enricoschumann.net>
 
@@ -742,8 +783,9 @@
 
 2014-08-05  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/btest.R (btest): added warning for 'isTRUE(convert.weights) &&
-        initial.cash == 0', in which case no trading will take place
+        * R/btest.R (btest): added warning for
+        'isTRUE(convert.weights) && initial.cash == 0', in which
+        case no trading will take place
 
 2014-07-31  Enrico Schumann  <es@enricoschumann.net>
 
@@ -755,21 +797,22 @@
 
 2014-06-20  Enrico Schumann  <es@enricoschumann.net>
 
-        * NAMESPACE: export print method for summary.NAVseries; import
-        function 'drawdown' from package 'NMOF'
+        * NAMESPACE: export print method for summary.NAVseries;
+        import function 'drawdown' from package 'NMOF'
 
 2014-06-19  Enrico Schumann  <es@enricoschumann.net>
 
         * man/NAVseries.Rd: added file
 
-        * R/NAVseries.R (print.summary.NAVseries): changed formating
+        * R/NAVseries.R (print.summary.NAVseries): changed
+        formating
 
 2014-06-18  Enrico Schumann  <es@enricoschumann.net>
 
         * NAMESPACE: export plot.NAVseries
 
-        * R/NAVseries.R (print.NAVseries): print now only shows minimal
-        information (old print moved to summary)
+        * R/NAVseries.R (print.NAVseries): print now only shows
+        minimal information (old print moved to summary)
 
 2014-06-03  Enrico Schumann  <es@enricoschumann.net>
 
@@ -795,8 +838,8 @@
 
         * DESCRIPTION (Version): Version: 0.1-45
 
-        * R/returns.R (returns0): fixed -- padding did not work properly
-        for single-column matrices
+        * R/returns.R (returns0): fixed -- padding did not work
+        properly for single-column matrices
 
         * inst/unitTests/ut_scale0.R: added file/tests
 
@@ -805,13 +848,13 @@
         * DESCRIPTION (ByteCompile): added ByteCompile: yes and
         NeedsCompilation: yes
 
-        * R/internals.R (scale0): added 'scale' argument: if TRUE, scale
-        to unit standard-dev
+        * R/internals.R (scale0): added 'scale' argument: if
+        TRUE, scale to unit standard-dev
 
 2014-04-04  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/returns.R (returns): now treats 'NAVseries' like 'zoo' (ie,
-        use price and timestamp)
+        * R/returns.R (returns): now treats 'NAVseries' like
+        'zoo' (ie, use price and timestamp)
 
 2014-04-03  Enrico Schumann  <es@enricoschumann.net>
 
@@ -819,8 +862,8 @@
 
 2014-04-02  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/internals.R (scale0): use 'inherits(x, "zoo")' instead of
-        'is.zoo'
+        * R/internals.R (scale0): use 'inherits(x, "zoo")'
+        instead of 'is.zoo'
 
 2014-03-24  Enrico Schumann  <es@enricoschumann.net>
 
@@ -830,25 +873,28 @@
 
         * DESCRIPTION (Version): Version: 0.1-44
 
-        * R/btest.R: fixed -- journal is set up also for multiple assets
+        * R/btest.R: fixed -- journal is set up also for multiple
+        assets
 
 2014-03-19  Enrico Schumann  <es@enricoschumann.net>
 
         * R/btest.R (btest): new argument 'cashflow'
 
-        * R/isValidISIN.R (isValidISIN): fixed -- 'isValidISIN' did not
-        take modulo 10 as a last step (thus, when the check digit is 0, it
-        was computed as 10, and the ISIN was flagged as FALSE); also
-        renamed .isin.re to .ISIN
+        * R/isValidISIN.R (isValidISIN): fixed -- 'isValidISIN'
+        did not take modulo 10 as a last step (thus, when the
+        check digit is 0, it was computed as 10, and the ISIN was
+        flagged as FALSE); also renamed .isin.re to .ISIN
 
 2014-03-17  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/btest.R: 'instrument' and 'timestamp' is now used for journal
+        * R/btest.R: 'instrument' and 'timestamp' is now used for
+        journal
 
 2014-03-13  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/returns.R (returns0): fixed -- with 'pad' not NULL, missing
-        values were always added as NA; now the value of pad is used
+        * R/returns.R (returns0): fixed -- with 'pad' not NULL,
+        missing values were always added as NA; now the value of
+        pad is used
 
 2014-03-12  Enrico Schumann  <es@enricoschumann.net>
 
@@ -858,8 +904,8 @@
 
 2014-03-11  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/returns.R (returns): accept zoo series with single-column/row
-        matrices
+        * R/returns.R (returns): accept zoo series with
+        single-column/row matrices
 
 2014-03-08  Enrico Schumann  <es@enricoschumann.net>
 
@@ -888,8 +934,8 @@
 
         * R/NAVseries.R (NAVseries): new arguments "title" and
         "instrument"
-        (summary.NAVseries): added function and print method (though
-        currently only wrapper for print.NAVseries)
+        (summary.NAVseries): added function and print method
+        (though currently only wrapper for print.NAVseries)
 
 2014-02-11  Enrico Schumann  <es@enricoschumann.net>
 
@@ -899,18 +945,20 @@
 
         * R/btest.R (btest): new arguments timestamp, instrument
 
-        * inst/unitTests/ut_rebalance.R (test.rebalance): updated tests
+        * inst/unitTests/ut_rebalance.R (test.rebalance): updated
+        tests
 
         * NAMESPACE: "valuation" (and methods) no longer exported
 
 2014-02-10  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-41 (will supersede the
-        release branch)
+        * DESCRIPTION (Version): Version: 0.1-41 (will supersede
+        the release branch)
 
-        * R/returns.R (returns): if "x" is of class "zoo": use "time"
-        (stats package) instead of "index" (zoo package); then, zoo needs
-        not be attached
+        * R/returns.R (returns): if "x" is of class "zoo": use
+        "time"
+        (stats package) instead of "index" (zoo package); then,
+        zoo needs not be attached
 
         * R/NAVseries.R (NAVseries): added function
         (print.NAVseries): added method
@@ -918,8 +966,9 @@
 
 2014-02-02  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/valuation.R (valuation.journal): fixed -- instrument == "cash"
-        and price == 1 was not recycled to length of journal
+        * R/valuation.R (valuation.journal): fixed -- instrument
+        == "cash" and price == 1 was not recycled to length of
+        journal
 
 2014-01-21  Enrico Schumann  <es@enricoschumann.net>
 
@@ -933,15 +982,15 @@
 
 2013-12-06  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/position.R (print.position): (re)construct colnames from
-        'instrument'
+        * R/position.R (print.position): (re)construct colnames
+        from 'instrument'
 
 2013-12-03  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): Version: 0.2-2
 
-        * R/rebalance.R (rebalance): more checks added; length-one values
-        for current/target allowed
+        * R/rebalance.R (rebalance): more checks added;
+        length-one values for current/target allowed
 
 2013-11-28  Enrico Schumann  <es@enricoschumann.net>
 
@@ -951,28 +1000,32 @@
 
         * DESCRIPTION (Version): Version: 0.2-1
 
-        * R/valuation.R (valuation): renamed 'value' to 'valuation' (value
-        is too common; package tseries has a generic of that name)
+        * R/valuation.R (valuation): renamed 'value' to
+        'valuation' (value is too common; package tseries has a
+        generic of that name)
 
 2013-11-18  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/returns.R (toLatex.preturns): new argument ytd with default
-        "YTD" (in order to specify "\\textsc{ytd}" or similar)
+        * R/returns.R (toLatex.preturns): new argument ytd with
+        default "YTD" (in order to specify "\\textsc{ytd}" or
+        similar)
 
 2013-11-16  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/slTable.R (sparkplot): added function (not exported yet)
+        * R/slTable.R (sparkplot): added function (not exported
+        yet)
 
         * R/btest.R (btest): renamed 'phi' to 'fraction'
 
 2013-11-12  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/pl.R (print.pl): use prettyNum to format all numeric values
+        * R/pl.R (print.pl): use prettyNum to format all numeric
+        values
 
 2013-11-08  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/returns.R (print.preturns): ignore case (eg, both "month" and
-        "Month" now work)
+        * R/returns.R (print.preturns): ignore case (eg, both
+        "month" and "Month" now work)
 
         * R/valuation.R (value): added generic
         (value.journal): added method
@@ -980,7 +1033,8 @@
 
 2013-10-23  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/internals.R (matchOrNext,matchOrPrevious): added functions
+        * R/internals.R (matchOrNext,matchOrPrevious): added
+        functions
         (not exported)
 
 2013-10-22  Enrico Schumann  <es@enricoschumann.net>
@@ -989,11 +1043,13 @@
 
 2013-10-16  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/totext.R (toText.default): coerce to character before write
+        * R/totext.R (toText.default): coerce to character before
+        write
 
 2013-10-14  Enrico Schumann  <es@enricoschumann.net>
 
-        * NAMESPACE: removed function 'drawdown': it is now included
+        * NAMESPACE: removed function 'drawdown': it is now
+        included
         [unchanged] in the NMOF package
 
 2013-10-10  Enrico Schumann  <es@enricoschumann.net>
@@ -1006,15 +1062,17 @@
 
 2013-09-18  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/returns.R (.tr): toHTML.preturns allows specification of
-        class/style
+        * R/returns.R (.tr): toHTML.preturns allows specification
+        of class/style
 
 2013-09-17  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/isValidISIN.R (isValidISIN): fixed -- in case all isins were
-        invalid because of length != 12 characters, the function failed
+        * R/isValidISIN.R (isValidISIN): fixed -- in case all
+        isins were invalid because of length != 12 characters,
+        the function failed
 
-        * R/drawdown.R (drawdown): fixed -- 'summary' argument was ignored
+        * R/drawdown.R (drawdown): fixed -- 'summary' argument
+        was ignored
 
 2013-09-16  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1022,11 +1080,13 @@
 
 2013-09-15  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/html.R (.xhtml.skeleton,.html5.skeleton): added functions
+        * R/html.R (.xhtml.skeleton,.html5.skeleton): added
+        functions
 
 2013-09-13  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/texttools.R (rmspace): added leading/trailing arguments
+        * R/texttools.R (rmspace): added leading/trailing
+        arguments
 
 2013-09-12  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1034,22 +1094,24 @@
 
 2013-09-11  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/backtest.R (btest): added function -- future replacement of
-        backtest
+        * R/backtest.R (btest): added function -- future
+        replacement of backtest
 
         * R/pl.R (pl): added multiplier argument
 
-        * R/pl.R (plfun): absolute amount -- initial/final positions are
-        subtracted (ie, amount only reflects _traded_ quantities)
+        * R/pl.R (plfun): absolute amount -- initial/final
+        positions are subtracted (ie, amount only reflects
+        _traded_ quantities)
 
-        * R/position.R (position): timestamp can be missing/zero-length
+        * R/position.R (position): timestamp can be
+        missing/zero-length
 
 2013-09-10  Enrico Schumann  <es@enricoschumann.net>
 
         * R/journal.R (`[.journal`): added argument 'reverse'
 
-        * R/returns.R (print.preturns): fixed -- period 'monthly' (instead
-        of month) is now also accepted
+        * R/returns.R (print.preturns): fixed -- period 'monthly'
+        (instead of month) is now also accepted
 
 2013-09-06  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1057,9 +1119,10 @@
 
         * NAMESPACE: export method aggregate.journal
 
-        * R/journal.R (c.journal): timestamp-classes of zero length
-        journals are not checked; no more warnings in case of class
-        vectors of length > 1 [such c("POSIXct", "POSIXt")]
+        * R/journal.R (c.journal): timestamp-classes of zero
+        length journals are not checked; no more warnings in case
+        of class vectors of length > 1 [such c("POSIXct",
+        "POSIXt")]
 
 2013-09-02  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1067,21 +1130,22 @@
 
 2013-08-30  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/journal.R (print.journal): fixed -- exclude did not exclude
-        fields
-        (c.journal): fixed -- method works now if journals have different
-        fields (adding NAs appropriately)
+        * R/journal.R (print.journal): fixed -- exclude did not
+        exclude fields
+        (c.journal): fixed -- method works now if journals have
+        different fields (adding NAs appropriately)
         (c.journal): fixed -- timestamp class is copied
 
 2013-08-29  Enrico Schumann  <es@enricoschumann.net>
 
         * R/journal.R (journal): replaced 'rep0' with 'rep'
 
-        * R/returns.R (pReturns): 'pad' is now passed also to 'period
-        returns'
+        * R/returns.R (pReturns): 'pad' is now passed also to
+        'period returns'
 
-        * R/position.R (position): removed from/to arguments (instead,
-        create a subset of a journal and pass this to position)
+        * R/position.R (position): removed from/to arguments
+        (instead, create a subset of a journal and pass this to
+        position)
 
 2013-08-28  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1090,11 +1154,12 @@
 
 2013-08-27  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/journal.R (`[.journal`): default for 'match.against' is now
-        c("instrument", "account")
+        * R/journal.R (`[.journal`): default for 'match.against'
+        is now c("instrument", "account")
 
-        * R/journal.R (c.journal): issue warning (instead of error) when
-        not all passed arguments are of class 'journal'
+        * R/journal.R (c.journal): issue warning (instead of
+        error) when not all passed arguments are of class
+        'journal'
 
 2013-08-22  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1128,54 +1193,58 @@
 
 2013-07-31  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/rebalance.R (rebalance): removed w.current/w.target arguments
+        * R/rebalance.R (rebalance): removed w.current/w.target
+        arguments
 
-        * R/returns.R (toHTML.preturns, toLatex.preturns): added/exported
+        * R/returns.R (toHTML.preturns, toLatex.preturns):
+        added/exported
 
         * NAMESPACE: removed 'saveAttachment'
 
-        * DESCRIPTION (Depends): removed base64enc. Moved function
-        'saveAttachment' to package mailtools.
+        * DESCRIPTION (Depends): removed base64enc. Moved
+        function 'saveAttachment' to package mailtools.
 
 2013-07-30  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/dev.R (## ): removed comments/old function definitions
+        * R/dev.R (## ): removed comments/old function
+        definitions
 
 2013-07-29  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/journal.R (journal): changed default arguments: 'id = NULL,
-        account = NULL' to emphasise optional nature
+        * R/journal.R (journal): changed default arguments: 'id =
+        NULL, account = NULL' to emphasise optional nature
 
         * R/drawdown.R (drawdown): returned list now contains
-        high.position, low.position (instead of highPosition, lowPosition)
+        high.position, low.position (instead of highPosition,
+        lowPosition)
 
         * R/returns.R (returns): checking 't'/zoo is now done in
         'returns'
 
 2013-07-28  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/texttools.R (.TeXunit.table): added vector (scaled points per
-        unit), to be used by TeXunits
+        * R/texttools.R (.TeXunit.table): added vector (scaled
+        points per unit), to be used by TeXunits
 
 2013-07-26  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/returns.R (returns): fixed -- if 'x' inherits from class
-        'zoo', 't' had to be specified explicitly (now 'NULL' works as
-        documented)
+        * R/returns.R (returns): fixed -- if 'x' inherits from
+        class 'zoo', 't' had to be specified explicitly (now
+        'NULL' works as documented)
         (pReturns): 'period' can now any grouping variable
 
 2013-07-24  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/journal.R (`[.journal`): subsetting transactions can now be
-        done (i) by number and (ii) by regexp (matched against instrument
-        and account
+        * R/journal.R (`[.journal`): subsetting transactions can
+        now be done (i) by number and (ii) by regexp (matched
+        against instrument and account
 
 2013-07-24  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): Version: 0.2-0
 
-        * R/journal.R (journal): experimental -- journal can take a
-        position and convert it to journal
+        * R/journal.R (journal): experimental -- journal can take
+        a position and convert it to journal
 
         * R/returns.R: removed unused function rtTab and comments
 
@@ -1185,41 +1254,44 @@
 
 2013-07-22  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/trades.R (monthlyStats): removed function definition and Rd
-        file
+        * R/trades.R (monthlyStats): removed function definition
+        and Rd file
 
         * NAMESPACE: removed 'monthlyStats'
 
-        * R/isValidISIN.R (isValidISIN): ISINs are now converted to upper
-        case before being tested
+        * R/isValidISIN.R (isValidISIN): ISINs are now converted
+        to upper case before being tested
 
 2013-07-19  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/journal.R (aggregate.journal): experimental -- added method:
-        splits/aggregates on instrument/date/sign
+        * R/journal.R (aggregate.journal): experimental -- added
+        method: splits/aggregates on instrument/date/sign
         (print.journal): sort columns for printing
 
 2013-07-17  Enrico Schumann  <es@enricoschumann.net>
 
-        * man/tradeanalysis.Rd: removed pl (now has its own Rd file)
+        * man/tradeanalysis.Rd: removed pl (now has its own Rd
+        file)
 
-        * R/pl.R (pl): fixed -- corrections for cases in which 't0' and
-        't1' were specified and when portfolio at t0 or t1 was empty
+        * R/pl.R (pl): fixed -- corrections for cases in which
+        't0' and 't1' were specified and when portfolio at t0 or
+        t1 was empty
 
 2013-07-16  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/journal.R (journal): 'journal()' returns an empty journal
+        * R/journal.R (journal): 'journal()' returns an empty
+        journal
 
-        * R/position.R (position): when now also accepts 'all', 'first' or
-        'last' (last is equivalent to missing)
+        * R/position.R (position): when now also accepts 'all',
+        'first' or 'last' (last is equivalent to missing)
         (print.position): new argument 'sep'
         (position): fixed -- there was a (harmless) warning when
         'instrument' was NULL
 
 2013-07-14  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/journal.R (print.journal): new argument 'exclude' for not
-        printing specific columns
+        * R/journal.R (print.journal): new argument 'exclude' for
+        not printing specific columns
 
 2013-07-13  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1233,9 +1305,9 @@
 
         * R/returns.R (print.preturns): added print.preturns
 
-        * R/texttools.R (expstr): fixed -- fill was inserted at the
-        beginning of regexp 'after', now it is inserted after it (see
-        examples with repeated spaces)
+        * R/texttools.R (expstr): fixed -- fill was inserted at
+        the beginning of regexp 'after', now it is inserted after
+        it (see examples with repeated spaces)
 
 2013-07-10  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1243,17 +1315,17 @@
 
 2013-07-03  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/pl.R (plPeriod): positions at t0 and t1 are computed with
-        drop.zero=TRUE
+        * R/pl.R (plPeriod): positions at t0 and t1 are computed
+        with drop.zero=TRUE
 
-        * man/mailtools.Rd: renamed to 'MailTools' (upper case), inline
-        with 'DateTimeTools'
+        * man/mailtools.Rd: renamed to 'MailTools' (upper case),
+        inline with 'DateTimeTools'
 
-        * man/texttools.Rd: renamed to 'TextTools' (upper case), inline
-        with 'DateTimeTools'
+        * man/texttools.Rd: renamed to 'TextTools' (upper case),
+        inline with 'DateTimeTools'
 
-        * R/journal.R (print.journal): new max.print argument (default is
-        10)
+        * R/journal.R (print.journal): new max.print argument
+        (default is 10)
 
 2013-07-02  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1262,7 +1334,8 @@
 2013-06-27  Enrico Schumann  <es@enricoschumann.net>
 
         * R/journal.R (subset.journal): new arguments account and
-        instrument that expect regular expressions (but default to NULL)
+        instrument that expect regular expressions (but default
+        to NULL)
         (`[.journal`): added `[` method (experimental)
 
         * inst/unitTests/ut_journal.R (test.journal): added tests
@@ -1288,31 +1361,31 @@
 
         * R/backtestALT.R: removed (archived in dev.R)
 
-        * R/ISIN.R: fixed -- isValidISIN did not work correctly for a
-        vector of length 1
+        * R/ISIN.R: fixed -- isValidISIN did not work correctly
+        for a vector of length 1
 
-        * vignettes/backtest.Rnw: moved to manual directory (to be added
-        to org file)
+        * vignettes/backtest.Rnw: moved to manual directory (to
+        be added to org file)
 
         * R/plotTradingHours.R (plotTradingHours): new file
 
 2013-06-19  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/datetimetools.R (ssm): added function ssm ('seconds since
-        midnight')
+        * R/datetimetools.R (ssm): added function ssm ('seconds
+        since midnight')
 
 2013-06-14  Enrico Schumann  <es@enricoschumann.net>
 
-        * vignettes/PL.Rnw: removed vignettes PL and classes (transferred
-        into manual.org)
+        * vignettes/PL.Rnw: removed vignettes PL and classes
+        (transferred into manual.org)
 
-        * R/pl.R (): 'plBetween' now in pl (which takes additional
-        arguments t0, t1, prices0, prices1)
+        * R/pl.R (): 'plBetween' now in pl (which takes
+        additional arguments t0, t1, prices0, prices1)
 
         * DESCRIPTION (Version): Version: 0.1-27
 
-        * R/returns.R (returns): all return functions (returns, pReturns,
-        twReturns) now have a single interface: returns
+        * R/returns.R (returns): all return functions (returns,
+        pReturns, twReturns) now have a single interface: returns
 
         * R/returns.R (print.preturns): new method
 
@@ -1324,7 +1397,8 @@
 
         * DESCRIPTION (Version): Version: 0.1-26
 
-        * R/journal.R (print.Journal): new argument 'width', default is 60
+        * R/journal.R (print.Journal): new argument 'width',
+        default is 60
 
 2013-06-12  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1332,23 +1406,24 @@
 
 2013-06-05  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/internals.R (letter2month): added internal function to convert
-        option-symbol letter to type & month
+        * R/internals.R (letter2month): added internal function
+        to convert option-symbol letter to type & month
 
 2013-05-31  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): Version: 0.1-24
 
-        * vignettes/PL.Rnw: moved vignette 'Journal' into 'PL' (and rm'd
-        Journal)
+        * vignettes/PL.Rnw: moved vignette 'Journal' into 'PL'
+        (and rm'd Journal)
 
-        * R/journal.R (filterJournal): removed (use 'subset' instead)
+        * R/journal.R (filterJournal): removed (use 'subset'
+        instead)
         (sort.Journal): added and exported
 
         * NAMESPACE: export 'length.Journal'
 
-        * R/pl.R (pl): new argument along.timestamp: default is FALSE; if
-        TRUE, include functionality of 'plsorted'
+        * R/pl.R (pl): new argument along.timestamp: default is
+        FALSE; if TRUE, include functionality of 'plsorted'
 
 2013-05-30  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1356,8 +1431,8 @@
 
         * R/journal.R (subset.Journal): added method
 
-        * R/position.R (position): now uses 'from' and 'to' reduce size of
-        journal
+        * R/position.R (position): now uses 'from' and 'to'
+        reduce size of journal
 
 2013-05-29  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1367,9 +1442,11 @@
 
         * R/journal.R (Journal): if timestamp missing, set to NA
 
-        * man/Texttools.Rd, Mailtools.Rd: renamed files to lower case
+        * man/Texttools.Rd, Mailtools.Rd: renamed files to lower
+        case
 
-        * man/PMwR-package.Rd: corrected example (which used 'tth')
+        * man/PMwR-package.Rd: corrected example (which used
+        'tth')
 
 2013-05-28  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1384,8 +1461,8 @@
 
         * R/classes.R: deleted
 
-        * R/pl.R (plsorted): added function (simplified version of
-        PLsorted, which is deprecated)
+        * R/pl.R (plsorted): added function (simplified version
+        of PLsorted, which is deprecated)
 
 2013-05-27  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1399,20 +1476,22 @@
 
         * man/tradeanalysis.Rd: 'PL' changed into 'pl'
 
-        * R/Tradelist.R (print.Journal): NAs are not printed; non-standard
-        fields are also printed
+        * R/Tradelist.R (print.Journal): NAs are not printed;
+        non-standard fields are also printed
 
-        * R/position.R (position): position now always returns a matrix;
-        ie, a dim attribute is attached
-        (position): new argument 'aggr.accounts' to specify whether pool
-        instruments by account (if TRUE) or not (FALSE); 
+        * R/position.R (position): position now always returns a
+        matrix; ie, a dim attribute is attached
+        (position): new argument 'aggr.accounts' to specify
+        whether pool instruments by account (if TRUE) or not
+        (FALSE);
         (position): new argument 'account.sep'
 
-        * R/Tradelist.R (print.Journal): fixed -- when instruments were
-        factors, a (harmless) warning was produced
-        (Journal): 'instrument' is now explicitly coerced to character (if
-        the original instrument is a class, it should have as as.character
-        method)
+        * R/Tradelist.R (print.Journal): fixed -- when
+        instruments were factors, a (harmless) warning was
+        produced
+        (Journal): 'instrument' is now explicitly coerced to
+        character (if the original instrument is a class, it
+        should have as as.character method)
 
 2013-05-27  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1426,12 +1505,13 @@
 
 2013-05-20  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/internals.R (divCorrection): added function: corrects series
-        for dividend payment
+        * R/internals.R (divCorrection): added function: corrects
+        series for dividend payment
 
 2013-05-16  Enrico Schumann  <es@enricoschumann.net>
 
-        * man/Tradelist.Rd: added methods ('print', 'c', 'length') to docs
+        * man/Tradelist.Rd: added methods ('print', 'c',
+        'length') to docs
 
 2013-05-15  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1441,13 +1521,13 @@
 
         * DESCRIPTION (Version): Version: 0.1-18
 
-        * R/Tradelist.R (c.Tradelist, length.Tradelist): added method for
-        length; rewrote c.Tradelist
+        * R/Tradelist.R (c.Tradelist, length.Tradelist): added
+        method for length; rewrote c.Tradelist
 
 2013-05-13  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/Tradelist.R (Tradelist): added '...' argument; all arguments
-        passed that way musz be named
+        * R/Tradelist.R (Tradelist): added '...' argument; all
+        arguments passed that way musz be named
 
 2013-05-07  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1455,8 +1535,8 @@
 
 2013-05-02  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/Datetimetools.R (plotTradingHours): fixed -- plotTradingHours
-        had ignored 'holidays' argument
+        * R/Datetimetools.R (plotTradingHours): fixed --
+        plotTradingHours had ignored 'holidays' argument
 
 2013-05-01  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1466,13 +1546,14 @@
 
         * DESCRIPTION (Version): Version: 0.1-17
 
-        * R/returns.R (twReturns): added. Compute time-weighted returns.
+        * R/returns.R (twReturns): added. Compute time-weighted
+        returns.
 
-        * R/Datetimetools.R (timegrid): fixed -- timegrid ignored holidays
-        specified as character ('YYYY-MM-DD')
+        * R/Datetimetools.R (timegrid): fixed -- timegrid ignored
+        holidays specified as character ('YYYY-MM-DD')
 
-        * R/internals.R (print.rebalance): rebalance evaluates to list;
-        print method added
+        * R/internals.R (print.rebalance): rebalance evaluates to
+        list; print method added
 
 2013-04-29  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1482,18 +1563,18 @@
 
         * DESCRIPTION (Version): 0.1-16
 
-        * R/position.R (position): 'when' can be a vector, thus the
-        position at several times can be computed
+        * R/position.R (position): 'when' can be a vector, thus
+        the position at several times can be computed
 
 2013-04-23  Enrico Schumann  <es@enricoschumann.net>
 
 
-        * R/position.R (position): if 'when' is missing, the latest
-        position (= maximum timestamp) is assumed
+        * R/position.R (position): if 'when' is missing, the
+        latest position (= maximum timestamp) is assumed
 
-        * R/internals.R (rebalance), man/PMwR-internal.Rd: function
-        'rebalance' is available, but not exported. It also gets a
-        'do.trunc' argument
+        * R/internals.R (rebalance), man/PMwR-internal.Rd:
+        function 'rebalance' is available, but not exported. It
+        also gets a 'do.trunc' argument
 
 2013-04-15  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1504,19 +1585,22 @@
         * R/returns.R (returns): added file
 
         * R/position.R (position): now checks whether 'amount',
-        'timestamp' or 'instrument' (in that order) inherits from class
-        'Tradelist'
+        'timestamp' or 'instrument' (in that order) inherits from
+        class 'Tradelist'
 
-        * R/Tradelist.R, PL.R: made arguments more consistent: 'amount'
+        * R/Tradelist.R, PL.R: made arguments more consistent:
+        'amount'
         [before sometimes 'n' or 'notional']; 'timestamp' [was:
-        'datetime', 'times']; all in singular (eg, 'price' not 'prices')
+        'datetime', 'times']; all in singular (eg, 'price' not
+        'prices')
 
 2013-04-10  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/position.R, PL.R (position, PLsorted): added file. Removed
-        generic for position and PLsorted (the function now checks the
-        class of its first argument: if 'Tradelist', it will convert into
-        vectors for notional etc.).
+        * R/position.R, PL.R (position, PLsorted): added
+        file. Removed generic for position and PLsorted (the
+        function now checks the class of its first argument: if
+        'Tradelist', it will convert into vectors for notional
+        etc.).
 
 2013-04-04  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1524,8 +1608,8 @@
 
 2013-03-21  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/TradesPL.R (PLsorted): now generic, methods for 'default' and
-        'Tradelist'
+        * R/TradesPL.R (PLsorted): now generic, methods for
+        'default' and 'Tradelist'
 
 2013-03-19  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1533,26 +1617,29 @@
 
         * R/Tradelist.R (Tradelist): price can now be NA
 
-        * R/Tradelist.R (print.Tradelist): corrected trade count message
-        when instrument is NA
+        * R/Tradelist.R (print.Tradelist): corrected trade count
+        message when instrument is NA
 
         * R/Tradelist.R (position): 'position' is now generic
 
 2013-03-14  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): 0.1-9 (and DESCRIPTION file updated)
+        * DESCRIPTION (Version): 0.1-9 (and DESCRIPTION file
+        updated)
 
-        * R/forward.R (putCallParity): removed -- this functionality is
-        available in the NMOF package
+        * R/forward.R (putCallParity): removed -- this
+        functionality is available in the NMOF package
 
         * .Rbuildignore: added R/dev.R
 
         * R/dev.R: added file
 
-        * NAMESPACE: export 'Tradelist' and S3 methods: c, print, sort
+        * NAMESPACE: export 'Tradelist' and S3 methods: c, print,
+        sort
 
-        * R/Tradelist.R (Tradelist): checks if all 'instrument' arguments
-        are equal (and in that case only stores vector of length one)
+        * R/Tradelist.R (Tradelist): checks if all 'instrument'
+        arguments are equal (and in that case only stores vector
+        of length one)
 
         * man/Tradelist.Rd: added file
 
@@ -1560,32 +1647,36 @@
 
         * DESCRIPTION (Version): 0.1-8
 
-        * vignettes/plotTradingHours.Rnw: added examples, discussion
+        * vignettes/plotTradingHours.Rnw: added examples,
+        discussion
 
 2013-03-08  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/Datetimetools.R (plotTradingHours): removed formating of
-        axis(2), ablines and par
+        * R/Datetimetools.R (plotTradingHours): removed formating
+        of axis(2), ablines and par
 
         * R/internals.R (first,last): added first and last
 
-        * R/Datetimetools.R (timegrid): now uses numeric representation of
-        times (instead of character before)
+        * R/Datetimetools.R (timegrid): now uses numeric
+        representation of times (instead of character before)
 
 2013-03-07  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/Datetimetools.R (plotTradingHours): returns coordinates even
-        when plotting (but invisibly); removed 'ppar' argument
+        * R/Datetimetools.R (plotTradingHours): returns
+        coordinates even when plotting (but invisibly); removed
+        'ppar' argument
 
 2013-02-28  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/classes.R (print.Tradelist): now shows also instrument
+        * R/classes.R (print.Tradelist): now shows also
+        instrument
 
 2013-02-20  Enrico Schumann  <es@enricoschumann.net>
 
         * vignettes/PL.Rnw: added example for twExposure
 
-        * inst/unitTests/unitTestsPL.R (test.twExposure): added unit test
+        * inst/unitTests/unitTestsPL.R (test.twExposure): added
+        unit test
 
 2013-02-18  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1593,8 +1684,8 @@
 
         * NAMESPACE: twExposure exported
 
-        * R/classes.R (PLsorted): added Tradelist function; experimental:
-        PLsorted as generic
+        * R/classes.R (PLsorted): added Tradelist function;
+        experimental: PLsorted as generic
 
 2013-02-13  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1606,12 +1697,13 @@
 
         * NAMESPACE: added lastWeekday
 
-        * R/Datetimetools.R (lastWeekday): added arguments 'period =
-        'month', before, inclusive = TRUE'
+        * R/Datetimetools.R (lastWeekday): added arguments
+        'period = 'month', before, inclusive = TRUE'
 
 2013-02-11  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/Datetimetools.R (lastWeekday): added (not exported yet)
+        * R/Datetimetools.R (lastWeekday): added (not exported
+        yet)
 
         * inst/unitTests/unitTestsDateTime.R: added file
 
@@ -1629,8 +1721,8 @@
 
 2012-12-21  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/TradesPL.R (lastIndex,firstIndex): added lastIndex and
-        firstIndex
+        * R/TradesPL.R (lastIndex,firstIndex): added lastIndex
+        and firstIndex
 
 2012-12-21  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1640,9 +1732,11 @@
 
         * man/computeMonthlyStats.Rd: small corrections
 
-        * NAMESPACE: export endOfMonth, scaleToUnity and closeOnFirst
+        * NAMESPACE: export endOfMonth, scaleToUnity and
+        closeOnFirst
 
-        * R/TradesPL.R (finalObs): added function (not yet exported)
+        * R/TradesPL.R (finalObs): added function (not yet
+        exported)
 
         * R/internals.R (wait): added to unexported functions
 
@@ -1654,8 +1748,8 @@
 
         * R/TradesPL.R (PL): symbols is now supported
 
-        * R/Datetimetools.R (`dayOfMonth<-`): added replacement fun for
-        dayOfMonth (and added both to NAMESPACE)
+        * R/Datetimetools.R (`dayOfMonth<-`): added replacement
+        fun for dayOfMonth (and added both to NAMESPACE)
 
         * NAMESPACE: added 'isWeekend'
 
@@ -1679,15 +1773,16 @@
 
         * DESCRIPTION (Version): 0.1-1
 
-        * R/saveAttachment.R (saveAttachment): fixed -- regexp for
-        matching filename now works with quoted and unquoted filenames
-        (saveAttachment): if not base64, attachment is not decoded and
-        written 'as is' to outfile
+        * R/saveAttachment.R (saveAttachment): fixed -- regexp
+        for matching filename now works with quoted and unquoted
+        filenames
+        (saveAttachment): if not base64, attachment is not
+        decoded and written 'as is' to outfile
 
 2012-11-16  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/saveAttachment.R (saveAttachment): changed decoding from
-        base64 package to base64enc
+        * R/saveAttachment.R (saveAttachment): changed decoding
+        from base64 package to base64enc
 
         * DESCRIPTION (Version): initial version
 
