@@ -1,5 +1,7 @@
 2016-01-19  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-83
+
         * R/returns.R (returns): argument 'pad' is ignored for
         periods 'mtd' and 'ytd' (with a warning); the 'print'
         method shows the period (not just the end date) for which
