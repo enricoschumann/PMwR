@@ -8,7 +8,7 @@
 #+PROPERTY: tangle yes
 # ------------------ LATEX ------------------
 #+LATEX_CLASS: scrbook
-#+LaTeX_CLASS_OPTIONS: [a4paper,fontsize=11pt]
+#+LaTeX_CLASS_OPTIONS: [a4paper,fontsize=12pt]
 #+LATEX_HEADER: \addtokomafont{disposition}{\rmfamily}
 #+LATEX_HEADER: \addtokomafont{descriptionlabel}{\rmfamily}
 #+LATEX_HEADER: \setlength{\parindent}{0em}
