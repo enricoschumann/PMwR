@@ -1,5 +1,7 @@
 2016-02-03  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-84
+
 	* R/journal.R (str.journal): new str method for 'journal'
 
 2016-01-19  Enrico Schumann  <es@enricoschumann.net>
