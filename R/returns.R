@@ -164,7 +164,7 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         attr(ans, "period") <- "itd"
         attr(ans, "t") <- if (is.null(t)) NULL else c(t[1], t[lx])
     } else if (tolower(period) == "ytd") {
-        ## TODO allow syntax like "ytd2016" or "ytd02-15"? (the
+        ## TODO allow syntax like "ytd!" or "ytd02-15"? (the
         ## latter returns a vector of returns ytd up to 15 Feb)
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")

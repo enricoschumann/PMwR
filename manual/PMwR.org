@@ -8,7 +8,7 @@
 #+PROPERTY: tangle yes
 # ------------------ LATEX ------------------
 #+LATEX_CLASS: scrbook
-#+LaTeX_CLASS_OPTIONS: [a4paper,fontsize=12pt]
+#+LATEX_CLASS_OPTIONS: [a4paper,fontsize=12pt]
 #+LATEX_HEADER: \addtokomafont{disposition}{\rmfamily}
 #+LATEX_HEADER: \addtokomafont{descriptionlabel}{\rmfamily}
 #+LATEX_HEADER: \setlength{\parindent}{0em}
@@ -19,21 +19,28 @@
 #+LATEX_HEADER: \usepackage[backend=bibtex,citestyle=authoryear]{biblatex}
 #+LATEX_HEADER: \addbibresource{Library.bib}
 #+LATEX_HEADER: %% \usepackage{amsmath}
+#+LATEX_HEADER: \usepackage[left=3cm,right=5cm,top=2cm,bottom=4cm,twoside]{geometry}
 #+LATEX_HEADER: \usepackage{fontspec}
-#+LATEX_HEADER: \setmainfont{EB Garamond}
+#+LATEX_HEADER: \setmainfont{Linux Libertine O}
 #+LATEX_HEADER: \setmonofont[Scale=0.91]{inconsolata}
 #+LATEX_HEADER: \usepackage{graphicx}
 #+LATEX_HEADER: \usepackage{xcolor}
+#+LATEX_HEADER: \definecolor{grey90}{gray}{0.90}
+#+LATEX_HEADER: \definecolor{grey96}{gray}{0.96}
 #+LATEX_HEADER: \usepackage{listings}
 #+LATEX_HEADER: \lstset{language=R,basicstyle=\ttfamily,frame=single,
-#+LATEX_HEADER:         numberstyle=\ttfamily\footnotesize\color{gray}}
+#+LATEX_HEADER:         numberstyle=\ttfamily\footnotesize\color{gray},
+#+LATEX_HEADER:         backgroundcolor=\color{grey96},rulecolor=\color{grey90}
+#+LATEX_HEADER:         }
+#+LATEX_HEADER: \lstnewenvironment{results}
+#+LATEX_HEADER:   {\lstset{backgroundcolor={},frame=single,numbers=none}}{}
 #+LATEX_HEADER: \usepackage{mdframed}
 #+LATEX_HEADER: \newenvironment{FAQ}
 #+LATEX_HEADER:  {\begin{mdframed}}{\end{mdframed}}
 #+LATEX_HEADER: \newenvironment{FAA}
 #+LATEX_HEADER:  {\begin{mdframed}}{\end{mdframed}}
 #+LATEX_HEADER: \usepackage{makeidx}\makeindex
-#+LATEX_HEADER: \usepackage{hyperref}
+#+LATEX_HEADER: \usepackage[hidelinks]{hyperref}
 #+PROPERTY: header-args:R :session *R*
 # ------------------ HTML ------------------
 #+HTML_HEAD: <style>
@@ -175,7 +182,7 @@ Idea, algorithm, implementation.
 
 ** Classes and Data structures
 
-The following classes are implicitly defined (ie, S3 classes):
+The following classes are implicitly defined (ie, =S3= classes):
 
 - journal :: keeps transactions. Internally, a object of class
      =journal= is named list of atomic vectors.
@@ -257,10 +264,10 @@ The following classes are implicitly defined (ie, S3 classes):
   =journal=. Methods should not rely on this list being sorted in
   any particular way: components of a journal should always be
   retrieved by name, never by position. (In this respect a
-  journal differs from a dataframe, where we can meaningfully
+  journal differs from a dataframe, for which we can meaningfully
   refer to the /n/-th column.)
   #+INDEX: journal!comparison with dataframe
-  I will call to these journal components, such as =amount= or
+  I will call these journal components, such as =amount= or
   =timestamp=, fields.
   
   The simplicity of the class is intended, because it is meant
@@ -279,17 +286,18 @@ The following classes are implicitly defined (ie, S3 classes):
 
 - =price= :: well, price
 
-- =instrument= :: description of the financial instrument; typically
-     rather an identifier (a.k.a. ticker or symbol)
+- =instrument= :: description of the financial instrument;
+     typically an identifier, a.k.a. ticker or symbol
 
-- =id= :: (possibly unique) id
+- =id= :: (possibly but not necessarily unique) transaction
+     identifier
 
 - =account= :: description of the account
 
 - =...= :: other fields. They must be named, as in =fees = c(1,2,1)=
 
 All fields can be completely missing, except =amount=. Missing fields
-will be 'added back' as =NA= with the exception of =id= and =account=,
+will be `added back' as =NA= with the exception of =id= and =account=,
 which will be =NULL=. (Note that =amount= could be a vector with only
 =NA= values in it; but =amount= cannot be left out when the journal is
 created. This will become clearer with the examples below.)
@@ -306,7 +314,7 @@ pension::equities
 #+END_EXAMPLE
 
 
-** Creating journals and combining
+** Creating and combining journals
 
 The function =journal= creates journal objects. For details about
 the function and methods for =journal= objects, see =?journal=.
@@ -314,21 +322,23 @@ the function and methods for =journal= objects, see =?journal=.
 
 
 At is very minimum, a journal must contain amounts of something.
-#+BEGIN_SRC R -n :exports both :results output
-  amount <- c(+1, +2, -2, +3)
+#+BEGIN_SRC R -n :exports both :results value output
+  amount <- c(1, 2, -2, 3)
   jnl <- journal(amount = amount)
   jnl
 #+END_SRC
 
 #+RESULTS:
-:  
-:   amount
+:    amount
 : 1       1
 : 2       2
 : 3      -2
 : 4       3
 : 
 : 4 transactions
+
+
+
 
 Actually, that is not true. On occasion it is useful to create an empty
 journal, one with no entries at all. You can do this by saying
@@ -350,7 +360,7 @@ over all amounts, we can use =position=.
 : [1,]    4
 
 Only providing amounts is, admittedly, not overly useful. You can keep
-track of positions, true. But a [[https://en.wikipedia.org/wiki/General_journal][journal]] implies chronological
+track of positions, true; but a [[https://en.wikipedia.org/wiki/General_journal][journal]] implies chronological
 information, that is, flows. (As opposed to a [[https://en.wikipedia.org/wiki/Ledger][ledger]], which gives you
 positions, or stocks.)
 
@@ -416,9 +426,9 @@ jnl
 9 transactions
 #+end_example
 
-You could check your drinking habits for patterns, say. But
-perhaps we better switch to a financial example.
-
+You could check your drinking habits for patterns, such as slow
+accumulation of wine, followed by rapid consumption; or the other
+way around. But perhaps we better switch to a financial example.
 
 #+BEGIN_SRC R -n :exports both :results output
   (J <- journal(timestamp  = as.Date("2012-01-01") + 0:3, 
@@ -435,7 +445,8 @@ perhaps we better switch to a financial example.
 : 
 : 4 transactions
 
-A =print= method defines how to display a journal.
+A =print= method defines how to display a journal. See
+=?print.journal= for details.
 #+INDEX: journal!print journals (print method)
 #+BEGIN_SRC R -n :exports both :results output
 print(J, max.print = 2, exclude = "instrument")

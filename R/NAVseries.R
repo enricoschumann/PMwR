@@ -239,7 +239,7 @@ as.NAVseries.btest <- function(x, ...){
     NAV <- x$wealth
     if (any(na <- is.na(NAV)))
         NAV <- NAV[-c(1:max(which(na)))]
-    timestamp <- if(!is.null(x$timestamp))
+    timestamp <- if (!is.null(x$timestamp))
                      timestamp else seq_along(NAV)
     ## TODO: scale1 method for NAVseries
     NAVseries(NAV = scale1(NAV, level = 100),

@@ -344,3 +344,12 @@ as.journal <- function(x, ...)
 
 as.journal.data.frame <- function(x, ...)
     do.call("journal", as.list(x))
+
+str.journal <- function(object, ...) {
+    n <- length(object)
+    cat(sQuote("journal"), ":\t ",
+        n, " transaction", if (n != 1) "s", "\n",
+        sep = "")
+    NextMethod(object)
+    invisible()
+}
