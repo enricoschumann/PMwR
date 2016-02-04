@@ -2,19 +2,20 @@
 
         * DESCRIPTION (Version): 0.1-84
 
-	* R/journal.R (str.journal): new str method for 'journal'
+        * R/journal.R (str.journal): added 'str' method for
+        'journal'
 
 2016-01-19  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-83
 
-        * R/returns.R (returns): argument 'pad' is ignored for
-        periods 'mtd' and 'ytd' (with a warning); the 'print'
+        * R/returns.R (returns): argument 'pad' is now ignored
+        for periods 'mtd' and 'ytd' (with a warning); the 'print'
         method shows the period (not just the end date) for which
         returns were computed
 
         * R/returns.R (print.p_returns): fixed -- print with
-        period 'annualised' now also used the 'digits' argument
+        period 'annualised' now also uses the 'digits' argument
 
 2016-01-14  Enrico Schumann  <es@enricoschumann.net>
 
