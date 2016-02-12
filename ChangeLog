@@ -1,3 +1,8 @@
+2016-02-12  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (toLatex.p_returns, toHTML.p_returns): added warning
+	when 'x' uses old list strucuture; see ChangeLog 2015-06-26
+
 2016-02-03  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-84
@@ -362,15 +367,16 @@
 
         * man/scale1.Rd: describe argument 'geometric'
 
-        * R/returns.R (pReturns): renamed class 'preturns' to
-        'p_returns'.  An object of that class is now a numeric
-        vector/matrix with attributes 't' and 'period'. Before)
-        (it had been a list with elements 'returns', 't' and
-        'period'. So, when 'x' is of class 'p_returns':
+        * R/returns.R (pReturns): renamed class 'preturns' to 'p_returns'.
+	An object of that class is now a numeric vector/matrix with
+	attributes 't' and 'period'. Before, it had been a list with
+	elements 'returns', 't' and 'period'. So, when 'x' is of class
+	'p_returns':
 
-        WHAT NEW OLD retrieve returns x x$returns retrieve
-        timestamp attr(x, "t") x$t retrieve period attr(x,
-        "period") x$period
+          WHAT                  NEW                  OLD
+          retrieve returns      x                    x$returns
+          retrieve timestamp    attr(x, "t")         x$t
+          retrieve period       attr(x, "period")    x$period
 
 2015-06-25  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1793,5 +1799,5 @@
         * R/saveAttachment.R (saveAttachment): changed decoding
         from base64 package to base64enc
 
-        * DESCRIPTION (Version): initial version
+        * DESCRIPTION (Version): initial version (take code from 'PM')
 
