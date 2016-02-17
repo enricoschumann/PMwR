@@ -34,7 +34,7 @@ returns(x, \dots)
     year.rows = TRUE, ytd = "YTD", month.names = NULL, 
     stand.alone = TRUE, table.style = NULL, table.class = NULL, 
     th.style = NULL, th.class = NULL,
-    td.style = "text-align:right;padding:0.5em;", 
+    td.style = "text-align:right; padding:0.5em;", 
     td.class = NULL, tr.style = NULL, tr.class = NULL, browse = FALSE)
 
 .returns(x, pad = NULL, lag)
