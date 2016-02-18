@@ -3,7 +3,7 @@ returns <- function(x, ...)
 
 ## -----[Handling of 'timestamp' and 'period' in methods]-----
 ## 
-## Methods are responsible for 'stripping' the input down do x and t,
+## Methods are responsible for 'stripping down' the input to x and t,
 ## calling 'returns.default' (or some other method) and then to
 ## re-assemble the original class's structure. When there is no
 ## period, methods should keep timestamp information for themselves,
@@ -165,7 +165,9 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         attr(ans, "t") <- if (is.null(t)) NULL else c(t[1], t[lx])
     } else if (tolower(period) == "ytd") {
         ## TODO allow syntax like "ytd!" or "ytd02-15"? (the
-        ## latter returns a vector of returns ytd up to 15 Feb)
+        ## latter returns a vector of returns ytd up to 15 Feb).
+        ##
+        ## ! gives error if when YTD does not make Sys.Date's year
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
         years <- as.numeric(format(t, "%Y"))
@@ -300,7 +302,9 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
 toLatex.p_returns <- function(object, ..., year.rows = TRUE,
                              ytd = "YTD", month.names = NULL, eol = "\\\\",
                               stand.alone = FALSE) {
-    ## TODO: if list, warning
+    if (is.list(object))
+        warning("format of 'p_returns' objects has changed: see ChangeLog 2015-06-26")
+
     period <- attr(object, "period")
     if (grepl("month(ly)?", period, ignore.case = TRUE)) {
         if (year.rows)
@@ -325,12 +329,14 @@ toHTML.p_returns <- function(x, ..., year.rows = TRUE,
                             table.class = NULL,
                             th.style = NULL,
                             th.class = NULL,
-                            td.style = "text-align:right;padding:0.5em;",
+                            td.style = "text-align:right; padding:0.5em;",
                             td.class = NULL,
                             tr.style = NULL, tr.class = NULL,
                             browse = FALSE) {
 
-    ## TODO: if list, warning
+    if (is.list(x))
+        warning("format of 'p_returns' objects has changed: see ChangeLog 2015-06-26")
+
     period <- attr(x, "period")
 
     .ctag <- function(value, tag)
@@ -387,7 +393,9 @@ toHTML.p_returns <- function(x, ..., year.rows = TRUE,
 toText.p_returns <- function(x, ..., year.rows = TRUE,
                             ytd = "YTD", month.names = NULL) {
 
-    ## TODO: if list, warning
+    if (is.list(x))
+        warning("format of 'p_returns' objects has changed: see ChangeLog 2015-06-26")
+
     period <- attr(x, "period")
 
     if (grepl("month(ly)?", period)) {

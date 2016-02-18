@@ -163,5 +163,4 @@ x <- seq_along(t) + 1000
 returns(x, t = t, period = "month")
 returns(x, t = t, period = "month", complete.first = FALSE)
 
-
 }

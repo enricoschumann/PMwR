@@ -115,6 +115,7 @@ test.returns <- function() {
 
     
     
+    
     ## time-weighted returns
     x <- 101:105
     checkEquals(returns(x, position = c(1, 1, 1, 1, 1)),

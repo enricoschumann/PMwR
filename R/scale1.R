@@ -75,6 +75,8 @@ scale1.zoo <- function(x, ..., when = "first.complete",
 
     ii <- index(x)
     x <- coredata(x)
+    if (inherits(when, class(ii)))
+        when <- matchOrNext(when, ii)
     ans <- scale1.default(x, when = when, level = level,
                           centre = centre, scale = scale,
                           geometric = geometric)
