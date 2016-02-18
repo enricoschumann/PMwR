@@ -1,5 +1,7 @@
 2016-02-18  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-85
+
 	* R/scale1.R (scale1.zoo): fixed -- 'when' was not properly
 	matched against the series's index
 
