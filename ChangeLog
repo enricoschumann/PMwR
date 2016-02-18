@@ -1,5 +1,15 @@
 2016-02-18  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/returns.R (returns): period 'annualised' now also works with
+	matrices/data.frames, not just single series.
+
+	* R/returns.R (pReturns): when 'period = "ann"', the result's
+	attribute 'annualised' is renamed to 'is.annualised'; see
+	ChangeLog 2016-01-14
+
+
+2016-02-18  Enrico Schumann  <es@enricoschumann.net>
+
         * DESCRIPTION (Version): 0.1-85
 
 	* R/scale1.R (scale1.zoo): fixed -- 'when' was not properly

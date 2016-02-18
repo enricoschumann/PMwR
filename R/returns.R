@@ -145,29 +145,47 @@ twReturns <- function(price, position, pad = NULL) {
 ## not exported
 pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
     x <- as.matrix(x)
+    nc <- ncol(x)
     if (grepl("^ann", period, ignore.case = TRUE)) {
-        xi <- as.Date(t)
-        lx <- length(xi)
-        t <- as.numeric(xi[lx] - xi[1L])/365
-        ans <- if (t < 1 && !(grepl("!$", period))) {
-                   (x[lx]/x[1L]) - 1
-               } else {
-                   (x[lx]/x[1L])^(1/t) - 1
-               }
-        attr(ans, "period") <- "annualised"
-        attr(ans, "t") <- c(xi[1L], xi[lx])
-        attr(ans, "annualised") <- if (t < 1 && !(grepl("!$", period)))
-                                       FALSE else TRUE
+        ## loop over the columns of x and compute
+        ## returns for each column
+        if (!is.null(pad))
+            warning(sQuote("pad"), " is ignored")
+        force <- grepl("!$", period)
+        ans <- numeric(nc)
+        is.ann  <- logical(nc)
+        from.to <- array(NA, dim = c(nc, 2))
+        colnames(from.to) <- c("from", "to")
+        t <- as.Date(t)
+        for (j in 1:nc) {
+            xj <- x[ ,j]
+            t1 <- max(which(!is.na(xj)))
+            t0 <- min(which(!is.na(xj)))
+            tt <- as.numeric( t[t1] - t[t0] )/365
+            tmp <- xj[t1]/xj[t0]
+            if (tt > 1 || force) {
+                tmp^(1/tt)
+                is.ann[j] <- TRUE
+            }
+            ans[j] <- tmp - 1
+            from.to[ j, ] <- c(t[t0], t[t1])
+        }
+        attr(ans, "period") <- if (force) "annualised!" else "annualised"        
+        class(from.to) <- "Date"
+        attr(ans, "t") <- from.to
+        attr(ans, "is.annualised") <- is.ann
     } else if (tolower(period) == "itd") {
         lx <- length(x)
         (x[lx]/x[1L]) - 1
         attr(ans, "period") <- "itd"
         attr(ans, "t") <- if (is.null(t)) NULL else c(t[1], t[lx])
     } else if (tolower(period) == "ytd") {
-        ## TODO allow syntax like "ytd!" or "ytd02-15"? (the
-        ## latter returns a vector of returns ytd up to 15 Feb).
+        ## TODO allow syntax like "ytd!" or "ytd02-15"?
+        ## (the latter returns a vector of returns ytd
+        ## up to 15 Feb).
         ##
-        ## ! gives error if when YTD does not make Sys.Date's year
+        ## ! gives error if when YTD does not make
+        ## ! Sys.Date's year
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
         years <- as.numeric(format(t, "%Y"))
@@ -233,7 +251,8 @@ fmt <- function(x, plus, digits) {
 }
 
 .mtab <- function(x, ytd = "YTD", month.names = NULL, zero.print = "0", plus = FALSE,
-                 digits = 1) {
+                  digits = 1) {
+    ## TODO change interface to INPUT: x, t
     years <- as.numeric(format(attr(x, "t"), "%Y"))
     mons  <- as.numeric(format(attr(x, "t"), "%m"))
     tb <- array("", dim = c(length(unique(years)), 13L))
@@ -280,13 +299,21 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
             print(fmt(tmp, plus, digits), quote = FALSE)
         else
             print(as.matrix(fmt(tmp, plus, digits)), quote = FALSE)
-    } else if (period == "annualised") {
-        cat(format(round(x*100, digits), nsmall = digits), "% p.a.  ",
-            "  [", format(timestamp[1], "%d %b %Y"), " -- ",
-                 format(timestamp[2], "%d %b %Y"), "", sep = "")
-        if (as.numeric(timestamp[2L]-timestamp[1L])/365 < 1)
-            cat(", less than one year]\n", sep = "") else
-            cat("]\n", sep = "")
+    } else if (grepl("annualised", period)) {
+        r_str <- paste0(format(round(x*100, digits), nsmall = digits), "%  ")        
+        cal_str <- paste0("[",
+                       format(timestamp[,1],"%d %b %Y"), " -- ",
+                       format(timestamp[,2],"%d %b %Y"))
+
+        note <- rep("]", length(x))
+        note[as.numeric(timestamp[,2L]-timestamp[,1L])/365 < 1 &
+              attr(x, "is.annualised")] <- 
+            "less than one year, but annualised]"
+        note[as.numeric(timestamp[,2L]-timestamp[,1L])/365 < 1 &
+              !attr(x, "is.annualised")] <- 
+            "less than one year, not annualised]"
+        cat(paste0(r_str, cal_str, note, collapse = "\n"), "\n")
+        
     } else if (period == "ytd" || period == "mtd") {
         tmp <- paste0("[ ",   format(head(timestamp, 1), "%d %b %Y"),
                       " -- ", format(tail(timestamp, 1), "%d %b %Y"), " ]")
