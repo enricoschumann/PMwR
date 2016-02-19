@@ -1,5 +1,7 @@
 2016-02-19  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-86
+
 	* R/returns.R (returns): period 'mtd' and 'ytd' now handle NA
 	values
 
