@@ -1,5 +1,10 @@
 2016-02-19  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/returns.R (.mtab): now takes returns and timestamps as
+	separate arguments; the function is no longer exported
+
+2016-02-19  Enrico Schumann  <es@enricoschumann.net>
+
         * DESCRIPTION (Version): 0.1-87
 
 	* R/returns.R (pReturns): period 'itd' also handles NA values

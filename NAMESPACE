@@ -21,7 +21,6 @@ importFrom(crayon, bold)
 
 export(
     .returns,
-    .mtab,
     .pl,
     NAVseries,
     as.NAVseries,

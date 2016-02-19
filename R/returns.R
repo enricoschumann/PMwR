@@ -20,9 +20,9 @@ returns.NAVseries <- function(x, period = NULL, complete.first = TRUE,
                         complete.first = complete.first,
                         pad = pad, position = position, lag = lag, ...)
     } else {
-        ans <- returns.default(x, period = NULL,
-                               complete.first = complete.first,
-                               pad = pad, position = position, lag = lag, ...)
+        returns.default(x, period = NULL,
+                        complete.first = complete.first,
+                        pad = pad, position = position, lag = lag, ...)
     }
 }
 
@@ -34,8 +34,8 @@ returns.zoo <- function(x, period = NULL, complete.first = TRUE,
 
     if (!is.null(period)) {
         returns.default(x, t = t, period = period,
-                complete.first = complete.first,
-                pad = pad, position = position, lag = lag, ...)
+                        complete.first = complete.first,
+                        pad = pad, position = position, lag = lag, ...)
     } else {
         ans <- returns.default(x, period = NULL,
                        complete.first = complete.first,
@@ -47,13 +47,13 @@ returns.zoo <- function(x, period = NULL, complete.first = TRUE,
     }
 }
 
-returns.data.frame <- function(x, t = NULL, period = NULL, complete.first = TRUE,
+returns.data.frame <- function(x, t = NULL, period = NULL,
+                               complete.first = TRUE,
                                pad = NULL, position = NULL,
                                weights = NULL, rebalance.when = NULL,
                                lag = 1, ...) {
 
-    ans <- returns.default(x,
-                           t = t, period = period,
+    ans <- returns.default(x, t = t, period = period,
                            complete.first = complete.first,
                            pad = pad, position = position,
                            weights = weights,
@@ -62,7 +62,8 @@ returns.data.frame <- function(x, t = NULL, period = NULL, complete.first = TRUE
     as.data.frame(ans)
 }
 
-returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
+returns.default <- function(x, t = NULL, period = NULL,
+                            complete.first = TRUE,
                             pad = NULL, position = NULL,
                             weights = NULL,
                             rebalance.when = NULL,
@@ -288,11 +289,10 @@ fmt <- function(x, plus, digits) {
         ans
 }
 
-.mtab <- function(x, ytd = "YTD", month.names = NULL, zero.print = "0", plus = FALSE,
+.mtab <- function(x, t, ytd = "YTD", month.names = NULL, zero.print = "0", plus = FALSE,
                   digits = 1) {
-    ## TODO change interface to INPUT: x, t
-    years <- as.numeric(format(attr(x, "t"), "%Y"))
-    mons  <- as.numeric(format(attr(x, "t"), "%m"))
+    years <- as.numeric(format(t, "%Y"))
+    mons  <- as.numeric(format(t, "%m"))
     tb <- array("", dim = c(length(unique(years)), 13L))
     tb[cbind(years - years[1L] + 1L, mons)] <- fmt(x, plus, digits)
     for (y in sort(unique(years)))
@@ -318,11 +318,11 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
     timestamp <- attr(x, "t")
     if (period == "monthly" && is.null(dim(x))) {
         if (year.rows)
-            print(.mtab(x, ytd = "YTD", month.names = month.names,
-                       zero.print = zero.print, plus = plus, digits = digits),
+            print(.mtab(x, timestamp, ytd = "YTD", month.names = month.names,
+                        zero.print = zero.print, plus = plus, digits = digits),
                   quote = FALSE, print.gap = 1, right = TRUE)
         else
-            print(t(.mtab(x, ytd = "YTD", month.names = month.names,
+            print(t(.mtab(x, timestamp, ytd = "YTD", month.names = month.names,
                        zero.print = zero.print, plus = plus, digits = digits)),
                   quote = FALSE, print.gap = 2, right = TRUE)
     } else if (period == "monthly") {
@@ -366,17 +366,19 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
 
 ## not exported
 toLatex.p_returns <- function(object, ..., year.rows = TRUE,
-                             ytd = "YTD", month.names = NULL, eol = "\\\\",
+                              ytd = "YTD", month.names = NULL, eol = "\\\\",
                               stand.alone = FALSE) {
     if (is.list(object))
         warning("format of 'p_returns' objects has changed: see ChangeLog 2015-06-26")
 
     period <- attr(object, "period")
+    timestamp <- attr(object, "t")
+
     if (grepl("month(ly)?", period, ignore.case = TRUE)) {
         if (year.rows)
-            mt <- .mtab(object, ytd = ytd, month.names = month.names)
+            mt <- .mtab(object, timestamp, ytd = ytd, month.names = month.names)
         else
-            mt <- t(.mtab(object, ytd = ytd, month.names = month.names))
+            mt <- t(.mtab(object, timestamp, ytd = ytd, month.names = month.names))
     } else {
         stop("currently only supported for period ", sQuote("month"))
     }
@@ -404,6 +406,7 @@ toHTML.p_returns <- function(x, ..., year.rows = TRUE,
         warning("format of 'p_returns' objects has changed: see ChangeLog 2015-06-26")
 
     period <- attr(x, "period")
+    timestamp <- attr(x, "t")
 
     .ctag <- function(value, tag)
         if (!is.null(value) && value != "")
@@ -426,9 +429,9 @@ toHTML.p_returns <- function(x, ..., year.rows = TRUE,
 
     if (grepl("month(ly)?", period)) {
         if (year.rows)
-            mt <- .mtab(x, ytd = ytd, month.names = month.names)
+            mt <- .mtab(x, timestamp, ytd = ytd, month.names = month.names)
         else
-            mt <- t(.mtab(x, ytd = ytd, month.names = month.names))
+            mt <- t(.mtab(x, timestamp, ytd = ytd, month.names = month.names))
     } else {
         stop("currently only supported for period ", sQuote("month"))
     }
@@ -461,12 +464,13 @@ toText.p_returns <- function(x, ..., year.rows = TRUE,
         warning("format of 'p_returns' objects has changed: see ChangeLog 2015-06-26")
 
     period <- attr(x, "period")
+    timestamp <- attr(x, "t")
 
     if (grepl("month(ly)?", period)) {
         if (year.rows)
-            mt <- .mtab(x, ytd = ytd, month.names = month.names)
+            mt <- .mtab(x, timestamp, ytd = ytd, month.names = month.names)
         else
-            mt <- t(.mtab(x, ytd = ytd, month.names = month.names))
+            mt <- t(.mtab(x, timestamp, ytd = ytd, month.names = month.names))
     } else {
         stop("currently only supported for period ", sQuote("month"))
     }

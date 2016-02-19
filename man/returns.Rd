@@ -166,6 +166,16 @@ x <- seq_along(t) + 1000
 returns(x, t = t, period = "month")
 returns(x, t = t, period = "month", complete.first = FALSE)
 
+### formatting
+    ## .mtab(x)
+    ## .mtab(x, plus = TRUE)
+    ## .mtab(x, zero.print = "_____")
+    ## .mtab(x, zero.print = "_____", plus = TRUE)
+    ## .mtab(x, month.names = LETTERS[1:12], ytd = "Z")
+    ## .mtab(x, digits = 0)
+    ## .mtab(x, digits = 0, zero.print = "___")
+
+
 ## returns per year (annualised returns)
 returns(x, t = t, period = "ann")  ## less than one year, not annualised
 returns(x, t = t, period = "ann!") ## less than one year, *but* annualised
@@ -175,6 +185,8 @@ is.ann <- function(x)
 
 is.ann(returns(x, t = t, period = "ann"))   ## FALSE
 is.ann(returns(x, t = t, period = "ann!"))  ## TRUE
+
+
 
 
 }

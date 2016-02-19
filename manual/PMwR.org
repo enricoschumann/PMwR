@@ -1375,10 +1375,9 @@ returns(x, t = t, period = "month")
 #+END_SRC 
 
 #+RESULTS:
-:  
-:     Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov  Dec YTD
-: 2014                                         7.5 -0.8 6.7
-: 2015 1.7                                              1.7
+:      Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov  Dec  YTD
+: 2014                                         4.5 -5.0 -0.7
+: 2015 7.7                                               7.7
 
 #+INDEX: returns!yearly
 
@@ -1388,7 +1387,7 @@ returns(x, t = t, period = "year")
 
 #+RESULTS:
 : 2014 2015 
-:  6.7  1.7
+: -0.7  7.7
 
 See =?print.preturns= for more display options. For instance:
 #+BEGIN_SRC R -n :exports both :results output
