@@ -1,5 +1,7 @@
 2016-02-19  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-88
+
 	* R/returns.R (.mtab): now takes returns and timestamps as
 	separate arguments; the function is no longer exported
 
