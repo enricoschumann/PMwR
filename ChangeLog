@@ -1,5 +1,7 @@
 2016-02-19  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-87
+
 	* R/returns.R (pReturns): period 'itd' also handles NA values
 
 	* R/returns.R (print.p_returns): for period 'itd', the timestamps
