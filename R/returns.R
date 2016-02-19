@@ -2,7 +2,7 @@ returns <- function(x, ...)
     UseMethod("returns")
 
 ## -----[Handling of 'timestamp' and 'period' in methods]-----
-## 
+##
 ## Methods are responsible for 'stripping down' the input to x and t,
 ## calling 'returns.default' (or some other method) and then to
 ## re-assemble the original class's structure. When there is no
@@ -78,7 +78,7 @@ returns.default <- function(x, t = NULL, period = NULL, complete.first = TRUE,
                 sQuote("period"), " is not specified")
         t <- NULL
     }
-    
+
     if (is.null(t) &&  is.null(position) && is.null(weights)) {
         .returns(x, pad = pad, lag = lag)
     } else if (is.null(t) &&  is.null(position) && !is.null(weights)) {
@@ -147,8 +147,6 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
     x <- as.matrix(x)
     nc <- ncol(x)
     if (grepl("^ann", period, ignore.case = TRUE)) {
-        ## loop over the columns of x and compute
-        ## returns for each column
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
         force <- grepl("!$", period)
@@ -164,13 +162,14 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
             tt <- as.numeric( t[t1] - t[t0] )/365
             tmp <- xj[t1]/xj[t0]
             if (tt > 1 || force) {
-                tmp^(1/tt)
+                tmp <- tmp^(1/tt)
                 is.ann[j] <- TRUE
             }
             ans[j] <- tmp - 1
             from.to[ j, ] <- c(t[t0], t[t1])
         }
-        attr(ans, "period") <- if (force) "annualised!" else "annualised"        
+        attr(ans, "period") <- if (force)
+                                   "annualised!" else "annualised"
         class(from.to) <- "Date"
         attr(ans, "t") <- from.to
         attr(ans, "is.annualised") <- is.ann
@@ -189,21 +188,49 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
         years <- as.numeric(format(t, "%Y"))
-        i <- which(years < max(years))
-        i <- if (!length(i)) 1 else max(i) 
-        ii <- c(i, length(t))
-        ans <- drop(returns(x[ii, ]))
-        attr(ans, "t") <- t[ii]
+        ans <- numeric(nc)
+        from.to <- array(NA, dim = c(nc, 2))
+        colnames(from.to) <- c("from", "to")
+        for (j in 1:nc) {
+            xj <- x[ ,j]
+            i <- which(years < max(years))
+            if (!length(i)) {
+                ## all obs are with one year
+                i <- seq_along(xj)
+                t0 <- min(which(!is.na(xj[i])))
+            } else {
+                t0 <- max(which(!is.na(xj[i])))
+            }
+            t1 <- max(which(!is.na(xj)))
+            ans[j] <- drop(returns( xj[c(t0, t1)] ))
+            from.to[j,] <- c(t[t0], t[t1])
+        }
+        class(from.to) <- "Date"
+        attr(ans, "t") <- from.to
         attr(ans, "period") <- "ytd"
     } else if (tolower(period) == "mtd") {
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
         ymon <- as.numeric(format(t, "%Y%m"))
-        i <- which(ymon < max(ymon))
-        i <- if (!length(i)) 1 else max(i) 
-        ii <- c(i, length(t))
-        ans <- drop(returns(x[ii, ]))
-        attr(ans, "t") <- t[ii]
+        ans <- numeric(nc)
+        from.to <- array(NA, dim = c(nc, 2))
+        colnames(from.to) <- c("from", "to")
+        for (j in 1:nc) {
+            xj <- x[ ,j]
+            i <- which(ymon < max(ymon))
+            if (!length(i)) {
+                ## all obs are with one month
+                i <- seq_along(xj)
+                t0 <- min(which(!is.na(xj[i])))
+            } else {
+                t0 <- max(which(!is.na(xj[i])))
+            }
+            t1 <- max(which(!is.na(xj)))
+            ans[j] <- drop(returns( xj[c(t0, t1)] ))
+            from.to[j,] <- c(t[t0], t[t1])
+        }
+        class(from.to) <- "Date"
+        attr(ans, "t") <- from.to
         attr(ans, "period") <- "mtd"
     } else {
         if (length(period) > 1L) {
@@ -300,25 +327,26 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
         else
             print(as.matrix(fmt(tmp, plus, digits)), quote = FALSE)
     } else if (grepl("annualised", period)) {
-        r_str <- paste0(format(round(x*100, digits), nsmall = digits), "%  ")        
+        r_str <- paste0(format(round(x*100, digits), nsmall = digits), "%  ")
         cal_str <- paste0("[",
                        format(timestamp[,1],"%d %b %Y"), " -- ",
                        format(timestamp[,2],"%d %b %Y"))
 
         note <- rep("]", length(x))
         note[as.numeric(timestamp[,2L]-timestamp[,1L])/365 < 1 &
-              attr(x, "is.annualised")] <- 
-            "less than one year, but annualised]"
+              attr(x, "is.annualised")] <-
+            "; less than one year, but annualised]"
         note[as.numeric(timestamp[,2L]-timestamp[,1L])/365 < 1 &
-              !attr(x, "is.annualised")] <- 
-            "less than one year, not annualised]"
+              !attr(x, "is.annualised")] <-
+            "; less than one year, not annualised]"
         cat(paste0(r_str, cal_str, note, collapse = "\n"), "\n")
-        
     } else if (period == "ytd" || period == "mtd") {
-        tmp <- paste0("[ ",   format(head(timestamp, 1), "%d %b %Y"),
-                      " -- ", format(tail(timestamp, 1), "%d %b %Y"), " ]")
-        cat(paste0(format(round(x * 100, digits), nsmall = digits), "%   ", 
-                   tmp), sep = "\n")
+        cal_str <- paste0("[",
+                          format(timestamp[,1],"%d %b %Y"), " -- ",
+                          format(timestamp[,2],"%d %b %Y"),
+                          "]")
+        cat(paste0(format(round(x * 100, digits), nsmall = digits), "%   ",
+                   cal_str), sep = "\n")
     } else {
         print(unclass(x))
     }
@@ -412,8 +440,6 @@ toHTML.p_returns <- function(x, ..., year.rows = TRUE,
         invisible(mt)
     } else
         mt
-
-    
 }
 
 ## not exported
@@ -472,7 +498,6 @@ returns_rebalance <- function(prices, weights, when = NULL, pad = NULL) {
         tmp[round(when)] <- TRUE
         when <- tmp
     }
-        
     val <- numeric(nr)
     h <- ctb <- array(0, dim = dim(prices))
 

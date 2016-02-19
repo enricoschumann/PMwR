@@ -78,9 +78,15 @@ test.returns <- function() {
     suppressWarnings(checkEquals(returns(x, t = t),            returns(x)))
     
     ## period -- check class
+    require("PMwR", quietly = TRUE)
+    require("RUnit", quietly = TRUE)
+    require("zoo", quietly = TRUE, warn.conflicts = FALSE)
     t <- seq(as.Date("2012-01-01"), as.Date("2012-12-31"), by = "1 day")
     x <- seq_along(t)/10 + 100
-    z <- zoo(x, t)    
+    z <- zoo(x, t)
+    ## z <- cbind(z,z,z)
+    returns(z, period = "mtd")
+    
     checkTrue(class(returns(x, t = t, period = "month")) == "p_returns")
     checkTrue(class(returns(z,        period = "month")) == "p_returns")
     checkTrue(class(returns(z)) == "zoo")

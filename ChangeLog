@@ -1,7 +1,21 @@
+2016-02-19  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (returns): period 'mtd' and 'ytd' now handle NA
+	values
+
+	* R/returns.R (print.p_returns): when period is 'mtd', 'ytd' or
+	'ann', the timestamps (dates) of the observations that were used
+	to compute the returns are printed. This is particularly useful
+	when returns are computed from a matrix of series and some series
+	have NA values.
+
+	* man/returns.Rd: added examples for annualised returns
+
 2016-02-18  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/returns.R (returns): period 'annualised' now also works with
-	matrices/data.frames, not just single series.
+	matrices/data.frames, not just single series; NAs are also handled
+	now
 
 	* R/returns.R (pReturns): when 'period = "ann"', the result's
 	attribute 'annualised' is renamed to 'is.annualised'; see

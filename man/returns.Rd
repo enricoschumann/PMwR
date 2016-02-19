@@ -61,7 +61,8 @@ returns(x, \dots)
     length of the time series is less than one year. To force
     annualising in such a case, use \sQuote{\code{ann!}}. Annualisation
     can only work when the timestamp \code{t} can be coerced to class
-    \code{\link{Date}}.
+    \code{\link{Date}}. The result will have an attribute
+    "is.annualised", which is a logical vector.
 
   }
   \item{complete.first}{
@@ -158,9 +159,22 @@ returns(x)
 returns(x, pad = NA)
 returns(x, pad = NA, lag = 2)
 
-t <- seq(as.Date("2012-01-05"), as.Date("2012-12-31"), by = "1 day")
+
+## monthly returns
+t <- seq(as.Date("2012-06-15"), as.Date("2012-12-31"), by = "1 day")
 x <- seq_along(t) + 1000
 returns(x, t = t, period = "month")
 returns(x, t = t, period = "month", complete.first = FALSE)
+
+## returns per year (annualised returns)
+returns(x, t = t, period = "ann")  ## less than one year, not annualised
+returns(x, t = t, period = "ann!") ## less than one year, *but* annualised
+
+is.ann <- function(x)
+    attr(x, "is.annualised")
+
+is.ann(returns(x, t = t, period = "ann"))   ## FALSE
+is.ann(returns(x, t = t, period = "ann!"))  ## TRUE
+
 
 }
