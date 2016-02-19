@@ -1640,11 +1640,9 @@
         'timestamp' or 'instrument' (in that order) inherits from
         class 'Tradelist'
 
-        * R/Tradelist.R, PL.R: made arguments more consistent:
-        'amount'
-        [before sometimes 'n' or 'notional']; 'timestamp' [was:
-        'datetime', 'times']; all in singular (eg, 'price' not
-        'prices')
+        * R/Tradelist.R, PL.R: made arguments more consistent: 'amount'
+	[before sometimes 'n' or 'notional']; 'timestamp' [was:
+	'datetime', 'times']; all in singular (eg, 'price' not 'prices')
 
 2013-04-10  Enrico Schumann  <es@enricoschumann.net>
 
