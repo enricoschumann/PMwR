@@ -1,7 +1,7 @@
 #+COMMENT: -*- fill-column: 65; -*-
 #+TITLE: Portfolio Management with R 
 #+AUTHOR: Enrico Schumann
-#+DATE: 30 November 2015
+#+DATE: 18 February 2015
 #+OPTIONS: toc:nil
 #+BIND: org-latex-default-packages-alist nil
 #+BIND: org-use-sub-superscripts {}
@@ -94,7 +94,7 @@
 #+BEGIN_HTML
 <p>
     <a href = "http://enricoschumann.net">Enrico Schumann</a>&nbsp;&nbsp;&nbsp;
-    <time datetime="2015-11-30">30 November 2015</time>&nbsp;&nbsp;&nbsp;
+    <time datetime="2016-02-18">18 February 2016</time>&nbsp;&nbsp;&nbsp;
     <a href = "PMwR.pdf">[PDF]</a>
 </p>
 #+END_HTML
@@ -1281,7 +1281,6 @@ so we always compute simple returns. For computing profit/loss in
 currency units, see [[#ch:pl][Computing profit and (or) loss]].
 
 
-
 ** Numeric vectors and matrices, data frames
 
 #+BEGIN_SRC R -n :exports both :results output
@@ -1292,7 +1291,7 @@ returns(x)
 #+RESULTS:
 : [1]  0.0200 -0.0098 -0.0099
 
-To replace the lost first observation, specify =pad=.
+To replace the lost intial observation, specify =pad=.
 #+BEGIN_SRC R -n :exports both :results output
 returns(x, pad = 0)
 returns(x, pad = NA)
@@ -1307,30 +1306,21 @@ for each column.
 #+BEGIN_SRC R -n :exports both :results output
 X <- cbind(x, x, x)
 returns(X, pad = NA)
-returns(as.data.frame(X), pad = NA)
 #+END_SRC 
 
 #+RESULTS:
-#+begin_example
-           x       x       x
-[1,]      NA      NA      NA
-[2,]  0.0200  0.0200  0.0200
-[3,] -0.0098 -0.0098 -0.0098
-[4,] -0.0099 -0.0099 -0.0099
- 
-       x       x       x
-1      NA      NA      NA
-2  0.0200  0.0200  0.0200
-3 -0.0098 -0.0098 -0.0098
-4 -0.0099 -0.0099 -0.0099
-#+end_example
+:  
+:           x       x       x
+: [1,]      NA      NA      NA
+: [2,]  0.0200  0.0200  0.0200
+: [3,] -0.0098 -0.0098 -0.0098
+: [4,] -0.0099 -0.0099 -0.0099
 
 =returns= is a generic function, which goes along with some
 overhead. If you need to compute returns on simple data
 structures as in the examples above and need fast computation,
 then you may also use =.returns=. This function is the actual
 workhorse that performs the raw returns calculation.
-
 
 ** =zoo= objects
 
@@ -1355,16 +1345,17 @@ Matrices work as well.
 #+BEGIN_SRC R -n :exports both :results output
 z <- zoo(X, as.Date("2015-1-5") + 0:2)
 returns(z)
-returns(z, pad = NA)
+returns(z, pad = 0)
 #+END_SRC 
 
 #+RESULTS:
-:                  x       x       x
+:  
+:                 x       x       x
 : 2015-01-06  0.0200  0.0200  0.0200
 : 2015-01-07 -0.0098 -0.0098 -0.0098
 :  
 :                 x       x       x
-: 2015-01-05      NA      NA      NA
+: 2015-01-05  0.0000  0.0000  0.0000
 : 2015-01-06  0.0200  0.0200  0.0200
 : 2015-01-07 -0.0098 -0.0098 -0.0098
 
@@ -1375,7 +1366,8 @@ returns(z, pad = NA)
 #+INDEX: returns!monthly
 When a timestamp is available, =returns= can compute returns for
 specific calendar periods. The result is a vector of returns with
-attributes and class =p_returns=. Most useful is a =print= method.
+attributes and class =p_returns=. Most useful is a =print=
+method.
 #+BEGIN_SRC R -n :exports both :results output
 t <- as.Date("2014-11-1") + 0:80
 x <- cumprod(1 + rnorm(length(t), sd = 0.01))
@@ -1384,10 +1376,9 @@ returns(x, t = t, period = "month")
 
 #+RESULTS:
 :  
-:     Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov  Dec  YTD
-: 2014                                         6.0 -5.9 -0.3
-: 2015 0.3                                               0.3
-
+:     Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov  Dec YTD
+: 2014                                         7.5 -0.8 6.7
+: 2015 1.7                                              1.7
 
 #+INDEX: returns!yearly
 
@@ -1397,7 +1388,7 @@ returns(x, t = t, period = "year")
 
 #+RESULTS:
 : 2014 2015 
-: -0.3  0.3
+:  6.7  1.7
 
 See =?print.preturns= for more display options. For instance:
 #+BEGIN_SRC R -n :exports both :results output
@@ -1407,8 +1398,8 @@ print(returns(zoo(x, t), period = "month"),
 
 #+RESULTS:
 #+begin_example
-       2014  2015
-Jan         0.26
+      2014  2015
+Jan         1.68
 Feb             
 Mar             
 Apr             
@@ -1418,10 +1409,12 @@ Jul
 Aug             
 Sep             
 Oct             
-Nov   5.99      
-Dec  -5.93      
-YTD  -0.30  0.26
+Nov   7.55      
+Dec  -0.75      
+YTD   6.74  1.68
 #+end_example
+
+
 
 To get annualised returns, use period `=ann='.
 #+INDEX: returns!annualised
@@ -1432,30 +1425,30 @@ returns(zoo(x, t), period = "ann")
 #+END_SRC 
 
 #+RESULTS:
-: 0.0% p.a.   [01 Nov 2014 -- 20 Jan 2015, less than one year]
-: 0.0% p.a.   [01 Nov 2014 -- 20 Jan 2015, less than one year]
+: 8.5%  [01 Nov 2014 -- 20 Jan 2015; less than one year, not annualised]
+: 8.5%  [01 Nov 2014 -- 20 Jan 2015; less than one year, not annualised]
 
-But note that the function did /not/ annualise: it does not annualise
-if the time period is shorter than one year.
+But note that the function did /not/ annualise: it does not
+annualise if the time period is shorter than one year.
 #+BEGIN_SRC R -n :exports both :results output
 x[length(x)]/x[1] - 1
 #+END_SRC 
 
 #+RESULTS:
-: [1] -0.000374
+: [1] 0.0853
 
-To force annualising, add a `=!='. The exclamation mark serves
-as a mnenomic that it is now imperative to annualise.
+To force annualising, add a `=!='. The exclamation mark serves as
+a mnenomic that it is now imperative to annualise.
 #+BEGIN_SRC R -n :exports both :results output
 returns(x, t, period = "ann!")
 #+END_SRC 
 
 #+RESULTS:
-: -0.2% p.a.   [01 Nov 2014 -- 20 Jan 2015, less than one year]
+: 45.3%  [01 Nov 2014 -- 20 Jan 2015; less than one year, but annualised]
 
-There are methods to =toLatex= and =toHTML=
-for monthly returns.  In Sweave documents, you need to use
-=results = tex= and =echo = false= in the chunk options:
+There are methods to =toLatex= and =toHTML= for monthly returns.
+In Sweave documents, you need to use =results = tex= and =echo =
+false= in the chunk options:
 
 #+BEGIN_SRC tex :eval never
 \noindent
@@ -1468,7 +1461,6 @@ toLatex(returns(x, t = t, period = "month"))
 
 ** Rebalanced returns                                             
 
-
 #+BEGIN_SRC R -n :exports none :results output 
 ## TODO simple example: difference holdings, weights
   X <- array(c(100,105,110,100,100,100), dim = c(3,2))
@@ -1480,7 +1472,6 @@ toLatex(returns(x, t = t, period = "month"))
   returns(X %*% position)
   returns(X) %*% w
 #+END_SRC 
-
 
    We can also compute returns from fixed weights and assumptions
    when the portfolio is rebalanced. For instance, we may want to
@@ -1539,17 +1530,13 @@ attr(,"contributions")
 #+end_example
 
 The result is the actual return series plus two additional pieces
-of information.
+of information, stored in attributes.
 
 - holdings :: A matrix whose dimensions correspond to those of
      =x=, and which gives the hypothetical holdings were used to
      compute the returns.
 - contributions :: Another matrix; it procides the return
      contributions of the single assets.
- 
-
-
-
 
 * Backtesting
   :PROPERTIES:
