@@ -1,5 +1,13 @@
 2016-02-19  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/returns.R (pReturns): period 'itd' also handles NA values
+
+	* R/returns.R (print.p_returns): for period 'itd', the timestamps
+	of the observations that were used to compute the returns are
+	printed (same as for 'mtd' and 'ytd')
+
+2016-02-19  Enrico Schumann  <es@enricoschumann.net>
+
         * DESCRIPTION (Version): 0.1-86
 
 	* R/returns.R (returns): period 'mtd' and 'ytd' now handle NA
