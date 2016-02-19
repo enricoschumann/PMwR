@@ -174,10 +174,21 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         attr(ans, "t") <- from.to
         attr(ans, "is.annualised") <- is.ann
     } else if (tolower(period) == "itd") {
-        lx <- length(x)
-        (x[lx]/x[1L]) - 1
+        if (!is.null(pad))
+            warning(sQuote("pad"), " is ignored")
+        ans <- numeric(nc)
+        from.to <- array(NA, dim = c(nc, 2))
+        colnames(from.to) <- c("from", "to")
+        for (j in 1:nc) {
+            xj <- x[ ,j]
+            t0 <- min(which(!is.na(xj)))
+            t1 <- max(which(!is.na(xj)))
+            ans[j] <- drop(returns( xj[c(t0, t1)] ))
+            from.to[j,] <- c(t[t0], t[t1])
+        }
         attr(ans, "period") <- "itd"
-        attr(ans, "t") <- if (is.null(t)) NULL else c(t[1], t[lx])
+        class(from.to) <- "Date"
+        attr(ans, "t") <- from.to
     } else if (tolower(period) == "ytd") {
         ## TODO allow syntax like "ytd!" or "ytd02-15"?
         ## (the latter returns a vector of returns ytd
@@ -340,13 +351,13 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
               !attr(x, "is.annualised")] <-
             "; less than one year, not annualised]"
         cat(paste0(r_str, cal_str, note, collapse = "\n"), "\n")
-    } else if (period == "ytd" || period == "mtd") {
+    } else if (period == "ytd" || period == "mtd" || period == "itd") {
+        r_str <- paste0(format(round(x*100, digits), nsmall = digits), "%  ")
         cal_str <- paste0("[",
                           format(timestamp[,1],"%d %b %Y"), " -- ",
                           format(timestamp[,2],"%d %b %Y"),
                           "]")
-        cat(paste0(format(round(x * 100, digits), nsmall = digits), "%   ",
-                   cal_str), sep = "\n")
+        cat(paste0(r_str, cal_str, collapse = "\n"), "\n")
     } else {
         print(unclass(x))
     }
