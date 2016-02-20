@@ -1,7 +1,7 @@
 #+COMMENT: -*- fill-column: 65; -*-
 #+TITLE: Portfolio Management with R 
 #+AUTHOR: Enrico Schumann
-#+DATE: 18 February 2015
+#+DATE: 20 February 2015
 #+OPTIONS: toc:nil
 #+BIND: org-latex-default-packages-alist nil
 #+BIND: org-use-sub-superscripts {}
@@ -94,7 +94,7 @@
 #+BEGIN_HTML
 <p>
     <a href = "http://enricoschumann.net">Enrico Schumann</a>&nbsp;&nbsp;&nbsp;
-    <time datetime="2016-02-18">18 February 2016</time>&nbsp;&nbsp;&nbsp;
+    <time datetime="2016-02-20">20 February 2016</time>&nbsp;&nbsp;&nbsp;
     <a href = "PMwR.pdf">[PDF]</a>
 </p>
 #+END_HTML
@@ -102,9 +102,9 @@
 #+TOC: headlines 2 
 
 #+BEGIN_SRC R :exports none :results none
-  options(continue = " ", digits = 3, width = 60, useFancyQuotes = FALSE)
-  require("PMwR")
-  require("zoo")
+  options(continue = " ", digits = 3, width = 80, useFancyQuotes = FALSE)
+  require("PMwR", quietly = TRUE)
+  require("zoo", quietly = TRUE, warn.conflicts = FALSE)
 #+END_SRC
 
 * About PMwR
@@ -707,6 +707,11 @@ assets + expenses = liabilities + income + equity
   :CUSTOM_ID: ch:pl
   :END:
 
+In this chapter we will deal with computing profit and loss in
+currency units. If you are interested in computing returns, see
+[[#ch:returns][Computing returns]].
+
+
 ** Simple cases
 
 We have an account, currency is euro. We buy one asset at a price
@@ -1272,49 +1277,102 @@ by it.)
   :CUSTOM_ID: ch:returns
   :END:
 
-The function =returns= computes returns for various types of
-objects. The return of an asset in period /t/ is defined as
+** Simple returns
+
+#+BEGIN_SRC R :exports none :results none
+
+  require(tseries)
+  ## dax  <- get.hist.quote("^GDAXI", start = as.Date("2015-11-1"), quote = "Close")
+  ## rex <- get.hist.quote("^GREXP", start = as.Date("2015-11-1"), quote = "Close")
+
+  data <- fetchTable("daily2", c("de0008469008", "de0008469115"),
+                     "close", from = "2014-1-1", to = "2015-12-31", return.class="zoo")
+
+  dput(data)
+#+END_SRC
+
+The function =returns= computes returns from prices. The function
+computes what are often called simple returns:[fn:3] let $P_t$ be
+the prices in period $t$, then
 \begin{equation} \label{eq:return}
-  r_t = \frac{P_t}{P_{t-1}}-1 = R_t-1\,,
+  r_t = R_t -1 = \frac{P_t}{P_{t-1}}-1 = \frac{P_t-P_{t-1}}{P_{t-1}}\,.
 \end{equation}
-so we always compute simple returns. For computing profit/loss in
-currency units, see [[#ch:pl][Computing profit and (or) loss]].
+For computing profit/loss in currency units, see [[#ch:pl][Computing profit
+and (or) loss]].
 
+Typically, we transform a whole series $P_{t_1}, P_{t_2},
+P_{t_3}, \ldots$ into returns $R_{t_1}, R_{t_2}, R_{t_3},
+\ldots$, which is straightforward it R:
+#+BEGIN_SRC R -n :exports code :results none
+  simple_returns <- function(x) {
+      x[-1L]/x[-length(x)] - 1
+  }
+#+END_SRC
 
-** Numeric vectors and matrices, data frames
-
+So, given a vector of prices -- here, the closing values of the
+DAX, the German stock-market index from 2014-01-02 to
+2014-01-08, it computes returns.
 #+BEGIN_SRC R -n :exports both :results output
-x <- c(100, 102, 101, 100)
-returns(x)
-#+END_SRC 
+  P <- c(9400.04, 9435.15, 9428, 9506.2, 9497.84)
+  simple_returns(P)
+#+END_SRC
 
 #+RESULTS:
-: [1]  0.0200 -0.0098 -0.0099
+: [1]  0.003735 -0.000758  0.008294 -0.000879
 
-To replace the lost intial observation, specify =pad=.
+In fact, using =returns= as provided by PMwR would have given the
+same result.
 #+BEGIN_SRC R -n :exports both :results output
-returns(x, pad = 0)
-returns(x, pad = NA)
-#+END_SRC 
+returns(P)
+#+END_SRC
 
 #+RESULTS:
-: [1]  0.0000  0.0200 -0.0098 -0.0099
-: [1]      NA  0.0200 -0.0098 -0.0099
+: [1]  0.003735 -0.000758  0.008294 -0.000879
 
-When =x= is a matrix or a data.frame, returns are computed
-for each column.
+But =returns= offers more convenience. For instance, it will
+recognise if the input argument has several columns, such as a
+matrix or a dataframe. In such a case, it computes returns for
+each column.
+
 #+BEGIN_SRC R -n :exports both :results output
-X <- cbind(x, x, x)
-returns(X, pad = NA)
-#+END_SRC 
+returns(cbind(P, P))
+#+END_SRC
 
 #+RESULTS:
-:  
-:           x       x       x
-: [1,]      NA      NA      NA
-: [2,]  0.0200  0.0200  0.0200
-: [3,] -0.0098 -0.0098 -0.0098
-: [4,] -0.0099 -0.0099 -0.0099
+:              P         P
+: [1,]  0.003735  0.003735
+: [2,] -0.000758 -0.000758
+: [3,]  0.008294  0.008294
+: [4,] -0.000879 -0.000879
+
+The argument =pad= determines how the initial observation is
+handled. The default, =NULL=, means that the first observation is
+dropped. It is often useful to use =NA= instead, since in this
+way the returns series keeps the same length as the original
+price series.
+
+#+BEGIN_SRC R -n :exports both :results output
+data.frame(price = P, returns = returns(P, pad = NA))
+#+END_SRC
+
+#+RESULTS:
+:   price   returns
+: 1  9400        NA
+: 2  9435  0.003735
+: 3  9428 -0.000758
+: 4  9506  0.008294
+: 5  9498 -0.000879
+
+Setting =pad= to 0 can also be useful, because then it is easy to
+`rebuild' the original series with =cumprod=. (But see [[#ch:scale][Scaling
+series]] for a description of the function =scale1=, which is even
+more convenient.)
+#+BEGIN_SRC R -n :exports both :results output
+  all.equal(P, P[1] * cumprod(1 + returns(P, pad = 0)))
+#+END_SRC
+
+#+RESULTS:
+: [1] TRUE
 
 =returns= is a generic function, which goes along with some
 overhead. If you need to compute returns on simple data
@@ -1322,62 +1380,182 @@ structures as in the examples above and need fast computation,
 then you may also use =.returns=. This function is the actual
 workhorse that performs the raw returns calculation.
 
-** =zoo= objects
-
-=returns= has a method for =zoo= objects.
+Besides  methods for numeric vectors and dataframes, the function
+also understands =zoo= objects.
 #+INDEX: zoo
 
 #+BEGIN_SRC R -n :exports both :results output
-  require("zoo", quietly = TRUE, warn.conflicts = FALSE)
-  z <- zoo(x, as.Date("2015-1-5") + 0:2)
-  returns(z)
-  returns(z, pad = NA)
+  dax <- zoo(P, as.Date(c("2014-01-02", "2014-01-03",
+                        "2014-01-06", "2014-01-07", "2014-01-08")))
+  returns(dax, pad = NA)
 #+END_SRC 
 
 #+RESULTS:
-: 2015-01-06 2015-01-07 
-:     0.0200    -0.0098
-: 2015-01-05 2015-01-06 2015-01-07 
-:         NA     0.0200    -0.0098
+: 2014-01-02 2014-01-03 2014-01-06 2014-01-07 2014-01-08 
+:         NA   0.003735  -0.000758   0.008294  -0.000879
 
 
 Matrices work as well.
 #+BEGIN_SRC R -n :exports both :results output
-z <- zoo(X, as.Date("2015-1-5") + 0:2)
-returns(z)
-returns(z, pad = 0)
+  rex <- zoo(c(440.5252, 440.7944, 441.5456, 441.8197, 441.7619),
+             as.Date(c("2014-01-02", "2014-01-03", "2014-01-06",
+                       "2014-01-07", "2014-01-08")))
+
+  returns(cbind(DAX = dax, REXP = rex))
 #+END_SRC 
 
 #+RESULTS:
-:  
-:                 x       x       x
-: 2015-01-06  0.0200  0.0200  0.0200
-: 2015-01-07 -0.0098 -0.0098 -0.0098
-:  
-:                 x       x       x
-: 2015-01-05  0.0000  0.0000  0.0000
-: 2015-01-06  0.0200  0.0200  0.0200
-: 2015-01-07 -0.0098 -0.0098 -0.0098
+:                  DAX      REXP
+: 2014-01-03  0.003735  0.000611
+: 2014-01-06 -0.000758  0.001704
+: 2014-01-07  0.008294  0.000621
+: 2014-01-08 -0.000879 -0.000131
 
+In fact, =zoo= objects bring another piece of information --
+timestamps --, which =returns= can use.
 
 ** Period returns
+
+#+BEGIN_SRC R :exports none :results none
+  data <- fetchTable("daily2", c("de0008469008", "de0008469115"),
+                       "close", from = "2014-1-1", to = "2015-12-31", return.class="zoo")
+
+  dax  <- data[,1]
+  rex  <- data[,2]
+  x  <- coredata(dax)
+  t <- index(dax)
+  z <- coredata(rex)
+#+END_SRC
 
 #+INDEX: returns!for calendar period
 #+INDEX: returns!monthly
 When a timestamp is available, =returns= can compute returns for
-specific calendar periods. The result is a vector of returns with
-attributes and class =p_returns=. Most useful is a =print=
-method.
+specific calendar periods. As an example, we look at the daily
+DAX levels in 2014 and 2015. The prices are stored in =x=; the
+timestamps are stored in =t=.
+
 #+BEGIN_SRC R -n :exports both :results output
-t <- as.Date("2014-11-1") + 0:80
-x <- cumprod(1 + rnorm(length(t), sd = 0.01))
+head(x)
+#+END_SRC 
+
+#+RESULTS:
+: [1] 9400 9435 9428 9506 9498 9422
+
+#+BEGIN_SRC R -n :exports both :results output
+head(t)
+#+END_SRC 
+
+#+RESULTS:
+: [1] "2014-01-02" "2014-01-03" "2014-01-06" "2014-01-07"
+: [5] "2014-01-08" "2014-01-09"
+
+#+BEGIN_SRC R -n :exports both :results output
+t <- index(dax)
+x <- coredata(dax)
 returns(x, t = t, period = "month")
 #+END_SRC 
 
 #+RESULTS:
-:      Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov  Dec  YTD
-: 2014                                         4.5 -5.0 -0.7
-: 2015 7.7                                               7.7
+:  
+:       Jan Feb  Mar  Apr  May  Jun  Jul  Aug  Sep  Oct Nov  Dec YTD
+: 2014 -1.0 4.1 -1.4  0.5  3.5 -1.1 -4.3  0.7  0.0 -1.6 7.0 -1.8 4.3
+: 2015  9.1 6.6  5.0 -4.3 -0.4 -4.1  3.3 -9.3 -5.8 12.3 4.9 -5.6 9.6
+
+If you  work with a =zoo= series, you can omit the timestamp =t=.
+
+#+BEGIN_SRC R -n :exports both :results output
+z <- zoo(x, t)
+returns(z, period = "month")
+#+END_SRC 
+
+#+RESULTS:
+:       Jan Feb  Mar  Apr  May  Jun  Jul  Aug  Sep  Oct Nov  Dec YTD
+: 2014 -1.0 4.1 -1.4  0.5  3.5 -1.1 -4.3  0.7  0.0 -1.6 7.0 -1.8 4.3
+: 2015  9.1 6.6  5.0 -4.3 -0.4 -4.1  3.3 -9.3 -5.8 12.3 4.9 -5.6 9.6
+
+The result of the function call is actually vector of returns;
+additional information is added through attributes. There is also
+a class attribute =p_returns=. The advantage of such a data
+structure is that it is `natural' to compute with the returns,
+such as in 
+#+BEGIN_SRC R -n :exports both :results output
+range(returns(z, period = "month"))
+#+END_SRC 
+
+#+RESULTS:
+: [1] -0.0928  0.1232
+
+Most useful, however, is probably the =print= method, whose
+results you have seen above.
+
+We may also compute monthly returns for matrices. But now the
+=print= method will behave differently. Suppose we also have
+prices for the REXP, a German government bond index, stored in a
+vector =z=.
+
+#+BEGIN_SRC R -n :exports both :results output
+head(z)
+#+END_SRC 
+
+#+RESULTS:
+: [1] 441 441 442 442 442 441
+
+The function's assumption is that now it would be more convenient
+to print the returns aligned by date in a table.
+
+#+BEGIN_SRC R -n :exports both :results output
+returns(cbind(DAX = x, REXP = z), t = t, period = "month")
+#+END_SRC 
+
+#+RESULTS:
+#+begin_example
+            DAX   REXP
+2014-01-31  -1.0   1.8
+2014-02-28   4.1   0.4
+2014-03-31  -1.4   0.1
+2014-04-30   0.5   0.3
+2014-05-30   3.5   0.9
+2014-06-30  -1.1   0.4
+2014-07-31  -4.3   0.4
+2014-08-29   0.7   1.0
+2014-09-30   0.0  -0.1
+2014-10-31  -1.6   0.1
+2014-11-28   7.0   0.4
+2014-12-30  -1.8   1.0
+2015-01-30   9.1   0.3
+2015-02-27   6.6   0.1
+2015-03-31   5.0   0.3
+2015-04-30  -4.3  -0.5
+2015-05-29  -0.4  -0.2
+2015-06-30  -4.1  -0.8
+2015-07-31   3.3   0.7
+2015-08-31  -9.3   0.0
+2015-09-30  -5.8   0.4
+2015-10-30  12.3   0.4
+2015-11-30   4.9   0.3
+2015-12-30  -5.6  -0.6
+#+end_example
+
+If you rather wanted the other display, just call the function
+separately for each series.
+
+#+BEGIN_SRC R -n :exports both :results output
+lapply(list(DAX = x, REXP = z), returns, t = t, period = "month")
+#+END_SRC 
+
+#+RESULTS:
+: $DAX
+:       Jan Feb  Mar  Apr  May  Jun  Jul  Aug  Sep  Oct Nov  Dec YTD
+: 2014 -1.0 4.1 -1.4  0.5  3.5 -1.1 -4.3  0.7  0.0 -1.6 7.0 -1.8 4.3
+: 2015  9.1 6.6  5.0 -4.3 -0.4 -4.1  3.3 -9.3 -5.8 12.3 4.9 -5.6 9.6
+: 
+: $REXP
+:      Jan Feb Mar  Apr  May  Jun Jul Aug  Sep Oct Nov  Dec YTD
+: 2014 1.8 0.4 0.1  0.3  0.9  0.4 0.4 1.0 -0.1 0.1 0.4  1.0 7.1
+: 2015 0.3 0.1 0.3 -0.5 -0.2 -0.8 0.7 0.0  0.4 0.4 0.3 -0.6 0.5
+
+
+You can also compute yearly returns.
 
 #+INDEX: returns!yearly
 
@@ -1387,69 +1565,72 @@ returns(x, t = t, period = "year")
 
 #+RESULTS:
 : 2014 2015 
-: -0.7  7.7
+:  4.3  9.6
 
 See =?print.preturns= for more display options. For instance:
 #+BEGIN_SRC R -n :exports both :results output
-print(returns(zoo(x, t), period = "month"), 
-      digits = 2, year.rows = FALSE)
+  print(returns(zoo(x, t), period = "month"), 
+        digits = 2, year.rows = FALSE, plus = TRUE,
+        month.names = 1:12)
 #+END_SRC 
 
 #+RESULTS:
 #+begin_example
-      2014  2015
-Jan         1.68
-Feb             
-Mar             
-Apr             
-May             
-Jun             
-Jul             
-Aug             
-Sep             
-Oct             
-Nov   7.55      
-Dec  -0.75      
-YTD   6.74  1.68
+      2014    2015
+1    -1.00   +9.06
+2    +4.14   +6.61
+3    -1.40   +4.95
+4    +0.50   -4.28
+5    +3.54   -0.35
+6    -1.11   -4.11
+7    -4.33   +3.33
+8    +0.67   -9.28
+9    +0.04   -5.84
+10   -1.56  +12.32
+11   +7.01   +4.90
+12   -1.76   -5.62
+YTD  +4.31   +9.56
 #+end_example
 
 
-
-To get annualised returns, use period `=ann='.
+To get annualised returns, use period =ann= (or actually any
+string that the regular expression =^ann= matches; case is
+ignored).
 #+INDEX: returns!annualised
 #+INDEX: annualised returns
 #+BEGIN_SRC R -n :exports both :results output
-returns(x, t = t,  period = "ann")
 returns(zoo(x, t), period = "ann")
 #+END_SRC 
 
 #+RESULTS:
-: 8.5%  [01 Nov 2014 -- 20 Jan 2015; less than one year, not annualised]
-: 8.5%  [01 Nov 2014 -- 20 Jan 2015; less than one year, not annualised]
+: 6.9%  [02 Jan 2014 -- 30 Dec 2015]
 
-But note that the function did /not/ annualise: it does not
-annualise if the time period is shorter than one year.
+Now let us try a shorter period.
 #+BEGIN_SRC R -n :exports both :results output
-x[length(x)]/x[1] - 1
+returns(window(zoo(x, t), end = as.Date("2014-1-31")), period = "ann")
 #+END_SRC 
 
 #+RESULTS:
-: [1] 0.0853
+: -1.0%  [02 Jan 2014 -- 31 Jan 2014; less than one year, not annualised]
 
-To force annualising, add a `=!='. The exclamation mark serves as
+The function did /not/ annualise: it does not annualise if the
+time period is shorter than one year. (You can see the monthly
+return for January 2014 in the tables above.)
+
+To force annualising, add a =!=. The exclamation mark serves as
 a mnenomic that it is now imperative to annualise.
 #+BEGIN_SRC R -n :exports both :results output
-returns(x, t, period = "ann!")
+returns(window(zoo(x, t), end = as.Date("2014-1-31")), period = "ann!")
 #+END_SRC 
 
 #+RESULTS:
-: 45.3%  [01 Nov 2014 -- 20 Jan 2015; less than one year, but annualised]
+: -11.8%  [02 Jan 2014 -- 31 Jan 2014; less than one year, but annualised]
 
 There are methods to =toLatex= and =toHTML= for monthly returns.
 In Sweave documents, you need to use =results = tex= and =echo =
 false= in the chunk options:
 
-#+BEGIN_SRC tex :eval never
+#+BEGIN_SRC tex :eval never :noweb no
 \noindent
 \begin{tabular}{rrrrrrrrrrrrrr}
 <<results=tex,echo=false>>=
@@ -1457,30 +1638,22 @@ toLatex(returns(x, t = t, period = "month"))
 \end{tabular}
 #+END_SRC
 
+There are also several other periods, such as month-to-date
+(=mtd=), year-to-date (=ytd=) or inception-to-date (=itd=). The
+help page of =returns= lists all options.
+
 
 ** Rebalanced returns                                             
 
-#+BEGIN_SRC R -n :exports none :results output 
-## TODO simple example: difference holdings, weights
-  X <- array(c(100,105,110,100,100,100), dim = c(3,2))
-
-  w <- c(0.5,0.5)
-  budget <- 1
-  position <- budget/X[1,]*w
-
-  returns(X %*% position)
-  returns(X) %*% w
-#+END_SRC 
-
    We can also compute returns from fixed weights and assumptions
    when the portfolio is rebalanced. For instance, we may want to
-   see how a constant allocation [0.1, 0.5, 0.4] to three funds
+   see how a constant allocation $[0.1, 0.5, 0.4]$ to three funds
    would have done, assuming that a portfolio is rebalanced once
    a month.
 
    If more detail is necessary, then =btest= can be used; see
-   [[#ch:backtesting][Backtesting]]. But the simple case can be done with
-   =returns= already. Here is an example.
+   [[#ch:backtesting][Backtesting]]. But the simple case can be done with =returns=
+   already. Here is an example.
 
 #+BEGIN_SRC R -n :exports both :results output 
   prices <- c(100, 102, 104, 104, 104.5,
@@ -1500,7 +1673,7 @@ toLatex(returns(x, t = t, period = "month"))
 : [4,]  104  2.3  3.2
 : [5,]  104  2.5  3.1
 
-Now suppose we want a constant weight vector, [0.2, 0.5, 0.3],
+Now suppose we want a constant weight vector, $[0.1, 0.5, 0.4]$,
 but only rebalance at times 1 and 4.
 
 #+BEGIN_SRC R -n :exports both :results output 
@@ -1511,7 +1684,8 @@ but only rebalance at times 1 and 4.
 
 #+RESULTS:
 #+begin_example
-  [1] -0.00514  0.06376 -0.01282  0.03146
+[1] -0.00514  0.06376 -0.01282  0.03146
+
 attr(,"holdings")
       [,1]  [,2]  [,3]
 [1,] 0.001 0.250 0.114
@@ -1519,6 +1693,7 @@ attr(,"holdings")
 [3,] 0.001 0.250 0.114
 [4,] 0.001 0.227 0.131
 [5,] 0.001 0.227 0.131
+
 attr(,"contributions")
          [,1]    [,2]    [,3]
 [1,] 0.000000  0.0000  0.0000
@@ -1528,14 +1703,15 @@ attr(,"contributions")
 [5,] 0.000481  0.0435 -0.0125
 #+end_example
 
-The result is the actual return series plus two additional pieces
-of information, stored in attributes.
+The result is the return series plus two additional pieces of
+information, stored in attributes.
 
 - holdings :: A matrix whose dimensions correspond to those of
      =x=, and which gives the hypothetical holdings were used to
      compute the returns.
 - contributions :: Another matrix; it procides the return
      contributions of the single assets.
+
 
 * Backtesting
   :PROPERTIES:
@@ -3428,6 +3604,9 @@ values[tmp$map(moretimes)$ix]
 
 
 * Scaling series
+  :PROPERTIES:
+  :CUSTOM_ID: ch:scale
+  :END:
 
 The function =scale1= rescales time-series.  It is a generic function;
 currently there are methods for numeric vectors and for =zoo= objects.
@@ -3654,6 +3833,8 @@ loaded via a namespace (and not attached):
 
 
 * Footnotes
+
+[fn:3] The function never computes logarithmic returns.
 
 [fn:1] This notation is inspired by the syntax of =ledger=
   files. See [[http://www.ledger-cli.org/]] .
