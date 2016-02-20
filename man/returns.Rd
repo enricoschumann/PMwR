@@ -167,14 +167,7 @@ returns(x, t = t, period = "month")
 returns(x, t = t, period = "month", complete.first = FALSE)
 
 ### formatting
-    ## .mtab(x)
-    ## .mtab(x, plus = TRUE)
-    ## .mtab(x, zero.print = "_____")
-    ## .mtab(x, zero.print = "_____", plus = TRUE)
-    ## .mtab(x, month.names = LETTERS[1:12], ytd = "Z")
-    ## .mtab(x, digits = 0)
-    ## .mtab(x, digits = 0, zero.print = "___")
-
+print(returns(x, t = t, period = "month"), plus = TRUE, digits = 0)
 
 ## returns per year (annualised returns)
 returns(x, t = t, period = "ann")  ## less than one year, not annualised
@@ -185,8 +178,5 @@ is.ann <- function(x)
 
 is.ann(returns(x, t = t, period = "ann"))   ## FALSE
 is.ann(returns(x, t = t, period = "ann!"))  ## TRUE
-
-
-
 
 }
