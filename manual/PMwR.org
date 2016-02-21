@@ -1,7 +1,7 @@
 #+COMMENT: -*- fill-column: 65; -*-
 #+TITLE: Portfolio Management with R 
 #+AUTHOR: Enrico Schumann
-#+DATE: 20 February 2016
+#+DATE: 21 February 2016
 #+OPTIONS: toc:nil
 #+BIND: org-latex-default-packages-alist nil
 #+BIND: org-use-sub-superscripts {}
@@ -94,7 +94,7 @@
 #+BEGIN_HTML
 <p>
     <a href = "http://enricoschumann.net">Enrico Schumann</a>&nbsp;&nbsp;&nbsp;
-    <time datetime="2016-02-20">20 February 2016</time>&nbsp;&nbsp;&nbsp;
+    <time datetime="2016-02-21">21 February 2016</time>&nbsp;&nbsp;&nbsp;
     <a href = "PMwR.pdf">[PDF]</a>
 </p>
 #+END_HTML
@@ -132,12 +132,12 @@ install.packages("PMwR",
                  type  = "source")
 #+END_SRC
 
-to download and install it. The package depends on several other
-packages, which can be obtained from the same repository.
+  to download and install it. The package depends on several other
+  packages, which can be obtained from the same repository.
 
-(There is currently no automatic build for Windows. If you wish
-to use the package on Windows and have problems building it, then
-please contact me and I will provide you with a Windows version.)
+  (There is currently no automatic build for Windows. If you wish
+  to use the package on Windows and have problems building it, then
+  please contact me and I will provide you with a Windows version.)
 
 
 * Using R in portfolio management -- Two examples                  :noexport:
@@ -254,18 +254,20 @@ The following classes are implicitly defined (ie, =S3= classes):
 
 #+INDEX: journal!definition
 
-  Many computations that the PMwR package provides are based on
-  lists of transactions. Conceptually, you can think of such
-  lists as dataframes, but PMwR provides an =S3= class =journal=
-  for handling them.
+  The ultimate basis of many financial computations are lists of
+  transactions. And so many of the tools that the PMwR package
+  provides take lists of transactions as input. 
 
-  A =journal= is a list of atomic vectors with a class
-  attribute. Such a list is created through the function
-  =journal=. Methods should not rely on this list being sorted in
-  any particular way: components of a journal should always be
-  retrieved by name, never by position. (In this respect a
-  journal differs from a dataframe, for which we can meaningfully
-  refer to the /n/-th column.)
+  Conceptually, you can think of such lists as dataframes, but
+  PMwR provides an =S3= class =journal= for handling them.
+
+  A =journal= is a list of atomic vectors, to which a class
+  attribute is attached. Such a list is created through the
+  function =journal=. Methods should not rely on this list being
+  sorted in any particular way: components of a journal should
+  always be retrieved by name, never by position. (In this
+  respect a journal differs from a dataframe, for which we can
+  meaningfully refer to the /n/-th column.)
   #+INDEX: journal!comparison with dataframe
   I will call these journal components, such as =amount= or
   =timestamp=, fields.
@@ -277,42 +279,45 @@ The following classes are implicitly defined (ie, =S3= classes):
 
   What is actually stored in a =journal= is up to the user. A
   number of fields are, however, required for certain operations
-  and should always be present:
+  and so it is recommended that they be present:
 
-- =amount= :: the notional amount that is transacted
+- =amount= :: The notional amount that is transacted.
 
-- =timestamp= :: numeric or character vector; should typically be
-     sortable
+- =timestamp= :: When did the transaction take place? A numeric
+     or character vector; should typically be sortable.
 
-- =price= :: well, price
+- =price= :: Well, price.
 
-- =instrument= :: description of the financial instrument;
-     typically an identifier, a.k.a. ticker or symbol
+- =instrument= :: Description of the financial instrument;
+     typically an identifier, a.k.a. ticker or symbol. That is, a
+     string, not really a more complex object (recall that
+     journals are lists of atomic vectors).
 
-- =id= :: (possibly but not necessarily unique) transaction
-     identifier
+- =id= ::  A (possibly but not necessarily unique) transaction
+     identifier.
 
-- =account= :: description of the account
+- =account= :: Description of the account.
 
 - =...= :: other fields. They must be named, as in =fees = c(1,2,1)=
 
-All fields can be completely missing, except =amount=. Missing fields
-will be `added back' as =NA= with the exception of =id= and =account=,
-which will be =NULL=. (Note that =amount= could be a vector with only
-=NA= values in it; but =amount= cannot be left out when the journal is
-created. This will become clearer with the examples below.)
+All fields except =amount= can be missing. Such missing values
+will be `added back' as =NA= with the exception of =id= and
+=account=, which will be =NULL=. (Note that =amount= could be a
+vector with only =NA= values in it, but =amount= cannot be left
+out when the journal is created. This will become clearer with
+the examples below.)
 
-Transactions in a journal can be organised in hierachies, such as
-#+BEGIN_EXAMPLE
-<account> => <instrument>
-#+END_EXAMPLE
-even though currently no functions use this hierarchy. A simple scheme
-is to use specific characters or a pattern such as =::= to introduce
-hierarchies into accounts,[fn:1] such as
+Transactions in a journal can conceptually be organised in
+hierachies, such as /account/ => /instrument/. (You may have
+traded stock XY for several different accounts, or as part of
+different strategies.)
+
+Even though, currently no functions use this hierarchy. A simple
+scheme is to use specific characters or a pattern such as =::= to
+introduce hierarchies into accounts,[fn:1] such as
 #+BEGIN_EXAMPLE
 pension::equities
 #+END_EXAMPLE
-
 
 ** Creating and combining journals
 
@@ -320,25 +325,21 @@ The function =journal= creates journal objects. For details about
 the function and methods for =journal= objects, see =?journal=.
 @@latex:\index{journal@\texttt{journal} (function)}@@
 
-
 At is very minimum, a journal must contain amounts of something.
 #+BEGIN_SRC R -n :exports both :results value output
-  amount <- c(1, 2, -2, 3)
-  jnl <- journal(amount = amount)
+  jnl <- journal(amount = c(1, 2, -2, 3))
   jnl
 #+END_SRC
 
 #+RESULTS:
-:    amount
+:  
+:   amount
 : 1       1
 : 2       2
 : 3      -2
 : 4       3
 : 
 : 4 transactions
-
-
-
 
 Actually, that is not true. On occasion it is useful to create an empty
 journal, one with no entries at all. You can do this by saying
@@ -350,7 +351,7 @@ journal()
 : no transactions
 
 To see the current balance, which is nothing more than the sum
-over all amounts, we can use =position=.
+over all amounts, you can use =position=.
 #+BEGIN_SRC R -n :exports both :results output
   position(jnl)
 #+END_SRC
@@ -364,98 +365,59 @@ track of positions, true; but a [[https://en.wikipedia.org/wiki/General_journal]
 information, that is, flows. (As opposed to a [[https://en.wikipedia.org/wiki/Ledger][ledger]], which gives you
 positions, or stocks.)
 
-When the amounts are actually sorted in time -- though nothing in the
-data structure that we created above could make sure they are --, then
-we can at least track positions over time.
+When you make sure that the amounts are actually sorted in time,
+then you can at least track positions over time. (But nothing in
+the data structure that we created above could make sure that
+transactions really are sorted.)
 
 Suppose you wanted to note how many bottles of milk and wine you have
 stored in your basement. Whenever you add to your storage, you have a
 positive amount; whenever you retrieve bottles, you have a negative
-amount.
+amount. Then, by keeping track of transactions, you may not have
+to take stock (apart, perhaps, from occasional checking that you
+did not miss a transaction), as long as you keep track of what
+you put into your cellar and what you take out. 
 
-#+name: tab_wine
-| what | amount |
-|------+--------|
-| wine |     +1 |
-| wine |     +4 |
-| milk |     +1 |
-| wine |     -2 |
-| milk |     -1 |
-| milk |     +1 |
-| milk |     -1 |
-| milk |     +1 |
-| wine |     -1 |
+There may be some analyses you can do on flows alone (without any
+information): perhaps checking your drinking habits for patterns,
+such as slow accumulation of wine, followed by rapid consumption;
+or the other way around.
 
-#+BEGIN_SRC R :var jnl=tab_wine :results code :exports none
-  ##jnl <- as.journal(jnl)
-  jnl <- as.journal(jnl)
-  capture.output(dput(jnl))
-#+END_SRC
-
-#+RESULTS:
-#+BEGIN_SRC R
-structure(list(instrument = c(NA_character_, NA_character_, NA_character_, 
-NA_character_, NA_character_, NA_character_, NA_character_, NA_character_, 
-NA_character_), timestamp = c(NA, NA, NA, NA, NA, NA, NA, NA, 
-NA), amount = c(1L, 4L, 1L, -2L, -1L, 1L, -1L, 1L, -1L), price = c(NA, 
-NA, NA, NA, NA, NA, NA, NA, NA), what = c("wine", "wine", "milk", 
-"wine", "milk", "milk", "milk", "milk", "wine")), .Names = c("instrument", 
-"timestamp", "amount", "price", "what"), class = "journal")
-#+END_SRC
-
-
-The journal would look like this.
-
-#+BEGIN_SRC R :results output :exports both :colnames yes
-jnl
-#+END_SRC
-
-#+RESULTS:
-#+begin_example
-   amount  what
-1       1  wine
-2       4  wine
-3       1  milk
-4      -2  wine
-5      -1  milk
-6       1  milk
-7      -1  milk
-8       1  milk
-9      -1  wine
-
-9 transactions
-#+end_example
-
-You could check your drinking habits for patterns, such as slow
-accumulation of wine, followed by rapid consumption; or the other
-way around. But perhaps we better switch to a financial example.
+But typically, the more information you store about transactions
+(when, what, at what price, etc.), the better. Journals allow you
+to store such information. To show how they are used, let us
+switch to a financial example.
 
 #+BEGIN_SRC R -n :exports both :results output
   (J <- journal(timestamp  = as.Date("2012-01-01") + 0:3, 
                 amount     = c(1, 2, -2, 5),
-                instrument = c("EUR", "EUR", "CHF", "CHF")))
+                instrument = c("EUR", "EUR", "CHF", "CHF"),
+                comment    = c("initial balance", "", "transfer", "")))
 #+END_SRC
 
 #+RESULTS:
-:      instrument   timestamp  amount
-: 1         EUR  2012-01-01       1
-: 2         EUR  2012-01-02       2
-: 3         CHF  2012-01-03      -2
-: 4         CHF  2012-01-04       5
+:    instrument   timestamp  amount          comment
+: 1         EUR  2012-01-01       1  initial balance
+: 2         EUR  2012-01-02       2                 
+: 3         CHF  2012-01-03      -2         transfer
+: 4         CHF  2012-01-04       5                 
 : 
 : 4 transactions
 
-A =print= method defines how to display a journal. See
-=?print.journal= for details.
+A =print= method defines how a journal is displayed. See
+=?print.journal= for details. (In general, you can always get
+help for methods for generic functions by saying
+=?function_name.journal=, e.g. =?print.journal= or
+=?as.data.frame.journal=.)
 #+INDEX: journal!print journals (print method)
 #+BEGIN_SRC R -n :exports both :results output
 print(J, max.print = 2, exclude = "instrument")
 #+END_SRC
 
 #+RESULTS:
-:     timestamp  amount
-: 1  2012-01-01       1
-: 2  2012-01-02       2
+:     timestamp  amount          comment
+: 1  2012-01-01       1  initial balance
+: 2  2012-01-02       2                 
 : [ .... ]
 : 
 : 4 transactions
@@ -465,22 +427,63 @@ Journals can be combined with =c=.
 #+INDEX: journal!combining journals
 #+BEGIN_SRC R -n :exports both :results output
 J2 <- J
-J2$fees <- rep(1,4)
+J2$fees <- rep(0.1,4)
 c(J, J2)
 #+END_SRC
 
 #+RESULTS:
 #+begin_example
- 
-  instrument   timestamp  amount  fees
-1         EUR  2012-01-01       1    NA
-2         EUR  2012-01-02       2    NA
-3         CHF  2012-01-03      -2    NA
-4         CHF  2012-01-04       5    NA
-5         EUR  2012-01-01       1     1
-6         EUR  2012-01-02       2     1
-7         CHF  2012-01-03      -2     1
-8         CHF  2012-01-04       5     1
+   instrument   timestamp  amount          comment  fees
+1         EUR  2012-01-01       1  initial balance    NA
+2         EUR  2012-01-02       2                     NA
+3         CHF  2012-01-03      -2         transfer    NA
+4         CHF  2012-01-04       5                     NA
+5         EUR  2012-01-01       1  initial balance   0.1
+6         EUR  2012-01-02       2                    0.1
+7         CHF  2012-01-03      -2         transfer   0.1
+8         CHF  2012-01-04       5                    0.1
+
+8 transactions
+#+end_example
+
+
+But we wanted the combined journal sorted by date.
+#+INDEX: journal!sorting journals
+#+BEGIN_SRC R -n :exports both :results output
+sort(c(J, J2))
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+   instrument   timestamp  amount          comment  fees
+1         EUR  2012-01-01       1  initial balance    NA
+2         EUR  2012-01-01       1  initial balance   0.1
+3         EUR  2012-01-02       2                     NA
+4         EUR  2012-01-02       2                    0.1
+5         CHF  2012-01-03      -2         transfer    NA
+6         CHF  2012-01-03      -2         transfer   0.1
+7         CHF  2012-01-04       5                     NA
+8         CHF  2012-01-04       5                    0.1
+
+8 transactions
+#+end_example
+
+We can also sort by some other field, such as amount.
+#+BEGIN_SRC R -n :exports both :results output
+sort(c(J, J2), by = "amount", decreasing = TRUE)
+#+END_SRC
+
+#+RESULTS:
+#+begin_example
+   instrument   timestamp  amount          comment  fees
+1         CHF  2012-01-04       5                     NA
+2         CHF  2012-01-04       5                    0.1
+3         EUR  2012-01-02       2                     NA
+4         EUR  2012-01-02       2                    0.1
+5         EUR  2012-01-01       1  initial balance    NA
+6         EUR  2012-01-01       1  initial balance   0.1
+7         CHF  2012-01-03      -2         transfer    NA
+8         CHF  2012-01-03      -2         transfer   0.1
 
 8 transactions
 #+end_example
@@ -496,9 +499,9 @@ subset(J, amount > 1)
 #+END_SRC
 
 #+RESULTS:
-:    instrument   timestamp  amount
-: 1         EUR  2012-01-02       2
-: 2         CHF  2012-01-04       5
+:    instrument   timestamp  amount  comment
+: 1         EUR  2012-01-02       2         
+: 2         CHF  2012-01-04       5         
 : 
 : 2 transactions
 
@@ -524,11 +527,11 @@ J
 #+END_SRC 
 
 #+RESULTS:
-:    instrument   timestamp  amount
-: 1         EUR  2012-01-01       1
-: 2         EUR  2012-01-02       2
-: 3         CHF  2012-01-03      -2
-: 4         CHF  2012-01-04       8
+:    instrument   timestamp  amount          comment
+: 1         EUR  2012-01-01       1  initial balance
+: 2         EUR  2012-01-02       2                 
+: 3         CHF  2012-01-03      -2         transfer
+: 4         CHF  2012-01-04       8                 
 : 
 : 4 transactions
 
@@ -539,9 +542,9 @@ J[2:3]
 #+END_SRC 
 
 #+RESULTS:
-:    instrument   timestamp  amount
-: 1         EUR  2012-01-02       2
-: 2         CHF  2012-01-03      -2
+:    instrument   timestamp  amount   comment
+: 1         EUR  2012-01-02       2          
+: 2         CHF  2012-01-03      -2  transfer
 : 
 : 2 transactions
 
@@ -550,8 +553,8 @@ J[J$amount < 0]
 #+END_SRC 
 
 #+RESULTS:
-:    instrument   timestamp  amount
-: 1         CHF  2012-01-03      -2
+:    instrument   timestamp  amount   comment
+: 1         CHF  2012-01-03      -2  transfer
 : 
 : 1 transaction
 
@@ -564,52 +567,46 @@ J["eur"]
 #+END_SRC 
 
 #+RESULTS:
-:    instrument   timestamp  amount
-: 1         EUR  2012-01-01       1
-: 2         EUR  2012-01-02       2
+:    instrument   timestamp  amount          comment
+: 1         EUR  2012-01-01       1  initial balance
+: 2         EUR  2012-01-02       2                 
 : 
 : 2 transactions
 
 By default, case is ignored, but you can set =ignore.case= to
-=FALSE=.  You can also specify the fields to match the string
-against.
+=FALSE=.
 #+BEGIN_SRC R -n :exports both :results output
-J["eur", ignore.case = FALSE]
+J["Transfer"]
+#+END_SRC 
+
+#+RESULTS:
+:    instrument   timestamp  amount   comment
+: 1         CHF  2012-01-03      -2  transfer
+: 
+: 1 transaction
+
+
+#+BEGIN_SRC R -n :exports both :results output
+J["Transfer", ignore.case = FALSE]
 #+END_SRC 
 
 #+RESULTS:
 : no transactions
 
+You can also specify the fields to match the string against.
 #+BEGIN_SRC R -n :exports both :results output
-J["eur", ignore.case = TRUE]
+J["Transfer", match.against = "instrument"]
 #+END_SRC 
 
 #+RESULTS:
-:    instrument   timestamp  amount
-: 1         EUR  2012-01-01       1
-: 2         EUR  2012-01-02       2
-: 
-: 2 transactions
-
-#+BEGIN_SRC R -n :exports both :results output
-J$comment <- c("", "", "EUR", "EUR")
-J["eur", match.against = "comment"]
-#+END_SRC 
-
-#+RESULTS:
-:    instrument   timestamp  amount  comment
-: 1         CHF  2012-01-03      -2      EUR
-: 2         CHF  2012-01-04       8      EUR
-: 
-: 2 transactions
+: no transactions
 
 
 ** Computing balances
 
-As already mentioned, the function =position= gives the current
-balance of all instruments.
-@@latex:\index{position@\texttt{position} (function)}@@
-
+The function =position= gives the current balance of all
+instruments.  @@latex:\index{position@\texttt{position}
+(function)}@@
 
 #+BEGIN_SRC R -n :exports both :results output
 position(J)
@@ -630,7 +627,8 @@ position(J, when = as.Date("2012-01-03"))
 : CHF         -2
 : EUR          3
 
-If you don't like that view, consider splitting the journal.
+If you do not like such a tabular view, consider splitting the
+journal.
 #+INDEX: journal!splitting
 #+BEGIN_SRC R -n :exports both :results output
 lapply(split(J, J$instrument), 
@@ -638,7 +636,7 @@ lapply(split(J, J$instrument),
 #+END_SRC 
 
 #+RESULTS:
-:  $CHF
+: $CHF
 :     2012-01-03
 : CHF         -2
 : 
@@ -646,10 +644,9 @@ lapply(split(J, J$instrument),
 :     2012-01-03
 : EUR          3
 
-
-To get a time series of positions, you can use specific keywords for
-=when=: =all= will print the position at all timestamps in the
-journal.
+To get a time series of positions, you can use specific keywords
+for =when=: =all= will print the position at all timestamps in
+the journal.
 #+BEGIN_SRC R -n :exports both :results output
 position(J, when = "all")
 #+END_SRC
@@ -680,14 +677,6 @@ position(J, when = seq(from = as.Date("2011-12-30"),
 : 2012-01-06   6   3
 
 
-
-#+BEGIN_SRC sh :results output :exports none
-  notify-send "Chapter 1" "Finished"
-#+END_SRC
-
-#+RESULTS:
-
-
 ** Appendix: Tutorials                                             :noexport:
 
 *** Double-entry accounting
@@ -701,6 +690,10 @@ assets + expenses = liabilities + income + equity
     right-hand side tells you where it came from.
 
 
+
+#+BEGIN_SRC sh :results none :exports none
+  notify-send "Chapter 1" "Finished"
+#+END_SRC
 
 * Computing profit and (or) loss
   :PROPERTIES:
@@ -1302,12 +1295,15 @@ and (or) loss]].
 
 Typically, we transform a whole series $P_{t_1}, P_{t_2},
 P_{t_3}, \ldots$ into returns $R_{t_1}, R_{t_2}, R_{t_3},
-\ldots$, which is straightforward it R:
+\ldots$, which is a one-liner in R:
 #+BEGIN_SRC R -n :exports code :results none
   simple_returns <- function(x) {
       x[-1L]/x[-length(x)] - 1
   }
 #+END_SRC
+
+(Of course, even a one-liner, if used repeatedly, should be
+written as a function.)
 
 So, given a vector of prices -- here, the closing values of the
 DAX, the German stock-market index from 2014-01-02 to
@@ -3725,6 +3721,7 @@ Answer: compute artificial prices.
 
 ** I need to value a financial instrument
 
+
 ** I have a list of trades (bought or sold what, when and at what price) and I need to compute the profit or loss.
 
 \begin{mdframed}
@@ -3812,15 +3809,13 @@ attached base packages:
 [1] stats     graphics  grDevices utils     datasets  methods   base     
 
 other attached packages:
-[1] datetimeutils_0.0-5  mailtools_0.1-3      textutils_0.0-6     
-[4] PMwR_0.1-80          NMOF_0.36-4          portfolioTools_0.0-5
-[7] esutils_0.1-3        zoo_1.7-12           database_0.1-39     
+[1] zoo_1.7-12  PMwR_0.1-89
 
 loaded via a namespace (and not attached):
- [1] lattice_0.20-33 digest_0.6.8    crayon_1.3.1    grid_3.2.2     
- [5] xts_0.9-7       fastmatch_1.0-4 RODBC_1.3-12    tools_3.2.2    
- [9] parallel_3.2.2  compiler_3.2.2  base64enc_0.1-3 IBrokers_0.9-12
-[13] memoise_0.2.1
+ [1] compiler_3.2.2      datetimeutils_0.1-0 tools_3.2.2        
+ [4] parallel_3.2.2      memoise_0.2.1       crayon_1.3.1       
+ [7] NMOF_0.36-4         grid_3.2.2          digest_0.6.8       
+[10] textutils_0.0-6     lattice_0.20-33
 #+end_example
 
 
