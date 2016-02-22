@@ -105,7 +105,7 @@ returns.default <- function(x, t = NULL, period = NULL,
 .returns <- function(x, pad = NULL, lag) {
     n <- NROW(x)
     if (n < 2L)
-        stop("less than two observations")
+        stop("fewer than two observations")
     do.pad <- !is.null(pad)
     a <- 1:lag
     b <- n:(n-lag+1L)
