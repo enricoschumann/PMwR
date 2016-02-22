@@ -39,7 +39,7 @@ print.pl <- function(x, ..., use.crayon = NULL) {
         if (i < ni)
             cat("\n")
     }
-    cat("\n", sQuote("total PnL"), " is in units of instrument;\n",
+    cat("\n", sQuote("PnL total"), " is in units of instrument;\n",
         sQuote("volume"), " is total /absolute/ amount of traded instruments.\n",
         sep = "")
     invisible(x)
