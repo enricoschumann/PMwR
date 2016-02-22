@@ -8,7 +8,7 @@
 #+PROPERTY: tangle yes
 # ------------------ LATEX ------------------
 #+LATEX_CLASS: scrbook
-#+LATEX_CLASS_OPTIONS: [a4paper,fontsize=12pt]
+#+LATEX_CLASS_OPTIONS: [a4paper,fontsize=11pt]
 #+LATEX_HEADER: \addtokomafont{disposition}{\rmfamily}
 #+LATEX_HEADER: \addtokomafont{descriptionlabel}{\rmfamily}
 #+LATEX_HEADER: \setlength{\parindent}{0em}
@@ -695,6 +695,7 @@ assets + expenses = liabilities + income + equity
   notify-send "Chapter 1" "Finished"
 #+END_SRC
 
+
 * Computing profit and (or) loss
   :PROPERTIES:
   :CUSTOM_ID: ch:pl
@@ -718,13 +719,13 @@ required computation simple as well. Computing profit-or-loss
 #+END_SRC 
 
 #+RESULTS:
-:  PnL total    2
+: PnL total    2
 : average buy  100
 : average sell 102
 : volume       2
 : 
-: 'total PnL' is in units of instrument;
-: 'volume' is total /absolute/ amount of traded instruments.
+: ‘total PnL’ is in units of instrument;
+: ‘volume’ is total /absolute/ amount of traded instruments.
 
 Suppose that a trader bought one unit at 50, one unit at 90 and sold
 two units at 100, resulting in a profit of 60. 
@@ -735,14 +736,13 @@ pl(jnl)
 #+END_SRC 
 
 #+RESULTS:
-:  PnL total    60
+: PnL total    60
 : average buy  70
 : average sell 100
 : volume       4
 : 
-: 'total PnL' is in units of instrument;
-: 'volume' is total /absolute/ amount of traded instruments.
-
+: ‘total PnL’ is in units of instrument;
+: ‘volume’ is total /absolute/ amount of traded instruments.
 
 But suppose that the actual order of the trades was
 
@@ -771,8 +771,8 @@ pl(jnl, along.timestamp = TRUE)
 : average sell 100
 : volume       1 2 4
 : 
-: 'total PnL' is in units of instrument;
-: 'volume' is total /absolute/ amount of traded instruments.
+: ‘total PnL’ is in units of instrument;
+: ‘volume’ is total /absolute/ amount of traded instruments.
 
 With no further arguments, the function will compute the running
 position and evaluate it at every trade with the trade's
@@ -793,11 +793,11 @@ average buy  100
 average sell .
 volume       1
 
-'total PnL' is in units of instrument;
-'volume' is total /absolute/ amount of traded instruments.
+‘total PnL’ is in units of instrument;
+‘volume’ is total /absolute/ amount of traded instruments.
 Warning message:
 In pl.default(amount, price, timestamp, instrument, multiplier = multiplier,  :
-  'sum(amount)' is not zero; specify 'eval.price' to compute p/l.
+  ‘sum(amount)’ is not zero; specify ‘eval.price’ to compute p/l.
 #+end_example
 
 To close the trade, only for the purpose of computing P/L,
@@ -3609,7 +3609,7 @@ currently there are methods for numeric vectors and for =zoo= objects.
 
 ** Numeric matrices
 
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output
 x <- c(9400.04, 9435.15, 9428, 9506.2, 9497.84, 9421.61, 9473.24, 
        9510.17, 9540.51, 9733.81, 9717.71, 9742.96, 9715.9, 9730.12, 
        9720.11, 9631.04, 9392.02, 9349.22, 9406.91, 9336.73, 9373.48, 
@@ -3625,57 +3625,17 @@ scale1(x)
 #+END_SRC 
 
 #+RESULTS:
-|                 1 |
-|  1.00373509048898 |
-|  1.00297445542785 |
-|  1.01129356896354 |
-|  1.01040421104591 |
-|  1.00229467108651 |
-|  1.00778720090553 |
-|  1.01171590759188 |
-|  1.01494355343169 |
-|  1.03550729571364 |
-|  1.03379453704452 |
-|  1.03648069582683 |
-|  1.03360198467241 |
-|  1.03511474419258 |
-|    1.034049855107 |
-|  1.02457436351335 |
-| 0.999146812141225 |
-| 0.994593640027064 |
-|  1.00073084795384 |
-| 0.993264922276926 |
-| 0.997174480108595 |
-| 0.990046850864464 |
+:  [1] 1.000 1.004 1.003 1.011 1.010 1.002 1.008 1.012 1.015 1.036 1.034 1.036
+: [13] 1.034 1.035 1.034 1.025 0.999 0.995 1.001 0.993 0.997 0.990
 
 With =centre=, the daily mean \emph{return} is subtracted.
-#+BEGIN_SRC R -n :exports both
+#+BEGIN_SRC R -n :exports both :results output
 scale1(x, centre = TRUE)
 #+END_SRC 
 
 #+RESULTS:
-|                 1 |
-|  1.00421331747428 |
-|  1.00393041227059 |
-|  1.01273974237873 |
-|  1.01233120554868 |
-|  1.00468465090715 |
-|  1.01067158025088 |
-|  1.01509494029324 |
-|  1.01881854845208 |
-|  1.03995605030523 |
-|  1.03873059809138 |
-|  1.04192576891034 |
-|  1.03952697873954 |
-|  1.04154441478418 |
-|  1.04096864170791 |
-|  1.03192117200964 |
-|  1.00679074435658 |
-|   1.0026802352837 |
-|  1.00934801433163 |
-|  1.00229511401331 |
-|   1.0067196358352 |
-| 0.999999999999999 |
+:  [1] 1.00 1.00 1.00 1.01 1.01 1.00 1.01 1.02 1.02 1.04 1.04 1.04 1.04 1.04 1.04
+: [16] 1.03 1.01 1.00 1.01 1.00 1.01 1.00
 
 With =scale=, the daily \emph{returns} are rescaled to to that
 standard deviation.
