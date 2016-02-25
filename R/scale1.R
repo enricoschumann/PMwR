@@ -7,17 +7,24 @@ scale100 <- function (x, ..., level = 100)
     UseMethod("scale1", x)
 
 scale1.default <- function (x, ..., when = "first.complete",
-                            level = 1, centre = FALSE, scale = FALSE, geometric = TRUE) {
+                            level = 1, centre = FALSE,
+                            scale = FALSE, geometric = TRUE) {
 
     makevec <- FALSE
     if (!is.matrix(x)) {
-        x <- as.matrix(x)
+        ## x is always coerced to matrix. But if it had not dim
+        ## attribute, it will be coerced back to a vector at the
+        ## end        
         makevec <- TRUE
+        x <- as.matrix(x)
     }    
     if (when == "first.complete") {
-        init.p <- min(which(apply(x, 1, function(i) !any(is.na(i)))))
-        ## TODO: add check if all NA
-        ## faster? rowSums(is.na(matrix(0, nrow=5,ncol=2)))
+        tmp <- which(apply(x, 1, function(i) !any(is.na(i))))
+        if (length(tmp))
+            init.p <- min(tmp)
+        else
+            stop("no complete row (no row without NAs)")
+        ## TODO faster? rowSums(is.na(matrix(0, nrow=5,ncol=2)))
     } else if (when == "first") {
         init.p <- 1
     } else if (is.numeric(when)) {
@@ -71,10 +78,17 @@ scale1.default <- function (x, ..., when = "first.complete",
 
 scale1.zoo <- function(x, ..., when = "first.complete",
                        level = 1, centre = FALSE, scale = FALSE,
-                       geometric = TRUE) {
+                       geometric = TRUE,
+                       inflate = NULL) {
 
     ii <- index(x)
     x <- coredata(x)
+    if (!is.null(inflate)) {
+        dates <- as.Date(ii)
+        inflate.d <- (1+inflate)^(1/365)
+        x <- x*inflate.d^as.numeric(dates-dates[1L])
+    }
+    
     if (inherits(when, class(ii)))
         when <- matchOrNext(when, ii)
     ans <- scale1.default(x, when = when, level = level,

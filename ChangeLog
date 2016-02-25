@@ -1,6 +1,14 @@
+2016-02-25  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/scale1.R (scale1.zoo): added inflate argument
+
 2016-02-20  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-89
+
+	* updated manual
+
+2016-02-20  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-88
 
