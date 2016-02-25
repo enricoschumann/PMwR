@@ -1,8 +1,0 @@
-# -*- org-mode; -*-
-
-|  timestamp | amount | comment          |
-|------------+--------+------------------|
-| 2012-01-01 |    100 | a comment        |
-| 2012-01-02 |    200 | another comment  |
-| 2012-01-03 |   -200 | bought something |
-| 2012-02-04 |    500 | got a present    |
