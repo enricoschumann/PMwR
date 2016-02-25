@@ -708,11 +708,18 @@ currency units. If you are interested in computing returns, see
 
 ** Simple cases
 
-We have an account, currency is euro. We buy one asset at a price
-of 100 euro and sell it again at 102 euro. We have made a profit
-of 2 euros. This simple case is frequent enough to make the
-required computation simple as well. Computing profit-or-loss
-(P/L) can be handled through the function =pl=.
+We have an account; currency is euro. We buy one unit of an asset
+at a price of 100 euro, and then we sell the asset for 102
+euro. We have made a profit of 2 euros. This simple case is
+frequent enough that we should make the required computation
+simple as well. 
+
+With the PMwR package, computing profit-or-loss (P/L) can be
+handled through the function =pl=. And for the simple case above,
+it may be called like as follows.
+
+@@latex:\index{pl@\texttt{pl} (function)}@@
+
 #+BEGIN_SRC R -n :exports both :results output
   pl(price  = c(100, 102), 
      amount = c(  1,  -1))
@@ -724,11 +731,12 @@ required computation simple as well. Computing profit-or-loss
 : average sell 102
 : volume       2
 : 
-: ‘total PnL’ is in units of instrument;
-: ‘volume’ is total /absolute/ amount of traded instruments.
+: 'total PnL' is in units of instrument;
+: 'volume' is total /absolute/ amount of traded instruments.
 
-Suppose that a trader bought one unit at 50, one unit at 90 and sold
-two units at 100, resulting in a profit of 60. 
+Another example. Suppose that a trader bought one unit of an
+asset at 50, one unit at 90 and sold two units at 100, resulting
+in a profit of 60.
 #+BEGIN_SRC R -n :exports both :results output
 jnl <- journal(price  = c( 90, 50, 100), 
                amount = c(  1,  1,  -2))
@@ -741,10 +749,11 @@ pl(jnl)
 : average sell 100
 : volume       4
 : 
-: ‘total PnL’ is in units of instrument;
-: ‘volume’ is total /absolute/ amount of traded instruments.
+: 'total PnL' is in units of instrument;
+: 'volume' is total /absolute/ amount of traded instruments.
 
-But suppose that the actual order of the trades was
+That looks like some pretty good trading. Yet suppose that the
+actual order of the trades was
 
 #+BEGIN_EXAMPLE
 buy at 90  =>  buy at 50  =>  sell at 100.
@@ -753,7 +762,7 @@ buy at 90  =>  buy at 50  =>  sell at 100.
 You may have noticed that the =journal= that we created above
 already has the trades ordered this way. We may know nothing
 about what was traded and when, but there is clearly some
-information by the order of the trades and the drawdown that it
+information in the order of the trades and the drawdown that it
 implies: the position had a drawdown of at least 40 before it
 recovered. For situations like this, the argument
 =along.timestamp= can be used. (Note that we do not provide an
@@ -771,14 +780,16 @@ pl(jnl, along.timestamp = TRUE)
 : average sell 100
 : volume       1 2 4
 : 
-: ‘total PnL’ is in units of instrument;
-: ‘volume’ is total /absolute/ amount of traded instruments.
+: 'total PnL' is in units of instrument;
+: 'volume' is total /absolute/ amount of traded instruments.
 
 With no further arguments, the function will compute the running
 position and evaluate it at every trade with the trade's
-price. This may not be accurate because of bid--ask spreads or
-other transaction costs. But it provides more information than
-only computing the P/L for the trades.
+price. This may not be totally accurate because of bid--ask
+spreads or other transaction costs. But it provides more
+information than only computing the aggregate P/L for the trades.
+
+## TODO EURUSD trades (many)
 
 We can also use =pl= for a journal in which some positions not
 closed yet.  The simplest example is a journal of just one trade.
@@ -793,15 +804,16 @@ average buy  100
 average sell .
 volume       1
 
-‘total PnL’ is in units of instrument;
-‘volume’ is total /absolute/ amount of traded instruments.
+'total PnL' is in units of instrument;
+'volume' is total /absolute/ amount of traded instruments.
 Warning message:
 In pl.default(amount, price, timestamp, instrument, multiplier = multiplier,  :
-  ‘sum(amount)’ is not zero; specify ‘eval.price’ to compute p/l.
+  'sum(amount)' is not zero; specify 'eval.price' to compute p/l.
 #+end_example
 
-To close the trade, only for the purpose of computing P/L,
-specify =eval.price=.
+The warning message that is thrown already tells us what to do:
+to close the trade -- only for the purpose of computing P/L, the
+trade is not really closed --, specify =eval.price=.
 #+BEGIN_SRC R -n :exports both :results output
   pl(jnl <- journal(amount = 1, price = 100), eval.price = 101)  
 #+END_SRC
@@ -815,11 +827,8 @@ specify =eval.price=.
 : 'total PnL' is in units of instrument;
 : 'volume' is total /absolute/ amount of traded instruments.
 
-Note that /average buy/ and /average sell/ reflect the specified
-evaluation price; but /volume/ does not since nothing is actually
-traded.
-
-
+Note that /average sell/ reflects the specified evaluation price;
+but /volume/ does nothing since nothing is actually traded.
 
 ** More complicated cases
 
@@ -861,7 +870,7 @@ multiply notionals by their multipliers).
 *** An example: P/L for lists of incomes and expenses
 
 Suppose you keep a journal just to keep track of your personal
-income and expenses. An aside: it's tedious to enter journals by
+income and expenses. An aside: it is tedious to enter journals by
 hand, in particular if we want to update them over time.  So, for
 practical use, we may write transactions into files, like this:
 
@@ -883,25 +892,25 @@ a dividend payment. Others are neutral, for example a transfer
 between bank accounts. There are several ways to deal with
 this.[fn:2]
 
-One way to deal with that is to switch to double-entry accounting. A
-second way is to add descriptions like =expense= and then subset by
+One way is to switch to double-entry accounting. A second way is
+to add descriptions like =expense= and then subset the journal by
 these descriptions.
 
 And yet another approach is to use prices. Whenever we evaluate
 the balances of a cash account, we say that the price per unit is
 one. That is actually reasonable: if my account has a balance of
-120.2, it actually means `120.2 euros'. The price of one euro --
-no surprise here -- is one euro.
+120.2, it actually means `120 euros and 20 cents, or 120.20
+euros'. The price of one euro -- no surprise here -- is one euro.
 
-An expense should be a negative amount; income should go with
-positive amounts.  When we add such an entry that is supposed to
-mean gain or loss to us, we make its price 0. Then, when we
-compute that value of a position, we make its price 1.  An
-example:
+There are just two rules to remember: 1) An expense should be a
+negative amount; income should go with positive amounts.  2) When
+an entry means gain or loss to us, we make its price 0. Then,
+when we compute that value of a position, we make its price 1.
+An example:
 
 #+BEGIN_SRC R -n :exports both :results output
 J <- journal(timestamp = c("day 1", "day 2", "day 3"), 
-               amount    = c(100,100,-200), 
+               amount    = c(100, 100, -200), 
                price     = c(  1,  0,   0),
                comment   = c("neutral", "income", "expense"),
                account   = "my account")
@@ -925,9 +934,8 @@ position(J)
 :      day 3
 : [1,]     0
 
-In terms of income and expenses we have made a loss of\nbsp{}100, which is
-exactly what the function =pl= reports.  (There will be more examples
-for using this function in [[#ch:pl][Computing profit and (or) loss]].)
+In terms of income and expenses we have made a loss of\nbsp{}100,
+which is exactly what the function =pl= reports.
 #+BEGIN_SRC R -n :exports both :results output
 pl(J, current.price = 1)
 #+END_SRC 
@@ -3604,8 +3612,9 @@ values[tmp$map(moretimes)$ix]
   :CUSTOM_ID: ch:scale
   :END:
 
-The function =scale1= rescales time-series.  It is a generic function;
-currently there are methods for numeric vectors and for =zoo= objects.
+The function =scale1= rescales time-series. It is a generic
+function; currently there are methods for numeric
+vectors/matrices and for =zoo= objects.
 
 ** Numeric matrices
 
@@ -3625,19 +3634,23 @@ scale1(x)
 #+END_SRC 
 
 #+RESULTS:
-:  [1] 1.000 1.004 1.003 1.011 1.010 1.002 1.008 1.012 1.015 1.036 1.034 1.036
-: [13] 1.034 1.035 1.034 1.025 0.999 0.995 1.001 0.993 0.997 0.990
+:  
+: [1] 1.0000000 1.0037351 1.0029745 1.0112936 1.0104042 1.0022947 1.0077872
+:  [8] 1.0117159 1.0149436 1.0355073 1.0337945 1.0364807 1.0336020 1.0351147
+: [15] 1.0340499 1.0245744 0.9991468 0.9945936 1.0007308 0.9932649 0.9971745
+: [22] 0.9900469
 
-With =centre=, the daily mean \emph{return} is subtracted.
+With =centre=, the daily mean /return/ is subtracted.
 #+BEGIN_SRC R -n :exports both :results output
 scale1(x, centre = TRUE)
 #+END_SRC 
 
 #+RESULTS:
-:  [1] 1.00 1.00 1.00 1.01 1.01 1.00 1.01 1.02 1.02 1.04 1.04 1.04 1.04 1.04 1.04
-: [16] 1.03 1.01 1.00 1.01 1.00 1.01 1.00
+:  [1] 1.000000 1.004213 1.003930 1.012740 1.012331 1.004685 1.010672 1.015095
+:  [9] 1.018819 1.039956 1.038731 1.041926 1.039527 1.041544 1.040969 1.031921
+: [17] 1.006791 1.002680 1.009348 1.002295 1.006720 1.000000
 
-With =scale=, the daily \emph{returns} are rescaled to to that
+With =scale=, the daily /returns/ are rescaled to to that
 standard deviation.
 #+BEGIN_SRC R -n :exports both
 sd(returns(scale1(x, scale = 0.02)))
@@ -3646,6 +3659,10 @@ plot(scale1(x, scale = 0.02))
 #+END_SRC 
 
 #+RESULTS:
+
+I stress that /returns/ are treated, but =scale1= expects price
+series (i.e. levels, not returns) and also returns a price
+series.
 
 ## %% \section{Handling NAs}
 
