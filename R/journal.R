@@ -25,6 +25,13 @@ journal.position <- function(amount, price, ...) {
                 instrument = attr(amount, "instrument"))
 }
 
+journal.rebalance <- function(amount, ..., price = TRUE, timestamp = NA) {
+    journal(instrument = if (amount$match.names) names(amount$price) else NA,
+            timestamp  = timestamp,
+            amount = unname(amount$target - amount$current),
+            price  = if (isTRUE(price)) unname(amount$price) else NA)
+}
+
 journal.btest <- function(amount, ...)
     amount$journal
 

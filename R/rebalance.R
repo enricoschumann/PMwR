@@ -1,8 +1,15 @@
 rebalance <- function(current, target, price,
                       notional = NULL, multiplier = 1, truncate = TRUE,
                       match.names = TRUE,
-                      check.match = TRUE) {
+                      check.match = TRUE,
+                      drop.zero = FALSE) {
 
+
+    if (inherits(current, "position")) {
+        instr <- attr(current, "instrument")
+        current <- as.numeric(current)
+        names(current) <- instr
+    }
     
     if (!match.names && length(current) == 1L && current == 0) {
         current <- rep.int(current, length(target))
@@ -69,6 +76,10 @@ rebalance <- function(current, target, price,
                 price       = price,
                 notional    = notional,
                 match.names = match.names)
+
+    rbl$current != 0 | rbl$target != 0
+    if (drop.zero)
+        rbl <- rbl[rbl$current != 0 | rbl$target != 0]
     class(rbl) <- "rebalance"
     rbl
 }
@@ -108,13 +119,3 @@ print.rebalance <- function(x, ..., drop.zero = TRUE) {
         ".\n", sep = "")
     invisible(x)
 }
-
-## price <- c(a = 1, b = 2, c = 3)
-## current <- c(a = 100, b = 20)
-## target <- c(a = 0.2, c = 0.3)
-## rebalance(current, target, price)
-
-## price <- c(1,2,3)
-## current <- c(100, 20, 0)
-## target <- c(0.2, 0, 0.3)
-## rebalance(current, target, price, match.names = FALSE)

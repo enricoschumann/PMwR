@@ -1,3 +1,16 @@
+2016-02-29  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/rebalance.R (rebalance): fixed -- the function did not
+	handle 'current' when it was a 'position' (thanks to Torsten
+	von Bartenwerffer for reporting)
+	(rebalance): new argument 'drop.zero'
+
+	* R/journal.R (journal.rebalance): experimental -- new
+	method (suggested by Torsten von Bartenwerffer)
+
+	* inst/unitTests/ut_rebalance.R (test.rebalance): added tests
+	for 'journal.rebalance'
+
 2016-02-25  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-90
@@ -23,9 +36,9 @@
 
 	* R/returns.R (pReturns): period 'itd' also handles NA values
 
-	* R/returns.R (print.p_returns): for period 'itd', the timestamps
-	of the observations that were used to compute the returns are
-	printed (same as for 'mtd' and 'ytd')
+	* R/returns.R (print.p_returns): for period 'itd', the
+	timestamps of the observations that were used to compute the
+	returns are printed (same as for 'mtd' and 'ytd')
 
 2016-02-19  Enrico Schumann  <es@enricoschumann.net>
 

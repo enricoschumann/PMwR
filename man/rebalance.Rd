@@ -9,11 +9,10 @@
 }
 \usage{
 rebalance(current, target, price,
-          notional = NULL,
-          multiplier = 1,
+          notional = NULL, multiplier = 1,
           truncate = TRUE,
-          match.names = TRUE,
-          check.match = TRUE)
+          match.names = TRUE, check.match = TRUE,
+          drop.zero = FALSE)
 
 \method{print}{rebalance}(x, \dots, drop.zero = TRUE)
 }
@@ -51,7 +50,7 @@ rebalance(current, target, price,
     arguments passed to \code{\link{print}}
   }
   \item{drop.zero}{
-    logical
+    logical; note the different defaults for computing and printing
   }
 }
 \details{
@@ -87,5 +86,8 @@ rebalance(current, target, price,
   \code{\link{journal}}
 }
 \examples{
-## see Manual
+rebalance(current = c(a = 100, b = 20),
+          target  = c(a = 0.2, c = 0.3),
+          price   = c(a = 1, b = 2, c = 3))
+
 }
