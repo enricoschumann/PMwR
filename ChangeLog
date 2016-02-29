@@ -1,5 +1,7 @@
 2016-02-29  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-91
+
 	* R/rebalance.R (rebalance): fixed -- the function did not
 	handle 'current' when it was a 'position' (thanks to Torsten
 	von Bartenwerffer for reporting)
