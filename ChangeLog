@@ -1,6 +1,6 @@
 2016-03-01  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): Version: 0.1-92
+	* DESCRIPTION (Version): 0.1-92
 
 	* R/btest.R (btest): experimental -- new argument
 	'final.position', with default FALSE. If TRUE, 'btest'
@@ -173,7 +173,7 @@
 
 2015-11-22  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-78
+        * DESCRIPTION (Version): 0.1-78
 
         * R/pl.R (pl): 'pl' is now a generic function; methods
         'default' and 'journal' are available. The function
@@ -363,7 +363,7 @@
 
 2015-09-02  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-67
+        * DESCRIPTION (Version): 0.1-67
 
         * R/position.R (print.position): fixed -- 'print' method
         returned a changed object
@@ -416,7 +416,7 @@
 
 2015-07-07  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-66
+        * DESCRIPTION (Version): 0.1-66
 
         * R/btest.R (plot.btest): new function
 
@@ -426,7 +426,7 @@
 
 2015-06-30  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-65
+        * DESCRIPTION (Version): 0.1-65
 
         * man/btest.Rd: update doc for 'do.signal'
 
@@ -472,7 +472,7 @@
 
 2015-06-25  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-64
+        * DESCRIPTION (Version): 0.1-64
 
         * R/returns.R (pReturns): match regexp '^ann' (instead of
         'ann') for annualised returns
@@ -542,7 +542,7 @@
         * inst/unitTests/ut_Datetime.R: moved tests to
         'datetimeutils'
 
-        * DESCRIPTION (Version): Version: 0.1-63
+        * DESCRIPTION (Version): 0.1-63
 
         * R/[...]: moved all helper functions that concern dates
         and times to package 'datetimeutils'
@@ -554,7 +554,7 @@
 
 2015-05-07  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-62
+        * DESCRIPTION (Version): 0.1-62
 
         * R/texttools.R: moved all helper functions that concern
         character vectors to 'textutils'
@@ -580,7 +580,7 @@
 
 2015-04-27  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-61
+        * DESCRIPTION (Version): 0.1-61
 
         * NAMESPACE: export as.NAVseries
 
@@ -604,7 +604,7 @@
 
 2015-03-03  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-60
+        * DESCRIPTION (Version): 0.1-60
 
         * NAMESPACE: 'ann' is no longer exported: use 'returns(x,
         t, period = "ann")' instead
@@ -628,7 +628,7 @@
 
 2015-02-11  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-59
+        * DESCRIPTION (Version): 0.1-59
 
         * R/journal.R (journal): journal is now a generic
         function, currently with methods default, which matches
@@ -637,7 +637,7 @@
 
 2015-01-28  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-58
+        * DESCRIPTION (Version): 0.1-58
 
         * R/slTable.R (valign, nspace): new internal functions
         (not exported)
@@ -647,7 +647,7 @@
 
 2015-01-28  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-57
+        * DESCRIPTION (Version): 0.1-57
 
         * man/returns.Rd: added arguments for 'toHTML'
         ('table.class' etc.)
@@ -667,7 +667,7 @@
 
 2015-01-27  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-56
+        * DESCRIPTION (Version): 0.1-56
 
         * R/position.R (position.journal): fixed -- 'drop.zero'
         was not used by 'position.journal'
@@ -694,7 +694,7 @@
 
 2015-01-14  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-55
+        * DESCRIPTION (Version): 0.1-55
 
         * vignettes/returns.Rnw: added vignette
 
@@ -702,7 +702,7 @@
 
 2015-01-14  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-54
+        * DESCRIPTION (Version): 0.1-54
 
         * R/returns.R (returns): behaviour of 'returns(z)' when
         'z' is of class 'zoo' has changed: the returned object
@@ -747,7 +747,7 @@
 
 2014-11-24  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-53
+        * DESCRIPTION (Version): 0.1-53
 
         * man/*.Rd: small updates in documentation
 
@@ -755,7 +755,7 @@
 
 2014-11-10  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-52
+        * DESCRIPTION (Version): 0.1-52
 
         * R/returns.R (print.preturns): period == "year" gets its
         own print method
@@ -765,7 +765,7 @@
 
 2014-11-05  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-51
+        * DESCRIPTION (Version): 0.1-51
 
         * R/scale0.R (scale1.default): use 'na.rm' for centring
         and scaling
@@ -801,7 +801,7 @@
 
 2014-09-24  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-50
+        * DESCRIPTION (Version): 0.1-50
 
         * vignettes/monthly.Rnw: new vignette
 
@@ -822,7 +822,7 @@
 
 2014-09-15  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-49
+        * DESCRIPTION (Version): 0.1-49
 
         * man/*: various small updates in documentation.
 
@@ -872,7 +872,7 @@
 
 2014-08-20  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-48
+        * DESCRIPTION (Version): 0.1-48
         (Enhances): zoo
 
         * NAMESPACE: export methods for 'scale1' (default, zoo)
@@ -886,7 +886,7 @@
 
 2014-08-06  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-47
+        * DESCRIPTION (Version): 0.1-47
 
 2014-08-05  Enrico Schumann  <es@enricoschumann.net>
 
@@ -931,7 +931,7 @@
 
 2014-05-28  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-46
+        * DESCRIPTION (Version): 0.1-46
 
         * R/returns.R (toLatex.preturns): added argument 'eol'
 
@@ -943,7 +943,7 @@
 
 2014-05-08  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-45
+        * DESCRIPTION (Version): 0.1-45
 
         * R/returns.R (returns0): fixed -- padding did not work
         properly for single-column matrices
@@ -978,7 +978,7 @@
 
 2014-03-20  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-44
+        * DESCRIPTION (Version): 0.1-44
 
         * R/btest.R: fixed -- journal is set up also for multiple
         assets
@@ -1020,7 +1020,7 @@
 
 2014-03-07  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-43
+        * DESCRIPTION (Version): 0.1-43
 
         * man/returns.Rd: updated docs
 
@@ -1033,7 +1033,7 @@
 
 2014-02-28  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-42
+        * DESCRIPTION (Version): 0.1-42
 
         * man/PMwR-package.Rd: corrected title
 
@@ -1059,8 +1059,8 @@
 
 2014-02-10  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-41 (will supersede
-        the release branch)
+        * DESCRIPTION (Version): 0.1-41 (supersedes the release
+	branch 0.2-x)
 
         * R/returns.R (returns): if "x" is of class "zoo": use
         "time"
@@ -1094,7 +1094,7 @@
 
 2013-12-03  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.2-2
+        * DESCRIPTION (Version): 0.2-2
 
         * R/rebalance.R (rebalance): more checks added;
         length-one values for current/target allowed
@@ -1105,11 +1105,11 @@
 
 2013-11-19  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.2-1
+        * DESCRIPTION (Version): 0.2-1
 
         * R/valuation.R (valuation): renamed 'value' to
-        'valuation' (value is too common; package tseries has a
-        generic of that name)
+	'valuation' ('value' is too common; package 'tseries' has
+	a generic of that name)
 
 2013-11-18  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1348,7 +1348,7 @@
 
 2013-07-24  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.2-0
+        * DESCRIPTION (Version): 0.2-0
 
         * R/journal.R (journal): experimental -- journal can take
         a position and convert it to journal
@@ -1489,7 +1489,7 @@
         * R/pl.R (): 'plBetween' now in pl (which takes
         additional arguments t0, t1, prices0, prices1)
 
-        * DESCRIPTION (Version): Version: 0.1-27
+        * DESCRIPTION (Version): 0.1-27
 
         * R/returns.R (returns): all return functions (returns,
         pReturns, twReturns) now have a single interface: returns
@@ -1502,14 +1502,14 @@
 
 2013-06-13  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-26
+        * DESCRIPTION (Version): 0.1-26
 
         * R/journal.R (print.Journal): new argument 'width',
         default is 60
 
 2013-06-12  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-25
+        * DESCRIPTION (Version): 0.1-25
 
 2013-06-05  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1518,7 +1518,7 @@
 
 2013-05-31  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-24
+        * DESCRIPTION (Version): 0.1-24
 
         * vignettes/PL.Rnw: moved vignette 'Journal' into 'PL'
         (and rm'd Journal)
@@ -1543,7 +1543,7 @@
 
 2013-05-29  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-23
+        * DESCRIPTION (Version): 0.1-23
 
         * R/position.R (position): check NA timestamps
 
@@ -1557,7 +1557,7 @@
 
 2013-05-28  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-22
+        * DESCRIPTION (Version): 0.1-22
 
         * R/instrument.R (Instrument): added example for
         'VanillaOptionEuropean'
@@ -1573,13 +1573,13 @@
 
 2013-05-27  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-21
+        * DESCRIPTION (Version): 0.1-21
 
         * R/PL.R (diffsigns): removed test cases
 
 2013-05-27  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-20
+        * DESCRIPTION (Version): 0.1-20
 
         * man/tradeanalysis.Rd: 'PL' changed into 'pl'
 
@@ -1602,7 +1602,7 @@
 
 2013-05-27  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-19
+        * DESCRIPTION (Version): 0.1-19
 
         * NAMESPACE, R/, man/: renamed 'Tradelist' into 'Journal'
 
@@ -1626,7 +1626,7 @@
 
 2013-05-14  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-18
+        * DESCRIPTION (Version): 0.1-18
 
         * R/Tradelist.R (c.Tradelist, length.Tradelist): added
         method for length; rewrote c.Tradelist
@@ -1651,7 +1651,7 @@
 
 2013-04-30  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.1-17
+        * DESCRIPTION (Version): 0.1-17
 
         * R/returns.R (twReturns): added. Compute time-weighted
         returns.
