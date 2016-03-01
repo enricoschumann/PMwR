@@ -11,6 +11,7 @@
 btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
       print.info = NULL, b = 1L, fraction = 1,
       initial.position = 0, initial.cash = 0,
+      final.position = FALSE,
       cashflow = NULL, tc = 0, \dots,
       add = FALSE, lag = 1, convert.weights = FALSE, tradeOnOpen = TRUE,
       tol = 1e-5, assignInGlobals = list(),
@@ -71,6 +72,9 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
   }
   \item{initial.cash}{
     a numeric vector of length 1. Defaults to 0.
+  }
+  \item{final.position}{
+    logical
   }
   \item{tc}{
     transaction costs as a fraction of turnover (e.g., 0.001 means 0.1\%)

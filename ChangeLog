@@ -1,3 +1,24 @@
+2016-03-01  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.1-92
+
+	* R/btest.R (btest): experimental -- new argument
+	'final.position', with default FALSE. If TRUE, 'btest'
+	computes a final position that uses all available data
+	and computes a position, without any lags. (Most
+	settings, such as 'do.rebalance', are ignored for this
+	final position; but 'convert.weights' is honoured.)
+
+	* R/btest.R (atest): experimental -- new function.
+	Essentially a copy of 'btest', but with 'do.signal' and
+	'do.rebalance' set to FALSE, and 'final.position' set to
+	TRUE. The effect will be skip all data and only use the
+	latest data to compute the final position (see
+	above). This may be useful for checking the computations
+	of the 'signal' function, or for really computing the
+	final (i.e. current) position. The function is currently
+	not exported, but can be accessed with 'PMwR:::atest'.
+
 2016-02-29  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-91

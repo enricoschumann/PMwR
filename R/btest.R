@@ -1,15 +1,16 @@
 ## -*- truncate-lines: t; -*-
 
-btest  <- function(prices,               
-                   signal,               
-                   do.signal = TRUE,     
-                   do.rebalance = TRUE,  
-                   print.info = NULL,    
+btest  <- function(prices,
+                   signal,
+                   do.signal = TRUE,
+                   do.rebalance = TRUE,
+                   print.info = NULL,
                    b = 1L,               ## burnin
                    fraction = 1,         ## how much to rebalance
-                   initial.position = 0, ## initial portfolio
-                   initial.cash = 0,     ## initial cash
-                   cashflow = NULL,      ## function to add to cash
+                   initial.position = 0,
+                   initial.cash = 0,
+                   final.position = FALSE,
+                   cashflow = NULL,
                    tc = 0,
                    ...,
                    add = FALSE,          ## if TRUE, 'position' is flow
@@ -33,10 +34,10 @@ btest  <- function(prices,
 
     if (add)
         .NotYetUsed("add", FALSE)
-    
+
     db.signal <- if (is.function(signal) && isdebugged(signal))
         TRUE else FALSE
-    
+
     if (is.function(do.signal) && isdebugged(do.signal))
         db.do.signal <- TRUE
     else
@@ -55,7 +56,7 @@ btest  <- function(prices,
     db.cashflow <-  if (is.function(cashflow) && isdebugged(cashflow))
                         TRUE else FALSE
 
-    
+
     if (is.null(do.signal) || identical(do.signal, TRUE)) {
         do.signal <- function(...)
             TRUE
@@ -73,7 +74,7 @@ btest  <- function(prices,
             if (Time(0L) %in% rebalancing_times)
                 TRUE
             else
-                FALSE        
+                FALSE
         }
     } else if (is.logical(do.signal)) {
         ## tests on identical to TRUE,FALSE above, so length > 1
@@ -82,7 +83,7 @@ btest  <- function(prices,
             if (Time(0L) %in% rebalancing_times)
                 TRUE
             else
-                FALSE                                
+                FALSE
     }  else if (is.character(do.signal) &&
                tolower(do.signal) == "firstofmonth") {
         tmp <- as.Date(timestamp)
@@ -95,7 +96,7 @@ btest  <- function(prices,
             if (Time(0) %in% i_rdays)
                 TRUE
             else
-                FALSE        
+                FALSE
     } else if (is.character(do.signal) &&
                (tolower(do.signal) == "lastofmonth" ||
                 tolower(do.signal) == "endofmonth")) {
@@ -109,7 +110,7 @@ btest  <- function(prices,
             if (Time(0) %in% i_rdays)
                 TRUE
             else
-                FALSE        
+                FALSE
     }
 
 
@@ -132,7 +133,7 @@ btest  <- function(prices,
             if (Time(0L) %in% rebalancing_times)
                 TRUE
             else
-                FALSE        
+                FALSE
         }
     } else if (is.logical(do.rebalance)) {
         ## tests on identical to TRUE,FALSE above, so length > 1
@@ -141,7 +142,7 @@ btest  <- function(prices,
             if (Time(0L) %in% rebalancing_times)
                 TRUE
             else
-                FALSE                                
+                FALSE
     }  else if (is.character(do.rebalance) &&
                tolower(do.rebalance) == "firstofmonth") {
         tmp <- as.Date(timestamp)
@@ -154,7 +155,7 @@ btest  <- function(prices,
             if (Time(0) %in% i_rdays)
                 TRUE
             else
-                FALSE        
+                FALSE
     } else if (is.character(do.rebalance) &&
                (tolower(do.rebalance) == "lastofmonth" ||
                 tolower(do.rebalance) == "endofmonth")) {
@@ -168,10 +169,9 @@ btest  <- function(prices,
             if (Time(0) %in% i_rdays)
                 TRUE
             else
-                FALSE        
+                FALSE
     }
 
-    
     ## if (is.null(do.rebalance) || identical(do.rebalance, TRUE)) {
     ##     do.rebalance <- function(...)
     ##         TRUE
@@ -322,7 +322,7 @@ btest  <- function(prices,
             mH <- as.matrix(prices[[2L]])
             mL <- as.matrix(prices[[3L]])
             mC <- as.matrix(prices[[4L]])
-        } else 
+        } else
             stop("see documentation on ", sQuote("prices"))
 
     } else {
@@ -367,7 +367,7 @@ btest  <- function(prices,
     if (initial.position != 0 && !is.null(prices0)) {
         initial.wealth <- sum(prices0 * initial.position) +initial.cash
     } else if (initial.position != 0) {
-        initial.wealth <- initial.cash ## FIXME: initial position needs be evaluated
+        initial.wealth <- initial.cash ## TODO: initial position needs be evaluated
     } else
         initial.wealth <- initial.cash
 
@@ -390,7 +390,7 @@ btest  <- function(prices,
                            Portfolio = Portfolio,
                            SuggestedPortfolio = SuggestedPortfolio,
                            Globals = Globals)
-            
+
             if (convert.weights)
                 temp <- temp * initial.wealth/prices0
 
@@ -470,7 +470,7 @@ btest  <- function(prices,
     for (t in max(2L, b+1L):T) {
         if (progressBar)
             setTxtProgressBar(progr, t)
-        t1 <- t - 1L        
+        t1 <- t - 1L
         computeSignal <- do.signal(...,
                                    Open = Open, High = High,
                                    Low = Low, Close = Close,
@@ -489,7 +489,7 @@ btest  <- function(prices,
                            Timestamp = Timestamp,
                            Portfolio = Portfolio,
                            SuggestedPortfolio = SuggestedPortfolio,
-                           Globals = Globals)            
+                           Globals = Globals)
             if (convert.weights)
                 temp <- temp * v[t1] / mC[t1, ]
 
@@ -566,6 +566,24 @@ btest  <- function(prices,
     if (progressBar)
         close(progr)
 
+    if (final.position) {
+        message("Compute final position ... ", appendLF = FALSE)
+        t  <- t + 1L
+        t1 <- t - 1L
+        final.pos <- signal(..., Open = Open, High = High,
+                       Low = Low, Close = Close, Wealth = Wealth,
+                       Cash = Cash, Time = Time,
+                       Timestamp = Timestamp,
+                       Portfolio = Portfolio,
+                       SuggestedPortfolio = SuggestedPortfolio,
+                       Globals = Globals)
+        if (convert.weights)
+            final.pos <- final.pos * v[t1] / mC[t1, ]
+        if (!missing(instrument))
+            names(final.pos) <- instrument
+        message("done")
+    }
+
     
     if (!missing(instrument))
         colnames(X) <- instrument
@@ -597,7 +615,8 @@ btest  <- function(prices,
                 cum.tc = tccum,
                 journal = jnl,
                 initial.wealth = initial.wealth,
-                b = b)
+                b = b,
+                final.position = if (final.position) final.pos else NA)
 
     if (include.data)
         ans <- c(ans,
@@ -630,3 +649,9 @@ plot.btest <- function(x, y = NULL, ...) {
         plot(x$wealth[-seq_len(x$b)], y, ...)
     invisible()
 }
+
+
+atest <- btest
+formals(atest)$do.signal <- FALSE
+formals(atest)$do.rebalance <- FALSE
+formals(atest)$final.position <- TRUE
