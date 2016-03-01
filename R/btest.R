@@ -1,10 +1,10 @@
 ## -*- truncate-lines: t; -*-
 
-btest  <- function(prices,               ## 
-                   signal,               ## function
-                   do.signal = TRUE,     ## 
-                   do.rebalance = TRUE,  ## 
-                   print.info = NULL,    ## 
+btest  <- function(prices,               
+                   signal,               
+                   do.signal = TRUE,     
+                   do.rebalance = TRUE,  
+                   print.info = NULL,    
                    b = 1L,               ## burnin
                    fraction = 1,         ## how much to rebalance
                    initial.position = 0, ## initial portfolio
@@ -27,7 +27,7 @@ btest  <- function(prices,               ##
         warning(sQuote("convert.weights"), " is TRUE and ",
                 sQuote("initial.cash"), " is zero")
 
-    if (convert.weights && b==0 && is.null(prices0) && lag>0)
+    if (convert.weights && b == 0 && is.null(prices0) && lag > 0)
         stop("to convert weights to positions, either specify ",
                 sQuote("prices0"), " or set ", sQuote("b"), " > 0")
 
@@ -271,8 +271,8 @@ btest  <- function(prices,               ##
     
     ## check reserved names
     reservedNames <- c("Open", "High", "Low", "Close",
-                       "Wealth", "Cash", "Time", "Portfolio",
-                       "SuggestedPortfolio", "Globals")
+                       "Wealth", "Cash", "Time", "Timestamp",
+                       "Portfolio", "SuggestedPortfolio", "Globals")
     funs <- c("signal", "do.signal", "do.rebalance", "print.info", "cashflow")
     for (thisfun in funs) {
         fNames <- names(formals(get(thisfun)))
@@ -281,7 +281,6 @@ btest  <- function(prices,               ##
                 stop(sQuote(rname), " cannot be used as an argument name for ",
                      sQuote("signal"))}
 
-    ## TODO abstract alist
     add.args <- alist(Open = Open,
                       High = High,
                       Low = Low,
