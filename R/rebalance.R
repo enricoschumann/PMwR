@@ -55,12 +55,13 @@ rebalance <- function(current, target, price,
     }
 
     
-    if (is.null(notional))
+    if (is.null(notional)) {
         if (match.names)
             notional <- sum(current * price[names(current)] *
                                 multiplier[names(current)])
         else
             notional <- sum(current * price * multiplier)
+    }
     
     if (match.names)
         ans <- target * notional / price[names(target)] / multiplier[names(target)]
