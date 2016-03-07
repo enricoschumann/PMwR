@@ -81,7 +81,7 @@ pl(amount, \dots)
 
   For \code{pl}, an object of class \code{pl}, which is a list of lists:
   one list for each instrument. Each such list contains numeric vectors:
-  \code{pnl}, \code{realised}, \code{unrealised}, \code{buy},
+  \code{pl}, \code{realised}, \code{unrealised}, \code{buy},
   \code{sell}, \code{volume}.
 
   

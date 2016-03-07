@@ -21,13 +21,13 @@ print.pl <- function(x, ..., use.crayon = NULL) {
             cat(attr(x, "instrument")[[i]], "\n")
             ind <- "  "
         }
-        w <- max(nchar(c(x[[i]]$pnl, x[[i]]$realised, x[[i]]$unrealised)))
+        w <- max(nchar(c(x[[i]]$pl, x[[i]]$realised, x[[i]]$unrealised)))
         BUY <- if (is.finite(x[[i]]$buy))
                    x[[i]]$buy else "."
         SELL <- if (is.finite(x[[i]]$sell))
                    x[[i]]$sell else "."
         cat(ind, "P/L total     ",
-            if (use.crayon) bold(numrow(x[[i]]$pnl, w)) else numrow(x[[i]]$pnl, w) , "\n",
+            if (use.crayon) bold(numrow(x[[i]]$pl, w)) else numrow(x[[i]]$pl, w) , "\n",
             if (any(!is.na(x[[i]]$realised)))
                 paste0(ind, "__ realised   ", numrow(x[[i]]$realised, w), "\n"),
             if (any(!is.na(x[[i]]$unrealised)))
@@ -40,7 +40,7 @@ print.pl <- function(x, ..., use.crayon = NULL) {
         if (i < ni)
             cat("\n")
     }
-    cat("\n", sQuote("PnL total"), " is in units of instrument;\n",
+    cat("\n", sQuote("P/L total"), " is in units of instrument;\n",
         sQuote("volume"), " is total /absolute/ amount of traded instruments.\n",
         sep = "")
     invisible(x)
@@ -243,7 +243,7 @@ pl.default <- function(amount, price, timestamp = NULL,
         }
         pl1 <- .pl(amount1, price1, tol = tol, do.warn = FALSE)
         if (!along.timestamp) {
-            tmp <- list(pnl = pl1[1L],
+            tmp <- list(pl = pl1[1L],
                         realised = NA,
                         unrealised = NA,
                         buy = pl1[3L],
@@ -257,7 +257,7 @@ pl.default <- function(amount, price, timestamp = NULL,
             cumpos  <- cumsum(amount1)
             pnl <- cumpos * price1 + cumcash
             real <- avg(amount1, price1)$realised
-            tmp <- list(pnl = pnl,
+            tmp <- list(pl = pnl,
                         realised = real,
                         unrealised = pnl - real,
                         buy = pl1[3L],

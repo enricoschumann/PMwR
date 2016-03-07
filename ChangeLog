@@ -1,4 +1,10 @@
-2016-03-06  Enrico Schumann  <es@enricoschumann.net>
+2016-03-07  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pl.R (pl.default): rename 'pnl' to 'pl' (for consistency)
+
+2016-03-07  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 0.1-93
 
 	* R/pl.R (print.pl): align 'pl' stats (total, realised,
 	unrealised, volume) for printing
