@@ -1,5 +1,11 @@
 2016-03-08  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/pl.R (print.pl): call 'prettyNum' before computing width of
+	numbers (to avoid that numbers such as 1.10000000001 are measured
+	as 13 characters wide, despite being printed as 1.1)
+
+2016-03-08  Enrico Schumann  <es@enricoschumann.net>
+
         * DESCRIPTION (Version): 0.1-94
 
 	* inst/unitTests/ut_pl.R (test.pl): pnl => pl

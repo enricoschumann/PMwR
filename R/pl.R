@@ -25,7 +25,7 @@ print.pl <- function(x, ..., use.crayon = NULL) {
             cat(attr(x, "instrument")[[i]], "\n")
             ind <- "  "
         }
-        w <- max(nchar(c(x[[i]]$pl, x[[i]]$realised, x[[i]]$unrealised)))
+        w <- max(nchar(prettyNum(c(x[[i]]$pl, x[[i]]$realised, x[[i]]$unrealised))))
         BUY <- if (is.finite(x[[i]]$buy))
                    x[[i]]$buy else "."
         SELL <- if (is.finite(x[[i]]$sell))
