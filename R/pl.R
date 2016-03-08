@@ -11,9 +11,13 @@ print.pl <- function(x, ..., use.crayon = NULL) {
 
     ni <- length(x)
 
-    numrow <- function(x, w)
-        substr(paste0(format(x, width = w), collapse = " "),
-               1, ceiling(getOption("width")*0.9))
+    numrow <- function(x, w) {
+        ans <- substr(paste0(format(x, width = w), collapse = " "),
+                      1, ceiling(getOption("width")*0.9))
+        if (nchar(ans) < nchar(paste0(format(x, width = w), collapse = " ")))
+            ans  <- paste(ans, "[...]")
+        ans
+    }
     
     for (i in seq_len(ni)) {
         ind <- ""
@@ -211,6 +215,10 @@ pl.default <- function(amount, price, timestamp = NULL,
         ni <- 1L
         if (!is.null(eval.price))
             names(eval.price) <- ""
+        if (!is.null(initial.position))
+            names(initial.position) <- ""
+        if (!is.null(initial.price))
+            names(initial.price) <- ""
     } else {
         no.i <- FALSE
         uniq.i <- sort(unique(instrument))
@@ -220,22 +228,36 @@ pl.default <- function(amount, price, timestamp = NULL,
     ans  <- vector(mode = "list", length = ni)
     for (i in seq_len(ni)) {
         ii <- uniq.i[i] == instrument
-        amount1 <- amount[ii]
-        price1 <- price[ii]
+        ## TODO amount could be zero
+        amount1 <- amount[ii && abs(amount) > tol]
+        if (length(amount1))
+            price1 <- price[ii && abs(amount) > tol]
+        else
+            price1 <- numeric(0)
+
         if (!is.null(eval.price) && no.i)
             eval.price1 <- eval.price
         if (!is.null(eval.price) && !no.i)
             eval.price1 <- eval.price[[ uniq.i[i] ]]
 
         ## TODO initial position
-
+        if (!is.null(initial.position) && no.i) {
+            ipos1 <- initial.position
+        } else if (!is.null(initial.position) && !no.i) {
+            ipos1 <- initial.position[[ uniq.i[i] ]]
+        } else
+            ipos1 <- 0
         
-        open <- abs(sum(amount1)) > tol
+        open <- abs(sum(amount1, ipos1)) > tol
         if (open && is.null(eval.price)) {
             warning(sQuote("sum(amount)"), " is not zero",
                     if (!no.i) " for ",  uniq.i[i], 
                     "; specify ",
                     sQuote("eval.price")," to compute p/l.")
+        }
+        if (!is.null(initial.position)) {
+            amount1 <- c(initial.position, amount1)
+            price1 <- c(initial.price, price1)
         }
         if (open && !is.null(eval.price)) {
             amount1 <- c(amount1, -sum(amount1))
@@ -251,7 +273,10 @@ pl.default <- function(amount, price, timestamp = NULL,
                         volume = pl1[2L])
             if (open && !is.null(eval.price))
                 tmp[["volume"]] <- tmp[["volume"]] -
-                                   abs(sum(amount[ii]))
+                                   abs(sum(amount[ii], ipos1))
+            if (!is.null(initial.position))
+                tmp[["volume"]] <- tmp[["volume"]] - abs(ipos1)
+            
         } else {
             cumcash <- cumsum(-price1 * amount1)
             cumpos  <- cumsum(amount1)
@@ -347,14 +372,3 @@ avg <- function(amount, price, tol = 1e-8) {
         list(average = av, realised = rd)            
     }
 }
-
-
-## amount <- c(1,1,-1,1,-2)
-## price <- c(100,102,105,102,105)
-
-## cumcash <- cumsum(-price * amount)
-## cumpos  <- cumsum(amount)
-## pnl <- cumpos * price + cumcash
-## real <- avg(amount, price)$realised
-## unreal <- pnl-real
-## data.frame(cumsum(amount), price, pnl, real, unreal)

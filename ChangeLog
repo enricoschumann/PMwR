@@ -1,6 +1,14 @@
+2016-03-08  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pl.R (print.pl): add '[...]' when pl along.timestamp
+	is cut off
+	(pl.default): 'initial.position' and 'initial.price' are
+	now used
+
 2016-03-07  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pl.R (pl.default): rename 'pnl' to 'pl' (for consistency)
+	* R/pl.R (pl.default): rename 'pnl' to 'pl' (for
+	consistency)
 
 2016-03-07  Enrico Schumann  <es@enricoschumann.net>
 
