@@ -1,5 +1,7 @@
 2016-03-08  Enrico Schumann  <es@enricoschumann.net>
 
+	* inst/unitTests/ut_pl.R (test.pl): pnl => pl
+
 	* R/pl.R (print.pl): add '[...]' when pl along.timestamp
 	is cut off
 	(pl.default): 'initial.position' and 'initial.price' are

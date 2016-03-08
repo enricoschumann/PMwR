@@ -4,14 +4,14 @@ test.pl <- function() {
     require("RUnit")
     
     checkEquals(pl(amount = c(1,-1),
-                   price  = c(1,2))[[1]][["pnl"]], 1)
+                   price  = c(1,2))[[1]][["pl"]], 1)
 
     timestamp <- 1:4
     amount <- c(1,1,1,1)
     price <- 101:104
     instrument <- "my I"
     jnl <- journal(timestamp, amount, price, , instrument= instrument)
-    checkTrue(is.na(suppressWarnings(pl(jnl)[[1]][["pnl"]])))
+    checkTrue(is.na(suppressWarnings(pl(jnl)[[1]][["pl"]])))
     
     ## amount <- c(1,1,-1,1,-1)
     ## price <- c(100,99,101,100,101)
