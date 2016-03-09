@@ -1,8 +1,18 @@
+2016-03-09  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pl.R (as.data.frame.pl): new method
+	(pl.default): refactor function; result now has an attribute
+	'along.timestamp' (logical)
+
+	* man/pl.Rd: document 'as.data.frame.pl'; add example for
+	using package 'crayon'
+
 2016-03-08  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pl.R (print.pl): call 'prettyNum' before computing width of
-	numbers (to avoid that numbers such as 1.10000000001 are measured
-	as 13 characters wide, despite being printed as 1.1)
+	* R/pl.R (print.pl): call 'prettyNum' before computing
+	width of numbers (to avoid that numbers such as
+	1.10000000001 are measured as 13 characters wide, despite
+	being printed as 1.1)
 
 2016-03-08  Enrico Schumann  <es@enricoschumann.net>
 

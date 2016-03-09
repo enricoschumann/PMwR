@@ -30,7 +30,7 @@ print.pl <- function(x, ..., use.crayon = NULL) {
                    x[[i]]$buy else "."
         SELL <- if (is.finite(x[[i]]$sell))
                    x[[i]]$sell else "."
-        cat(ind, "P/L total     ",
+        cat(ind, bold("P/L total     "),
             if (use.crayon) bold(numrow(x[[i]]$pl, w)) else numrow(x[[i]]$pl, w) , "\n",
             if (any(!is.na(x[[i]]$realised)))
                 paste0(ind, "__ realised   ", numrow(x[[i]]$realised, w), "\n"),
@@ -210,15 +210,15 @@ pl.default <- function(amount, price, timestamp = NULL,
         .NotYetUsed("approx")
     if (is.null(instrument) || all(is.na(instrument))) {
         no.i <- TRUE
-        instrument  <- rep("", length(amount))
-        uniq.i <- ""
+        instrument  <- rep("_", length(amount))
+        uniq.i <- "_"
         ni <- 1L
         if (!is.null(eval.price))
-            names(eval.price) <- ""
+            names(eval.price) <- "_"
         if (!is.null(initial.position))
-            names(initial.position) <- ""
+            names(initial.position) <- "_"
         if (!is.null(initial.price))
-            names(initial.price) <- ""
+            names(initial.price) <- "_"
     } else {
         no.i <- FALSE
         uniq.i <- sort(unique(instrument))
@@ -227,42 +227,43 @@ pl.default <- function(amount, price, timestamp = NULL,
         
     ans  <- vector(mode = "list", length = ni)
     for (i in seq_len(ni)) {
-        ii <- uniq.i[i] == instrument
-        ## TODO amount could be zero
-        amount1 <- amount[ii && abs(amount) > tol]
-        if (length(amount1))
-            price1 <- price[ii && abs(amount) > tol]
-        else
-            price1 <- numeric(0)
+        i1 <- uniq.i[i]
+        iv <- i1 == instrument & abs(amount) > tol
+        amount1 <- amount[iv]
+        price1 <- price[iv]
+        if (!is.null(timestamp))
+            timestamp1 <- timestamp[iv]
 
-        if (!is.null(eval.price) && no.i)
-            eval.price1 <- eval.price
-        if (!is.null(eval.price) && !no.i)
-            eval.price1 <- eval.price[[ uniq.i[i] ]]
+        subtr <- 0
+        if (!is.null(initial.position)) {
+            ipos1 <- initial.position[[ i1 ]]
+            iprice1 <- initial.price[[ i1 ]]
 
-        ## TODO initial position
-        if (!is.null(initial.position) && no.i) {
-            ipos1 <- initial.position
-        } else if (!is.null(initial.position) && !no.i) {
-            ipos1 <- initial.position[[ uniq.i[i] ]]
-        } else
-            ipos1 <- 0
-        
-        open <- abs(sum(amount1, ipos1)) > tol
+            subtr <- subtr + abs(ipos1)
+            amount1 <- c(ipos1, amount1)
+            price1 <- c(iprice1, price1)
+        } 
+
+        open <- abs(sum(amount1)) > tol
         if (open && is.null(eval.price)) {
             warning(sQuote("sum(amount)"), " is not zero",
-                    if (!no.i) " for ",  uniq.i[i], 
-                    "; specify ",
-                    sQuote("eval.price")," to compute p/l.")
+                    if (!no.i) paste0(" for ",  uniq.i[i]), 
+                    ": specify ",
+                    sQuote("eval.price")," to compute p/l")
+        } else if (!open && !is.null(eval.price)) {
+            warning("all trades are closed, ",
+                    "but ", sQuote("eval.price")," is specified")
         }
-        if (!is.null(initial.position)) {
-            amount1 <- c(initial.position, amount1)
-            price1 <- c(initial.price, price1)
-        }
-        if (open && !is.null(eval.price)) {
+
+        if (open) {
+            eval.price1 <- eval.price[[ i1 ]]
+            if (is.null(eval.price1))
+                eval.price1 <- NA
+            subtr <- subtr + abs(sum(amount1))
             amount1 <- c(amount1, -sum(amount1))
             price1  <- c(price1, eval.price1)
         }
+        
         pl1 <- .pl(amount1, price1, tol = tol, do.warn = FALSE)
         if (!along.timestamp) {
             tmp <- list(pl = pl1[1L],
@@ -270,12 +271,7 @@ pl.default <- function(amount, price, timestamp = NULL,
                         unrealised = NA,
                         buy = pl1[3L],
                         sell = pl1[4L],
-                        volume = pl1[2L])
-            if (open && !is.null(eval.price))
-                tmp[["volume"]] <- tmp[["volume"]] -
-                                   abs(sum(amount[ii], ipos1))
-            if (!is.null(initial.position))
-                tmp[["volume"]] <- tmp[["volume"]] - abs(ipos1)
+                        volume = pl1[2L] - subtr)
             
         } else {
             cumcash <- cumsum(-price1 * amount1)
@@ -292,8 +288,9 @@ pl.default <- function(amount, price, timestamp = NULL,
         ans[[i]] <- tmp
     }
     class(ans) <- "pl"
+    attr(ans, "along.timestamp") <- along.timestamp
     if (no.i) {
-        attr(ans, "instrument") <- NA        
+        attr(ans, "instrument") <- NA
     } else {
         attr(ans, "instrument") <- uniq.i
         names(ans) <- uniq.i
@@ -319,30 +316,20 @@ pl.default <- function(amount, price, timestamp = NULL,
 
 }
 
-## debug(pl.default)
- 
-## instrument  <- c("FGBL", "FGBL", "Bond", "Bond")
-## amount <- c(1, -2, 2, -1)
-## price <- c(100,101, 1, 5)
-## ## .pl(amount, price)
-## pl.default(amount, price, instrument=instrument)
-## pl.default(amount, price, instrument=instrument, eval.price=c(FGBL=103, Bond = 2))
+as.data.frame.pl <- function(x, ...) {
+    if (isTRUE(attr(x, "along.timestamp")))
+        stop("currently only supported for ",
+             sQuote("along.timestamp = FALSE"))
 
-## amount <- c(1, -2)
-## price <- c(100,101)
-## pl.default(amount, price)
-## pl.default(amount, price, eval.price=100)
+    ans <- data.frame(pl   = unlist(lapply(x, `[[`, "pl")),
+                      buy  = unlist(lapply(x, `[[`, "buy")),
+                      sell = unlist(lapply(x, `[[`, "sell")),
+                      volume = unlist(lapply(x, `[[`, "volume")))
+    if (!all(is.na(attr(x, "instrument"))))
+        row.names(ans) <- attr(x, "instrument")
+    ans
+}
 
-## require("rbenchmark")
-
-## amount <- rep(c(1,-1), times = 100000)
-## price <- rep(c(100,101), times = 100000)
-
-## benchmark(-drop(crossprod(amount, price)),
-##           -c(crossprod(amount, price)),
-##           -sum(amount * price),
-##           columns = c("test", "elapsed", "relative"),
-##           replications = 1000)
 
 avg <- function(amount, price, tol = 1e-8) {
     if (any(rm <- abs(amount) < tol)) {

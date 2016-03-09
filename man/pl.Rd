@@ -4,6 +4,7 @@
 \alias{pl.default}
 \alias{pl.journal}
 \alias{print.pl}
+\alias{as.data.frame.pl}
 \title{
   Profit and Loss
 }
@@ -27,6 +28,8 @@ pl(amount, \dots)
 .pl(amount, price, tol = 1e-10, do.warn = TRUE)
 
 \method{print}{pl}(x, \dots, use.crayon = NULL)
+
+\method{as.data.frame}{pl}(x, \dots)
 }
 \arguments{
   \item{amount}{
@@ -63,7 +66,7 @@ pl(amount, \dots)
   \item{approx}{logical}
   \item{tol}{numeric: threshold to consider a position zero.}
   \item{do.warn}{logical}
-  \item{x}{a pl object to be printed}
+  \item{x}{a pl object to be printed or to be coerced to a data.frame}
   \item{\dots}{further argument}
   \item{use.crayon}{logical}
 }
@@ -84,7 +87,6 @@ pl(amount, \dots)
   \code{pl}, \code{realised}, \code{unrealised}, \code{buy},
   \code{sell}, \code{volume}.
 
-  
 }
 \author{
   Enrico Schumann
@@ -97,7 +99,7 @@ J <- journal(timestamp = c(  1,   2,   3),
              amount    = c(  1,   1,  -2),
              price     = c(100, 102, 101))
 pl(J)
-pl(c(1, 1, -2), c(100,102, 101)) ## without a 'journal'
+pl(c(1, 1, -2), c(100,102, 101))  ## without a 'journal'
 
 
 J <- journal(timestamp  = c(  1,   2,   3,   1,   2,   3),
@@ -105,6 +107,8 @@ J <- journal(timestamp  = c(  1,   2,   3,   1,   2,   3),
              price      = c(100, 102, 101, 100, 102, 105),
              instrument = c(rep("Bond A", 3), rep("Bond B", 3)))
 pl(J)
+as.data.frame(pl(J))
+
 
 
 ## Example for 'eval.price'
@@ -124,5 +128,14 @@ instrument  <- c(rep("Bond A", 3), rep("Bond B", 3))
 amount <- c(1, -2, 1, 2, -1, -1)
 price <- c(100, 101, 103, 100, 105, 100)
 pl(amount, price, instrument = instrument) ## no p/l + warning
+
+
+## use package 'crayon'
+\dontrun{
+options(PMwR.use.crayon = FALSE)
+pl(amount = c(1, -1), price = c(1, 2))
+options(PMwR.use.crayon = TRUE)
+pl(amount = c(1, -1), price = c(1, 2))
+}
 
 }
