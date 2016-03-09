@@ -222,9 +222,9 @@ pl.default <- function(amount, price, timestamp = NULL,
     } else {
         no.i <- FALSE
         uniq.i <- sort(unique(instrument))
-        ni <- length(uniq.i)        
+        ni <- length(uniq.i)
     }
-        
+
     ans  <- vector(mode = "list", length = ni)
     for (i in seq_len(ni)) {
         i1 <- uniq.i[i]
@@ -242,12 +242,12 @@ pl.default <- function(amount, price, timestamp = NULL,
             subtr <- subtr + abs(ipos1)
             amount1 <- c(ipos1, amount1)
             price1 <- c(iprice1, price1)
-        } 
+        }
 
         open <- abs(sum(amount1)) > tol
         if (open && is.null(eval.price)) {
             warning(sQuote("sum(amount)"), " is not zero",
-                    if (!no.i) paste0(" for ",  uniq.i[i]), 
+                    if (!no.i) paste0(" for ",  uniq.i[i]),
                     ": specify ",
                     sQuote("eval.price")," to compute p/l")
         } else if (!open && !is.null(eval.price)) {
@@ -263,7 +263,7 @@ pl.default <- function(amount, price, timestamp = NULL,
             amount1 <- c(amount1, -sum(amount1))
             price1  <- c(price1, eval.price1)
         }
-        
+
         pl1 <- .pl(amount1, price1, tol = tol, do.warn = FALSE)
         if (!along.timestamp) {
             tmp <- list(pl = pl1[1L],
@@ -272,7 +272,6 @@ pl.default <- function(amount, price, timestamp = NULL,
                         buy = pl1[3L],
                         sell = pl1[4L],
                         volume = pl1[2L] - subtr)
-            
         } else {
             cumcash <- cumsum(-price1 * amount1)
             cumpos  <- cumsum(amount1)
@@ -340,9 +339,9 @@ avg <- function(amount, price, tol = 1e-8) {
     cs <- cumsum(amount)
     acs <- abs(cs)
     av <- rd <- numeric(n <- length(cs))
-    
+
     if (n == 1L) {
-        list(average = price, realised = 0)            
+        list(average = price, realised = 0)
     } else {
         av[1L] <- price[1L]
         for (i in 2L:n) {
@@ -356,6 +355,6 @@ avg <- function(amount, price, tol = 1e-8) {
                 rd[i] <- rd[i1] + amount[i] * (av[i] - price[i])
             }
         }
-        list(average = av, realised = rd)            
+        list(average = av, realised = rd)
     }
 }
