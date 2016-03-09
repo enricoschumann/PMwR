@@ -1,5 +1,7 @@
 2016-03-09  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-95
+
 	* R/pl.R (as.data.frame.pl): new method
 	(pl.default): refactor function; result now has an attribute
 	'along.timestamp' (logical)
