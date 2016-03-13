@@ -28,8 +28,9 @@ rebalance(current, target, price,
   \item{price}{
     the current prices
   }
-  \item{notional}{
-    the value of the portfolio; if missing, replaced by \code{sum(current*prices)}
+  \item{notional}{    
+    the value of the portfolio; if missing, replaced by
+    \code{sum(current*prices)}
   }
   \item{multiplier}{
     numeric vector, possibly named
@@ -55,16 +56,16 @@ rebalance(current, target, price,
 }
 \details{
 
-  Given a desired portfolio and a current portfolio, the function
-  computes the necessary trades.
+  The function compute the necessary trades to move from the
+  \code{current} portfolio to a desired portfolio.
   
 }
 \value{
 
-  An object of class rebalance, which is a list:
+  An object of class \code{rebalance}, which is a list:
   
-  \item{current}{\ldots}
-  \item{new}{\ldots}
+  \item{current}{current portfolio}
+  \item{new}{new portfolio}
   \item{names}{\ldots}
   \item{prices}{\ldots}
   \item{notional}{\ldots}
@@ -86,8 +87,8 @@ rebalance(current, target, price,
   \code{\link{journal}}
 }
 \examples{
-rebalance(current = c(a = 100, b = 20),
-          target  = c(a = 0.2, c = 0.3),
-          price   = c(a = 1, b = 2, c = 3))
-
+(r <- rebalance(current = c(a = 100, b = 20),
+                target  = c(a = 0.2, c = 0.3),
+                price   = c(a = 1, b = 2, c = 3)))
+##journal(r)
 }

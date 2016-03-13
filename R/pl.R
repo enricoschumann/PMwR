@@ -2,8 +2,10 @@ print.pl <- function(x, ..., use.crayon = NULL) {
     ## lapply(x, `[[`, "realised")
 
     use.crayon <- if (is.null(use.crayon) &&
-                      !is.null(uc <- getOption("PMwR.use.crayon")))
-                      uc else FALSE
+                      !is.null(tmp <- getOption("PMwR.use.crayon")))
+                      tmp else FALSE
+    if (!use.crayon)
+        bold <- function(x) x
     
     oo <- getOption("scipen")
     options(scipen = 1e8)
@@ -31,7 +33,7 @@ print.pl <- function(x, ..., use.crayon = NULL) {
         SELL <- if (is.finite(x[[i]]$sell))
                    x[[i]]$sell else "."
         cat(ind, bold("P/L total     "),
-            if (use.crayon) bold(numrow(x[[i]]$pl, w)) else numrow(x[[i]]$pl, w) , "\n",
+            bold(numrow(x[[i]]$pl, w)) , "\n",
             if (any(!is.na(x[[i]]$realised)))
                 paste0(ind, "__ realised   ", numrow(x[[i]]$realised, w), "\n"),
             if (any(!is.na(x[[i]]$unrealised)))
@@ -194,13 +196,15 @@ pl.journal <- function(amount, multiplier = 1,
                multiplier = multiplier,
                along.timestamp = along.timestamp,
                approx = approx,
+               initial.position = initial.position, initial.price = initial.price,
                eval.price = eval.price,
                tol = tol, ...)
 }
 
 pl.default <- function(amount, price, timestamp = NULL,
                        instrument = NULL, multiplier = 1,
-                       along.timestamp = FALSE, approx = FALSE,
+                       along.timestamp = FALSE,
+                       approx = FALSE,
                        initial.position = NULL, initial.price = NULL,
                        eval.price = NULL,
                        tol = 1e-10, ...) {
@@ -233,6 +237,9 @@ pl.default <- function(amount, price, timestamp = NULL,
         price1 <- price[iv]
         if (!is.null(timestamp))
             timestamp1 <- timestamp[iv]
+        eval.price1 <- eval.price[[ i1 ]]
+        if (is.null(eval.price1))
+            eval.price1 <- NA
 
         subtr <- 0
         if (!is.null(initial.position)) {
@@ -245,20 +252,18 @@ pl.default <- function(amount, price, timestamp = NULL,
         }
 
         open <- abs(sum(amount1)) > tol
-        if (open && is.null(eval.price)) {
-            warning(sQuote("sum(amount)"), " is not zero",
+        if (!open && !is.null(eval.price1) && !is.na(eval.price1)) {
+            warning("all trades are closed ",
                     if (!no.i) paste0(" for ",  uniq.i[i]),
-                    ": specify ",
-                    sQuote("eval.price")," to compute p/l")
-        } else if (!open && !is.null(eval.price)) {
-            warning("all trades are closed, ",
-                    "but ", sQuote("eval.price")," is specified")
+                    ", but ", sQuote("eval.price")," is specified")
         }
 
         if (open) {
-            eval.price1 <- eval.price[[ i1 ]]
-            if (is.null(eval.price1))
-                eval.price1 <- NA
+            if (is.null(eval.price))
+                warning(sQuote("sum(amount)"), " is not zero",
+                        if (!no.i) paste0(" for ",  uniq.i[i]),
+                        ": specify ",
+                        sQuote("eval.price")," to compute p/l")
             subtr <- subtr + abs(sum(amount1))
             amount1 <- c(amount1, -sum(amount1))
             price1  <- c(price1, eval.price1)
