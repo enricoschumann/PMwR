@@ -1,5 +1,7 @@
 2016-03-13  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-96
+
 	* R/pl.R (pl.journal): fixed -- 'pl.journal' had not
 	passed on 'initial.position' and 'initial.price'
 
