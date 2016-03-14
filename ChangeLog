@@ -1,5 +1,7 @@
 2016-03-14  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-97
+
 	* R/pl.R (print.pl): improve formatting (alignment
 	of numbers)
 	(print.pl): new argument 'na.print', with default '.'
