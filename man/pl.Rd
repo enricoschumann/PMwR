@@ -27,7 +27,7 @@ pl(amount, \dots)
 
 .pl(amount, price, tol = 1e-10, do.warn = TRUE)
 
-\method{print}{pl}(x, \dots, use.crayon = NULL)
+\method{print}{pl}(x, \dots, use.crayon = NULL, na.print = ".")
 
 \method{as.data.frame}{pl}(x, \dots)
 }
@@ -69,6 +69,7 @@ pl(amount, \dots)
   \item{x}{a pl object to be printed or to be coerced to a data.frame}
   \item{\dots}{further argument}
   \item{use.crayon}{logical}
+  \item{na.print}{character: how to print \code{NA} values}
 }
 \details{
 

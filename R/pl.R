@@ -1,6 +1,4 @@
-print.pl <- function(x, ..., use.crayon = NULL) {
-    ## lapply(x, `[[`, "realised")
-
+print.pl <- function(x, ..., use.crayon = NULL, na.print = ".") {
     use.crayon <- if (is.null(use.crayon) &&
                       !is.null(tmp <- getOption("PMwR.use.crayon")))
                       tmp else FALSE
@@ -14,33 +12,41 @@ print.pl <- function(x, ..., use.crayon = NULL) {
     ni <- length(x)
 
     numrow <- function(x, w) {
-        ans <- substr(paste0(format(x, width = w), collapse = " "),
+        ans <- substr(paste0(format(x, width = w, justify = "right"), collapse = " "),
                       1, ceiling(getOption("width")*0.9))
         if (nchar(ans) < nchar(paste0(format(x, width = w), collapse = " ")))
             ans  <- paste(ans, "[...]")
         ans
     }
-    
+
+    indent <- ""
+    print.inst <- FALSE
+    if (!all(is.na(attr(x, "instrument")))) {
+        print.inst <- TRUE
+        indent <- "  "
+    }
+
     for (i in seq_len(ni)) {
-        ind <- ""
-        if (!all(is.na(attr(x, "instrument")))) {
+        if (print.inst)
             cat(attr(x, "instrument")[[i]], "\n")
-            ind <- "  "
-        }
-        w <- max(nchar(prettyNum(c(x[[i]]$pl, x[[i]]$realised, x[[i]]$unrealised))))
-        BUY <- if (is.finite(x[[i]]$buy))
-                   x[[i]]$buy else "."
+        PL   <- if (is.finite(x[[i]]$pl))
+                    x[[i]]$pl else na.print
+        BUY  <- if (is.finite(x[[i]]$buy))
+                    x[[i]]$buy else na.print
         SELL <- if (is.finite(x[[i]]$sell))
-                   x[[i]]$sell else "."
-        cat(ind, bold("P/L total     "),
-            bold(numrow(x[[i]]$pl, w)) , "\n",
+                    x[[i]]$sell else na.print
+        w <- max(nchar(prettyNum(c(PL, BUY, SELL,
+                                   x[[i]]$realised,
+                                   x[[i]]$unrealised))))
+
+        cat(indent, bold("P/L total     "), bold(numrow(PL, w)) , "\n",
             if (any(!is.na(x[[i]]$realised)))
-                paste0(ind, "__ realised   ", numrow(x[[i]]$realised, w), "\n"),
+                paste0(indent, "__ realised   ", numrow(x[[i]]$realised, w), "\n"),
             if (any(!is.na(x[[i]]$unrealised)))
-                paste0(ind, "__ unrealised ", numrow(x[[i]]$unrealised, w), "\n"),
-            ind, "average buy    ", BUY, "\n",
-            ind, "average sell   ", SELL, "\n",
-            ind, "volume        ",
+                paste0(indent, "__ unrealised ", numrow(x[[i]]$unrealised, w), "\n"),
+            indent, "average buy   ", numrow(BUY, w), "\n",
+            indent, "average sell  ", numrow(SELL, w), "\n",
+            indent, "volume        ",
             numrow(x[[i]]$volume, w), "\n", sep = "")
 
         if (i < ni)
