@@ -185,7 +185,7 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
 
 }
 \references{
-  Enrico Schumann.\emph{Portfolio Managemnt with R.}
+  Enrico Schumann. \emph{Portfolio Management with R.}
 }
 \author{
   Enrico Schumann
