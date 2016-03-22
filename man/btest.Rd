@@ -52,7 +52,8 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
 
   }
   \item{do.rebalance}{    
-    Same as \code{do.signal}.
+    Same as \code{do.signal}. Can also be the string "do.signal", in
+    which case the actual result from \code{do.signal} is copied.
   }
   \item{print.info}{
     A function. If \code{NULL}, nothing is printed. See Details.

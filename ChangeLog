@@ -1,3 +1,9 @@
+2016-03-22  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): argument 'do.rebalance' can be
+	specified as string 'do.signal', in which case the
+	value of 'do.signal' is copied
+
 2016-03-14  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-97
@@ -18,8 +24,8 @@
         * DESCRIPTION (Version): 0.1-95
 
 	* R/pl.R (as.data.frame.pl): new method
-	(pl.default): refactor function; result now has an attribute
-	'along.timestamp' (logical)
+	(pl.default): refactor function; result now has an
+	attribute 'along.timestamp' (logical)
 
 	* man/pl.Rd: document 'as.data.frame.pl'; add example for
 	using package 'crayon'

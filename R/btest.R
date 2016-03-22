@@ -123,6 +123,9 @@ btest  <- function(prices,
         do.rebalance <- function(...)
             FALSE
         warning(sQuote("do.rebalance"), " is FALSE: strategy will never trade")
+    } else if (identical(do.rebalance, "do.signal")) {
+        do.rebalance <- function(...)
+            computeSignal                
     } else if (!missing(timestamp) && inherits(do.rebalance, class(timestamp))) {
         ## TODO: when timestamp is specified, match to timestamp
         stop("not implemented")
