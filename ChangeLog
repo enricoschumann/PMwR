@@ -1,3 +1,8 @@
+2016-03-23  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (do.signal): switch off 'never trade' warning for
+	'atest'
+
 2016-03-22  Enrico Schumann  <es@enricoschumann.net>
 
 	* man/btest.Rd: add example

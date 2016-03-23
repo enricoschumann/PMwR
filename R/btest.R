@@ -60,7 +60,8 @@ btest  <- function(prices,
     if (is.null(do.signal) || identical(do.signal, TRUE)) {
         do.signal <- function(...)
             TRUE
-    } else if (identical(do.signal, FALSE)) {
+    } else if (identical(do.signal, FALSE) &&
+               as.character(match.call()[[1]]) == "btest") {
         do.signal <- function(...)
             FALSE
         warning(sQuote("do.signal"), " is FALSE: strategy will never trade")
