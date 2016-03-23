@@ -56,12 +56,10 @@ btest  <- function(prices,
     db.cashflow <-  if (is.function(cashflow) && isdebugged(cashflow))
                         TRUE else FALSE
 
-
     if (is.null(do.signal) || identical(do.signal, TRUE)) {
         do.signal <- function(...)
             TRUE
-    } else if (identical(do.signal, FALSE) &&
-               as.character(match.call()[[1]]) == "btest") {
+    } else if (identical(do.signal, FALSE) && !final.position) {
         do.signal <- function(...)
             FALSE
         warning(sQuote("do.signal"), " is FALSE: strategy will never trade")
