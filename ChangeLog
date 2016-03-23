@@ -1,5 +1,7 @@
 2016-03-23  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-98
+
 	* R/btest.R (do.signal): switch off 'never trade' warning for
 	'atest'
 
