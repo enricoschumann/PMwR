@@ -1,3 +1,10 @@
+2016-03-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (str.journal): call 'str' directly to
+	avoid error message, which happens because 'journal'
+	defines 'length' and `[[` methods; see
+	https://stat.ethz.ch/pipermail/r-package-devel/2016q1/000687.html
+
 2016-03-23  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R (do.signal): switch off 'never trade'

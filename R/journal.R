@@ -357,6 +357,7 @@ str.journal <- function(object, ...) {
     cat(sQuote("journal"), ":\t ",
         n, " transaction", if (n != 1) "s", "\n",
         sep = "")
-    NextMethod(object)
+    tmp <- capture.output(str(unclass(object), ...))
+    cat(paste(tmp[-1], collapse = "\n", sep = ""), "\n")
     invisible()
 }
