@@ -1,5 +1,7 @@
 2016-03-24  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-99
+
 	* R/journal.R (str.journal): call 'str' directly to
 	avoid error message, which happens because 'journal'
 	defines 'length' and `[[` methods; see
