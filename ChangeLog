@@ -1,5 +1,8 @@
 2016-03-25  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/NAVseries.R (as.NAVseries.btest): use
+	'timestamp' information
+
 	* R/btest.R (btest): fixed -- with 'include.data'
 	set TRUE and a 'timestamp' specified, 'timestamp'
 	was not included in the final result
