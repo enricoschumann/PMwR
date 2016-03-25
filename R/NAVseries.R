@@ -185,6 +185,82 @@ print.summary.NAVseries <- function(x, ..., sparkplot = TRUE, monthly.returns = 
     invisible(x)
 }
 
+toLatex.summary.NAVseries <- function(x, ...) {
+    datef <- function(x) {
+        if (inherits(x[1L], "Date"))
+            x <- format(x, "%d %b %Y")
+        x
+    }
+    percf <- function(x)
+        format(round(100*x, 1), nsmall = 1, justify = "right", width = 7)
+    numf <- function(x)
+        format(x, justify = "right", width = 7, nsmall = 2, digits = 2,
+               scientific = FALSE)
+
+    ## format: dates
+    fields <- c("from", "to", "low.when", "high.when",
+                "mdd.high.when", "mdd.low.when")
+    for (f in fields)
+        x[[f]] <- datef(x[[f]])
+
+    ## format: %
+    fields <- c("mdd", "underwater",
+                "vol", "vol.up", "vol.down", "return")
+    for (f in fields)
+        x[[f]] <- percf(x[[f]])
+
+    ## format: prices
+    fields <- c("high", "low", "mdd.high", "mdd.low")
+    for (f in fields)
+        x[[f]] <- numf(x[[f]])
+
+    ## time period   from -- to
+    ## return p.a.
+    ## Volatility (%)           4.2  (annualised)
+    ## _ upside                 3.2
+    ## _ downside               2.7
+    ## max drawdown %
+    ## _ peak                139.17  (16 May 2013)
+    ## _ trough              132.69  (26 Dec 2014)
+    ## _ underwater as of, %)     0.1
+    ## ---------------------------------------------------------
+
+    template <-
+        c("---------------------------------------------------------",
+          "High <>%high%|  (%high.when%)",
+          "Low <>%low%|  (%low.when%)",
+          "---------------------------------------------------------",
+          "Return (%) <>%return%|  (annualised)",
+          "---------------------------------------------------------",
+          "Max. drawdown (%)   <> %mdd%|",
+          "_ peak <>%mdd.high%|  (%mdd.high.when%)",
+          "_ trough <>%mdd.low%|  (%mdd.low.when%)",
+          "_ underwater now (%) <>%underwater%|",
+          "---------------------------------------------------------",
+          "Volatility (%) <>%vol%|  (annualised)",
+          "_ upside <>%vol.up%|",
+          "_ downside <>%vol.down%|",
+          "---------------------------------------------------------\n")
+    nx <- names(x)
+    nx <- nx[nx != "NAVseries"]
+    nx <- nx[nx != "NAV"]
+    nx <- nx[nx != "timestamp"]
+    for (n in nx)
+        template <- gsub(paste0("%", n, "%"), x[[n]], template)
+    template <- valign(template)
+    cat(template, sep = "\n")
+    if (monthly.returns && inherits(x$timestamp, "Date")) {        
+        cat("Monthly returns  ")
+        if (.Platform$OS.type == "unix") 
+            sparkplot(returns(x=x$NAV, t=x$timestamp, period = "month"))
+        cat("\n")
+        
+        print(returns(x$NAV, x$timestamp, period = "month"),
+              year.rows = TRUE)
+    }
+    invisible(x)
+}
+
 ## print.NAVseries <- function(x, ...) {
         
     

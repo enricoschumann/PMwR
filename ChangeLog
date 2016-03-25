@@ -2,6 +2,7 @@
 
 	* R/NAVseries.R (as.NAVseries.btest): use
 	'timestamp' information
+	(toLatex.summary.NAVseries): add skeleton for method
 
 	* R/btest.R (btest): fixed -- with 'include.data'
 	set TRUE and a 'timestamp' specified, 'timestamp'
