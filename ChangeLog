@@ -1,3 +1,9 @@
+2016-03-25  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): fixed -- with 'include.data'
+	set TRUE and a 'timestamp' specified, 'timestamp'
+	was not included in the final result
+
 2016-03-24  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-99
