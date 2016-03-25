@@ -1,5 +1,7 @@
 2016-03-25  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-100
+
 	* R/NAVseries.R (as.NAVseries.btest): use
 	'timestamp' information
 	(toLatex.summary.NAVseries): add skeleton for method
