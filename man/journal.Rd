@@ -67,7 +67,7 @@ is.journal(x)
     numeric
   }
   \item{instrument}{
-    character
+    character or numeric (though typically character)
   }
   \item{id}{
     An atomic vector. Default is \code{NULL}.
