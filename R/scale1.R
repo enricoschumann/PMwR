@@ -97,6 +97,29 @@ scale1.zoo <- function(x, ..., when = "first.complete",
     zoo(ans, ii)
 }
 
+scale1.NAVseries <- function(x, ..., when = "first.complete",
+                             level = 1, centre = FALSE, scale = FALSE,
+                             geometric = TRUE,
+                             inflate = NULL) {
+
+    ii <- x$timestamp
+    xx <- x$NAV
+    if (!is.null(inflate)) {
+        dates <- as.Date(ii)
+        inflate.d <- (1+inflate)^(1/365)
+        xx <- xx*inflate.d^as.numeric(dates-dates[1L])
+    }
+    
+    if (inherits(when, class(ii)))
+        when <- matchOrNext(when, ii)
+    ans <- scale1.default(xx, when = when, level = level,
+                          centre = centre, scale = scale,
+                          geometric = geometric)
+    x$NAV <- ans
+    x
+}
+
+
 scale0 <- function(x, when = "first.complete", first = 100, scale = FALSE) {
     .Deprecated("scale1", package = "PMwR")
     ZOO <- FALSE

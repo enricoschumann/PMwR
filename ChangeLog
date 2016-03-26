@@ -2,6 +2,7 @@
 
 	* R/scale1.R (scale1.default): use 'anyNA()' instead
 	of 'any(is.na())'
+	(scale1.NAVseries): add method
 
 2016-03-25  Enrico Schumann  <es@enricoschumann.net>
 
