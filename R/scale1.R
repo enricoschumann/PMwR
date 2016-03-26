@@ -19,7 +19,7 @@ scale1.default <- function (x, ..., when = "first.complete",
         x <- as.matrix(x)
     }    
     if (when == "first.complete") {
-        tmp <- which(apply(x, 1, function(i) !any(is.na(i))))
+        tmp <- which(apply(x, 1, function(i) !anyNA(i)))
         if (length(tmp))
             init.p <- min(tmp)
         else
