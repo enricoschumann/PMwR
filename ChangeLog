@@ -1,5 +1,7 @@
 2016-03-31  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.1-101
+
 	* R/journal.R (journal.default): fixed -- 'journal'
 	did not recycle arguments (fields) passed via '...'
 
