@@ -1,3 +1,8 @@
+2016-03-31  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (journal.default): fixed -- 'journal'
+	did not recycle arguments (fields) passed via '...'
+
 2016-03-26  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/scale1.R (scale1.default): use 'anyNA()' instead

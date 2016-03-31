@@ -37,7 +37,6 @@ journal.btest <- function(amount, ...)
 
 journal.default <- function(amount, price, timestamp, instrument,
                     id = NULL,  account = NULL, ...) {
-        
     if (missing(timestamp))
         timestamp <- NA
     if (missing(instrument) || all(is.na(instrument)))
@@ -46,13 +45,19 @@ journal.default <- function(amount, price, timestamp, instrument,
         instrument <- instrument[1L]
     if (missing(price))
         price <- NA
-    instrument <- as.character(instrument)    
+    instrument <- as.character(instrument)
+
+    dots <- list(...)
+    nd <- names(dots)
+
     len <- max(length(timestamp),
                length(amount),
                length(price),
                length(id),
                length(instrument),
-               length(account))
+               length(account),
+               if (length(dots)) max(lengths(dots)))
+
     ans <- list(id         = rep(id,         len/length(id)),
                 instrument = rep(instrument, len/length(instrument)),
                 account    = rep(account,    len/length(account)),
@@ -66,16 +71,21 @@ journal.default <- function(amount, price, timestamp, instrument,
         if (isNul[i])
             ans[[names(isNul[i])]] <- NULL
 
-    dots <- list(...)
-    nd <- names(dots)
     if (length(dots)) {
         if (any(nd == "") || is.null(nd))
             stop("arguments passed via ... must be named")
-        else
+        else {
+            ldots <- lengths(dots)
+            bad_len <- ldots != len
+            if (any(bad_len)) {
+                for (i in which(bad_len))
+                    dots[[i]] <- rep(dots[[i]], len/ldots[[i]])
+            }
             ans <- c(ans, dots)
-    }    
+        }
+    }
     class(ans) <- "journal"
-    ans    
+    ans
 }
 
 print.journal <- function(x, ..., width = getOption("width"),
@@ -90,8 +100,8 @@ print.journal <- function(x, ..., width = getOption("width"),
     oo <- getOption("scipen")
     options(scipen = 1e8)
     on.exit(options(scipen = oo))
-    
-    df <- as.data.frame(unclass(x),                        
+
+    df <- as.data.frame(unclass(x),
                         row.names = seq_len(lx),
                         stringsAsFactors = FALSE)
 

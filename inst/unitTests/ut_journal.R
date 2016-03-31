@@ -71,5 +71,41 @@ test.journal <- function() {
                  price = price, instrument = instrument)
     head(j, 4)
     head(j, 4, by = FALSE)
-   
+
+    ## recycling
+    checkEquals(journal(amount = 1, foo = 1:10),
+                structure(list(instrument = c(NA_character_, NA_character_,
+                                              NA_character_, NA_character_,
+                                              NA_character_, NA_character_,
+                                              NA_character_, NA_character_, 
+                                              NA_character_, NA_character_),
+                               timestamp = c(NA, NA, NA, NA, 
+                                             NA, NA, NA, NA, NA, NA),
+                               amount = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+                               price = c(NA, NA, NA, NA, NA,
+                                         NA, NA, NA, NA, NA),
+                               foo = 1:10),
+                          .Names = c("instrument", "timestamp",
+                                     "amount", "price", "foo"),
+                          class = "journal"))
+    checkEquals(journal(amount = 1, foo = 1:10),
+                journal(amount = rep(1, 10), foo = 1:10))
+
+    checkEquals(journal(amount = 1:10, foo = 1),
+                structure(list(instrument = c(NA_character_, NA_character_,
+                                              NA_character_, NA_character_,
+                                              NA_character_, NA_character_,
+                                              NA_character_, NA_character_, 
+                                              NA_character_, NA_character_),
+                               timestamp = c(NA, NA, NA, NA, 
+                                             NA, NA, NA, NA, NA, NA),
+                               amount = 1:10,
+                               price = c(NA, NA, NA, NA, NA,
+                                         NA, NA, NA, NA, NA),
+                               foo = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1)),
+                          .Names = c("instrument", "timestamp",
+                                     "amount", "price", "foo"),
+                          class = "journal"))
+    checkEquals(journal(amount = 1:10, foo = 1),
+                journal(amount = 1:10, foo = rep(1, 10)))       
 }
