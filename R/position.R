@@ -97,8 +97,9 @@ position.default <- function(amount, timestamp, instrument, when,
 }
 
 position.btest <- function(amount, when, ...) {
-
-
+    ans <- amount$portfolio
+    class(ans) <- "position"
+    ans
 }
 
 print.position <- function(x, ..., sep = NA) {
