@@ -1,5 +1,7 @@
 2016-04-01  Enrico Schumann  <enrico.schumann@aq-investment.ch>
 
+	* DESCRIPTION (Version): 0.3-0
+
 	* R/position.R (position.default): remove argument
 	'sort.instruments': 'instruments', when supplied,
 	are always sorted

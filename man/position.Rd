@@ -55,13 +55,17 @@ position(amount, \dots)
   
 }
 \value{
-  An object of class \code{position}, which  is a numeric matrix with
-  \code{instrument} and \code{timestamp} attributes. Note that \code{position}
-  will never drop the result's \code{dim} attribute; it will always be a matrix.
+
+  An object of class \code{position}, which is a numeric matrix with
+  \code{instrument} and \code{timestamp} attributes. Note that
+  \code{position} will never drop the result's \code{dim} attribute; it
+  will always be a matrix of size \code{length(when)} times
+  \code{length(unique(instrument))}.
   
 }
 \references{
   Enrico Schumann -- Portfolio Management with R
+  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
 }
 \author{
   Enrico Schumann
