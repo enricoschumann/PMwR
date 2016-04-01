@@ -2,19 +2,18 @@ position <- function(amount, ...)
     UseMethod("position")
 
 position.journal <- function(amount, when,
-                             drop.zero = FALSE, sort.instruments = TRUE, ...) {
+                             drop.zero = FALSE,  ...) {
 
     instrument <- amount$instrument
     timestamp  <- amount$timestamp
     amount     <- amount$amount
 
     position.default(amount, timestamp, instrument, when, 
-                     drop.zero = drop.zero,
-                     sort.instruments = sort.instruments, ...)
+                     drop.zero = drop.zero, ...)
 }
                              
 position.default <- function(amount, timestamp, instrument, when, 
-                             drop.zero = FALSE, sort.instruments = TRUE, ...) {
+                             drop.zero = FALSE,  ...) {
     if (missing(instrument))
         instrument <- NA
         
@@ -61,9 +60,7 @@ position.default <- function(amount, timestamp, instrument, when,
         instrument[ina] <- "NA"
 
     nw <- length(when)
-    nm <- unique(instrument)
-    if (sort.instruments)
-        nm <- sort(nm)
+    nm <- sort(unique(instrument))
     pos <- array(0, dim = c(nw, length(nm)))
     colnames(pos) <- nm        
     rownames(pos) <- as.character(when)

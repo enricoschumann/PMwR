@@ -12,8 +12,7 @@
 \usage{
 position(amount, \dots)
 
-\method{position}{default}(amount, timestamp, instrument, when, drop.zero = FALSE,
-            sort.instruments = TRUE, \dots)
+\method{position}{default}(amount, timestamp, instrument, when, drop.zero = FALSE, \dots)
 
 \method{print}{position}(x, \dots, sep = NA)
 
@@ -34,9 +33,6 @@ position(amount, \dots)
   \item{drop.zero}{
     logical: drop instruments that have a zero position
   }  
-  \item{sort.instruments}{
-    logical: sort instruments alphabetically
-  }
   \item{x}{    
     An object of type position.
   }

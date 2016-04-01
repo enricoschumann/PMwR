@@ -1,3 +1,9 @@
+2016-04-01  Enrico Schumann  <enrico.schumann@aq-investment.ch>
+
+	* R/position.R (position.default): remove argument
+	'sort.instruments': 'instruments', when supplied,
+	are always sorted
+
 2016-04-01  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (position.btest): add method
