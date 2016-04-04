@@ -2,6 +2,7 @@
 .git
 .gitignore
 R/dev.R
+README.org
 TODO
 manual
 various
