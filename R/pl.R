@@ -214,15 +214,20 @@ pl.default <- function(amount, price, timestamp = NULL,
                        initial.position = NULL, initial.price = NULL,
                        eval.price = NULL,
                        tol = 1e-10, ...) {
-    if (multiplier != 1)
-        .NotYetUsed("multiplier")
+    if (length(multiplier) > 1L && is.null(names(multiplier)))
+        stop("multiplier must be named")
     if (approx)
         .NotYetUsed("approx")
+
+    multiplier.regexp <- FALSE ## TODO add argument
+
     if (is.null(instrument) || all(is.na(instrument))) {
         no.i <- TRUE
         instrument  <- rep("_", length(amount))
         uniq.i <- "_"
         ni <- 1L
+        mult <- multiplier[1]
+        names(mult) <- "_"
         if (!is.null(eval.price))
             names(eval.price) <- "_"
         if (!is.null(initial.position))
@@ -232,6 +237,18 @@ pl.default <- function(amount, price, timestamp = NULL,
     } else {
         no.i <- FALSE
         uniq.i <- sort(unique(instrument))
+
+        mult <- numeric(length(uniq.i))
+        if (multiplier.regexp) {
+            .NotYetUsed("multiplier.regexp")
+        } else {
+            if (all(multiplier == 1L))
+                mult[] <- 1
+            else 
+                mult <- multiplier[match(uniq.i, names(multiplier))]
+            names(mult) <- uniq.i
+        }
+
         ni <- length(uniq.i)
     }
 
@@ -277,7 +294,7 @@ pl.default <- function(amount, price, timestamp = NULL,
 
         pl1 <- .pl(amount1, price1, tol = tol, do.warn = FALSE)
         if (!along.timestamp) {
-            tmp <- list(pl = pl1[1L],
+            tmp <- list(pl = pl1[1L] * unname(mult[i1]),
                         realised = NA,
                         unrealised = NA,
                         buy = pl1[3L],
@@ -288,7 +305,7 @@ pl.default <- function(amount, price, timestamp = NULL,
             cumpos  <- cumsum(amount1)
             pnl <- cumpos * price1 + cumcash
             real <- avg(amount1, price1)$realised
-            tmp <- list(pl = pnl,
+            tmp <- list(pl = pnl * unname(mult[i1]),
                         realised = real,
                         unrealised = pnl - real,
                         buy = pl1[3L],

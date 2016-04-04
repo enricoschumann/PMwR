@@ -62,7 +62,7 @@ pl(amount, \dots)
     named, e.g. \code{c(stock1 = 100, stock2 = 101)}.
 
   }
-  \item{multiplier}{not supported yet}
+  \item{multiplier}{numeric vector, possibly named}
   \item{approx}{logical}
   \item{tol}{numeric: threshold to consider a position zero.}
   \item{do.warn}{logical}

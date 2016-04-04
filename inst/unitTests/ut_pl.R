@@ -119,6 +119,26 @@ test.pl <- function() {
 ## data.frame(cumsum(amount), price, pnl, real, unreal)
 
 
+    ## test multiplier
+    require("PMwR")
+    require("RUnit")
+    checkEquals(pl(amount = c(1, -1),
+                   price  = c(1,  2),
+                   multiplier = 0)[[1L]][["pl"]], 0)
+    checkEquals(pl(amount = c(1, -1),
+                   price  = c(1,  2),
+                   multiplier = 1)[[1L]][["pl"]], 1)
+    checkEquals(pl(amount = c(1, -1),
+                   price  = c(1,  2))[[1L]][["pl"]], 1)
+    checkEquals(pl(amount = c(1, -1),
+                   price  = c(1,  2),
+                   multiplier = 2)[[1]][["pl"]], 2)
+
+    checkEquals(pl(amount = c(1, -1),
+                   price  = c(1,  2),
+                   instrument = c("B", "B"),
+                   multiplier = c(A = 1, B = 2))[[1L]][["pl"]], 2)
+
     
 }
 
