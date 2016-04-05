@@ -16,11 +16,13 @@ pl(amount, \dots)
 
 \method{pl}{default}(amount, price, timestamp = NULL,
                      instrument = NULL, multiplier = 1,
+                     multiplier.regexp = FALSE,
                      along.timestamp = FALSE, approx = FALSE,
                      initial.position = NULL, initial.price = NULL,
                      eval.price = NULL, tol = 1e-10, \dots)
 
 \method{pl}{journal}(amount, multiplier = 1,
+                     multiplier.regexp = FALSE,
                      along.timestamp = FALSE, approx = FALSE,
                      initial.position = NULL, initial.price = NULL,
                      eval.price = NULL, tol = 1e-10, \dots)
@@ -62,7 +64,18 @@ pl(amount, \dots)
     named, e.g. \code{c(stock1 = 100, stock2 = 101)}.
 
   }
-  \item{multiplier}{numeric vector, possibly named}
+  \item{multiplier}{
+
+    numeric vector. When \code{instrument} is specified and the vector
+    is named, the names will be matched against instruments.
+
+  }
+  \item{multiplier.regexp}{
+
+    logical. If \code{TRUE}, the names of \code{multiplier} are
+    interpreted as regular expressions. See examples.
+
+  }
   \item{approx}{logical}
   \item{tol}{numeric: threshold to consider a position zero.}
   \item{do.warn}{logical}
@@ -129,6 +142,22 @@ instrument  <- c(rep("Bond A", 3), rep("Bond B", 3))
 amount <- c(1, -2, 1, 2, -1, -1)
 price <- c(100, 101, 103, 100, 105, 100)
 pl(amount, price, instrument = instrument) ## no p/l + warning
+
+
+## Example for 'multiplier
+jnl <- read.table(textConnection(
+"instrument, price, amount
+ FGBL MAR 16, 165.20,  1
+ FGBL MAR 16, 165.37, -1
+ FGBL JUN 16, 164.12,  1
+ FGBL JUN 16, 164.13, -1
+ FESX JUN 16,   2910,  5
+ FESX JUN 16,   2905, -5"
+), header = TRUE, stringsAsFactors = FALSE, sep = ",")
+
+jnl <- as.journal(jnl)
+pl(jnl,  multiplier.regexp = TRUE, ## regexp matching is case sensitive
+   multiplier = c("FGBL" = 1000, "FESX" = 10))
 
 
 ## use package 'crayon'

@@ -188,6 +188,7 @@ pl <- function(amount, ...)
     UseMethod("pl")
 
 pl.journal <- function(amount, multiplier = 1,
+                       multiplier.regexp = FALSE,
                        along.timestamp = FALSE, approx = FALSE,
                        initial.position = NULL, initial.price = NULL,
                        eval.price = NULL,
@@ -200,6 +201,7 @@ pl.journal <- function(amount, multiplier = 1,
     pl.default(amount, price, timestamp,
                instrument,
                multiplier = multiplier,
+               multiplier.regexp = multiplier.regexp,
                along.timestamp = along.timestamp,
                approx = approx,
                initial.position = initial.position, initial.price = initial.price,
@@ -209,6 +211,7 @@ pl.journal <- function(amount, multiplier = 1,
 
 pl.default <- function(amount, price, timestamp = NULL,
                        instrument = NULL, multiplier = 1,
+                       multiplier.regexp = FALSE,
                        along.timestamp = FALSE,
                        approx = FALSE,
                        initial.position = NULL, initial.price = NULL,
@@ -218,8 +221,6 @@ pl.default <- function(amount, price, timestamp = NULL,
         stop("multiplier must be named")
     if (approx)
         .NotYetUsed("approx")
-
-    multiplier.regexp <- FALSE ## TODO add argument
 
     if (is.null(instrument) || all(is.na(instrument))) {
         no.i <- TRUE
@@ -239,14 +240,21 @@ pl.default <- function(amount, price, timestamp = NULL,
         uniq.i <- sort(unique(instrument))
 
         mult <- numeric(length(uniq.i))
+        names(mult) <- uniq.i
         if (multiplier.regexp) {
-            .NotYetUsed("multiplier.regexp")
+            pattern <- names(multiplier)
+            mult <- mult + NA
+            for (i in seq_along(pattern)) {
+                if (any(matched <- grepl(pattern[i], uniq.i, perl = TRUE))) {
+                    mult[matched] <- multiplier[i]
+                    names(mult)[matched] <- uniq.i[matched]
+                }
+            }            
         } else {
             if (all(multiplier == 1L))
                 mult[] <- 1
             else 
                 mult <- multiplier[match(uniq.i, names(multiplier))]
-            names(mult) <- uniq.i
         }
 
         ni <- length(uniq.i)
