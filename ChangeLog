@@ -1,5 +1,7 @@
 2016-04-05  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.3-2
+
 	* R/pl.R (pl.default): new argument 'multiplier.regexp'
 
 2016-04-04  Enrico Schumann  <es@enricoschumann.net>
