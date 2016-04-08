@@ -26,9 +26,16 @@ journal.position <- function(amount, price, ...) {
 }
 
 journal.rebalance <- function(amount, ..., price = TRUE, timestamp = NA) {
+    if (amount$match.names) {
+        m <- numeric(length(amount$price))
+        names(m) <- names(amount$price)
+        m[names(amount$target)] <- amount$target
+        m[names(amount$current)] <- m[names(amount$current)] - amount$current
+    } else
+        m <- amount$target - amount$current
     journal(instrument = if (amount$match.names) names(amount$price) else NA,
             timestamp  = timestamp,
-            amount = unname(amount$target - amount$current),
+            amount = unname(m),
             price  = if (isTRUE(price)) unname(amount$price) else NA)
 }
 
