@@ -186,10 +186,12 @@ is.journal(x)
 
 }
 \references{
-  Enrico Schumann -- Portfolio Management with R
-}
+Schumann, E. (2016) \emph{Portfolio Management
+  with R}. \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
+
+} 
 \author{
-  Enrico Schumann
+Enrico Schumann <es@enricoschumann.net>
 }
 \seealso{
   \code{\link{position}}, \code{\link{pl}}

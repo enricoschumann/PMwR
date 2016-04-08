@@ -2,10 +2,10 @@
 \alias{div_adjust}
 \alias{split_adjust}
 \title{
-  Adjust Time-Series for Dividends and Splits
+  Adjust Time Series for Dividends and Splits
 }
 \description{
-  Adjust a time-series for dividends and splits.
+  Adjust a time series for dividends and splits.
 }
 \usage{
 div_adjust(x, t, div, backward = TRUE, additive = FALSE)

@@ -1,7 +1,7 @@
 \name{plotTradingHours}
 \alias{plotTradingHours}
 \title{
-  Plot Time Series during Trading Hours
+  Plot Time Series During Trading Hours
 }
 \description{
   Plot a time series after removing weekends and specific times of the day.
@@ -91,9 +91,12 @@ plotTradingHours(x, t = NULL,
   B.D. Ripley and K. Hornik. \emph{Date-Time Classes}. R-News,
   \strong{1}(2):8--12, 2001.
 
+  Schumann, E. (2016) \emph{Portfolio Management
+  with R}. \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
+
 }
 \author{
-  Enrico Schumann
+Enrico Schumann <es@enricoschumann.net>
 }
 \seealso{
   \code{\link{DateTimeClasses}}

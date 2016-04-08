@@ -49,7 +49,7 @@ valuation(x, ...)
 \details{
   \emph{valuation} is a generic function.  Its semantics suggest that an
   object (eg, a financial instrument or a position) is mapped into a
-  concrete cquantity (such as an amount of some currency).
+  concrete quantity (such as an amount of some currency).
 }
 \value{
   depends on the object

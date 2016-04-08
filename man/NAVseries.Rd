@@ -51,17 +51,22 @@ as.NAVseries(x, ...)
 A \code{NAVseries}
 }
 \references{
+Schumann, E. (2016) \emph{Portfolio Management
+  with R}. \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
 
-  Schumann, E. (2015) \emph{Portfolio Management
-  withR}. \url{http://enricoschumann.net/R/packages/PMwR/}
-
-}
+} 
 \author{
-  Enrico Schumann
+Enrico Schumann <es@enricoschumann.net>
 }
 \seealso{
   \code{\link{journal}}
 }
 \examples{
-## to be added
+
+\dontrun{
+require("tseries")
+dax <- get.hist.quote("^GDAXI", quote = "Close",
+                      start = as.Date("1999-1-1"))
+summary(as.NAVseries(dax))
+}
 }

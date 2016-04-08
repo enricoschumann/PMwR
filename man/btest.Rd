@@ -185,14 +185,12 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
 
 }
 \references{
-  Enrico Schumann. \emph{Portfolio Management with R.}
-  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
-}
+Schumann, E. (2016) \emph{Portfolio Management
+  with R}. \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
+
+} 
 \author{
-  Enrico Schumann
-}
-\note{
-  This function is still very \strong{experimental} and will likely change.
+Enrico Schumann <es@enricoschumann.net>
 }
 \examples{
 ## For more examples, please see then Manual
@@ -210,8 +208,8 @@ data.frame(timestamp, prices)
 signal <- function()     ## buy when last price is 
     if (Close() < 3200)  ## below 3200, else sell
         1 else 0         ## (more precisely: build position of 1
-                         ##  when price < 3200, else reduce position
-                         ##  to 0)
+                         ##  when price < 3200, else reduce
+                         ##  position to 0)
 
 solution <- btest(prices = prices, signal = signal)
 journal(solution)

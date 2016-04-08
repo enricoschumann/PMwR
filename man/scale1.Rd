@@ -54,7 +54,8 @@ scale1(x, \dots)
 }
 }
 \details{
-  This is a generic function
+  This is a generic function, with methods for numeric vectors and
+  matrices, and \code{zoo} objects.
 }
 \value{
 An object of the same type as \code{x}.

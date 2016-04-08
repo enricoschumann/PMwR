@@ -56,7 +56,7 @@ rebalance(current, target, price,
 }
 \details{
 
-  The function compute the necessary trades to move from the
+  The function computes the necessary trades to move from the
   \code{current} portfolio to a desired portfolio.
   
 }
@@ -87,8 +87,8 @@ rebalance(current, target, price,
   \code{\link{journal}}
 }
 \examples{
-(r <- rebalance(current = c(a = 100, b = 20),
-                target  = c(a = 0.2, c = 0.3),
-                price   = c(a = 1, b = 2, c = 3)))
-##journal(r)
+r <- rebalance(current = c(a = 100, b = 20),
+               target  = c(a = 0.2, c = 0.3),
+               price   = c(a = 1, b = 2, c = 3))
+journal(r)
 }

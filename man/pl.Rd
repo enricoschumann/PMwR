@@ -49,14 +49,11 @@ pl(amount, \dots)
   \item{along.timestamp}{
     a logical
   }
-  %% \item{do.sort}{
-  %%   sort all by time
-  %% }
   \item{initial.position}{
-    a \code{\link{position}}. \bold{Not yet supported}.
+    a \code{\link{position}}.
   }
   \item{initial.price}{
-    prices to evaluate initial position. \bold{Not yet supported}
+    prices to evaluate initial position.
   }
   \item{eval.price}{
 
@@ -102,8 +99,13 @@ pl(amount, \dots)
   \code{sell}, \code{volume}.
 
 }
+\references{
+Schumann, E. (2016) \emph{Portfolio Management
+  with R}. \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
+
+} 
 \author{
-  Enrico Schumann
+Enrico Schumann <es@enricoschumann.net>
 }
 \seealso{
   \code{\link{btest}},   \code{\link{returns}}
