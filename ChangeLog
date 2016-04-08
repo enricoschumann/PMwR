@@ -1,5 +1,7 @@
 2016-04-08  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.3-3
+
 	* R/journal.R (journal.rebalance): fixed -- works
 	now with 'match.names' set to TRUE
 
