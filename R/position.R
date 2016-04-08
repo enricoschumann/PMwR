@@ -38,14 +38,14 @@ position.default <- function(amount, timestamp, instrument, when,
             when <- min(timestamp)
     }
         
-    if (!any(is.na(timestamp)) && is.unsorted(timestamp)) {
+    if (!anyNA(timestamp) && is.unsorted(timestamp)) {
         io  <- order(timestamp)
         timestamp <- timestamp[io]
         amount  <- amount[io]
         instrument <- instrument[io]
     }
 
-    if (any(is.na(timestamp)) && is.unsorted(timestamp,na.rm = TRUE)) {
+    if (anyNA(timestamp) && is.unsorted(timestamp, na.rm = TRUE)) {
         stop("cannot compute position: journal is not sorted and timestamp has NA values ")
     }
 
