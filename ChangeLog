@@ -1,3 +1,8 @@
+2016-04-08  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (position.default): add warning when
+	there are NA values in timestamp
+
 2016-04-05  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-2

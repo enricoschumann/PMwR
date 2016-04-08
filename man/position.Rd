@@ -51,8 +51,11 @@ position(amount, \dots)
   split the journal.
 
   The function checks if \code{timestamp} is sorted (see
-  \code{\link{is.unsorted}}) and sorts by timestamp, if required.
-  
+  \code{\link{is.unsorted}}) and sorts the journal by \code{timestamp},
+  if required. If there are (some) \code{NA} values in \code{timestamp},
+  but \code{timestamp} is sorted otherwise, the function will proceed
+  (with a warning, though).
+    
 }
 \value{
 

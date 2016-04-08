@@ -45,9 +45,12 @@ position.default <- function(amount, timestamp, instrument, when,
         instrument <- instrument[io]
     }
 
-    if (anyNA(timestamp) && is.unsorted(timestamp, na.rm = TRUE)) {
-        stop("cannot compute position: journal is not sorted and timestamp has NA values ")
-    }
+    if (anyNA(timestamp) && is.unsorted(timestamp, na.rm = TRUE))
+        stop("cannot compute position: journal is not sorted ",
+             "and timestamp has NA values")
+
+    if (anyNA(timestamp) && !is.unsorted(timestamp, na.rm = TRUE))
+        warning("timestamp has NA values")
 
     if (is.null(instrument) || !length(instrument)) 
         instrument <- rep.int("", length(amount))    
