@@ -63,7 +63,7 @@ print.NAVseries <- function(x, ...) {
     
 }
 
-summary.NAVseries <- function(object, ...) {
+summary.NAVseries <- function(object, monthly = TRUE, ...) {
 
     ## TODO: assuming daily timestamps -- too restrictive? hourly?
     ## TODO: timestamp can also be numeric 1 .. n_obs
@@ -72,8 +72,8 @@ summary.NAVseries <- function(object, ...) {
     timestamp <- object$timestamp[!isna]
     NAV <- object$NAV[!isna]
     if (!is.null(timestamp) &&
-        !inherits(try(as.Date(timestamp), silent = TRUE), "try-error") && 
-        !any(is.na(as.Date(timestamp)))) {
+        !inherits(try(timestampD <- as.Date(timestamp), silent = TRUE), "try-error") && 
+        !any(is.na(timestampD))) {
         NAV <- aggregate(NAV, by = list(as.Date(timestamp)), tail, 1L)[[2L]]
         timestamp <- aggregate(timestamp,
                                by = list(as.Date(timestamp)), tail, 1L)[[2L]]
@@ -105,9 +105,17 @@ summary.NAVseries <- function(object, ...) {
     ans$mdd.low.when   <- timestamp[tmp$low.position]
     ans$underwater <- 1 - NAV[length(NAV)]/max(NAV)
 
-    ans$vol      <- sd(returns(NAV))*16
-    ans$vol.up   <- pm(returns(NAV), normalise = TRUE, lower = FALSE)*16
-    ans$vol.down <- pm(returns(NAV), normalise = TRUE)*16
+    if (monthly) {
+        tmp <- last(NAV, format(timestampD, "%Y %m"))
+        ans$vol      <- sd(returns(tmp))*sqrt(12)
+        ans$vol.up   <- pm(returns(tmp), normalise = TRUE, lower = FALSE)*sqrt(12)
+        ans$vol.down <- pm(returns(tmp), normalise = TRUE)*sqrt(12)
+
+    } else {
+        ans$vol      <- sd(returns(NAV))*16
+        ans$vol.up   <- pm(returns(NAV), normalise = TRUE, lower = FALSE)*16
+        ans$vol.down <- pm(returns(NAV), normalise = TRUE)*16
+    }
     class(ans) <- "summary.NAVseries"
     ans
 

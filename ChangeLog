@@ -1,3 +1,9 @@
+2016-04-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (summary.NAVseries): new argument
+	'monthly'; if TRUE (the default), vol computations
+	are done on monthly returns
+
 2016-04-08  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-3
