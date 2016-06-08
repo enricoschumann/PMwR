@@ -289,8 +289,9 @@ fmt <- function(x, plus, digits) {
         ans
 }
 
-.mtab <- function(x, t, ytd = "YTD", month.names = NULL, zero.print = "0", plus = FALSE,
-                  digits = 1) {
+.mtab <- function(x, t, ytd = "YTD", month.names = NULL,
+                  zero.print = "0", plus = FALSE, digits = 1,
+                  na.print = NULL) {
     years <- as.numeric(format(t, "%Y"))
     mons  <- as.numeric(format(t, "%m"))
     tb <- array("", dim = c(length(unique(years)), 13L))
@@ -311,9 +312,10 @@ fmt <- function(x, plus, digits) {
 ## not exported
 print.p_returns <- function(x, ..., year.rows = TRUE,
                            month.names = NULL, zero.print = "0", plus = FALSE,
-                           digits = 1) {
+                           digits = 1, na.print = NULL) {
     if (is.list(x))
-        warning("format of 'p_returns' objects has changed: see ChangeLog 2015-06-26")
+        warning("format of 'p_returns' objects has changed:",
+                " see ChangeLog 2015-06-26")
     period <- attr(x, "period")
     timestamp <- attr(x, "t")
     if (period == "monthly" && is.null(dim(x))) {
