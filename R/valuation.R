@@ -43,6 +43,8 @@ jcf <- function(x, multiplier = 1,
                 cashflow   = function(x) x$amount * x$price,
                 instrument = function(x) "cash",
                 flip.sign  = TRUE, ...) {
+    if (!inherits(x, "journal"))
+        warning("expected journal")
     if (!is.null(names(multiplier)))
         multiplier <- multiplier[x$instrument]
     ans <- x
