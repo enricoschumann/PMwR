@@ -16,7 +16,7 @@ NAVseries(NAV, timestamp,
 as.NAVseries(x, ...)
 
 \method{print}{NAVseries}(x, \dots)
-\method{summary}{NAVseries}(object, \dots)
+\method{summary}{NAVseries}(object, monthly = TRUE, \dots )
 }
 \arguments{
   \item{NAV}{
@@ -42,6 +42,10 @@ as.NAVseries(x, ...)
 }
 \item{\dots}{
   further arguments
+}
+\item{monthly}{
+  if \code{TRUE} (default), volatility computations
+  are done on monthly returns
 }
 }
 \details{
