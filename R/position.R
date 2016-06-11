@@ -136,3 +136,12 @@ print.position <- function(x, ..., sep = NA) {
 ##     class(ans) <- "position"
 ##     ans
 ## }
+
+as.matrix.position <- function(x, ...) {
+    ans <- c(x)
+    dim(ans) <- dim(x)
+    
+    rownames(ans) <- as.character(attr(x, "timestamp"))
+    colnames(ans) <- attr(x, "instrument")
+    ans
+}
