@@ -1,5 +1,6 @@
 \name{quote32}
 \alias{quote32}
+\alias{q32}
 \title{
   Treasury Quotes with 1/32nds of Point
 }
@@ -8,6 +9,7 @@
 }
 \usage{
 quote32(price, sep = "-")
+q32(price, sep = "-")
 }
 \arguments{
   \item{price}{
@@ -25,19 +27,25 @@ quote32(price, sep = "-")
 
   If \code{price} is \code{character}, it is interpreted as a quote in
   fractional notation.
-  
+
+  \code{q32} is a short-hand for \code{quote32}.
   
 }
 \value{
   A numeric vector of class \code{quote32}.
 }
 \references{
-  CME 
+
+  CME Group (2015). \emph{Treasury Futures Price Rounding Conventions.}  
+  \url{http://www.cmegroup.com/education/treasury-futures-price-rounding-conventions.html}
+
 }
 \author{
   Enrico Schumann
 }
 \examples{
 quote32(100 + 17/32 + 0.75/32)
+q32("100-272")
+
 
 }
