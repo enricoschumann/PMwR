@@ -1,4 +1,4 @@
-useDynLib(PMwR)
+## useDynLib(PMwR)
 
 importFrom(NMOF, drawdown)
 importFrom(NMOF, pm)
@@ -36,9 +36,10 @@ export(
     plotTradingHours,
     position,
     pricetable,
+    q32,
+    quote32,
     rebalance,
     returns,
-    runStats,
     scale1,
     scaleToUnity,
     scaleTrades,

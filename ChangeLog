@@ -1,3 +1,12 @@
+2016-06-13  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/runStats.R: move function 'runStats' to separate
+	package 'runStats'
+	http://enricoschumann.net/R/packages/runStats/
+
+	* R/quote32.R (quote32): new function to create
+	quotes with 32nds of points
+
 2016-06-10  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (as.matrix.position): new
