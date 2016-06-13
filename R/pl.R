@@ -29,7 +29,7 @@ print.pl <- function(x, ..., use.crayon = NULL, na.print = ".") {
     for (i in seq_len(ni)) {
         if (print.inst)
             cat(attr(x, "instrument")[[i]], "\n")
-        PL   <- if (is.finite(x[[i]]$pl))
+        PL   <- if (is.finite(x[[i]]$pl)) ## TODO: what if pl has length>1?
                     x[[i]]$pl else na.print
         BUY  <- if (is.finite(x[[i]]$buy))
                     x[[i]]$buy else na.print
@@ -348,7 +348,6 @@ pl.default <- function(amount, price, timestamp = NULL,
       sum(abs(amount)),
       sum(price[ i] * amount[ i])/sum(amount[ i]),
       sum(price[!i] * amount[!i])/sum(amount[!i]))
-
 }
 
 as.data.frame.pl <- function(x, ...) {
