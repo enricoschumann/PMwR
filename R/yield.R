@@ -10,5 +10,5 @@ computeYield <- function(cashflows, times, y0,
        tol = as.double(tol),
        h = as.double(h),
        n = as.integer(n),
-       maxit = as.integer(maxit))$y
+       maxit = as.integer(maxit), PACKAGE = "PMwR")$y
 }
