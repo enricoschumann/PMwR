@@ -1,5 +1,7 @@
 2016-06-13  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.3-4
+
 	* R/runStats.R: move function 'runStats' to separate
 	package 'runStats'
 	http://enricoschumann.net/R/packages/runStats/
