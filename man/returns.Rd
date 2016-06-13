@@ -24,7 +24,8 @@ returns(x, \dots)
                       pad = NULL, position = NULL, lag = 1, \dots)
 
 \method{print}{p_returns}(x, \dots, year.rows = TRUE, month.names = NULL,
-                         zero.print = "0", plus = FALSE, digits = 1)
+                         zero.print = "0", plus = FALSE, digits = 1,
+                         na.print = NULL)
 
 \method{toLatex}{p_returns}(object, \dots,
        year.rows = TRUE, ytd = "YTD", month.names = NULL, 
@@ -92,6 +93,9 @@ returns(x, \dots)
   }
   \item{zero.print}{
     character.  How to print zero values.
+  }
+  \item{na.print}{
+    character.  How to print \code{NA} values. (Not supported yet.)
   }
   \item{plus}{
     logical. Add a \sQuote{\code{+}} before positive numbers? Default is
