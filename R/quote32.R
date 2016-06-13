@@ -37,7 +37,7 @@ print.quote32 <- function(x, sep = "-",
                           "fractional" else "integer") {
 
     fracsym <- if (display == "fractional")
-                   c("0", "¼", "+", "¾")
+                   c("0", "\u00bc", "+", "\u00be")
                else if (display == "integer")
                    c("0", "2", "+", "7")
                else
