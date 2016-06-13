@@ -1,3 +1,11 @@
+v0.3-4  (2016-03-13)
+
+  o Moved function 'runStats' to a separate package 'runStats'
+    http://enricoschumann.net/R/packages/runStats/
+
+  o there is a public Git repository at
+    https://github.com/enricoschumann/PMwR
+
 v0.1-96  (2016-03-13)
 
   o A draft of the manual chapter on computing profit and loss
