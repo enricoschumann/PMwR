@@ -8,24 +8,24 @@ position.journal <- function(amount, when,
     timestamp  <- amount$timestamp
     amount     <- amount$amount
 
-    position.default(amount, timestamp, instrument, when, 
+    position.default(amount, timestamp, instrument, when,
                      drop.zero = drop.zero, ...)
 }
-                             
-position.default <- function(amount, timestamp, instrument, when, 
+
+position.default <- function(amount, timestamp, instrument, when,
                              drop.zero = FALSE,  ...) {
     if (missing(instrument))
         instrument <- NA
-        
+
     if (missing(timestamp) || !length(timestamp)){
         if (!missing(when))
             warning(sQuote("when"), " specified, but no valid timestamp supplied")
-        timestamp <- rep(1, length(amount))        
+        timestamp <- rep(1, length(amount))
     }
 
     if (missing(when) && all(is.na(timestamp))) {
         when <- ""
-        timestamp <- rep("", length(amount))        
+        timestamp <- rep("", length(amount))
     } else if (missing(when)) {
         ## TODO: if 'when' is missing, we can simply sum the amounts
         when <- max(timestamp)
@@ -37,7 +37,7 @@ position.default <- function(amount, timestamp, instrument, when,
         else if (when[1L] == "first" || when[1L] == "oldest")
             when <- min(timestamp)
     }
-        
+
     if (!anyNA(timestamp) && is.unsorted(timestamp)) {
         io  <- order(timestamp)
         timestamp <- timestamp[io]
@@ -52,8 +52,8 @@ position.default <- function(amount, timestamp, instrument, when,
     if (anyNA(timestamp) && !is.unsorted(timestamp, na.rm = TRUE))
         warning("timestamp has NA values")
 
-    if (is.null(instrument) || !length(instrument)) 
-        instrument <- rep.int("", length(amount))    
+    if (is.null(instrument) || !length(instrument))
+        instrument <- rep.int("", length(amount))
 
     allna <- FALSE
     if (all(ina <- is.na(instrument))) {
@@ -65,7 +65,7 @@ position.default <- function(amount, timestamp, instrument, when,
     nw <- length(when)
     nm <- sort(unique(instrument))
     pos <- array(0, dim = c(nw, length(nm)))
-    colnames(pos) <- nm        
+    colnames(pos) <- nm
     rownames(pos) <- as.character(when)
     for (j in seq_len(nw)) {
         for (i in seq_along(nm)) {
@@ -88,17 +88,19 @@ position.default <- function(amount, timestamp, instrument, when,
     }
     if (allna)
         nm[] <- NA
-    ## ans <- list(position = pos, timestamp = when, instrument = nm)
-    ## ans <- pos
     attr(pos, "timestamp") <- when
-    attr(pos, "instrument") <- nm    
+    attr(pos, "instrument") <- nm
     class(pos) <- "position"
     pos
 }
 
 position.btest <- function(amount, when, ...) {
-    ans <- amount$portfolio
+    ans <- amount$position
     class(ans) <- "position"
+    attr(ans, "timestamp") <- if (!is.null(amount$timestamp))
+                                  amount$timestamp else NA
+    attr(ans, "instrument") <- if (!is.null(amount$instrument))
+                                   amount$instrument else NA
     ans
 }
 
@@ -140,7 +142,7 @@ print.position <- function(x, ..., sep = NA) {
 as.matrix.position <- function(x, ...) {
     ans <- c(x)
     dim(ans) <- dim(x)
-    
+
     rownames(ans) <- as.character(attr(x, "timestamp"))
     colnames(ans) <- attr(x, "instrument")
     ans

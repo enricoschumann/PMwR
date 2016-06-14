@@ -4,7 +4,7 @@ print.pl <- function(x, ..., use.crayon = NULL, na.print = ".") {
                       tmp else FALSE
     if (!use.crayon)
         bold <- function(x) x
-    
+
     oo <- getOption("scipen")
     options(scipen = 1e8)
     on.exit(options(scipen = oo))
@@ -57,132 +57,6 @@ print.pl <- function(x, ..., use.crayon = NULL, na.print = ".") {
         sep = "")
     invisible(x)
 }
-
-## pl <- function(amount, price, instrument = NULL, timestamp = NULL,
-##                along.timestamp = FALSE,
-##                do.sort = FALSE, 
-##                initial.cash = 0, initial.position = NULL,
-##                initial.price = NULL, current.price = NULL,
-##                multiplier = 1,
-##                tol = 1e-10, do.warn = TRUE) {
-
-##     if (inherits(amount, "journal")) {
-##         J <- amount
-##         price <- J$price
-##         instrument <- J$instrument
-##         amount <- J$amount
-##         timestamp <- J$timestamp
-##     }
-    
-##     if (any(abs(amount) < tol) && do.warn)
-##         warning("zero ", sQuote("amount"), " values")
-
-##     if (do.sort) {
-##         if (is.null(timestamp))
-##             warning("cannot sort without timestamp")
-##         else  {
-##             ot <- order(timestamp)
-##             price <- price[ot]
-##             amount <- amount[ot]
-##             timestamp <- timestamp[ot]
-##             instrument <- instrument[ot]
-##         }
-##     }
-    
-##     plfun <- function(amount, price) {
-##         i <- amount > 0
-##         if (abs(sum(amount)) > tol && do.warn) {
-##             warning("sum of amount is not zero; cannot compute profit/loss.")
-##             c(NA, sum(abs(amount)),
-##               sum(price[ i] * amount[ i])/sum(amount[ i]),
-##               sum(price[!i] * amount[!i])/sum(amount[!i]))
-##         } else {
-##             if (length(amount) > 1000L)
-##                 p <- -drop(crossprod(amount, price)) else
-##             p <- -sum(amount * price)
-##             c(p, sum(abs(amount)),
-##               sum(price[ i] * amount[ i])/sum(amount[ i]),
-##               sum(price[!i] * amount[!i])/sum(amount[!i]))
-##         }
-##     }
-
-##     if (!is.null(initial.position) && length(initial.position)) {
-##         if (!is.null(names(initial.price)))
-##             initial.price <- initial.price[match(attr(initial.position, "instrument"),
-##                                                  names(initial.price))]        
-##         amount0 <- c(initial.position)
-##         instrument0 <- attr(initial.position, "instrument")
-##         timestamp0 <- rep(attr(initial.position, "timestamp"), length(amount0))
-##     } else {
-##         initial.price <- timestamp0 <- amount0 <- numeric(0)
-##         instrument0 <- character(0)
-##     }
-##     amount <- c(amount0, amount)
-##     timestamp <- c(timestamp0, timestamp)
-##     instrument <- c(instrument0, instrument)
-##     price <- c(initial.price, price)
-    
-##     ## open position?
-##     p1 <- position(amount, timestamp, instrument,
-##                    drop.zero = TRUE)
-##     if (length(p1) && !missing(current.price)) {
-##         if (!is.null(names(current.price))) 
-##             current.price <- current.price[match(attr(p1, "instrument"), names(current.price))]
-##         amount1 <- c(-p1)  ## revert position
-##         instrument1 <- attr(p1, "instrument")
-##         timestamp1 <- attr(p1, "timestamp") 
-##     } else {
-##         current.price <- timestamp1 <- amount1 <- numeric(0)
-##         instrument1 <- character(0)            
-##     }
-##     amount <- c(amount, amount1)
-##     timestamp <- c(timestamp, timestamp1)
-##     instrument <- c(instrument, instrument1)
-##     price <- c(price, current.price)
-    
-##     if (!length(instrument))
-##         instrument <- NULL    
-##     ui <- unique(instrument)    
-##     if (is.null(instrument) || length(ui) == 1L) {
-##         if (along.timestamp) {
-##             cumcash <- cumsum(-price * amount)
-##             cumpos  <- cumsum(amount)
-##             res <- list(value = cumpos * price + cumcash,
-##                         position = cumpos,
-##                         cash = cumcash + initial.cash)
-##             class(res) <- "plsorted"
-##         } else {
-##             tmp <- plfun(amount, price)
-##             res <- list(instrument   = if (is.null(instrument)) NA else ui,
-##                         pl           = tmp[1L],
-##                         ## subtract amounts that were not actually traded
-##                         total.amount = tmp[2L] - sum(abs(amount0)) - sum(abs(amount1)),
-##                         average.buy  = tmp[3L],
-##                         average.sell = tmp[4L])
-##             class(res) <- "pl"
-##         }        
-##     } else {
-##         if (along.timestamp)
-##             stop("currently only supported for a single instrument")            
-##         instr <- sort(ui)
-##         pls <- sumamounts <- mbuys <- msells <- numeric(length(instr))
-##         for (i in seq_along(instr)) {
-##             ix <- instr[i] == instrument  
-##             tmp <- plfun(amount[ix], price[ix])
-##             pls[i] <- tmp[1L]
-##             sumamounts[i] <- tmp[2L]
-##             mbuys[i] <- tmp[3L]
-##             msells[i] <- tmp[4L]
-##         }
-##         res <- list(instrument = instr, 
-##                     pl = pls,
-##                     total.amount = sumamounts,
-##                     average.buy = mbuys,
-##                     average.sell = msells)
-##         class(res) <- "pl"
-##     }
-##     res
-## }
 
 pl <- function(amount, ...)
     UseMethod("pl")
@@ -249,11 +123,11 @@ pl.default <- function(amount, price, timestamp = NULL,
                     mult[matched] <- multiplier[i]
                     names(mult)[matched] <- uniq.i[matched]
                 }
-            }            
+            }
         } else {
             if (all(multiplier == 1L))
                 mult[] <- 1
-            else 
+            else
                 mult <- multiplier[match(uniq.i, names(multiplier))]
         }
 

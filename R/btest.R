@@ -124,7 +124,7 @@ btest  <- function(prices,
         warning(sQuote("do.rebalance"), " is FALSE: strategy will never trade")
     } else if (identical(do.rebalance, "do.signal")) {
         do.rebalance <- function(...)
-            computeSignal                
+            computeSignal
     } else if (!missing(timestamp) && inherits(do.rebalance, class(timestamp))) {
         ## TODO: when timestamp is specified, match to timestamp
         stop("not implemented")
@@ -203,19 +203,19 @@ btest  <- function(prices,
         if (!is.na(n))
             mO[t - (n:1), , drop = FALSE]
         else
-            mO[t - lag, , drop = FALSE]            
+            mO[t - lag, , drop = FALSE]
     }
     High <- function(lag = 1, n = NA) {
         if (!is.na(n))
             mH[t - (n:1), , drop = FALSE]
         else
-            mH[t - lag, , drop = FALSE]            
+            mH[t - lag, , drop = FALSE]
     }
     Low <- function(lag = 1, n = NA) {
         if (!is.na(n))
             mL[t - (n:1), , drop = FALSE]
         else
-            mL[t - lag, , drop = FALSE]            
+            mL[t - lag, , drop = FALSE]
     }
     Close <- function(lag = 1, n = NA) {
         if (!is.na(n))
@@ -468,7 +468,7 @@ btest  <- function(prices,
                                 char = if (.Platform$OS.type == "unix") "\u2588" else "|",
                                 width = ceiling(getOption("width")*0.8),
                                 style = 3, file = "")
-    
+
     for (t in max(2L, b+1L):T) {
         if (progressBar)
             setTxtProgressBar(progr, t)
@@ -512,11 +512,11 @@ btest  <- function(prices,
                                   Portfolio = Portfolio,
                                   SuggestedPortfolio = SuggestedPortfolio,
                                   Globals = Globals)
-        
+
         dXs <- Xs[t, ] - X[t1, ]  ## b0
         if (max(abs(dXs)) < tol)
             rebalance <- FALSE
-        
+
         if (rebalance) {
             dx <- fraction * dXs
 
@@ -548,7 +548,7 @@ btest  <- function(prices,
                                       SuggestedPortfolio = SuggestedPortfolio,
                                       Globals = Globals)
 
-        
+
         ## WEALTH
         v[t] <- X[t, ] %*% mC[t, ] + cash[t]
 
@@ -586,7 +586,6 @@ btest  <- function(prices,
         message("done")
     }
 
-    
     if (!missing(instrument))
         colnames(X) <- instrument
     if (is.null(colnames(X)))
@@ -609,7 +608,7 @@ btest  <- function(prices,
         }
         jnl <- sort(jnl)
     }
-    
+
     ans <- list(position = X,
                 suggested.position = Xs,
                 cash = cash,
@@ -622,7 +621,7 @@ btest  <- function(prices,
 
     if (include.data)
         ans <- c(ans,
-                 prices = prices,              
+                 prices = prices,
                  signal = signal,
                  do.signal = do.signal,
                  timestamp = list(timestamp),
