@@ -1,5 +1,7 @@
 2016-06-14  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/yield.R, src/computeyield.c: remove code
+
 	* R/position.R (position.btest): fixed -- the method
 	always returned NULL, not the position; it now also
 	includes 'instrument' and 'timestamp' (if available)
