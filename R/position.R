@@ -147,3 +147,13 @@ as.matrix.position <- function(x, ...) {
     colnames(ans) <- attr(x, "instrument")
     ans
 }
+
+as.data.frame.position <- function(x, ...) {
+    ans <- c(x)
+    dim(ans) <- dim(x)
+    ans <- as.data.frame(ans)
+    
+    row.names(ans) <- as.character(attr(x, "timestamp"))
+    names(ans) <- attr(x, "instrument")
+    ans
+}

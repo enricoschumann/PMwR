@@ -20,6 +20,10 @@ q32(price, sep = "-")
 }
 }
 \details{
+
+  The function is meant for pretty-printing of US
+  treasury bond quotes; it provides no other
+  functionality.
   
   If \code{price} is \code{numeric}, it is interpreted as a quote in
   decimal notation and \sQuote{translated} into a price quoted in
@@ -29,6 +33,7 @@ q32(price, sep = "-")
   fractional notation.
 
   \code{q32} is a short-hand for \code{quote32}.
+
   
 }
 \value{
