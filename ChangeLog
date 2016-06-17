@@ -1,5 +1,7 @@
 2016-06-17  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/quote32.R (Ops.quote32): add method for Ops and `-`
+
 	* R/position.R (as.data.frame.position): add method
 
 2016-06-15  Enrico Schumann  <es@enricoschumann.net>

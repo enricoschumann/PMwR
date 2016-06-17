@@ -15,7 +15,7 @@ quote32 <- q32 <- function(price, sep = "-") {
         handle <- as.numeric(handle)
         ticks <- as.numeric(ticks)
         frac <- as.numeric(frac)
-        ans <- handle + ticks/32 + frac/32
+        ans <- handle + ticks/32 + frac/32/4
     } else {
         ans <- price    
 
@@ -34,7 +34,7 @@ quote32 <- q32 <- function(price, sep = "-") {
 
 print.quote32 <- function(x, sep = "-",
                           display = if (.Platform$OS.type == "unix")
-                          "fractional" else "integer") {
+                          "fractional" else "integer", ...) {
 
     fracsym <- if (display == "fractional")
                    c("0", "\u00bc", "+", "\u00be")
@@ -54,6 +54,13 @@ print.quote32 <- function(x, sep = "-",
     invisible(x)
 }
 
-## `-.quote32` <- function(e1,e2) {
-##     quote32(as.numeric(e1)-as.numeric(e2))        
-## }
+Ops.quote32 <- function (e1, e2) {
+    e1 <- as.numeric(e1)
+    e2 <- as.numeric(e2)
+    NextMethod(.Generic)
+}
+
+`-.quote32` <- function(e1,e2) {
+    ans <- as.numeric(e1) - as.numeric(e2)
+    quote32(ans)
+}
