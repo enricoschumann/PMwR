@@ -1,4 +1,6 @@
-2016-06-17  Enrico Schumann  <es@enricoschumann.net>
+2016-06-18  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 0.3-5
 
 	* R/quote32.R (Ops.quote32): add method for Ops and `-`
 
