@@ -267,3 +267,8 @@ avg <- function(amount, price, tol = 1e-8) {
         list(average = av, realised = rd)
     }
 }
+
+pl.btest <- function(amount, ...) {
+    ## TODO get journal, run pl
+    pl(amount$journal)
+}
