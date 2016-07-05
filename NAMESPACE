@@ -30,6 +30,7 @@ export(
     isValidISIN,
     as.journal,
     is.journal,
+    jcf,
     journal,
     limit,
     pl,

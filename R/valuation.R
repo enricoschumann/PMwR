@@ -48,6 +48,7 @@ jcf <- function(x, multiplier = 1,
     if (!is.null(names(multiplier)))
         multiplier <- multiplier[x$instrument]
     ans <- x
+    ans$instrument <- character(length(x))
     ans$instrument[] <- instrument(x)
     ans$amount <- cashflow(x) * multiplier
     if (flip.sign)
