@@ -1,5 +1,8 @@
 2016-07-07  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/pl.R (pl.default): fixed -- names of
+	initial.position were ignored
+
 	* R/internals.R (vname): new internal function
 	for creating named vectors
 

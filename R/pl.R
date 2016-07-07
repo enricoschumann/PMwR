@@ -96,7 +96,25 @@ pl.default <- function(amount, price, timestamp = NULL,
     if (approx)
         .NotYetUsed("approx")
 
-    if (is.null(instrument) || all(is.na(instrument))) {
+    ## initial position should be a named vector
+    if (!is.null(initial.position) &&
+        inherits(initial.position, "position")) {
+
+        initial.position <- vname(initial.position,
+                                  attr(initial.position, "instrument"))
+        
+    }
+    if (!is.null(initial.position) &&
+        any(abs(initial.position) > 0) &&
+        is.null(initial.price)) {
+        warning("initial.position but no initial.price")
+    }
+
+    ipos.named <- !is.null(initial.position) &&
+        length(names(initial.position)) > 0L
+    if ((is.null(instrument) ||
+        length(instrument) == 0L ||
+        all(is.na(instrument))) && !ipos.named) {
         no.i <- TRUE
         instrument  <- rep("_", length(amount))
         uniq.i <- "_"
@@ -111,6 +129,8 @@ pl.default <- function(amount, price, timestamp = NULL,
             names(initial.price) <- "_"
     } else {
         no.i <- FALSE
+        if (ipos.named)
+            instrument <- c(instrument, names(initial.position))
         uniq.i <- sort(unique(instrument))
 
         mult <- numeric(length(uniq.i))
@@ -125,7 +145,7 @@ pl.default <- function(amount, price, timestamp = NULL,
                 }
             }
         } else {
-            if (all(multiplier == 1L))
+            if (all(multiplier == 1))
                 mult[] <- 1
             else
                 mult <- multiplier[match(uniq.i, names(multiplier))]
@@ -142,12 +162,16 @@ pl.default <- function(amount, price, timestamp = NULL,
         price1 <- price[iv]
         if (!is.null(timestamp))
             timestamp1 <- timestamp[iv]
-        eval.price1 <- eval.price[[ i1 ]]
+        if (!is.null(eval.price) && i1 %in% names(eval.price))
+            eval.price1 <- eval.price[[ i1 ]]
+        else
+            eval.price1  <- NA
         if (is.null(eval.price1))
             eval.price1 <- NA
 
         subtr <- 0
-        if (!is.null(initial.position)) {
+        if (!is.null(initial.position) &&
+            i1 %in% names(initial.position)) {
             ipos1 <- initial.position[[ i1 ]]
             iprice1 <- initial.price[[ i1 ]]
 
