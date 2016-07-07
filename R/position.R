@@ -19,7 +19,8 @@ position.default <- function(amount, timestamp, instrument, when,
 
     if (missing(timestamp) || !length(timestamp)){
         if (!missing(when))
-            warning(sQuote("when"), " specified, but no valid timestamp supplied")
+            warning(sQuote("when"),
+                    " specified, but no valid timestamp supplied")
         timestamp <- rep(1, length(amount))
     }
 
