@@ -1,6 +1,6 @@
 ## -*- truncate-lines: t; fill-column: 60; -*-
 
-quote32 <- q32 <- function(price, sep = "-") {
+quote32 <- q32 <- function(price, sep = "-", warn = TRUE) {
 
     if (is.character(price)) {
         tmp <- strsplit(price, sep, fixed = TRUE)
@@ -24,6 +24,9 @@ quote32 <- q32 <- function(price, sep = "-") {
         ticks <- (tmp*128) %/% 4
         frac <- tmp*128-ticks*4
 
+        r.e <- abs(price - handle - ticks/32 - ticks/4/32)
+        if (warn && any(r.e > .Machine$double.eps^0.5))
+            warning("max rounding error is ", prettyNum(max(r.e)))
     }
     attr(ans, "handle") <- handle
     attr(ans, "ticks") <- ticks
@@ -62,5 +65,10 @@ Ops.quote32 <- function (e1, e2) {
 
 `-.quote32` <- function(e1,e2) {
     ans <- as.numeric(e1) - as.numeric(e2)
+    quote32(ans)
+}
+
+`+.quote32` <- function(e1, e2) {
+    ans <- as.numeric(e1) + as.numeric(e2)
     quote32(ans)
 }
