@@ -47,9 +47,16 @@ jcf <- function(x, multiplier = 1,
         warning("expected journal")
     if (!is.null(names(multiplier)))
         multiplier <- multiplier[x$instrument]
+    if (is.character(instrument))
+        istr  <- instrument
+    else if (is.function(instrument))
+        istr <- instrument(x)
+    else
+        istr <- as.character(instrument)
+
     ans <- x
     ans$instrument <- character(length(x))
-    ans$instrument[] <- instrument(x)
+    ans$instrument[] <- istr
     ans$amount <- cashflow(x) * multiplier
     if (flip.sign)
         ans$amount <- ans$amount * -1    
@@ -76,8 +83,8 @@ valuation.position <- function(x, multiplier = 1, price.table,
 }
 
 ## TODO: add to internal documentation
-pv <- function(x, multiplier = 1, price.table,
-                               do.sum = FALSE, unit, ...) {
+pv <- function(x, multiplier = 1, price.table, price.unit,
+               do.sum = FALSE, ...) {
 
     instrument <- attr(x, "instrument")
     
