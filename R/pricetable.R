@@ -4,16 +4,28 @@ pricetable <- function(instrument, when, price,
                        price.instrument = NULL, price.timestamp = NULL,
                        missing = "error") {
 
-    if (is.matrix(price)) {
-        if (is.null(price.instrument))
-            price.instrument <- colnames(price)
-        if (is.null(price.timestamp))
-            price.timestamp <- rownames(price)
-    } else {
-        stop("not supported yet")
-        ## TODO: construct price
+    if (!is.matrix(price))
+        price <- as.matrix(price)
+    
+    if (is.null(price.instrument) && !is.null(colnames(price)))
+        price.instrument <- colnames(price)
+    
+    if (missing(instrument)) {
+        ## no instrument
+        ## ==> compute prices for each column in price
+        if (!is.null(price.instrument))
+            instrument <- price.instrument
+        else if (is.null(price.instrument))
+            price.instrument <-
+                instrument  <- paste0("i", seq_len(ncol(price)))
     }
     
+    if (is.null(price.timestamp) && !is.null(rownames(price)))
+        price.timestamp <- rownames(price)
+    else if (is.null(price.timestamp))
+        price.timestamp <- seq_len(nrow(price))
+    
+
     if (length(miss <- setdiff(instrument, price.instrument))) {
         if (is.na(missing) || missing == "NA") {
             tmp <- array(NA, dim = c(nrow(price), length(miss)))
@@ -29,7 +41,8 @@ pricetable <- function(instrument, when, price,
     }
         
     i <- matchOrPrevious(when, price.timestamp)
-    ans <- price[i, instrument, drop = FALSE]
+    j <- match(instrument, price.instrument)
+    ans <- price[i, j, drop = FALSE]
     colnames(ans) <- instrument
     rownames(ans) <- as.character(when)
     class(ans) <- "pricetable"
