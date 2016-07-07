@@ -1,5 +1,8 @@
 2016-07-07  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/internals.R (vname): new internal function
+	for creating named vectors
+
 	* R/quote32.R (quote32/q32): add warning when
 	large rounding errors occur
 
