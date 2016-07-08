@@ -3,7 +3,7 @@ print.pl <- function(x, ..., use.crayon = NULL, na.print = ".") {
                       !is.null(tmp <- getOption("PMwR.use.crayon")))
                       tmp else FALSE
     if (!use.crayon)
-        bold <- function(x) x
+        bold <- identity
 
     oo <- getOption("scipen")
     options(scipen = 1e8)
@@ -92,29 +92,44 @@ pl.default <- function(amount, price, timestamp = NULL,
                        eval.price = NULL,
                        tol = 1e-10, ...) {
     if (length(multiplier) > 1L && is.null(names(multiplier)))
-        stop("multiplier must be named")
+        stop(sQuote("multiplier"), " must be a named vector")
     if (approx)
         .NotYetUsed("approx")
 
     ## initial position should be a named vector
-    if (!is.null(initial.position) &&
-        inherits(initial.position, "position")) {
+    if (!is.null(initial.position)) {
 
-        initial.position <- vname(initial.position,
-                                  attr(initial.position, "instrument"))
+        if (inherits(initial.position, "journal"))
+            initial.position <- position(initial.position)
+        ## TODO: if price is specified, use as initial.price
+        ## TODO: if timestamp is specified, use as timestamp0
         
-    }
-    if (!is.null(initial.position) &&
-        any(abs(initial.position) > 0) &&
-        is.null(initial.price)) {
-        warning("initial.position but no initial.price")
-    }
+        if (inherits(initial.position, "position"))            
+            initial.position <- vname(initial.position,
+                                      attr(initial.position, "instrument"))
+            
+        if (any(abs(initial.position) > 0) &&
+            is.null(initial.price)) {
+            warning("initial.position but no initial.price")
+        }
+        
+        instrument0 <- names(initial.position)
+        amount0 <- as.vector(initial.position)
+        price0 <- if (!is.null(names(initial.position)))
+                      initial.price[names(initial.position)]
+                  else
+                      initial.price
 
-    ipos.named <- !is.null(initial.position) &&
-        length(names(initial.position)) > 0L
-    if ((is.null(instrument) ||
-        length(instrument) == 0L ||
-        all(is.na(instrument))) && !ipos.named) {
+        instrument  <- c(instrument0, instrument)
+        amount      <- c(amount0, amount)
+        price       <- c(price0, price)
+    }
+    
+
+    ## ipos.named <- !is.null(initial.position) &&
+    ##     length(names(initial.position)) > 0L
+    if (is.null(instrument) || length(instrument) == 0L ||
+        all(is.na(instrument))) {
         no.i <- TRUE
         instrument  <- rep("_", length(amount))
         uniq.i <- "_"
@@ -123,16 +138,19 @@ pl.default <- function(amount, price, timestamp = NULL,
         names(mult) <- "_"
         if (!is.null(eval.price))
             names(eval.price) <- "_"
-        if (!is.null(initial.position))
-            names(initial.position) <- "_"
-        if (!is.null(initial.price))
-            names(initial.price) <- "_"
+        
+        if (!is.null(initial.position)) { ## necessary to later
+            instrument0 <- "_"            ## subtract i.pos from volume
+        }
+        ## if (!is.null(initial.price))
+        ##     names(initial.price) <- "_"
     } else {
         no.i <- FALSE
-        if (ipos.named)
-            instrument <- c(instrument, names(initial.position))
+        ## if (ipos.named)
+        ##     instrument <- c(instrument, names(initial.position))
         uniq.i <- sort(unique(instrument))
 
+        ## TODO: what if 'multiplier == 50'?
         mult <- numeric(length(uniq.i))
         names(mult) <- uniq.i
         if (multiplier.regexp) {
@@ -145,12 +163,11 @@ pl.default <- function(amount, price, timestamp = NULL,
                 }
             }
         } else {
-            if (all(multiplier == 1))
-                mult[] <- 1
+            if (all(c(0,diff(multiplier)) == 0))
+                mult[] <- multiplier[1]
             else
                 mult <- multiplier[match(uniq.i, names(multiplier))]
         }
-
         ni <- length(uniq.i)
     }
 
@@ -162,22 +179,25 @@ pl.default <- function(amount, price, timestamp = NULL,
         price1 <- price[iv]
         if (!is.null(timestamp))
             timestamp1 <- timestamp[iv]
+
+        eval.price1  <- NA
         if (!is.null(eval.price) && i1 %in% names(eval.price))
             eval.price1 <- eval.price[[ i1 ]]
-        else
-            eval.price1  <- NA
-        if (is.null(eval.price1))
-            eval.price1 <- NA
+        ## else
+        ##     eval.price1  <- NA
+        ## if (is.null(eval.price1))
+        ##     eval.price1 <- NA
 
         subtr <- 0
         if (!is.null(initial.position) &&
-            i1 %in% names(initial.position)) {
-            ipos1 <- initial.position[[ i1 ]]
-            iprice1 <- initial.price[[ i1 ]]
+            i1 %in% instrument0) {
+            ## ipos1 <- initial.position[[ i1 ]]
+            ipos1 <- amount0[i1 == instrument0]
+            ## iprice1 <- initial.price[[ i1 ]]
 
             subtr <- subtr + abs(ipos1)
-            amount1 <- c(ipos1, amount1)
-            price1 <- c(iprice1, price1)
+            ## amount1 <- c(ipos1, amount1)
+            ## price1 <- c(iprice1, price1)
         }
 
         open <- abs(sum(amount1)) > tol

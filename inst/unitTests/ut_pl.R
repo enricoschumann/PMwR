@@ -71,13 +71,39 @@ test.pl <- function() {
                           row.names = c("Equity A", "Equity B"),
                           class = "data.frame"))
 
+    ## open positions and no eval.price specified => pl is NA
     timestamp <- 1:4
     amount <- c(1,1,1,1)
     price <- 101:104
-    instrument <- "my I"
+    instrument <- "Bond"
     jnl <- journal(timestamp=timestamp, amount=amount,
                    price=price, instrument=instrument)
     checkTrue(is.na(suppressWarnings(pl(jnl)[[1]][["pl"]])))
+
+
+
+    ## initial position
+    pl(journal(),
+       initial.position = 1,
+       initial.price = 100,
+       eval.price = 105)
+
+    pl(journal(),
+       initial.position = c(A = 1, B = 2),
+       initial.price = c(A = 100),
+       eval.price = c(A = 105, B = 110))
+
+    pl(journal(),
+       initial.position = c(A = 1, B = 2),
+       initial.price = c(A = 100, B = 100),
+       eval.price = c(A = 105, B = 110))
+
+    pl(journal(), multiplier = 2,
+       initial.position = c(A = 1, B = 2),
+       initial.price = c(A = 100, B = 100),
+       eval.price = c(A = 105, B = 110))
+
+    1
     
     ## amount <- c(1,1,-1,1,-1)
     ## price <- c(100,99,101,100,101)
