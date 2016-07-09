@@ -8,8 +8,8 @@
   Print treasury quotes with 1/32nds of points.  
 }
 \usage{
-quote32(price, sep = "-")
-q32(price, sep = "-")
+quote32(price, sep = "-", warn = TRUE)
+q32(price, sep = "-", warn = TRUE)
 }
 \arguments{
   \item{price}{
@@ -17,6 +17,9 @@ q32(price, sep = "-")
 }
   \item{sep}{
     character
+}
+  \item{warn}{
+    logical. Warn about rounding errors?
 }
 }
 \details{
