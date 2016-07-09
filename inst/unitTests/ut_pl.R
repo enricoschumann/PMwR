@@ -83,27 +83,37 @@ test.pl <- function() {
 
 
     ## initial position
-    pl(journal(),
-       initial.position = 1,
-       initial.price = 100,
-       eval.price = 105)
+    tmp <- pl(journal(),
+              initial.position = 1,
+              initial.price = 100,
+              eval.price = 105)
+    checkEquals(tmp[[1]][["pl"]],5)
+    
+    tmp <- pl(journal(),
+              initial.position = c(A = 1, B = 2),
+              initial.price = c(A = 100),
+              eval.price = c(A = 105, B = 110))
+    checkEquals(tmp[[1]][["pl"]],5)
+    checkTrue(is.na(tmp[[2]][["pl"]]))
+    
+    tmp <- pl(journal(),
+              initial.position = c(A = 1, B = 2),
+              initial.price = c(A = 100, B = 100),
+              eval.price = c(A = 105, B = 110))
+    checkEquals(unlist(lapply(tmp, `[[`, "pl")), c(A=5,B=20))
+    
+    tmp <- pl(journal(),
+              initial.position = c(A = 1, B = 2),
+              initial.price = c(A = 100, B = 100),
+              eval.price = c(B = 110, A = 105))
+    checkEquals(unlist(lapply(tmp, `[[`, "pl")), c(A=5,B=20))
 
-    pl(journal(),
-       initial.position = c(A = 1, B = 2),
-       initial.price = c(A = 100),
-       eval.price = c(A = 105, B = 110))
+    tmp <- pl(journal(), multiplier = 2,
+              initial.position = c(A = 1, B = 2),
+              initial.price = c(A = 100, B = 100),
+              eval.price = c(A = 105, B = 110))
+    checkEquals(unlist(lapply(tmp, `[[`, "pl")), c(A=10,B=40))
 
-    pl(journal(),
-       initial.position = c(A = 1, B = 2),
-       initial.price = c(A = 100, B = 100),
-       eval.price = c(A = 105, B = 110))
-
-    pl(journal(), multiplier = 2,
-       initial.position = c(A = 1, B = 2),
-       initial.price = c(A = 100, B = 100),
-       eval.price = c(A = 105, B = 110))
-
-    1
     
     ## amount <- c(1,1,-1,1,-1)
     ## price <- c(100,99,101,100,101)

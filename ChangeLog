@@ -1,5 +1,8 @@
 2016-07-09  Enrico Schumann  <es@enricoschumann.net>
 
+	* inst/unitTests/ut_pl.R (test.pl): add more
+	tests for 'initial.position'
+
 	* man/quote32.Rd: doc fix
 
 2016-07-08  Enrico Schumann  <es@enricoschumann.net>
