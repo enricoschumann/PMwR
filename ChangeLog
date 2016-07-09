@@ -1,5 +1,7 @@
 2016-07-09  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.3-6
+
 	* inst/unitTests/ut_pl.R (test.pl): add more
 	tests for 'initial.position'
 
