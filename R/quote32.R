@@ -3,6 +3,10 @@
 quote32 <- q32 <- function(price, sep = "-", warn = TRUE) {
 
     if (is.character(price)) {
+        if (warn &&
+            any(!grepl(paste0("[0-9]+", sep, "[0-9]+"), price)))
+            warning("(some) prices do not match pattern <number> <sep> <number>")
+
         tmp <- strsplit(price, sep, fixed = TRUE)
         handle <- unlist(lapply(tmp, `[[`, 1))
         ticks <- substr(unlist(lapply(tmp, `[[`, 2)), 1, 2)
@@ -24,7 +28,7 @@ quote32 <- q32 <- function(price, sep = "-", warn = TRUE) {
         ticks <- (tmp*128) %/% 4
         frac <- tmp*128-ticks*4
 
-        r.e <- abs(price - handle - ticks/32 - ticks/4/32)
+        r.e <- abs(price - handle - ticks/32 - frac/4/32)
         if (warn && any(r.e > .Machine$double.eps^0.5))
             warning("max rounding error is ", prettyNum(max(r.e)))
     }

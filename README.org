@@ -61,6 +61,7 @@ More details are in the manual:
   will change as frequently as the package. I am grateful
   for comments and suggestions.
 
+
 * Installation
 
 To install the package from a running R session, type:
