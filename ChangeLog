@@ -1,3 +1,7 @@
+2016-07-19  Enrico Schumann  <es@enricoschumann.net>
+
+	* inst/CITATION: add file
+
 2016-07-13  Enrico Schumann  <es@enricoschumann.net>
 
 	* NAMESPACE: remove 'jcf' from exported functions
