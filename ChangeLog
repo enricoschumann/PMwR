@@ -1,5 +1,8 @@
 2016-07-19  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/pl.R (pl): rename argument 'eval.price'
+	to 'vprice'
+
 	* inst/CITATION: add file
 
 2016-07-13  Enrico Schumann  <es@enricoschumann.net>

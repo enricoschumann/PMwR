@@ -20,7 +20,7 @@ test.pl <- function() {
                 
     checkEquals(pl(amount = 1, price = 1,
                    initial.position = 1, initial.price = 1,
-                   eval.price = 2),
+                   vprice = 2),
                 structure(list(structure(list(pl = 2,
                                               realised = NA,
                                               unrealised = NA, 
@@ -71,7 +71,7 @@ test.pl <- function() {
                           row.names = c("Equity A", "Equity B"),
                           class = "data.frame"))
 
-    ## open positions and no eval.price specified => pl is NA
+    ## open positions and no vprice specified => pl is NA
     timestamp <- 1:4
     amount <- c(1,1,1,1)
     price <- 101:104
@@ -86,32 +86,32 @@ test.pl <- function() {
     tmp <- pl(journal(),
               initial.position = 1,
               initial.price = 100,
-              eval.price = 105)
+              vprice = 105)
     checkEquals(tmp[[1]][["pl"]],5)
     
     tmp <- pl(journal(),
               initial.position = c(A = 1, B = 2),
               initial.price = c(A = 100),
-              eval.price = c(A = 105, B = 110))
+              vprice = c(A = 105, B = 110))
     checkEquals(tmp[[1]][["pl"]],5)
     checkTrue(is.na(tmp[[2]][["pl"]]))
     
     tmp <- pl(journal(),
               initial.position = c(A = 1, B = 2),
               initial.price = c(A = 100, B = 100),
-              eval.price = c(A = 105, B = 110))
+              vprice = c(A = 105, B = 110))
     checkEquals(unlist(lapply(tmp, `[[`, "pl")), c(A=5,B=20))
     
     tmp <- pl(journal(),
               initial.position = c(A = 1, B = 2),
               initial.price = c(A = 100, B = 100),
-              eval.price = c(B = 110, A = 105))
+              vprice = c(B = 110, A = 105))
     checkEquals(unlist(lapply(tmp, `[[`, "pl")), c(A=5,B=20))
 
     tmp <- pl(journal(), multiplier = 2,
               initial.position = c(A = 1, B = 2),
               initial.price = c(A = 100, B = 100),
-              eval.price = c(A = 105, B = 110))
+              vprice = c(A = 105, B = 110))
     checkEquals(unlist(lapply(tmp, `[[`, "pl")), c(A=10,B=40))
 
     
@@ -138,10 +138,10 @@ test.pl <- function() {
 
 
 
-## pl(amount = 1, price = 1, eval.price = 2)
+## pl(amount = 1, price = 1, vprice = 2)
 
 ## pl(amount = 1, price = 2, initial.position = 1,
-##    initial.price = 1, eval.price = 3)
+##    initial.price = 1, vprice = 3)
 
 
 ## amount <- c(1,1,-1,1,-2)
@@ -180,7 +180,7 @@ test.pl <- function() {
 
 ## pl(amount = 1, price = 1,
 ##    initial.position = 1, initial.price = 1,
-##    eval.price = 2)
+##    vprice = 2)
 
 
 ## instrument  <- c("FGBL", "FGBL", "Bond", "Bond")
@@ -188,12 +188,12 @@ test.pl <- function() {
 ## price <- c(100,101, 1, 5)
 ## ## .pl(amount, price)
 ## pl.default(amount, price, instrument=instrument)
-## pl.default(amount, price, instrument=instrument, eval.price=c(FGBL=103, Bond = 2))
+## pl.default(amount, price, instrument=instrument, vprice=c(FGBL=103, Bond = 2))
 
 ## amount <- c(1, -2)
 ## price <- c(100,101)
 ## pl.default(amount, price)
-## pl.default(amount, price, eval.price=100)
+## pl.default(amount, price, vprice=100)
 
 ## require("rbenchmark")
 

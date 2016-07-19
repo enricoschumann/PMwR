@@ -65,7 +65,7 @@ pl.journal <- function(amount, multiplier = 1,
                        multiplier.regexp = FALSE,
                        along.timestamp = FALSE, approx = FALSE,
                        initial.position = NULL, initial.price = NULL,
-                       eval.price = NULL,
+                       vprice = NULL,
                        tol = 1e-10, ...) {
     J <- amount
     price <- J$price
@@ -79,7 +79,7 @@ pl.journal <- function(amount, multiplier = 1,
                along.timestamp = along.timestamp,
                approx = approx,
                initial.position = initial.position, initial.price = initial.price,
-               eval.price = eval.price,
+               vprice = vprice,
                tol = tol, ...)
 }
 
@@ -89,7 +89,7 @@ pl.default <- function(amount, price, timestamp = NULL,
                        along.timestamp = FALSE,
                        approx = FALSE,
                        initial.position = NULL, initial.price = NULL,
-                       eval.price = NULL,
+                       vprice = NULL,
                        tol = 1e-10, ...) {
     if (length(multiplier) > 1L && is.null(names(multiplier)))
         stop(sQuote("multiplier"), " must be a named vector")
@@ -136,8 +136,8 @@ pl.default <- function(amount, price, timestamp = NULL,
         ni <- 1L
         mult <- multiplier[1]
         names(mult) <- "_"
-        if (!is.null(eval.price))
-            names(eval.price) <- "_"
+        if (!is.null(vprice))
+            names(vprice) <- "_"
         
         if (!is.null(initial.position)) { ## necessary to later
             instrument0 <- "_"            ## subtract i.pos from volume
@@ -180,13 +180,13 @@ pl.default <- function(amount, price, timestamp = NULL,
         if (!is.null(timestamp))
             timestamp1 <- timestamp[iv]
 
-        eval.price1  <- NA
-        if (!is.null(eval.price) && i1 %in% names(eval.price))
-            eval.price1 <- eval.price[[ i1 ]]
+        vprice1  <- NA
+        if (!is.null(vprice) && i1 %in% names(vprice))
+            vprice1 <- vprice[[ i1 ]]
         ## else
-        ##     eval.price1  <- NA
-        ## if (is.null(eval.price1))
-        ##     eval.price1 <- NA
+        ##     vprice1  <- NA
+        ## if (is.null(vprice1))
+        ##     vprice1 <- NA
 
         subtr <- 0
         if (!is.null(initial.position) &&
@@ -201,21 +201,21 @@ pl.default <- function(amount, price, timestamp = NULL,
         }
 
         open <- abs(sum(amount1)) > tol
-        if (!open && !is.null(eval.price1) && !is.na(eval.price1)) {
+        if (!open && !is.null(vprice1) && !is.na(vprice1)) {
             warning("all trades are closed ",
                     if (!no.i) paste0(" for ",  uniq.i[i]),
-                    ", but ", sQuote("eval.price")," is specified")
+                    ", but ", sQuote("vprice")," is specified")
         }
 
         if (open) {
-            if (is.null(eval.price))
+            if (is.null(vprice))
                 warning(sQuote("sum(amount)"), " is not zero",
                         if (!no.i) paste0(" for ",  uniq.i[i]),
                         ": specify ",
-                        sQuote("eval.price")," to compute p/l")
+                        sQuote("vprice")," to compute p/l")
             subtr <- subtr + abs(sum(amount1))
             amount1 <- c(amount1, -sum(amount1))
-            price1  <- c(price1, eval.price1)
+            price1  <- c(price1, vprice1)
         }
 
         pl1 <- .pl(amount1, price1, tol = tol, do.warn = FALSE)

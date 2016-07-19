@@ -19,13 +19,13 @@ pl(amount, \dots)
                      multiplier.regexp = FALSE,
                      along.timestamp = FALSE, approx = FALSE,
                      initial.position = NULL, initial.price = NULL,
-                     eval.price = NULL, tol = 1e-10, \dots)
+                     vprice = NULL, tol = 1e-10, \dots)
 
 \method{pl}{journal}(amount, multiplier = 1,
                      multiplier.regexp = FALSE,
                      along.timestamp = FALSE, approx = FALSE,
                      initial.position = NULL, initial.price = NULL,
-                     eval.price = NULL, tol = 1e-10, \dots)
+                     vprice = NULL, tol = 1e-10, \dots)
 
 .pl(amount, price, tol = 1e-10, do.warn = TRUE)
 
@@ -55,7 +55,7 @@ pl(amount, \dots)
   \item{initial.price}{
     prices to evaluate initial position.
   }
-  \item{eval.price}{
+  \item{vprice}{
 
     numeric vector. With several instruments, the prices should be
     named, e.g. \code{c(stock1 = 100, stock2 = 101)}.
@@ -127,7 +127,7 @@ as.data.frame(pl(J))
 
 
 
-## Example for 'eval.price'
+## Example for 'vprice'
 instrument  <- c(rep("Bond A", 2), rep("Bond B", 2))
 amount <- c(1, -2, 2, -1)
 price <- c(100, 101, 100, 105)
@@ -135,9 +135,9 @@ price <- c(100, 101, 100, 105)
 ## ... no p/l + warning because positions not closed:
 pl(amount, price, instrument = instrument) 
 
-## ... but with eval.price specified, p/l is computed:
+## ... but with vprice specified, p/l is computed:
 pl(amount, price, instrument = instrument, ## p/l + no warning
-   eval.price = c("Bond A" = 103, "Bond B" = 100)) 
+   vprice = c("Bond A" = 103, "Bond B" = 100)) 
 
 ### ... and is, except for volume, the same as here:
 instrument  <- c(rep("Bond A", 3), rep("Bond B", 3))
