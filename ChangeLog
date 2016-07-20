@@ -1,4 +1,6 @@
-2016-07-19  Enrico Schumann  <es@enricoschumann.net>
+2016-07-20  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 0.3-7
 
 	* R/pl.R (pl): rename argument 'eval.price'
 	to 'vprice'
