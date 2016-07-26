@@ -1,3 +1,9 @@
+2016-07-26  Enrico Schumann  <es@enricoschumann.net>
+
+	* inst/unitTests/ut_pl.R (test.pl): add tests
+	for 'pl' when initial position is a 'journal'
+	or a 'position'
+
 2016-07-20  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-7

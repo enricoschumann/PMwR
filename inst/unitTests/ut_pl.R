@@ -1,7 +1,7 @@
 test.pl <- function() {
 
-    require("PMwR")
-    require("RUnit")
+    ## require("PMwR")
+    ## require("RUnit")
     
     checkEquals(pl(amount = c(1,-1),
                    price  = c(1,2))[[1]][["pl"]], 1)
@@ -87,7 +87,7 @@ test.pl <- function() {
               initial.position = 1,
               initial.price = 100,
               vprice = 105)
-    checkEquals(tmp[[1]][["pl"]],5)
+    checkEquals(tmp[[1]][["pl"]], 5)
     
     tmp <- pl(journal(),
               initial.position = c(A = 1, B = 2),
@@ -114,6 +114,35 @@ test.pl <- function() {
               vprice = c(A = 105, B = 110))
     checkEquals(unlist(lapply(tmp, `[[`, "pl")), c(A=10,B=40))
 
+
+    
+    ## initial position can be a 'position'
+    tmp <- pl(journal(),
+              initial.position = position(amount = c(1,2),
+                                          instrument = c("A", "B")),
+              initial.price = c(A = 100, B = 100),
+              vprice = c(A = 105, B = 110))
+    checkEquals(unlist(lapply(tmp, `[[`, "pl")), c(A=5,B=20))
+
+    tmp <- pl(journal(), 
+              initial.position = position(amount = c(2,1),
+                                          instrument = c("B", "A")),
+              initial.price = c(A = 100, B = 100),
+              vprice = c(A = 105, B = 110))
+    checkEquals(unlist(lapply(tmp, `[[`, "pl")), c(A=5,B=20))
+
+    
+    ## initial position can be a 'journal'
+    tmp <- pl(journal(),
+              multiplier = c(A = 2,
+                             B = 4),
+              initial.position = journal(amount     = c(2,1),
+                                  instrument = c("B", "A")),
+              initial.price = c(A = 100,
+                                B = 100),
+              vprice = c(A = 105, B = 110))
+    checkEquals(unlist(lapply(tmp, `[[`, "pl")), c(A=10,B=80))
+    
     
     ## amount <- c(1,1,-1,1,-1)
     ## price <- c(100,99,101,100,101)
