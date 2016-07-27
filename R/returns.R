@@ -40,10 +40,14 @@ returns.zoo <- function(x, period = NULL, complete.first = TRUE,
         ans <- returns.default(x, period = NULL,
                        complete.first = complete.first,
                        pad = pad, position = position, lag = lag, ...)
-        if (!is.null(pad))
-            zoo(ans, t)
-        else
-            zoo(ans, t[-1L])
+        attrs <- attributes(ans)
+        ans <- if (!is.null(pad))
+                   zoo(ans, t)
+               else
+                   zoo(ans, t[-1L])
+        attr(ans, "holdings") <- attrs$holdings
+        attr(ans, "contributions") <- attrs$contributions
+        ans    
     }
 }
 

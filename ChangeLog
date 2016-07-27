@@ -1,3 +1,13 @@
+2016-07-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (returns.zoo): copy attributes
+	'holdings' and 'contributions' when weights are
+	supplied
+
+	* inst/unitTests/ut_returns.R (test.returns):
+	add tests for 'returns' when 'weights' are
+	supplied
+
 2016-07-26  Enrico Schumann  <es@enricoschumann.net>
 
 	* inst/unitTests/ut_pl.R (test.pl): add tests
