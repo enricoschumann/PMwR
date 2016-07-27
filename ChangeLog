@@ -1,5 +1,7 @@
 2016-07-27  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.3-8
+
 	* R/returns.R (returns.zoo): copy attributes
 	'holdings' and 'contributions' when weights are
 	supplied
