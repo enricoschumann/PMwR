@@ -1,7 +1,7 @@
 test.returns <- function() {
 
-    require("PMwR", quietly = TRUE)
-    require("RUnit", quietly = TRUE)
+    ## require("PMwR", quietly = TRUE)
+    ## require("RUnit", quietly = TRUE)
     require("zoo", quietly = TRUE, warn.conflicts = FALSE)
     
 
@@ -69,18 +69,19 @@ test.returns <- function() {
     ## period, but no timestamp: period is ignored
     ## timestamp, but no period: timestamp is ignored
     ##
-    ## (when there is no period, methods are required to keep
-    ## timestamp information for themselves and then to re-assemble
-    ## the necessary class structure)
+    ## (when there is no period, methods are required
+    ## to keep timestamp information for themselves and
+    ## then to re-assemble the necessary class
+    ## structure)
     x <- 101:112
     t <- seq_along(x)
     suppressWarnings(checkEquals(returns(x, period = "month"), returns(x)))
     suppressWarnings(checkEquals(returns(x, t = t),            returns(x)))
     
     ## period -- check class
-    require("PMwR", quietly = TRUE)
-    require("RUnit", quietly = TRUE)
-    require("zoo", quietly = TRUE, warn.conflicts = FALSE)
+    ## require("PMwR", quietly = TRUE)
+    ## require("RUnit", quietly = TRUE)
+    ## require("zoo", quietly = TRUE, warn.conflicts = FALSE)
     t <- seq(as.Date("2012-01-01"), as.Date("2012-12-31"), by = "1 day")
     x <- seq_along(t)/10 + 100
     z <- zoo(x, t)
@@ -118,6 +119,36 @@ test.returns <- function() {
     ## period -- mtd
     checkEquals(c(returns(x, t = t, period = "mtd")),
                 tail(x, 1) / x[match(as.Date("2012-11-30"),t)] - 1)
+
+
+    
+    ## returns with weights
+    x <- 101:112
+    t <- seq_along(x)
+    x <- cbind(x+rnorm(length(x)), x+rnorm(length(x)))
+    checkEquals(returns(x[,1]),
+                c(returns(x, weights = c(1,0))))
+    checkEquals(returns(x[,2]),
+                c(returns(x, weights = c(0,1))))
+    ## ... check attr
+    checkEquals(length(attributes(returns(x, weights = c(0,1)))), 2)
+    checkEquals(
+        sort(names(attributes(returns(x, weights = c(1,0))))),
+        c("contributions", "holdings"))
+
+    
+    ## ... with zoo
+    checkEquals(returns(zoo(x,t))[,1],
+                c(returns(zoo(x,t), weights = c(1,0))))
+    checkEquals(returns(zoo(x,t))[,2],
+                c(returns(zoo(x,t), weights = c(0,1))))
+    
+    ## ... check attr with zoo
+    checkEquals(
+        sort(names(attributes(returns(zoo(x,t), weights = c(1,0))))),
+        c("class", "contributions", "holdings", "index"))
+
+
 
     
     
