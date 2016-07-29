@@ -64,8 +64,9 @@ btest  <- function(prices,
             FALSE
         warning(sQuote("do.signal"), " is FALSE: strategy will never trade")
     } else if (!missing(timestamp) && inherits(do.signal, class(timestamp))) {
-        ## TODO: when timestamp is specified, match to timestamp
-        stop("not implemented")
+        rebalancing_times <- matchOrNext(do.signal, timestamp)
+        do.signal <- function(...)
+            Time(0L) %in% rebalancing_times
     } else if (is.numeric(do.signal)) {
         ## TODO: what if Date?
         rebalancing_times <- do.signal
@@ -126,16 +127,13 @@ btest  <- function(prices,
         do.rebalance <- function(...)
             computeSignal
     } else if (!missing(timestamp) && inherits(do.rebalance, class(timestamp))) {
-        ## TODO: when timestamp is specified, match to timestamp
-        stop("not implemented")
+        rebalancing_times <- matchOrNext(do.rebalance, timestamp)
+        do.signal <- function(...)
+            Time(0L) %in% rebalancing_times
     } else if (is.numeric(do.rebalance)) {
-        ## TODO: what if Date?
         rebalancing_times <- do.rebalance
         do.rebalance <- function(...) {
-            if (Time(0L) %in% rebalancing_times)
-                TRUE
-            else
-                FALSE
+            Time(0L) %in% rebalancing_times
         }
     } else if (is.logical(do.rebalance)) {
         ## tests on identical to TRUE,FALSE above, so length > 1

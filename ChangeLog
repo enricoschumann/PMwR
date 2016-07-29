@@ -1,3 +1,11 @@
+2016-07-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (do.signal, do.rebalance): when
+	'do.signal' or 'do.rebalance' is a vector and
+	of the same class as 'timestamp' -- typically
+	Date or POSIXct --, their elements will be
+	matched against 'timestamp'
+
 2016-07-27  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-8

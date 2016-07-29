@@ -152,8 +152,8 @@ test.btest <- function() {
     ## with timestamp
     require("datetimeutils")
     timestamp <- seq(from = as.Date("2015-01-01"),
-                to   = as.Date("2015-04-15"),
-                by   = "1 day")
+                     to   = as.Date("2015-04-15"),
+                     by   = "1 day")
     timestamp <- timestamp[!isWeekend(timestamp)]
     ## prices <- c(100+)
 
@@ -174,4 +174,18 @@ test.btest <- function() {
                  initial.cash = 100,
                  timestamp = timestamp)
     res$journal
+
+    ## check whether date is matched against
+    ## timestamp. The 31 Jan is not in timestamp, so
+    ## trade takes place on next day (2 Feb)    
+    res <- btest(list(prices),
+                 signal = function() c(0.5,0.5),
+                 convert.weights = TRUE,
+                 do.signal = as.Date(c("2015-01-08",
+                                       "2015-01-31")),
+                 initial.cash = 100,
+                 timestamp = timestamp)
+    checkEquals(unique(res$journal$timestamp),
+                as.Date(c("2015-01-08", "2015-02-02")))    
+    checkEquals(length(res$journal), 4)
 }
