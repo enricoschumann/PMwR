@@ -1,3 +1,8 @@
+2016-08-02  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (acc.split): add function (not
+	exported)
+
 2016-07-28  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R (do.signal, do.rebalance): when

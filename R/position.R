@@ -13,7 +13,7 @@ position.journal <- function(amount, when,
 }
 
 position.default <- function(amount, timestamp, instrument, when,
-                             drop.zero = FALSE,  ...) {
+                             drop.zero = FALSE, ...) {
     if (missing(instrument))
         instrument <- NA
 
@@ -157,4 +157,38 @@ as.data.frame.position <- function(x, ...) {
     row.names(ans) <- as.character(attr(x, "timestamp"))
     names(ans) <- attr(x, "instrument")
     ans
+}
+
+acc.split <- function(account, sep, perl = FALSE) {
+
+    account[is.na(account)] <- ""
+    gs <- sort(unique(account))
+    
+    list.gs <- strsplit(gs, sep, perl = perl)
+
+    ans <- NULL
+    for (i in seq_along(list.gs)) {
+        if ((lg <- length(list.gs[[i]])) == 1L)
+            next
+        
+        tmp <- NULL
+        for (j in seq_len(lg-1))
+            tmp <- c(tmp,paste(list.gs[[i]][1:j], collapse="::"))
+        ans <- c(ans,tmp)
+    }
+    
+    sort(unique(c(ans, account)))    
+} 
+
+if (FALSE) {
+    input <- c("equity::traditional",
+               "equity::traditional::USA",
+               "equity::traditional::USA",
+               "equity::traditional::Europe",
+               "equity::traditional::Japan",
+               "equity::long-short",
+               "equity::long-short",
+               "equity::long-short" )
+    
+    acc.split(input, "\\s*::\\s*", TRUE)
 }
