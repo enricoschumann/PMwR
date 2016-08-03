@@ -1,3 +1,11 @@
+2016-08-03  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (position.default): add basic
+	support for 'account'
+
+	* inst/unitTests/ut_position.R (test.position):
+	add tests
+
 2016-08-02  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (acc.split): add function (not
