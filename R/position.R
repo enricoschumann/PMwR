@@ -6,18 +6,27 @@ position.journal <- function(amount, when,
 
     instrument <- amount$instrument
     timestamp  <- amount$timestamp
+    account    <- amount$account
     amount     <- amount$amount
 
     position.default(amount, timestamp, instrument, when,
-                     drop.zero = drop.zero, ...)
+                     drop.zero = drop.zero,
+                     account = account, ...)
 }
 
-position.default <- function(amount, timestamp, instrument, when,
-                             drop.zero = FALSE, ...) {
-    if (missing(instrument))
-        instrument <- NA
+position.default <- function(amount, timestamp, instrument,
+                             when, drop.zero = FALSE,
+                             account = NULL, ...) {
 
-    if (missing(timestamp) || !length(timestamp)){
+    allna <- FALSE ## are all instruments missing/NA?
+    if (missing(instrument) ||
+        is.null(instrument) ||
+        all(is.na(instrument)) ||
+        !length(instrument)) {
+        instrument <- rep.int("", length(amount))
+        allna <- TRUE
+    }
+    if (missing(timestamp) || !length(timestamp)) {
         if (!missing(when))
             warning(sQuote("when"),
                     " specified, but no valid timestamp supplied")
@@ -53,16 +62,15 @@ position.default <- function(amount, timestamp, instrument, when,
     if (anyNA(timestamp) && !is.unsorted(timestamp, na.rm = TRUE))
         warning("timestamp has NA values")
 
-    if (is.null(instrument) || !length(instrument))
-        instrument <- rep.int("", length(amount))
 
-    allna <- FALSE
     if (all(ina <- is.na(instrument))) {
         instrument[] <- ""
         allna <- TRUE
     } else
         instrument[ina] <- "NA"
 
+    instrument <- paste(account, ":::", instrument, sep = "")
+        
     nw <- length(when)
     nm <- sort(unique(instrument))
     pos <- array(0, dim = c(nw, length(nm)))
@@ -90,7 +98,8 @@ position.default <- function(amount, timestamp, instrument, when,
     if (allna)
         nm[] <- NA
     attr(pos, "timestamp") <- when
-    attr(pos, "instrument") <- nm
+    attr(pos, "instrument") <- gsub(".*:::(.*?)", "\\1", nm)
+    attr(pos, "account") <- gsub("(.*):::.*", "\\1", nm)    
     class(pos) <- "position"
     pos
 }
@@ -109,14 +118,20 @@ print.position <- function(x, ..., sep = NA) {
     original.x <- x
     if (!is.na(sep))
         .NotYetUsed("sep")
+    account <- attr(x, "account")
     instrument <- attr(x, "instrument")
     timestamp <- attr(x, "timestamp")
+    if (!is.null(account))
+        instrument <- paste(account, "  ", instrument, sep = "")
+    if (!all(is.na(instrument)))
+        colnames(x) <- instrument        
+
     if (all(is.na(timestamp)) || (is.character(timestamp) && all(timestamp == "")))
         rownames(x) <- NULL
     if (all(is.na(instrument)) || (is.character(instrument) && all(instrument == "")))
         colnames(x) <- NULL
-    if (!all(is.na(instrument)))
-        colnames(x) <- instrument
+
+    attr(x, "account") <- NULL
     attr(x, "instrument") <- NULL
     attr(x, "timestamp") <- NULL
     if (dim(x)[1L] > 1L) {
@@ -181,6 +196,8 @@ acc.split <- function(account, sep, perl = FALSE) {
 } 
 
 if (FALSE) {
+
+    require("PMwR")
     input <- c("equity::traditional",
                "equity::traditional::USA",
                "equity::traditional::USA",
@@ -190,5 +207,21 @@ if (FALSE) {
                "equity::long-short",
                "equity::long-short" )
     
-    acc.split(input, "\\s*::\\s*", TRUE)
+    PMwR:::acc.split(input, "\\s*::\\s*", TRUE)
+    
+    j <- journal(amount = c(1,1,1,1),
+                 instrument = c("fgbl", "fgbl", "fesx", "fesx"),
+                 account = c("A", "B", "B", "B"),
+                 price = c(1,1,1,1),
+                 timestamp = 1)
+    j2 <- journal(amount = c(1,1,1,1),
+                 instrument = c("fgbl", "fgbl", "fesx", "fesx"),
+                 account = c("A", "B", "B", "B"),
+                 price = c(1,1,1,1),
+                 timestamp = 2)
+    position(j)
+    position(c(j,j2), when=1:2)
+    dput(position(j))
+
 }
+

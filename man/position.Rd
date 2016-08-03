@@ -12,7 +12,8 @@
 \usage{
 position(amount, \dots)
 
-\method{position}{default}(amount, timestamp, instrument, when, drop.zero = FALSE, \dots)
+\method{position}{default}(amount, timestamp, instrument, when,
+                 drop.zero = FALSE, account = NULL, \dots)
 
 \method{print}{position}(x, \dots, sep = NA)
 
@@ -29,6 +30,9 @@ position(amount, \dots)
   }
   \item{instrument}{
     character: symbols to identify different instruments
+  }
+  \item{account}{
+    character: description of account
   }
   \item{drop.zero}{
     logical: drop instruments that have a zero position
