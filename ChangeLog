@@ -1,3 +1,9 @@
+2016-08-04  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/quote32.R (quote32): disable warnings for
+	strings without separator; for instance,
+	'q32("130")' will be printed as '130-000'
+
 2016-08-03  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-9

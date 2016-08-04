@@ -1,10 +1,9 @@
 ## -*- truncate-lines: t; fill-column: 60; -*-
 
 quote32 <- q32 <- function(price, sep = "-", warn = TRUE) {
-
     if (is.character(price)) {
         if (warn &&
-            any(!grepl(paste0("[0-9]+", sep, "[0-9]+"), price)))
+            any(!grepl(paste0("[0-9]+", sep, "?[0-9]+"), price)))
             warning("(some) prices do not match pattern <number> <sep> <number>")
 
         tmp <- strsplit(price, sep, fixed = TRUE)
