@@ -225,3 +225,6 @@ if (FALSE) {
 
 }
 
+as.zoo.position <- function(x, ...) {
+    zoo(x, attr(x, "timestamp"))
+}

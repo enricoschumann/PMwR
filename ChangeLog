@@ -1,3 +1,8 @@
+2016-08-09  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (as.zoo.position): add and
+	export method
+
 2016-08-04  Enrico Schumann  <es@enricoschumann.net>
 
         * R/quote32.R (quote32): disable warnings for
