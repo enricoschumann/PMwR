@@ -405,13 +405,13 @@ btest  <- function(prices,
 
         ## REBALANCE?
         rebalance <- do.rebalance(...,
-                               Open = Open, High = High,
-                               Low = Low, Close = Close,
-                               Wealth = Wealth, Cash = Cash,
-                               Time = Time, Timestamp = Timestamp,
-                               Portfolio = Portfolio,
-                               SuggestedPortfolio = SuggestedPortfolio,
-                               Globals = Globals)
+                                  Open = Open, High = High,
+                                  Low = Low, Close = Close,
+                                  Wealth = Wealth, Cash = Cash,
+                                  Time = Time, Timestamp = Timestamp,
+                                  Portfolio = Portfolio,
+                                  SuggestedPortfolio = SuggestedPortfolio,
+                                  Globals = Globals)
 
         dXs <- Xs[t, ] - if (any(initial.position != 0))
                              initial.position else 0
@@ -571,12 +571,12 @@ btest  <- function(prices,
         t  <- t + 1L
         t1 <- t - 1L
         final.pos <- signal(..., Open = Open, High = High,
-                       Low = Low, Close = Close, Wealth = Wealth,
-                       Cash = Cash, Time = Time,
-                       Timestamp = Timestamp,
-                       Portfolio = Portfolio,
-                       SuggestedPortfolio = SuggestedPortfolio,
-                       Globals = Globals)
+                            Low = Low, Close = Close, Wealth = Wealth,
+                            Cash = Cash, Time = Time,
+                            Timestamp = Timestamp,
+                            Portfolio = Portfolio,
+                            SuggestedPortfolio = SuggestedPortfolio,
+                            Globals = Globals)
         if (convert.weights)
             final.pos <- final.pos * v[t1] / mC[t1, ]
         if (!missing(instrument))
