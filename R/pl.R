@@ -150,7 +150,6 @@ pl.default <- function(amount, price, timestamp = NULL,
         ##     instrument <- c(instrument, names(initial.position))
         uniq.i <- sort(unique(instrument))
 
-        ## TODO: what if 'multiplier == 50'?
         mult <- numeric(length(uniq.i))
         names(mult) <- uniq.i
         if (multiplier.regexp) {
@@ -163,8 +162,8 @@ pl.default <- function(amount, price, timestamp = NULL,
                 }
             }
         } else {
-            if (all(c(0,diff(multiplier)) == 0))
-                mult[] <- multiplier[1]
+            if (all(c(0, diff(multiplier)) == 0)) ## check if all multipliers
+                mult[] <- multiplier[1]           ## are identical
             else
                 mult <- multiplier[match(uniq.i, names(multiplier))]
         }
