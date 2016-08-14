@@ -12,8 +12,9 @@ print.pl <- function(x, ..., use.crayon = NULL, na.print = ".") {
     ni <- length(x)
 
     numrow <- function(x, w) {
-        ans <- substr(paste0(format(x, width = w, justify = "right"), collapse = " "),
-                      1, ceiling(getOption("width")*0.9))
+        ans <- substr(paste0(format(x, width = w, justify = "right"),
+                             collapse = " "),
+                      start = 1, stop = ceiling(getOption("width")*0.9))
         if (nchar(ans) < nchar(paste0(format(x, width = w), collapse = " ")))
             ans  <- paste(ans, "[...]")
         ans
@@ -78,7 +79,8 @@ pl.journal <- function(amount, multiplier = 1,
                multiplier.regexp = multiplier.regexp,
                along.timestamp = along.timestamp,
                approx = approx,
-               initial.position = initial.position, initial.price = initial.price,
+               initial.position = initial.position,
+               initial.price = initial.price,
                vprice = vprice,
                tol = tol, ...)
 }
@@ -88,7 +90,8 @@ pl.default <- function(amount, price, timestamp = NULL,
                        multiplier.regexp = FALSE,
                        along.timestamp = FALSE,
                        approx = FALSE,
-                       initial.position = NULL, initial.price = NULL,
+                       initial.position = NULL,
+                       initial.price = NULL,
                        vprice = NULL,
                        tol = 1e-10, ...) {
     if (length(multiplier) > 1L && is.null(names(multiplier)))
@@ -109,9 +112,8 @@ pl.default <- function(amount, price, timestamp = NULL,
                                       attr(initial.position, "instrument"))
             
         if (any(abs(initial.position) > 0) &&
-            is.null(initial.price)) {
+            is.null(initial.price))
             warning("initial.position but no initial.price")
-        }
         
         instrument0 <- names(initial.position)
         amount0 <- as.vector(initial.position)
@@ -312,6 +314,5 @@ avg <- function(amount, price, tol = 1e-8) {
 }
 
 pl.btest <- function(amount, ...) {
-    ## TODO get journal, run pl
     pl(amount$journal)
 }
