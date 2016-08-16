@@ -1,5 +1,8 @@
 2016-08-16  Enrico Schumann  <es@enricoschumann.net>
 
+	* vignettes/An_overview_of_PMwR.Rnw: add
+	footnote on unit tests
+
 	* R/pl.R (pl.default): 'along.timestamp' can
 	now be a vector, compatible with 'timestamp'.
 
