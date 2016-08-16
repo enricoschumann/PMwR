@@ -30,11 +30,11 @@ print.pl <- function(x, ..., use.crayon = NULL, na.print = ".") {
     for (i in seq_len(ni)) {
         if (print.inst)
             cat(attr(x, "instrument")[[i]], "\n")
-        PL   <- if (is.finite(x[[i]]$pl)) ## TODO: what if pl has length>1?
+        PL   <- if (any(is.finite(x[[i]]$pl)))
                     x[[i]]$pl else na.print
-        BUY  <- if (is.finite(x[[i]]$buy))
+        BUY  <- if (any(is.finite(x[[i]]$buy)))
                     x[[i]]$buy else na.print
-        SELL <- if (is.finite(x[[i]]$sell))
+        SELL <- if (any(is.finite(x[[i]]$sell)))
                     x[[i]]$sell else na.print
         w <- max(nchar(prettyNum(c(PL, BUY, SELL,
                                    x[[i]]$realised,
@@ -94,18 +94,51 @@ pl.default <- function(amount, price, timestamp = NULL,
                        initial.price = NULL,
                        vprice = NULL,
                        tol = 1e-10, ...) {
+
+    ## browser()
     if (length(multiplier) > 1L && is.null(names(multiplier)))
         stop(sQuote("multiplier"), " must be a named vector")
     if (approx)
         .NotYetUsed("approx")
 
+
+    ## if user defined timestamp: vprice needs to be
+    ## specified and must be a matrix
+    if (!identical(along.timestamp, TRUE) &&
+        !identical(along.timestamp, FALSE)) {
+        custom.timestamp <- TRUE
+               
+        ## TODO what if a named vector
+        ## (names=instruments) is used?  use case:
+        ## compute pl at a specific point in time.
+        ## Right now, strict requirement: when vprice
+        ## is used for more than one asset, it must be
+        ## a matrix.
+        if (is.null(dim(vprice)))
+            vprice <- as.matrix(vprice)
+
+        if (is.null(timestamp) || !length(timestamp))
+            stop(sQuote("along.timestamp"),
+                 " specified but no timestamp available")
+        
+    } else {
+        custom.timestamp <- FALSE
+    }
+  
+
     ## initial position should be a named vector
     if (!is.null(initial.position)) {
 
-        if (inherits(initial.position, "journal"))
+        if (inherits(initial.position, "journal")) {
+            ## TODO: if price is specified, use as
+            ## initial.price => but only the latest
+            ## price should be used
+            
+            ## TODO: if timestamp is specified, use as
+            ## timestamp0 => but only the latest
+            ## timestamp should be used
             initial.position <- position(initial.position)
-        ## TODO: if price is specified, use as initial.price
-        ## TODO: if timestamp is specified, use as timestamp0
+        }
         
         if (inherits(initial.position, "position"))            
             initial.position <- vname(initial.position,
@@ -126,20 +159,25 @@ pl.default <- function(amount, price, timestamp = NULL,
         amount      <- c(amount0, amount)
         price       <- c(price0, price)
     }
-    
-
-    ## ipos.named <- !is.null(initial.position) &&
-    ##     length(names(initial.position)) > 0L
+                
     if (is.null(instrument) || length(instrument) == 0L ||
         all(is.na(instrument))) {
+        ## case 1: only a single instrument, unnamed
         no.i <- TRUE
         instrument  <- rep("_", length(amount))
         uniq.i <- "_"
         ni <- 1L
+        ## TODO: warn if multiplier is named (but
+        ## ignore multiplier)
         mult <- multiplier[1]
         names(mult) <- "_"
-        if (!is.null(vprice))
-            names(vprice) <- "_"
+        if (!is.null(vprice)) {
+            if (custom.timestamp) {
+                colnames(vprice) <- "_"                
+            } else {
+                names(vprice) <- "_"
+            }
+        }
         
         if (!is.null(initial.position)) { ## necessary to later
             instrument0 <- "_"            ## subtract i.pos from volume
@@ -147,9 +185,9 @@ pl.default <- function(amount, price, timestamp = NULL,
         ## if (!is.null(initial.price))
         ##     names(initial.price) <- "_"
     } else {
+        ## 'instrument' is named (even if it is just a
+        ## single instrument)
         no.i <- FALSE
-        ## if (ipos.named)
-        ##     instrument <- c(instrument, names(initial.position))
         uniq.i <- sort(unique(instrument))
 
         mult <- numeric(length(uniq.i))
@@ -178,12 +216,14 @@ pl.default <- function(amount, price, timestamp = NULL,
         iv <- i1 == instrument & abs(amount) > tol
         amount1 <- amount[iv]
         price1 <- price[iv]
-        if (!is.null(timestamp))
+        if (!is.null(timestamp) && length(timestamp) > 0L)
             timestamp1 <- timestamp[iv]
 
         vprice1  <- NA
-        if (!is.null(vprice) && i1 %in% names(vprice))
+        if (!is.null(vprice)  && is.null(dim(vprice)))
             vprice1 <- vprice[[ i1 ]]
+        if (!is.null(vprice) && !is.null(dim(vprice)))
+            vprice1 <- vprice[, i1]
         ## else
         ##     vprice1  <- NA
         ## if (is.null(vprice1))
@@ -192,9 +232,9 @@ pl.default <- function(amount, price, timestamp = NULL,
         subtr <- 0
         if (!is.null(initial.position) &&
             i1 %in% instrument0) {
-            ## ipos1 <- initial.position[[ i1 ]]
+
             ipos1 <- amount0[i1 == instrument0]
-            ## iprice1 <- initial.price[[ i1 ]]
+
 
             subtr <- subtr + abs(ipos1)
             ## amount1 <- c(ipos1, amount1)
@@ -202,13 +242,14 @@ pl.default <- function(amount, price, timestamp = NULL,
         }
 
         open <- abs(sum(amount1)) > tol
-        if (!open && !is.null(vprice1) && !is.na(vprice1)) {
-            warning("all trades are closed ",
-                    if (!no.i) paste0(" for ",  uniq.i[i]),
+        if (!open && !is.na(vprice1) &&
+            length(along.timestamp) == 1L) {
+            warning("no open position",
+                    if (!no.i) paste0(" in ",  uniq.i[i]),
                     ", but ", sQuote("vprice")," is specified")
         }
 
-        if (open) {
+        if (open && !custom.timestamp) {
             if (is.null(vprice))
                 warning(sQuote("sum(amount)"), " is not zero",
                         if (!no.i) paste0(" for ",  uniq.i[i]),
@@ -216,11 +257,11 @@ pl.default <- function(amount, price, timestamp = NULL,
                         sQuote("vprice")," to compute p/l")
             subtr <- subtr + abs(sum(amount1))
             amount1 <- c(amount1, -sum(amount1))
-            price1  <- c(price1, vprice1)
+            price1 <- c(price1, vprice1)
         }
 
         pl1 <- .pl(amount1, price1, tol = tol, do.warn = FALSE)
-        if (!along.timestamp) {
+        if (identical(along.timestamp, FALSE)) {
             tmp <- list(pl = pl1[1L] * unname(mult[i1]),
                         realised = NA,
                         unrealised = NA,
@@ -230,13 +271,30 @@ pl.default <- function(amount, price, timestamp = NULL,
         } else {
             cumcash <- cumsum(-price1 * amount1)
             cumpos  <- cumsum(amount1)
-            pnl <- cumpos * price1 + cumcash
+
             real <- avg(amount1, price1)$realised
+            if (isTRUE(along.timestamp)) {
+                pnl <- cumpos * price1 + cumcash
+            } else {
+                ## compute position at any timestamp
+                ## specified by 'along.timestamp',
+                ## including the cash account
+                tmp <- position(amount = c(amount1, -price1 * amount1),
+                                timestamp = c(timestamp1, timestamp1),
+                                instrument = c(rep(i1, length(amount1)),
+                                               rep("cash", length(amount1))),
+                                when = along.timestamp)
+                pnl <- rowSums(tmp * cbind(vprice, 1))
+                real <- c(position(real,
+                                   timestamp = timestamp1,
+                                   when = along.timestamp)) * unname(mult[i1])
+            }
             tmp <- list(pl = pnl * unname(mult[i1]),
                         realised = real,
                         unrealised = pnl - real,
                         buy = pl1[3L],
                         sell = pl1[4L],
+                        ## FIXME: volume needs to obey 'along.timestamp'
                         volume = cumsum(abs(amount1)))
         }
         ans[[i]] <- tmp

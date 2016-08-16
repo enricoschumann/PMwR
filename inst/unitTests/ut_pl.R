@@ -6,6 +6,7 @@ test.pl <- function() {
     checkEquals(pl(amount = c(1,-1),
                    price  = c(1,2))[[1]][["pl"]], 1)
 
+    
     checkEquals(pl(amount = c(1,-1), price = c(1,2)),                
                 structure(list(structure(list(pl = 1,
                                               realised = NA,
@@ -167,26 +168,27 @@ test.pl <- function() {
 
 
 
-## pl(amount = 1, price = 1, vprice = 2)
+    ## pl(amount = 1, price = 1, vprice = 2)
+    
+    ## pl(amount = 1, price = 2, initial.position = 1,
+    ##    initial.price = 1, vprice = 3)
+    
+    
+    ## amount <- c(1,1,-1,1,-2)
+    ## price <- c(100,102,105,102,105)
+    
+    ## cumcash <- cumsum(-price * amount)
+    ## cumpos  <- cumsum(amount)
+    ## pnl <- cumpos * price + cumcash
+    ## real <- avg(amount, price)$realised
+    ## unreal <- pnl-real
+    ## data.frame(cumsum(amount), price, pnl, real, unreal)
+    
+    
+    ## require("PMwR")
+    ## require("RUnit")
 
-## pl(amount = 1, price = 2, initial.position = 1,
-##    initial.price = 1, vprice = 3)
-
-
-## amount <- c(1,1,-1,1,-2)
-## price <- c(100,102,105,102,105)
-
-## cumcash <- cumsum(-price * amount)
-## cumpos  <- cumsum(amount)
-## pnl <- cumpos * price + cumcash
-## real <- avg(amount, price)$realised
-## unreal <- pnl-real
-## data.frame(cumsum(amount), price, pnl, real, unreal)
-
-
-    ## test multiplier
-    require("PMwR")
-    require("RUnit")
+    ## multiplier
     checkEquals(pl(amount = c(1, -1),
                    price  = c(1,  2),
                    multiplier = 0)[[1L]][["pl"]], 0)
@@ -203,6 +205,38 @@ test.pl <- function() {
                    price  = c(1,  2),
                    instrument = c("B", "B"),
                    multiplier = c(A = 1, B = 2))[[1L]][["pl"]], 2)
+
+    ## along.timestamp
+    j <- journal(amount = c(1,-1),
+                 timestamp = c(1,2.5),
+                 price = c(100,101))
+    pl(j, along.timestamp = TRUE)
+    checkEqualsNumeric(pl(j, along.timestamp = TRUE)[[1]]$pl,
+                       0:1)
+
+
+    pl(j, along.timestamp=1:3, vprice = c(100,102,103))
+
+    tmp <- pl(amount = 1, timestamp = 0, price = 100,
+              vprice = 101:110, along.timestamp = 1:10)
+    checkEqualsNumeric(tmp[[1]]$pl, 1:10)
+    
+    ## should work since vprice is timestamp-agnostic:
+    ## it just computes the current PL, no matter the
+    ## time
+    pl(journal(),
+       initial.position = 1, initial.price = 1,
+       vprice = 101)
+
+    ## should *not* work since the initial price has no
+    ## timestamp, but for vprice the timestamps are
+    ## specified
+    checkException(
+        pl(journal(),
+           initial.position = 1, initial.price = 1,
+           vprice = 101:110, along.timestamp = 1:10),
+        silent = TRUE)
+
 
     
 }

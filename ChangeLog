@@ -1,3 +1,8 @@
+2016-08-16  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pl.R (pl.default): 'along.timestamp' can
+	now be a vector, compatible with 'timestamp'.
+
 2016-08-09  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (as.zoo.position): add and
