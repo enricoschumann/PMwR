@@ -1,5 +1,7 @@
 2016-08-16  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.3-10
+
 	* vignettes/An_overview_of_PMwR.Rnw: add
 	footnote on unit tests
 
