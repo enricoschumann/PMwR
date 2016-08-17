@@ -85,6 +85,14 @@ plotTradingHours(x, t = NULL,
 
   \code{list(t, x, axis.pos = pos, axis.labels, timegrid)}
 
+ \item{t}{positions}
+ \item{x}{values}
+ \item{axis.pos}{positions of x-tickmarks}
+ \item{axis.labels}{labels at x-ticks}
+ \item{timegrid}{a POSIXct vector}
+ \item{map}{a function. See the manual (a link is under References).}
+
+  
 }
 \references{
 
@@ -102,12 +110,12 @@ Enrico Schumann <es@enricoschumann.net>
   \code{\link{DateTimeClasses}}
 }
 \examples{
-t <- as.POSIXct("2012-08-31 08:05:00") - 36000:1
+t <- as.POSIXct("2012-08-31 08:00:00") + 0:32400
 x <- runif(length(t))
 
 par(tck = 0.001, mgp = c(3,1,0.5), bty = "n")
 plotTradingHours(x, t,
-                 interval = "15 min", labels = "hours",
+                 interval = "5 min", labels = "hours",
                  xlab = "time", ylab = "random points",
                  col = "blue")
 }
