@@ -62,12 +62,12 @@ plotTradingHours <- function(x, t = NULL,
     values <- values[ri]    
 
     maptime <- function(t) {
-        ## interval, grd in environment!
+        ## interval, grd in environment
         by <- roundPOSIXt(t, interval = interval)
         t <- unique(by)
         ri <- match(grd, t, nomatch = 0L)
         rx <- match(t[ri], grd)
-        list(t = rx, ix = ri[ri > 0])
+        list(t = rx, ix = last(by, by, TRUE))
     }
     
     ## prepare labels
