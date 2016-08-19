@@ -1,5 +1,7 @@
 2016-08-19  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.3-11
+
 	* R/plotTradingHours.R (maptime): fixed -- the
 	'map' function returned by 'plotTradingHours'
 	did not always report the correct positions to
