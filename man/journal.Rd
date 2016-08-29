@@ -19,7 +19,7 @@
   Journal
 }
 \description{
-  Create a journal of financial transactions.
+  Create and manipulate a journal of financial transactions.
 }
 \usage{
 journal(amount, \dots)
