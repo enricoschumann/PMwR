@@ -282,9 +282,12 @@ aggregate.journal <- function(x, by, FUN, ...) {
 
     lenx <- length(x)    
     grp <- double(lenx)
+    if (is.atomic(by))
+        by <- list(by)
     for (ind in rev(by)) {
         if (length(ind) != lenx) 
-            stop("all vectors in 'by' must have same length")
+            stop("all vectors in ", sQuote("by"),
+                 " must have same length")
         ind <- as.factor(ind)
         grp <- grp * nlevels(ind) + (as.integer(ind) - 1L)
     }
