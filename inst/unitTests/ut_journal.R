@@ -108,4 +108,17 @@ test.journal <- function() {
                           class = "journal"))
     checkEquals(journal(amount = 1:10, foo = 1),
                 journal(amount = 1:10, foo = rep(1, 10)))       
+
+
+    ## assignment
+    j <- journal(amount=1:3)
+
+    ## ok: replace field
+    j$amount[1] <- 5   ## ok
+    checkEquals(j$amount, c(5,2,3))
+    
+    ## not ok: replace journal as a whole
+    checkException(j[1]$amount <- 10, silent=TRUE)
+
 }
+
