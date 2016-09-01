@@ -53,6 +53,7 @@ export(
 S3method(`+`, quote32)
 S3method(`-`, quote32)
 S3method(`[`, journal)
+S3method(`[<-`, journal)
 S3method(Ops, quote32)
 S3method(aggregate, journal)
 S3method(as.NAVseries, btest)

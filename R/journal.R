@@ -207,7 +207,7 @@ account <- function(x, ...) {
         x$account
 }
 
-`account<-` <- function(x, value) {
+`account<-` <- function(x, ..., value) {
     if (!inherits(x, "journal"))
         stop(sQuote("x"), " must inherit from class ", sQuote("journal"))
 
@@ -220,13 +220,13 @@ account <- function(x, ...) {
     x
 }
 
-amount <- function(x, abs = FALSE, ...) {
+amount <- function(x, ...) {
     if (!inherits(x, "journal"))
         stop(sQuote("x"), " must inherit from class ", sQuote("journal"))
     x$amount
 }
 
-`amount<-` <- function(x, value) {
+`amount<-` <- function(x, ..., value) {
 
     if (!inherits(x, "journal"))
         stop(sQuote("x"), " must inherit from class ", sQuote("journal"))
@@ -255,7 +255,6 @@ print.summary.journal <- function(x, ...) {
     invisible(x)
 }
 
-
 `[.journal`  <- function(x, i, match.against = NULL,
                          ignore.case = TRUE, ..., reverse = FALSE) {
     if (is.character(i)) {
@@ -276,6 +275,12 @@ print.summary.journal <- function(x, ...) {
     ans <- lapply(unclass(x), `[`, ii)
     class(ans) <- "journal"
     ans
+}
+
+`[<-.journal`  <- function(x, i, match.against = NULL,
+                           ignore.case = TRUE, ..., reverse = FALSE, value) {
+
+    stop("extraction only: use x$amount[] etc. for replacement")
 }
 
 aggregate.journal <- function(x, by, FUN, ...) {
