@@ -14,6 +14,7 @@
 \alias{head.journal}
 \alias{tail.journal}
 \alias{[.journal}
+\alias{[<-.journal}
 \alias{as.data.frame.journal}
 \title{
   Journal
@@ -47,6 +48,9 @@ is.journal(x)
 
 \method{[}{journal}(x, i, match.against = NULL,
                     ignore.case = TRUE, \dots, reverse = FALSE)
+
+\method{[}{journal}(x, i, match.against = NULL,
+                    ignore.case = TRUE, \dots, reverse = FALSE) <- value
 
 \method{as.data.frame}{journal}(x, row.names = NULL, optional = FALSE, \dots)
 
@@ -144,6 +148,9 @@ is.journal(x)
   \item{FUN}{
     either a function that takes as input a journal and evaluates to a
     journal, or a list of named functions
+  }
+  \item{value}{
+    a replacement value
   }
 }
 \details{
