@@ -1,5 +1,10 @@
 2016-09-06  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/position.R (position.default): fix handling
+	of NA amounts: such positions are always
+	kept (which is as before, but then the instrument
+	was overwritten with NA as well)
+
 	* man/journal.Rd: fix entry for `[<-.journal`
 
 2016-09-01  Enrico Schumann  <es@enricoschumann.net>

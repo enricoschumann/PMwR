@@ -88,12 +88,12 @@ position.default <- function(amount, timestamp, instrument,
     }
     if (!is.logical(drop.zero)) {
         drop <- apply(pos, 2, function(x) all(abs(x) < drop.zero))
-        pos <- pos[ , !drop, drop = FALSE]
-        nm <- nm[!drop]
+        pos <- pos[ , is.na(drop) | !drop, drop = FALSE]
+        nm <- nm[is.na(drop) | !drop]
     } else if (drop.zero) {
         drop <- apply(pos, 2, function(x) all(x == 0))
-        pos <- pos[ , !drop, drop = FALSE]
-        nm <- nm[!drop]
+        pos <- pos[ , is.na(drop) | !drop, drop = FALSE]
+        nm <- nm[is.na(drop) | !drop]
     }
     if (allna)
         nm[] <- NA
