@@ -32,6 +32,7 @@ export(
     is.journal,
     journal,
     limit,
+    instrument,
     pl,
     plotTradingHours,
     position,
@@ -78,6 +79,7 @@ S3method(pl, default)
 S3method(pl, journal)
 S3method(plot, NAVseries)
 S3method(plot, btest)
+S3method(instrument, position)
 S3method(position, btest)
 S3method(position, default)
 S3method(position, journal)

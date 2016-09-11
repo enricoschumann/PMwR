@@ -240,6 +240,31 @@ amount <- function(x, ...) {
     x
 }
 
+instrument <- function(x, ...) {
+    UseMethod("instrument")
+}
+
+instrument.position <- function(x, ...) {
+    attr(x, "instrument")
+}
+
+instrument.journal <- function(x, ...) {
+    x$journal
+}
+
+`instrument.journal<-` <- function(x, ..., value) {
+    len <- length(value)
+    lenx <- length(x)
+    if (len == lenx)
+        x$instrument <- value
+    else if (len == 1L)
+        x$instrument <- rep(value, lenx)
+    else
+        stop("length(instrument) differs from length(journal)")
+    x
+
+}
+
 summary.journal <- function(x, ...) {
     ## TODO
     ## number of trades per instrument

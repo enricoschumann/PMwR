@@ -1,5 +1,10 @@
 2016-09-11  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/journal.R (instrument): new generic
+	'instrument', with methods for 'position' and
+	'journal'
+	(`instrument.journal<-`): replacement function
+
 	* R/position.R (position.default): use `%SEP%`
 	as internal separator string, instead of `:::`
 
