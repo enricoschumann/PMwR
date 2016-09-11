@@ -69,7 +69,7 @@ position.default <- function(amount, timestamp, instrument,
     } else
         instrument[ina] <- "NA"
 
-    instrument <- paste(account, ":::", instrument, sep = "")
+    instrument <- paste(account, "%SEP%", instrument, sep = "")
         
     nw <- length(when)
     nm <- sort(unique(instrument))
@@ -98,8 +98,8 @@ position.default <- function(amount, timestamp, instrument,
     if (allna)
         nm[] <- NA
     attr(pos, "timestamp") <- when
-    attr(pos, "instrument") <- gsub(".*:::(.*?)", "\\1", nm)
-    attr(pos, "account") <- gsub("(.*):::.*", "\\1", nm)    
+    attr(pos, "instrument") <- gsub(".*%SEP%(.*?)", "\\1", nm)
+    attr(pos, "account") <- gsub("(.*)%SEP%.*", "\\1", nm)    
     class(pos) <- "position"
     pos
 }
