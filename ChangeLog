@@ -1,3 +1,9 @@
+2016-09-11  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/amount.R (amount): experimental/not
+	exported: add function 'amount', which adds a
+	'unit' attribute to numeric vectors
+
 2016-09-06  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (position.default): fix handling
