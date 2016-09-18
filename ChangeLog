@@ -1,3 +1,8 @@
+2016-09-18  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pl.R (pl.pl): add method, which retrieves
+	raw p/l numbers from 'pl' object
+
 2016-09-11  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (instrument): new generic
