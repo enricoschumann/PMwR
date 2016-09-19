@@ -115,6 +115,8 @@ position.btest <- function(amount, when, ...) {
 }
 
 print.position <- function(x, ..., sep = NA) {
+    if (dim(x)[[2L]] == 0L) ## empty position
+        return(invisible(x))
     original.x <- x
     if (!is.na(sep))
         .NotYetUsed("sep")
@@ -188,11 +190,21 @@ acc.split <- function(account, sep, perl = FALSE) {
         
         tmp <- NULL
         for (j in seq_len(lg-1))
-            tmp <- c(tmp,paste(list.gs[[i]][1:j], collapse="::"))
-        ans <- c(ans,tmp)
+            tmp <- c(tmp, paste(list.gs[[i]][1:j],
+                                collapse = "::"))
+        ans <- c(ans, tmp)
     }
     
-    sort(unique(c(ans, account)))    
+    ans <- sort(unique(c(ans, account)))
+
+    ## compute level
+    level <- as.numeric(
+        unlist(lapply(gregexpr(sep, ans),
+                      function(x) length(x) == 1 && x == -1)))
+
+    level[level == 0L] <- lengths(gregexpr(sep, ans))[level == 0L] + 1
+
+    data.frame(account=ans, level)
 } 
 
 if (FALSE) {

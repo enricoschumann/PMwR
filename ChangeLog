@@ -1,4 +1,13 @@
+2016-09-19  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (acc.split): evaluate to
+	data.frame of `account` and `level`
+
 2016-09-18  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (print.position): fixed --
+	printing empty positions threw an error; now
+	nothing is printed
 
 	* R/pl.R (pl.pl): add method, which retrieves
 	raw p/l numbers from 'pl' object
