@@ -2,9 +2,6 @@
 
 importFrom(NMOF, drawdown)
 importFrom(NMOF, pm)
-importFrom(utils, head)
-importFrom(utils, tail)
-importFrom(utils, toLatex)
 importFrom(stats, aggregate)
 importFrom(zoo, as.zoo)
 importFrom(zoo, coredata)
@@ -18,6 +15,17 @@ importFrom(textutils, valign)
 importFrom(datetimeutils, roundPOSIXt)
 importFrom(datetimeutils, timegrid)
 importFrom(crayon, bold)
+
+importFrom("grDevices",
+           "grey")
+importFrom("graphics",
+           "abline", "axis", "hist", "lines", "par", "plot")
+importFrom("stats",
+           "quantile", "runif", "sd", "time")
+importFrom("utils",
+           "browseURL", "capture.output", "setTxtProgressBar",
+           "str", "txtProgressBar",
+           "head", "tail", "toLatex")
 
 export(
     .returns,

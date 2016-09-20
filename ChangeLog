@@ -1,3 +1,15 @@
+2016-09-20  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: import from graphics, stats,
+	utils, grDevices
+
+	* R/position.R (acc.split): stringsAsFactors is
+	now FALSE
+
+	* man/instrument.Rd: add file
+
+	* R/pl.R (print.pl): remove NA printing
+
 2016-09-19  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (acc.split): evaluate to

@@ -204,7 +204,7 @@ acc.split <- function(account, sep, perl = FALSE) {
 
     level[level == 0L] <- lengths(gregexpr(sep, ans))[level == 0L] + 1
 
-    data.frame(account=ans, level)
+    data.frame(account = ans, level, stringsAsFactors = FALSE)
 } 
 
 if (FALSE) {

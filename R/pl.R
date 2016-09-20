@@ -30,12 +30,15 @@ print.pl <- function(x, ..., use.crayon = NULL, na.print = ".") {
     for (i in seq_len(ni)) {
         if (print.inst)
             cat(attr(x, "instrument")[[i]], "\n")
-        PL   <- if (any(is.finite(x[[i]]$pl)))
-                    x[[i]]$pl else na.print
-        BUY  <- if (any(is.finite(x[[i]]$buy)))
-                    x[[i]]$buy else na.print
-        SELL <- if (any(is.finite(x[[i]]$sell)))
-                    x[[i]]$sell else na.print
+        ## PL   <- if (any(is.finite(x[[i]]$pl)))
+        ##             x[[i]]$pl else na.print
+        ## BUY  <- if (any(is.finite(x[[i]]$buy)))
+        ##             x[[i]]$buy else na.print
+        ## SELL <- if (any(is.finite(x[[i]]$sell)))
+        ##             x[[i]]$sell else na.print
+        PL   <- x[[i]]$pl
+        BUY  <- x[[i]]$buy
+        SELL <- x[[i]]$sell
         w <- max(nchar(prettyNum(c(PL, BUY, SELL,
                                    x[[i]]$realised,
                                    x[[i]]$unrealised))))
