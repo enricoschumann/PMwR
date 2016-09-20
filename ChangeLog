@@ -1,5 +1,7 @@
 2016-09-20  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.3-12
+
 	* NAMESPACE: import from graphics, stats,
 	utils, grDevices
 
