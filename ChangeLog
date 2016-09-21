@@ -1,5 +1,7 @@
 2016-09-21  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.3-13
+
 	* R/pl.R (pl.default, pl.journal): new argument
 	'do.warn'; default is TRUE, which matches
 	previous behaviour
