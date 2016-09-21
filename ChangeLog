@@ -1,3 +1,16 @@
+2016-09-21  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pl.R (pl.default, pl.journal): new argument
+	'do.warn'; default is TRUE, which matches
+	previous behaviour
+
+	* NAMESPACE: export methods for instrument
+
+	* R/journal.R (c.journal): skip NULL arguments
+
+	* R/instrument.R (## instrument):
+	remove/comment old function definition
+
 2016-09-20  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-12

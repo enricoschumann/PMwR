@@ -73,7 +73,7 @@ pl.journal <- function(amount, multiplier = 1,
                        along.timestamp = FALSE, approx = FALSE,
                        initial.position = NULL, initial.price = NULL,
                        vprice = NULL,
-                       tol = 1e-10, ...) {
+                       tol = 1e-10, do.warn = TRUE,...) {
     J <- amount
     price <- J$price
     instrument <- J$instrument
@@ -88,7 +88,8 @@ pl.journal <- function(amount, multiplier = 1,
                initial.position = initial.position,
                initial.price = initial.price,
                vprice = vprice,
-               tol = tol, ...)
+               tol = tol,
+               do.warn = do.warn, ...)
 }
 
 pl.default <- function(amount, price, timestamp = NULL,
@@ -99,7 +100,7 @@ pl.default <- function(amount, price, timestamp = NULL,
                        initial.position = NULL,
                        initial.price = NULL,
                        vprice = NULL,
-                       tol = 1e-10, ...) {
+                       tol = 1e-10, do.warn = TRUE,...) {
 
     ## browser()
     if (length(multiplier) > 1L && is.null(names(multiplier)))
@@ -150,7 +151,7 @@ pl.default <- function(amount, price, timestamp = NULL,
             initial.position <- vname(initial.position,
                                       attr(initial.position, "instrument"))
             
-        if (any(abs(initial.position) > 0) &&
+        if (do.warn && any(abs(initial.position) > 0) &&
             is.null(initial.price))
             warning("initial.position but no initial.price")
         
@@ -174,7 +175,7 @@ pl.default <- function(amount, price, timestamp = NULL,
         uniq.i <- "_"
         ni <- 1L
         ## TODO: warn if multiplier is named (but
-        ## ignore multiplier)
+        ## ignore multiplier)?
         mult <- multiplier[1]
         names(mult) <- "_"
         if (!is.null(vprice)) {
@@ -248,15 +249,17 @@ pl.default <- function(amount, price, timestamp = NULL,
         }
 
         open <- abs(sum(amount1)) > tol
-        if (!open && !is.na(vprice1) &&
+        if (do.warn && !open && !is.na(vprice1) &&
             length(along.timestamp) == 1L) {
+
+            ## TODO: remove warning?
             warning("no open position",
                     if (!no.i) paste0(" in ",  uniq.i[i]),
                     ", but ", sQuote("vprice")," is specified")
         }
 
         if (open && !custom.timestamp) {
-            if (is.null(vprice))
+            if (do.warn && is.null(vprice))
                 warning(sQuote("sum(amount)"), " is not zero",
                         if (!no.i) paste0(" for ",  uniq.i[i]),
                         ": specify ",

@@ -16,40 +16,40 @@ prepareArgs <- function(x, ...)
 prepareArgs.default <- function(x, ...)
     list(...)
 
-instrument <- function(class, id = NULL, ...) {
+## instrument <- function(class, id = NULL, ...) {
 
-    properties <- list(...)
-    class <- tolower(class)
+##     properties <- list(...)
+##     class <- tolower(class)
 
-    if (class == "equity") {
+##     if (class == "equity") {
         
-        ans <- list(id          = id,
-                    description = properties$description,
-                    currency    = properties$currency,
-                    vfun        = function(x,...) NA)
+##         ans <- list(id          = id,
+##                     description = properties$description,
+##                     currency    = properties$currency,
+##                     vfun        = function(x,...) NA)
                 
-        class(ans) <- c("equity", "instrument")
+##         class(ans) <- c("equity", "instrument")
         
-    } else if (class == "vanillaoptioneuropean") {
+##     } else if (class == "vanillaoptioneuropean") {
         
-        ans <- list(id          = id,
-                    description = properties$description,
-                    underlier   = properties$underlier,
-                    currency    = properties$currency,
-                    strike      = properties$strike,
-                    expiry      = properties$expiry,
-                    payoff      = properties$payoff,
-                    vfun        = NMOF::vanillaOptionEuropean)
+##         ans <- list(id          = id,
+##                     description = properties$description,
+##                     underlier   = properties$underlier,
+##                     currency    = properties$currency,
+##                     strike      = properties$strike,
+##                     expiry      = properties$expiry,
+##                     payoff      = properties$payoff,
+##                     vfun        = NMOF::vanillaOptionEuropean)
         
-        class(ans) <- c("vanillaOptionEuropean", "instrument")
+##         class(ans) <- c("vanillaOptionEuropean", "instrument")
 
-    } else
-        stop("unknown instrument class ", sQuote(class))
+##     } else
+##         stop("unknown instrument class ", sQuote(class))
     
-    ans
-}
-length.instrument <- function(x)
-    1L
+##     ans
+## }
+## length.instrument <- function(x)
+##     1L
 
 ## ii <- instrument(class       = "vanillaOptionEuropean",
 ##                  id          = "odax201309c8000",

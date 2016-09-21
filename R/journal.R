@@ -154,6 +154,7 @@ sort.journal <- function(x, decreasing = FALSE, by = "timestamp",
 
 c.journal <- function(..., recursive = FALSE) {
     tls <- list(...)
+    tls <- tls[!unlist(lapply(tls, is.null))]
     if (!all(unlist(lapply(tls, inherits, "journal")) ))
         warning("method only works for ", sQuote("journal"), " objects")    
     ns <- unique(unlist(lapply(tls, names)))
@@ -249,7 +250,7 @@ instrument.position <- function(x, ...) {
 }
 
 instrument.journal <- function(x, ...) {
-    x$journal
+    x$instrument
 }
 
 `instrument.journal<-` <- function(x, ..., value) {
