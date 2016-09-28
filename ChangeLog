@@ -1,3 +1,11 @@
+2016-09-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (position.default): fixed --
+	'account' was not sorted by time
+
+	* R/position.R (position.journal): new argument
+	'use.account', with default FALSE
+
 2016-09-21  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-13

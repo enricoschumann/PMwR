@@ -2,12 +2,14 @@ position <- function(amount, ...)
     UseMethod("position")
 
 position.journal <- function(amount, when,
-                             drop.zero = FALSE,  ...) {
+                             drop.zero = FALSE,
+                             use.account = FALSE, ...) {
 
     instrument <- amount$instrument
     timestamp  <- amount$timestamp
-    account    <- amount$account
     amount     <- amount$amount
+    account <- if (use.account)
+                   amount$account
 
     position.default(amount, timestamp, instrument, when,
                      drop.zero = drop.zero,
@@ -49,10 +51,12 @@ position.default <- function(amount, timestamp, instrument,
     }
 
     if (!anyNA(timestamp) && is.unsorted(timestamp)) {
-        io  <- order(timestamp)
+        io <- order(timestamp)
         timestamp <- timestamp[io]
         amount  <- amount[io]
         instrument <- instrument[io]
+        if (!is.null(account))
+            account <- account[io]
     }
 
     if (anyNA(timestamp) && is.unsorted(timestamp, na.rm = TRUE))
