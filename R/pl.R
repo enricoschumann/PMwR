@@ -249,15 +249,6 @@ pl.default <- function(amount, price, timestamp = NULL,
         }
 
         open <- abs(sum(amount1)) > tol
-        if (do.warn && !open && !is.na(vprice1) &&
-            length(along.timestamp) == 1L) {
-
-            ## TODO: remove warning?
-            warning("no open position",
-                    if (!no.i) paste0(" in ",  uniq.i[i]),
-                    ", but ", sQuote("vprice")," is specified")
-        }
-
         if (open && !custom.timestamp) {
             if (do.warn && is.null(vprice))
                 warning(sQuote("sum(amount)"), " is not zero",

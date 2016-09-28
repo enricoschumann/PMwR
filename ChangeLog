@@ -1,5 +1,8 @@
 2016-09-28  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/pl.R (pl.default): remove warning when
+	'vprice' was specified for zero position
+
 	* R/position.R (position.default): fixed --
 	'account' was not sorted by time
 
