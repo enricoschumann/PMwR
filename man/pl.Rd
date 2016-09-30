@@ -19,13 +19,13 @@ pl(amount, \dots)
                      multiplier.regexp = FALSE,
                      along.timestamp = FALSE, approx = FALSE,
                      initial.position = NULL, initial.price = NULL,
-                     vprice = NULL, tol = 1e-10, \dots)
+                     vprice = NULL, tol = 1e-10, do.warn = TRUE, \dots)
 
 \method{pl}{journal}(amount, multiplier = 1,
                      multiplier.regexp = FALSE,
                      along.timestamp = FALSE, approx = FALSE,
                      initial.position = NULL, initial.price = NULL,
-                     vprice = NULL, tol = 1e-10, \dots)
+                     vprice = NULL, tol = 1e-10, do.warn = TRUE, \dots)
 
 .pl(amount, price, tol = 1e-10, do.warn = TRUE)
 
@@ -75,27 +75,29 @@ pl(amount, \dots)
   }
   \item{approx}{logical}
   \item{tol}{numeric: threshold to consider a position zero.}
-  \item{do.warn}{logical}
   \item{x}{a pl object to be printed or to be coerced to a data.frame}
   \item{\dots}{further argument}
   \item{use.crayon}{logical}
   \item{na.print}{character: how to print \code{NA} values}
+  \item{do.warn}{logical: issue warnings?}
 }
 \details{
 
   Computes profit and/or loss.
 
-  To use package crayon -- which is only sensible in interactive use --,
-   either explicitly set it to \code{TRUE} or set an option
-   \code{PMwR.use.crayon} to \code{TRUE}.
+  To use package crayon -- which is only sensible in
+   interactive use --, either explicitly set it to
+   \code{TRUE} or set an option \code{PMwR.use.crayon}
+   to \code{TRUE}.
 
   
 }
 \value{
 
-  For \code{pl}, an object of class \code{pl}, which is a list of lists:
-  one list for each instrument. Each such list contains numeric vectors:
-  \code{pl}, \code{realised}, \code{unrealised}, \code{buy},
+  For \code{pl}, an object of class \code{pl}, which is
+  a list of lists: one list for each instrument. Each
+  such list contains numeric vectors: \code{pl},
+  \code{realised}, \code{unrealised}, \code{buy},
   \code{sell}, \code{volume}.
 
 }
