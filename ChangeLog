@@ -1,3 +1,9 @@
+2016-10-10  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (rc): new function for computing
+	return contributions; may be 'merged' later
+	into 'returns'
+
 2016-09-30  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-15
