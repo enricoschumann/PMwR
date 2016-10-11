@@ -89,7 +89,7 @@ lag <- function(x, k, pad = NA) {
 }
 
 vname <- function(v, names) {
-    ans <- as.vector(v)
+    ans <- c(v)
     names(ans) <- names
     ans    
 }

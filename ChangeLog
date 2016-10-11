@@ -1,5 +1,13 @@
 2016-10-11  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/internals.R (vname): use c() instead of
+	as.vector() to ensure vector. With 'c', class
+	is not dropped if a method exists. Which is the
+	case for Date: 'c(Dates)' gives a vector of
+	Dates, where 'as.vector(Dates)' returns the the
+	number of days since 1 Jan 1970 (i.e. the
+	Date's numeric representation).
+
 	* R/journal.R (as.journal.data.frame): zero-row
 	data.frames are now properly coerced to
 	zero-length (i.e. empty) journals
