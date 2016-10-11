@@ -1,5 +1,7 @@
 2016-10-11  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.3-16
+
 	* R/internals.R (vname): use c() instead of
 	as.vector() to ensure vector. With 'c', class
 	is not dropped if a method exists. Which is the
