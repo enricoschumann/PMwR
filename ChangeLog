@@ -1,5 +1,9 @@
 2016-10-11  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/returns.R (rc): compute total return, too
+
+2016-10-11  Enrico Schumann  <es@enricoschumann.net>
+
         * DESCRIPTION (Version): 0.3-16
 
 	* R/internals.R (vname): use c() instead of

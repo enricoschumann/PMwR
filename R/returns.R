@@ -540,10 +540,18 @@ returns_rebalance <- function(prices, weights, when = NULL, pad = NULL) {
 }
 
 rc <- function(R, weights, timestamp, segments = NULL) {
-    if (is.null(segments))
-        segments <- paste0("segment_", 1:ncol(weights))
+    if (is.null(segments)) {
+        segments <- if (!is.null(cr <- colnames(R)))
+                        cr
+                    else if (!is.null(cr <- colnames(weights)))
+                        cr
+                    else 
+                        paste0("segment_", 1:ncol(weights))
+    }
     if (missing(timestamp))
         timestamp <- 1:nrow(weights)
+    ns <- length(segments)
+    nt <- length(timestamp)
     df <- data.frame(timestamp,
                      cbind(weights*R, rowSums(weights*R)),
                      stringsAsFactors = FALSE)
@@ -551,34 +559,17 @@ rc <- function(R, weights, timestamp, segments = NULL) {
 
     later_r <- c(rev(cumprod(1 + rev(df[["total"]])))[-1], 1)
     
-    total <- rep(NA_real_, length(segments))
-    names(total) <- segments
-    for (i in seq_along(total))
-        total[[i]] <- sum(df[[i+1]] *later_r)
+    total <- rep(NA_real_, ns + 1)
+    names(total) <- c(segments, "total")
+    for (i in seq_len(ns))
+        total[[i]] <- sum(df[[i + 1]] * later_r)
+    total[[ns + 1]] <- cumprod(df[["total"]] + 1)[[nt]] - 1
     list(period_contributions = df,
          total_contributions = total)
 }
 
-
 if (FALSE) {
-    weights <- rbind(c(0.25,0.75),
-                     c(0.4, 0.60),
-                     c(0.25, 0.75))
-    
-    R <- rbind(c(0.01,0),
-               c(0.02, -0.01),
-               c(-0.01, 0.03))
-    
-    
-    df$segment_1[1]*prod(df$total[-1]+1)+
-        df$segment_1[2]*prod(df$total[-c(1:2)]+1)+
-        df$segment_1[3]*prod(df$total[-c(1:3)]+1)+
-        df$segment_2[1]*prod(df$total[-1]+1)+
-        df$segment_2[2]*prod(df$total[-c(1:2)]+1)+
-        df$segment_2[3]*prod(df$total[-c(1:3)]+1) - (prod(1+df$total) -1)
-}
 
-if (FALSE) {
     
     prices <- c(100 ,102 ,104 ,104 ,104.5 ,
                 2   ,2.2 ,2.4 ,2.3 ,2.5   ,
