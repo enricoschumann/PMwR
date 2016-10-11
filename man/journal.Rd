@@ -182,13 +182,17 @@ is.journal(x)
     functions: see Examples and the Manual.}
   }  
   
-  Missing arguments will be coded as \code{\link{NA}} except for
-  \code{id} and \code{account}, which become \code{\link{NULL}}.
+  For journals that have a length, missing arguments will be coded as
+  \code{\link{NA}} except for \code{id} and \code{account}, which become
+  \code{\link{NULL}}. In zero-length (i.e. \sQuote{empty}) journals, all
+  fields have length 0. A zero-length journal is created, of instance,
+  by saying \code{journal()} or when an zero-row \code{data.frame} is
+  passed to \code{as.journal}.
   
 }
 \value{
   
-  An object of class \code{journal}, which is simply a list of atomic
+  An object of class \code{journal}, which is a list of atomic
   vectors.
 
 }

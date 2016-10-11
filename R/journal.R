@@ -400,8 +400,14 @@ is.journal <- function (x)
 as.journal <- function(x, ...)
     UseMethod("as.journal")
 
-as.journal.data.frame <- function(x, ...)
-    do.call("journal", as.list(x))
+as.journal.data.frame <- function(x, ...) {
+    lx <- as.list(x)
+    if (!nrow(x)) {
+        class(lx) <- "journal"
+        lx
+    } else
+        do.call("journal", lx)
+}
 
 str.journal <- function(object, ...) {
     n <- length(object)

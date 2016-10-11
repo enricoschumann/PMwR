@@ -1,3 +1,9 @@
+2016-10-11  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (as.journal.data.frame): zero-row
+	data.frames are now properly coerced to
+	zero-length (i.e. empty) journals
+
 2016-10-10  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/returns.R (rc): new function for computing

@@ -5,7 +5,7 @@ test.journal <- function() {
     require("PMwR")
     require("RUnit")
     
-    ## the simplest journal
+    ## a simple journal
     j <- journal(amount = 1:2)
 
     ## length
@@ -25,7 +25,7 @@ test.journal <- function() {
     checkEquals(length(j$instrument), length(j))
     checkEquals(length(j$price),      length(j))
     
-    ## empty journal
+    ## empty journals
     checkEquals(journal(),
                 structure(list(timestamp = numeric(0),
                                amount = numeric(0),
@@ -35,6 +35,15 @@ test.journal <- function() {
                                      "price", "instrument"),
                           class = "journal"))
 
+    checkEquals(as.journal(data.frame(amount = numeric(0),
+                                      comment = character(0),
+                                      stringsAsFactors = FALSE)),
+                structure(list(amount = numeric(0),
+                               comment = character(0)),
+                          .Names = c("amount", "comment"),
+                          class = "journal"))
+
+    
     ## a more reasonable journal
     timestamp <- 1:5
     amount <- 1
