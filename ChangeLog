@@ -1,6 +1,12 @@
+2016-10-17  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (rc): weights can be missing, for
+	cases when only segment contributions but not
+	segment weights are known
+
 2016-10-11  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (rc): compute total return, too
+	* R/returns.R (rc): compute also total return
 
 2016-10-11  Enrico Schumann  <es@enricoschumann.net>
 

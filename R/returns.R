@@ -540,6 +540,8 @@ returns_rebalance <- function(prices, weights, when = NULL, pad = NULL) {
 }
 
 rc <- function(R, weights, timestamp, segments = NULL) {
+    if (missing(weights))
+        weights <- 1
     if (is.null(segments)) {
         segments <- if (!is.null(cr <- colnames(R)))
                         cr
@@ -549,7 +551,7 @@ rc <- function(R, weights, timestamp, segments = NULL) {
                         paste0("segment_", 1:ncol(weights))
     }
     if (missing(timestamp))
-        timestamp <- 1:nrow(weights)
+        timestamp <- 1:nrow(R)
     ns <- length(segments)
     nt <- length(timestamp)
     df <- data.frame(timestamp,
