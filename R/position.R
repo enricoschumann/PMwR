@@ -73,7 +73,8 @@ position.default <- function(amount, timestamp, instrument,
     } else
         instrument[ina] <- "NA"
 
-    instrument <- paste(account, "%SEP%", instrument, sep = "")
+    if (!is.null(account) && !identical(account, FALSE))                      
+        instrument <- paste(account, "%SEP%", instrument, sep = "")
         
     nw <- length(when)
     nm <- sort(unique(instrument))

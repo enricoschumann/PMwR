@@ -1,3 +1,10 @@
+2016-10-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (position.default): fixed --
+	`%SEP%` would always be prepended to
+	`instrument`, even when no `account` was
+	provided
+
 2016-10-19  Enrico Schumann  <es@enricoschumann.net>
 
 	* man/rc.Rd: add help file
