@@ -35,7 +35,13 @@ position(amount, \dots)
     character: description of account
   }
   \item{drop.zero}{
-    logical: drop instruments that have a zero position
+
+    If logical, drop instruments that have a zero
+    position; default is \code{FALSE}. If numeric, it
+    is used as a tolerance; e.g., a value of
+    \code{1-e12} will drop any position whose absolute
+    amount is smaller than \code{1-e12}.
+
   }  
   \item{x}{    
     An object of type position.
