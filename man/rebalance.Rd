@@ -12,7 +12,7 @@ rebalance(current, target, price,
           notional = NULL, multiplier = 1,
           truncate = TRUE,
           match.names = TRUE, check.match = TRUE,
-          drop.zero = FALSE)
+          fraction = 1, drop.zero = FALSE)
 
 \method{print}{rebalance}(x, \dots, drop.zero = TRUE)
 }
@@ -43,6 +43,9 @@ rebalance(current, target, price,
   }
   \item{check.match}{
     logical
+  }
+  \item{fraction}{
+    numeric, but \strong{not yet supported}
   }
   \item{x}{
     an object of class \code{rebalance}.

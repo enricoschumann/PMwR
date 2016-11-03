@@ -11,6 +11,7 @@
 \usepackage{natbib}
 \usepackage{xcolor}
 \usepackage{framed}
+\usepackage[hang]{footmisc}
 \definecolor{grau2}{rgb}{.2,.2,.2}
 \definecolor{grau7}{rgb}{.7,.7,.7}
 \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
@@ -74,9 +75,8 @@ The latest version of the package is available from
 \url{http://enricoschumann.net/R/packages/PMwR/}. To install the
 package from within R, type
 <<eval=false, results=hide>>=
-install.packages("PMwR", 
-                 repos = "http://enricoschumann.net/R/", 
-                 type  = "source")
+install.packages('PMwR', type = 'source',
+                 repos = c('http://enricoschumann.net/R', getOption('repos')))
 @ 
 within a session. The package depends on several other packages,
 which can be obtained from the same repository.

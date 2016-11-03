@@ -1,3 +1,10 @@
+2016-11-03  Enrico Schumann  <es@enricoschumann.net>
+
+	* vignettes/An_overview_of_PMwR.Rnw: update
+	install instructions
+
+	* man/rebalance.Rd: update docs
+
 2016-10-27  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (position.default): fixed --

@@ -2,6 +2,7 @@ rebalance <- function(current, target, price,
                       notional = NULL, multiplier = 1, truncate = TRUE,
                       match.names = TRUE,
                       check.match = TRUE,
+                      fraction = 1,
                       drop.zero = FALSE) {
 
 
