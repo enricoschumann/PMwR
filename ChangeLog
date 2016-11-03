@@ -1,5 +1,7 @@
 2016-11-03  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.3-17
+
 	* vignettes/An_overview_of_PMwR.Rnw: update
 	install instructions
 
