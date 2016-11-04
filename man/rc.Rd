@@ -31,7 +31,7 @@ rc(R, weights, timestamp, segments = NULL)
 }
 \details{
 
-  The function computes segment contributiong,
+  The function computes segment contribution,
   potentially over time. Returns and weights must be
   arranged in matrices, with rows corresponding to time
   periods and columns to portfolio segments
