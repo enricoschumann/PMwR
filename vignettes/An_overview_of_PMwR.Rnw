@@ -76,7 +76,8 @@ The latest version of the package is available from
 package from within R, type
 <<eval=false, results=hide>>=
 install.packages('PMwR', type = 'source',
-                 repos = c('http://enricoschumann.net/R', getOption('repos')))
+                 repos = c('http://enricoschumann.net/R', 
+                           getOption('repos')))
 @ 
 within a session. The package depends on several other packages,
 which can be obtained from the same repository.

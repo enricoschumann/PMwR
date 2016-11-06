@@ -26,9 +26,10 @@ reporting, backtesting and more.
   [[http://enricoschumann.net/R/packages/PMwR/]]. To install the
   package from within R, type
 #+BEGIN_SRC R :eval never
-install.packages("PMwR", 
-                 repos = "http://enricoschumann.net/R/", 
-                 type  = "source")
+  install.packages('PMwR', type = 'source',
+                   repos = c('http://enricoschumann.net/R', 
+                             getOption('repos')),
+                   type  = "source")
 #+END_SRC
 
   within a session. The package depends on several other
