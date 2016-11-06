@@ -1,5 +1,7 @@
 2016-11-06  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.3-18
+
 	* inst/unitTests/ut_q32.R (test.quote32): add
 	tests for quote32/q32
 
