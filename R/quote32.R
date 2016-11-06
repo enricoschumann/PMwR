@@ -25,11 +25,11 @@ quote32 <- q32 <- function(price, sep = "-", warn = TRUE) {
         handle <- trunc(price)
         tmp <- price - handle
         ticks <- (tmp*128) %/% 4
-        frac <- tmp*128-ticks*4
+        frac <- round(tmp*128-ticks*4)
 
         r.e <- abs(price - handle - ticks/32 - frac/4/32)
         if (warn && any(r.e > .Machine$double.eps^0.5))
-            warning("max rounding error is ", prettyNum(max(r.e)))
+            warning("largest rounding error is ", prettyNum(max(r.e)))
     }
     attr(ans, "handle") <- handle
     attr(ans, "ticks") <- ticks

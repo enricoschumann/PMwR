@@ -1,3 +1,16 @@
+2016-11-06  Enrico Schumann  <es@enricoschumann.net>
+
+	* inst/unitTests/ut_q32.R (test.quote32): add
+	tests for quote32/q32
+
+	* R/quote32.R (quote32, q32): fixed -- quarters
+	of 1/32 of a point are now rounded. Without
+	rounding, `q32(109.1484)` would print
+	    109-04
+	instead of the correct
+	    109-047  (plus a warning about rounding
+	error)
+
 2016-11-03  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-17
