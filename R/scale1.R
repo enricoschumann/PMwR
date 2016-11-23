@@ -3,12 +3,18 @@
 scale1 <- function (x, ...)
     UseMethod("scale1", x)
 
-scale100 <- function (x, ..., level = 100)
-    UseMethod("scale1", x)
+## TODO: make a wrapper scale100 that uses a default
+##       level of 100
 
-scale1.default <- function (x, ..., when = "first.complete",
-                            level = 1, centre = FALSE,
-                            scale = FALSE, geometric = TRUE) {
+scale1.default <- function (x, ...,
+                            when = "first.complete",
+                            level = 1,
+                            centre = FALSE,
+                            scale = FALSE,
+                            geometric = TRUE,
+                            total.g = NULL) {
+
+    ## TODO: add a formal 'na.rm' argument
 
     makevec <- FALSE
     if (!is.matrix(x)) {
@@ -55,17 +61,30 @@ scale1.default <- function (x, ..., when = "first.complete",
         ## x[NAs] <- NA
         ## browser()
         if (geometric) {
-            for (i in seq_len(ncol(x0))) {
-                tmp <- (1+x0[-1,i])/
-                    (tail(x[ ,i], 1)/head(x[ ,i],1)) ^ (1/(length(x0[-1,i])))
-                x[,i] <- cumprod(c(1, tmp))
-            }
+            ## for (i in seq_len(ncol(x0))) {
+            ##     tmp <- (1+x0[-1,i])/
+            ##         (tail(x[ ,i], 1)/head(x[ ,i],1)) ^ (1/(length(x0[-1,i])))
+            ##     x[,i] <- cumprod(c(1, tmp))
+            ## }
+            total.g <- 0
         } else {
             m <- colMeans(x0[-1L, , drop = FALSE], na.rm = TRUE)
             for (i in seq_len(ncol(x0)))
                 x[,i] <- cumprod(1 + x0[ ,i] - m[i])
         }
         x[NAs] <- NA
+    }
+    if (!is.null(total.g)) {
+        x0 <- .returns(x, lag = 1)
+        if (length(total.g) == 1L)
+            total.g <- rep(total.g, ncol(x))
+        f <- function(z)
+            sum(log(1+r+z)) - log(1+total.g[i])
+        for (i in seq_len(ncol(x))) {
+            r <- x0[,i]
+            x[,i] <- cumprod(
+                1 + c(0, r + uniroot(f, interval = c(-0.2,0.2), tol = 1e-10)$root))
+        }
     }
     for (i in seq_len(ncol(x)))
         x[,i] <- x[,i]/x[init.p, i]
@@ -79,7 +98,8 @@ scale1.default <- function (x, ..., when = "first.complete",
 scale1.zoo <- function(x, ..., when = "first.complete",
                        level = 1, centre = FALSE, scale = FALSE,
                        geometric = TRUE,
-                       inflate = NULL) {
+                       inflate = NULL,
+                       total.g = NULL) {
 
     ii <- index(x)
     x <- coredata(x)
@@ -93,14 +113,16 @@ scale1.zoo <- function(x, ..., when = "first.complete",
         when <- matchOrNext(when, ii)
     ans <- scale1.default(x, when = when, level = level,
                           centre = centre, scale = scale,
-                          geometric = geometric)
+                          geometric = geometric,
+                          total.g = total.g)
     zoo(ans, ii)
 }
 
 scale1.NAVseries <- function(x, ..., when = "first.complete",
                              level = 1, centre = FALSE, scale = FALSE,
                              geometric = TRUE,
-                             inflate = NULL) {
+                             inflate = NULL,
+                             total.g = NULL) {
 
     ii <- x$timestamp
     xx <- x$NAV
@@ -114,7 +136,8 @@ scale1.NAVseries <- function(x, ..., when = "first.complete",
         when <- matchOrNext(when, ii)
     ans <- scale1.default(xx, when = when, level = level,
                           centre = centre, scale = scale,
-                          geometric = geometric)
+                          geometric = geometric,
+                          total.g = total.g)
     x$NAV <- ans
     x
 }

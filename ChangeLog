@@ -1,3 +1,12 @@
+2016-11-21  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/scale1.R (scale1.default): new argument
+	'total.g' (="total growth"). Geometric return
+	scaling, as used when 'centre' is TRUE and when
+	'total.g' is specified, is now exact for simple
+	returns, which is more intuitive than then the
+	log approximations used before.
+
 2016-11-06  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-18
@@ -964,15 +973,17 @@
 
 2015-05-29  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/scale1.R (scale1.default): new argument 'geometric'
-        (with default TRUE): centre by subtracting the geometric
-        mean; if FALSE, the arithmetic mean is subtracted
+        * R/scale1.R (scale1.default): new argument
+	'geometric', with default TRUE: centre by
+	subtracting the geometric mean; if FALSE, the
+	arithmetic mean is subtracted
 
-        * inst/unitTests/ut_returns.R (test.returns): added test
-        cases for returns.data.frame
+        * inst/unitTests/ut_returns.R (test.returns):
+	added test cases for returns.data.frame
 
         * R/returns.R (.returns): renamed 'returns0' to
-        '.returns' (under neither name is the function exported)
+	'.returns' (under neither name is the function
+	exported)
         (returns.data.frame): fixed -- propagate 'row.names' of
         dataframe
 

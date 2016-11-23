@@ -36,7 +36,7 @@ rc(R, weights, timestamp, segments = NULL)
   arranged in matrices, with rows corresponding to time
   periods and columns to portfolio segments
 
-  Weights can be missing. In that case, \code{R}  is
+  Weights can be missing, in which case \code{R} is
   assumed to already comprise segment returns.
   
 }
