@@ -1,3 +1,15 @@
+2016-12-01  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (position.default): only add
+	attribute 'account' when it is specified
+	(Ops.position): experimental -- support for
+	unary/binary operators:
+	  `+`  add the positions,
+	  `-`  take difference between positions,
+	  `/`  compute ratio of positions,
+               with each operator taking care of
+	       specified instruments
+
 2016-11-21  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/scale1.R (scale1.default): new argument

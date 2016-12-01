@@ -104,7 +104,8 @@ position.default <- function(amount, timestamp, instrument,
         nm[] <- NA
     attr(pos, "timestamp") <- when
     attr(pos, "instrument") <- gsub(".*%SEP%(.*?)", "\\1", nm)
-    attr(pos, "account") <- gsub("(.*)%SEP%.*", "\\1", nm)    
+    if (!is.null(account))         
+        attr(pos, "account") <- gsub("(.*)%SEP%.*", "\\1", nm)    
     class(pos) <- "position"
     pos
 }
@@ -179,6 +180,36 @@ as.data.frame.position <- function(x, ...) {
     row.names(ans) <- as.character(attr(x, "timestamp"))
     names(ans) <- attr(x, "instrument")
     ans
+}
+
+Ops.position <- function(e1, e2) {
+    if (nargs() == 1) {
+        switch(.Generic, `+` = {
+        }, `-` = {
+            e1[] <- -unclass(e1)
+        }, stop(gettextf("unary '%s' not defined for ",
+                         sQuote("position"), " objects", 
+            .Generic), domain = NA, call. = FALSE))
+        return(e1)
+    }
+
+    if (inherits(e1, "position") && inherits(e2, "position")) {
+        allI <- sort(unique(c(instrument(e1), instrument(e2))))
+        ans <- numeric(length(allI))
+        ans[match(instrument(e1), allI)] <- as.numeric(e1)
+        ii <- match(instrument(e2), allI)
+        if (.Generic == "+") {
+            ans[ii] <- ans[ii] + as.numeric(e2)
+        } else if (.Generic == "-") {
+            ans[ii] <- ans[ii] - as.numeric(e2)
+        } else if (.Generic == "/") {
+            ans[ii] <- ans[ii] / as.numeric(e2)
+        }
+        position.default(ans, instrument = allI,
+                                timestamp = rep(attr(e1, "timestamp"),
+                                                length(allI)))
+    } else
+        NextMethod(.Generic)
 }
 
 acc.split <- function(account, sep, perl = FALSE) {
