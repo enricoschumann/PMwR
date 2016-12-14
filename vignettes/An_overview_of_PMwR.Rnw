@@ -55,7 +55,7 @@ test.rep <- readLines(system.file("unitTests/test_results.txt",
 nt <- gsub(".*\\(([0-9]+) checks?\\).*", "\\1",
            test.rep[grep("\\(\\d+ checks?\\)", test.rep)])
 @ 
-Even if \textsc{PMwR} is under development: the package is to
+Even if \textsc{pm}w\textsc{r} is under development: the package is to
 provide reliable code. Hence, for all computations, unit tests are included.
 As of package version \Sexpr{packageVersion("PMwR")},
 there are \Sexpr{sum(as.numeric(nt))} tests included. 
