@@ -1,5 +1,7 @@
 2016-12-14  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.3-19
+
 	* R/trades.R (splitTrades): the elements of the
 	returned lists are now called 'amount' and
 	'price' (instead of 'n' and 'p') in order to be
