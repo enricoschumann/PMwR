@@ -1,2 +1,0 @@
-## -*- truncate-lines: t; -*-
-
