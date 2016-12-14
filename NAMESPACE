@@ -21,7 +21,7 @@ importFrom("grDevices",
 importFrom("graphics",
            "abline", "axis", "hist", "lines", "par", "plot")
 importFrom("stats",
-           "quantile", "runif", "sd", "time")
+           "quantile", "runif", "sd", "time", "uniroot")
 importFrom("utils",
            "browseURL", "capture.output", "setTxtProgressBar",
            "str", "txtProgressBar",

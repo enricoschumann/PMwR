@@ -1,5 +1,6 @@
 ## -*- truncate-lines: t; fill-column: 65; comment-column: 50; -*-
 
+if (FALSE) {
 amount <- function(x, unit) {
     ans <- x
 
@@ -62,3 +63,4 @@ conv_table <- function(table, unit, timestamp = NULL) {
 }
 
 ## journal(amount = x)
+}

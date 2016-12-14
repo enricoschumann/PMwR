@@ -69,9 +69,6 @@ zero position.
 }
 \value{
 
-  \code{pl}: an object of class \code{pl}, which is a list of five
-  elements (and the class attribute).
-
   Either a list or a list-of-lists.
 
 }

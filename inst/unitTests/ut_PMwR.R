@@ -4,30 +4,37 @@ test.position <- function() {
 
     checkEqualsNumeric(position(amount = 1:5), 15)
 
-    ## at least 'amount' needs to be specified
+    ## ERROR: at least 'amount' needs to be specified
     checkException(position(), silent = TRUE)
 
     
-    ## construct from raw data or from journal
+    ## Construct position from raw data or from journal
     t <- 1:5
     n <- c(1, 1, -1, 3, -4)
     j <- journal(timestamp = t, amount = n)
 
-    position(amount = n, timestamp = t, when = 4.9)    
+    ## ... 1) check correct position for *vector* input
+    checkEquals(c(position(amount = n, timestamp = t, when = 4.9)),
+                4)
+    checkEquals(c(position(amount = n, timestamp = t, when = c(-10,1.4,4.9,10))),
+                c(0, 1, 4, 0))
+
+    ## ... 2) check correct position for *journal* input
+    checkEquals(c(position(j, when = 4.9)), 4)
+    checkEquals(c(position(j, when = c(-10,1.4,4.9,10))), c(0,1,4,0))
+
+    ## ... 3) check equal output for *vector* and *journal* input
+    checkEquals(position(amount = n, timestamp = t, when = 4.9),
+                position(j, when = 4.9))
+    checkEquals(position(amount = n, timestamp = t, when = c(-10,1.4,4.9,10)),
+                position(j, when = c(-10,1.4,4.9,10)))
 
     
-    position(amount = n, timestamp = t, when = c(-10,1.4,4.9))
-
-    position(j, when = 4.9)
-    position(j, when = c(-10,1.4,4.9))
-
-
     ## Ops
     x <- position(amount = 1, instrument = c("a"))
     y <- position(amount = 1:2, instrument = c("a","b"))
     checkEquals(x, +x)
     checkEquals(y, +y)
-    dput(x+y)
     checkEquals(x+y,
                 structure(c(2, 2),
                           .Dim = 1:2,
@@ -39,6 +46,34 @@ test.position <- function() {
 }
 
 test.splitTrades <- function() {
+    amount <- c(1, -1)
+    price <- c(1,2)
+    ans <- splitTrades(amount, price, seq_along(amount))
+    checkEquals(length(ans), 1)
+    checkEquals(ans,
+                list(structure(list(amount = c(1, -1),
+                                    price = c(1, 2),
+                                    timestamp = 1:2),
+                               .Names = c("amount", "price", "timestamp"))))
+
+    
+    
+    amount <- c(1, -2, 1)
+    price <- c(1,2,3)
+    ans <- splitTrades(amount, price, seq_along(amount))
+    checkEquals(length(ans), 2)
+
+    checkEquals(ans[[1L]],
+                structure(list(amount = c(1, -1),
+                               price = c(1, 2),
+                               timestamp = 1:2),
+                          .Names = c("amount", "price", "timestamp")))
+    checkEquals(ans[[2L]],
+                structure(list(amount = c(-1, 1),
+                               price = c(2, 3),
+                               timestamp = 2:3),
+                          .Names = c("amount", "price", "timestamp")))
+    
     n <- c(1,1,-3,1)
     p <- c(1,2,3,2)
     tradetimes <- seq_along(n)
@@ -47,7 +82,6 @@ test.splitTrades <- function() {
 
 
 test.btest <- function() {
-
     btTable <- function(solution, prices)
         data.frame(prices = prices,
                    position     = solution$position,

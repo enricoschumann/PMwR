@@ -1,3 +1,19 @@
+2016-12-14  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/trades.R (splitTrades): the elements of the
+	returned lists are now called 'amount' and
+	'price' (instead of 'n' and 'p') in order to be
+	consistent with other functions
+
+	* man/scale1.Rd: update docs (argument 'total.g')
+
+	* man/tradeanalysis.Rd: update docs
+
+	* NAMESPACE: import 'stats::uniroot'
+
+	* inst/unitTests/ut_PMwR.R (test.splitTrades):
+	add tests
+
 2016-12-01  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (position.default): only add

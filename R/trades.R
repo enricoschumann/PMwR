@@ -4,7 +4,7 @@ splitTrades <- function(amount, price, timestamp, aggregate = FALSE) {
 
     if (missing(timestamp))
         timestamp <- seq_along(amount)
-    cumn <- cumsum(n)
+    cumn <- cumsum(amount)
     N <- length(cumn)
 
     I <- which(sign(cumn[-1L]) * sign(cumn[-N]) < 0) + 1L
@@ -35,7 +35,7 @@ splitTrades <- function(amount, price, timestamp, aggregate = FALSE) {
             res <- vector(mode = "list", length = ntrades)
             for (i in seq_len(ntrades)) {
                 fromto <- from[i]:to[i]
-                res[[i]] <- list(n = n[fromto], p = p[fromto],
+                res[[i]] <- list(amount = n[fromto], price = p[fromto],
                                  timestamp = timestamp[fromto])
             }
         } else {
@@ -50,28 +50,27 @@ splitTrades <- function(amount, price, timestamp, aggregate = FALSE) {
 
 scaleTrades <- function(amount, price, timestamp, aggregate = FALSE,
                         fun = NULL, ...) {
-    n <- amount
-    p <- price
-    trades <- splitTrades(n, p, timestamp, aggregate = FALSE)
+    trades <- splitTrades(amount, price, timestamp, aggregate = FALSE)
     if (is.null(fun))
         fun <- scaleToUnity
     for (i in seq_along(trades)) {
-        trades[[i]]$n <- fun(trades[[i]]$n, ...)
-        zero <- trades[[i]]$n == 0
-        trades[[i]]$n <- trades[[i]]$n[!zero]
-        trades[[i]]$p <- trades[[i]]$p[!zero]
+        trades[[i]]$amount <- fun(trades[[i]]$amount, ...)
+        zero <- trades[[i]]$amount == 0
+        trades[[i]]$amount <- trades[[i]]$amount[!zero]
+        trades[[i]]$price <- trades[[i]]$price[!zero]
         trades[[i]]$timestamp <- trades[[i]]$timestamp[!zero]
     }
 
     if (!aggregate)
         trades
     else {
-        n <- unlist(lapply(trades, `[[`, "n"))
-        p <- unlist(lapply(trades, `[[`, "p"))
+        amount <- unlist(lapply(trades, `[[`, "amount"))
+        price <- unlist(lapply(trades, `[[`, "price"))
         timestamp <- unlist(lapply(trades, `[[`, "timestamp"))
-        n <- aggregate(n, list(timestamp), sum)[["x"]]
-        p <- aggregate(p, list(timestamp), tail,1L)[["x"]]
-        list(amount = n, price = p, timestamp = timestamp) }
+        amount <- aggregate(amount, list(timestamp), sum)[["x"]]
+        price <- aggregate(price, list(timestamp), tail,1L)[["x"]]
+        list(amount = amount, price = price, timestamp = timestamp)
+    }
 }
 scaleToUnity <- function(amount) {
     maxn <- max(abs(cumsum(amount)))

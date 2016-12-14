@@ -187,9 +187,12 @@ Ops.position <- function(e1, e2) {
         switch(.Generic, `+` = {
         }, `-` = {
             e1[] <- -unclass(e1)
-        }, stop(gettextf("unary '%s' not defined for ",
-                         sQuote("position"), " objects", 
-            .Generic), domain = NA, call. = FALSE))
+        },
+        ## stop(gettextf("unary '%s' not defined for ",
+        ##               sQuote("position"), " objects", 
+        ##               .Generic), domain = NA, call. = FALSE)
+        NextMethod(.Generic)
+        )
         return(e1)
     }
 

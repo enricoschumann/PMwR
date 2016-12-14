@@ -12,11 +12,12 @@
 scale1(x, \dots)
 
 \method{scale1}{default}(x, \dots, when = "first.complete", level = 1,
-                         centre = FALSE, scale = FALSE, geometric = TRUE)
+                         centre = FALSE, scale = FALSE, geometric = TRUE,
+                         total.g = NULL)
 
 \method{scale1}{zoo}(x, \dots, when = "first.complete", level = 1,
                      centre = FALSE, scale = FALSE, geometric = TRUE,
-                     inflate = NULL)
+                     inflate = NULL, total.g = NULL)
 }
 \arguments{
   \item{x}{
@@ -49,6 +50,9 @@ scale1(x, \dots)
     numeric: an annual rate at which the series is inflated (or deflated
              if negative)
   }
+  \item{total.g}{
+    numeric: to total growth rate (or total return) of a series
+  }
   \item{\dots}{
     other arguments passed to methods
 }
@@ -61,13 +65,11 @@ scale1(x, \dots)
 An object of the same type as \code{x}.
 }
 \references{
-  Enrico Schumann -- PMwR
+  Enrico Schumann -- Portfolio Management with R.
+  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
 }
 \author{
   Enrico Schumann
-}
-\note{
-  Experimental: interface may change.
 }
 \seealso{
   \code{\link{scale}}
