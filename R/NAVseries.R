@@ -325,7 +325,7 @@ as.NAVseries.btest <- function(x, ...){
         NAV <- NAV[-leading.na]
     }
     timestamp <- if (!is.null(x$timestamp))
-                     timestamp[-leading.na] else seq_along(NAV)
+                     x$timestamp[-leading.na] else seq_along(NAV)
     NAVseries(NAV = scale1(NAV, level = 100),
               timestamp = timestamp)
 }
