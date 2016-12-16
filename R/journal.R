@@ -10,35 +10,6 @@ journal <- function(amount, ...) {
         UseMethod("journal")
 }
 
-journal.position <- function(amount, price, ...) {
-
-        if (!missing(price) && !is.null(names(price))) 
-            price <- price[match(attr(amount, "instrument"), names(price))]
-        else if (missing(price))
-            price <- NA
-        if (length(attr(amount, "timestamp")) > 1L)
-            stop("must be position at *one* point in time")
-
-        journal(timestamp  = attr(amount, "timestamp"),
-                amount     = c(amount),
-                price      = price,
-                instrument = attr(amount, "instrument"))
-}
-
-journal.rebalance <- function(amount, ..., price = TRUE, timestamp = NA) {
-    if (amount$match.names) {
-        m <- numeric(length(amount$price))
-        names(m) <- names(amount$price)
-        m[names(amount$target)] <- amount$target
-        m[names(amount$current)] <- m[names(amount$current)] - amount$current
-    } else
-        m <- amount$target - amount$current
-    journal(instrument = if (amount$match.names) names(amount$price) else NA,
-            timestamp  = timestamp,
-            amount = unname(m),
-            price  = if (isTRUE(price)) unname(amount$price) else NA)
-}
-
 journal.btest <- function(amount, ...)
     amount$journal
 
@@ -397,6 +368,8 @@ cashflows <- function(x, multiplier = 1, ...) {
 is.journal <- function (x) 
     inherits(x, "journal")
 
+
+## --- [ as.journal ] ---
 as.journal <- function(x, ...)
     UseMethod("as.journal")
 
@@ -409,6 +382,39 @@ as.journal.data.frame <- function(x, ...) {
         do.call("journal", lx)
 }
 
+as.journal.position <- function(x, price, ...) {
+    amount <- x    
+    if (!missing(price) && !is.null(names(price))) 
+        price <- price[match(attr(amount, "instrument"), names(price))]
+    else if (missing(price))
+        price <- NA
+    if (length(attr(amount, "timestamp")) > 1L)
+        stop("must be position at *one* point in time")
+    
+    journal(timestamp  = attr(amount, "timestamp"),
+            amount     = c(amount),
+            price      = price,
+            instrument = attr(amount, "instrument"))
+}
+
+as.journal.rebalance <- function(x, ..., price = TRUE, timestamp = NA,
+                                 drop.zero = TRUE) {
+    amount <- x    
+    mn <- attr(amount, "match.names")
+    if (drop.zero)
+        amount <- amount[amount[["target"]] != 0 , , drop = FALSE]
+    journal(instrument = if (mn)
+                             amount[["instrument"]]
+                         else
+                             NA,
+            timestamp  = timestamp,
+            amount     = unname(amount[["difference"]]),
+            price      = if (isTRUE(price))
+                             unname(amount[["price"]])
+                         else
+                             NA)
+}
+
 str.journal <- function(object, ...) {
     n <- length(object)
     cat(sQuote("journal"), ":\t ",
@@ -417,4 +423,11 @@ str.journal <- function(object, ...) {
     tmp <- capture.output(str(unclass(object), ...))
     cat(paste(tmp[-1], collapse = "\n", sep = ""), "\n")
     invisible()
+}
+
+toOrg.journal <- function(x, inactive = TRUE, ...) {
+    df <- as.data.frame.journal(x)
+    if (inherits(df[["timestamp"]], "Date"))
+        df[["timestamp"]] <- toOrg(df[["timestamp"]], inactive = inactive)
+    toOrg(df)
 }

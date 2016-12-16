@@ -98,5 +98,5 @@ rebalance(current, target, price,
 r <- rebalance(current = c(a = 100, b = 20),
                target  = c(a = 0.2, c = 0.3),
                price   = c(a = 1, b = 2, c = 3))
-journal(r)
+as.journal(r)
 }

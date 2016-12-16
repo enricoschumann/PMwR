@@ -4,12 +4,26 @@
 
 2016-12-16  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/journal.R
+	(as.journal.position, as.journal.rebalance):
+	methods 'journal.position' and
+	'journal.rebalance' have been replaced by
+	'as.journal.position' and
+	'as.journal.rebalance'. [The first argument of
+	'journal' is called 'amount', but the first
+	argument of 'as.journal' is called 'x'.]
+
 	* R/rebalance.R (rebalance): the function now
 	returns a data.frame instead of a list, with
 	additional information attached as attributes;
 	argument 'fraction' is now supported
 
+	* R/journal.R (journal.rebalance): update for
+	new structure of 'rebalance' objects
+
 	* man/rebalance.Rd: update docs
+
+	* R/journal.R (toOrg.journal): add method
 
 2016-12-15  Enrico Schumann  <es@enricoschumann.net>
 

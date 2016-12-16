@@ -84,11 +84,12 @@ rebalance <- function(current,
         ans <- target * notional / price / multiplier
         all.names <- NA
     }
-    diff <- fraction*(ans - current)
     if (truncate) {
         ans <- round(trunc(ans/10^(-truncate))*10^(-truncate))
+        diff <- fraction*(ans - current)
         diff <- round(trunc(diff/10^(-truncate))*10^(-truncate))
-    }
+    } else
+        diff <- fraction*(ans - current)
     rbl <- data.frame(instrument = all.names,
                       price = price,
                       current = current,
@@ -101,7 +102,7 @@ rebalance <- function(current,
 
     if (drop.zero)
         rbl <- rbl[rbl$current != 0 | rbl$target != 0, ]
-    class(rbl) <- "rebalance"
+    class(rbl) <- c("rebalance", "data.frame")
     rbl
 }
 

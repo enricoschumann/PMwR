@@ -10,7 +10,7 @@ Authors@R: person(given = "Enrico", family = "Schumann",
 Description: Functions and examples for 'Portfolio Management with R':
   backtesting investment and trading strategies, computing
   profit-and-loss and returns, reporting, and more. 
-Imports: NMOF, crayon, datetimeutils, textutils, utils, zoo
+Imports: NMOF, crayon, datetimeutils, orgutils, textutils, utils, zoo
 Suggests: RUnit, rbenchmark
 License: GPL-3
 LazyLoad: yes

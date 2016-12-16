@@ -736,7 +736,7 @@ test.rebalance <- function() {
     target  <- c(d = 0.1)
 
     x <- rebalance(current, target, prices, match.names = TRUE)
-    checkEquals(x$target, c(d=1))
+    checkEquals(x$target, c(0,1))
 
     ## *journal*
     j <- journal(amount = c(1, 2),
@@ -744,7 +744,7 @@ test.rebalance <- function() {
     w <- c(A = 0.5, B = 0.5)
     
     amount <- rebalance(position(j), w, price = c(A = 1, B = 12))
-    checkEquals(journal(amount),
+    checkEquals(as.journal(amount),
                 structure(list(instrument = c("A", "B"),
                                timestamp = c(NA, NA),
                                amount = c(11, -1),
@@ -754,7 +754,7 @@ test.rebalance <- function() {
                           class = "journal"))
 
     
-    checkEquals(journal(amount, price = FALSE),
+    checkEquals(as.journal(amount, price = FALSE),
                 structure(list(instrument = c("A", "B"),
                                timestamp  = c(NA, NA),
                                amount     = c(11, -1),
