@@ -1,5 +1,9 @@
-rebalance <- function(current, target, price,
-                      notional = NULL, multiplier = 1, truncate = TRUE,
+rebalance <- function(current,
+                      target,
+                      price,
+                      notional = NULL,
+                      multiplier = 1,
+                      truncate = TRUE,
                       match.names = TRUE,
                       check.match = TRUE,
                       fraction = 1,
@@ -10,6 +14,11 @@ rebalance <- function(current, target, price,
         instr <- attr(current, "instrument")
         current <- as.numeric(current)
         names(current) <- instr
+    }
+    if (inherits(target, "position")) {
+        instr <- attr(target, "instrument")
+        current <- as.numeric(target)
+        names(target) <- instr
     }
     
     if (!match.names && length(current) == 1L && current == 0) {
@@ -38,19 +47,18 @@ rebalance <- function(current, target, price,
             stop(sQuote("match.names"),
                  " is TRUE but vectors are not named")
         }
-        if (check.match) {
-            if (any(is.na(match(names(current), names(price)))))
-                stop("name in current that does not match price")
-            if (any(is.na(match(names(target), names(price)))))
-                stop("name in target that does not match price")
-        }
+
+        ## TODO say for which instruments there is no price
+        if (any(is.na(match(names(current), names(price)))))
+            warning("instrument in current without price")
+        if (any(is.na(match(names(target), names(price)))))
+            warning("instrument in target without price")    
     }
 
 
     if (match.names &&
         is.null(names(multiplier)) &&
         length(multiplier) == 1L) {
-
         multiplier <- rep(multiplier, length(price))
         names(multiplier) <- names(price)
     }
@@ -64,60 +72,65 @@ rebalance <- function(current, target, price,
             notional <- sum(current * price * multiplier)
     }
     
-    if (match.names)
-        ans <- target * notional / price[names(target)] / multiplier[names(target)]
-    else 
+    if (match.names) {
+        all.names <- sort(unique(c(names(target), names(current))))
+        target_ <- current_ <- numeric(length(all.names))
+        current_[match(names(current), all.names)] <- current
+        target_[match(names(target), all.names)] <- target
+        current <- current_
+        price <- price[all.names]
+        ans <- target_ * notional / price / multiplier[all.names]
+    } else {
         ans <- target * notional / price / multiplier
-
-    if (truncate)
+        all.names <- NA
+    }
+    diff <- fraction*(ans - current)
+    if (truncate) {
         ans <- round(trunc(ans/10^(-truncate))*10^(-truncate))
-    rbl <- list(current = current,
-                target  = ans, 
-                names.current = names(current),
-                names.target  = names(target),
-                price       = price,
-                notional    = notional,
-                match.names = match.names)
+        diff <- round(trunc(diff/10^(-truncate))*10^(-truncate))
+    }
+    rbl <- data.frame(instrument = all.names,
+                      price = price,
+                      current = current,
+                      target = ans,
+                      difference = diff,
+                      stringsAsFactors = FALSE)
+    attr(rbl, "notional") <- notional
+    attr(rbl, "match.names") <- match.names
+    attr(rbl, "multiplier") <-  multiplier
 
-    rbl$current != 0 | rbl$target != 0
     if (drop.zero)
-        rbl <- rbl[rbl$current != 0 | rbl$target != 0]
+        rbl <- rbl[rbl$current != 0 | rbl$target != 0, ]
     class(rbl) <- "rebalance"
     rbl
 }
 
 print.rebalance <- function(x, ..., drop.zero = TRUE) {
-    all.names <- names(x$price)
-    if (x$match.names) {
-        target <- current <- numeric(length(all.names))        
-        current[match(x$names.current, all.names)] <- x$current
-        target[match(x$names.target, all.names)] <- x$target
-        
-    } else {
-        if (is.null(all.names))
-            all.names <- seq_along(x$price)
-        current <- x$current
-        target <- x$target               
-    }
-    df <- data.frame(price  = x$price,
-                     current = current,
-                     `value` = current * x$price,
-                     `% `   = format(100*current * x$price/x$notional, nsmall = 1, digits=1),
-                     `  `   = format("     ", justify = "centre"),
-                     new = target,
-                     value = target * x$price,
-                     `% `   = format(100*target * x$price / x$notional, nsmall = 1, digits =1),
-                     `  ` = format("     ", justify = "centre"),
-                     order = target - current,
+    all.names <- x[["instrument"]]
+    if (all(is.na(all.names)))
+        all.names <- seq_along(x$current)
+    df <- data.frame(price   = x$price,
+                     current = x$current,
+                     value   = x$current * x$price, ## TODO multiplier
+                     `%`    = format(100*x$current * x$price / attr(x, "notional"),
+                                     nsmall = 1, digits = 1),
+                     `  `    = format("     ", justify = "centre"),
+                     target  = x$target,
+                     value   = x$target * x$price,
+                     `%`    = format(100*x$target * x$price / attr(x, "notional"),
+                                      nsmall = 1, digits = 1),
+                     `  `    = format("     ", justify = "centre"),
+                     order   = x$difference,
                      row.names = all.names,
                      check.names = FALSE)
 
     if (drop.zero)
-        df <- df[df$current != 0 | df$new != 0, ]
+        df <- df[df$current != 0 | df$target != 0, ]
     print(df, ...)
 
-    cat("\nNotional: ", x$notional, ".  Amount invested: ", sum(target * x$price),
-        ".  Total turnover: ", sum(abs(current - target) * x$price),
+    cat("\nNotional: ", attr(x, "notional"),
+        ".  Amount invested: ", sum(x$target * x$price),
+        ".  Total (2-way) turnover: ", sum(abs(x$current - x$target) * x$price),
         ".\n", sep = "")
     invisible(x)
 }

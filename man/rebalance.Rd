@@ -45,7 +45,7 @@ rebalance(current, target, price,
     logical
   }
   \item{fraction}{
-    numeric, but \strong{not yet supported}
+    numeric
   }
   \item{x}{
     an object of class \code{rebalance}.
@@ -60,19 +60,27 @@ rebalance(current, target, price,
 \details{
 
   The function computes the necessary trades to move from the
-  \code{current} portfolio to a desired portfolio.
+  \code{current} portfolio to a \code{target} portfolio.
   
 }
 \value{
 
-  An object of class \code{rebalance}, which is a list:
+  An object of class \code{rebalance}, which is a
+  \code{data.frame}:
   
+  \item{instrument}{character, or \code{NA} when
+                    \code{match.names} is \code{FALSE}}
+  \item{price}{prices}
   \item{current}{current portfolio}
-  \item{new}{new portfolio}
-  \item{names}{\ldots}
-  \item{prices}{\ldots}
-  \item{notional}{\ldots}
+  \item{target}{new portfolio}
+  \item{difference}{the difference between current and target}
 
+  Attached to the data.frame are several attributes:
+  
+  \item{notional}{notional}
+  \item{match.names}{logical}
+  \item{multiplier}{multipliers}
+  
 }
 \references{
 
@@ -82,9 +90,6 @@ rebalance(current, target, price,
 }
 \author{
   Enrico Schumann
-}
-\section{Warning }{
-  Very experimental. The interface may change.
 }
 \seealso{
   \code{\link{journal}}

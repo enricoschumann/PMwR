@@ -1,3 +1,16 @@
+2017-04-01  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 0.4-0 [unreleased]
+
+2016-12-16  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/rebalance.R (rebalance): the function now
+	returns a data.frame instead of a list, with
+	additional information attached as attributes;
+	argument 'fraction' is now supported
+
+	* man/rebalance.Rd: update docs
+
 2016-12-15  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/NAVseries.R (as.NAVseries.btest): fix
