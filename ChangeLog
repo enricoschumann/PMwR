@@ -1,6 +1,13 @@
-2017-04-01  Enrico Schumann  <es@enricoschumann.net>
+2099-12-31  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.4-0 [unreleased]
+
+2016-12-17  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/rebalance.R (rebalance): 'target' may now
+	be a position. The function also gains a new
+	argument 'target.weights'; the argument
+	'check.match' is no longer used and removed.
 
 2016-12-16  Enrico Schumann  <es@enricoschumann.net>
 

@@ -10,9 +10,9 @@
 \usage{
 rebalance(current, target, price,
           notional = NULL, multiplier = 1,
-          truncate = TRUE,
-          match.names = TRUE, check.match = TRUE,
-          fraction = 1, drop.zero = FALSE)
+          truncate = TRUE, match.names = TRUE,
+          fraction = 1, drop.zero = FALSE,
+          target.weights = TRUE)
 
 \method{print}{rebalance}(x, \dots, drop.zero = TRUE)
 }
@@ -41,9 +41,6 @@ rebalance(current, target, price,
   \item{match.names}{
     logical
   }
-  \item{check.match}{
-    logical
-  }
   \item{fraction}{
     numeric
   }
@@ -55,6 +52,11 @@ rebalance(current, target, price,
   }
   \item{drop.zero}{
     logical; note the different defaults for computing and printing
+  }
+  \item{target.weights}{
+    logical. If \code{TRUE} (the default), the values in target are
+    interpreted as weights. If \code{FALSE}, \code{target} is
+    interpreted as a position (i.e. notional/number  of contracts).
   }
 }
 \details{
@@ -84,7 +86,7 @@ rebalance(current, target, price,
 }
 \references{
 
-  Schumann, E. (2015) \emph{Portfolio Management with
+  Schumann, E. (2016) \emph{Portfolio Management with
     R}. \url{http://enricoschumann.net/R/packages/PMwR/}
 
 }

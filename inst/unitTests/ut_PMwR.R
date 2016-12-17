@@ -706,29 +706,36 @@ test.quote32 <- function() {
 
 test.rebalance <- function() {
 
+    require(PMwR) ; require(RUnit)
     current <- c(0,0,100,100)
     prices  <- c(1,1,1,1)
     target  <- c(0.25, 0.25, 0.25, 0.25)
     x <- rebalance(current, target, prices, match.names = FALSE)
     checkEquals(x$target, rep(50, 4))
 
+    
     ## no initial position: 'current' is 0
     current <- 0
     prices  <- c(1,1,1,2)
     target  <- c(0.25, 0.25, 0.25, 0.25)
-    x <- rebalance(current, target, prices, match.names = FALSE, notional = 100)
+    x <- rebalance(current, target, prices,
+                   match.names = FALSE, notional = 100)
     checkEquals(x$target, c(rep(25,3), 12))
+
     
     ## liquidate all: 'target' is 0
     current <- c(0,0,100,100)
-    x <- rebalance(current, target = 0, prices, match.names = FALSE, notional = 100)
+    x <- rebalance(current, target = 0, prices,
+                   match.names = FALSE, notional = 100)
     checkEquals(x$target, rep(0,4))
 
     current <- c(0,0,-100,-100)
-    x <- rebalance(current, target = 0, prices, match.names = FALSE, notional = 100)
+    x <- rebalance(current, target = 0, prices,
+                   match.names = FALSE, notional = 100)
     checkEquals(x$target, rep(0,4))
 
-    ## *names*
+    
+    ## with names
     prices  <- c(1,1,1,1)
     names(prices) <- letters[1:4]
 
@@ -738,7 +745,8 @@ test.rebalance <- function() {
     x <- rebalance(current, target, prices, match.names = TRUE)
     checkEquals(x$target, c(0,1))
 
-    ## *journal*
+    
+    ##  with position/journal
     j <- journal(amount = c(1, 2),
                  instrument = c("A", "B"))
     w <- c(A = 0.5, B = 0.5)
@@ -763,7 +771,24 @@ test.rebalance <- function() {
                                      "amount", "price"),
                           class = "journal"))    
 
+    ##  with two positions
+    prices  <- c(1,1,1,1)
+    names(prices) <- letters[1:4]
 
+    current <- position(amount = 10, instrument = "b")
+    target  <- position(amount = 5,  instrument = "d")
+
+    x <- rebalance(current, target, prices)
+    checkEquals(x$target, c(0,5))
+    checkEquals(x$difference, c(-10,5))
+
+    current <- position(amount = c(10,5), instrument = c("a", "b"))
+    target  <- position(amount = c(0,2), instrument = c("a", "b"))
+    prices  <- c(1,1)
+
+    x <- rebalance(current, target, prices, match.names=FALSE)
+    checkEquals(x$target, c(0,2))
+    checkEquals(x$difference, c(-10,-3))
 
 ## price <- c(a = 1, b = 2, c = 3)
 ## current <- c(a = 100, b = 20)

@@ -5,9 +5,9 @@ rebalance <- function(current,
                       multiplier = 1,
                       truncate = TRUE,
                       match.names = TRUE,
-                      check.match = TRUE,
                       fraction = 1,
-                      drop.zero = FALSE) {
+                      drop.zero = FALSE,
+                      target.weights = TRUE) {
 
 
     if (inherits(current, "position")) {
@@ -17,8 +17,9 @@ rebalance <- function(current,
     }
     if (inherits(target, "position")) {
         instr <- attr(target, "instrument")
-        current <- as.numeric(target)
+        target <- as.numeric(target)
         names(target) <- instr
+        target.weights  <-  FALSE
     }
     
     if (!match.names && length(current) == 1L && current == 0) {
@@ -79,9 +80,15 @@ rebalance <- function(current,
         target_[match(names(target), all.names)] <- target
         current <- current_
         price <- price[all.names]
-        ans <- target_ * notional / price / multiplier[all.names]
+        if (target.weights)
+            ans <- target_ * notional / price / multiplier[all.names]
+        else
+            ans <- target_
     } else {
-        ans <- target * notional / price / multiplier
+        if (target.weights)            
+            ans <- target * notional / price / multiplier
+        else
+            ans <- target
         all.names <- NA
     }
     if (truncate) {
