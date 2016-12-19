@@ -835,6 +835,24 @@ test.rebalance <- function() {
 
 }
 
+test.as.journal <- function() {
+
+    ## unnamed numeric vector
+    checkEquals(journal(amount = 1:5),
+                as.journal(1:5))
+
+    ## named numeric vector
+    x <- 1:3
+    names(x) <- letters[1:3]
+    checkEquals(journal(amount = 1:3,
+                        instrument = letters[1:3]),
+              as.journal(x))
+
+    ## ERROR: no method for matrix
+    x <- array(1, dim = c(2,2))
+    checkException(as.journal(x), silent = TRUE)
+}
+
 test.returns <- function() {
 
     require("zoo", quietly = TRUE, warn.conflicts = FALSE)

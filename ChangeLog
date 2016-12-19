@@ -1,6 +1,12 @@
-2099-12-31  Enrico Schumann  <es@enricoschumann.net>
+2017-04-01  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.4-0 [unreleased]
+
+2016-12-19  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (as.journal.default): add and
+	export method, which is restricted to
+	possibly-named numeric vectors
 
 2016-12-17  Enrico Schumann  <es@enricoschumann.net>
 

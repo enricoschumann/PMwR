@@ -10,9 +10,6 @@ journal <- function(amount, ...) {
         UseMethod("journal")
 }
 
-journal.btest <- function(amount, ...)
-    amount$journal
-
 journal.default <- function(amount, price, timestamp, instrument,
                     id = NULL,  account = NULL, ...) {
     if (missing(timestamp))
@@ -66,10 +63,13 @@ journal.default <- function(amount, price, timestamp, instrument,
     ans
 }
 
-print.journal <- function(x, ..., width = getOption("width"),
+journal.btest <- function(amount, ...)
+    amount$journal
+
+print.journal <- function(x, ...,
+                          width = getOption("width"),
                           max.print = getOption("max.print"),
                           exclude = NULL, include.only = NULL) {
-
     lx <- length(x)
     if (lx == 0L) {
         cat("no transactions\n")
@@ -84,7 +84,7 @@ print.journal <- function(x, ..., width = getOption("width"),
                         stringsAsFactors = FALSE)
 
     ndf <- colnames(df)
-    first.cols <- c("instrument", "timestamp", "amount","price")
+    first.cols <- c("instrument", "timestamp", "amount", "price")
     df <- df[TRUE, c(first.cols, setdiff(ndf, first.cols)), drop = FALSE]
     
     if (!is.null(exclude))
@@ -166,7 +166,6 @@ as.data.frame.journal <- function(x, row.names = NULL,
                                   optional = FALSE, ...)
     as.data.frame(unclass(x),
                   row.names = row.names, optional = optional, ...)
-
 
 ## accessors
 account <- function(x, ...) {
@@ -365,13 +364,31 @@ cashflows <- function(x, multiplier = 1, ...) {
     ans
 }
 
+
+
+
+## ================= [ is.journal ] =================
+
 is.journal <- function (x) 
     inherits(x, "journal")
 
 
-## --- [ as.journal ] ---
+
+## ================= [ as.journal ] =================
+
 as.journal <- function(x, ...)
     UseMethod("as.journal")
+
+as.journal.default <- function(x, ...) {
+    if (is.vector(x) && is.numeric(x))
+        if (is.null(names(x)))
+            journal.default(amount = x)
+        else
+            journal.default(amount = unname(x),
+                            instrument = names(x))
+    else
+        stop("no default method")
+}
 
 as.journal.data.frame <- function(x, ...) {
     lx <- as.list(x)
@@ -414,6 +431,9 @@ as.journal.rebalance <- function(x, ..., price = TRUE, timestamp = NA,
                          else
                              NA)
 }
+
+
+## ================= [ other methods ] =================
 
 str.journal <- function(object, ...) {
     n <- length(object)
