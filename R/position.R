@@ -1,53 +1,50 @@
 position <- function(amount, ...)
     UseMethod("position")
 
-position.journal <- function(amount, when,
-                             drop.zero = FALSE,
-                             use.account = FALSE, ...) {
-
-    instrument <- amount$instrument
-    timestamp  <- amount$timestamp
-    amount     <- amount$amount
-    account <- if (use.account)
-                   amount$account
-
-    position.default(amount, timestamp, instrument, when,
-                     drop.zero = drop.zero,
-                     account = account, ...)
-}
-
 position.default <- function(amount, timestamp, instrument,
                              when, drop.zero = FALSE,
                              account = NULL, ...) {
-
-    allna <- FALSE ## are all instruments missing/NA?
+    
+    no.instruments <- FALSE ## are all instruments missing/NA?
     if (missing(instrument) ||
-        is.null(instrument) ||
-        all(is.na(instrument)) ||
-        !length(instrument)) {
+        !length(instrument) ||
+        all(is.na(instrument))) {
         instrument <- rep.int("", length(amount))
-        allna <- TRUE
+        no.instruments <- TRUE
     }
-    if (missing(timestamp) || !length(timestamp)) {
-        if (!missing(when))
+
+    no.timestamp <- FALSE
+    if (missing(timestamp) ||
+        !length(timestamp) ||
+        all(is.na(timestamp))) {
+        timestamp <- rep(1, length(amount))
+        no.timestamp <- TRUE
+    }
+
+    len <- max(length(amount),
+               length(timestamp),
+               length(instrument),
+               length(account))
+    amount <- rep(amount, len/length(amount))
+    timestamp <- rep(timestamp, len/length(timestamp))
+    instrument <- rep(instrument, len/length(instrument))
+    account <- rep(account, len/length(account))
+
+    if (missing(when)) {
+        ## TODO: if 'when' is missing, we can simply sum the amounts        
+        when <- max(timestamp, na.rm = TRUE)
+    } else {
+        if (no.timestamp)
             warning(sQuote("when"),
                     " specified, but no valid timestamp supplied")
-        timestamp <- rep(1, length(amount))
-    }
-
-    if (missing(when) && all(is.na(timestamp))) {
-        when <- ""
-        timestamp <- rep("", length(amount))
-    } else if (missing(when)) {
-        ## TODO: if 'when' is missing, we can simply sum the amounts
-        when <- max(timestamp)
-    } else if (is.character(when)) {
-        if (when[1L] == "last" || when[1L] == "newest" || when[1L] == "latest")
-            when <- max(timestamp)
-        else if (when[1L] == "all")
-            when <- timestamp
-        else if (when[1L] == "first" || when[1L] == "oldest")
-            when <- min(timestamp)
+        if (is.character(when)) {            
+            if (when[1L] == "last" || when[1L] == "newest" || when[1L] == "latest")
+                when <- max(timestamp)
+            else if (when[1L] == "all")
+                when <- unique(timestamp)
+            else if (when[1L] == "first" || when[1L] == "oldest")
+                when <- min(timestamp)
+        }
     }
 
     if (!anyNA(timestamp) && is.unsorted(timestamp)) {
@@ -66,12 +63,11 @@ position.default <- function(amount, timestamp, instrument,
     if (anyNA(timestamp) && !is.unsorted(timestamp, na.rm = TRUE))
         warning("timestamp has NA values")
 
-
-    if (all(ina <- is.na(instrument))) {
-        instrument[] <- ""
-        allna <- TRUE
-    } else
-        instrument[ina] <- "NA"
+    ## if (all(ina <- is.na(instrument))) {
+    ##     instrument[] <- ""
+    ##     no.instruments <- TRUE
+    ## } else
+    ##     instrument[ina] <- "NA"
 
     if (!is.null(account) && !identical(account, FALSE))                      
         instrument <- paste(account, "%SEP%", instrument, sep = "")
@@ -80,7 +76,7 @@ position.default <- function(amount, timestamp, instrument,
     nm <- sort(unique(instrument))
     pos <- array(0, dim = c(nw, length(nm)))
     colnames(pos) <- nm
-    rownames(pos) <- as.character(when)
+    rownames(pos) <- if (no.timestamp) rep("", length(when)) else as.character(when)
     for (j in seq_len(nw)) {
         for (i in seq_along(nm)) {
             ri  <-  nm[i] == instrument
@@ -100,14 +96,29 @@ position.default <- function(amount, timestamp, instrument,
         pos <- pos[ , is.na(drop) | !drop, drop = FALSE]
         nm <- nm[is.na(drop) | !drop]
     }
-    if (allna)
+    if (no.instruments)
         nm[] <- NA
-    attr(pos, "timestamp") <- when
+    attr(pos, "timestamp") <- if (no.timestamp) NA else when
     attr(pos, "instrument") <- gsub(".*%SEP%(.*?)", "\\1", nm)
     if (!is.null(account))         
         attr(pos, "account") <- gsub("(.*)%SEP%.*", "\\1", nm)    
     class(pos) <- "position"
     pos
+}
+
+position.journal <- function(amount, when,
+                             drop.zero = FALSE,
+                             use.account = FALSE, ...) {
+
+    instrument <- amount$instrument
+    timestamp  <- amount$timestamp
+    amount     <- amount$amount
+    account <- if (use.account)
+                   amount$account
+
+    position.default(amount, timestamp, instrument, when,
+                     drop.zero = drop.zero,
+                     account = account, ...)
 }
 
 position.btest <- function(amount, when, ...) {
@@ -142,10 +153,16 @@ print.position <- function(x, ..., sep = NA) {
     attr(x, "account") <- NULL
     attr(x, "instrument") <- NULL
     attr(x, "timestamp") <- NULL
+    ## if (all.equal(dimnames(x), list(NULL, NULL))) {
+    ##     if (any(dim(x) == 1L))
+    ##         print(c(unclass(x)))
+    ##     else
+    ##         dimnames(x) <- list(rep("", dim(x)[[1L]]), rep("", dim(x)[[2L]]))
+    ## } else
     if (dim(x)[1L] > 1L) {
-        print(unclass(x), big.mark = ",")
+        print(unclass(x))
     } else {
-        print(t(unclass(x)), big.mark = ",")
+        print(t(unclass(x)))
     }
     invisible(original.x)
 }

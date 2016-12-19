@@ -4,6 +4,16 @@
 
 2016-12-19  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/position.R (position.default): recycle
+	arguments 'amount', 'instrument', 'timestamp'
+	and 'account'
+
+	* R/position.R (position.default)
+	(print.position): position does no longe use
+	the 'articifial' timestamp 1 when no timestamp
+	information is provided; instead, timestamp is
+	set to NA
+
 	* R/journal.R (as.journal.default): add and
 	export method, which is restricted to
 	possibly-named numeric vectors

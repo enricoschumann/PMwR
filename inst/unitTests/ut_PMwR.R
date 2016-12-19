@@ -38,8 +38,8 @@ test.position <- function() {
     checkEquals(x+y,
                 structure(c(2, 2),
                           .Dim = 1:2,
-                          .Dimnames = list("1", c("a", "b")),
-                          timestamp = 1,
+                          .Dimnames = list("", c("a", "b")),
+                          timestamp = NA,
                           instrument = c("a", "b"),
                           class = "position"))
     
