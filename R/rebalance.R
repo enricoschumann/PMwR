@@ -142,3 +142,24 @@ print.rebalance <- function(x, ..., drop.zero = TRUE) {
         ".\n", sep = "")
     invisible(x)
 }
+
+replace_weight <- function(weights, ..., prefix = TRUE, sep = "::") {
+    repl <- list(...)
+    for (i in seq_along(repl)) {
+        nw <- names(weights)
+        ii <- match(names(repl)[[i]], nw, nomatch = 0)
+        if (ii > 0) {
+            w_new <- weights[[ii]]*repl[[i]]
+            if (prefix)
+                names(w_new) <- paste0(names(weights)[[ii]], sep,
+                                       names(repl[[i]]))
+            tmp <- c(weights[0:(ii-1L)],
+                         w_new)
+            if (ii != length(weights))
+                weights <- c(tmp, weights[ (ii+1L) : length(weights)])
+            else
+                weights <- tmp
+        }
+    }
+    weights
+}

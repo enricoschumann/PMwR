@@ -1119,3 +1119,13 @@ test.scale1 <- function() {
     ##             rep(0.01, ncol(p))) ## sd is 0.01
 
 }
+
+test.replace_weight <- function() {
+
+    w <- c(a = 0.4, b = 0.6)
+    a  <- c(x=0.9, y = 0.05, z = 0.05)
+    b <- c(A=0.1, B = 0.2, C = 0.7)
+    checkEquals(1,
+                sum(replace_weight(w, a = a, b = b, x = c(aaa = 1))))
+
+}

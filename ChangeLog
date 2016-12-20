@@ -2,6 +2,10 @@
 
         * DESCRIPTION (Version): 0.4-0 [unreleased]
 
+2016-12-20  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/rebalance.R (replace_weight): add function
+
 2016-12-19  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (position.default): recycle

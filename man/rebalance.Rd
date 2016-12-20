@@ -1,5 +1,6 @@
 \name{rebalance}
 \alias{rebalance}
+\alias{replace_weight}
 \alias{print.rebalance}
 \title{
   Rebalance Portfolio
@@ -15,6 +16,8 @@ rebalance(current, target, price,
           target.weights = TRUE)
 
 \method{print}{rebalance}(x, \dots, drop.zero = TRUE)
+
+replace_weight(weights, ..., prefix = TRUE, sep = "::") 
 }
 \arguments{
   \item{current}{
@@ -48,7 +51,8 @@ rebalance(current, target, price,
     an object of class \code{rebalance}.
   }
   \item{\dots}{
-    arguments passed to \code{\link{print}}
+    \code{rebalance}: arguments passed to \code{\link{print}};
+    \code{replace_weight}: numeric vectors
   }
   \item{drop.zero}{
     logical; note the different defaults for computing and printing
@@ -58,12 +62,30 @@ rebalance(current, target, price,
     interpreted as weights. If \code{FALSE}, \code{target} is
     interpreted as a position (i.e. notional/number  of contracts).
   }
+  \item{weights}{
+    a numeric vector with named components
+  }
+  \item{sep}{
+    character
+  }
+  \item{prefix}{
+    logical
+  }
 }
 \details{
 
   The function computes the necessary trades to move from the
   \code{current} portfolio to a \code{target} portfolio.
+
+  \code{replace_weight} is a helper function to split
+  baskets into their components. All arguments passed
+  via \code{...} should be named vectors. If names are
+  not syntactically valid (see
+  \code{\link{make.names}}), quote them. The passed
+  vectors themselves should be passed as named
+  arguments: see examples.
   
+
 }
 \value{
 
@@ -101,4 +123,16 @@ r <- rebalance(current = c(a = 100, b = 20),
                target  = c(a = 0.2, c = 0.3),
                price   = c(a = 1, b = 2, c = 3))
 as.journal(r)
+
+## replace_weight: the passed vectors must be named;
+##                 'basket_3' is ignored because not
+##                 component of weights is named
+##                 'basket_3'
+
+replace_weight(c(basket_1 = 0.3,
+                 basket_2 = 0.7),
+               basket_1 = c(a = 0.1, b = 0.4, c = .5),
+               basket_2 = c(x = 0.1, y = 0.4, z = .5),
+               basket_3 = c(X = 0.5, Z = 0.5),
+               sep = "|")
 }

@@ -50,6 +50,7 @@ export(
     quote32,
     rc,
     rebalance,
+    replace_weight,
     returns,
     scale1,
     scaleToUnity,

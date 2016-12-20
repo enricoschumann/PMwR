@@ -1,3 +1,7 @@
+v0.4-0  (2017-04-01)
+
+  o ...
+
 v0.3-4  (2016-06-13)
 
   o Moved function 'runStats' to a separate package 'runStats'
@@ -10,21 +14,26 @@ v0.3-4  (2016-06-13)
 
 v0.1-96  (2016-03-13)
 
-  o A draft of the manual chapter on computing profit and loss
-    is available:
+  o A draft of the manual chapter on computing profit
+    and loss is available:    
     http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#ch:pl
 
 v0.1-90  (2016-02-25)
 
-  o A draft of the manual chapter on scaling series is available:
+  o A draft of the manual chapter on scaling series is
+    available:
     http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#ch:scale
 
 v0.1-89  (2016-02-19)
 
-  o A draft of the manual chapter on computing returns is available:
+  o A draft of the manual chapter on computing returns
+    is available:
     http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#ch:returns
 
 v0.1-81  (2015-12-08)
 
-  o The package is still under heavy development.
+  o The PMwR package provides utilities for backtesting
+    investment and trading strategies, computing
+    profit-and-loss and returns, reporting, and more.
+    The package is still under heavy development.
     Please see the ChangeLog for updates.
