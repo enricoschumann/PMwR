@@ -2,6 +2,10 @@
 
         * DESCRIPTION (Version): 0.4-0 [unreleased]
 
+2017-01-02  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (URL): update URL
+
 2016-12-20  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/rebalance.R (replace_weight): add function
@@ -2467,4 +2471,10 @@
         from base64 package to base64enc
 
         * DESCRIPTION (Version): initial version (take code from 'PM')
+
+2012-02-11  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/dayOfMonth.R (isWeekend): changed 'tmp$w' into 'tmp$wday'.
+	(getNextBusinessDay): added function.
+	(getPreviousBusinessDay): added function.
 
