@@ -1,9 +1,9 @@
 #+TITLE: Portfolio Management with R
 #+AUTHOR: Enrico Schumann
 
-Functions and examples for 'Portfolio Management with R':
-pricing of financial instruments, computing profit-and-loss,
-reporting, backtesting and more.
+Functions and examples for 'Portfolio Management with R': 
+backtesting investment and trading strategies, computing 
+profit-and-loss and returns, reporting, and more.
 
 * The PMwR package
 

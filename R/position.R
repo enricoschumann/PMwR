@@ -232,7 +232,7 @@ Ops.position <- function(e1, e2) {
         NextMethod(.Generic)
 }
 
-acc.split <- function(account, sep, perl = FALSE) {
+acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
 
     account[is.na(account)] <- ""
     gs <- sort(unique(account))
@@ -249,49 +249,52 @@ acc.split <- function(account, sep, perl = FALSE) {
             tmp <- c(tmp, paste(list.gs[[i]][1:j],
                                 collapse = "::"))
         ans <- c(ans, tmp)
-    }
-    
+    }    
     ans <- sort(unique(c(ans, account)))
 
-    ## compute level
+    
+    ## LEVEL
     level <- as.numeric(
         unlist(lapply(gregexpr(sep, ans),
                       function(x) length(x) == 1 && x == -1)))
-
     level[level == 0L] <- lengths(gregexpr(sep, ans))[level == 0L] + 1
 
-    data.frame(account = ans, level, stringsAsFactors = FALSE)
+
+    ## TREE
+    if (tree) {
+        leaf <- function(x, sep = "::") {
+            ## return last subaccount 
+            ## account::subaccount::...::deepest_subaccount
+            gsub(paste0(".*", sep, "([^", substr(sep,1,1), "]+)$"),
+                 "\\1", x, perl = TRUE)
+        }
+        
+        sp <- spaces(2*(level - 1))
+        tree1 <- paste0(sp, leaf(ans)) 
+        ## cat(tree1, sep = "\n")
+        
+        sp <- spaces(4*(level - 1))
+        upd <- which(nchar(sp) > 0 & c(diff(nchar(sp)), 1) != 0)
+        tree2 <- paste0(gsub("    $", "|-- ", sp), leaf(ans))
+        tree2[upd] <- sub("|", "`", tree2[upd], fixed = TRUE)
+        ## cat(tree2, sep = "\n")
+        
+        tree3 <- paste0(gsub("    $", "\u251c\u2500\u2500 ", sp), leaf(ans))
+        ## cat(tree3, sep = "\n")
+        tree3[upd] <- sub("\u251c", "\u2514", tree3[upd])
+        ## cat(tree3, sep = "\n")
+        tree3 <- enc2utf8(tree3)
+
+        data.frame(account = ans,
+                   level,
+                   tree_indent = tree1,
+                   tree_ascii = tree2,
+                   tree_unicode = tree3,
+                   stringsAsFactors = FALSE)
+    } else {
+        data.frame(account = ans, level, stringsAsFactors = FALSE)
+    }    
 } 
-
-if (FALSE) {
-
-    require("PMwR")
-    input <- c("equity::traditional",
-               "equity::traditional::USA",
-               "equity::traditional::USA",
-               "equity::traditional::Europe",
-               "equity::traditional::Japan",
-               "equity::long-short",
-               "equity::long-short",
-               "equity::long-short" )
-    
-    PMwR:::acc.split(input, "\\s*::\\s*", TRUE)
-    
-    j <- journal(amount = c(1,1,1,1),
-                 instrument = c("fgbl", "fgbl", "fesx", "fesx"),
-                 account = c("A", "B", "B", "B"),
-                 price = c(1,1,1,1),
-                 timestamp = 1)
-    j2 <- journal(amount = c(1,1,1,1),
-                 instrument = c("fgbl", "fgbl", "fesx", "fesx"),
-                 account = c("A", "B", "B", "B"),
-                 price = c(1,1,1,1),
-                 timestamp = 2)
-    position(j)
-    position(c(j,j2), when=1:2)
-    dput(position(j))
-
-}
 
 as.zoo.position <- function(x, ...) {
     zoo(x, attr(x, "timestamp"))

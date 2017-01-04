@@ -2,6 +2,28 @@
 
         * DESCRIPTION (Version): 0.4-0 [unreleased]
 
+2017-01-04  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (acc.split): experimental
+	support for computing trees that visualise
+	account hierarchies, for instance:
+
+	  "tree_ascii"       "tree_indent"
+	 ----------------------------------
+          Bonds              Bonds
+	  `-- long-only        long-only
+	      |-- Germany        Germany
+	      `-- Italy          Italy
+	  Equity             Equity
+	  |-- long-short       long-short
+	  `-- long-only        long-only
+	      |-- Europe         Europe
+	      |-- Japan          Japan
+	      `-- USA            USA
+
+        ('acc.split' is still internal, i.e. not
+	exported)
+
 2017-01-02  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (URL): update URL
