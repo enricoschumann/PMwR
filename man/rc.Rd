@@ -55,9 +55,9 @@ rc(R, weights, timestamp, segments = NULL)
   \code{\link{returns}}
 }
 \examples{
-weights <-rbind(c( 0.25, 0.75),
-                c( 0.40, 0.60),
-                c( 0.25, 0.75))
+weights <- rbind(c( 0.25, 0.75),
+                 c( 0.40, 0.60),
+                 c( 0.25, 0.75))
 
 R <- rbind(c( 1  ,    0),
            c( 2.5, -1.0),
