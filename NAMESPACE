@@ -59,6 +59,7 @@ export(
     split_adjust,
     splitTrades,
     twExposure,
+    unit_prices,
     valuation
     )
 

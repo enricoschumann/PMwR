@@ -2,6 +2,10 @@
 
         * DESCRIPTION (Version): 0.4-0 [unreleased]
 
+2017-01-11  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/unit_prices.R (unit_prices): add function
+
 2017-01-04  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (acc.split): experimental
@@ -1142,13 +1146,13 @@
 
         * NAMESPACE: moved function 'pm' to package NMOF
 
-        * inst/unitTests/ut_Datetime.R: moved tests to
+        * inst/unitTests/ut_Datetime.R: moved tests to new
         'datetimeutils'
 
         * DESCRIPTION (Version): 0.1-63
 
         * R/[...]: moved all helper functions that concern dates
-        and times to package 'datetimeutils'
+        and times to new package 'datetimeutils'
 
 2015-05-08  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1160,7 +1164,7 @@
         * DESCRIPTION (Version): 0.1-62
 
         * R/texttools.R: moved all helper functions that concern
-        character vectors to 'textutils'
+        character vectors to new package 'textutils'
 
         * R/toText.R: moved 'toText' to new package 'textutils'
 
