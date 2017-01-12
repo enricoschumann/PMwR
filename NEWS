@@ -1,6 +1,25 @@
-v0.4-0  (2017-04-01)
+v0.4-0  (2017-04-01)  
 
   o ... [not yet released]
+
+  o new function 'unit_prices'
+
+  o new function 'rc'
+
+  o new function 'acc.split'
+
+  o new method as.data.frame.position
+
+  o new method as.zoo.position
+
+  o new method pl.btest
+
+  o new method toOrg.journal
+
+  o support for (some) arithmetic operations on positions and quote32
+
+  o Updated manual chapter on computing returns:
+    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#ch:returns
 
 v0.3-4  (2016-06-13)
 
