@@ -100,9 +100,14 @@ pl(amount, \dots)
   \code{realised}, \code{unrealised}, \code{buy},
   \code{sell}, \code{volume}.
 
+  For \code{.pl}, a numeric vector with four elements:
+  profit/loss in units of the instrument, sum of
+  absolute amounts, average buy price, average sell
+  price.
+  
 }
 \references{
-Schumann, E. (2016) \emph{Portfolio Management
+Schumann, E. (2017) \emph{Portfolio Management
   with R}. \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
 
 } 
