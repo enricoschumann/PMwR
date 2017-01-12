@@ -236,18 +236,54 @@ instrument.journal <- function(x, ...) {
 
 }
 
-summary.journal <- function(x, ...) {
-    ## TODO
-    ## number of trades per instrument
-    ## level: instrument or account or factor
-    ## number of transactions, first/last transactions, min/max price (if meaningful) 
+summary.journal <- function(object, ...) {
+    ## TODO level: instrument or account or factor
     ans <- list()
-    ans$n_transactions <- length(x)
+    ans$n_transactions <- length(object)
+    no_instrument <- FALSE
+    if (is.null(xi <- instrument(object))) {
+        xi <- object$instrument <- rep("_", length(object))
+        no_instrument <- TRUE
+    }
+    
+    stats <- data.frame(instrument = character(0),
+                        n_transactions = numeric(0),
+                        average_buy = numeric(0),
+                        average_sell = numeric(0),
+                        first_t = numeric(0),
+                        last_t = numeric(0),
+                        stringsAsFactors = FALSE)
+    for (i in sort(unique(xi))) {
+        ji <- object[ i==xi ]
+        si <- data.frame(instrument   = i,
+                         n_t          = length(ji),
+                         average_buy  = mean(ji$price[ji$amount > 0], na.rm=TRUE),
+                         average_sell = mean(ji$price[ji$amount < 0], na.rm=TRUE),
+                         first_t      = min(ji$timestamp)[[1L]],
+                         last_t       = max(ji$timestamp)[[1L]],
+                         stringsAsFactors = FALSE)
+        stats <- rbind(stats, si)
+    }
+    if (no_instrument)
+        stats$instrument <- NULL
+    ans$stats  <- stats    
+    class(ans) <- "summary.journal"
     ans
 }
 
 print.summary.journal <- function(x, ...) {
-    cat("Journal with ", x$n_transactions, " transactions.")
+    ans <- x$stats
+    cat("journal: ", x$n_transactions, " transactions ",
+        "in ", nrow(ans), " instruments\n\n", sep = "")
+    colnames(ans) <- c("instrument", "n", "avg buy", "avg sell",
+                       "first", "last")
+    for (i in 3:4)
+        ans[[i]][!is.finite(ans[[i]])] <- NA
+        
+    ans[["instrument"]] <- paste0("",
+                                  format(ans[["instrument"]], justify = "left"))
+    print.data.frame(ans, na.print = "",
+                     print.gap = 2, row.names = FALSE)
     invisible(x)
 }
 
