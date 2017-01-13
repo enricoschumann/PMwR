@@ -10,6 +10,8 @@ v0.4-0  (2017-04-01)
 
   o new method as.data.frame.position
 
+  o new method summary.journal
+
   o new method as.zoo.position
 
   o new method pl.btest
