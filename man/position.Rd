@@ -20,7 +20,8 @@ position(amount, \dots)
 }
 \arguments{
   \item{when}{
-    a timestamp or a vector of timestamps
+    a timestamp or a vector of timestamps;
+    alternatively, several keywords are supported. See Details.
   }
   \item{amount}{
     numeric or an object of class \code{\link{journal}}
@@ -65,6 +66,15 @@ position(amount, \dots)
   if required. If there are (some) \code{NA} values in \code{timestamp},
   but \code{timestamp} is sorted otherwise, the function will proceed
   (with a warning, though).
+
+  The argument \code{when} can also be specified as one of several
+  keywords: \code{last} (or \code{newest} or \code{latest}) provides the
+  position at the latest timestamp; \code{first} (or \code{oldest})
+  provides the position at the earliest timestamp; \code{all} provides
+  the positions at all timestamps in the journal; \code{endofmonth}
+  provides positions at the end of all calendar months within the
+  timestamp range of the journal. The latter can only work when
+  \code{timestamp} can be coerced to \code{\link{Date}}.
     
 }
 \value{
@@ -77,8 +87,10 @@ position(amount, \dots)
   
 }
 \references{
-  Enrico Schumann -- Portfolio Management with R
-  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
+
+  Schumann, E. (2017) \emph{Portfolio Management
+    with \R}. \url{http://enricoschumann.net/R/packages/PMwR/}
+  
 }
 \author{
   Enrico Schumann

@@ -38,11 +38,25 @@ position.default <- function(amount, timestamp, instrument,
             warning(sQuote("when"),
                     " specified, but no valid timestamp supplied")
         if (is.character(when)) {            
-            if (when[1L] == "last" || when[1L] == "newest" || when[1L] == "latest")
+            if (when[[1L]] == "last" ||
+                when[[1L]] == "newest" ||
+                when[[1L]] == "latest")
                 when <- max(timestamp)
-            else if (when[1L] == "all")
+            else if (when[[1L]] == "all")
                 when <- unique(timestamp)
-            else if (when[1L] == "first" || when[1L] == "oldest")
+            else if (when[[1L]] == "endofmonth" ||
+                     when[[1L]] == "lastofmonth") {
+                ## when <- last(timestamp,
+                ##              format(as.Date(timestamp), "%Y-%m"))
+                timestamp <- as.Date(timestamp)
+                when <- endOfMonth(seq(firstOfMonth(min(timestamp)),
+                                       firstOfMonth(max(timestamp)),
+                                       by = "1 month"))
+            } else if (when[[1L]] == "endofday") {
+                when <- last(timestamp,
+                             format(as.Date(timestamp), "%Y-%m-%d"))
+            } else if (when[[1L]] == "first" ||
+                     when[1L] == "oldest")
                 when <- min(timestamp)
         }
     }

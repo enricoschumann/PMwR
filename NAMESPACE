@@ -16,6 +16,8 @@ importFrom(textutils, trim)
 importFrom(textutils, valign)
 importFrom(datetimeutils, roundPOSIXt)
 importFrom(datetimeutils, timegrid)
+importFrom(datetimeutils, endOfMonth)
+importFrom(datetimeutils, firstOfMonth)
 importFrom(crayon, bold)
 
 importFrom("grDevices",

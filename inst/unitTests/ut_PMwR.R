@@ -42,6 +42,14 @@ test.position <- function() {
                           timestamp = NA,
                           instrument = c("a", "b"),
                           class = "position"))
+
+    ## 'when' specifications
+    t <- as.Date("2015-1-15") + seq(10, 350, by = 30)
+    checkEquals(as.numeric(position(rep(1, length(t)),
+                                    timestamp = t,
+                                    when = "endofmonth")),
+                1:12)
+
     
 }
 

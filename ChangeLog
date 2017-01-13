@@ -2,10 +2,18 @@
 
         * DESCRIPTION (Version): 0.4-0 [unreleased]
 
+2017-01-13  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (position.default): support
+	keyword 'endofmonth' for argument 'when'
+
+	* NAMESPACE: import functions 'firstOfMonth',
+	'endOfMonth' from package datetimeutils
+
 2017-01-12  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (summary.journal): the function
-	now provides information per-instrument
+	now provides information per instrument
 	(print.summary.journal): update for new
 	'summary.journal' structure
 
