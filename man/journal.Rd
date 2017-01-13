@@ -197,8 +197,9 @@ is.journal(x)
 
 }
 \references{
-Schumann, E. (2016) \emph{Portfolio Management
-  with R}. \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
+
+Schumann, E. (2017) \emph{Portfolio Management
+  with R}. \url{http://enricoschumann.net/R/packages/PMwR/}
 
 } 
 \author{
