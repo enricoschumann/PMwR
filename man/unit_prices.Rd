@@ -8,7 +8,8 @@
 }
 \usage{
 unit_prices(NAV, cashflows,
-            initial.price = 100, initial.shares = 0)
+            initial.price = 100, initial.shares = 0,
+            cf.included = FALSE)
 }
 \arguments{
   \item{NAV}{
@@ -23,6 +24,9 @@ unit_prices(NAV, cashflows,
 }
   \item{initial.shares}{
     number of outstanding shares for first NAV
+}
+  \item{cf.included}{
+    logical
 }
 }
 \details{

@@ -2,6 +2,11 @@
 
         * DESCRIPTION (Version): 0.4-0 [unreleased]
 
+2017-01-14  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/unit_prices.R (unit_prices): new argument
+	'cf.included'
+
 2017-01-13  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (position.default): support
