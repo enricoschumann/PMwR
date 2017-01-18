@@ -2,6 +2,15 @@
 
         * DESCRIPTION (Version): 0.4-0 [unreleased]
 
+2017-01-16  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R: add warnings when length of
+	timestamp/instrument do not match the price
+	data
+
+	* R/btest.R (plot.btest): set default plot
+	type to "l"
+
 2017-01-14  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/unit_prices.R (unit_prices): new argument

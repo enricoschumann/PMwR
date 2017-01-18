@@ -345,6 +345,11 @@ btest  <- function(prices,
     T <- nrow(mC)
     nA <- ncol(mC)
 
+    if (!missing(timestamp) && length(timestamp) != T)
+        warning("length(timestamp) does not match nrow(prices)")
+    if (!missing(instrument) && length(instrument) != nA)
+        warning("length(instrument) does not match ncol(prices)")
+    
     ## tc can be of length nA or length 1L
     tccum <- numeric(T)
 
@@ -641,11 +646,11 @@ print.btest <- function(x, ...) {
     invisible(x)
 }
 
-plot.btest <- function(x, y = NULL, ...) {
+plot.btest <- function(x, y = NULL, type = "l", ...) {
     if (!is.null(x$timestamp))
-        plot(x$timestamp[-seq_len(x$b)], x$wealth[-seq_len(x$b)], ...)
+        plot(x$timestamp[-seq_len(x$b)], x$wealth[-seq_len(x$b)], type = type, ...)
     else
-        plot(x$wealth[-seq_len(x$b)], y, ...)
+        plot(x$wealth[-seq_len(x$b)], y, type = type, ...)
     invisible()
 }
 
