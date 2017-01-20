@@ -2,6 +2,10 @@
 
         * DESCRIPTION (Version): 0.4-0 [unreleased]
 
+2017-01-20  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (lines.btest): new method
+
 2017-01-16  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R: add warnings when length of

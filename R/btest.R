@@ -654,6 +654,14 @@ plot.btest <- function(x, y = NULL, type = "l", ...) {
     invisible()
 }
 
+lines.btest <- function(x, y = NULL, type = "l", ...) {
+    if (!is.null(x$timestamp))
+        lines(x$timestamp[-seq_len(x$b)], x$wealth[-seq_len(x$b)], type = type, ...)
+    else
+        lines(x$wealth[-seq_len(x$b)], y, type = type, ...)
+    invisible()
+}
+
 
 atest <- btest
 formals(atest)$do.signal <- FALSE
