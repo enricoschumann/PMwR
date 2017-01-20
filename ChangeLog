@@ -6,6 +6,11 @@
 
 	* R/btest.R (lines.btest): new method
 
+	* R/journal.R (journal.position): new method,
+	which issues a warning that 'as.journal' may be
+	more appropriate (see ChangeLog entry of
+	2016-12-16)
+
 2017-01-16  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R: add warnings when length of

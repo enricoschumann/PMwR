@@ -10,6 +10,11 @@ journal <- function(amount, ...) {
         UseMethod("journal")
 }
 
+journal.position <- function(x, price, ...) {
+    warning("did you mean 'as.journal'?")
+    journal.default(amount = x, price = price, ...)
+}
+
 journal.default <- function(amount, price, timestamp, instrument,
                     id = NULL,  account = NULL, ...) {
     if (missing(timestamp))
