@@ -283,26 +283,17 @@ acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
                  "\\1", x, perl = TRUE)
         }
         
-        sp <- spaces(2*(level - 1))
-        tree1 <- paste0(sp, leaf(ans)) 
-        ## cat(tree1, sep = "\n")
-        
         sp <- spaces(4*(level - 1))
-        upd <- which(nchar(sp) > 0 & c(diff(nchar(sp)), 1) != 0)
-        tree2 <- paste0(gsub("    $", "|-- ", sp), leaf(ans))
-        tree2[upd] <- sub("|", "`", tree2[upd], fixed = TRUE)
-        ## cat(tree2, sep = "\n")
-        
-        tree3 <- paste0(gsub("    $", "\u251c\u2500\u2500 ", sp), leaf(ans))
-        ## cat(tree3, sep = "\n")
-        tree3[upd] <- sub("\u251c", "\u2514", tree3[upd])
-        ## cat(tree3, sep = "\n")
-        tree3 <- enc2utf8(tree3)
+        tree1 <- paste0(sp, leaf(ans)) 
 
+        tree2 <- paste0(.tree(level), leaf(ans))
+        tree3 <- paste0(.tree(level, TRUE), leaf(ans))
+        tree3 <- enc2utf8(tree3)
+        
         data.frame(account = ans,
                    level,
-                   tree_indent = tree1,
-                   tree_ascii = tree2,
+                   tree_indent  = tree1,
+                   tree_ascii   = tree2,
                    tree_unicode = tree3,
                    stringsAsFactors = FALSE)
     } else {
@@ -313,3 +304,40 @@ acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
 as.zoo.position <- function(x, ...) {
     zoo(x, attr(x, "timestamp"))
 }
+
+.tree <- function(lv, unicode = FALSE) {
+    child <- "|--"
+    final_child <- "`"
+    cont <- "|"
+    indent <- spaces((lv-1)*4)
+    mlv <- max(lv)
+    n <- length(lv)
+    for (i in 1L:(mlv-1L)) {
+        group.start <- c(which(lv == i), n+1)
+        group.end <- group.start
+        for (g in 1:length(group.start)) {
+            if (any(next_l <- 1:n < group.start[g+1] &
+                              1:n >= group.start[g] &
+                              lv == i+1))
+                group.end[g] <- max(which(next_l))
+        }
+        group.start <- group.start[-length(group.start)]
+        group.end <- group.end[-length(group.end)]
+        
+        for (g in 1:length(group.start)) {
+            if (group.start[g] < group.end[g])
+                substring(indent[setdiff((group.start[g]+1):group.end[g], which(lv == 1+1))],
+                (i-1)*4+1,(i-1)*4+1) <- cont
+        }
+        substring(indent[lv==1+i],(i-1)*4+1,(i-1)*4+3) <- child
+        substring(indent[group.end[group.end != group.start]],
+               (i-1)*4+1, (i-1)*4+1) <- final_child
+    }
+    if (unicode) {
+        indent <- gsub("|--", "\u251c\u2500\u2500", indent, fixed = TRUE)
+        indent <- gsub("`--", "\u2514\u2500\u2500", indent, fixed = TRUE)
+        indent <- gsub("|", "\u2502", indent, fixed = TRUE)
+    }
+    indent
+}
+

@@ -2,6 +2,12 @@
 
         * DESCRIPTION (Version): 0.4-0 [unreleased]
 
+2017-01-22  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (.tree): new internal function
+	for producing account hierarchies; used in
+	'acc.split' (see ChangeLog entry of 2017-01-04)
+
 2017-01-20  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R (lines.btest): new method
