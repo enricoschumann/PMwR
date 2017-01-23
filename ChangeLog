@@ -2,6 +2,15 @@
 
         * DESCRIPTION (Version): 0.4-0 [unreleased]
 
+2017-01-23  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (acc.split): add attribute
+	"positions" (=positions of initial accounts in
+	expanded list of accounts)
+
+	* R/position.R (.tree): simplify/clarify
+	computations
+
 2017-01-22  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (.tree): new internal function

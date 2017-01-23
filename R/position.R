@@ -246,6 +246,10 @@ Ops.position <- function(e1, e2) {
         NextMethod(.Generic)
 }
 
+as.zoo.position <- function(x, ...) {
+    zoo(x, attr(x, "timestamp"))
+}
+
 acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
 
     account[is.na(account)] <- ""
@@ -253,7 +257,7 @@ acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
     
     list.gs <- strsplit(gs, sep, perl = perl)
 
-    ans <- NULL
+    all.acc <- NULL
     for (i in seq_along(list.gs)) {
         if ((lg <- length(list.gs[[i]])) == 1L)
             next
@@ -262,16 +266,16 @@ acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
         for (j in seq_len(lg-1))
             tmp <- c(tmp, paste(list.gs[[i]][1:j],
                                 collapse = "::"))
-        ans <- c(ans, tmp)
+        all.acc <- c(all.acc, tmp)
     }    
-    ans <- sort(unique(c(ans, account)))
-
+    all.acc <- sort(unique(c(all.acc, account)))
+    positions <- match(account, all.acc)
     
     ## LEVEL
     level <- as.numeric(
-        unlist(lapply(gregexpr(sep, ans),
+        unlist(lapply(gregexpr(sep, all.acc),
                       function(x) length(x) == 1 && x == -1)))
-    level[level == 0L] <- lengths(gregexpr(sep, ans))[level == 0L] + 1
+    level[level == 0L] <- lengths(gregexpr(sep, all.acc))[level == 0L] + 1
 
 
     ## TREE
@@ -284,36 +288,33 @@ acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
         }
         
         sp <- spaces(4*(level - 1))
-        tree1 <- paste0(sp, leaf(ans)) 
+        tree1 <- paste0(sp, leaf(all.acc)) 
 
-        tree2 <- paste0(.tree(level), leaf(ans))
-        tree3 <- paste0(.tree(level, TRUE), leaf(ans))
+        tree2 <- paste0(.tree(level), leaf(all.acc))
+        tree3 <- paste0(.tree(level, TRUE), leaf(all.acc))
         tree3 <- enc2utf8(tree3)
         
-        data.frame(account = ans,
-                   level,
-                   tree_indent  = tree1,
-                   tree_ascii   = tree2,
-                   tree_unicode = tree3,
-                   stringsAsFactors = FALSE)
+        res <- data.frame(account = all.acc,
+                          level,
+                          tree_indent  = tree1,
+                          tree_ascii   = tree2,
+                          tree_unicode = tree3,
+                          stringsAsFactors = FALSE)
     } else {
-        data.frame(account = ans, level, stringsAsFactors = FALSE)
-    }    
+        res <- data.frame(account = all.acc, level, stringsAsFactors = FALSE)
+    }
+    attr(res, "positions") <- positions
+    res
 } 
-
-as.zoo.position <- function(x, ...) {
-    zoo(x, attr(x, "timestamp"))
-}
 
 .tree <- function(lv, unicode = FALSE) {
     child <- "|--"
-    final_child <- "`"
+    final_child <- "`--"
     cont <- "|"
     indent <- spaces((lv-1)*4)
-    mlv <- max(lv)
     n <- length(lv)
-    for (i in 1L:(mlv-1L)) {
-        group.start <- c(which(lv == i), n+1)
+    for (i in 1L:(max(lv)-1L)) {
+        group.start <- c(which(lv == i), n + 1)
         group.end <- group.start
         for (g in 1:length(group.start)) {
             if (any(next_l <- 1:n < group.start[g+1] &
@@ -321,17 +322,24 @@ as.zoo.position <- function(x, ...) {
                               lv == i+1))
                 group.end[g] <- max(which(next_l))
         }
+
         group.start <- group.start[-length(group.start)]
         group.end <- group.end[-length(group.end)]
         
         for (g in 1:length(group.start)) {
-            if (group.start[g] < group.end[g])
-                substring(indent[setdiff((group.start[g]+1):group.end[g], which(lv == 1+1))],
-                (i-1)*4+1,(i-1)*4+1) <- cont
+            if (group.start[g] == group.end[g])
+                next
+            else if (group.end[g] - group.start[g] == 1L)
+                substring(indent[group.end[g]], (i-1)*4+1,(i-1)*4+3) <- final_child
+            else  {
+                substring(indent[1:n > group.start[g] & 1:n < group.end[g] & lv==1+i],
+                          (i-1)*4+1,(i-1)*4+3) <- child
+                substring(indent[1:n > group.start[g] & 1:n < group.end[g] & lv != 1+i],
+                          (i-1)*4+1,(i-1)*4+1) <- cont
+                substring(indent[group.end[g]],
+                          (i-1)*4+1,(i-1)*4+3) <- final_child
+            }
         }
-        substring(indent[lv==1+i],(i-1)*4+1,(i-1)*4+3) <- child
-        substring(indent[group.end[group.end != group.start]],
-               (i-1)*4+1, (i-1)*4+1) <- final_child
     }
     if (unicode) {
         indent <- gsub("|--", "\u251c\u2500\u2500", indent, fixed = TRUE)
