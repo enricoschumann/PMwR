@@ -31,7 +31,8 @@ position.default <- function(amount, timestamp, instrument,
     account <- rep(account, len/length(account))
 
     if (missing(when)) {
-        ## TODO: if 'when' is missing, we can simply sum the amounts        
+        ## TODO: if 'when' is missing, we can simply
+        ##       sum the amounts
         when <- max(timestamp, na.rm = TRUE)
     } else {
         if (no.timestamp)
@@ -76,12 +77,6 @@ position.default <- function(amount, timestamp, instrument,
 
     if (anyNA(timestamp) && !is.unsorted(timestamp, na.rm = TRUE))
         warning("timestamp has NA values")
-
-    ## if (all(ina <- is.na(instrument))) {
-    ##     instrument[] <- ""
-    ##     no.instruments <- TRUE
-    ## } else
-    ##     instrument[ina] <- "NA"
 
     if (!is.null(account) && !identical(account, FALSE))                      
         instrument <- paste(account, "%SEP%", instrument, sep = "")
@@ -167,12 +162,6 @@ print.position <- function(x, ..., sep = NA) {
     attr(x, "account") <- NULL
     attr(x, "instrument") <- NULL
     attr(x, "timestamp") <- NULL
-    ## if (all.equal(dimnames(x), list(NULL, NULL))) {
-    ##     if (any(dim(x) == 1L))
-    ##         print(c(unclass(x)))
-    ##     else
-    ##         dimnames(x) <- list(rep("", dim(x)[[1L]]), rep("", dim(x)[[2L]]))
-    ## } else
     if (dim(x)[1L] > 1L) {
         print(unclass(x))
     } else {
@@ -219,9 +208,6 @@ Ops.position <- function(e1, e2) {
         }, `-` = {
             e1[] <- -unclass(e1)
         },
-        ## stop(gettextf("unary '%s' not defined for ",
-        ##               sQuote("position"), " objects", 
-        ##               .Generic), domain = NA, call. = FALSE)
         NextMethod(.Generic)
         )
         return(e1)
@@ -348,4 +334,3 @@ acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
     }
     indent
 }
-
