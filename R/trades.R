@@ -72,6 +72,7 @@ scaleTrades <- function(amount, price, timestamp, aggregate = FALSE,
         list(amount = amount, price = price, timestamp = timestamp)
     }
 }
+
 scaleToUnity <- function(amount) {
     maxn <- max(abs(cumsum(amount)))
     amount/maxn
