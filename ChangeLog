@@ -4,6 +4,9 @@
 
 2017-01-25  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/position.R (acc.split): fixed --
+	'acc.split' had ignored the 'sep' argument
+
 	* R/btest.R: add environment 'Globals' to the
 	list of returned objects
 

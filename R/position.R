@@ -251,7 +251,7 @@ acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
         tmp <- NULL
         for (j in seq_len(lg-1))
             tmp <- c(tmp, paste(list.gs[[i]][1:j],
-                                collapse = "::"))
+                                collapse = sep))
         all.acc <- c(all.acc, tmp)
     }    
     all.acc <- sort(unique(c(all.acc, account)))
@@ -266,7 +266,7 @@ acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
 
     ## TREE
     if (tree) {
-        leaf <- function(x, sep = "::") {
+        leaf <- function(x, sep = sep) {
             ## return last subaccount 
             ## account::subaccount::...::deepest_subaccount
             gsub(paste0(".*", sep, "([^", substr(sep,1,1), "]+)$"),
