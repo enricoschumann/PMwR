@@ -620,7 +620,8 @@ btest  <- function(prices,
                 journal = jnl,
                 initial.wealth = initial.wealth,
                 b = b,
-                final.position = if (final.position) final.pos else NA)
+                final.position = if (final.position) final.pos else NA,
+                Globals = Globals)
 
     if (include.data)
         ans <- c(ans,

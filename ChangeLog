@@ -2,6 +2,13 @@
 
         * DESCRIPTION (Version): 0.4-0 [unreleased]
 
+2017-01-25  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R: add environment 'Globals' to the
+	list of returned objects
+
+	* man/btest.Rd: update docs
+
 2017-01-23  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (acc.split): add attribute

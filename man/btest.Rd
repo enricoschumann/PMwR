@@ -81,9 +81,12 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
     transaction costs as a fraction of turnover (e.g., 0.001 means 0.1\%)
   }
   \item{\dots}{
-    other named arguments. All functions (signal, signalYN, rebalanceYN,
-    printInfo) will have access to these arguments. See Details for
+    
+    other named arguments. All functions (signal,
+    do.signal, do.rebalance, print.info, cashflow) will
+    have access to these arguments. See Details for
     reserved argument names.
+
   }
   \item{add}{
 
@@ -147,30 +150,47 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
 }
 \details{
   
-  The function provides an accounting framework for trading rules. The
-  basic ingredients are time series in the form of \acronym{OHLC} bars
-  (which need not be equally spaced) and several functions that map
-  these series into positions.
+  The function provides an accounting framework for
+  trading rules. The basic ingredients are time series
+  in the form of \acronym{OHLC} bars (which need not be
+  equally spaced) and several functions that map these
+  series into positions.
   
   \code{backtest} runs a loop from \code{b + 1} to
-  \code{NROW(prices)}. In iteration \code{t}, a \code{signal} can be
-  computed based on information from periods prior to \code{t} (but
-  nothing will ensure this). Trading then takes place at the opening
-  price of \code{t}. For slow-to-compute signals this is reasonable if
-  there is time lag between close and open. For daily prices, for
-  instance, signals could be computed overnight. For higher frequencies,
-  such as every second, the signal function should be fast to compute;
-  alternatively, it may be better to use a larger time offset (i.e., use
-  information from periods \code{<< t}).
+  \code{NROW(prices)}. In iteration \code{t}, a
+  \code{signal} can be computed based on information
+  from periods prior to \code{t}. Trading then takes
+  place at the opening price of \code{t}. For
+  slow-to-compute signals this is reasonable if there
+  is a time lag between close and open. For daily prices,
+  for instance, signals could be computed
+  overnight. For higher frequencies, such as every
+  second, the signal function should be fast to
+  compute; alternatively, it may be better to use a
+  larger time offset (i.e. use information from
+  periods \code{<< t}).
 
-  If no \acronym{ohlc} bar are available, a single series (assumed to be
-  close prices) can be passed. In effect, we might then use information
-  up to the close of \code{t - 1}, and trade at the close of \code{t}.
+  If no \acronym{ohlc} bar are available, a single
+  series (assumed to be close prices) can be passed. In
+  effect, we might then use information up to the close
+  of \code{t - 1}, and trade at the close of \code{t}.
+
+  The \sQuote{trade logic} needs to be coded in the
+  function \code{signal}; arguments to that function
+  should be named and need to be passed with \code{...}.
   
-  Reserved names are currently these: "Open", "High", "Low", "Close",
-  "Wealth", "Cash", "Time", "Timestamp", "Portfolio",
-  "SuggestedPortfolio", "Globals".
+  Reserved argument names are currently these:
+  \code{Open}, \code{High}, \code{Low}, \code{Close},
+  \code{Wealth}, \code{Cash}, \code{Time},
+  \code{Timestamp}, \code{Portfolio},
+  \code{SuggestedPortfolio}, \code{Globals}.
 
+  \code{Globals} is special: it is an
+  \code{\link{environment}}, which can be used to
+  persistently store data during the run of
+  \code{btest}. Use the argument \code{assignInGlobals}
+  to add initial objects to this list.
+  
 }
 \value{
   A list with class attribute \code{btest}. The list comprises:  
@@ -178,10 +198,16 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
   \item{\code{suggested.portfolio}}{The suggested holdings}
   \item{\code{cash}}{cash}
   \item{\code{wealth}}{total portfolio value}
+  \item{\code{cum.tc}}{transaction costs}
+  \item{\code{journal}}{\code{\link{journal}} of trades}
+  \item{\code{initial.wealth}}{initial wealth}
+  \item{\code{b}}{burnin}
+  \item{\code{final.position}}{final position}
+  \item{\code{Globals}}{environment Globals}
 
-  and cumTC, trades, initial.wealth. When \code{include.data} is
-  \code{TRUE}, all information (prices, timestamp, etc.) are stored in
-  the list as well.
+  When \code{include.data} is \code{TRUE}, all information (prices,
+  timestamp, instrument, the actual \code{call} and functions
+  \code{signal} etc.) are stored in the list as well.
 
 }
 \references{
