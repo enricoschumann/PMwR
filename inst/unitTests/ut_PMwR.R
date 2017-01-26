@@ -273,6 +273,113 @@ test.btest <- function() {
     checkEquals(unique(res$journal$timestamp),
                 as.Date(c("2015-01-08", "2015-02-02")))    
     checkEquals(length(res$journal), 4)
+
+
+    ## specifying when to trade
+    require("zoo")
+    tmp <- structure(c(3490, 3458, 3434, 3358, 3287, 3321,
+                       3419, 3535, 3589, 3603, 3626, 3677,
+                       3672, 3689, 3646, 3633, 3631, 3599,
+                       3517, 3549, 3572, 3578, 3598, 3634,
+                       3618, 3680, 3669, 3640, 3675, 3604,
+                       3492, 3513, 3495, 3503, 3497, 3433,
+                       3356, 3256, 3067, 3228, 3182, 3286,
+                       3279, 3269, 3182, 3205, 3272, 3185,
+                       3201, 3236, 3272, 3224, 3194, 3188,
+                       3213, 3255, 3261),
+                     .Dim = c(57L, 1L), 
+                     .Dimnames = list(
+                         NULL, "fesx201509"), 
+                     index = structure(
+                         c(16617L, 16618L, 16619L, 16622L,
+                           16623L, 16624L, 16625L, 16626L,
+                           16629L, 16630L, 16631L, 16632L,
+                           16633L, 16636L, 16637L, 16638L,
+                           16639L, 16640L, 16643L, 16644L,
+                           16645L, 16646L, 16647L, 16650L,
+                           16651L, 16652L, 16653L, 16654L,
+                           16657L, 16658L, 16659L, 16660L,
+                           16661L, 16664L, 16665L, 16666L,
+                           16667L, 16668L, 16671L, 16672L,
+                           16673L, 16674L, 16675L, 16678L,
+                           16679L, 16680L, 16681L, 16682L,
+                           16685L, 16686L, 16687L, 16688L,
+                           16689L, 16692L, 16693L, 16694L,
+                           16695L), class = "Date"),
+                     class = "zoo")
+
+    prices <- coredata(tmp)
+    timestamp <- index(tmp)
+
+    ## have a position equal to the numeric timestamp
+    ## => buy 1 unit in every period
+    signal <- function()
+        Time(0)
+    res <- journal(btest(prices = prices, signal = signal))
+    checkEquals(length(res), length(tmp) - 1L)
+    checkTrue(all(res$amount[-1] == 1))   ## the first traded amount
+                                          ## is 2: first trade is at
+                                          ## t==2, since the default
+                                          ## lag of 1 is in force
+    
+    checkTrue(all(res$timestamp == seq(2, length(tmp))))
+
+    ## buy at specified timestamps (integers; no lag!)
+    when <- c(10,20,30)
+    j <- journal(btest(prices = prices,
+                       signal = signal, 
+                       do.signal = when))
+    checkEquals(j$timestamp, when)
+    
+    ## logical
+    j1 <- journal(btest(prices = prices, signal = signal, 
+                       do.signal = prices > 3600))
+    j2 <- journal(btest(prices = prices, signal = signal, 
+                       do.signal = function() Close(0L) > 3600))
+    checkEquals(j1, j2)
+    
+
+    ## do.rebalance FALSE -- strategy never trades
+    ## promote warning to error
+    ## options(warn=2)
+    ## checkException({
+    ##     options(warn=10);
+    ##     btest(prices = prices, signal = signal, 
+    ##           do.signal = TRUE,
+    ##           do.rebalance = FALSE)
+    ## })
+    ## warning only, no trades
+    options(warn=0)
+    checkEquals(length(journal(btest(prices = prices, signal = signal, 
+                              do.signal = TRUE,
+                              do.rebalance = FALSE))),
+                0L)
+
+    when <- c(10,20)
+    j <- journal(btest(prices = prices,
+                       signal = signal, 
+                       do.rebalance = when))
+    checkEquals(j$timestamp, when)
+
+
+    ## keywords
+    j <- journal(btest(prices = prices,
+                       signal = signal, 
+                       do.signal = "firstofmonth",
+                       timestamp = timestamp,
+                       b = 0))
+    
+    checkEquals(j$timestamp,
+                PMwR:::first(timestamp, format(timestamp, "%Y-%m")))
+    
+    j <- journal(btest(prices = prices,
+                       signal = signal, 
+                       do.signal = "lastofmonth",
+                       timestamp = timestamp))
+    checkEquals(j$timestamp,
+                PMwR:::last(timestamp, format(timestamp, "%Y-%m")))
+
+    
 }
 
 test.journal <- function() {
@@ -301,9 +408,9 @@ test.journal <- function() {
     checkEquals(journal(),
                 structure(list(timestamp = numeric(0),
                                amount = numeric(0),
-                               price = numeric(0), 
+                               price = numeric(0),
                                instrument = character(0)),
-                          .Names = c("timestamp", "amount", 
+                          .Names = c("timestamp", "amount",
                                      "price", "instrument"),
                           class = "journal"))
 
@@ -314,7 +421,7 @@ test.journal <- function() {
                                comment = character(0)),
                           .Names = c("amount", "comment"),
                           class = "journal"))
-
+    
     
     ## a more reasonable journal
     timestamp <- 1:5
@@ -325,7 +432,7 @@ test.journal <- function() {
                  price=price, instrument = instrument)
 
     ## method: c
-    checkEquals(c(j, journal()) , j)    
+    checkEquals(c(j, journal()) , j)
     ## checkEquals(c(journal(), j), j)   ## TODO: sorting of fields
 
     ## subsetting
@@ -358,9 +465,9 @@ test.journal <- function() {
                 structure(list(instrument = c(NA_character_, NA_character_,
                                               NA_character_, NA_character_,
                                               NA_character_, NA_character_,
-                                              NA_character_, NA_character_, 
+                                              NA_character_, NA_character_,
                                               NA_character_, NA_character_),
-                               timestamp = c(NA, NA, NA, NA, 
+                               timestamp = c(NA, NA, NA, NA,
                                              NA, NA, NA, NA, NA, NA),
                                amount = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
                                price = c(NA, NA, NA, NA, NA,
@@ -388,7 +495,7 @@ test.journal <- function() {
                                      "amount", "price", "foo"),
                           class = "journal"))
     checkEquals(journal(amount = 1:10, foo = 1),
-                journal(amount = 1:10, foo = rep(1, 10)))       
+                journal(amount = 1:10, foo = rep(1, 10)))
 
 
     ## assignment
@@ -409,7 +516,7 @@ test.pl <- function() {
                    price  = c(1,2))[[1]][["pl"]], 1)
 
     
-    checkEquals(pl(amount = c(1,-1), price = c(1,2)),                
+    checkEquals(pl(amount = c(1,-1), price = c(1,2)),
                 structure(list(structure(list(pl = 1,
                                               realised = NA,
                                               unrealised = NA, 
@@ -420,13 +527,13 @@ test.pl <- function() {
                                                     "realised", "unrealised",
                                                     "buy", "sell", "volume"))),
                           class = "pl", along.timestamp = FALSE, instrument = NA))
-                
+    
     checkEquals(pl(amount = 1, price = 1,
                    initial.position = 1, initial.price = 1,
                    vprice = 2),
                 structure(list(structure(list(pl = 2,
                                               realised = NA,
-                                              unrealised = NA, 
+                                              unrealised = NA,
                                               buy = 1,
                                               sell = 2,
                                               volume = 1),
@@ -461,7 +568,6 @@ test.pl <- function() {
                           instrument = c("Equity A", 
                                          "Equity B"),
                           .Names = c("Equity A", "Equity B")))
-                
     
     
     checkEquals(as.data.frame(x),
@@ -1024,7 +1130,7 @@ test.returns <- function() {
     tmp[4] <- 0
     checkEquals(returns(x, position = c(1, 1, 1, 0, 0)),
                 tmp)
-        
+    
     checkEquals(returns(x, position = c(1,1,2,2,3)),
                 returns(x))
     checkEquals(returns(x, position = c(0,0,0,0,0)),

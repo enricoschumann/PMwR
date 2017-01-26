@@ -7,6 +7,9 @@
 	* R/btest.R (btest): fixed -- error message for
 	reserved names showed the wrong function name
 
+	* inst/unitTests/ut_PMwR.R (btest): add
+	tests for 'do.signal'/'do.rebalance'
+
 2017-01-25  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (acc.split): fixed --
