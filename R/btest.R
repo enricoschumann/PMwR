@@ -279,7 +279,7 @@ btest  <- function(prices,
         for (rname in reservedNames)
             if (rname %in% fNames)
                 stop(sQuote(rname), " cannot be used as an argument name for ",
-                     sQuote("signal"))}
+                     sQuote(thisfun))}
 
     add.args <- alist(Open = Open,
                       High = High,

@@ -2,6 +2,11 @@
 
         * DESCRIPTION (Version): 0.4-0 [unreleased]
 
+2017-01-26  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): fixed -- error message for
+	reserved names showed the wrong function name
+
 2017-01-25  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (acc.split): fixed --
