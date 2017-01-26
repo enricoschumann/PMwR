@@ -6,7 +6,7 @@ v0.4-0  (2017-04-01)
 
   o new function 'rc'
 
-  o new function 'acc.split'
+  o new function 'acc.split': .expand and .tree
 
   o new method as.data.frame.position
 
@@ -22,6 +22,9 @@ v0.4-0  (2017-04-01)
 
   o Updated manual chapter on computing returns:
     http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#ch:returns
+
+  o Updated manual chapter on backtesting:
+    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#ch:backtesting
 
 v0.3-4  (2016-06-13)
 
