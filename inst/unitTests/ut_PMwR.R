@@ -2,6 +2,8 @@
 
 test.position <- function() {
 
+    require("zoo", quietly = TRUE, warn.conflicts = FALSE)
+
     checkEqualsNumeric(position(amount = 1:5), 15)
 
     ## ERROR: at least 'amount' needs to be specified
@@ -90,6 +92,9 @@ test.splitTrades <- function() {
 
 
 test.btest <- function() {
+
+    require("zoo", quietly = TRUE, warn.conflicts = FALSE)
+
     btTable <- function(solution, prices)
         data.frame(prices = prices,
                    position     = solution$position,
@@ -276,7 +281,6 @@ test.btest <- function() {
 
 
     ## specifying when to trade
-    require("zoo")
     tmp <- structure(c(3490, 3458, 3434, 3358, 3287, 3321,
                        3419, 3535, 3589, 3603, 3626, 3677,
                        3672, 3689, 3646, 3633, 3631, 3599,
@@ -826,7 +830,6 @@ test.quote32 <- function() {
 
 test.rebalance <- function() {
 
-    require(PMwR) ; require(RUnit)
     current <- c(0,0,100,100)
     prices  <- c(1,1,1,1)
     target  <- c(0.25, 0.25, 0.25, 0.25)
