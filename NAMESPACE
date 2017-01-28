@@ -32,6 +32,8 @@ importFrom("utils",
            "head", "tail", "toLatex")
 
 export(
+    .expand,
+    .tree,
     .returns,
     .pl,
     NAVseries,

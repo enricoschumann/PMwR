@@ -421,15 +421,21 @@ test.journal <- function() {
                                comment = character(0)),
                           .Names = c("amount", "comment"),
                           class = "journal"))
-    
+
+    checkEquals(journal(),
+                c(journal(), journal()))
+    checkEquals(journal(),
+                c(journal(), journal(), journal()))
     
     ## a more reasonable journal
     timestamp <- 1:5
     amount <- 1
     price <- 101:105
     instrument <- "Stock A"
-    j <- journal(timestamp = timestamp, amount = amount,
-                 price=price, instrument = instrument)
+    j <- journal(timestamp = timestamp,
+                 amount = amount,
+                 price = price,
+                 instrument = instrument)
 
     ## method: c
     checkEquals(c(j, journal()) , j)

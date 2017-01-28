@@ -121,9 +121,9 @@ position.journal <- function(amount, when,
 
     instrument <- amount$instrument
     timestamp  <- amount$timestamp
-    amount     <- amount$amount
     account <- if (use.account)
                    amount$account
+    amount     <- amount$amount
 
     position.default(amount, timestamp, instrument, when,
                      drop.zero = drop.zero,
@@ -140,19 +140,29 @@ position.btest <- function(amount, when, ...) {
     ans
 }
 
-print.position <- function(x, ..., sep = NA) {
+print.position <- function(x, ..., sep = ":") {
     if (dim(x)[[2L]] == 0L) ## empty position
         return(invisible(x))
     original.x <- x
-    if (!is.na(sep))
-        .NotYetUsed("sep")
+    ## if (!is.na(sep))
+    ##     .NotYetUsed("sep")
     account <- attr(x, "account")
     instrument <- attr(x, "instrument")
     timestamp <- attr(x, "timestamp")
-    if (!is.null(account))
-        instrument <- paste(account, "  ", instrument, sep = "")
+    if (!is.null(account)) {
+        instrument <- paste(account, instrument, sep = sep)
+        if (nrow(x) == 1L) {
+            all_i <- .expand(instrument, sep = ":")
+            instrument <- paste0(.tree(all_i$level, style = "ascii"),
+                                 .leaf(paste(all_i$description), ":"))
+            pos <- numeric(nrow(all_i)) + NA
+            dim(pos) <- c(1L, nrow(all_i))
+            pos[all_i$position > 0] <- unclass(x)[all_i$position]
+            x <- pos
+        }
+    }        
     if (!all(is.na(instrument)))
-        colnames(x) <- instrument        
+        colnames(x) <- instrument
 
     if (all(is.na(timestamp)) || (is.character(timestamp) && all(timestamp == "")))
         rownames(x) <- NULL
@@ -163,25 +173,12 @@ print.position <- function(x, ..., sep = NA) {
     attr(x, "instrument") <- NULL
     attr(x, "timestamp") <- NULL
     if (dim(x)[1L] > 1L) {
-        print(unclass(x))
+        print(unclass(x), na.print = "")
     } else {
-        print(t(unclass(x)))
+        print(t(unclass(x)), na.print = "")
     }
     invisible(original.x)
 }
-
-## `[.position`  <- function(x, i, j, ...) {
-##     if (missing(i))
-##         i <- TRUE
-##     if (missing(j))
-##         j <- TRUE
-##     ans <- x$position[i,j, drop = FALSE]
-##     ans <- list(position = ans,
-##                 timestamp = x$timestamp[i],
-##                 instrument = x$instrument[j])
-##     class(ans) <- "position"
-##     ans
-## }
 
 as.matrix.position <- function(x, ...) {
     ans <- c(x)
@@ -236,8 +233,44 @@ as.zoo.position <- function(x, ...) {
     zoo(x, attr(x, "timestamp"))
 }
 
-acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
+.expand <- function(s, sep, perl = FALSE, warn.dup = TRUE) {
+    if (warn.dup && any(d <- duplicated(s))) {
+        warning("duplicated values:\n",
+                paste(sort(unique(s[d])), collapse = "\n"))
+    }
+    s[is.na(s)] <- ""
+    gs <- sort(unique(s))
+    
+    list.gs <- strsplit(gs, sep, perl = perl)
 
+    all.acc <- NULL
+    for (i in seq_along(list.gs)) {
+        if ((lg <- length(list.gs[[i]])) == 1L)
+            next
+        
+        tmp <- NULL
+        for (j in seq_len(lg-1))
+            tmp <- c(tmp, paste(list.gs[[i]][1:j],
+                                collapse = sep))
+        all.acc <- c(all.acc, tmp)
+    }    
+    all.acc <- sort(unique(c(all.acc, s)))
+    
+    ## LEVEL
+    level <- as.numeric(
+        unlist(lapply(gregexpr(sep, all.acc),
+                      function(x) length(x) == 1 && x == -1)))
+    level[level == 0L] <- lengths(gregexpr(sep, all.acc))[level == 0L] + 1
+
+    data.frame(description = all.acc,
+               level,
+               position = match(all.acc, s, nomatch = 0L),
+               stringsAsFactors = FALSE)
+
+}
+
+acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
+    .Deprecated(".expand")
     account[is.na(account)] <- ""
     gs <- sort(unique(account))
     
@@ -293,44 +326,80 @@ acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
     res
 } 
 
-.tree <- function(lv, unicode = FALSE) {
-    child <- "|--"
-    final_child <- "`--"
-    cont <- "|"
-    indent <- spaces((lv-1)*4)
-    n <- length(lv)
-    for (i in 1L:(max(lv)-1L)) {
-        group.start <- c(which(lv == i), n + 1)
-        group.end <- group.start
-        for (g in 1:length(group.start)) {
-            if (any(next_l <- 1:n < group.start[g+1] &
-                              1:n >= group.start[g] &
-                              lv == i+1))
-                group.end[g] <- max(which(next_l))
-        }
+.leaf <- function(x, sep, perl = TRUE) {
+    ## return last level 
+    ## level::sublevel::...::subbest_sublevel
+    ## => the regexp used greedy matching
+    gsub(paste0(".*", sep, "(.*)"), "\\1", x, perl = TRUE)
+}
 
-        group.start <- group.start[-length(group.start)]
-        group.end <- group.end[-length(group.end)]
-        
-        for (g in 1:length(group.start)) {
-            if (group.start[g] == group.end[g])
-                next
-            else if (group.end[g] - group.start[g] == 1L)
-                substring(indent[group.end[g]], (i-1)*4+1,(i-1)*4+3) <- final_child
-            else  {
-                substring(indent[1:n > group.start[g] & 1:n < group.end[g] & lv==1+i],
-                          (i-1)*4+1,(i-1)*4+3) <- child
-                substring(indent[1:n > group.start[g] & 1:n < group.end[g] & lv != 1+i],
-                          (i-1)*4+1,(i-1)*4+1) <- cont
-                substring(indent[group.end[g]],
-                          (i-1)*4+1,(i-1)*4+3) <- final_child
+.tree <- function(lv, style = "indent", width = 4,
+                  styles) {
+
+    if (style != "indent" && width != 4)
+        warning(sQuote("width"), " is ignored")
+    if (style == "indent") {
+        spaces(width*(lv - 1))
+    } else  {
+        child <- "|--"
+        final_child <- "`--"
+        cont <- "|  "
+        indent <- spaces((lv-1)*width)
+        n <- length(lv)
+        for (i in 1L:(max(lv)-1L)) {
+            group.start <- c(which(lv == i), n + 1)
+            group.end <- group.start
+            for (g in 1:length(group.start)) {
+                if (any(next_l <- 1:n < group.start[g+1] &
+                            1:n >= group.start[g] &
+                            lv == i+1))
+                    group.end[g] <- max(which(next_l))
+            }
+            
+            group.start <- group.start[-length(group.start)]
+            group.end <- group.end[-length(group.end)]
+            
+            for (g in 1:length(group.start)) {
+                if (group.start[g] == group.end[g])
+                    next
+                else if (group.end[g] - group.start[g] == 1L)
+                    substring(indent[group.end[g]], (i-1)*4+1,(i-1)*4+3) <- final_child
+                else  {
+                    substring(indent[1:n > group.start[g] & 1:n < group.end[g] & lv==1+i],
+                    (i-1)*4+1,(i-1)*4+3) <- child
+                    substring(indent[1:n > group.start[g] & 1:n < group.end[g] & lv != 1+i],
+                    (i-1)*4+1,(i-1)*4+3) <- cont
+                    substring(indent[group.end[g]],
+                    (i-1)*4+1,(i-1)*4+3) <- final_child
+                }
             }
         }
-    }
-    if (unicode) {
-        indent <- gsub("|--", "\u251c\u2500\u2500", indent, fixed = TRUE)
-        indent <- gsub("`--", "\u2514\u2500\u2500", indent, fixed = TRUE)
-        indent <- gsub("|", "\u2502", indent, fixed = TRUE)
-    }
-    indent
+        if (style == "unicode") {
+            indent <- gsub("|--", "\u251c\u2500\u2500", indent, fixed = TRUE)
+            indent <- gsub("`--", "\u2514\u2500\u2500", indent, fixed = TRUE)
+            indent <- gsub("|  ", "\u2502  ", indent, fixed = TRUE)
+        }
+        indent
+    } 
 }
+
+## require("PMwR")
+## j <- journal(amount = 1:3,
+##              instrument = "fgbl",
+##              account = c("A:a:1",
+##                          "B:2",
+##                          "B:1"))
+
+## s <- paste(j$account, ":", j$instrument, sep = "")
+## .tree(PMwR:::.expand(s, ":")$level)
+
+## cat(paste0(.tree(.expand(s, ":")$level, width = 2),
+##            .expand(s, ":")$level), sep = "\n")
+
+## position(j, use.account = TRUE)
+## cat(paste0(tree(.expand(s, ":")$level, width = 4, style = "ascii"),
+##            .expand(s, ":")$level), sep = "\n")
+## cat(paste0(tree(.expand(s, ":")$level, width = 4, style = "unicode"),
+##            .expand(s, ":")$level), sep = "\n")
+
+## x <- position(j, use.account = TRUE)

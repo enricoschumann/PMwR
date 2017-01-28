@@ -145,7 +145,8 @@ c.journal <- function(..., recursive = FALSE) {
 
     nts <- which(ns == "timestamp")
     classes <- lapply(lapply(tls, `[[`, "timestamp"), class)
-    classes[unlist(lapply(tls, length)) == 0L] <- NULL ## remove empty journals
+    if (any(lengths(tls)))
+        classes[lengths(tls) == 0L] <- NULL ## remove empty journals
     class(ans[[nts]]) <- classes[[1L]]
     if (length(unique(lapply(classes, paste, collapse = ""))) > 1L)
         warning("different timestamp classes")

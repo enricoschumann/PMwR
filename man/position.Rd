@@ -15,7 +15,7 @@ position(amount, \dots)
 \method{position}{default}(amount, timestamp, instrument, when,
                  drop.zero = FALSE, account = NULL, \dots)
 
-\method{print}{position}(x, \dots, sep = NA)
+\method{print}{position}(x, \dots, sep = ":")
 
 }
 \arguments{
@@ -27,7 +27,7 @@ position(amount, \dots)
     numeric or an object of class \code{\link{journal}}
   }
   \item{timestamp}{
-    timestamps (must be sortable)
+    numeric or character: timestamps, must be sortable
   }
   \item{instrument}{
     character: symbols to identify different instruments

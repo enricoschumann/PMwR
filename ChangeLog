@@ -2,6 +2,36 @@
 
         * DESCRIPTION (Version): 0.4-0 [unreleased]
 
+2017-01-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (c.journal): fix concatenating
+	empty journals: 'c(journal(), journal())' had
+	thrown an error
+
+	* R/position.R (.expand, .tree): refactor
+	'acc.split' into two functions .expand and
+	.tree, both exported. These functions are now
+	used in 'print.position'. For example:
+
+           j <- journal(amount     = 1:3,
+                        instrument = c("a", "a", "b"),
+                        account    = c("A", "B", "B"))
+
+           position(j)
+	   ## ... produces
+           ##   [,1]
+           ## a    3
+           ## b    3
+
+           position(j, use.account = TRUE)
+	   ## ... produces
+           ##       [,1]
+           ## A
+           ## `-- a    1
+           ## B
+           ## |-- a    2
+           ## `-- b    3
+
 2017-01-26  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R (btest): fixed -- error message for
