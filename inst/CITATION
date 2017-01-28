@@ -1,4 +1,4 @@
-citHeader("To cite PMwR in publications use:")
+citHeader("To cite PMwR in publications, please use:")
 
 citEntry(entry = "manual",
          title = "Portfolio Management with {R}",
@@ -8,4 +8,5 @@ citEntry(entry = "manual",
          textVersion = 
              paste("Enrico Schumann.", 
                    "PMwR: Portfolio Management with R.",
-                   "2016."))
+                   "http://enricoschumann.net/PMwR/",
+                   "2017."))
