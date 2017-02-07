@@ -1,74 +1,75 @@
 #+TITLE: Portfolio Management with R
 #+AUTHOR: Enrico Schumann
 
-Functions and examples for 'Portfolio Management with R': 
-backtesting investment and trading strategies, computing 
-profit-and-loss and returns, reporting, and more.
 
-* The PMwR package
 
-  PMwR grew out of various pieces of software that I have
-  written since 2008. The package is currently under
-  development and changes frequently, simply because the
-  code has been written over many years and is in need of
-  being groomed for general use. Specifically, the
-  interfaces to functions are not stable (e.g., argument
-  names are currently being made consistent across
-  functions); in some cases, generic functions will be
-  introduced. The *recommended* *practice* is therefore to
-  *explicitly* *name* *arguments* *in* *function* *calls*
-  (and not pass arguments by position). Any changes in
-  argument names will be documented in the ChangeLog
-  ([[http://enricoschumann.net/R/packages/PMwR/ChangeLog]]) and
-  so can be easily followed.
+* About PMwR
 
-  The latest version of the package is available from
-  [[http://enricoschumann.net/R/packages/PMwR/]]. To install the
-  package from within R, type
-#+BEGIN_SRC R :eval never
-  install.packages('PMwR', type = 'source',
-                   repos = c('http://enricoschumann.net/R', 
-                             getOption('repos')),
-                   type  = "source")
-#+END_SRC
+Functions and examples for 'Portfolio Management with
+R': backtesting investment and trading strategies,
+computing profit-and-loss and returns, reporting, and
+more. The aim of PMwR is to provide a small set of
+reliable, efficient and convenient tools that help in
+processing and analysing trade/portfolio data. The
+package does not provide a complete application that
+could be used 'as is', but building blocks for creating
+such an application.
 
-  within a session. The package depends on several other
-  packages, which can be obtained from the same repository.
+PMwR grew out of various pieces of software that I have
+written since 2008. The package is currently under
+development and changes frequently, simply because the
+code has been written over many years and is in need of
+being groomed for general use. Specifically, the
+interfaces to functions are not stable (e.g., argument
+names are currently being made consistent across
+functions); in some cases, generic functions will be
+introduced. The *recommended* *practice* is therefore
+to *explicitly* *name* *arguments* *in* *function*
+*calls* (and not pass arguments by position). Any
+changes in argument names will be documented in the
+ChangeLog
+([[http://enricoschumann.net/R/packages/PMwR/ChangeLog]])
+and so can be easily followed.
 
-  There is currently no automatic build for Windows. If you
-  wish to use the package on Windows and have problems
-  building it, then please contact me and I will provide you
-  with a Windows version.
 
 
 * What PMwR provides
 
-  The package provides functions that can serve as building blocks for
-  many activities in portfolio management.
+The package provides functions that can serve as
+building blocks for many activities in portfolio
+management.
 
 - Testing strategies :: See =?btest=.
 - Keeping track of transactions :: The package provides
-     functions that work with journals (sometimes called
+     functions for handling journals (sometimes called
      blotters). See =?journal= and =?position=.
-- Computing profit/loss and returns :: See =?returns= and
-     =?pl=.
+- Computing profit/loss and returns :: See =?returns=,
+     =?rc= =?pl= or =?unit_prices=.
 
-
-More details are in the manual:
+All details are in the manual:
 
 [[http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html]]
 
-  The manual, it should be stressed, is only a draft, and it
-  will change as frequently as the package. I am grateful
-  for comments and suggestions.
+The manual, it should be stressed, is only a draft, and
+it will change as frequently as the package. I am
+grateful for comments, suggestions and corrections.
+
 
 
 * Installation
 
-To install the package from a running R session, type:
+The latest version of the package is available from
+[[http://enricoschumann.net/R/packages/PMwR/]]. You can
+install the package directly from within R:
 #+BEGIN_SRC R :eval never
-install.packages('PMwR', type = 'source',
-                 repos = c('http://enricoschumann.net/R', 
-                           getOption('repos')))
+  install.packages('PMwR', type = 'source',
+                   repos = c('http://enricoschumann.net/R', 
+                             getOption('repos')))
 #+END_SRC
+The package depends on several other packages, which
+can be obtained from the same repository.
 
+There is currently no automatic build for Windows. If
+you wish to use the package on Windows and have
+problems building it, then please contact me and I will
+provide you with a Windows version.
