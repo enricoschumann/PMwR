@@ -89,28 +89,32 @@ btest  <- function(prices,
         tmp <- as.Date(timestamp)
         if (any(is.na(tmp)))
             stop("timestamp with NAs")
-        i_rdays <- match(aggregate(tmp, by = list(format(tmp, "%Y-%m")),
+        ii <- if (b > 0)
+                  -seq_len(b)
+              else
+                  TRUE
+        i_rdays <- match(aggregate(tmp[ii],
+                                   by = list(format(tmp[ii], "%Y-%m")),
                                    FUN = head, 1)[[2L]],
                          tmp)
         do.signal <- function(...)
-            if (Time(0) %in% i_rdays)
-                TRUE
-            else
-                FALSE
+            Time(0) %in% i_rdays
     } else if (is.character(do.signal) &&
                (tolower(do.signal) == "lastofmonth" ||
                 tolower(do.signal) == "endofmonth")) {
         tmp <- as.Date(timestamp)
         if (any(is.na(tmp)))
             stop("timestamp with NAs")
-        i_rdays <- match(aggregate(tmp, by = list(format(tmp, "%Y-%m")),
+        ii <- if (b > 0)
+                  -seq_len(b)
+              else
+                  TRUE
+        i_rdays <- match(aggregate(tmp[ii],
+                                   by = list(format(tmp[ii], "%Y-%m")),
                                    FUN = tail, 1)[[2L]],
                          tmp)
         do.signal <- function(...)
-            if (Time(0) %in% i_rdays)
-                TRUE
-            else
-                FALSE
+            Time(0) %in% i_rdays
     }
 
 
@@ -148,28 +152,32 @@ btest  <- function(prices,
         tmp <- as.Date(timestamp)
         if (any(is.na(tmp)))
             stop("timestamp with NAs")
-        i_rdays <- match(aggregate(tmp, by = list(format(tmp, "%Y-%m")),
+        ii <- if (b > 0)
+                  -seq_len(b)
+              else
+                  TRUE        
+        i_rdays <- match(aggregate(tmp[ii],
+                                   by = list(format(tmp[ii], "%Y-%m")),
                                    FUN = head, 1)[[2L]],
                          tmp)
         do.rebalance <- function(...)
-            if (Time(0) %in% i_rdays)
-                TRUE
-            else
-                FALSE
+            Time(0) %in% i_rdays
     } else if (is.character(do.rebalance) &&
                (tolower(do.rebalance) == "lastofmonth" ||
                 tolower(do.rebalance) == "endofmonth")) {
         tmp <- as.Date(timestamp)
         if (any(is.na(tmp)))
             stop("timestamp with NAs")
-        i_rdays <- match(aggregate(tmp, by = list(format(tmp, "%Y-%m")),
+        ii <- if (b > 0)
+                  -seq_len(b)
+              else
+                  TRUE        
+        i_rdays <- match(aggregate(tmp[ii],
+                                   by = list(format(tmp[ii], "%Y-%m")),
                                    FUN = tail, 1)[[2L]],
                          tmp)
         do.rebalance <- function(...)
-            if (Time(0) %in% i_rdays)
-                TRUE
-            else
-                FALSE
+            Time(0) %in% i_rdays
     }
 
     ## if (is.null(do.rebalance) || identical(do.rebalance, TRUE)) {

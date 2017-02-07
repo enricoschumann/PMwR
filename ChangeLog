@@ -1,6 +1,10 @@
-2017-04-01  Enrico Schumann  <es@enricoschumann.net>
+2017-02-07  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): 0.4-0 [unreleased]
+        * DESCRIPTION (Version): 0.4-0
+
+	* R/btest.R (btest): fixed -- 'do.signal' and
+	'do.rebalance' ignored the burnin 'b' when
+	keywords 'firstofmonth' etc. were used
 
 2017-01-28  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1412,21 +1416,22 @@
 
         * DESCRIPTION (Version): 0.1-54
 
-        * R/returns.R (returns): behaviour of 'returns(z)' when
-        'z' is of class 'zoo' has changed: the returned object
-        now has class zoo. To get the old behaviour, use
-        something like
+        * R/returns.R (returns): behaviour of
+	'returns(z)' when 'z' is of class 'zoo' has
+	changed: the returned object now has class
+	zoo. To get the old behaviour, use something
+	like
 
-            r <- return(z) ## r is of class 'zoo' r <-
-        list(returns = coredata(r), t = index(r))
+          r <- return(z) ## r is of class 'zoo'
+	  r <- list(returns = coredata(r), t = index(r))
 
-        * R/returns.R (returns.zoo): fixed -- when 'period' is
-        specified, the returned object should not be of class
-        'zoo', but 'preturns'.  Conversion is possible with
-        'as.zoo(x)'.
+        * R/returns.R (returns.zoo): fixed -- when
+	'period' is specified, the returned object
+	should not be of class 'zoo', but 'preturns'.
+	Conversion is possible with 'as.zoo(x)'.
 
-        * inst/unitTests/ut_returns.R (test.returns): added more
-        tests for 'returns.zoo'
+        * inst/unitTests/ut_returns.R (test.returns):
+	added more tests for 'returns.zoo'
 
 2015-01-13  Enrico Schumann  <es@enricoschumann.net>
 
