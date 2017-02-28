@@ -1,3 +1,8 @@
+2017-02-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (aggregate.journal): fix handling
+	of named lists
+
 2017-02-07  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.4-0

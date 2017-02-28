@@ -320,7 +320,6 @@ print.summary.journal <- function(x, ...) {
 
     stop("extraction only: use x$amount[] etc. for replacement")
 }
-
 aggregate.journal <- function(x, by, FUN, ...) {
 
     lenx <- length(x)    
@@ -341,6 +340,7 @@ aggregate.journal <- function(x, by, FUN, ...) {
             ans <- list()
             for (i in seq_along(funlist))
                 ans <- c(ans, funlist[[i]](x[[ names(funlist)[i] ]], ...))
+            names(ans) <- names(funlist)
             class(ans) <- "journal"
             ans
         }

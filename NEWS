@@ -1,18 +1,18 @@
 v0.4-0  (2017-02-07)  
 
-  o new functions 'unit_prices', for computing
-    time-weighted returns, and 'rc' for computing
-    return contributions
+  o New functions 'unit_prices', for computing
+    time-weighted returns, and 'rc', for computing
+    return contributions.
 
-  o new helper functions '.expand' and '.tree' for
-    displaying account hierachies
+  o New helper functions '.expand' and '.tree', for
+    displaying account hierachies.
 
-  o various new methods: 'as.data.frame.position',
+  o Various new methods: 'as.data.frame.position',
     'summary.journal', 'as.zoo.position', 'pl.btest',
-    'toOrg.journal'
+    'toOrg.journal'.
 
-  o support for (some) arithmetic operations on
-    'position' and 'quote32' objects
+  o Support for (some) arithmetic operations on
+    'position' and 'quote32' objects.
 
   o Updated manual chapter on computing returns:
     http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#ch:returns
