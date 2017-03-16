@@ -1095,6 +1095,14 @@ test.returns <- function() {
     checkEquals(c(returns(x, t = t, period = "mtd")),
                 tail(x, 1) / x[match(as.Date("2012-11-30"),t)] - 1)
 
+    ## period -- quarterly
+    checkEquals(c(returns(x, t = t, period = "quarterly")),
+                returns(x[match(as.Date(c("2012-1-1",
+                                          "2012-3-31",
+                                          "2012-6-30",
+                                          "2012-9-30",
+                                          "2012-12-31")),t)]))
+    
 
     
     ## returns with weights

@@ -260,6 +260,9 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         } else if (grepl("month(ly)?", period, ignore.case = TRUE)) {
             by <- format(t, "%Y%m")
             period <- "monthly"
+        } else if (grepl("quarter(ly)?", period, ignore.case = TRUE)) {
+            by <- paste0(format(t, "%Y"), "-", quarters(t))
+            period <- "quarterly"
         } else {
             stop("unknown ", sQuote("period"))
         }

@@ -51,11 +51,11 @@ returns(x, \dots)
   }
   \item{period}{
     
-    Typically \code{character}; supported are "month", "year" or "ann"
+    Typically \code{character}; supported are "month", "quarter", "year" or "ann"
     (annualised), "ytd" (year-to-date), "mtd" (month-to-date) or "itd"
     (month-to-date). The value of \sQuote{period} is used only when
     timestamp information is available: for instance, when \code{t} is
-    not \code{NULL} or with \code{zoo} objects.
+    not \code{NULL} or with \code{zoo}/\code{xts} objects.
 
     All returns are computed as simple returns. They will only be
     annualised with option "ann"; they will not be annualised when the
