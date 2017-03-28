@@ -1,3 +1,10 @@
+2017-03-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (do.signal): 'do.signal' and
+	'do.rebalance' can also be the string
+	'firstofquarter' to rebalance on first day of
+	quarter
+
 2017-03-16  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.4-1
@@ -1161,9 +1168,9 @@
 2015-06-29  Enrico Schumann  <es@enricoschumann.net>
 
         * R/btest.R (do.signal): 'do.signal' can be a numeric
-        vector of times (i.e., row numbers) or a logical vector
-        (indicating the rows); 'do.signal' can also be the string
-        'endofmonth' to rebalance on last day of month
+        vector of times (i.e., row numbers) or a logical
+        vector (indicating the rows); 'do.signal' can also be the
+	string 'endofmonth' to rebalance on last day of month
 
         * R/scale1.R (scale1.default): fixed -- scale1 did not
         scale correctly with 'geometric = TRUE'
