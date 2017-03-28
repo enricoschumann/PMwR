@@ -1,5 +1,7 @@
 2017-03-28  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.4-2
+
 	* R/btest.R (do.signal): 'do.signal' and
 	'do.rebalance' can also be the string
 	'firstofquarter' to rebalance on first day of
