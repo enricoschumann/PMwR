@@ -46,9 +46,9 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
     every period. When a logical/numeric vector, its length must match
     the number of observations in prices: \code{so.signal} then gives
     the rows in \code{prices} at which a signal is computed.  Can also
-    be the string \dQuote{firstofmonth} or \dQuote{lastofmonth}; in this
-    case, \code{timestamp} needs to specified and must be coercable to
-    \code{\link{Date}}.
+    be the string \dQuote{firstofmonth} or \dQuote{lastofmonth} or
+    \dQuote{firstofquarter}; in this case, \code{timestamp} needs to
+    specified and must be coercable to \code{\link{Date}}.
 
   }
   \item{do.rebalance}{    
@@ -211,8 +211,8 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
 
 }
 \references{
-Schumann, E. (2016) \emph{Portfolio Management
-  with R}. \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
+Schumann, E. (2017) \emph{Portfolio Management
+  with R}. \url{http://enricoschumann.net/PMwR/}
 
 } 
 \author{

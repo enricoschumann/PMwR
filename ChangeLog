@@ -9,7 +9,7 @@
 
 2017-03-16  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): Version: 0.4-1
+	* DESCRIPTION (Version): 0.4-1
 
 	* R/returns.R (returns): 'period' may now also
 	be 'quarterly'
