@@ -1,5 +1,7 @@
 2017-04-14  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.4-3
+
 	* R/btest.R (do.signal): 'do.signal' and
 	'do.rebalance' can also be the string
 	'lastofquarter' to rebalance on last day of
