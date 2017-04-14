@@ -265,6 +265,15 @@ test.btest <- function() {
                  timestamp = timestamp)
     res$journal
 
+    res <- btest(list(prices),
+                 signal = function() c(0.5,0.5),
+                 convert.weights = TRUE,
+                 do.signal = "lastofquarter",
+                 initial.cash = 100,
+                 timestamp = timestamp)
+    res$journal
+
+    
     ## check whether date is matched against
     ## timestamp. The 31 Jan is not in timestamp, so
     ## trade takes place on next day (2 Feb)    
@@ -1102,7 +1111,6 @@ test.returns <- function() {
                                           "2012-6-30",
                                           "2012-9-30",
                                           "2012-12-31")),t)]))
-    
 
     
     ## returns with weights

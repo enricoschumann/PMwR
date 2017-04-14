@@ -130,6 +130,21 @@ btest  <- function(prices,
                          tmp)
         do.signal <- function(...)
             Time(0) %in% i_rdays
+    } else if (is.character(do.signal) &&
+               tolower(do.signal) == "lastofquarter") {
+        tmp <- as.Date(timestamp)
+        if (any(is.na(tmp)))
+            stop("timestamp with NAs")
+        ii <- if (b > 0)
+                  -seq_len(b)
+              else
+                  TRUE
+        i_rdays <- match(aggregate(tmp[ii],
+                                   by = list(paste0(format(tmp[ii], "%Y"), "-", quarters(tmp[ii]))),
+                                   FUN = tail, 1)[[2L]],
+                         tmp)
+        do.signal <- function(...)
+            Time(0) %in% i_rdays
     }
 
 
@@ -205,6 +220,21 @@ btest  <- function(prices,
         i_rdays <- match(aggregate(tmp[ii],
                                    by = list(list(paste0(format(tmp[ii], "%Y"), "-", quarters(tmp[ii])))),
                                    FUN = head, 1)[[2L]],
+                         tmp)
+        do.rebalance <- function(...)
+            Time(0) %in% i_rdays
+    } else if (is.character(do.rebalance) &&
+               tolower(do.rebalance) == "lastofquarter") {
+        tmp <- as.Date(timestamp)
+        if (any(is.na(tmp)))
+            stop("timestamp with NAs")
+        ii <- if (b > 0)
+                  -seq_len(b)
+              else
+                  TRUE
+        i_rdays <- match(aggregate(tmp[ii],
+                                   by = list(list(paste0(format(tmp[ii], "%Y"), "-", quarters(tmp[ii])))),
+                                   FUN = tail, 1)[[2L]],
                          tmp)
         do.rebalance <- function(...)
             Time(0) %in% i_rdays
