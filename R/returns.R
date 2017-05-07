@@ -339,13 +339,23 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
         tmp <- format(round(tmp*100,1), nsmall = digits)
         row.names(tmp) <- as.character(timestamp)
         print(unclass(tmp), quote = FALSE, print.gap = 2)
-    } else if (period == "yearly") {
+    } else if (period == "yearly" && is.null(dim(x))) {
         tmp <- x
         names(tmp) <- format(timestamp, "%Y")
         if (year.rows)
             print(fmt(tmp, plus, digits), quote = FALSE)
         else
             print(as.matrix(fmt(tmp, plus, digits)), quote = FALSE)
+    } else if (period == "yearly") {
+        tmp <- unclass(x)
+        rownames(tmp) <- format(timestamp, "%Y")
+        attr(tmp, "t") <- NULL
+        attr(tmp, "period") <- NULL
+        if (year.rows) {
+            print(fmt(tmp, plus, digits), quote = FALSE, print.gap = 1, right = TRUE)
+        } else {
+            print(fmt(t(tmp), plus, digits), quote = FALSE, print.gap = 1, right = TRUE)
+        }
     } else if (grepl("annualised", period)) {
         r_str <- paste0(format(round(x*100, digits), nsmall = digits), "%  ")
         cal_str <- paste0("[",

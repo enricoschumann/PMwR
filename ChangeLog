@@ -1,3 +1,10 @@
+2017-05-07  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.4-4
+
+	* R/returns.R (print.p_returns): fix printing
+	of yearly returns of multivariate price series
+
 2017-04-14  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.4-3
