@@ -1,3 +1,10 @@
+2017-05-08  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.4-5
+
+	* R/position.R (position.default): update for
+	changes in package datetimeutils (0.2-0)
+
 2017-05-07  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): 0.4-4

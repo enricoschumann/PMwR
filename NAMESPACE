@@ -14,10 +14,10 @@ importFrom(textutils, toHTML)
 importFrom(textutils, toText)
 importFrom(textutils, trim)
 importFrom(textutils, valign)
+importFrom(datetimeutils, end_of_month)
+importFrom(datetimeutils, first_of_month)
 importFrom(datetimeutils, roundPOSIXt)
 importFrom(datetimeutils, timegrid)
-importFrom(datetimeutils, endOfMonth)
-importFrom(datetimeutils, firstOfMonth)
 importFrom(crayon, bold)
 
 importFrom("grDevices",

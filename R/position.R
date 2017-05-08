@@ -50,9 +50,9 @@ position.default <- function(amount, timestamp, instrument,
                 ## when <- last(timestamp,
                 ##              format(as.Date(timestamp), "%Y-%m"))
                 timestamp <- as.Date(timestamp)
-                when <- endOfMonth(seq(firstOfMonth(min(timestamp)),
-                                       firstOfMonth(max(timestamp)),
-                                       by = "1 month"))
+                when <- end_of_month(seq(first_of_month(min(timestamp)),
+                                         first_of_month(max(timestamp)),
+                                         by = "1 month"))
             } else if (when[[1L]] == "endofday") {
                 when <- last(timestamp,
                              format(as.Date(timestamp), "%Y-%m-%d"))
