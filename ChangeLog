@@ -1,3 +1,8 @@
+2017-05-23  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (toLatex.p_returns): fixed --
+	'na.print' had been ignored
+
 2017-05-08  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): 0.4-5

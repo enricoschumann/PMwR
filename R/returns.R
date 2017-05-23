@@ -311,6 +311,8 @@ fmt <- function(x, plus, digits) {
                         c(format(as.Date(paste0("2012-", 1:12, "-1")), "%b"), ytd)
                     else
                         c(month.names, ytd)
+    if (!is.null(na.print))
+        tb <- gsub("NA", na.print, tb, fixed = TRUE)
     if (zero.print != "0")
         tb <- gsub("^ *[+-]?[0.]+$", zero.print, tb)
     tb
@@ -395,9 +397,9 @@ toLatex.p_returns <- function(object, ..., year.rows = TRUE,
 
     if (grepl("month(ly)?", period, ignore.case = TRUE)) {
         if (year.rows)
-            mt <- .mtab(object, timestamp, ytd = ytd, month.names = month.names)
+            mt <- .mtab(object, timestamp, ytd = ytd, month.names = month.names, ...)
         else
-            mt <- t(.mtab(object, timestamp, ytd = ytd, month.names = month.names))
+            mt <- t(.mtab(object, timestamp, ytd = ytd, month.names = month.names, ...))
     } else {
         stop("currently only supported for period ", sQuote("month"))
     }
