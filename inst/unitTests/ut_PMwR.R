@@ -244,7 +244,7 @@ test.btest <- function() {
     timestamp <- seq(from = as.Date("2015-01-01"),
                      to   = as.Date("2015-04-15"),
                      by   = "1 day")
-    timestamp <- timestamp[!isWeekend(timestamp)]
+    timestamp <- timestamp[!is_weekend(timestamp)]
     ## prices <- c(100+)
 
     prices <- cbind(as.numeric(paste0("1.", format(timestamp, "%m%d"))),

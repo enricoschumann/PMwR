@@ -1,3 +1,8 @@
+2017-05-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* inst/unitTests/ut_PMwR.R (btest): update for
+	changes in package datetimeutils (0.2-0)
+
 2017-05-23  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/returns.R (toLatex.p_returns): fixed --
