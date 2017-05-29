@@ -1,5 +1,13 @@
 2017-05-29  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/returns.R (as.matrix.p_returns): new
+	method, which places monthly returns into a
+	numeric matrix with years in rows and months in
+	columns. For other holding-periods, as.matrix
+	is called on the raw numeric data.
+
+2017-05-29  Enrico Schumann  <es@enricoschumann.net>
+
 	* DESCRIPTION (Version): 0.4-6
 
 	* R/returns.R (returns): 'period' may also

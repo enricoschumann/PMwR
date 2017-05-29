@@ -150,6 +150,8 @@ twReturns <- function(price, position, pad = NULL) {
 
 ## not exported
 pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
+    ## TODO add also: 'previous month' and pattern 'YYYYMM'
+    
     x <- as.matrix(x)
     nc <- ncol(x)
     period <- tolower(period)
@@ -313,7 +315,7 @@ fmt <- function(x, plus, digits) {
     mons  <- as.numeric(format(t, "%m"))
     tb <- array("", dim = c(length(unique(years)), 13L))
     tb[cbind(years - years[1L] + 1L, mons)] <- fmt(x, plus, digits)
-    for (y in sort(unique(years)))
+    for (y in suy <- sort(unique(years)))
         tb[y - years[1L] + 1L, 13L] <- fmt(prod(x[years==y & !is.na(x)] + 1L) - 1L,
                                            plus, digits)
     rownames(tb) <- sort(unique(years))
@@ -679,3 +681,26 @@ if (FALSE) {
     
 
 }
+
+as.matrix.p_returns <- function(x, ...) {
+    
+    if (attr(x, "period") == "monthly" && is.null(dim(x))) {
+        t <- attr(x, "t")
+        x <- unclass(x)
+        
+        years <- as.numeric(format(t, "%Y"))
+        mons  <- as.numeric(format(t, "%m"))
+        tb <- array(NA, dim = c(length(unique(years)), 13L))
+        tb[cbind(years - years[1L] + 1L, mons)] <- x
+        for (y in suy <- sort(unique(years)))
+            tb[y - years[1L] + 1L, 13L] <- prod(x[years==y & !is.na(x)] + 1) - 1
+        rownames(tb) <- suy
+        colnames(tb) <- c(1:12, "YTD")
+        tb
+    } else
+        NextMethod("as.matrix", x)
+    
+
+}
+
+## TODO: as.data.frame.p_returns
