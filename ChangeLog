@@ -1,9 +1,17 @@
 2017-05-29  Enrico Schumann  <es@enricoschumann.net>
 
+	* DESCRIPTION (Version): 0.4-7
+
+	* R/returns.R (returns.NAVseries): fix and
+	export method
+
+	* R/NAVseries.R (plot.NAVseries): let 'xlab'
+	and 'ylab' default to ""
+
 	* R/returns.R (as.matrix.p_returns): new
 	method, which places monthly returns into a
 	numeric matrix with years in rows and months in
-	columns. For other holding-periods, as.matrix
+	columns. For other holding periods, as.matrix
 	is called on the raw numeric data.
 
 2017-05-29  Enrico Schumann  <es@enricoschumann.net>

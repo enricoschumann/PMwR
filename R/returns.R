@@ -13,15 +13,15 @@ returns <- function(x, ...)
 returns.NAVseries <- function(x, period = NULL, complete.first = TRUE,
                               pad = NULL, position = NULL, lag = 1, ...) {
 
-    ## does *not* returns a NAVseries since it is not defined for
+    ## does *not* return a NAVseries since it is not defined for
     ## returns, only for NAVs (levels)
 
     if (!is.null(period)) {
-        returns.default(x, t = t, period = period,
+        returns.default(x$NAV, t = x$timestamp, period = period,
                         complete.first = complete.first,
                         pad = pad, position = position, lag = lag, ...)
     } else {
-        returns.default(x, period = NULL,
+        returns.default(x$NAV, period = NULL,
                         complete.first = complete.first,
                         pad = pad, position = position, lag = lag, ...)
     }
@@ -659,27 +659,27 @@ if (FALSE) {
             when <- which(when)
     
     
-    for (i in when)
-        pos[i, ] <- weights / prices[i, ] ## TODO: if w is matrix, w[i, ]
-    ## TODO na.locf
-    
-    pos <- na.locf(pos)
-    pos[is.na(pos)] <- 0
-    w <- pos * prices
-    w <- w/rowSums(w)
-    
-    rowSums(returns(prices) * w[-nr,])
+        for (i in when)
+            pos[i, ] <- weights / prices[i, ] ## TODO: if w is matrix, w[i, ]
+        ## TODO na.locf
+        
+        pos <- na.locf(pos)
+        pos[is.na(pos)] <- 0
+        w <- pos * prices
+        w <- w/rowSums(w)
+        
+        rowSums(returns(prices) * w[-nr,])
     }
     
     returns_rebalance2(prices, weights, when = TRUE)
-    returns_rebalance(prices, weights, when = TRUE)
+    PMwR:::returns_rebalance(prices, weights, when = TRUE)
     
     require("rbenchmark")
     benchmark(returns_rebalance2(prices, weights, when = TRUE),
-              returns_rebalance(prices, weights, when = TRUE),
-              columns = c("test", "relative", "elapsed"))
-    
+              PMwR:::returns_rebalance(prices, weights, when = TRUE),
+              columns = c("test", "relative", "elapsed"), replications = 1000)
 
+    
 }
 
 as.matrix.p_returns <- function(x, ...) {

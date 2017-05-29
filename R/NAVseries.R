@@ -299,12 +299,14 @@ toLatex.summary.NAVseries <- function(x, ...) {
 ## }
 
 
-plot.NAVseries <- function(x, y, ...) {
+plot.NAVseries <- function(x, y,
+                           xlab = "", ylab = "", ...) {
     if (!missing(y))
         stop("scatterplot of *returns* -- not implemented")    
-    plot(x=x$timestamp, y=x$NAV, ...)
+    plot(x = x$timestamp, y = x$NAV,
+         xlab = xlab, ylab = "", ...)
 
-    return(invisible(x))
+    invisible(x)
 }
 
 as.NAVseries <- function(x, ...) {
