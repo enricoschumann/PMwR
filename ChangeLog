@@ -1,3 +1,10 @@
+2017-05-29  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.4-6
+
+	* R/returns.R (returns): 'period' may also
+	be a single year, such as "2007"
+
 2017-05-24  Enrico Schumann  <es@enricoschumann.net>
 
 	* inst/unitTests/ut_PMwR.R (btest): update for

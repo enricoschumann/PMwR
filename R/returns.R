@@ -152,6 +152,7 @@ twReturns <- function(price, position, pad = NULL) {
 pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
     x <- as.matrix(x)
     nc <- ncol(x)
+    period <- tolower(period)
     if (grepl("^ann", period, ignore.case = TRUE)) {
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
@@ -179,7 +180,7 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         class(from.to) <- "Date"
         attr(ans, "t") <- from.to
         attr(ans, "is.annualised") <- is.ann
-    } else if (tolower(period) == "itd") {
+    } else if (period == "itd") {
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
         ans <- numeric(nc)
@@ -195,16 +196,15 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         attr(ans, "period") <- "itd"
         class(from.to) <- "Date"
         attr(ans, "t") <- from.to
-    } else if (tolower(period) == "ytd") {
-        ## TODO allow syntax like "ytd!" or "ytd02-15"?
-        ## (the latter returns a vector of returns ytd
-        ## up to 15 Feb).
-        ##
-        ## ! gives error if when YTD does not make
-        ## ! Sys.Date's year
+    } else if (grepl("^ytd", period, ignore.case = TRUE)) {
+        ## TODO allow syntax like "ytd02-15"?
+        ## => returns a vector of returns ytd
+        ##    up to 15 Feb
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
         years <- as.numeric(format(t, "%Y"))
+        if (period != "ytd!" && max(years) != as.numeric(format(Sys.Date(), "%Y")))
+            warning("max. timestamp (", max(years), ") does not match current year")
         ans <- numeric(nc)
         from.to <- array(NA, dim = c(nc, 2))
         colnames(from.to) <- c("from", "to")
@@ -225,7 +225,7 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         class(from.to) <- "Date"
         attr(ans, "t") <- from.to
         attr(ans, "period") <- "ytd"
-    } else if (tolower(period) == "mtd") {
+    } else if (period == "mtd") {
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
         ymon <- as.numeric(format(t, "%Y%m"))
@@ -249,6 +249,14 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         class(from.to) <- "Date"
         attr(ans, "t") <- from.to
         attr(ans, "period") <- "mtd"
+    } else if ((grepl("[0-9][0-9][0-9][0-9]", period, ignore.case = TRUE))) {
+        m <- which(format(t, "%Y") == period)
+        ii <- c(max(1, min(m)-1), max(m))
+        ans <- returns(x[ii, ], pad = pad)
+        attr(ans, "t") <- t(t[ii])
+        class(attr(ans, "t")) <- "Date"
+        attr(ans, "period") <- period
+        
     } else {
         if (length(period) > 1L) {
             by <- period
@@ -374,7 +382,8 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
               !attr(x, "is.annualised")] <-
             "; less than one year, not annualised]"
         cat(paste0(r_str, cal_str, note, collapse = "\n"), "\n")
-    } else if (period == "ytd" || period == "mtd" || period == "itd") {
+    } else if (period == "ytd" || period == "mtd" || period == "itd" ||
+               grepl("^[0-9][0-9][0-9][0-9]$", period)) {
         r_str <- paste0(format(round(x*100, digits), nsmall = digits), "%  ")
         cal_str <- paste0("[",
                           format(timestamp[,1],"%d %b %Y"), " -- ",
