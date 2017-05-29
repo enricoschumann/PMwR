@@ -1,13 +1,14 @@
 returns <- function(x, ...)
     UseMethod("returns")
 
-## -----[Handling of 'timestamp' and 'period' in methods]-----
+## ---[Handling of 'timestamp' and 'period' in methods]---
 ##
-## Methods are responsible for 'stripping down' the input to x and t,
-## calling 'returns.default' (or some other method) and then to
-## re-assemble the original class's structure. When there is no
-## period, methods should keep timestamp information for themselves,
-## not pass it on.
+## Methods are responsible for 'stripping down' the input
+## to x and t, calling 'returns.default' (or some other
+## method) and then for re-assembling the original class's
+## structure. When there is no period, methods should keep
+## timestamp information for themselves, not pass it on.
+
 
 returns.NAVseries <- function(x, period = NULL, complete.first = TRUE,
                               pad = NULL, position = NULL, lag = 1, ...) {
@@ -296,6 +297,7 @@ fmt <- function(x, plus, digits) {
         ans
 }
 
+## not exported
 .mtab <- function(x, t, ytd = "YTD", month.names = NULL,
                   zero.print = "0", plus = FALSE, digits = 1,
                   na.print = NULL) {
