@@ -587,7 +587,10 @@ test.pl <- function() {
                           instrument = c("Equity A", 
                                          "Equity B"),
                           .Names = c("Equity A", "Equity B")))
-    
+
+    ## pl(pl(...))
+    checkEquals(pl(x),
+                structure(c(2, 60), .Names = c("Equity A", "Equity B")))
     
     checkEquals(as.data.frame(x),
                 structure(list(pl = c(2, 60),

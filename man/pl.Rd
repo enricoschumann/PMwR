@@ -3,6 +3,7 @@
 \alias{.pl}
 \alias{pl.default}
 \alias{pl.journal}
+\alias{pl.pl}
 \alias{print.pl}
 \alias{as.data.frame.pl}
 \title{
@@ -26,6 +27,8 @@ pl(amount, \dots)
                      along.timestamp = FALSE, approx = FALSE,
                      initial.position = NULL, initial.price = NULL,
                      vprice = NULL, tol = 1e-10, do.warn = TRUE, \dots)
+
+\method{pl}{pl}(amount, \dots)
 
 .pl(amount, price, tol = 1e-10, do.warn = TRUE)
 
@@ -70,7 +73,7 @@ pl(amount, \dots)
   \item{multiplier.regexp}{
 
     logical. If \code{TRUE}, the names of \code{multiplier} are
-    interpreted as regular expressions. See examples.
+    interpreted as regular expressions. See Examples.
 
   }
   \item{approx}{logical}
@@ -83,8 +86,13 @@ pl(amount, \dots)
 }
 \details{
 
-  Computes profit and/or loss.
+  Computes profit and/or loss and returns a list with
+  several statistics (see Section Value, below). To get
+  only the profit/loss numbers as a numeric vector,
+  call \code{pl} twice (\code{pl(pl(...))}).
 
+  
+  
   To use package crayon -- which is only sensible in
    interactive use --, either explicitly set it to
    \code{TRUE} or set an option \code{PMwR.use.crayon}
@@ -131,7 +139,7 @@ J <- journal(timestamp  = c(  1,   2,   3,   1,   2,   3),
              instrument = c(rep("Bond A", 3), rep("Bond B", 3)))
 pl(J)
 as.data.frame(pl(J))
-
+pl(pl(J))  ## P/L as a numeric vector
 
 
 ## Example for 'vprice'

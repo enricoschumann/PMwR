@@ -65,8 +65,11 @@ print.pl <- function(x, ..., use.crayon = NULL, na.print = ".") {
 pl <- function(amount, ...)
     UseMethod("pl")
 
-pl.pl <- function(amount, ...)
-    unlist(lapply(amount, `[`, "pl"))
+pl.pl <- function(amount, ...) {
+    ans <- unlist(lapply(amount, `[`, "pl"))
+    names(ans) <- names(amount)
+    ans
+}
 
 pl.journal <- function(amount, multiplier = 1,
                        multiplier.regexp = FALSE,
