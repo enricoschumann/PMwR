@@ -1,5 +1,10 @@
 2017-06-02  Enrico Schumann  <es@enricoschumann.net>
 
+	* DESCRIPTION (Version): 0.4-8
+
+	* R/btest.R (plot.btest, lines.btest): let
+	'xlab' and 'ylab' default to ""
+
 	* R/pl.R (pl.pl): remove 'pl' suffix from names
 
 2017-05-29  Enrico Schumann  <es@enricoschumann.net>

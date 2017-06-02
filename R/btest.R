@@ -715,19 +715,25 @@ print.btest <- function(x, ...) {
     invisible(x)
 }
 
-plot.btest <- function(x, y = NULL, type = "l", ...) {
+plot.btest <- function(x, y = NULL, type = "l",
+                       xlab = "", ylab = "", ...) {
     if (!is.null(x$timestamp))
-        plot(x$timestamp[-seq_len(x$b)], x$wealth[-seq_len(x$b)], type = type, ...)
+        plot(x$timestamp[-seq_len(x$b)], x$wealth[-seq_len(x$b)],
+             type = type, xlab = xlab, ylab = ylab, ...)
     else
-        plot(x$wealth[-seq_len(x$b)], y, type = type, ...)
+        plot(x$wealth[-seq_len(x$b)], y,
+             type = type, xlab = xlab, ylab = ylab, ...)
     invisible()
 }
 
-lines.btest <- function(x, y = NULL, type = "l", ...) {
+lines.btest <- function(x, y = NULL, type = "l",
+                        xlab = "", ylab = "", ...) {
     if (!is.null(x$timestamp))
-        lines(x$timestamp[-seq_len(x$b)], x$wealth[-seq_len(x$b)], type = type, ...)
+        lines(x$timestamp[-seq_len(x$b)], x$wealth[-seq_len(x$b)],
+              type = type, xlab = xlab, ylab = ylab, ...)
     else
-        lines(x$wealth[-seq_len(x$b)], y, type = type, ...)
+        lines(x$wealth[-seq_len(x$b)], y,
+              type = type, xlab = xlab, ylab = ylab, ...)
     invisible()
 }
 
