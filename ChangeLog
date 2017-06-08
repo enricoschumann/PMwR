@@ -1,3 +1,8 @@
+2017-06-08  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R: fix inclusion of instrument vector
+	when 'include.data' is TRUE
+
 2017-06-02  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): 0.4-8
