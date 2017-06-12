@@ -39,10 +39,15 @@ print.pl <- function(x, ..., use.crayon = NULL, na.print = ".") {
         PL   <- x[[i]]$pl
         BUY  <- x[[i]]$buy
         SELL <- x[[i]]$sell
-        w <- max(nchar(prettyNum(c(PL, BUY, SELL,
-                                   x[[i]]$realised,
-                                   x[[i]]$unrealised))))
-
+        w <- max(nchar(
+            c(as.character(prettyNum(c(PL, BUY, SELL,
+                                     x[[i]]$realised,
+                                     x[[i]]$unrealised))),
+              as.character(x[[i]]$timestamp))))
+        ## browser()
+        if (!is.null(x[[i]]$timestamp))
+            cat(indent,      "timestamp     ", numrow(as.character(x[[i]]$timestamp), w),
+                "\n", sep = "")
         cat(indent, bold("P/L total     "), bold(numrow(PL, w)) , "\n",
             if (any(!is.na(x[[i]]$realised)))
                 paste0(indent, "__ realised   ", numrow(x[[i]]$realised, w), "\n"),
@@ -105,7 +110,6 @@ pl.default <- function(amount, price, timestamp = NULL,
                        vprice = NULL,
                        tol = 1e-10, do.warn = TRUE,...) {
 
-    ## browser()
     if (length(multiplier) > 1L && is.null(names(multiplier)))
         stop(sQuote("multiplier"), " must be a named vector")
     if (approx)
@@ -183,7 +187,7 @@ pl.default <- function(amount, price, timestamp = NULL,
         names(mult) <- "_"
         if (!is.null(vprice)) {
             if (custom.timestamp) {
-                colnames(vprice) <- "_"                
+                colnames(vprice) <- "_"
             } else {
                 names(vprice) <- "_"
             }
@@ -218,6 +222,15 @@ pl.default <- function(amount, price, timestamp = NULL,
                 mult <- multiplier[match(uniq.i, names(multiplier))]
         }
         ni <- length(uniq.i)
+        if (ni == 1L && !is.null(vprice)) {
+            if (custom.timestamp && is.null(colnames(vprice)) && do.warn) {
+                warning(sQuote("vprice"), " is unnamed")
+                colnames(vprice) <- uniq.i
+            } else if (is.null(names(vprice)) && do.warn) {
+                warning(sQuote("vprice"), " is unnamed")
+                names(vprice) <- uniq.i
+            }
+        }
     }
 
     ans  <- vector(mode = "list", length = ni)
@@ -231,7 +244,7 @@ pl.default <- function(amount, price, timestamp = NULL,
 
         vprice1  <- NA
         if (!is.null(vprice)  && is.null(dim(vprice)))
-            vprice1 <- vprice[[ i1 ]]
+            vprice1 <- vprice[ i1 ]
         if (!is.null(vprice) && !is.null(dim(vprice)))
             vprice1 <- vprice[, i1]
         ## else
@@ -292,7 +305,8 @@ pl.default <- function(amount, price, timestamp = NULL,
                                    timestamp = timestamp1,
                                    when = along.timestamp)) * unname(mult[i1])
             }
-            tmp <- list(pl = pnl * unname(mult[i1]),
+            tmp <- list(timestamp = timestamp1,
+                        pl = pnl * unname(mult[i1]),
                         realised = real,
                         unrealised = pnl - real,
                         buy = pl1[3L],

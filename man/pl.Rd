@@ -60,8 +60,9 @@ pl(amount, \dots)
   }
   \item{vprice}{
 
-    numeric vector. With several instruments, the prices should be
-    named, e.g. \code{c(stock1 = 100, stock2 = 101)}.
+    valuation price; a numeric vector. With several
+    instruments, the prices must be named,
+    e.g. \code{c(stock1 = 100, stock2 = 101)}.
 
   }
   \item{multiplier}{

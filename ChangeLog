@@ -1,3 +1,35 @@
+2017-06-12  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.4-9
+
+	* R/pl.R (print.pl): when along.timestamp is not
+	FALSE, print timestamp
+	(pl.default): when there is only a single named
+	instrument, 'vprice' need not be named (but a
+	warning will be generated if it is not). Before,
+
+          pl(amount = 10, price = 10,
+	     vprice = 10)                 ## OK
+
+	would have worked and still does, but
+
+          pl(amount = 10, price = 10,
+	     instrument = "A", vprice = 10)
+
+	would fail because 'pl' now expected a named
+	vector of valuation prices, i.e.
+
+	  vprice = c(A = 10)
+
+	The call will now succeed, but with a
+	warning. Also, with a missing valuation price
+	as in
+
+	  pl(amount = 10, price = 10,
+	     instrument = "A", vprice = c(B = 10))
+
+	'pl' does not fail any more, but returns NA.
+
 2017-06-08  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R: fix inclusion of instrument vector
