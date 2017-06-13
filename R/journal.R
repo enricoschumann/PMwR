@@ -243,11 +243,11 @@ instrument.journal <- function(x, ...) {
 }
 
 summary.journal <- function(object, ...) {
-    ## TODO level: instrument or account or factor
+    ## TODO aggregation level? instrument or account or factor ...
     ans <- list()
     ans$n_transactions <- length(object)
     no_instrument <- FALSE
-    if (is.null(xi <- instrument(object))) {
+    if (all(is.na(xi <- instrument(object)))) {
         xi <- object$instrument <- rep("_", length(object))
         no_instrument <- TRUE
     }
@@ -271,7 +271,7 @@ summary.journal <- function(object, ...) {
         stats <- rbind(stats, si)
     }
     if (no_instrument)
-        stats$instrument <- NULL
+        stats$instrument <- NA
     ans$stats  <- stats    
     class(ans) <- "summary.journal"
     ans
@@ -279,15 +279,20 @@ summary.journal <- function(object, ...) {
 
 print.summary.journal <- function(x, ...) {
     ans <- x$stats
+    has_instrument <- !all(is.na(x$stats$instrument))
+    if (!has_instrument)
+        ans$instrument <- NULL
     cat("journal: ", x$n_transactions, " transactions ",
         "in ", nrow(ans), " instruments\n\n", sep = "")
-    colnames(ans) <- c("instrument", "n", "avg buy", "avg sell",
+    colnames(ans) <- c(if (has_instrument) "instrument",
+                       "n", "avg buy", "avg sell",
                        "first", "last")
     for (i in 3:4)
         ans[[i]][!is.finite(ans[[i]])] <- NA
-        
-    ans[["instrument"]] <- paste0("",
-                                  format(ans[["instrument"]], justify = "left"))
+
+    if (has_instrument)
+        ans[["instrument"]] <- paste0("",
+                                      format(ans[["instrument"]], justify = "left"))
     print.data.frame(ans, na.print = "",
                      print.gap = 2, row.names = FALSE)
     invisible(x)
