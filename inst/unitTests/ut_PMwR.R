@@ -1292,6 +1292,6 @@ test.unit_prices  <- function() {
     
     x2 <- unit_prices(NAV, cf, cf.included = FALSE)
     
-    all.equal(x1$price,x2$price)
+    checkEquals(x1$price,x2$price)
 
 }
