@@ -13,7 +13,7 @@ if (tolower(Sys.getenv("ES_PACKAGE_TESTING")) == "true" &&
     
     myTestSuite <- defineTestSuite(pkg,
                                    dirs = path,
-                                   testFileRegexp = "ut_.*")
+                                   testFileRegexp = "ut_.*[^~]$")
     stopifnot(isValidTestSuite(myTestSuite))
     testResult <- runTestSuite(myTestSuite, verbose = 0L)
     printTextProtocol(testResult,
