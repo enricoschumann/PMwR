@@ -1,5 +1,6 @@
 \name{isValidISIN}
 \alias{isValidISIN}
+\alias{is_valid_ISIN}
 \title{
   Validate International Securities Identification Numbers (ISINs)
 }
@@ -7,7 +8,8 @@
   Check whether a given ISIN is valid.
 }
 \usage{
-isValidISIN(isin)
+is_valid_ISIN(isin)
+isValidISIN(isin) ## deprecated
 }
 \arguments{
   \item{isin}{
@@ -38,8 +40,8 @@ isValidISIN(isin)
 \examples{
 isin <- c("US0378331005", "AU0000XVGZA3",
           "DE000A0C3743", "not_an_isin")
-isValidISIN(isin)
+is_valid_ISIN(isin)
 
-isValidISIN(c("US0378331005",
+is_valid_ISIN(c("US0378331005",
               "us0378331005")) ## case is ignored
 }

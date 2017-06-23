@@ -1,10 +1,10 @@
 \name{TradeAnalysis}
-\alias{closeOnFirst}
+\alias{close_on_first}
 \alias{limit}
-\alias{scaleToUnity}
-\alias{scaleTrades}
-\alias{splitTrades}
-\alias{twExposure}
+\alias{scale_to_unity}
+\alias{scale_trades}
+\alias{split_trades}
+\alias{tw_exposure}
 \title{
   Analysing Trades: Compute Profit/Loss, Resize and more
 }
@@ -12,15 +12,15 @@
   Functions to help analyse trades (as opposed to profit-and-loss series)
 }
 \usage{
-scaleTrades(amount, price, timestamp, aggregate = FALSE,
+scale_trades(amount, price, timestamp, aggregate = FALSE,
             fun = NULL, ...)
-splitTrades(amount, price, timestamp, aggregate = FALSE)
+split_trades(amount, price, timestamp, aggregate = FALSE)
 
 limit(amount, price, timestamp, lim, tol = 1e-8)
-scaleToUnity(amount)
-closeOnFirst(amount)
+scale_to_unity(amount)
+close_on_first(amount)
 
-twExposure(amount, timestamp, start, end, abs.value = TRUE)
+tw_exposure(amount, timestamp, start, end, abs.value = TRUE)
 }
 \arguments{
   \item{amount}{
@@ -55,14 +55,14 @@ twExposure(amount, timestamp, start, end, abs.value = TRUE)
 }
 \details{
 
-\code{scaleTrades} takes a vector of notionals, prices and scales all
+\code{scale_trades} takes a vector of notionals, prices and scales all
 trades along the paths so that the maximum exposure is 1.
 
 The default \code{fun} divides every element of a vector \code{n} by
 \code{max(abs(cumsum(n)))}. If user-specified, the function \code{fun}
 needs to take a vector of notionals (changes in position.)
 
-\code{splitTrades} decomposes a trade list into single trades, where a
+\code{split_trades} decomposes a trade list into single trades, where a
 single trade comprises those trades from a zero position to the next
 zero position.
 
@@ -83,9 +83,9 @@ n <- c(1,1,-3,-1,2)
 p <- 100 + 1:length(n)
 timestamp <- 1:length(n)
 
-splitTrades(n,p,timestamp)
-splitTrades(n,p,timestamp, TRUE)  ## almost like the original series
+split_trades(n, p, timestamp)
+split_trades(n, p, timestamp, TRUE)  ## almost like the original series
 
-scaleTrades(n,p,timestamp)
-scaleTrades(n,p,timestamp, TRUE)  ## each _trade_ gets scaled
+scale_trades(n, p, timestamp)
+scale_trades(n, p, timestamp, TRUE)  ## each _trade_ gets scaled
 }

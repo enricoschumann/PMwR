@@ -1,7 +1,4 @@
 ## -*- truncate-lines: t; -*-
-## x <- c(9,9,10,8,10,11)
-## div <- 2
-## t <- 4
 
 div_adjust <- function(x, t, div, backward = TRUE, additive = FALSE) {
     if (!is.null(dim(x)))
