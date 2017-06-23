@@ -55,10 +55,10 @@ test.position <- function() {
     
 }
 
-test.splitTrades <- function() {
+test.split_trades <- function() {
     amount <- c(1, -1)
     price <- c(1,2)
-    ans <- splitTrades(amount, price, seq_along(amount))
+    ans <- split_trades(amount, price, seq_along(amount))
     checkEquals(length(ans), 1)
     checkEquals(ans,
                 list(structure(list(amount = c(1, -1),
@@ -70,7 +70,7 @@ test.splitTrades <- function() {
     
     amount <- c(1, -2, 1)
     price <- c(1,2,3)
-    ans <- splitTrades(amount, price, seq_along(amount))
+    ans <- split_trades(amount, price, seq_along(amount))
     checkEquals(length(ans), 2)
 
     checkEquals(ans[[1L]],
@@ -87,7 +87,7 @@ test.splitTrades <- function() {
     n <- c(1,1,-3,1)
     p <- c(1,2,3,2)
     tradetimes <- seq_along(n)
-    splitTrades(n,p,tradetimes)
+    split_trades(n,p,tradetimes)
 }
 
 
@@ -1293,5 +1293,20 @@ test.unit_prices  <- function() {
     x2 <- unit_prices(NAV, cf, cf.included = FALSE)
     
     all.equal(x1$price,x2$price)
+
+}
+
+test.is_valid_ISIN <- function() {
+
+    isin <- c("US0378331005",
+              "AU0000XVGZA3",
+              "DE000A0C3743",
+              "not_an_isin")
+    checkEquals(unname(is_valid_ISIN(isin)),
+                c(TRUE, TRUE,  TRUE, FALSE))
+    
+    ## case is ignored
+    checkEquals(unname(isValidISIN(c("US0378331005", "us0378331005"))),
+                c(TRUE, TRUE))
 
 }

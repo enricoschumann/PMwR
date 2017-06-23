@@ -1,4 +1,4 @@
-splitTrades <- function(amount, price, timestamp, aggregate = FALSE) {
+split_trades <- splitTrades <- function(amount, price, timestamp, aggregate = FALSE) {
     n <- amount
     p <- price
 
@@ -48,7 +48,7 @@ splitTrades <- function(amount, price, timestamp, aggregate = FALSE) {
     }
 }
 
-scaleTrades <- function(amount, price, timestamp, aggregate = FALSE,
+scale_trades <- scaleTrades <- function(amount, price, timestamp, aggregate = FALSE,
                         fun = NULL, ...) {
     trades <- splitTrades(amount, price, timestamp, aggregate = FALSE)
     if (is.null(fun))
@@ -73,12 +73,12 @@ scaleTrades <- function(amount, price, timestamp, aggregate = FALSE,
     }
 }
 
-scaleToUnity <- function(amount) {
+scale_to_unity <- scaleToUnity <- function(amount) {
     maxn <- max(abs(cumsum(amount)))
     amount/maxn
 }
 
-closeOnFirst <- function(amount) {
+close_on_first <- closeOnFirst <- function(amount) {
     s <- sign(amount)
     s1 <- s[1L]
     cn <- cumsum(amount)
@@ -125,7 +125,7 @@ periodObs <- function(x, t = NULL, period = "month", missing = "NA") {
         x[i]        
 }
 
-twExposure <- function(amount, timestamp, start, end, abs.value = TRUE) {
+tw_exposure <- twExposure <- function(amount, timestamp, start, end, abs.value = TRUE) {
     if (missing(start))
         start <- min(timestamp)
     else {

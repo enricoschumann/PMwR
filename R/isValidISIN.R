@@ -1,4 +1,8 @@
-isValidISIN <- function(isin) {    
+is_valid_ISIN <- isValidISIN <- function(isin) {    
+
+    if (as.character(sys.call(sys.parent()))[1L] == "isValidISIN")
+        .Deprecated("is_valid_ISIN")
+
     validNC <- 12L
     result <- logical(length(isin))
     isin <- isin[hasValidNC <- which(nchar(isin) == validNC)]

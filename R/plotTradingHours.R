@@ -1,14 +1,18 @@
-plotTradingHours <- function(x, t = NULL,
-                             interval = "5 min", labels = "hours",
-                             label.format = NULL,
-                             excludeWeekends = TRUE, holidays = NULL,
-                             fromHHMMSS = "000000", toHHMMSS = "240000",
-                             do.plotAxis = TRUE,
-                             ...,
-                             from = NULL, to = NULL,
-                             do.plot = TRUE,
-                             axis1.par = list()) {
-
+plot_trading_hours <-
+    plotTradingHours <- function(x, t = NULL,
+             interval = "5 min", labels = "hours",
+             label.format = NULL,
+             excludeWeekends = TRUE, holidays = NULL,
+             fromHHMMSS = "000000", toHHMMSS = "240000",
+             do.plotAxis = TRUE,
+             ...,
+             from = NULL, to = NULL,
+             do.plot = TRUE,
+             axis1.par = list()) {
+        
+    if (as.character(sys.call(sys.parent()))[1L] == "plotTradingHours")
+        .Deprecated("plot_trading_hours")
+            
     ## plot
     plot.par.def <- list(type = "l", xaxt = "n",
                          xlab = "", ylab = "")
@@ -109,3 +113,6 @@ plotTradingHours <- function(x, t = NULL,
              map = maptime)
     }
 }
+
+## body(plotTradingHours) <- (quote(.Deprecated("plot_trading_hours")),
+##                             body(plotTradingHours))

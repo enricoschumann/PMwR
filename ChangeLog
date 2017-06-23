@@ -1,6 +1,29 @@
+2017-06-23  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.5-0
+
+	* R/: a number of functions have been
+	renamed:
+
+	isValidISIN      => is_valid_ISIN
+        closeOnFirst     => close_on_first
+        plotTradingHours => plot_trading_hours
+        scaleToUnity     => scale_to_unity
+        scaleTrades      => scale_trades
+        splitTrades      => split_trades
+        twExposure       => tw_exposure
+
+	for the time being, the old functions
+	can still be called with
+	    PMwR:::<old-fun-name>
+	but the new names are preferred
+
+	* inst/unitTests/ut_PMwR.R
+	(test.is_valid_ISIN): add tests
+
 2017-06-13  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): Version: 0.4-10
+	* DESCRIPTION (Version): 0.4-10
 
 	* R/journal.R (summary.journal)
 	(print.summary.journal): fix summary
