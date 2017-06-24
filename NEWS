@@ -1,4 +1,42 @@
-v0.4-0  (2017-02-07)  
+v0.5-0  (2017-06-23)
+
+  o A number of functions have been renamed:
+
+      isValidISIN      => is_valid_ISIN
+      closeOnFirst     => close_on_first
+      plotTradingHours => plot_trading_hours
+      scaleToUnity     => scale_to_unity
+      scaleTrades      => scale_trades
+      splitTrades      => split_trades
+      twExposure       => tw_exposure
+
+    For the time being, the old functions can still be
+    called with
+
+      PMwR:::<old-fun-name>
+
+    but the old names shall be removed in a future
+    version.
+
+  o New 'as.matrix' method for monthly holding-period
+    returns, which places returns into a numeric matrix
+    with years in rows and months in columns. For other
+    holding periods, as.matrix is called on the raw
+    numeric data.
+
+  o returns: argument 'period' may also be 'quarterly'
+    or a single year, such as "2007"
+
+  o btest: 'do.signal' and 'do.rebalance' can also be
+    the string 'lastofquarter' to rebalance on last day
+    of quarter; or 'firstofquarter' to rebalance on
+    first day of quarter
+
+  o A more-comprehensive list of changes is available
+    in the ChangeLog:
+    http://enricoschumann.net/R/packages/PMwR/ChangeLog
+
+v0.4-0  (2017-02-07)
 
   o New functions 'unit_prices', for computing
     time-weighted returns, and 'rc', for computing
