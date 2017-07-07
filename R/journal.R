@@ -243,9 +243,15 @@ instrument.journal <- function(x, ...) {
 }
 
 summary.journal <- function(object, ...) {
-    ## TODO aggregation level? instrument or account or factor ...
     ans <- list()
     ans$n_transactions <- length(object)
+    if (ans$n_transactions == 0L) {
+        ans$stats <- NA
+        class(ans) <- "summary.journal"
+        return(ans)
+    }
+    
+    ## TODO aggregation level? instrument or account or factor ...
     no_instrument <- FALSE
     if (all(is.na(xi <- instrument(object)))) {
         xi <- object$instrument <- rep("_", length(object))
@@ -278,23 +284,28 @@ summary.journal <- function(object, ...) {
 }
 
 print.summary.journal <- function(x, ...) {
-    ans <- x$stats
-    has_instrument <- !all(is.na(x$stats$instrument))
-    if (!has_instrument)
-        ans$instrument <- NULL
-    cat("journal: ", x$n_transactions, " transactions ",
-        "in ", nrow(ans), " instruments\n\n", sep = "")
-    colnames(ans) <- c(if (has_instrument) "instrument",
-                       "n", "avg buy", "avg sell",
-                       "first", "last")
-    for (i in 3:4)
-        ans[[i]][!is.finite(ans[[i]])] <- NA
-
-    if (has_instrument)
-        ans[["instrument"]] <- paste0("",
-                                      format(ans[["instrument"]], justify = "left"))
-    print.data.frame(ans, na.print = "",
-                     print.gap = 2, row.names = FALSE)
+    if (x$n_transactions > 0L) {
+        ans <- x$stats
+        has_instrument <- !all(is.na(x$stats$instrument))
+        if (!has_instrument)
+            ans$instrument <- NULL
+        cat("journal: ", x$n_transactions, " transactions ",
+            "in ", nrow(ans), " instrument",
+            if (nrow(ans) > 1L) "s", "\n\n", sep = "")
+        colnames(ans) <- c(if (has_instrument) "instrument",
+                           "n", "avg buy", "avg sell",
+                           "first", "last")
+        for (i in 3:4)
+            ans[[i]][!is.finite(ans[[i]])] <- NA
+        
+        if (has_instrument)
+            ans[["instrument"]] <- paste0("",
+                                          format(ans[["instrument"]], justify = "left"))
+        print.data.frame(ans, na.print = "",
+                         print.gap = 2, row.names = FALSE)
+    } else {
+        cat("no transactions\n")
+    }
     invisible(x)
 }
 

@@ -434,11 +434,17 @@ test.journal <- function() {
                                comment = character(0)),
                           .Names = c("amount", "comment"),
                           class = "journal"))
-
+    
     checkEquals(journal(),
                 c(journal(), journal()))
     checkEquals(journal(),
                 c(journal(), journal(), journal()))
+    checkEquals(summary(journal()),
+                structure(list(n_transactions = 0L, stats = NA),
+                          .Names = c("n_transactions", 
+                                     "stats"),
+                          class = "summary.journal"))
+
     
     ## a more reasonable journal
     timestamp <- 1:5
@@ -525,8 +531,58 @@ test.journal <- function() {
     checkEquals(j$amount, c(5,2,3))
     
     ## not ok: replace journal as a whole
-    checkException(j[1]$amount <- 10, silent=TRUE)
+    checkException(j[1]$amount <- 10, silent = TRUE)
 
+
+   
+}
+
+test..pl_stats <- function() {
+
+    amount <- c(1); price <- 100
+    checkEquals(.pl_stats(amount, price),
+                list(average = 100, realised = 0))
+    
+    amount <- c(1,-1); price <- c(100, 100)
+    checkEquals(.pl_stats(amount, price),
+                list(average = c(100, 100), realised = c(0, 0)))
+    
+    amount <- c(1,-1); price <- c(100, 101)
+    checkEquals(.pl_stats(amount, price),
+                list(average = c(100, 101), realised = c(0, 1)))
+    
+    amount <- c(1,-1); price <- c(100, 99)
+    checkEquals(.pl_stats(amount, price),
+                list(average = c(100, 99), realised = c(0, -1)))
+    
+    amount <- c(1,-5); price <- c(100, 101)
+    checkEquals(.pl_stats(amount, price),
+                list(average = c(100, 101), realised = c(0, 1)))
+    
+    amount <- c(1,0); price <- c(100, 101)
+    checkEquals(.pl_stats(amount, price),
+                list(average = c(100, 100), realised = c(0, 0)))
+    
+    amount <- c(1,0,1); price <- c(100, 101,102)
+    checkEquals(.pl_stats(amount, price),
+                list(average = c(100, 100, 101), realised = c(0, 0, 0)))
+    
+    amount <- c(1,-2,1); price <- c(100, 101, 99)
+    checkEquals(.pl_stats(amount, price),
+                list(average = c(100, 101, 99), realised = c(0, 1, 3)))
+    
+    amount <- c(0,0); price <- c(100, 200)
+    checkEquals(.pl_stats(amount, price),
+                list(average = c(100, 100), realised = c(0, 0)))
+    
+    amount <- c(-1,-1,-1); price <- c(100, 98, 96)
+    checkEquals(.pl_stats(amount, price),
+                list(average = c(100,99,98), realised = c(0, 0, 0)))
+    
+    amount <- c(-1,1,0,-1,0,1); price <- c(100, 98,95, 96,97, 94)
+    checkEquals(.pl_stats(amount, price),
+                list(average  = c(100, 98, 98, 96, 96, 94),
+                     realised = c(0, 2, 2, 2, 2, 4)))
 }
 
 test.pl <- function() {

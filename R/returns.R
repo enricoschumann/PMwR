@@ -238,7 +238,7 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
             xj <- x[ ,j]
             i <- which(ymon < max(ymon))
             if (!length(i)) {
-                ## all obs are with one month
+                ## all obs are within one month
                 i <- seq_along(xj)
                 t0 <- min(which(!is.na(xj[i])))
             } else {

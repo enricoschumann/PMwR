@@ -1,3 +1,33 @@
+2017-07-07  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.5-1
+
+	* inst/unitTests/ut_PMwR.R (test..pl_stats):
+	add unit tests
+
+	* R/pl.R (.pl_stats): fix profit/loss
+	computation when position changes sign: the
+	function was originally written for long-only
+	cases; also zero-amount trades are no longer
+	filtered. Experimentally, the function is also
+	exported.
+
+2017-07-06  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pl.R (pl.default): clean code/remove comments
+
+	* R/journal.R (summary.journal): safeguard
+	summary method and the associated print method
+	for zero-transaction journals
+
+2017-07-05  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pl.R (pl.default): warn if multiplier is
+	named but instrument is not specified
+	(.pl_stats <- avg): introduce alias '.pl_stats'
+	for 'avg' (the latter will be removed in the
+	future)
+
 2017-06-23  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): 0.5-0
@@ -27,7 +57,7 @@
 
 	* R/journal.R (summary.journal)
 	(print.summary.journal): fix summary
-	computation when instrument was omitted
+	computation when instrument is omitted
 
 2017-06-12  Enrico Schumann  <es@enricoschumann.net>
 

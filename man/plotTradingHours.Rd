@@ -9,14 +9,14 @@
 }
 \usage{
 plot_trading_hours(x, t = NULL,
-                 interval = "5 min", labels = "hours", label.format = NULL,
-                 excludeWeekends = TRUE, holidays = NULL,
-                 fromHHMMSS = "000000", toHHMMSS = "240000",
-                 do.plotAxis = TRUE,
-                 ...,
-                 from = NULL, to = NULL,
-                 do.plot = TRUE,
-                 axis1.par = list())
+                   interval = "5 min", labels = "hours", label.format = NULL,
+                   excludeWeekends = TRUE, holidays = NULL,
+                   fromHHMMSS = "000000", toHHMMSS = "240000",
+                   do.plotAxis = TRUE,
+                   ...,
+                   from = NULL, to = NULL,
+                   do.plot = TRUE,
+                   axis1.par = list())
 plotTradingHours(x, t = NULL,
                  interval = "5 min", labels = "hours", label.format = NULL,
                  excludeWeekends = TRUE, holidays = NULL,
@@ -125,9 +125,9 @@ x <- runif(length(t))
 
 par(tck = 0.001, mgp = c(3,1,0.5), bty = "n")
 p <- plot_trading_hours(x, t,
-                       interval = "5 min", labels = "hours",
-                       xlab = "time", ylab = "random points",
-                       col = "blue")
+                        interval = "5 min", labels = "hours",
+                        xlab = "time", ylab = "random points",
+                        col = "blue")
 
 
 ## with ?lines
