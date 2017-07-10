@@ -308,23 +308,30 @@ pl.default <- function(amount, price, timestamp = NULL,
                 ## specified by 'along.timestamp',
                 ## including the cash account
 
+                ## total pnl
                 tmp <- position(amount = c(amount1, -price1 * amount1),
                                 timestamp = c(timestamp1, timestamp1),
                                 instrument = c(rep(i1, length(amount1)),
                                                rep("cash", length(amount1))),
-                                when = along.timestamp)
+                                when = along.timestamp)[, c(i1, "cash")]
                 pnl <- rowSums(tmp * cbind(vprice, 1))
-                real <- c(position(real,
-                                   timestamp = timestamp1,
-                                   when = along.timestamp)) * unname(mult[i1])
+
+                real_ <- numeric(length(pnl)) + NA
+                real_[matchOrNext(timestamp1, along.timestamp)] <-
+                    real[matchOrNext(timestamp1, along.timestamp) > 0]
+                real_ <- zoo::na.locf(real_, na.rm = FALSE)
+                real <- real_
                 volume <- numeric(length(along.timestamp))
-                volume[matchOrNext(timestamp,along.timestamp)] <- cumsum(abs(amount1))
+                volume[matchOrNext(unique(timestamp1), along.timestamp)] <-
+                    abs(tapply(amount1, timestamp1,
+                               function(x) sum(abs(x))))
+                volume <- cumsum(volume)
             }
             tmp <- list(timestamp = if (isTRUE(along.timestamp))
                                         timestamp1 else
                                         along.timestamp,
                         pl = pnl * unname(mult[i1]),
-                        realised = real,
+                        realised = real * unname(mult[i1]),
                         unrealised = pnl - real,
                         buy = pl1[3L],
                         sell = pl1[4L],

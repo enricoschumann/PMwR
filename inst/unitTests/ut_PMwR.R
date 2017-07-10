@@ -800,20 +800,28 @@ test.pl <- function() {
     checkEqualsNumeric(pl(j, along.timestamp = TRUE)[[1]]$pl,
                        0:1)
 
-
-    pl(j, along.timestamp=1:3, vprice = c(100,102,103))
-
+    ### ... journal timestamp
+    checkEquals(pl(j, along.timestamp = TRUE)[[1]]$timestamp,
+                c(1,2.5))
+    
     tmp <- pl(amount = 1, timestamp = 0, price = 100,
               vprice = 101:110, along.timestamp = 1:10)
     checkEqualsNumeric(tmp[[1]]$pl, 1:10)
+    ### ... custom timestamp
+    checkEquals(tmp[[1]]$timestamp, 1:10)
     
     ## should work since vprice is timestamp-agnostic:
     ## it just computes the current PL, no matter the
     ## time
-    pl(journal(),
-       initial.position = 1, initial.price = 1,
-       vprice = 101)
-
+    res <- pl(journal(),
+              initial.position = 1, initial.price = 100,
+              vprice = 101)
+    checkEquals(pl(res), 1)
+    checkEquals(res[[1]]$buy, 100)
+    checkEquals(res[[1]]$sell, 101)
+    checkEquals(res[[1]]$volume, 0)
+    
+    
     ## should *not* work since the initial price has no
     ## timestamp, but for vprice the timestamps are
     ## specified
@@ -825,11 +833,28 @@ test.pl <- function() {
 
 
     
-}
+    res <- pl(journal(amount = 1,
+                      price = 2.5,
+                      timestamp = 3),
+              along.timestamp = 1:10,
+              vprice = 1:10)
+    checkEquals(res[[1]]$timestamp, 1:10)
+    checkEqualsNumeric(res[[1]]$unrealised[10], 7.5)
+    checkEqualsNumeric(res[[1]]$realised[10],   0.0)
 
-## pl(amount = 1, price = 1,
-##    initial.position = 1, initial.price = 1,
-##    vprice = 2)
+    res <- pl(journal(amount = 1:2,
+                      price = 1:2,
+                      timestamp = 3),
+              along.timestamp = 1:10,
+              vprice = 1:10)
+
+    checkEquals(res[[1]]$volume,
+                c(0, 0, 3, 3, 3, 3, 3, 3, 3, 3))
+    checkEqualsNumeric(res[[1]]$unrealised[3], 4)
+    checkEqualsNumeric(res[[1]]$unrealised[4], 7)
+   
+    
+}
 
 
 ## instrument  <- c("FGBL", "FGBL", "Bond", "Bond")
