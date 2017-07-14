@@ -52,19 +52,87 @@ pricetable <- function(instrument, when, price,
 }
 
 
-## pricetable <- function(when, instrument, ...) {
 
-##     series <- list(...)
-##     ns <- length(series)
-##     if (ns %% 2 == 1L)
-##         stop("need prices and time series")
-    
-##     ans <- array(NA, dim = c(length(when), ns/2))
-    
-##     for (i in seq_len(ns/2))
-##         ans[, i] <- series[[i*2-1]][matchOrPrevious(when, series[[i*2]])]
 
-##     ans <- list(price.table = ans, timestamp = when, instrument = instrument)
-##     class(ans) <- "price_table"
-##     ans
-## }
+pricetable <- function(price, ...) {
+    UseMethod("pricetable")
+}
+
+pricetable.matrix <- function(price, instrument, timestamp, missing = "NA",
+                              ...) {
+
+    if (missing(instrument))
+        if (is.null(instrument <- colnames(price)))
+            instrument <- seq_len(ncol(price))
+
+    if (missing(timestamp))
+        if (is.null(timestamp <- rownames(price)))
+            timestamp <- seq_len(nrow(price))
+
+    if (anyDuplicated(instrument))
+        warning("duplicate instruments")
+
+    if (anyDuplicated(timestamp))
+        warning("duplicate timestamps")
+
+    ans <- price
+    colnames(ans) <- attr(ans, "instrument") <- instrument
+    rownames(ans) <- attr(ans, "timestamp") <- timestamp
+
+    class(ans) <- "pricetable"
+    ans
+    
+}
+
+
+`[.pricetable`  <- function(p, i, j, start, end, ..., drop = FALSE) {
+
+
+    ## pt[when, instrument]
+    ##
+    ## i  .. character, logical, numeric, datetime
+    ## j  .. character, logical, numeric
+    ## answer is guaranteed to have dim(length(i), length(j))
+    
+    
+    
+    ## if (is.character(i)) {
+    ##     if (is.null(match.against))
+    ##         match.against  <- names(x)[unlist(lapply(x, mode)) == "character"]
+    ##     ii <- logical(length(x))
+    ##     if (length(i) > 1L)
+    ##         i <- paste(i, collapse = "|")
+    ##     for (m in match.against) {
+    ##         if (is.null(x[[m]]))
+    ##             next
+    ##         ii <- ii | grepl(i, x[[m]], ignore.case = ignore.case, ...)
+    ##     }        
+    ##     if (reverse)
+    ##         ii <- !ii
+    ## } else
+    ##     ii <- i
+
+    p.raw <- unclass(p)
+    
+    if (is.character(j)) {
+        j <- match(j, attr(p, "instrument"), nomatch = 0L)
+    }
+
+    ans <- array(NA, dim = c(length(i), length(j)))
+
+    
+    ans <- unclass(p)[i,j, drop = drop]
+    class(ans) <- "pricetable"
+    ans
+}
+
+`[<-.pricetable`  <- function(x, i, j, ..., value) {
+    stop("extraction only: convert to matrix to replace values")
+}
+
+## x <- array(1:6, dim = c(3,2))
+## colnames(x) <- letters[1:2]
+## rownames(x) <- 1:3
+
+## p <- pricetable(x)
+## p[ , c("a", "a", "c")]

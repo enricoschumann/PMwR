@@ -225,6 +225,10 @@ instrument.position <- function(x, ...) {
     attr(x, "instrument")
 }
 
+instrument.pricetable <- function(x, ...) {
+    attr(x, "instrument")
+}
+
 instrument.journal <- function(x, ...) {
     x$instrument
 }
@@ -336,6 +340,7 @@ print.summary.journal <- function(x, ...) {
 
     stop("extraction only: use x$amount[] etc. for replacement")
 }
+
 aggregate.journal <- function(x, by, FUN, ...) {
 
     lenx <- length(x)    

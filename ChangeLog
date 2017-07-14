@@ -1,3 +1,10 @@
+2017-07-11  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pricetable.R (pricetable): 'pricetable' is
+	now generic
+
+	* R/journal.R (instrument.pricetable): add method
+
 2017-07-10  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/pl.R (pl.default): fix realised/unrealised
