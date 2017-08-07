@@ -8,8 +8,8 @@
   Print treasury quotes with 1/32nds of points.  
 }
 \usage{
-quote32(price, sep = "-", warn = TRUE)
-q32(price, sep = "-", warn = TRUE)
+quote32(price, sep = "(-|')", warn = TRUE)
+q32(price, sep = "(-|')", warn = TRUE)
 }
 \arguments{
   \item{price}{

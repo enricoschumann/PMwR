@@ -1,3 +1,22 @@
+2017-08-07  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.5-2
+
+	* R/returns.R (*.p_returns): remove warning
+	when input is a list (see ChangeLog 2015-06-26)
+
+	* inst/unitTests/ut_PMwR.R (test.btest):
+	suppress _expected_ warnings during tests
+
+	* R/quote32.R (quote32): the function now
+	recognises a hyphen (-) and single quote (') as
+	a separator
+
+	* R/quote32.R (c.quote32, Summary.quote32)
+	(diff.quote32): add rudimentary group generic
+	support: 'min', 'max' and 'range' now return
+	'quote32' objects, as do 'c' and 'diff'
+
 2017-07-11  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/pricetable.R (pricetable): 'pricetable' is
@@ -13,7 +32,7 @@
 
 2017-07-07  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): Version: 0.5-1
+	* DESCRIPTION (Version): 0.5-1
 
 	* inst/unitTests/ut_PMwR.R (test..pl_stats):
 	add unit tests

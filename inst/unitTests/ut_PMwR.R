@@ -147,7 +147,9 @@ test.btest <- function() {
         0.12
 
     ## ... no position (since wealth is 0)
-    solution <- btest(prices = prices, signal = signal, convert.weights = TRUE)
+    solution <- suppressWarnings(btest(prices = prices,
+                                       signal = signal,
+                                       convert.weights = TRUE))
     checkEquals(drop(solution$position), rep(0, length(prices)))
     checkEquals(drop(solution$wealth), rep(0, length(prices)))
     checkEquals(drop(solution$suggested.position), rep(0, length(prices)))
@@ -167,14 +169,17 @@ test.btest <- function() {
     signal <- function()
         c(0.2, 0.3)
 
-    ## ... no initial wealth, no position
-    solution <- btest(list(prices2), signal = signal, convert.weights = TRUE)
+    ## ... no initial wealth, no position (creates a warning)
+    solution <- suppressWarnings(btest(list(prices2),
+                                       signal = signal,
+                                       convert.weights = TRUE))
     checkEquals(dim(solution$position), dim(prices2))
-    checkTrue(all(solution$position==0))
+    checkTrue(all(solution$position == 0))
     checkEquals(solution$journal, journal())
 
     ## ... with initial wealth
-    solution <- btest(list(prices2), signal = signal, convert.weights = TRUE,
+    solution <- btest(list(prices2), signal = signal,
+                      convert.weights = TRUE,
                       initial.cash = 1000)
     checkEquals((outer(solution$wealth, signal())/prices2)[-nrow(prices2), ],
                 solution$position[-1L, ])
@@ -216,14 +221,17 @@ test.btest <- function() {
     signal <- function()
         c(0.2, 0.3, 0.25)
 
-    ## ... no initial wealth, no position
-    solution <- btest(list(prices3), signal = signal, convert.weights = TRUE)
+    ## ... no initial wealth, no position (creates a warning)
+    solution <- suppressWarnings(btest(list(prices3),
+                                       signal = signal,
+                                       convert.weights = TRUE))
     checkEquals(dim(solution$position), dim(prices3))
-    checkTrue(all(solution$position==0))
+    checkTrue(all(solution$position == 0))
     checkEquals(solution$journal, journal())
 
-    ## ... no initial wealth, no position
-    solution <- btest(list(prices3), signal = signal, convert.weights = TRUE,
+    ## ... with initial cash
+    solution <- btest(list(prices3), signal = signal,
+                      convert.weights = TRUE,
                       initial.cash = 1000)
     checkEquals((outer(solution$wealth, signal())/prices3)[-nrow(prices3), ],
                 solution$position[-1L, ])
@@ -362,10 +370,10 @@ test.btest <- function() {
     ##           do.rebalance = FALSE)
     ## })
     ## warning only, no trades
-    options(warn=0)
-    checkEquals(length(journal(btest(prices = prices, signal = signal, 
+    options(warn = 0)
+    checkEquals(length(journal(suppressWarnings(btest(prices = prices, signal = signal, 
                               do.signal = TRUE,
-                              do.rebalance = FALSE))),
+                              do.rebalance = FALSE)))),
                 0L)
 
     when <- c(10,20)
@@ -1181,7 +1189,8 @@ test.returns <- function() {
 
     
     ## period -- ytd
-    checkEquals(c(returns(x, t = t, period = "ytd")),
+    ## --> supress warning that 2012 is not the current year
+    checkEquals(c(suppressWarnings(returns(x, t = t, period = "ytd"))),
                 tail(x,1)/head(x,1) - 1)
     
     ## period -- mtd

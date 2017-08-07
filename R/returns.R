@@ -290,9 +290,6 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
 }
 
 as.zoo.p_returns <- function (x, ...) {
-    if (is.list(x))
-        warning(paste0("format of ", sQuote("p_returns"),
-                       "objects has changed: see ChangeLog 2015-06-26"))
     zoo(x, attr(x, "t"))
 }
 
@@ -334,9 +331,6 @@ fmt <- function(x, plus, digits) {
 print.p_returns <- function(x, ..., year.rows = TRUE,
                            month.names = NULL, zero.print = "0", plus = FALSE,
                            digits = 1, na.print = NULL) {
-    if (is.list(x))
-        warning("format of 'p_returns' objects has changed:",
-                " see ChangeLog 2015-06-26")
     period <- attr(x, "period")
     timestamp <- attr(x, "t")
     if (period == "monthly" && is.null(dim(x))) {
@@ -402,8 +396,6 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
 toLatex.p_returns <- function(object, ..., year.rows = TRUE,
                               ytd = "YTD", month.names = NULL, eol = "\\\\",
                               stand.alone = FALSE) {
-    if (is.list(object))
-        warning("format of 'p_returns' objects has changed: see ChangeLog 2015-06-26")
 
     period <- attr(object, "period")
     timestamp <- attr(object, "t")
@@ -435,9 +427,6 @@ toHTML.p_returns <- function(x, ..., year.rows = TRUE,
                             td.class = NULL,
                             tr.style = NULL, tr.class = NULL,
                             browse = FALSE) {
-
-    if (is.list(x))
-        warning("format of 'p_returns' objects has changed: see ChangeLog 2015-06-26")
 
     period <- attr(x, "period")
     timestamp <- attr(x, "t")
@@ -493,9 +482,6 @@ toHTML.p_returns <- function(x, ..., year.rows = TRUE,
 ## not exported
 toText.p_returns <- function(x, ..., year.rows = TRUE,
                             ytd = "YTD", month.names = NULL) {
-
-    if (is.list(x))
-        warning("format of 'p_returns' objects has changed: see ChangeLog 2015-06-26")
 
     period <- attr(x, "period")
     timestamp <- attr(x, "t")

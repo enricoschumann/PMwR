@@ -1,12 +1,12 @@
 ## -*- truncate-lines: t; fill-column: 60; -*-
 
-quote32 <- q32 <- function(price, sep = "-", warn = TRUE) {
+quote32 <- q32 <- function(price, sep = "(-|')", warn = TRUE) {
     if (is.character(price)) {
         if (warn &&
             any(!grepl(paste0("[0-9]+", sep, "?[0-9]+"), price)))
             warning("(some) prices do not match pattern <number> <sep> <number>")
 
-        tmp <- strsplit(price, sep, fixed = TRUE)
+        tmp <- strsplit(price, sep)
         handle <- unlist(lapply(tmp, `[[`, 1))
         ticks <- substr(unlist(lapply(tmp, `[[`, 2)), 1, 2)
         frac <- substr(unlist(lapply(tmp, `[[`, 2)), 3,3)
@@ -56,7 +56,7 @@ print.quote32 <- function(x, sep = "-",
     
     cat(paste0(attr(x, "handle"), sep,
                sprintf("%02d", attr(x, "ticks")),
-               frac, "\n"), sep = "")
+               frac, ""), sep = "")
     invisible(x)
 }
 
@@ -73,5 +73,28 @@ Ops.quote32 <- function (e1, e2) {
 
 `+.quote32` <- function(e1, e2) {
     ans <- as.numeric(e1) + as.numeric(e2)
+    quote32(ans)
+}
+
+c.quote32 <- function(..., recursive = FALSE) {
+    L <- list(...)
+    ans <- unlist(L)
+    attr(ans, "handle") <- unlist(lapply(L, attr, "handle"))
+    attr(ans, "ticks")  <- unlist(lapply(L, attr, "ticks"))
+    attr(ans, "fraction") <- unlist(lapply(L, attr, "fraction"))
+    class(ans) <- "quote32"
+    ans
+}
+
+Summary.quote32 <- function(..., na.rm){
+    if (.Generic %in% c("min", "max", "range")) {
+        ans <- NextMethod(.Generic)
+        quote32(ans)
+    } else
+        NextMethod(.Generic)
+}
+
+diff.quote32 <- function(x, ...) {
+    ans <- x[2:length(x)] - x[1:(length(x)-1)]
     quote32(ans)
 }
