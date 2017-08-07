@@ -382,11 +382,6 @@ as.data.frame.pl <- function(x, ...) {
 }
 
 .pl_stats <- function(amount, price, tol = sqrt(.Machine$double.eps)) {
-    ## if (any(rm <- abs(amount) < tol)) {
-    ##     warning("removed zero amounts")
-    ##     amount <-  amount[!rm]
-    ##     price  <- price[!rm]
-    ## }
     cs <- cumsum(amount)
     acs <- abs(cs)
     av <- rd <- numeric(n <- length(cs))
