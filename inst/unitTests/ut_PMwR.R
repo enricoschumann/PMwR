@@ -861,32 +861,19 @@ test.pl <- function() {
     checkEqualsNumeric(res[[1]]$unrealised[3], 4)
     checkEqualsNumeric(res[[1]]$unrealised[4], 7)
    
+
+    ## unsorted timestamp
+    jnl <- journal(price  = c( 90, 50, 100), 
+                   amount = c(  1,  1,  -2),
+                   timestamp = 3:1)
+    checkEquals(pl(jnl, along.timestamp = TRUE)[[1]]$timestamp, 1:3)
+
+    ## implicit timestamp
+    jnl <- journal(price  = c( 90, 50, 100), 
+                   amount = c(  1,  1,  -2))
+    checkEquals(pl(jnl, along.timestamp = TRUE)[[1]]$timestamp, 1:3)
     
 }
-
-
-## instrument  <- c("FGBL", "FGBL", "Bond", "Bond")
-## amount <- c(1, -2, 2, -1)
-## price <- c(100,101, 1, 5)
-## ## .pl(amount, price)
-## pl.default(amount, price, instrument=instrument)
-## pl.default(amount, price, instrument=instrument, vprice=c(FGBL=103, Bond = 2))
-
-## amount <- c(1, -2)
-## price <- c(100,101)
-## pl.default(amount, price)
-## pl.default(amount, price, vprice=100)
-
-## require("rbenchmark")
-
-## amount <- rep(c(1,-1), times = 1000)
-## price <- rep(c(100,101), times = 1000)
-
-## benchmark(-drop(crossprod(amount, price)),
-##           -c(crossprod(amount, price)),
-##           -sum(amount * price),
-##           columns = c("test", "elapsed", "relative"),
-##           replications = 100000, order ="relative")
 
 
 test.quote32 <- function() {

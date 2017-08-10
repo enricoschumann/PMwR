@@ -44,7 +44,6 @@ print.pl <- function(x, ..., use.crayon = NULL, na.print = ".") {
                                      x[[i]]$realised,
                                      x[[i]]$unrealised))),
               as.character(x[[i]]$timestamp))))
-        ## browser()
         if (!is.null(x[[i]]$timestamp))
             cat(indent,      "timestamp     ", numrow(as.character(x[[i]]$timestamp), w),
                 "\n", sep = "")
@@ -116,11 +115,26 @@ pl.default <- function(amount, price, timestamp = NULL,
         .NotYetUsed("approx")
 
 
-    ## if user defined timestamp: vprice needs to be
-    ## specified and must be a matrix. In this case,
-    ## along.timestamp is a vector of Dates, POSIXct, ...
-    if (!identical(along.timestamp, TRUE) &&
-        !identical(along.timestamp, FALSE)) {
+    custom.timestamp <- FALSE
+    if (isTRUE(along.timestamp)) {
+        
+        if (is.null(timestamp) || all(is.na(timestamp)))
+            timestamp <- seq_along(amount)
+        else            
+            if (is.unsorted(timestamp)) {
+                io <- order(timestamp)
+                timestamp <- timestamp[io]
+                amount <- amount[io]
+                instrument <- instrument[io]
+                price <- price[io]
+            }        
+    } else if (!identical(along.timestamp, FALSE)) {
+
+        ## User-defined timestamp: vprice needs to be
+        ## specified and must be a matrix. In this
+        ## case, along.timestamp is a vector of Dates,
+        ## POSIXct, ...
+
         custom.timestamp <- TRUE
                
         if (is.null(dim(vprice)))
@@ -133,11 +147,7 @@ pl.default <- function(amount, price, timestamp = NULL,
         if (nrow(vprice) != length(along.timestamp))
             stop("lengths of ", sQuote("vprice"), " and ",
                  sQuote("along.timestamp"), " differ")
-        
-    } else {
-        custom.timestamp <- FALSE
-    }
-  
+    }        
 
     ## initial position should be a named vector
     if (!is.null(initial.position)) {

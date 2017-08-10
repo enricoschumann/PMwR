@@ -1,3 +1,11 @@
+2017-08-10  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.5-3
+
+	* R/pl.R (pl.default): fixed -- the function
+	had not checked whether a supplied timestamp
+	was actually sorted
+
 2017-08-07  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): 0.5-2
