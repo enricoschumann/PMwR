@@ -172,7 +172,11 @@ print.position <- function(x, ..., sep = ":") {
     attr(x, "account") <- NULL
     attr(x, "instrument") <- NULL
     attr(x, "timestamp") <- NULL
-    if (dim(x)[1L] > 1L) {
+    if (dim(x) == c(1L,1L) &&
+        is.null(rownames(x)) &&
+        is.null(colnames(x))) {
+        cat(x, "\n")
+    } else if (dim(x)[1L] > 1L) {
         print(unclass(x), na.print = "")
     } else {
         print(t(unclass(x)), na.print = "")
