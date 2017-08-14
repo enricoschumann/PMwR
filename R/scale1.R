@@ -124,8 +124,8 @@ scale1.NAVseries <- function(x, ..., when = "first.complete",
                              inflate = NULL,
                              total.g = NULL) {
 
-    ii <- x$timestamp
-    xx <- x$NAV
+    ii <- attr(x, "timestamp")
+    xx <- c(x)
     if (!is.null(inflate)) {
         dates <- as.Date(ii)
         inflate.d <- (1+inflate)^(1/365)
@@ -138,7 +138,7 @@ scale1.NAVseries <- function(x, ..., when = "first.complete",
                           centre = centre, scale = scale,
                           geometric = geometric,
                           total.g = total.g)
-    x$NAV <- ans
+    x[] <- ans
     x
 }
 

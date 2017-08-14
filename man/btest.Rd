@@ -32,6 +32,11 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
     prices should be arranged in a matrix \code{p} of size 100 times 5;
     and \code{prices = list(p)}.)
 
+    The series in \code{prices} are also used to value
+    the positions that are created. If signals are to
+    be based on other series, then these other series
+    should be passed via the \dots argument.
+    
   }
   \item{signal}{
 

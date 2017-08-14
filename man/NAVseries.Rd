@@ -1,6 +1,7 @@
 \name{NAVseries}
 \alias{NAVseries}
 \alias{as.NAVseries}
+\alias{plot.NAVseries}
 \alias{print.NAVseries}
 \alias{summary.NAVseries}
 \title{
@@ -16,7 +17,10 @@ NAVseries(NAV, timestamp,
 as.NAVseries(x, ...)
 
 \method{print}{NAVseries}(x, \dots)
+
 \method{summary}{NAVseries}(object, monthly = TRUE, \dots )
+
+\method{plot}{NAVseries}(x, y, xlab = "", ylab = "", \dots )
 }
 \arguments{
   \item{NAV}{
@@ -47,16 +51,33 @@ as.NAVseries(x, ...)
   if \code{TRUE} (default), volatility computations
   are done on monthly returns
 }
+\item{y}{
+  a second NAVseries to be plotted. Not supported yet.
+}
+\item{xlab}{
+  character
+}
+\item{ylab}{
+  character
+}
 }
 \details{
-  Experimental.
+
+  An NAVseries is a numeric vector (the actual series) and additional
+  information, attached as attributes: timestamp, instrument, title,
+  description. Of these attributes, timestamp is the most useful, as it
+  is used for several computations (e.g. when callung
+  \code{\link{summary}}) or for plotting.
+  
+  
 }
 \value{
-A \code{NAVseries}
+an \code{NAVseries}: see Details.
 }
 \references{
-Schumann, E. (2016) \emph{Portfolio Management
-  with R}. \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
+
+  Schumann, E. (2017) \emph{Portfolio Management with
+  \R}. \url{http://enricoschumann.net/PMwR/}
 
 } 
 \author{

@@ -4,33 +4,32 @@ NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
                       title = NULL,
                       description = NULL) {
-    if (missing(timestamp)) 
+    if (missing(timestamp))
         timestamp <- seq_along(NAV)
-    ans <- list(NAV = NAV, timestamp = timestamp,
-                instrument = instrument,
-                title = as.character(title),
-                description = as.character(description))
-    if (any(duplicated(ans$timestamp)))
+    ans <- NAV
+    attr(ans, "timestamp") <- timestamp
+    attr(ans, "instrument") <- instrument
+    attr(ans, "title") <- as.character(title)
+    attr(ans, "description") <- as.character(description)
+    if (anyDuplicated(attr(ans, "timestamp")))
         warning("duplicated timestamps")
     class(ans) <- "NAVseries"
     ans
 }
 
-
 print.NAVseries <- function(x, ...) {
-    ## TODO: should there be warnings if leading or trailing NAs are
-    ## removed?
-
     bm <- function(x)
         if (x >= 10000)
-            format(x, big.mark = ",", decimal.mark = ".") else x
-    if (length(x$title))
-        cat(x$title, "\n")
-    else if (!is.null(x$instrument))
-        cat(x$instrument, "\n")
+            format(x, big.mark = ",", decimal.mark = ".")
+        else
+            x
+    if (length(title <- attr(x, "title")))
+        cat(title, "\n")
+    else if (!is.null(instrument <- attr(x, "instrument")))
+        cat(instrument, "\n")
 
-    timestamp <- x$timestamp
-    NAV <- x$NAV
+    timestamp <- attr(x, "timestamp")
+    NAV <- x
     n <- length(timestamp)
     isna <- is.na(NAV)
     timestamp <- timestamp[!isna]
@@ -48,55 +47,61 @@ print.NAVseries <- function(x, ...) {
     last <- NAV[length(NAV)]
 
     cat(mint, "==>", maxt)
-    cat("   (", bm(n), " data points, ", 
-        na, " NAs)\n", sep = "")
-    cat(format(first, justify = "right", width = nchar(mint), digits = 6), "   ",
-        format(last,  justify = "right", width = nchar(maxt), digits = 6), "")
-    if (is.na(x$NAV[1L]) && is.na(x$NAV[n]))
+    cat("   (", bm(n), " data points, ",
+        na, " NA", if (na != 1L) "s" ,")\n", sep = "")
+    cat(format(first, justify = "right", width = nchar(mint), digits = 6),
+        "   ",
+        format(last,  justify = "right", width = nchar(maxt), digits = 6))
+
+    ## TODO: should there be warnings if leading or
+    ## trailing NAs are removed?
+    if (is.na(x[1L]) && is.na(x[n]))
         cat("  (leading and trailing NAs removed)")
-    else if (is.na(x$NAV[1L]))
+    else if (is.na(x[1L]))
         cat("  (leading NAs removed)")
-    else if (is.na(x$NAV[n]))
+    else if (is.na(x[n]))
         cat("  (trailing NAs removed)")
     cat("\n")
     invisible(x)
-    
 }
 
 summary.NAVseries <- function(object, monthly = TRUE, ...) {
-
     ## TODO: assuming daily timestamps -- too restrictive? hourly?
     ## TODO: timestamp can also be numeric 1 .. n_obs
-    isna <- is.na(object$NAV)
+    isna <- is.na(object)
     nna <- sum(isna)
-    timestamp <- object$timestamp[!isna]
-    NAV <- object$NAV[!isna]
+    timestamp <- attr(object, "timestamp")[!isna]
+    NAV <- object[!isna]
     if (!is.null(timestamp) &&
-        !inherits(try(timestampD <- as.Date(timestamp), silent = TRUE), "try-error") && 
+        !inherits(try(timestampD <- as.Date(timestamp), silent = TRUE),
+                  "try-error") &&
         !any(is.na(timestampD))) {
         NAV <- aggregate(NAV, by = list(as.Date(timestamp)), tail, 1L)[[2L]]
         timestamp <- aggregate(timestamp,
                                by = list(as.Date(timestamp)), tail, 1L)[[2L]]
-    }
-    
+    } else
+        timestampD <- timestamp
+
     ans <- list()
     ans$NAVseries <- object
-    ans$NAV <- NAV
+    ans$NAV <- c(object)
     ans$timestamp <- timestamp
-    ans$from <- min(timestamp)
-    ans$to   <- max(timestamp)
-    ans$nobs <- length(object$timestamp)
+    ans$start <- min(timestamp)
+    ans$end   <- max(timestamp)
+    ans$nobs <- length(attr(object, "timestamp"))
     ans$nna  <- nna
     ans$low  <- min(NAV)
     ans$high <- max(NAV)
     ans$low.when  <- timestamp[which.min(NAV)[1L]]
     ans$high.when <- timestamp[which.max(NAV)[1L]]
-    ans$return <- if ((t <- as.numeric(ans$to - ans$from)) > 365)
+    ans$return <- if ((t <- as.numeric(ans$end - ans$start)) > 365)
                       ((tail(NAV,1)/head(NAV,1))^(365/t)) - 1
-                  else 
+                  else
                       (tail(NAV,1)/head(NAV,1)) - 1
-                  
-    ans$return.annualised <- if (t > 365) TRUE else FALSE
+    ans$return.annualised <- if (t >= 365)
+                                 TRUE
+                             else
+                                 FALSE
     tmp          <- drawdown(NAV)
     ans$mdd      <- tmp$maximum
     ans$mdd.high <- tmp$high
@@ -105,23 +110,34 @@ summary.NAVseries <- function(object, monthly = TRUE, ...) {
     ans$mdd.low.when   <- timestamp[tmp$low.position]
     ans$underwater <- 1 - NAV[length(NAV)]/max(NAV)
 
-    if (monthly) {
-        tmp <- last(NAV, format(timestampD, "%Y %m"))
-        ans$vol      <- sd(returns(tmp))*sqrt(12)
-        ans$vol.up   <- pm(returns(tmp), normalise = TRUE, lower = FALSE)*sqrt(12)
-        ans$vol.down <- pm(returns(tmp), normalise = TRUE)*sqrt(12)
-
+    if (inherits(timestampD, "Date")) {
+        if (monthly) {
+            tmp <- returns(NAV, t = timestamp, period = "month")
+            sq12 <- sqrt(12)
+            ans$vol      <- sd(tmp) * sq12
+            ans$vol.up   <- pm(tmp, normalise = TRUE,
+                               lower = FALSE) * sq12
+            ans$vol.down <- pm(tmp, normalise = TRUE) * sq12
+        } else {
+            ## TODO: assumes daily data -- too restrictive?
+            ans$vol      <- sd(returns(NAV))*16
+            ans$vol.up   <- pm(returns(NAV), normalise = TRUE,
+                               lower = FALSE)*16
+            ans$vol.down <- pm(returns(NAV), normalise = TRUE)*16
+        }
     } else {
-        ans$vol      <- sd(returns(NAV))*16
-        ans$vol.up   <- pm(returns(NAV), normalise = TRUE, lower = FALSE)*16
-        ans$vol.down <- pm(returns(NAV), normalise = TRUE)*16
+            ans$vol      <- sd(returns(NAV))
+            ans$vol.up   <- pm(returns(NAV), normalise = TRUE, lower = FALSE)
+            ans$vol.down <- pm(returns(NAV), normalise = TRUE)
     }
+
     class(ans) <- "summary.NAVseries"
     ans
-
 }
 
-print.summary.NAVseries <- function(x, ..., sparkplot = TRUE, monthly.returns = TRUE) {
+print.summary.NAVseries <- function(x, ...,
+                                    sparkplot = TRUE,
+                                    monthly.returns = TRUE) {
     datef <- function(x) {
         if (inherits(x[1L], "Date"))
             x <- format(x, "%d %b %Y")
@@ -132,10 +148,11 @@ print.summary.NAVseries <- function(x, ..., sparkplot = TRUE, monthly.returns = 
     numf <- function(x)
         format(x, justify = "right", width = 7, nsmall = 2, digits = 2,
                scientific = FALSE)
-    if (length(x$NAVseries$title))
-        cat(x$NAVseries$title, "\n")
-    else if (!is.null(x$NAVseries$instrument))
-        cat(x$NAVseries$instrument, "\n")
+
+    if (length(title <- attr(x$NAVseries, "title")))
+        cat(title, "\n")
+    else if (!is.null(instrument <- attr(x$NAVseries, "instrument")))
+        cat(instrument, "\n")
 
     ## format: dates
     fields <- c("from", "to", "low.when", "high.when",
@@ -154,9 +171,8 @@ print.summary.NAVseries <- function(x, ..., sparkplot = TRUE, monthly.returns = 
     for (f in fields)
         x[[f]] <- numf(x[[f]])
 
-    
     cat("---------------------------------------------------------\n")
-    print(x$NAVseries)    
+    print(x$NAVseries, ...)
     template <-
         c("---------------------------------------------------------",
           "High <>%high%|  (%high.when%)",
@@ -180,15 +196,18 @@ print.summary.NAVseries <- function(x, ..., sparkplot = TRUE, monthly.returns = 
     for (n in nx)
         template <- gsub(paste0("%", n, "%"), x[[n]], template)
     template <- valign(template)
+    if (!x$return.annualised)
+        template <- sub("(annualised)", "", template, fixed = TRUE)
     cat(template, sep = "\n")
-    if (monthly.returns && inherits(x$timestamp, "Date")) {        
+    if (monthly.returns && inherits(x$timestamp, "Date")) {
         cat("Monthly returns  ")
-        if (.Platform$OS.type == "unix") 
-            sparkplot(returns(x=x$NAV, t=x$timestamp, period = "month"))
+        mr <- returns(x = x$NAV,
+                      t = x$timestamp,
+                      period = "month")
+        if (.Platform$OS.type == "unix")
+            sparkplot(mr)
         cat("\n")
-        
-        print(returns(x$NAV, x$timestamp, period = "month"),
-              year.rows = TRUE)
+        print(mr, ...)
     }
     invisible(x)
 }
@@ -257,12 +276,11 @@ toLatex.summary.NAVseries <- function(x, ...) {
         template <- gsub(paste0("%", n, "%"), x[[n]], template)
     template <- valign(template)
     cat(template, sep = "\n")
-    if (monthly.returns && inherits(x$timestamp, "Date")) {        
+    if (monthly.returns && inherits(x$timestamp, "Date")) {
         cat("Monthly returns  ")
-        if (.Platform$OS.type == "unix") 
+        if (.Platform$OS.type == "unix")
             sparkplot(returns(x=x$NAV, t=x$timestamp, period = "month"))
         cat("\n")
-        
         print(returns(x$NAV, x$timestamp, period = "month"),
               year.rows = TRUE)
     }
@@ -270,43 +288,42 @@ toLatex.summary.NAVseries <- function(x, ...) {
 }
 
 ## print.NAVseries <- function(x, ...) {
-        
-    
+
 ##     if (length(ii <- which(NAV == stats$low)) > 1L) {
 ##         stats$low_timestamp <- paste0(datef(timestamp[ii][1L]), "*")
-##         footnote <- TRUE        
+##         footnote <- TRUE
 ##     } else
 ##         stats$low_timestamp <- datef(timestamp[ii])
 
 ##     if (length(ii <- which(NAV == stats$high)) > 1L) {
 ##         stats$high_timestamp <- paste0(datef(timestamp[ii][1L]), "*")
-##         footnote <- TRUE        
+##         footnote <- TRUE
 ##     } else
 ##         stats$high_timestamp <- datef(timestamp[ii])
 
 ##     stats$vol      <- percf(sd(returns(NAV))*16)
 ##     stats$vol_up   <- percf(pm(returns(NAV), normalise = TRUE, lower = FALSE)*16)
 ##     stats$vol_down <- percf(pm(returns(NAV), normalise = TRUE)*16)
-    
+
 ##     for (s in names(stats)) {
 ##         template <- gsub(paste0("%", s, "%"), stats[[s]], template)
 ##     }
-    
+
 ##     cat(template, fill = TRUE)
-    
+
 ##     cat("\n")
 ##     invisible(x)
 ## }
 
-
 plot.NAVseries <- function(x, y,
                            xlab = "", ylab = "", ...) {
     if (!missing(y))
-        stop("scatterplot of *returns* -- not implemented")    
-    plot(x = x$timestamp, y = x$NAV,
-         xlab = xlab, ylab = "", ...)
+        stop("scatterplot of *returns* -- not implemented")
+    plot(x = attr(x, "timestamp"),
+         y = x,
+         xlab = xlab, ylab = ylab, ...)
 
-    invisible(x)
+    invisible()
 }
 
 as.NAVseries <- function(x, ...) {
@@ -315,7 +332,7 @@ as.NAVseries <- function(x, ...) {
 
 as.NAVseries.zoo <- function(x, ...){
     dx <- dim(x)
-    if (!is.null(dx) && !any(dx == 1))
+    if (!is.null(dx) && !any(dx == 1L))
         stop("can only coerce single series")
     NAVseries(NAV = coredata(x), timestamp = index(x))
 }
@@ -333,7 +350,7 @@ as.NAVseries.btest <- function(x, ...){
 }
 
 as.zoo.NAVseries <- function(x, ...){
-    zoo(x$NAV, x$timestamp)
+    zoo(x$NAV, attr(x, "timestamp"))
 }
 
 .summary.NAVseries.template <- 
@@ -356,6 +373,5 @@ Volatility p.a. in \\% & %vol%        &                                         
 toLatex.summary.NAVseries <-
     function(x, template = .summary.NAVseries.template, ...) {
 
-.summary.NAVseries.template        
+        .summary.NAVseries.template
 }
-    

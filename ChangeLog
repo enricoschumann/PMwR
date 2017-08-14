@@ -1,3 +1,12 @@
+2017-08-14  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (NAVseries): change structure
+	of NAVseries to a numeric vector with attributes;
+	update methods, such as scale1.NAVseries
+
+	* inst/unitTests/ut_PMwR.R (test.NAVseries):
+	add tests
+
 2017-08-11  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (print.position): drop dimension
@@ -60,7 +69,8 @@
 
 2017-07-06  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pl.R (pl.default): clean code/remove comments
+	* R/pl.R (pl.default): clean code/remove
+	comments
 
 	* R/journal.R (summary.journal): safeguard
 	summary method and the associated print method
@@ -123,7 +133,7 @@
           pl(amount = 10, price = 10,
 	     instrument = "A", vprice = 10)
 
-	would fail because 'pl' now expected a named
+	would fail because 'pl' expected a named
 	vector of valuation prices, i.e.
 
 	  vprice = c(A = 10)

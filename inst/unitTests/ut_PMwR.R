@@ -1383,7 +1383,68 @@ test.is_valid_ISIN <- function() {
                 c(TRUE, TRUE,  TRUE, FALSE))
     
     ## case is ignored
-    checkEquals(unname(isValidISIN(c("US0378331005", "us0378331005"))),
+    checkEquals(unname(isValidISIN(c("US0378331005",
+                                     "us0378331005"))),
                 c(TRUE, TRUE))
+
+}
+
+test.NAVseries <- function() {
+
+    ## require("PMwR")
+    ## require("RUnit")
+
+    nav <- NAVseries(1:10)
+    checkEquals(c(nav), 1:10)
+    checkEquals(attr(nav, "timestamp"), 1:10)  ## integer timestamp added
+    ## summary
+    sum.nav <- summary(nav)
+    checkEquals(sum.nav$return, tail(nav,1)/head(nav, 1)-1)
+    checkEquals(sum.nav$nna, 0)
+    checkEquals(sum.nav$nobs, 10)
+
+
+
+    ## with NA
+    nav <- NAVseries(c(1, NA, 3:10))
+    checkEquals(attr(nav, "timestamp"), 1:10)  ## integer timestamp added
+    ## summary
+    sum.nav <- summary(nav)
+    checkEquals(sum.nav$return, tail(nav,1)/head(nav, 1)-1)
+    checkEquals(sum.nav$nna, 1)
+    checkEquals(sum.nav$nobs, 10)
+
+
+    
+    ## with Date timestamp
+    nav <- NAVseries(1:10, timestamp = as.Date("2017-1-1")+0:9)
+    checkEquals(c(nav), 1:10)
+    checkEquals(attr(nav, "timestamp"), as.Date("2017-1-1")+0:9)
+    ## summary
+    sum.nav <- summary(nav)
+    checkEquals(sum.nav$return, tail(nav,1)/head(nav, 1)-1)
+    checkEquals(sum.nav$nna, 0)
+    checkEquals(sum.nav$nobs, 10)
+
+    ## scale1
+    checkEquals(scale1(NAVseries(10:15), level = 100),
+                NAVseries((10:15)*10))
+
+
+
+    
+    prices <- 100:109
+    
+    signal <- function()
+        1
+    bt <- btest(prices = prices, signal = signal, b = 0,
+                initial.cash = 100)
+    journal(bt)
+    checkEquals(c(as.NAVseries(bt)), 100:109)
+
+    ## summary(nav, monthly = FALSE)
+
+    ## plot(NAVseries(1:10))
+    ## plot(NAVseries(1:10, timestamp = as.Date("2017-1-1")+0:9))
 
 }
