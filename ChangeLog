@@ -1,5 +1,7 @@
 2017-08-14  Enrico Schumann  <es@enricoschumann.net>
 
+	* DESCRIPTION (Version): 0.5-4
+
 	* R/NAVseries.R (NAVseries): change structure
 	of NAVseries to a numeric vector with attributes;
 	update methods, such as scale1.NAVseries
