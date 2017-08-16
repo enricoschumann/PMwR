@@ -1,3 +1,7 @@
+2017-08-16  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pricetable.R (pricetable.zoo): add method
+
 2017-08-14  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): 0.5-4

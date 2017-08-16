@@ -56,12 +56,14 @@ pricetable <- function(price, ...) {
     UseMethod("pricetable")
 }
 
-pricetable.matrix <- function(price, instrument, timestamp,
-                              missing = "NA", ...) {
+pricetable.default <- function(price, instrument, timestamp,
+                               missing = NA, ...) {
+
+    price <- as.matrix(price)
 
     if (missing(instrument))
         if (is.null(instrument <- colnames(price)))
-            instrument <- seq_len(ncol(price))
+            instrument <- paste0("P", seq_len(ncol(price)))
 
     if (missing(timestamp))
         if (is.null(timestamp <- rownames(price)))
@@ -74,12 +76,25 @@ pricetable.matrix <- function(price, instrument, timestamp,
         warning("duplicate timestamps")
 
     ans <- price
-    colnames(ans) <- attr(ans, "instrument") <- instrument
-    rownames(ans) <- attr(ans, "timestamp") <- timestamp
+    attr(ans, "instrument") <- instrument
+    attr(ans, "timestamp") <- timestamp
 
+    colnames(ans) <- as.character(instrument)
+    rownames(ans) <- as.character(timestamp)
+    
     class(ans) <- "pricetable"
     ans
     
+}
+
+pricetable.zoo <- function(price, instrument, missing = NA, ...) {
+
+    timestamp <- index(price)
+    pricetable.default(coredata(price),
+                       instrument = instrument,
+                       timestamp = timestamp,
+                       missing = missing, ...)
+
 }
 
 
@@ -110,17 +125,39 @@ pricetable.matrix <- function(price, instrument, timestamp,
     ## } else
     ##     ii <- i
 
-    p.raw <- unclass(p)
-    
-    if (is.character(j)) {
-        j <- match(j, attr(p, "instrument"), nomatch = 0L)
-    }
+    timestamp <- attr(p, "timestamp")
+    instrument <- attr(p, "instrument")
 
+    if (missing(i)) {
+        i <- TRUE
+    } else if (is.character(i)) {
+        if (inherits(timestamp, "Date"))
+            i <- as.Date(i)
+        i <- match(i, timestamp, nomatch = 0L)        
+    } else
+        i <- match(i, timestamp, nomatch = 0L)        
+        
+    if (missing(j)) {
+        j <- TRUE
+    } else if (is.character(j)) {
+        j <- match(j, instrument, nomatch = 0L)
+    } else
+        j <- match(j, instrument, nomatch = 0L)
+    ##:ess-bp-start::browser@nil:##
+browser(expr=is.null(.ESSBP.[["@8@"]]));##:ess-bp-end:##
+    
     ans <- array(NA, dim = c(length(i), length(j)))
+        
+    ans[i>0, j>0] <- unclass(p)[i[ i> 0], j[ j> 0], drop = FALSE]
 
-    
-    ans <- unclass(p)[i,j, drop = drop]
+    attr(ans, "timestamp") <- timestamp[i>0]
+    attr(ans, "instrument") <- instrument[j>0]
+
+    rownames(ans[i>0, ]) <- as.character(timestamp[i>0])
+    colnames(ans[]) <- as.character(instrument[j>0])
+
     class(ans) <- "pricetable"
+
     ans
 }
 
@@ -134,3 +171,11 @@ pricetable.matrix <- function(price, instrument, timestamp,
 
 ## p <- pricetable(x)
 ## p[ , c("a", "a", "c")]
+
+## require("zoo")
+
+## z <- zoo(1:10, as.Date("2017-1-1")+0:9)
+
+## pricetable(z)[as.Date("2017-1-1")+-1:3]
+
+## pricetable(z)["2017-1-1"]
