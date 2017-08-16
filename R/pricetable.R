@@ -57,9 +57,7 @@ pricetable <- function(price, ...) {
 }
 
 pricetable.default <- function(price, instrument, timestamp, ...) {
-
     price <- as.matrix(price)
-
     if (missing(instrument))
         if (is.null(instrument <- colnames(price)))
             instrument <- paste0("P", seq_len(ncol(price)))
@@ -78,25 +76,41 @@ pricetable.default <- function(price, instrument, timestamp, ...) {
     attr(ans, "instrument") <- instrument
     attr(ans, "timestamp") <- timestamp
 
-    colnames(ans) <- as.character(instrument)
-    rownames(ans) <- as.character(timestamp)
+    ## colnames(ans) <- as.character(instrument)
+    ## rownames(ans) <- as.character(timestamp)
     
     class(ans) <- "pricetable"
     ans
     
 }
 
-pricetable.zoo <- function(price, instrument, ...) {
+pricetable.zoo <- function(price, ..., instrument) {
+    dots <- list(...)
 
-    timestamp <- index(price)
+    if (length(dots)) {
+        dots <- c(list(price), dots)
+        timestamp <- do.call(c, lapply(dots, index))
+        if (inherits(timestamp, "Date")) {
+            timestamp <- sort(unique(unclass(timestamp)))
+            class(timestamp) <- "Date"
+        } else
+            timestamp <- sort(unique(timestamp))
+        price <- array(NA, dim = c(length(timestamp), length(dots)))
+        for (j in seq_along(dots)) {
+            i <- fmatch(index(dots[[j]]), timestamp, nomatch = 0L)
+            ## TODO use unclass instead of coredata?
+            price[i, j] <- coredata(dots[[j]])[i > 0]
+        }
+    } else {
+        timestamp <- index(price)
+        price <- coredata(price)
+    }
     pricetable.default(coredata(price),
                        instrument = instrument,
                        timestamp = timestamp, ...)
 }
 
-
 `[.pricetable`  <- function(p, i, j, start, end, missing = NA,..., drop = FALSE) {
-
 
     ## pt[when, instrument]
     ##
@@ -152,7 +166,7 @@ pricetable.zoo <- function(price, instrument, ...) {
 
     ans <- array(NA, dim = c(length(i), length(j)))
         
-    ans[i>0, j>0] <- unclass(p)[i[ i> 0], j[ j> 0], drop = FALSE]
+    ans[i>0, j>0] <- unclass(p)[i[ i>0 ], j[ j>0 ], drop = FALSE]
 
     attr(ans, "timestamp") <- i.orig
     attr(ans, "instrument") <- j.orig
@@ -178,4 +192,3 @@ print.pricetable <- function(x, ...) {
     attr(xx, "instrument") <- NULL
     print.default(unclass(xx))
 }
-

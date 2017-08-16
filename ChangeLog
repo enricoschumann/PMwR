@@ -1,5 +1,11 @@
 2017-08-16  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/pricetable.R (pricetable.zoo): experimental
+	-- have pricetable merge zoo series passed
+	via ...
+
+2017-08-16  Enrico Schumann  <es@enricoschumann.net>
+
 	* DESCRIPTION (Version): 0.5-5
 
 	* NAMESPACE: export pricetable methods

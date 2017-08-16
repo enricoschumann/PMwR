@@ -19,6 +19,7 @@ importFrom(datetimeutils, first_of_month)
 importFrom(datetimeutils, roundPOSIXt)
 importFrom(datetimeutils, timegrid)
 importFrom(crayon, bold)
+importFrom(fastmatch, fmatch)
 
 importFrom("grDevices",
            "grey")
