@@ -1,3 +1,10 @@
+2017-08-15  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (as.zoo.NAVseries): fix method
+	-- was broken after update (ChangeLog of
+	2017-08-14)
+	* R/returns.R (returns.NAVseries): fix method
+
 2017-08-14  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): 0.5-4

@@ -17,11 +17,11 @@ returns.NAVseries <- function(x, period = NULL, complete.first = TRUE,
     ## returns, only for NAVs (levels)
 
     if (!is.null(period)) {
-        returns.default(x$NAV, t = x$timestamp, period = period,
+        returns.default(x, t = attr(x, "timestamp"), period = period,
                         complete.first = complete.first,
                         pad = pad, position = position, lag = lag, ...)
     } else {
-        returns.default(x$NAV, period = NULL,
+        returns.default(c(x), period = NULL,
                         complete.first = complete.first,
                         pad = pad, position = position, lag = lag, ...)
     }

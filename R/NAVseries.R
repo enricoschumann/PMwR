@@ -350,7 +350,7 @@ as.NAVseries.btest <- function(x, ...){
 }
 
 as.zoo.NAVseries <- function(x, ...){
-    zoo(x$NAV, attr(x, "timestamp"))
+    zoo(x, attr(x, "timestamp"))
 }
 
 .summary.NAVseries.template <- 
