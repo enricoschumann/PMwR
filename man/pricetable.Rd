@@ -36,11 +36,21 @@ pricetable(price, \dots)
 }
 }
 \details{
-  Experimental: interface may change; may become generic. A helper
-  function for pv.
+
+  
+  Experimental: interface may change.
+
+  A helper function for extracting prices of particular
+  instrument at specified dates. \code{pricetable} is a
+  generic function, currently with methods for numeric
+  vectors (including vectors with a \code{\link{dim}},
+  aka matrices) and for \code{\link{zoo}} objects.
+
 }
 \value{
-  A numeric matrix with class attribute pricetable
+
+  a numeric matrix with class attribute \code{pricetable}
+
 }
 \references{
   Schumann, E. (2017) \emph{Portfolio Management with
@@ -63,7 +73,9 @@ rownames(price) <- 1:m
 when <- c(0,1.2,3,3,20)
 instrument <- c("a", "c", "x", "z_1", "z_2")
 
-pricetable(instrument, when, price, missing = NA)
+pricetable(price)[,"a"]
+pricetable(price)[,"a"]
+
 pricetable(instrument, when, price, missing = 1)
 
 pricetable(c("a", "c"), when, price, missing = 1)

@@ -1,6 +1,14 @@
 2017-08-16  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pricetable.R (pricetable.zoo): add method
+	* DESCRIPTION (Version): 0.5-5
+
+	* NAMESPACE: export pricetable methods
+
+	* inst/unitTests/ut_PMwR.R (test.pricetable):
+	add tests
+
+	* R/pricetable.R (print.pricetable): add method
+	(pricetable.zoo): add method
 
 2017-08-15  Enrico Schumann  <es@enricoschumann.net>
 
@@ -2116,14 +2124,13 @@
 
 2013-10-16  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/totext.R (toText.default): coerce to character before
-        write
+        * R/totext.R (toText.default): coerce to
+	character before write
 
 2013-10-14  Enrico Schumann  <es@enricoschumann.net>
 
         * NAMESPACE: removed function 'drawdown': it is now
-        included
-        [unchanged] in the NMOF package
+        included [unchanged] in the NMOF package
 
 2013-10-10  Enrico Schumann  <es@enricoschumann.net>
 
@@ -2135,8 +2142,8 @@
 
 2013-09-18  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/returns.R (.tr): toHTML.preturns allows specification
-        of class/style
+        * R/returns.R (.tr): toHTML.preturns allows
+	specification of class/style
 
 2013-09-17  Enrico Schumann  <es@enricoschumann.net>
 
@@ -2144,8 +2151,8 @@
         isins were invalid because of length != 12 characters,
         the function failed
 
-        * R/drawdown.R (drawdown): fixed -- 'summary' argument
-        was ignored
+        * R/drawdown.R (drawdown): fixed -- 'summary'
+	argument was ignored
 
 2013-09-16  Enrico Schumann  <es@enricoschumann.net>
 
@@ -2188,7 +2195,8 @@
 
 2013-09-06  Enrico Schumann  <es@enricoschumann.net>
 
-        * man/journal.Rd: updated examples for aggregate.journal
+        * man/journal.Rd: updated examples for
+	aggregate.journal
 
         * NAMESPACE: export method aggregate.journal
 
@@ -2327,13 +2335,13 @@
 
 2013-07-22  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/trades.R (monthlyStats): removed function definition
-        and Rd file
+        * R/trades.R (monthlyStats): removed function
+	definition and Rd file
 
         * NAMESPACE: removed 'monthlyStats'
 
-        * R/isValidISIN.R (isValidISIN): ISINs are now converted
-        to upper case before being tested
+        * R/isValidISIN.R (isValidISIN): ISINs are now
+	converted to upper case before being tested
 
 2013-07-19  Enrico Schumann  <es@enricoschumann.net>
 

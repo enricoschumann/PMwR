@@ -1448,3 +1448,58 @@ test.NAVseries <- function() {
     ## plot(NAVseries(1:10, timestamp = as.Date("2017-1-1")+0:9))
 
 }
+
+test.pricetable <- function() {
+
+    ## require("PMwR")
+    ## require("RUnit")
+    ## require("zoo")
+
+    checkTrue(all(pricetable(1:10) == 1:10))
+
+    checkEquals(pricetable(1:10, timestamp = 1:10, instrument = "A"),
+                pricetable(1:10, timestamp = 1:10, instrument = "A")[,"A"])
+    
+    checkEquals(pricetable(1:10, timestamp = 1:10, instrument = "A"),
+                pricetable(1:10, timestamp = 1:10, instrument = "A")[1:10,"A"])
+
+    checkEquals(pricetable(1:10, timestamp = 1:10, instrument = "A"),
+                pricetable(1:10, timestamp = 1:10, instrument = "A")[1:10,])
+
+
+    ## repeated column
+    pt <- pricetable(1:3, timestamp = 1:3, instrument = "A")[ ,c("A","A")]
+    checkEquals(colnames(pt),c("A","A"))
+    checkEquals(pt,
+                structure(c(1L, 2L, 3L, 1L, 2L, 3L),
+                          .Dim = c(3L, 2L),
+                          timestamp = 1:3,
+                          instrument = c("A", "A"),
+                          .Dimnames = list(c("1", "2", "3"),
+                                           c("A", "A")), class = "pricetable"))
+    
+    ## repeated column + NA column
+    pt <- pricetable(1:3, timestamp = 1:3, instrument = "A")[ ,c("A","B","A")]
+    checkEquals(colnames(pt),c("A","B","A"))
+    checkEquals(pt,
+                structure(c(1L, 2L, 3L, NA, NA, NA, 1L, 2L, 3L),
+                          .Dim = c(3L, 3L),
+                          timestamp = 1:3,
+                          instrument = c("A", "B", "A"),
+                          .Dimnames = list(c("1", "2", "3"), c("A", "B", "A")),
+                          class = "pricetable"))
+
+
+    
+    ## repeated column + NA column + NA rows
+    pt <- pricetable(1:3, timestamp = 1:3, instrument = "A")[0:4 ,c("A","B","A")]
+    checkEquals(pt,
+                structure(c(NA, 1L, 2L, 3L, NA,
+                            NA, NA, NA, NA, NA,
+                            NA, 1L, 2L, 3L, NA),
+                          .Dim = c(5L, 3L),
+                          timestamp = 0:4,
+                          instrument = c("A", "B", "A"),
+                          .Dimnames = list(c("0", "1", "2", "3", "4"),
+                                           c("A", "B", "A")), class = "pricetable"))        
+}

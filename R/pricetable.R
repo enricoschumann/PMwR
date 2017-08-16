@@ -56,8 +56,7 @@ pricetable <- function(price, ...) {
     UseMethod("pricetable")
 }
 
-pricetable.default <- function(price, instrument, timestamp,
-                               missing = NA, ...) {
+pricetable.default <- function(price, instrument, timestamp, ...) {
 
     price <- as.matrix(price)
 
@@ -87,18 +86,16 @@ pricetable.default <- function(price, instrument, timestamp,
     
 }
 
-pricetable.zoo <- function(price, instrument, missing = NA, ...) {
+pricetable.zoo <- function(price, instrument, ...) {
 
     timestamp <- index(price)
     pricetable.default(coredata(price),
                        instrument = instrument,
-                       timestamp = timestamp,
-                       missing = missing, ...)
-
+                       timestamp = timestamp, ...)
 }
 
 
-`[.pricetable`  <- function(p, i, j, start, end, ..., drop = FALSE) {
+`[.pricetable`  <- function(p, i, j, start, end, missing = NA,..., drop = FALSE) {
 
 
     ## pt[when, instrument]
@@ -106,7 +103,6 @@ pricetable.zoo <- function(price, instrument, missing = NA, ...) {
     ## i  .. character, logical, numeric, datetime
     ## j  .. character, logical, numeric
     ## answer is guaranteed to have dim(length(i), length(j))
-    
     
     
     ## if (is.character(i)) {
@@ -129,31 +125,44 @@ pricetable.zoo <- function(price, instrument, missing = NA, ...) {
     instrument <- attr(p, "instrument")
 
     if (missing(i)) {
-        i <- TRUE
-    } else if (is.character(i)) {
-        if (inherits(timestamp, "Date"))
-            i <- as.Date(i)
+        i <- timestamp
+        i.orig <- i
+    } else {
+        i.orig <- i
+        if (is.character(i)) {
+            if (inherits(timestamp, "Date")) {
+                i <- as.Date(i)
+                i.orig <- as.character(i)
+            } else if (inherits(timestamp, "POSIXct"))
+                i <- as.POSIXct(i)
+        }
         i <- match(i, timestamp, nomatch = 0L)        
-    } else
-        i <- match(i, timestamp, nomatch = 0L)        
-        
+    } 
+
+
     if (missing(j)) {
-        j <- TRUE
-    } else if (is.character(j)) {
+        if (is.null(j <- colnames(p)))
+            j <- TRUE
+        j.orig <- j
+    } else {
+        j.orig <- j
         j <- match(j, instrument, nomatch = 0L)
-    } else
-        j <- match(j, instrument, nomatch = 0L)
+    }
     
+
     ans <- array(NA, dim = c(length(i), length(j)))
         
     ans[i>0, j>0] <- unclass(p)[i[ i> 0], j[ j> 0], drop = FALSE]
 
-    attr(ans, "timestamp") <- timestamp[i>0]
-    attr(ans, "instrument") <- instrument[j>0]
+    attr(ans, "timestamp") <- i.orig
+    attr(ans, "instrument") <- j.orig
 
-    rownames(ans[i>0, ]) <- as.character(timestamp[i>0])
-    colnames(ans[]) <- as.character(instrument[j>0])
+    rownames(ans) <- as.character(i.orig)
+    colnames(ans) <- as.character(j.orig)
 
+    if (!is.na(missing)) {
+        ans[is.na(ans)] <- missing
+    }
     class(ans) <- "pricetable"
 
     ans
@@ -163,17 +172,10 @@ pricetable.zoo <- function(price, instrument, missing = NA, ...) {
     stop("extraction only: convert to matrix to replace values")
 }
 
-## x <- array(1:6, dim = c(3,2))
-## colnames(x) <- letters[1:2]
-## rownames(x) <- 1:3
+print.pricetable <- function(x, ...) {
+    xx <- x
+    attr(xx, "timestamp") <- NULL
+    attr(xx, "instrument") <- NULL
+    print.default(unclass(xx))
+}
 
-## p <- pricetable(x)
-## p[ , c("a", "a", "c")]
-
-## require("zoo")
-
-## z <- zoo(1:10, as.Date("2017-1-1")+0:9)
-
-## pricetable(z)[as.Date("2017-1-1")+-1:3]
-
-## pricetable(z)["2017-1-1"]
