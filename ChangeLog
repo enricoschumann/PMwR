@@ -1,3 +1,21 @@
+2017-08-17  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): Version: 0.5-6
+
+	* R/NAVseries.R (toLatex.summary.NAVseries):
+	export method
+
+	* R/pricetable.R
+	(`[.pricetable`, print.pricetable): dimnames
+	are only used for printing, not for subsetting
+	any more
+
+	* R/internals.R (map01): copy esutils::map01,
+	for internal use only; not exported
+	(sparklines): add internal function that
+	transforms timeseries for use with LaTeX
+	package sparklines (https://ctan.org/pkg/sparklines)
+
 2017-08-16  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/pricetable.R (pricetable.zoo): experimental

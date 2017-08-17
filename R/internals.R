@@ -93,3 +93,37 @@ vname <- function(v, names) {
     names(ans) <- names
     ans    
 }
+
+sparklines <- function(x,
+                       width = 8,
+                       sparklineheight = 1.75,
+                       true.min = min(x),
+                       true.max = max(x),
+                       zero.line = TRUE) {
+    xx <- map01(x, omin = true.min, omax = true.max)
+    sl <- c("{",
+            if (sparklineheight != 1.75)
+                paste0("\\renewcommand{\\sparklineheight}{", sparklineheight, "}"),
+            paste0("\\begin{sparkline}{", width, "}"), ## ...
+            
+            ## zero.line
+            if (zero.line) {
+                c("\\spark ",
+                  paste(0, xx[1], 1, xx[1]),
+                  "/ \n")
+            }, ## ...
+            
+            "\\spark ",
+            paste(seq(0,1, length.out = length(x)), xx),
+            "/ \n",
+            "\\end{sparkline}",
+            "}" )    
+    sl
+}
+
+map01 <- function (x, min = 0, max = 1,
+                   omin = min(x), omax = max(x)) {
+    new.range <- max - min
+    old.range <- omax - omin
+    (new.range * x + min * omax - max * omin)/old.range
+}

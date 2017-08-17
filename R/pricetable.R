@@ -135,6 +135,8 @@ pricetable.zoo <- function(price, ..., instrument) {
     ## } else
     ##     ii <- i
 
+    ## browser()
+    
     timestamp <- attr(p, "timestamp")
     instrument <- attr(p, "instrument")
 
@@ -154,25 +156,21 @@ pricetable.zoo <- function(price, ..., instrument) {
     } 
 
 
-    if (missing(j)) {
-        if (is.null(j <- colnames(p)))
-            j <- TRUE
-        j.orig <- j
-    } else {
-        j.orig <- j
-        j <- match(j, instrument, nomatch = 0L)
-    }
+    if (missing(j))
+        j <- instrument
+    j.orig <- j
+    j <- match(j, instrument, nomatch = 0L)
     
 
     ans <- array(NA, dim = c(length(i), length(j)))
         
-    ans[i>0, j>0] <- unclass(p)[i[ i>0 ], j[ j>0 ], drop = FALSE]
+    ans[i>0, j>0] <- unclass(p)[i, j, drop = FALSE]
 
     attr(ans, "timestamp") <- i.orig
     attr(ans, "instrument") <- j.orig
 
-    rownames(ans) <- as.character(i.orig)
-    colnames(ans) <- as.character(j.orig)
+    ## rownames(ans) <- as.character(i.orig)
+    ## colnames(ans) <- as.character(j.orig)
 
     if (!is.na(missing)) {
         ans[is.na(ans)] <- missing
@@ -188,6 +186,8 @@ pricetable.zoo <- function(price, ..., instrument) {
 
 print.pricetable <- function(x, ...) {
     xx <- x
+    rownames(xx) <- as.character(attr(xx, "timestamp"))
+    colnames(xx) <- as.character(attr(xx, "instrument"))
     attr(xx, "timestamp") <- NULL
     attr(xx, "instrument") <- NULL
     print.default(unclass(xx))

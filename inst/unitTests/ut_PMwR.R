@@ -1451,9 +1451,9 @@ test.NAVseries <- function() {
 
 test.pricetable <- function() {
 
-    ## require("PMwR")
-    ## require("RUnit")
-    ## require("zoo")
+    require("PMwR")
+    require("RUnit")
+    require("zoo")
 
     checkTrue(all(pricetable(1:10) == 1:10))
 
@@ -1469,24 +1469,22 @@ test.pricetable <- function() {
 
     ## repeated column
     pt <- pricetable(1:3, timestamp = 1:3, instrument = "A")[ ,c("A","A")]
-    checkEquals(colnames(pt),c("A","A"))
+    checkEquals(attr(pt, "instrument"), c("A","A"))
     checkEquals(pt,
                 structure(c(1L, 2L, 3L, 1L, 2L, 3L),
                           .Dim = c(3L, 2L),
                           timestamp = 1:3,
                           instrument = c("A", "A"),
-                          .Dimnames = list(c("1", "2", "3"),
-                                           c("A", "A")), class = "pricetable"))
+                          class = "pricetable"))
     
     ## repeated column + NA column
     pt <- pricetable(1:3, timestamp = 1:3, instrument = "A")[ ,c("A","B","A")]
-    checkEquals(colnames(pt),c("A","B","A"))
+    checkEquals(attr(pt, "instrument"), c("A","B","A"))
     checkEquals(pt,
                 structure(c(1L, 2L, 3L, NA, NA, NA, 1L, 2L, 3L),
                           .Dim = c(3L, 3L),
                           timestamp = 1:3,
                           instrument = c("A", "B", "A"),
-                          .Dimnames = list(c("1", "2", "3"), c("A", "B", "A")),
                           class = "pricetable"))
 
 
@@ -1500,6 +1498,9 @@ test.pricetable <- function() {
                           .Dim = c(5L, 3L),
                           timestamp = 0:4,
                           instrument = c("A", "B", "A"),
-                          .Dimnames = list(c("0", "1", "2", "3", "4"),
-                                           c("A", "B", "A")), class = "pricetable"))        
+                          class = "pricetable"))        
+
+    pt1 <- pricetable(1:3, timestamp = 1:3, instrument = "A")[0:4 ,c("A","B","A")]
+    pt2 <- pricetable(1:3, timestamp = 1:3, instrument = "A")[0:4 ,c("A","B","A"), missing = -99]
+    checkTrue(all(unclass(pt2)[is.na(pt1), drop = FALSE] == -99))
 }
