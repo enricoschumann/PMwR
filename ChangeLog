@@ -1,5 +1,7 @@
 2017-08-18  Enrico Schumann  <es@enricoschumann.net>
 
+	* data/DAX.csv: add datasets DAX and REXP
+
 	* NAMESPACE: 'isValidISIN' is no longer
 	available; use the drop-in replacement
 	'is_valid_ISIN' instead
