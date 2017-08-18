@@ -14,34 +14,40 @@ instrument(x, \dots)
     an object
   }
   \item{\dots}{
-    arguments passed to \code{\link{print}}
+    arguments passed to methods
+    
   }
 }
 \details{
 
-  Generic function.
+  Generic function: extract or, if meaningful, replace
+  instrument information
   
 }
 \value{
 
-  A character vector.
+  when used to extract instrument, a character vector
   
 }
 \references{
 
-  Schumann, E. (2016) \emph{Portfolio Management with
+  Schumann, E. (2017) \emph{Portfolio Management with
     R}. \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
 
 }
 \author{
   Enrico Schumann
 }
-\section{Warning }{
+\section{Warning}{
    Experimental. The interface may change.
 }
 \seealso{
   \code{\link{position}}
 }
 \examples{
-## TO BE ADDED
+jnl <- journal(instrument = "A",
+               amount = 100,
+               price = 1)
+instrument(jnl)
+
 }
