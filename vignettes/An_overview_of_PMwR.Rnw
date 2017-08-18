@@ -3,7 +3,7 @@
 \usepackage[left = 3cm, top = 2cm, bottom = 2cm, right = 4cm]{geometry}
 \usepackage[noae,nogin]{Sweave}
 \usepackage{libertine}
-\usepackage[scaled=0.8]{DejaVuSansMono}
+\usepackage[scaled=0.9]{inconsolata}
 \usepackage[T1]{fontenc}
 \renewcommand*\familydefault{\sfdefault} 
 \usepackage{amsmath,amstext}

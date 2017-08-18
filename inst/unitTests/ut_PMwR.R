@@ -1383,8 +1383,8 @@ test.is_valid_ISIN <- function() {
                 c(TRUE, TRUE,  TRUE, FALSE))
     
     ## case is ignored
-    checkEquals(unname(isValidISIN(c("US0378331005",
-                                     "us0378331005"))),
+    checkEquals(unname(is_valid_ISIN(c("US0378331005",
+                                       "us0378331005"))),
                 c(TRUE, TRUE))
 
 }

@@ -1,10 +1,8 @@
 %% \VignetteIndexEntry{FinTeX}
 \documentclass[a4paper,fontsize=11pt,DIV=12]{scrartcl}
-%% \usepackage[left = 3cm, top = 2cm, bottom = 2cm, right = 4cm]{geometry}
 \usepackage[noae,nogin]{Sweave}
 \usepackage{libertine}
-%% \usepackage[scaled=0.8]{DejaVuSansMono}
-\usepackage{inconsolata}
+\usepackage[scaled=0.9]{inconsolata}
 \usepackage[T1]{fontenc}
 \renewcommand*\familydefault{\sfdefault} 
 \usepackage{amsmath,amstext}
@@ -12,6 +10,7 @@
 \usepackage{natbib}
 \usepackage{xcolor}
 \usepackage{framed}
+\usepackage{sparklines}
 \usepackage[hang]{footmisc}
 \definecolor{grau2}{rgb}{.2,.2,.2}
 \definecolor{grau7}{rgb}{.7,.7,.7}
@@ -24,14 +23,14 @@
 \SweaveOpts{keep.source = TRUE, eps = TRUE}
 
 <<echo=false>>=
-options(continue = "  ", digits = 3, width = 60, useFancyQuotes = FALSE)
+options(continue = "  ", digits = 3, width = 80, useFancyQuotes = FALSE)
 @
 
 \begin{document}
 \title{Fin\TeX}
 \author{Enrico Schumann\\\url{es@enricoschumann.net}}
 
-{\raggedright{\LARGE \textbf{Fin\TeX}}}\medskip
+{\raggedright{\huge Fin\kern-0.14ex\TeX}}\medskip
 
 \noindent Enrico Schumann\\
 \noindent \url{es@enricoschumann.net}\\
@@ -40,15 +39,80 @@ options(continue = "  ", digits = 3, width = 60, useFancyQuotes = FALSE)
 <<echo=false>>=
 require("PMwR")
 require("zoo")
+DAX <- as.zoo(DAX, as.Date(row.names(DAX)))
+REXP <- as.zoo(REXP, as.Date(row.names(REXP)))
 @
 
-\noindent\textsc{pm}w\textsc{r} provides several methods for
-\texttt{toLatex}.
-\section*{Monthly returns}
+\noindent\textsc{pm}w\textsc{r} provides several
+methods for \texttt{toLatex}.  \vspace{4ex}
+
+
+\noindent\textbf{Monthly returns}
+
+\noindent For a timeseries (e.g. \texttt{zoo} or
+\texttt{xts}), the function \texttt{returns} provides
+monthly returns.
 <<>>=
-1:10
+returns(DAX, period = "month")
 @ 
 
-\section*{NAVseries}
+\noindent To have such a table placed into a \LaTeX\
+file, you can put the following snippet into a Sweave
+file.\medskip
+
+\noindent\verb+\begin{tabular}{rrrrrrrrrrrrrr}+
+
+\noindent\verb+<<results=tex,echo=false>>=+
+
+\noindent\verb+toLatex(returns(DAX, period = "month"), ytd = "\\textsc{ytd}")+
+
+\noindent\verb+@+
+
+\noindent\verb+\end{tabular}+
+
+\medskip
+
+\noindent The results will look like this:\medskip
+
+\begin{center}
+\noindent\begin{tabular}{rrrrrrrrrrrrrr}
+<<results=tex,echo=false>>=
+toLatex(returns(DAX, period = "month"), ytd = "\\textsc{ytd}")
+@ 
+\end{tabular}
+\end{center}
+
+\vspace{4ex}
+
+\noindent\textbf{NAVseries}
+
+\noindent Data from summaries of NAVseries can be
+placed into \LaTeX\ tables. 
+<<echo=false, results=hide>>=
+DAX  <- as.NAVseries(DAX,  title = "DAX")
+REXP <- as.NAVseries(REXP, title = "REXP")
+@ 
+<<>>=
+DAX
+returns(DAX, period = "annualised")
+@ 
+A table such as this one:
+\begin{center}
+\begin{tabular}{llrr}
+& & Return p.a. & Volatility \\
+<<results=tex,echo=false>>=
+toLatex(summary(DAX),
+        summary(REXP),
+        template = "%title & %sparkline & %return & %volatility  \\\\" )
+@ 
+\end{tabular}
+\end{center}
+\medskip
+
+\noindent\ldots is produced by the following call:
+<<results=hide,eval=false>>=
+toLatex(summary(DAX), summary(REXP),
+        template = "%title & %sparkline & %return & %volatility  \\\\" )
+@ 
 
 \end{document}

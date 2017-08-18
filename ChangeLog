@@ -1,5 +1,12 @@
 2017-08-18  Enrico Schumann  <es@enricoschumann.net>
 
+	* DESCRIPTION (Version): Version: 0.5-7
+
+	* vignettes/FinTeX.Rnw: add vignette
+
+	* R/NAVseries.R (as.NAVseries.NAVseries): add
+	method (return the input argument unchanged)
+
 	* data/DAX.csv: add datasets DAX and REXP
 
 	* NAMESPACE: 'isValidISIN' is no longer

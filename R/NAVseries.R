@@ -199,6 +199,8 @@ print.summary.NAVseries <- function(x, ...,
     nx <- nx[nx != "NAVseries"]
     nx <- nx[nx != "NAV"]
     nx <- nx[nx != "timestamp"]
+    nx <- nx[nx != "title"]
+    nx <- nx[nx != "description"]
     for (n in nx)
         template <- gsub(paste0("%", n, "%"), x[[n]], template)
     template <- valign(template)
@@ -245,18 +247,16 @@ toLatex.summary.NAVseries <- function(object, ...,
                 field_values <- fmt_p(unlist(lapply(dots, `[[`, field)))
                 for (i in seq_len(ns))
                     ans[i] <- gsub(paste0("%", field), field_values[i], ans[i])}}}
-    
+
+    NAVs <- lapply(dots, `[[`, "NAV")
+    NAVs <- lapply(NAVs, scale1)
     if (grepl("%sparkline", template, fixed = TRUE)) {
         
-        true.min <- min(unlist(
-            lapply(dots, function(x) min(x[["NAV"]]))))
-        true.max <- max(unlist(
-            lapply(dots, function(x) max(x[["NAV"]]))))
-        
-        for (i in seq_len(ns)) {
-            
+        true.min <- min(unlist(NAVs))
+        true.max <- max(unlist(NAVs))        
+        for (i in seq_len(ns)) {            
             ans[i] <- gsub("%sparkline",
-                           paste(sparklines(dots[[i]]$NAV,
+                           paste(sparklines(NAVs[[i]],
                                             true.min = true.min,
                                             true.max = true.max,
                                             sparklineheight = 2.5, width = 10), collapse = "\n"),
@@ -265,6 +265,7 @@ toLatex.summary.NAVseries <- function(object, ...,
         
         
     }
+    class(ans) <- "Latex"
     if (!is.null(file)) {
         writeLines(ans, con = file)
         invisible(ans)
@@ -287,11 +288,21 @@ as.NAVseries <- function(x, ...) {
     UseMethod("as.NAVseries")
 }
 
-as.NAVseries.zoo <- function(x, ...){
+as.NAVseries.NAVseries <- function(x, ...) {
+    x
+}
+
+as.NAVseries.zoo <- function(x,
+                             instrument = NULL,
+                             title = NULL,
+                             description = NULL, ...){
     dx <- dim(x)
     if (!is.null(dx) && !any(dx == 1L))
-        stop("can only coerce single series")
-    NAVseries(NAV = coredata(x), timestamp = index(x))
+        stop("can only coerce a _single_ series")
+    NAVseries(NAV = coredata(x), timestamp = index(x),
+              instrument = instrument,
+              title = title,
+              description = description)
 }
 
 as.NAVseries.btest <- function(x, ...){
