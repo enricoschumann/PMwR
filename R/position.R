@@ -1,3 +1,5 @@
+## -*- truncate-lines: t; -*-
+
 position <- function(amount, ...)
     UseMethod("position")
 

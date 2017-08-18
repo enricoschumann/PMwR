@@ -1,4 +1,4 @@
-## -*- truncate-lines: t; fill-column: 65; comment-column: 50; -*-
+## -*- truncate-lines: t; -*-
 
 ## valuation <- function(x, ...) {
 ##     UseMethod("valuation")

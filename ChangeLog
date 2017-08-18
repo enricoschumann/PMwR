@@ -1,3 +1,9 @@
+2017-08-18  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: 'isValidISIN' is no longer
+	available; use the drop-in replacement
+	'is_valid_ISIN' instead
+
 2017-08-17  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.5-6
@@ -2172,7 +2178,7 @@
 2013-09-17  Enrico Schumann  <es@enricoschumann.net>
 
         * R/isValidISIN.R (isValidISIN): fixed -- in case all
-        isins were invalid because of length != 12 characters,
+        ISINs were invalid because of length != 12 characters,
         the function failed
 
         * R/drawdown.R (drawdown): fixed -- 'summary'

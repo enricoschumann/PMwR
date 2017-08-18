@@ -1,5 +1,4 @@
-\name{isValidISIN}
-\alias{isValidISIN}
+\name{is_valid_ISIN}
 \alias{is_valid_ISIN}
 \title{
   Validate International Securities Identification Numbers (ISINs)
@@ -9,7 +8,6 @@
 }
 \usage{
 is_valid_ISIN(isin)
-isValidISIN(isin) ## deprecated
 }
 \arguments{
   \item{isin}{

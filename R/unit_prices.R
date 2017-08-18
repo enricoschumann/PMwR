@@ -1,3 +1,5 @@
+## -*- truncate-lines: t; -*-
+
 unit_prices <- function(NAV, cashflows,
                         initial.price = 100,
                         initial.shares = 0,

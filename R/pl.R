@@ -1,3 +1,8 @@
+## -*- truncate-lines: t; -*-
+
+pl <- function(amount, ...)
+    UseMethod("pl")
+
 print.pl <- function(x, ..., use.crayon = NULL, na.print = ".") {
     use.crayon <- if (is.null(use.crayon) &&
                       !is.null(tmp <- getOption("PMwR.use.crayon")))
@@ -65,9 +70,6 @@ print.pl <- function(x, ..., use.crayon = NULL, na.print = ".") {
         sep = "")
     invisible(x)
 }
-
-pl <- function(amount, ...)
-    UseMethod("pl")
 
 pl.pl <- function(amount, ...) {
     ans <- unlist(lapply(amount, `[`, "pl"))

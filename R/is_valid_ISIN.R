@@ -1,4 +1,6 @@
-is_valid_ISIN <- isValidISIN <- function(isin) {    
+## -*- truncate-lines: t; -*-
+
+is_valid_ISIN <- function(isin) {    
 
     if (as.character(sys.call(sys.parent()))[1L] == "isValidISIN")
         .Deprecated("is_valid_ISIN")

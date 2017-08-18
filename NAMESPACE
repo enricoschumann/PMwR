@@ -46,7 +46,6 @@ export(
     div_adjust,
     instrument,
     is.journal,
-    isValidISIN,
     is_valid_ISIN,
     journal,
     limit,

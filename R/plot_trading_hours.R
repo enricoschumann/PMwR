@@ -1,3 +1,5 @@
+## -*- truncate-lines: t; -*-
+
 plot_trading_hours <-
     plotTradingHours <- function(x, t = NULL,
              interval = "5 min", labels = "hours",
@@ -113,6 +115,3 @@ plot_trading_hours <-
              map = maptime)
     }
 }
-
-## body(plotTradingHours) <- (quote(.Deprecated("plot_trading_hours")),
-##                             body(plotTradingHours))

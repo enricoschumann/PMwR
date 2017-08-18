@@ -1,3 +1,5 @@
+## -*- truncate-lines: t; -*-
+
 journal <- function(amount, ...) {
     if (match.call() == "journal()") {
         ans <- list(timestamp = numeric(0),

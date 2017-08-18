@@ -36,15 +36,23 @@ pricetable(price, \dots)
 }
 }
 \details{
-
   
   Experimental: interface may change.
 
-  A helper function for extracting prices of particular
-  instrument at specified dates. \code{pricetable} is a
-  generic function, currently with methods for numeric
-  vectors (including vectors with a \code{\link{dim}},
-  aka matrices) and for \code{\link{zoo}} objects.
+  \code{pricetable} is a helper function for extracting
+  prices of particular instrument at specified dates.
+  For this, it first creates a table that merges series
+  passed via \dots and appends a class attribute. A \code{[}
+  method then allows to extract prices. Importantly, if
+  you ask for a subset of m rows and n columns, the
+  result will be a matrix of size m times n, even if
+  times or instruments are missing.
+
+  \code{pricetable} is a generic function, currently
+  with methods for numeric vectors (including vectors
+  with a \code{\link{dim}}, aka matrices) and for
+  \code{\link{zoo}} objects.
+
 
 }
 \value{

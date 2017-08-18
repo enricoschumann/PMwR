@@ -737,7 +737,6 @@ lines.btest <- function(x, y = NULL, type = "l",
     invisible()
 }
 
-
 atest <- btest
 formals(atest)$do.signal <- FALSE
 formals(atest)$do.rebalance <- FALSE

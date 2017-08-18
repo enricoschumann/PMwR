@@ -1,3 +1,5 @@
+## -*- truncate-lines: t; -*-
+
 rebalance <- function(current,
                       target,
                       price,
