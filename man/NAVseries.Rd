@@ -68,11 +68,15 @@ as.NAVseries(x, ...)
   description. Of these attributes, timestamp is the most useful, as it
   is used for several computations (e.g. when callung
   \code{\link{summary}}) or for plotting.
-  
-  
+
+  The summary method returns a list of the original NAVseries plus
+  various statistics, such as return per year and volatility.
+    
 }
 \value{
-an \code{NAVseries}: see Details.
+  an \code{NAVseries}: see Details.
+
+  
 }
 \references{
 
@@ -87,11 +91,5 @@ Enrico Schumann <es@enricoschumann.net>
   \code{\link{journal}}
 }
 \examples{
-
-\dontrun{
-require("tseries")
-dax <- get.hist.quote("^GDAXI", quote = "Close",
-                      start = as.Date("1999-1-1"))
-summary(as.NAVseries(dax))
-}
+summary(NAVseries(DAX[[1]], as.Date(row.names(DAX)), title = "DAX"))
 }
