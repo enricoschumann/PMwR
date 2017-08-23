@@ -86,52 +86,54 @@ toLatex(returns(DAX, period = "month"), ytd = "\\textsc{ytd}")
 
 \noindent\textbf{NAVseries}
 
-<<echo=false, results=hide>>=
-DAX  <- summary(as.NAVseries(DAX,  title = "DAX"))
-REXP <- summary(as.NAVseries(REXP, title = "REXP"))
-@ 
-
 \noindent Summaries of NAVseries contain a number of statistics that
 can be placed into \LaTeX\ templates.
-
 <<>>=
+returns(DAX, period = "annualised")
+@ 
+
+We first compute summaries.
+<<>>=
+DAX  <- summary(as.NAVseries(DAX,  title = "DAX"))
+REXP <- summary(as.NAVseries(REXP, title = "REXP"))
 toLatex(DAX, REXP, template = "%title: %return\\% \\\\")
 @ 
+\noindent Note that the template was recycled, i.e. it
+was used for both series. We may also pass
+separate templates for each series.
 
 <<>>=
 tmpl <- c("Equities (%title) made %return\\%, with a drawdown of %mdd\\%;",
-                     "bonds (%title) returned %return\\%.")
+          "bonds (%title) returned %return\\%.")
 toLatex(DAX, REXP, template = tmpl)
 @ 
 
-
+\noindent The keyword \texttt{\%sparkline} adds a sparkline:
 <<results=tex>>=
-toLatex(DAX, template = "The DAX %sparkline made %return\\%.")
+toLatex(DAX, template = "The DAX %sparkline made %return\\% during the period.")
 @ 
 
-
-\noindent Suchd a from summaries of NAVseries can be
-placed into \LaTeX\ tables. 
-<<>>=
-## returns(DAX, period = "annualised")
-@ 
-A table such as this one:
+\noindent Since templates are recycled, we can easily create rows for
+\LaTeX\ tables, such as this one:
 \begin{center}
 \begin{tabular}{llrr}
 & & Return p.a. & Volatility \\
 <<results=tex,echo=false>>=
-toLatex(DAX,
-        REXP,
+toLatex(DAX, REXP,
         template = "%title & %sparkline & %return & %volatility  \\\\" )
 @ 
 \end{tabular}
 \end{center}
 \medskip
 
-\noindent\ldots is produced by the following call:
+\noindent\ldots which is produced by the following call:
 <<results=hide,eval=false>>=
 toLatex(DAX, REXP,
         template = "%title & %sparkline & %return & %volatility  \\\\" )
 @ 
+When several NAV series are passed to \texttt{toLatex}, all sparkline plots
+use the same y-scale.
+
+
 
 \end{document}
