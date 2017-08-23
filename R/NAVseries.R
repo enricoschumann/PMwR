@@ -155,11 +155,6 @@ print.summary.NAVseries <- function(x, ...,
         format(x, justify = "right", width = 7, nsmall = 2, digits = 2,
                scientific = FALSE)
 
-    if (length(title <- attr(x$NAVseries, "title")))
-        cat(title, "\n")
-    else if (!is.null(instrument <- attr(x$NAVseries, "instrument")))
-        cat(instrument, "\n")
-
     ## format: dates
     fields <- c("from", "to", "low.when", "high.when",
                 "mdd.high.when", "mdd.low.when")
@@ -224,42 +219,52 @@ print.summary.NAVseries <- function(x, ...,
 toLatex.summary.NAVseries <- function(object, ...,
                                       template = " %title & %return & %volatility & %sparkline \\\\",
                                       file = NULL) {
-    dots <- list(...)
-    if (length(dots))
-        dots <- c(list(object), dots)
+    dots <- c(list(object), list(...))
 
     fmt_p <- function(x, ...) {
         if (is.numeric(x))
             format(round(x*100, 1), nsmall = 1)
         else x
     }
-
     ns <- length(dots)
-    ans <- rep(template, ns)
+    ans <- if (length(template) == 1L) 
+        rep(template, ns)
+    else
+        template
     
-    m <- gregexpr("(^|[^\\])%[a-z.]+%?", template)[[1L]]
-    if (length(m) > 1L || m > -1) {
-        for (j in seq_along(m)) {
-            field <- substr(template,
-                            m[j] + if(m[j]==1) 1L else 2L, ## drop %
-                            m[j] + attr(m, "match.length")[j] - 1L)
-            if (field %in% names(dots[[1L]])) {
-                field_values <- fmt_p(unlist(lapply(dots, `[[`, field)))
-                for (i in seq_len(ns))
-                    ans[i] <- gsub(paste0("%", field), field_values[i], ans[i])}}}
+    fields <- c("instrument", "title", "description", 
+                "start", "end", "nobs", "nna",
+                "low.when", "high.when", "low", "high", 
+                "return.annualised", "return", 
+                "mdd.high.when", "mdd.low.when",
+                "mdd.high", "mdd.low",
+                "mdd", "underwater",
+                "volatility.up", "volatility.down", "volatility")
+
+    perc_fields <- c("return", 
+                     "mdd", "underwater",
+                     "volatility", "volatility.up", "volatility.down")
+
+    for (field in fields) {
+        field_values <- unlist(lapply(dots, `[[`, field))
+        if (field %in% perc_fields)
+            field_values <- fmt_p(field_values)
+        for (i in seq_len(ns))
+            ans[i] <- gsub(paste0("%", field), field_values[i], ans[i])
+    }
 
     NAVs <- lapply(dots, `[[`, "NAV")
     NAVs <- lapply(NAVs, scale1)
-    if (grepl("%sparkline", template, fixed = TRUE)) {
+    if (any(grepl("%sparkline", template, fixed = TRUE))) {
         
         true.min <- min(unlist(NAVs))
         true.max <- max(unlist(NAVs))        
         for (i in seq_len(ns)) {            
             ans[i] <- gsub("%sparkline",
                            paste(sparklines(NAVs[[i]],
-                                            true.min = true.min,
-                                            true.max = true.max,
-                                            sparklineheight = 2.5, width = 10), collapse = "\n"),
+                                           true.min = true.min,
+                                           true.max = true.max,
+                                           sparklineheight = 2.5, width = 10), collapse = "\n"),
                            ans[i], fixed = TRUE)
         }
         

@@ -62,8 +62,8 @@ v0.3-4  (2016-06-13)
 
   o Moved function 'runStats' to a separate package 'runStats'
     http://enricoschumann.net/R/packages/runStats/ .
-    The package contains only R code now, so no special
-    tools are required for installing from source.
+    The PMwR package contains only R code now, so no
+    special tools are required for installing from source.
     
   o There is a public Git repository at
     https://github.com/enricoschumann/PMwR

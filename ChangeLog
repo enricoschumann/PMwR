@@ -1,3 +1,12 @@
+2017-08-23  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (print.summary.NAVseries):
+	remove double-printing of title
+	(toLatex.summary.NAVseries): 'template' is only
+	repeated when of length 1
+	(toLatex.summary.NAVseries): rewrote
+	replacement of values (with fewer regexes)
+
 2017-08-18  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.5-7
