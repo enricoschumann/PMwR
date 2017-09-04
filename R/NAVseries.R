@@ -312,13 +312,15 @@ as.NAVseries.zoo <- function(x,
 
 as.NAVseries.btest <- function(x, ...){
     NAV <- x$wealth
-    leading.na <- 0
+    timestamp <- if (!is.null(x$timestamp))
+                     x$timestamp
+                 else
+                     seq_along(NAV)
     if (any(na <- is.na(NAV))) {
         leading.na <- 1:max(which(na))
         NAV <- NAV[-leading.na]
+        timestamp <- timestamp[-leading.na]
     }
-    timestamp <- if (!is.null(x$timestamp))
-                     x$timestamp[-leading.na] else seq_along(NAV)
     NAVseries(NAV = scale1(NAV, level = 100),
               timestamp = timestamp)
 }
