@@ -312,6 +312,7 @@ as.NAVseries.zoo <- function(x,
 
 as.NAVseries.btest <- function(x, ...){
     NAV <- x$wealth
+    leading.na <- 0
     if (any(na <- is.na(NAV))) {
         leading.na <- 1:max(which(na))
         NAV <- NAV[-leading.na]

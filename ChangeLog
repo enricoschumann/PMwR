@@ -1,3 +1,9 @@
+2017-09-04  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (as.NAVseries.btest): fixed --
+	the method would fail when there are no leading
+	NAs (i.e. no burnin in the test)
+
 2017-08-24  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/NAVseries.R (plot.NAVseries): set default
