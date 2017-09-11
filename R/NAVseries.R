@@ -310,14 +310,15 @@ as.NAVseries.zoo <- function(x,
               description = description)
 }
 
-as.NAVseries.btest <- function(x, ...){
+as.NAVseries.btest <- function(x, ...,
+                               drop.NA = TRUE){
     NAV <- x$wealth
     timestamp <- if (!is.null(x$timestamp))
                      x$timestamp
                  else
                      seq_along(NAV)
-    if (any(na <- is.na(NAV))) {
-        leading.na <- 1:max(which(na))
+    if (drop.NA && is.na(NAV[1L])) {
+        leading.na <- min(which(!is.na(NAV))) - 1
         NAV <- NAV[-leading.na]
         timestamp <- timestamp[-leading.na]
     }

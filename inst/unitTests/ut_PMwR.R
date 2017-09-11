@@ -1431,15 +1431,13 @@ test.NAVseries <- function() {
                 NAVseries((10:15)*10))
 
 
-
-    
+   
     prices <- 100:109
     
     signal <- function()
         1
     bt <- btest(prices = prices, signal = signal, b = 0,
                 initial.cash = 100)
-    journal(bt)
     checkEquals(c(as.NAVseries(bt)), 100:109)
 
     ## summary(nav, monthly = FALSE)
@@ -1447,6 +1445,19 @@ test.NAVseries <- function() {
     ## plot(NAVseries(1:10))
     ## plot(NAVseries(1:10, timestamp = as.Date("2017-1-1")+0:9))
 
+    checkEquals(returns(as.NAVseries(bt)),
+                returns(prices))
+
+
+    ## leading NAs
+    bt <- btest(prices = prices, signal = signal,
+                b = 2, initial.cash = 100)
+    
+    checkEqualsNumeric(as.NAVseries(bt),
+                       c(100, 100:107))
+
+    checkEqualsNumeric(as.NAVseries(bt, drop.NA = FALSE),
+                       c(NA, 100, 100:107))
 }
 
 test.pricetable <- function() {
