@@ -319,6 +319,7 @@ as.NAVseries.btest <- function(x, ...,
                      seq_along(NAV)
     if (drop.NA && is.na(NAV[1L])) {
         leading.na <- min(which(!is.na(NAV))) - 1
+        leading.na <- seq_len(leading.na)
         NAV <- NAV[-leading.na]
         timestamp <- timestamp[-leading.na]
     }

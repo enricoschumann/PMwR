@@ -1453,11 +1453,19 @@ test.NAVseries <- function() {
     bt <- btest(prices = prices, signal = signal,
                 b = 2, initial.cash = 100)
     
+    ### ... no NAs
     checkEqualsNumeric(as.NAVseries(bt),
                        c(100, 100:107))
 
+    ### ... one NA
     checkEqualsNumeric(as.NAVseries(bt, drop.NA = FALSE),
                        c(NA, 100, 100:107))
+
+    ### ... several NAs
+    bt <- btest(prices = prices, signal = signal,
+                b = 5, initial.cash = 100)
+    checkEqualsNumeric(as.NAVseries(bt, drop.NA = FALSE),
+                       c(NA, NA, NA, NA, 100, 100, 101, 102, 103, 104))
 }
 
 test.pricetable <- function() {
