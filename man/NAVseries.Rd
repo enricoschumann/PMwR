@@ -20,7 +20,7 @@ as.NAVseries(x, ...)
 
 \method{summary}{NAVseries}(object, monthly = TRUE, \dots )
 
-\method{plot}{NAVseries}(x, y, xlab = "", ylab = "", \dots )
+\method{plot}{NAVseries}(x, y, xlab = "", ylab = "", type = "l", \dots )
 }
 \arguments{
   \item{NAV}{
@@ -59,6 +59,9 @@ as.NAVseries(x, ...)
 }
 \item{ylab}{
   character
+}
+\item{type}{
+  character. See \code{\link{plot}}.
 }
 }
 \details{
