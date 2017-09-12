@@ -132,13 +132,27 @@ position.journal <- function(amount, when,
                      account = account, ...)
 }
 
-position.btest <- function(amount, when, ...) {
+position.btest <- function(amount, when, ...,
+                           include.cash = FALSE) {
     ans <- amount$position
     class(ans) <- "position"
+
     attr(ans, "timestamp") <- if (!is.null(amount$timestamp))
-                                  amount$timestamp else NA
-    attr(ans, "instrument") <- if (!is.null(amount$instrument))
-                                   amount$instrument else NA
+                                  amount$timestamp
+                              else
+                                  NA
+
+    instrument <- if (!is.null(amount$instrument))
+                      amount$instrument
+                  else
+                      rep(NA, ncol(ans))
+
+    if (include.cash) {
+        ans <- cbind(ans, amount$cash)
+        instrument <- c(instrument, "cash")
+    }
+
+    attr(ans, "instrument") <- instrument
     ans
 }
 
@@ -388,24 +402,3 @@ acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
         indent
     } 
 }
-
-## require("PMwR")
-## j <- journal(amount = 1:3,
-##              instrument = "fgbl",
-##              account = c("A:a:1",
-##                          "B:2",
-##                          "B:1"))
-
-## s <- paste(j$account, ":", j$instrument, sep = "")
-## .tree(PMwR:::.expand(s, ":")$level)
-
-## cat(paste0(.tree(.expand(s, ":")$level, width = 2),
-##            .expand(s, ":")$level), sep = "\n")
-
-## position(j, use.account = TRUE)
-## cat(paste0(tree(.expand(s, ":")$level, width = 4, style = "ascii"),
-##            .expand(s, ":")$level), sep = "\n")
-## cat(paste0(tree(.expand(s, ":")$level, width = 4, style = "unicode"),
-##            .expand(s, ":")$level), sep = "\n")
-
-## x <- position(j, use.account = TRUE)

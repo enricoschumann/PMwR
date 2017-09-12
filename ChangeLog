@@ -1,5 +1,8 @@
 2017-09-11  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/position.R (position.btest): new argument
+	'include.cash'
+
 	* R/NAVseries.R (as.NAVseries.btest): new
 	argument 'drop.NA' that controls whether
 	leading NAs are dropped. Default is TRUE.
