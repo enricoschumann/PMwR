@@ -5,6 +5,15 @@
 
 	* DESCRIPTION (Package): set ByteCompile: yes
 
+2017-09-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pricetable.R (as.matrix.pricetable): add
+	method
+	(`[.pricetable`): argument missing may now be
+	'locf', as in Last Observation Carried Forward
+	(print.pricetable): method now returns original
+	pricetable, not matrix
+
 2017-09-11  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (position.btest): new argument
@@ -27,7 +36,7 @@
 
 2017-08-23  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): Version: 0.5-8
+	* DESCRIPTION (Version): 0.5-8
 
 	* R/NAVseries.R (print.summary.NAVseries):
 	remove double-printing of title
@@ -38,7 +47,7 @@
 
 2017-08-18  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): Version: 0.5-7
+	* DESCRIPTION (Version): 0.5-7
 
 	* vignettes/FinTeX.Rnw: add vignette
 
@@ -53,7 +62,7 @@
 
 2017-08-17  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): Version: 0.5-6
+	* DESCRIPTION (Version): 0.5-6
 
 	* R/NAVseries.R (toLatex.summary.NAVseries):
 	export method
