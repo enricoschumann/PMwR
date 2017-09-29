@@ -223,6 +223,10 @@ instrument <- function(x, ...) {
     UseMethod("instrument")
 }
 
+`instrument<-` <- function(x, ..., value) {
+    UseMethod("instrument<-")
+}
+
 instrument.position <- function(x, ...) {
     attr(x, "instrument")
 }

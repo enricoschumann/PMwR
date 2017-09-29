@@ -44,6 +44,7 @@ export(
     btest,
     close_on_first,
     div_adjust,
+    "instrument<-",
     instrument,
     is.journal,
     is_valid_ISIN,
@@ -99,6 +100,8 @@ S3method(c, journal)
 S3method(head, journal)
 S3method(instrument, journal)
 S3method(instrument, position)
+S3method(instrument, pricetable)
+S3method(`instrument<-`, pricetable)
 S3method(journal, btest)
 S3method(journal, default)
 S3method(length, journal)
@@ -145,3 +148,5 @@ S3method(toOrg, journal)
 S3method(toText, p_returns)
 S3method(valuation, default)
 S3method(valuation, journal)
+S3method(names, pricetable)
+S3method(`names<-`, pricetable)

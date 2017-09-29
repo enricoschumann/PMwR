@@ -1,3 +1,12 @@
+2017-09-29  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (`instrument<-`): add generic
+	function
+
+	* R/pricetable.R (names.pricetable): add names
+	and instrument methods, both for extraction and
+	replacement
+
 2017-09-11  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (position.btest): new argument
