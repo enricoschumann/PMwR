@@ -140,3 +140,19 @@ print.pricetable <- function(x, ...) {
     attr(xx, "instrument") <- NULL
     print.default(unclass(xx))
 }
+
+names.pricetable <- function(x)
+    attr(x, "instrument")
+
+`names<-.pricetable` <- function(x, value) {
+    attr(x, "instrument") <- value
+    x
+}
+
+instrument.pricetable <- function(x, ...)
+    attr(x, "instrument")
+
+`instrument<-.pricetable` <- function(x, ..., value) {
+    attr(x, "instrument") <- value
+    x
+}
