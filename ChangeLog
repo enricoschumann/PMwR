@@ -1,3 +1,10 @@
+2017-09-29  Enrico Schumann  <es@enricoschumann.net>
+
+	* inst/unitTests/ut_PMwR.R (btest): add tests
+	for argument 'include.data'
+
+	* DESCRIPTION (Package): set ByteCompile: yes
+
 2017-09-11  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (position.btest): new argument

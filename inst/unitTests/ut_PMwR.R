@@ -401,6 +401,24 @@ test.btest <- function() {
                 PMwR:::last(timestamp, format(timestamp, "%Y-%m")))
 
     
+
+    ## include.data
+    prices <- c(100,98,98,97,101,102,101,98,99,101)
+    signal <- function()
+        1
+    res <- btest(prices, signal = signal)
+    checkEquals(res$prices, NULL)
+    checkEquals(res$signal, NULL)
+    res <- btest(list(prices), signal = signal, include.data = TRUE)
+    checkEquals(res$prices, prices)
+    checkEquals(body(res$signal), body(signal))
+    ## !is.list(prices) && is.null(dim(prices))
+    
+    prices <- c(100,98,98,97,101,102,101,98,99,101)
+    prices <- cbind(prices, prices)
+    res <- btest(list(prices), signal = signal, include.data = TRUE)
+    checkEquals(res$prices, prices)
+    
 }
 
 test.journal <- function() {
@@ -1275,6 +1293,8 @@ test.returns <- function() {
     p <- position(j, when = 1:10)
     rowSums(p*prices)
 
+
+    
 }
 
 test.scale1 <- function() {
