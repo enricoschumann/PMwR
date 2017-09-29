@@ -1,8 +1,7 @@
 ## -*- truncate-lines: t; -*-
 
-pricetable <- function(price, ...) {
+pricetable <- function(price, ...)
     UseMethod("pricetable")
-}
 
 pricetable.default <- function(price, instrument, timestamp, ...) {
     price <- as.matrix(price)
@@ -58,7 +57,8 @@ pricetable.zoo <- function(price, ..., instrument) {
                        timestamp = timestamp, ...)
 }
 
-`[.pricetable`  <- function(p, i, j, start, end, missing = NA,..., drop = FALSE) {
+`[.pricetable`  <- function(p, i, j, start, end, missing = NA,...,
+                            drop = FALSE) {
 
     ## pt[when, instrument]
     ##
@@ -82,8 +82,6 @@ pricetable.zoo <- function(price, ..., instrument) {
     ##         ii <- !ii
     ## } else
     ##     ii <- i
-
-    ## browser()
     
     timestamp <- attr(p, "timestamp")
     instrument <- attr(p, "instrument")
@@ -100,27 +98,25 @@ pricetable.zoo <- function(price, ..., instrument) {
             } else if (inherits(timestamp, "POSIXct"))
                 i <- as.POSIXct(i)
         }
-        i <- match(i, timestamp, nomatch = 0L)        
+        if (!is.na(missing) && missing == "locf") {
+            i <- matchOrPrevious(i, timestamp)
+        } else
+            i <- match(i, timestamp, nomatch = 0L)        
     } 
-
 
     if (missing(j))
         j <- instrument
     j.orig <- j
     j <- match(j, instrument, nomatch = 0L)
     
-
-    ans <- array(NA, dim = c(length(i), length(j)))
-        
-    ans[i>0, j>0] <- unclass(p)[i, j, drop = FALSE]
+    ans <- array(NA, dim = c(length(i), length(j)))        
+    ans[!is.na(i) & i > 0, j > 0] <-
+        unclass(p)[!is.na(i) & i, j, drop = FALSE]
 
     attr(ans, "timestamp") <- i.orig
     attr(ans, "instrument") <- j.orig
 
-    ## rownames(ans) <- as.character(i.orig)
-    ## colnames(ans) <- as.character(j.orig)
-
-    if (!is.na(missing)) {
+    if (!is.na(missing) && missing != "locf") {
         ans[is.na(ans)] <- missing
     }
     class(ans) <- "pricetable"
@@ -128,9 +124,8 @@ pricetable.zoo <- function(price, ..., instrument) {
     ans
 }
 
-`[<-.pricetable`  <- function(x, i, j, ..., value) {
+`[<-.pricetable`  <- function(x, i, j, ..., value)
     stop("extraction only: convert to matrix to replace values")
-}
 
 print.pricetable <- function(x, ...) {
     xx <- x
@@ -139,6 +134,15 @@ print.pricetable <- function(x, ...) {
     attr(xx, "timestamp") <- NULL
     attr(xx, "instrument") <- NULL
     print.default(unclass(xx))
+    invisible(x)
+}
+
+as.matrix.pricetable <- function(x, ...) {
+    rownames(x) <- as.character(attr(x, "timestamp"))
+    colnames(x) <- as.character(attr(x, "instrument"))
+    attr(x, "timestamp") <- NULL
+    attr(x, "instrument") <- NULL    
+    unclass(x)
 }
 
 names.pricetable <- function(x)

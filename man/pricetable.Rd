@@ -44,15 +44,14 @@ pricetable(price, \dots)
   For this, it first creates a table that merges series
   passed via \dots and appends a class attribute. A \code{[}
   method then allows to extract prices. Importantly, if
-  you ask for a subset of m rows and n columns, the
-  result will be a matrix of size m times n, even if
+  you ask for a subset of \emph{m} rows and \emph{n} columns, the
+  result will be a matrix of size \emph{m} times \emph{n}, even if
   times or instruments are missing.
 
   \code{pricetable} is a generic function, currently
   with methods for numeric vectors (including vectors
   with a \code{\link{dim}}, aka matrices) and for
   \code{\link{zoo}} objects.
-
 
 }
 \value{
@@ -71,23 +70,37 @@ pricetable(price, \dots)
   \code{\link{match}}
 }
 \examples{
-\dontrun{
-m <- 20
-n <- 8
-price <- array(rnorm(m*n), dim = c(m,n))
-colnames(price) <- letters[1:n]
-rownames(price) <- 1:m
+m <- 3
+n <- 2
+price <- array(c(1:m, 1:m + 100), dim = c(m,n))
+colnames(price) <- LETTERS[1:n]
+pt <- pricetable(price, timestamp = 1:m)
+##   A   B
+## 1 1 101
+## 2 2 102
+## 3 3 103
 
-when <- c(0,1.2,3,3,20)
-instrument <- c("a", "c", "x", "z_1", "z_2")
+pt[ , "A"]
+##   A
+## 1 1
+## 2 2
+## 3 3
 
-pricetable(price)[,"a"]
-pricetable(price)[,"a"]
+pt[ , c("X", "A", "X")]
+##    x A  x
+## 1 NA 1 NA
+## 2 NA 2 NA
+## 3 NA 3 NA
 
-pricetable(instrument, when, price, missing = 1)
+pt[ , c("X", "A", "X"), missing = 0]
+##   X A X
+## 1 0 1 0
+## 2 0 2 0
+## 3 0 3 0
 
-pricetable(c("a", "c"), when, price, missing = 1)
-pricetable(c("c", "c"), when, price, missing = 1)
-pricetable(c("c", "a"), when, price, missing = 1)
-}
+pt[c(0, 1.5, 4), , missing = "locf"]
+##      A   B
+## 0   NA  NA
+## 1.5  2 102
+## 4    3 103
 }
