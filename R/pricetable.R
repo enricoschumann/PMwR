@@ -25,10 +25,10 @@ pricetable.default <- function(price, instrument, timestamp, ...) {
 
     ## colnames(ans) <- as.character(instrument)
     ## rownames(ans) <- as.character(timestamp)
-    
+
     class(ans) <- "pricetable"
     ans
-    
+
 }
 
 pricetable.zoo <- function(price, ..., instrument) {
@@ -65,8 +65,8 @@ pricetable.zoo <- function(price, ..., instrument) {
     ## i  .. character, logical, numeric, datetime
     ## j  .. character, logical, numeric
     ## answer is guaranteed to have dim(length(i), length(j))
-    
-    
+
+
     ## if (is.character(i)) {
     ##     if (is.null(match.against))
     ##         match.against  <- names(x)[unlist(lapply(x, mode)) == "character"]
@@ -77,14 +77,15 @@ pricetable.zoo <- function(price, ..., instrument) {
     ##         if (is.null(x[[m]]))
     ##             next
     ##         ii <- ii | grepl(i, x[[m]], ignore.case = ignore.case, ...)
-    ##     }        
+    ##     }
     ##     if (reverse)
     ##         ii <- !ii
     ## } else
     ##     ii <- i
-    
+
     timestamp <- attr(p, "timestamp")
     instrument <- attr(p, "instrument")
+
 
     if (missing(i)) {
         i <- timestamp
@@ -98,20 +99,20 @@ pricetable.zoo <- function(price, ..., instrument) {
             } else if (inherits(timestamp, "POSIXct"))
                 i <- as.POSIXct(i)
         }
-        if (!is.na(missing) && missing == "locf") {
+        if (!is.na(missing) && (missing == "locf" || missing == "previous")) {
             i <- matchOrPrevious(i, timestamp)
         } else
-            i <- match(i, timestamp, nomatch = 0L)        
-    } 
+            i <- match(i, timestamp, nomatch = 0L)
+    }
 
     if (missing(j))
         j <- instrument
     j.orig <- j
     j <- match(j, instrument, nomatch = 0L)
-    
-    ans <- array(NA, dim = c(length(i), length(j)))        
+
+    ans <- array(NA, dim = c(length(i), length(j)))
     ans[!is.na(i) & i > 0, j > 0] <-
-        unclass(p)[!is.na(i) & i, j, drop = FALSE]
+        unclass(p)[i[!is.na(i)], j, drop = drop]
 
     attr(ans, "timestamp") <- i.orig
     attr(ans, "instrument") <- j.orig
@@ -141,7 +142,7 @@ as.matrix.pricetable <- function(x, ...) {
     rownames(x) <- as.character(attr(x, "timestamp"))
     colnames(x) <- as.character(attr(x, "instrument"))
     attr(x, "timestamp") <- NULL
-    attr(x, "instrument") <- NULL    
+    attr(x, "instrument") <- NULL
     unclass(x)
 }
 

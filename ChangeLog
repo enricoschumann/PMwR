@@ -1,3 +1,24 @@
+2017-10-16  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.5-9
+
+        * R/pl.R (pl.default): 'pl' is now less lenient
+        when trades are passed without instrument, but
+        vprice/multiplier is named and of length > 1.
+        For instance, these examples now fail:
+
+            pl(amount = 1, price  = 100,
+               vprice = c(A = 100, B = 100))
+            ## named vprice but instrument is not specified
+
+            pl(amount = 1, price  = 100,
+               multiplier = c(A = 100, B = 100))
+            ## named multipliers but instrument is not specified
+
+        * R/pricetable.R (`[.pricetable`): fix
+        subsetting when requested timestamp is not in
+        pricetable
+
 2017-09-29  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (`instrument<-`): add generic

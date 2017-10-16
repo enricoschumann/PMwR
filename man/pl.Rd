@@ -68,24 +68,27 @@ pl(amount, \dots)
 
     valuation price; a numeric vector. With several
     instruments, the prices must be named,
-    e.g. \code{c(stock1 = 100, stock2 = 101)}.
+    e.g. \code{c(stock1 = 100, stock2 = 101)}. See
+    Details.
 
   }
   \item{multiplier}{
 
-    numeric vector. When \code{instrument} is specified and the vector
-    is named, the names will be matched against instruments.
+    numeric vector. When \code{instrument} is specified
+    and the vector is named, the names will be matched
+    against instruments.
 
   }
   \item{multiplier.regexp}{
 
-    logical. If \code{TRUE}, the names of \code{multiplier} are
-    interpreted as regular expressions. See Examples.
+    logical. If \code{TRUE}, the names of
+    \code{multiplier} are interpreted as regular
+    expressions. See Examples.
 
   }
   \item{approx}{logical}
   \item{tol}{numeric: threshold to consider a position zero.}
-  \item{x}{a pl object to be printed or to be coerced to a data.frame}
+  \item{x}{a \code{pl} object to be printed or to be coerced to a data.frame}
   \item{\dots}{further argument}
   \item{use.crayon}{logical}
   \item{na.print}{character: how to print \code{NA} values}
@@ -97,15 +100,25 @@ pl(amount, \dots)
   several statistics (see Section Value, below). To get
   only the profit/loss numbers as a numeric vector,
   call \code{pl} twice (\code{pl(pl(...))}).
-
-  
   
   To use package crayon -- which is only sensible in
-   interactive use --, either explicitly set it to
-   \code{TRUE} or set an option \code{PMwR.use.crayon}
-   to \code{TRUE}.
+  interactive use --, either explicitly set
+  \code{use.crayon} to \code{TRUE} or set an option
+  \code{PMwR.use.crayon} to \code{TRUE}.
 
-  
+  Using \code{vprice}: when \code{along.timestamp} is
+  logical -- \code{FALSE} (the default) or TRUE -- ,
+  \code{vprice} can be used to value an open
+  position. For a single asset, it should be a single
+  number; for several assets, it should be named
+  vector. When \code{along.timestamp} is used to pass a
+  custom timestamp: for a single asset, \code{vprice}
+  must be a vector with the same length as
+  \code{along.timestamp}; for several assets, it must
+  be a numeric matrix with dimension
+  \code{length(along.timestamp)} times number of
+  assets.
+      
 }
 \value{
 
@@ -123,7 +136,7 @@ pl(amount, \dots)
 }
 \references{
 Schumann, E. (2017) \emph{Portfolio Management
-  with R}. \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
+  with R}. \url{http://enricoschumann.net/PMwR/}
 
 } 
 \author{
@@ -207,7 +220,7 @@ pl(j,
 
 
 
-## Example for 'multiplier
+## Example for 'multiplier'
 jnl <- read.table(textConnection(
 "instrument, price, amount
  FGBL MAR 16, 165.20,  1
@@ -224,10 +237,9 @@ pl(jnl,  multiplier.regexp = TRUE, ## regexp matching is case sensitive
 
 
 
-
-
 ## use package 'crayon'
 \dontrun{
+## on Windows, you may also need 'options(crayon.enabled = TRUE)'
 options(PMwR.use.crayon = FALSE)
 pl(amount = c(1, -1), price = c(1, 2))
 options(PMwR.use.crayon = TRUE)

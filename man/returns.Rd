@@ -51,32 +51,46 @@ returns(x, \dots)
   }
   \item{period}{
     
-    Typically \code{character}; supported are "month", "quarter", "year" or "ann"
-    (annualised), "ytd" (year-to-date), "mtd" (month-to-date) or "itd"
-    (month-to-date). The value of \sQuote{period} is used only when
-    timestamp information is available: for instance, when \code{t} is
-    not \code{NULL} or with \code{zoo}/\code{xts} objects.
+    Typically \code{character}; supported are "month",
+    "quarter", "year" or "ann" (annualised), "ytd"
+    (year-to-date), "mtd" (month-to-date), "itd"
+    (inception-to-date) or a single year, such as
+    "2012".  The value of \sQuote{period} is used only
+    when timestamp information is available: for
+    instance, when \code{t} is not \code{NULL} or with
+    \code{zoo}/\code{xts} objects.
 
-    All returns are computed as simple returns. They will only be
-    annualised with option "ann"; they will not be annualised when the
-    length of the time series is less than one year. To force
-    annualising in such a case, use \sQuote{\code{ann!}}. Annualisation
-    can only work when the timestamp \code{t} can be coerced to class
-    \code{\link{Date}}. The result will have an attribute
-    "is.annualised", which is a logical vector.
+    All returns are computed as simple returns. They
+    will only be annualised with option "ann"; they
+    will not be annualised when the length of the time
+    series is less than one year. To force annualising
+    in such a case, use
+    \sQuote{\code{ann!}}. Annualisation can only work
+    when the timestamp \code{t} can be coerced to class
+    \code{\link{Date}}. The result will have an
+    attribute "is.annualised", which is a logical
+    vector.
 
   }
   \item{complete.first}{
-    logical. For monthly returns, should the first month (if incomplete)
-    be used.
+
+    logical. For monthly returns, should the first
+    month (if incomplete) be used.
+
   }
   \item{pad}{
-    either \code{NULL} (no padding of initial lost observation) or a
-    value used for padding (reasonable values might be \link{NA} or 0)
+
+    either \code{NULL} (no padding of initial lost
+    observation) or a value used for padding
+    (reasonable values might be \link{NA} or 0)
+
   }
   \item{position}{
+
     numeric; the same length/dimension as
-    \code{x}. \strong{Deprecated: will be removed in the future.}
+    \code{x}. \strong{Deprecated: will be removed in
+    the future.}
+
   }
   \item{weights}{
     numeric
@@ -87,26 +101,40 @@ returns(x, \dots)
   \item{\dots}{
     further arguments
   }
+
   \item{year.rows}{
-    logical. If \code{TRUE} (the default), print monthly returns with
-    one row per year.
+
+    logical. If \code{TRUE} (the default), print
+    monthly returns with one row per year.
+
   }
   \item{zero.print}{
     character.  How to print zero values.
   }
   \item{na.print}{
-    character.  How to print \code{NA} values. (Not supported yet.)
+
+    character.  How to print \code{NA} values. (Not
+    supported yet.)
+
   }
   \item{plus}{
-    logical. Add a \sQuote{\code{+}} before positive numbers? Default is
-    \code{FALSE}.
+
+    logical. Add a \sQuote{\code{+}} before positive
+    numbers? Default is \code{FALSE}.
+
   }
   \item{lag}{
-    The lag for computing returns. A positive integer, defaults to one;
-    ignored for time-weighted returns or if \code{t} is supplied.
+
+    The lag for computing returns. A positive integer,
+    defaults to one; ignored for time-weighted returns
+    or if \code{t} is supplied.
+
   }
   \item{object}{
-    an object of class \code{p_returns} (\sQuote{period returns})
+
+    an object of class \code{p_returns} (\sQuote{period
+    returns})
+
   }
   \item{month.names}{
     character: names of months
@@ -133,22 +161,25 @@ returns(x, \dots)
 }
 \details{
 
-  \code{return} is a generic function.  It computes simple returns:
-  current values divided by prior values minus one.  The default method
-  works for numeric vectors/matrices.
+  \code{return} is a generic function.  It computes
+  simple returns: current values divided by prior
+  values minus one.  The default method works for
+  numeric vectors/matrices.
 
 }
 \value{
 
-  If called as \code{returns(x)}: a numeric vector or matrix, possibly
-  of class \code{zoo}.
+  If called as \code{returns(x)}: a numeric vector or
+  matrix, possibly of class \code{zoo}.
 
-  If called with a \code{period} argument: an object of class
-  \code{"p_returns"} (period returns), which is a numeric vector of
-  returns with attributes \code{t} (timestamp) and \code{period}.
-  Main use is to have methods that pretty-print such period returns;
-  currently, there are methods
-  for \code{\link{toLatex}} and \code{\link[tools]{toHTML}}.
+  If called with a \code{period} argument: an object of
+  class \code{"p_returns"} (period returns), which is a
+  numeric vector of returns with attributes \code{t}
+  (timestamp) and \code{period}.  Main use is to have
+  methods that pretty-print such period returns;
+  currently, there are methods for
+  \code{\link{toLatex}} and
+  \code{\link[tools]{toHTML}}.
 
 }
 \author{
