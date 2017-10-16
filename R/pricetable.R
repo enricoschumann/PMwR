@@ -82,9 +82,10 @@ pricetable.zoo <- function(price, ..., instrument) {
     ##         ii <- !ii
     ## } else
     ##     ii <- i
-    
+
     timestamp <- attr(p, "timestamp")
     instrument <- attr(p, "instrument")
+
 
     if (missing(i)) {
         i <- timestamp
@@ -98,7 +99,7 @@ pricetable.zoo <- function(price, ..., instrument) {
             } else if (inherits(timestamp, "POSIXct"))
                 i <- as.POSIXct(i)
         }
-        if (!is.na(missing) && missing == "locf") {
+        if (!is.na(missing) && (missing == "locf" || missing == "previous")) {
             i <- matchOrPrevious(i, timestamp)
         } else
             i <- match(i, timestamp, nomatch = 0L)        
@@ -111,7 +112,7 @@ pricetable.zoo <- function(price, ..., instrument) {
     
     ans <- array(NA, dim = c(length(i), length(j)))        
     ans[!is.na(i) & i > 0, j > 0] <-
-        unclass(p)[!is.na(i) & i, j, drop = FALSE]
+        unclass(p)[i[!is.na(i)], j, drop = drop]
 
     attr(ans, "timestamp") <- i.orig
     attr(ans, "instrument") <- j.orig

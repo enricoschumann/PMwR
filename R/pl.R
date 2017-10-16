@@ -135,10 +135,11 @@ pl.default <- function(amount, price, timestamp = NULL,
         ## User-defined timestamp: vprice needs to be
         ## specified and must be a matrix. In this
         ## case, along.timestamp is a vector of Dates,
-        ## POSIXct, ...
+        ## POSIXct, integers, ...
 
         custom.timestamp <- TRUE
-               
+        if (is.null(vprice))
+            stop("user-defined timestamp: vprice needs be specified")
         if (is.null(dim(vprice)))
             vprice <- as.matrix(vprice)
 
@@ -194,13 +195,24 @@ pl.default <- function(amount, price, timestamp = NULL,
         length(instrument) == 0L ||
         all(is.na(instrument))) {
 
-        ## case 1: 'instrument' is missing => a single
+        ## CASE 1: 'instrument' is missing, so a single
         ##         instrument is assumed
 
         no.i <- TRUE
         instrument  <- rep("_", length(amount))
         uniq.i <- "_"
         ni <- 1L
+        if (!is.null(names(multiplier)) &&
+            length(unique(names(multiplier))) > 1L &&
+            length(multiplier) > 1L) {
+            stop("named multipliers but instrument is not specified")
+        }
+        if (!is.null(vprice) &&
+            !is.null(names(vprice)) &&
+            length(unique(names(vprice))) > 1L &&
+            length(vprice) > 1L) {
+            stop("named vprice but instrument is not specified")
+        }
         if (do.warn && !is.null(names(multiplier))) {
             warning("multiplier is named but instrument is not specified")
             multiplier <- unname(multiplier)
@@ -275,7 +287,7 @@ pl.default <- function(amount, price, timestamp = NULL,
 
         open <- abs(sum(amount1)) > tol
         if (open && !custom.timestamp) {
-            if (do.warn && is.null(vprice))
+            if (do.warn && (is.null(vprice) || is.na(vprice1)))
                 warning(sQuote("sum(amount)"), " is not zero",
                         if (!no.i) paste0(" for ",  uniq.i[i]),
                         ": specify ",
