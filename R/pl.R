@@ -50,13 +50,16 @@ print.pl <- function(x, ..., use.crayon = NULL, na.print = ".") {
                                      x[[i]]$unrealised))),
               as.character(x[[i]]$timestamp))))
         if (!is.null(x[[i]]$timestamp))
-            cat(indent,      "timestamp     ", numrow(as.character(x[[i]]$timestamp), w),
+            cat(indent,      "timestamp     ",
+                numrow(as.character(x[[i]]$timestamp), w),
                 "\n", sep = "")
         cat(indent, bold("P/L total     "), bold(numrow(PL, w)) , "\n",
             if (any(!is.na(x[[i]]$realised)))
-                paste0(indent, "__ realised   ", numrow(x[[i]]$realised, w), "\n"),
+                paste0(indent, "__ realised   ",
+                       numrow(x[[i]]$realised, w), "\n"),
             if (any(!is.na(x[[i]]$unrealised)))
-                paste0(indent, "__ unrealised ", numrow(x[[i]]$unrealised, w), "\n"),
+                paste0(indent, "__ unrealised ",
+                       numrow(x[[i]]$unrealised, w), "\n"),
             indent, "average buy   ", numrow(BUY, w), "\n",
             indent, "average sell  ", numrow(SELL, w), "\n",
             indent, "cum. volume   ",
@@ -119,17 +122,17 @@ pl.default <- function(amount, price, timestamp = NULL,
 
     custom.timestamp <- FALSE
     if (isTRUE(along.timestamp)) {
-        
+
         if (is.null(timestamp) || all(is.na(timestamp)))
             timestamp <- seq_along(amount)
-        else            
+        else
             if (is.unsorted(timestamp)) {
                 io <- order(timestamp)
                 timestamp <- timestamp[io]
                 amount <- amount[io]
                 instrument <- instrument[io]
                 price <- price[io]
-            }        
+            }
     } else if (!identical(along.timestamp, FALSE)) {
 
         ## User-defined timestamp: vprice needs to be
@@ -150,7 +153,7 @@ pl.default <- function(amount, price, timestamp = NULL,
         if (nrow(vprice) != length(along.timestamp))
             stop("lengths of ", sQuote("vprice"), " and ",
                  sQuote("along.timestamp"), " differ")
-    }        
+    }
 
     ## initial position should be a named vector
     if (!is.null(initial.position)) {
@@ -159,24 +162,24 @@ pl.default <- function(amount, price, timestamp = NULL,
             ## TODO: if price is specified, use as
             ##       initial.price => but only the latest
             ##       price should be used
-            
+
             ## TODO: if timestamp is specified, use as
             ##       timestamp0 => but only the latest
             ##       timestamp should be used
             initial.position <- position(initial.position)
         }
-        
-        if (inherits(initial.position, "position"))            
+
+        if (inherits(initial.position, "position"))
             initial.position <- vname(initial.position,
                                       attr(initial.position, "instrument"))
-            
+
         if (do.warn &&
             any(abs(initial.position) > 0) &&
             is.null(initial.price))
             warning(sQuote("initial.position"),
                     " but no ",
                     sQuote("initial.price"))
-        
+
         instrument0 <- names(initial.position)
         amount0 <- as.vector(initial.position)
         price0 <- if (!is.null(names(initial.position)))
@@ -190,7 +193,7 @@ pl.default <- function(amount, price, timestamp = NULL,
 
         ## timestamp0 ?? initial.timestamp
     }
-                
+
     if (is.null(instrument) ||
         length(instrument) == 0L ||
         all(is.na(instrument))) {
@@ -226,9 +229,9 @@ pl.default <- function(amount, price, timestamp = NULL,
                 names(vprice) <- "_"
             }
         }
-        
+
         if (!is.null(initial.position))
-            instrument0 <- "_"            
+            instrument0 <- "_"
 
     } else {
 

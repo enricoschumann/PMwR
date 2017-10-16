@@ -48,7 +48,7 @@ returns.zoo <- function(x, period = NULL, complete.first = TRUE,
                    zoo(ans, t[-1L])
         attr(ans, "holdings") <- attrs$holdings
         attr(ans, "contributions") <- attrs$contributions
-        ans    
+        ans
     }
 }
 
@@ -150,8 +150,8 @@ twReturns <- function(price, position, pad = NULL) {
 
 ## not exported
 pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
-    ## TODO add also: 'previous month' and pattern 'YYYYMM'
-    
+    ## TODO add also: 'previous month' and pattern 'YYYY-?MM'
+
     x <- as.matrix(x)
     nc <- ncol(x)
     period <- tolower(period)
@@ -258,7 +258,7 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         attr(ans, "t") <- t(t[ii])
         class(attr(ans, "t")) <- "Date"
         attr(ans, "period") <- period
-        
+
     } else {
         if (length(period) > 1L) {
             by <- period
@@ -561,7 +561,7 @@ rc <- function(R, weights, timestamp, segments = NULL) {
                         cr
                     else if (!is.null(cr <- colnames(weights)))
                         cr
-                    else 
+                    else
                         paste0("segment_", 1:ncol(weights))
     }
     if (missing(timestamp))
@@ -574,7 +574,7 @@ rc <- function(R, weights, timestamp, segments = NULL) {
     names(df) <- c("timestamp", segments, "total")
 
     later_r <- c(rev(cumprod(1 + rev(df[["total"]])))[-1], 1)
-    
+
     total <- rep(NA_real_, ns + 1)
     names(total) <- c(segments, "total")
     for (i in seq_len(ns))
