@@ -1,3 +1,12 @@
+2017-10-19  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.5-10
+
+	* R/returns.R (returns_rebalance): call
+	.returns instead of returns
+	(returns,returns_rebalance): 'rebalance.when'
+	may now be the string 'endofmonth'
+
 2017-10-16  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): 0.5-9
