@@ -45,9 +45,11 @@ rc(R, weights, timestamp, segments = NULL)
  \item{period_contributions}{a data.frame}
  \item{total_contributions}{a numeric vector}
 }
-%% \references{
-%%   %% ~put references to the literature/web site here ~
-%% }
+\references{
+
+  Feibel, Bruce (2003), \emph{Investment Performance Measurement}, Wiley.
+
+}
 \author{
   Enrico Schumann
 }
