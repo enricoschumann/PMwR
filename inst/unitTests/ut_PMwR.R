@@ -1512,10 +1512,6 @@ test.NAVseries <- function() {
 
 test.pricetable <- function() {
 
-    require("PMwR")
-    require("RUnit")
-    require("zoo")
-
     checkTrue(all(pricetable(1:10) == 1:10))
 
     checkEquals(pricetable(1:10, timestamp = 1:10, instrument = "A"),
