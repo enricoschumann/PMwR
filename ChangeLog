@@ -2731,7 +2731,7 @@
 2013-05-13  Enrico Schumann  <es@enricoschumann.net>
 
         * R/Tradelist.R (Tradelist): added '...' argument; all
-        arguments passed that way musz be named
+        arguments passed that way must be named
 
 2013-05-07  Enrico Schumann  <es@enricoschumann.net>
 
