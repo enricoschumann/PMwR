@@ -18,7 +18,7 @@ as.NAVseries(x, ...)
 
 \method{print}{NAVseries}(x, \dots)
 
-\method{summary}{NAVseries}(object, monthly = TRUE, \dots )
+\method{summary}{NAVseries}(object, monthly = TRUE, na.rm = FALSE, \dots )
 
 \method{plot}{NAVseries}(x, y, xlab = "", ylab = "", type = "l", \dots )
 }
@@ -50,6 +50,9 @@ as.NAVseries(x, ...)
 \item{monthly}{
   if \code{TRUE} (default), volatility computations
   are done on monthly returns
+}
+\item{na.rm}{
+  logical
 }
 \item{y}{
   a second NAVseries to be plotted. Not supported yet.

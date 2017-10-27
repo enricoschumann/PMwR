@@ -1,3 +1,13 @@
+2017-10-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.5-12
+
+	* R/NAVseries.R (summary.NAVseries): fix NA
+	handling: with missing values in NAVs, the
+	timestamp was incorrectly stored, which led to
+	wrong monthly returns in 'print.summary.NAVseries'
+	(summary.NAVseries): new argument 'na.rm'
+
 2017-10-25  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): 0.5-11

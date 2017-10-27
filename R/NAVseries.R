@@ -65,16 +65,22 @@ print.NAVseries <- function(x, ...) {
     invisible(x)
 }
 
-summary.NAVseries <- function(object, monthly = TRUE, ...) {
+summary.NAVseries <- function(object, monthly = TRUE, na.rm = FALSE, ...) {
     ## TODO: assuming daily timestamps -- too restrictive? hourly?
     ## TODO: timestamp can also be numeric 1 .. n_obs
     isna <- is.na(object)
     nna <- sum(isna)
-    timestamp <- attr(object, "timestamp")[!isna]
-    NAV <- object[!isna]
+    if (na.rm) {
+        timestamp <- attr(object, "timestamp")[!isna]
+        NAV <- object[!isna]
+    } else {
+        timestamp <- attr(object, "timestamp")
+        NAV <- c(object)
+    }
+        
     if (!is.null(timestamp) &&
-        !inherits(try(timestampD <- as.Date(timestamp), silent = TRUE),
-                  "try-error") &&
+        !inherits(try(timestampD <- as.Date(timestamp),
+                      silent = TRUE), "try-error") &&
         !any(is.na(timestampD))) {
         NAV <- aggregate(NAV, by = list(as.Date(timestamp)), tail, 1L)[[2L]]
         timestamp <- aggregate(timestamp,
@@ -86,6 +92,7 @@ summary.NAVseries <- function(object, monthly = TRUE, ...) {
     ans$NAVseries <- object
     ans$NAV <- c(object)
     ans$timestamp <- timestamp
+    ans$timestamp <- attr(object, "timestamp")
     ans$instrument  <- if (!is.null(attr(object, "instrument")))
                           attr(object, "instrument") else NA
     ans$title       <- if (!is.null(attr(object, "title")))

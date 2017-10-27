@@ -1,5 +1,6 @@
 \name{instrument}
 \alias{instrument}
+\alias{instrument<-}
 \title{
   Retrieve or Change Instrument
 }

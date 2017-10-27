@@ -21,7 +21,8 @@ returns(x, \dots)
         lag = 1, \dots)
 
 \method{returns}{zoo}(x, period = NULL, complete.first = TRUE,
-                      pad = NULL, position = NULL, lag = 1, \dots)
+                      pad = NULL, position = NULL,
+                      weights = NULL, rebalance.when = NULL, lag = 1, \dots)
 
 \method{print}{p_returns}(x, \dots, year.rows = TRUE, month.names = NULL,
                          zero.print = "0", plus = FALSE, digits = 1,

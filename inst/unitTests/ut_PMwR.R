@@ -1294,13 +1294,15 @@ test.returns <- function() {
     rowSums(p*prices)
 
 
-
-
-
-
     ## weights/rebalance.when
+    ## TODO: add tests
 
-    ## TODO
+
+    
+    ## missing values
+    x <- zoo(c(NA, 2:5), as.Date("2017-10-27") + 1:5)
+    checkEqualsNumeric(unclass(returns(x, period = "month")), c(NA, 0.25))
+
 }
 
 test.scale1 <- function() {
@@ -1436,8 +1438,8 @@ test.is_valid_ISIN <- function() {
 
 test.NAVseries <- function() {
 
-    ## require("PMwR")
-    ## require("RUnit")
+    require("PMwR")
+    require("RUnit")
 
     nav <- NAVseries(1:10)
     checkEquals(c(nav), 1:10)
