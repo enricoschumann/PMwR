@@ -1,3 +1,11 @@
+2017-10-25  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.5-11
+
+	* R/journal.R (journal.default): fix NA
+	handling in 'journal': 'journal' would stop
+	if there were NA values in instrument
+
 2017-10-19  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): 0.5-10

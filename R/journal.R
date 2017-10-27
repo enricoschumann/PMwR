@@ -23,7 +23,8 @@ journal.default <- function(amount, price, timestamp, instrument,
         timestamp <- NA
     if (missing(instrument) || all(is.na(instrument)))
         instrument <- NA
-    else if (all(instrument == instrument[1L]))
+    else if (!any(is.na(instrument)) &&
+             all(instrument == instrument[1L]))
         instrument <- instrument[1L]
     if (missing(price))
         price <- NA
