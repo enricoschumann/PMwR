@@ -710,10 +710,25 @@ as.matrix.p_returns <- function(x, ...) {
         rownames(tb) <- suy
         colnames(tb) <- c(1:12, "YTD")
         tb
-    } else
-        NextMethod("as.matrix", x)
-    
+    } else {
+        res <- unclass(x)
+        res <- as.matrix(res)
+        if (!is.null(attr(x, "t")))
+            rownames(res) <- as.character(attr(x, "t"))
+        attr(res, "t") <- NULL
+        attr(res, "period") <- NULL
+        res
+    }
 
 }
 
 ## TODO: as.data.frame.p_returns
+
+as.data.frame.p_returns <- function(x, ...) {
+
+    res <- unclass(x)
+    res <- as.data.frame(res)
+    rownames(res) <- as.character(attr(x, "t"))
+    res
+
+}

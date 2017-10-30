@@ -1,3 +1,8 @@
+2017-10-30  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (as.matrix.p_returns): do not use
+	NextMethod but directly unclass/coerce
+
 2017-10-27  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): 0.5-12
