@@ -132,10 +132,10 @@ summary.NAVseries <- function(object, monthly = TRUE, na.rm = FALSE, ...) {
                                lower = FALSE) * sq12
             ans$volatility.down <- pm(tmp, normalise = TRUE) * sq12
         } else {
-            ## TODO: assumes daily data -- too restrictive?
+            ## TODO: assumes daily data -- too restrictive: could be intraday
             ans$volatility      <- sd(returns(NAV))*16
             ans$volatility.up   <- pm(returns(NAV), normalise = TRUE,
-                               lower = FALSE)*16
+                                      lower = FALSE)*16
             ans$volatility.down <- pm(returns(NAV), normalise = TRUE)*16
         }
     } else {
@@ -204,7 +204,7 @@ print.summary.NAVseries <- function(x, ...,
     nx <- nx[nx != "title"]
     nx <- nx[nx != "description"]
     for (n in nx)
-        template <- gsub(paste0("%", n, "%"), x[[n]], template)
+        template <- gsub(paste0("%", n, "%"), x[[n]], template, fixed = TRUE)
     template <- valign(template)
     if (!x$return.annualised)
         template <- sub("(annualised)", "", template, fixed = TRUE)
@@ -254,10 +254,15 @@ toLatex.summary.NAVseries <- function(object, ...,
 
     for (field in fields) {
         field_values <- unlist(lapply(dots, `[[`, field))
-        if (field %in% perc_fields)
+        if (is.null(field_values) ||
+            length(field_values) == 0L ||
+            all(is.na(field_values)))
+            field_values <- rep("NA", ns)
+        else if (field %in% perc_fields)
             field_values <- fmt_p(field_values)
         for (i in seq_len(ns))
-            ans[i] <- gsub(paste0("%", field), field_values[i], ans[i])
+            ans[i] <- gsub(paste0("%", field), field_values[i], ans[i],
+                           fixed = TRUE)
     }
 
     NAVs <- lapply(dots, `[[`, "NAV")
