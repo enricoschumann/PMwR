@@ -1,3 +1,9 @@
+2017-11-07  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (toLatex.summary.NAVseries):
+	fix handling of NA values -- 'NA' is now
+	interpolated into the template
+
 2017-10-30  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/returns.R (as.matrix.p_returns): do not use
