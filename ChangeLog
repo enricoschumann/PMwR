@@ -3,6 +3,8 @@
 	* R/NAVseries.R (toLatex.summary.NAVseries):
 	fix handling of NA values -- 'NA' is now
 	interpolated into the template
+	(toLatex.summary.NAVseries): use gsub with
+	'fixed=TRUE' when filling in template
 
 2017-10-30  Enrico Schumann  <es@enricoschumann.net>
 
