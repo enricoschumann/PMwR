@@ -3,6 +3,8 @@
 div_adjust <- function(x, t, div, backward = TRUE, additive = FALSE) {
     if (!is.null(dim(x)))
         stop(sQuote("x"), " must be a vector")
+    if (length(div) == 1L && length(t) > 1L)
+        div <- rep(div, length(t))
     tmp <- t > 1L
     div <- div[tmp]
     t <- t[tmp]

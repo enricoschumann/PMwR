@@ -4,7 +4,7 @@ plot_trading_hours <-
     plotTradingHours <- function(x, t = NULL,
              interval = "5 min", labels = "hours",
              label.format = NULL,
-             excludeWeekends = TRUE, holidays = NULL,
+             exclude.weekends = TRUE, holidays = NULL,
              fromHHMMSS = "000000", toHHMMSS = "240000",
              do.plotAxis = TRUE,
              ...,

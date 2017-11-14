@@ -1,4 +1,4 @@
-\name{AdjustSeries}
+\name{Adjust-Series}
 \alias{div_adjust}
 \alias{split_adjust}
 \title{
@@ -14,36 +14,42 @@ split_adjust(x, t, ratio, backward = TRUE)
 \arguments{
   \item{x}{
     a numeric vector
-}
+  }
   \item{t}{
-    an integer vector, specifying the positions in \code{x} at which
-    dividends were paid (\sQuote{ex-days}) or at which a split occurs
-}
+
+    an integer vector, specifying the positions in
+    \code{x} at which dividends were paid
+    (\sQuote{ex-days}) or at which a split occurs
+
+  }
   \item{div}{
-    a numeric vector, specifying the dividends.  If necessary, recycled
-    to the length of \code{t}.
-}
-\item{ratio}{
-  
-    a numeric vector, specifying the split ratios.  A 2-for-1 stock
-    split, say, has a ratio of 2.  (This is \sQuote{American Style}; in
-    some countries, for instance Germany, a 2-for-1 stock split would be
-    called a 1-for-1 split: you keep your shares and receive one new
-    share per share that you own.)
     
-}
-\item{backward}{
-  logical
-}
-\item{additive}{
-  logical
-}
+    a numeric vector, specifying the dividends.  If of
+    length one, recycled to the length of \code{t}.
+    
+  }
+  \item{ratio}{
+    
+    a numeric vector, specifying the split ratios.  A
+    2-for-1 stock split, say, has a ratio of 2.  (This
+    is \sQuote{American Style}; in some countries, for
+    instance Germany, a 2-for-1 stock split would be
+    called a 1-for-1 split: you keep your shares and
+    receive one new share per share that you own.)
+    
+  }
+  \item{backward}{
+    logical
+  }
+  \item{additive}{
+    logical
+  }
 }
 \details{
 
-  With \code{backward} set to \code{TRUE}, which is the default, the
-  final prices in the unadjusted series matches the final prices in the
-  adjusted series.
+  With \code{backward} set to \code{TRUE}, which is the
+  default, the final prices in the unadjusted series
+  matches the final prices in the adjusted series.
 
 }
 \value{

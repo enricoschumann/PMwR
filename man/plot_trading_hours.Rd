@@ -10,16 +10,17 @@
 \usage{
 plot_trading_hours(x, t = NULL,
                    interval = "5 min", labels = "hours", label.format = NULL,
-                   excludeWeekends = TRUE, holidays = NULL,
+                   exclude.weekends = TRUE, holidays = NULL,
                    fromHHMMSS = "000000", toHHMMSS = "240000",
                    do.plotAxis = TRUE,
                    ...,
                    from = NULL, to = NULL,
                    do.plot = TRUE,
                    axis1.par = list())
+
 plotTradingHours(x, t = NULL,
                  interval = "5 min", labels = "hours", label.format = NULL,
-                 excludeWeekends = TRUE, holidays = NULL,
+                 exclude.weekends = TRUE, holidays = NULL,
                  fromHHMMSS = "000000", toHHMMSS = "240000",
                  do.plotAxis = TRUE,
                  ...,
@@ -109,8 +110,8 @@ plotTradingHours(x, t = NULL,
   B.D. Ripley and K. Hornik. \emph{Date-Time Classes}. R-News,
   \strong{1}(2):8--12, 2001.
 
-  Schumann, E. (2016) \emph{Portfolio Management
-  with R}. \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
+  E. Schumann (2017) \emph{Portfolio Management with \R}.
+  \url{http://enricoschumann.net/PMwR/}
 
 }
 \author{
