@@ -12,7 +12,7 @@ plot_trading_hours(x, t = NULL,
                    interval = "5 min", labels = "hours", label.format = NULL,
                    exclude.weekends = TRUE, holidays = NULL,
                    fromHHMMSS = "000000", toHHMMSS = "240000",
-                   do.plotAxis = TRUE,
+                   do.plot.axis = TRUE,
                    ...,
                    from = NULL, to = NULL,
                    do.plot = TRUE,
@@ -22,7 +22,7 @@ plotTradingHours(x, t = NULL,
                  interval = "5 min", labels = "hours", label.format = NULL,
                  exclude.weekends = TRUE, holidays = NULL,
                  fromHHMMSS = "000000", toHHMMSS = "240000",
-                 do.plotAxis = TRUE,
+                 do.plot.axis = TRUE,
                  ...,
                  from = NULL, to = NULL,
                  do.plot = TRUE,
@@ -64,7 +64,7 @@ plotTradingHours(x, t = NULL,
   \item{toHHMMSS}{
     a character vector of length one in format \dQuote{HHMMSS}
   }
-  \item{do.plotAxis}{
+  \item{do.plot.axis}{
     logical. Should \code{axis(1)} be plotted? Default is \code{TRUE}.
   }
   \item{\dots}{

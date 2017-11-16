@@ -1,4 +1,4 @@
-2017-11-14  Enrico Schumann  <es@enricoschumann.net>
+2017-11-16  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): Version: 0.6-0
 
@@ -7,9 +7,10 @@
             tradeOnOpen      =>  trade.at.open
             assignInGlobals  =>  Globals
 
-	* R/plot_trading_hours.R: rename argument
+	* R/plot_trading_hours.R: rename arguments
 
 	    excludeWeekends  =>  exclude.weekends
+	    do.plotAxis      =>  do.plot.axis
 
 2017-11-13  Enrico Schumann  <es@enricoschumann.net>
 

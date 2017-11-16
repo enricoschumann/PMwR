@@ -321,8 +321,6 @@ make_neighbour <- function(wmin = 0,
             list(w = x, Rw = Rw)
         }
         
-        
-        
     } else
         stop("no matches")
 }

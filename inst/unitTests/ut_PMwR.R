@@ -818,6 +818,60 @@ test.pl <- function() {
                    instrument = c("B", "B"),
                    multiplier = c(A = 1, B = 2))[[1L]][["pl"]], 2)
 
+
+
+    ## along.timestamp: user-specified: open trade
+    j <- journal(amount = 1,
+                 timestamp = 2.5,
+                 price = 102)
+    res <- pl(j, along.timestamp = 1:10,
+              vprice = 101:110)
+    checkEquals(res[[1]]$timestamp, 1:10)
+
+    ### .... total pnl
+    checkEqualsNumeric(res[[1]]$pl,
+                       c(0, 0, 1, 2, 3, 4, 5, 6, 7, 8))
+
+    ### .... and split pnl
+    checkEqualsNumeric(res[[1]]$pl[-(1:2)], 1:8)
+    checkEqualsNumeric(res[[1]]$unrealised[-(1:2)], 1:8)
+    checkTrue(all(res[[1]]$realised[-(1:2)] == 0))
+
+    ### .... pnl before trades should be either 0 or NA
+    checkTrue(all(is.na(res[[1]]$pl[(1:2)]) | res[[1]]$pl[(1:2)]==0L))
+    checkTrue(all(is.na(res[[1]]$realised) | res[[1]]$realised==0))
+
+
+
+
+    
+    ## along.timestamp: user-specified: closed trade
+    j <- journal(amount = c(1,-1),
+                 timestamp = c(2.5,9),
+                 price = c(102, 109))
+    res <- pl(j, along.timestamp = 1:10,
+              vprice = 101:110)
+    checkEquals(res[[1]]$timestamp, 1:10)
+
+    ### .... total pnl
+    checkEqualsNumeric(res[[1]]$pl,
+                       c(0, 0, 1, 2, 3, 4, 5, 6, 7, 7))
+
+    ### .... and split pnl
+    checkEqualsNumeric(res[[1]]$pl[-(1:2)], c(1:7,7))
+    checkEqualsNumeric(res[[1]]$unrealised[-(1:2)],
+                       c(1, 2, 3, 4, 5, 6, 0, 0))
+    checkEqualsNumeric(res[[1]]$realised[-(1:2)],
+                       c(0, 0, 0, 0, 0, 0, 7, 7))
+
+    ### .... pnl before trades should be either 0 or NA
+    checkTrue(all(is.na(res[[1]]$pl[(1:2)]) | res[[1]]$pl[(1:2)]==0L))
+
+
+
+
+    
+    
     ## along.timestamp
     j <- journal(amount = c(1,-1),
                  timestamp = c(1,2.5),
@@ -941,49 +995,51 @@ test.vprice <- function() {
     ## single trade, instrument unnamed
     j <- journal(amount = 1, price = 20)
 
-    p <- pl(j)   ## NA
+    p <- suppressWarnings(pl(j))   ## NA
     checkTrue(is.na(p[[1]]$pl))
     pl(j, vprice = 21)  ## 1
     
     pl(j, vprice = c(A = 21))
     pl(j, vprice = c(B = 21))
-    checkException(pl(j, vprice = c(B = 19, A = 21)))
+    checkException(pl(j, vprice = c(B = 19, A = 21)), silent = TRUE)
 
-    ## single trade, instrument named
-    j <- journal(amount = 1,
-                 price = 20,
-                 instrument = "A")
+    ## TODO: make tests
     
-    pl(j)
-    pl(j, vprice = 21)
-    pl(j, vprice = c(A = 21))
-    pl(j, vprice = c(B = 21))
-    pl(j, vprice = c(B = 21, A = 21))
+    ## ## single trade, instrument named
+    ## j <- journal(amount = 1,
+    ##              price = 20,
+    ##              instrument = "A")
+    
+    ## pl(j)
+    ## pl(j, vprice = 21)
+    ## pl(j, vprice = c(A = 21))
+    ## pl(j, vprice = c(B = 21))
+    ## pl(j, vprice = c(B = 21, A = 21))
 
 
 
-    ## single trade, journal has timestamp
-    j <- journal(amount = 1,
-                 price = 20,
-                 instrument = "A",
-                 timestamp = 5)
+    ## ## single trade, journal has timestamp
+    ## j <- journal(amount = 1,
+    ##              price = 20,
+    ##              instrument = "A",
+    ##              timestamp = 5)
     
-    pl(j)
-    pl(j, vprice = 21)
-    pl(j, vprice = c(A = 21))
-    pl(j, vprice = c(B = 21))
-    pl(j, vprice = c(B = 21, A = 21))
+    ## pl(j)
+    ## pl(j, vprice = 21)
+    ## pl(j, vprice = c(A = 21))
+    ## pl(j, vprice = c(B = 21))
+    ## pl(j, vprice = c(B = 21, A = 21))
     
     
     
-    ## single trade, along.timestamp is TRUE
-    j <- journal(amount = 1,
-                 price = 20,
-                 instrument = "A",
-                 timestamp = 5)
+    ## ## single trade, along.timestamp is TRUE
+    ## j <- journal(amount = 1,
+    ##              price = 20,
+    ##              instrument = "A",
+    ##              timestamp = 5)
     
-    pl(j, along.timestamp = TRUE)
-    pl(j, along.timestamp = TRUE, vprice = 21)  ## INCORRECT: profit is labelled realised
+    ## pl(j, along.timestamp = TRUE)
+    ## pl(j, along.timestamp = TRUE, vprice = 21)  ## FIXME INCORRECT: profit is labelled realised
     
     
     
@@ -993,7 +1049,7 @@ test.vprice <- function() {
                  instrument = "A",
                  timestamp = 5)
     
-    checkException(pl(j, along.timestamp = 4:6)) ## should fail: vprice must be specified
+    checkException(pl(j, along.timestamp = 4:6), silent = TRUE) ## should fail: vprice must be specified
     pl(j, along.timestamp = 4:6, vprice = c(21,20,22))
 
 }

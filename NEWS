@@ -1,13 +1,14 @@
-v0.6-0  (2017-11-14)
+v0.6-0  (2017-11-16)
 
   o btest: two arguments have been renamed
 
 	tradeOnOpen      =>  trade.at.open
 	assignInGlobals  =>  Globals
 
-  o plot_trading_hours: an argument has been renamed
+  o plot_trading_hours: two arguments have been renamed
 
 	excludeWeekends  =>  exclude.weekends
+	do.plotAxis      =>  do.plot.axis
 
   o Function 'isValidISIN' is no longer available; use
     the drop-in replacement 'is_valid_ISIN' instead.
@@ -21,14 +22,15 @@ v0.6-0  (2017-11-14)
   o New generic function instrument, also for
     replacement.
 
-  o NAVseries: new method 'toLatex.summary.NAVseries'
+  o NAVseries: new method 'toLatex.summary.NAVseries';
+    see the vignette for examples.
 
   o pricetable: the function is now a generic, with a
-    default and zoo method. Methods for pricetable have
-    been added (print, `[`, as.matrix).
+    default and a zoo method. Methods for pricetable
+    have been added (print, `[`, as.matrix).
 
-  o quote32: the function now recognises a hyphen (-)
-    and single quote (') as a separator
+  o quote32: the function now recognises both a hyphen
+    (-) or single quote (') as a separator
 
   o A more-comprehensive list of changes is available
     in the ChangeLog:
