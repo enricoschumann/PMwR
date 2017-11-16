@@ -1,4 +1,4 @@
-\name{TradeAnalysis}
+\name{Trade-Analysis}
 \alias{close_on_first}
 \alias{limit}
 \alias{scale_to_unity}

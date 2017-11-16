@@ -1640,3 +1640,36 @@ test.pricetable <- function() {
                           class = "pricetable"))
 
 }
+
+test.div_adjust <- function() {
+    
+    x <- c(10, 5)
+    div <- 5
+    t <- 2
+    checkEquals(div_adjust(x, t, div),
+                c(5, 5))
+    checkEquals(div_adjust(x, t, div, backward = FALSE),
+                c(10, 10))
+
+    x <- 10
+    div <- 5
+    t <- 0
+    checkEquals(div_adjust(x, t, div), 10)
+    checkEquals(div_adjust(x, t, div, backward = FALSE), 10)
+    t <- 1
+    checkEquals(div_adjust(x, t, div), 10)
+    checkEquals(div_adjust(x, t, div, backward = FALSE), 10)
+    t <- 2
+    checkEquals(div_adjust(x, t, div), 10)
+    checkEquals(div_adjust(x, t, div, backward = FALSE), 10)
+
+    
+    x <- c(10,5,10,5)
+    div <- 5
+    t <- c(2,4)
+    checkEquals(div_adjust(x, t, div), rep(5, 4))
+    checkEquals(div_adjust(x, t, div, backward = FALSE), rep(10,4))
+
+    
+    
+}

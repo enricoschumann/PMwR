@@ -5,29 +5,29 @@
 
 * About PMwR
 
-Functions and examples for 'Portfolio Management with
-R': backtesting investment and trading strategies,
-computing profit-and-loss and returns, reporting, and
-more. The aim of PMwR is to provide a small set of
-reliable, efficient and convenient tools that help in
-processing and analysing trade/portfolio data. The
-package does not provide a complete application that
-could be used 'as is', but building blocks for creating
-such an application.
+Functions for the practical management of financial
+portfolios:: backtesting investment and trading
+strategies, computing profit-and-loss and returns,
+analysing trades, reporting, and more. The aim of PMwR
+is to provide a small set of reliable, efficient and
+convenient tools that help in processing and analysing
+trade/portfolio data. The package does not provide a
+complete application that could be used 'as is', but
+building blocks for creating such an application.
 
 PMwR grew out of various pieces of software that I have
 written since 2008. The package is currently under
-development and changes frequently, simply because the
-code has been written over many years and is in need of
-being groomed for general use. Specifically, the
-interfaces to functions are not stable (e.g., argument
-names are currently being made consistent across
-functions); in some cases, generic functions will be
-introduced. The *recommended* *practice* is therefore
-to *explicitly* *name* *arguments* *in* *function*
-*calls* (and not pass arguments by position). Any
-changes in argument names will be documented in the
-ChangeLog
+active development and changes frequently, simply
+because the code has been written over many years and
+is in need of being groomed for general
+use. Specifically, the interfaces to functions are not
+stable (e.g., argument names are currently being made
+consistent across functions); in some cases, generic
+functions will be introduced. The *recommended*
+*practice* is therefore to *explicitly* *name*
+*arguments* *in* *function* *calls* (and not pass
+arguments by position). Any changes in argument names
+will be documented in the ChangeLog
 ([[http://enricoschumann.net/R/packages/PMwR/ChangeLog]])
 and so can be easily followed.
 
@@ -50,9 +50,8 @@ All details are in the manual:
 
 [[http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html]]
 
-The manual, it should be stressed, is only a draft, and
-it will change as frequently as the package. I am
-grateful for comments, suggestions and corrections.
+I am grateful for comments, suggestions and
+corrections.
 
 
 

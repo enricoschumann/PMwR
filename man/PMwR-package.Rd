@@ -7,31 +7,25 @@
 }
 \description{
 
-  Functions for the practical management of financial portfolios:
-  computing profit-and-loss, accounting, analysing trades, reporting,
-  and more.
+  Functions for the practical management of financial
+  portfolios: backtesting investment and trading
+  strategies, computing profit-and-loss and returns,
+  analysing trades, reporting, and more.
 
 }
 \details{
 
-  The package comprises functions that have been written in various
-  circumstances and for various purposes.  Which is an apologetic way of
-  saying that in the current version, the interfaces to functions are
-  not stable (e.g., argument names are currently being made consistent
-  across functions); in some cases, generic functions will be
-  introduced.  The currently \bold{recommended practice} is therefore to
-  \bold{explicitly name arguments in function calls} (and not pass
-  arguments by position).  Any changes in argument names will be
-  documented in the ChangeLog and so can be easily followed.
-
-  The Manual provides more details. It is available from
-  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html} .
+The aim of \pkg{PMwR} is to provide a small set of
+reliable, efficient and convenient tools that help in
+processing and analysing trade/portfolio data. The
+Manual provides all the details. It is available from
+\url{http://enricoschumann.net/PMwR/}.
 
 }
 \author{
-Enrico Schumann
 
-Maintainer: Enrico Schumann <es@enricoschumann.net>
+  Enrico Schumann <es@enricoschumann.net>
+
 }
 \references{
 
@@ -39,8 +33,8 @@ Gilli, M., Maringer, D. and Schumann, E. (2011) \emph{Numerical Methods
 and Optimization in Finance}. Elsevier.
 \url{http://www.elsevierdirect.com/product.jsp?isbn=9780123756626}
 
-Schumann, E. (2016) \emph{Portfolio Management with R}. 
-\url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
+Schumann, E. (2017) \emph{Portfolio Management
+  with R}. \url{http://enricoschumann.net/PMwR/}
 
 } 
 \keyword{package}
