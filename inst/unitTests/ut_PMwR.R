@@ -18,7 +18,8 @@ test.position <- function() {
     ## ... 1) check correct position for *vector* input
     checkEquals(c(position(amount = n, timestamp = t, when = 4.9)),
                 4)
-    checkEquals(c(position(amount = n, timestamp = t, when = c(-10,1.4,4.9,10))),
+    checkEquals(c(position(amount = n, timestamp = t,
+                           when = c(-10,1.4,4.9,10))),
                 c(0, 1, 4, 0))
 
     ## ... 2) check correct position for *journal* input
@@ -348,7 +349,7 @@ test.btest <- function() {
     ## buy at specified timestamps (integers; no lag!)
     when <- c(10,20,30)
     j <- journal(btest(prices = prices,
-                       signal = signal, 
+                       signal = signal,
                        do.signal = when))
     checkEquals(j$timestamp, when)
     
@@ -1622,7 +1623,7 @@ test.pricetable <- function() {
                           .Dim = c(5L, 3L),
                           timestamp = 0:4,
                           instrument = c("A", "B", "A"),
-                          class = "pricetable"))        
+                          class = "pricetable"))
 
     pt1 <- pricetable(1:3, timestamp = 1:3, instrument = "A")[0:4 ,c("A","B","A")]
     pt2 <- pricetable(1:3, timestamp = 1:3, instrument = "A")[0:4 ,c("A","B","A"), missing = -99]
@@ -1642,15 +1643,8 @@ test.pricetable <- function() {
 }
 
 test.div_adjust <- function() {
-    
-    x <- c(10, 5)
-    div <- 5
-    t <- 2
-    checkEquals(div_adjust(x, t, div),
-                c(5, 5))
-    checkEquals(div_adjust(x, t, div, backward = FALSE),
-                c(10, 10))
 
+    ## no adjustments
     x <- 10
     div <- 5
     t <- 0
@@ -1663,13 +1657,61 @@ test.div_adjust <- function() {
     checkEquals(div_adjust(x, t, div), 10)
     checkEquals(div_adjust(x, t, div, backward = FALSE), 10)
 
-    
+
+    ## one adjustment
+    x <- c(10, 5)
+    div <- 5
+    t <- 2
+    checkEquals(div_adjust(x, t, div),
+                c(5, 5))
+    checkEquals(div_adjust(x, t, div, backward = FALSE),
+                c(10, 10))
+
+
+    ## two adjustments
     x <- c(10,5,10,5)
     div <- 5
     t <- c(2,4)
     checkEquals(div_adjust(x, t, div), rep(5, 4))
     checkEquals(div_adjust(x, t, div, backward = FALSE), rep(10,4))
 
-    
-    
+}
+
+
+test.split_adjust <- function() {
+
+    ## no adjustments
+    x <- 10
+    t <- 0
+    ratio <- 5
+    checkEquals(split_adjust(x, t, ratio), 10)
+    checkEquals(split_adjust(x, t, ratio, backward = FALSE), 10)
+    t <- 1
+    checkEquals(split_adjust(x, t, ratio), 10)
+    checkEquals(split_adjust(x, t, ratio, backward = FALSE), 10)
+    t <- 2
+    checkEquals(split_adjust(x, t, ratio), 10)
+    checkEquals(split_adjust(x, t, ratio, backward = FALSE), 10)
+
+
+    ## one adjustment
+    x <- c(10, 2)
+    t <- 2
+    ratio <- 5
+    checkEquals(split_adjust(x, t, ratio),
+                c(2, 2))
+    checkEquals(split_adjust(x, t, ratio, backward = FALSE),
+                c(10, 10))
+
+
+    ## two adjustments
+    x <- c(10, 5, 5, 1)
+    t <- c(2, 4)
+    ratio <- c(2,5)
+    checkEquals(split_adjust(x, t, ratio),
+                rep(1,4))
+    checkEquals(split_adjust(x, t, ratio, backward = FALSE),
+                rep(10,4))
+
+
 }

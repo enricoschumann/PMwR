@@ -50,7 +50,7 @@ split_adjust(x, t, ratio, backward = TRUE)
 
 }
 \value{
-  a numeric vector of length \code{length(x)}
+  a numeric vector of length equal to \code{length(x)}
 }
 %% \references{
 %% %% ~put references to the literature/web site here ~

@@ -1,10 +1,14 @@
 2017-11-16  Enrico Schumann  <es@enricoschumann.net>
 
-	* inst/unitTests/ut_PMwR.R (test.div_adjust):
-	add tests
+	* R/div_adjust.R (split_adjust): fix handling
+	of several splits per series
 
 	* R/div_adjust.R (div_adjust): fix handling of
-	several dividends
+	several dividends per series
+
+	* inst/unitTests/ut_PMwR.R (test.div_adjust):
+	add tests
+	(test.split_adjust): add tests
 
 2017-11-07  Enrico Schumann  <es@enricoschumann.net>
 
