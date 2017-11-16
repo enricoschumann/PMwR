@@ -45,13 +45,13 @@ plotTradingHours(x, t = NULL,
   }
   \item{labels}{
     A character vector of length one, determining the grid for
-    \code{plotTradingHours}: can be \dQuote{hour}, \dQuote{day},
+    \code{plot_trading_hours}: can be \dQuote{hour}, \dQuote{day},
     \dQuote{dayhour} or \dQuote{month}.
   }
   \item{label.format}{
     See \code{\link{strftime}}.
   }
-  \item{excludeWeekends}{
+  \item{exclude.weekends}{
     logical: default is \code{TRUE}
   }
   \item{holidays}{
