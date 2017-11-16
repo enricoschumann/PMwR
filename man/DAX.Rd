@@ -9,7 +9,7 @@
 }
 \usage{data("DAX")}
 \format{
-  A data frame with 505 observations on the following variable.
+  A data frame with 505 observations on the following variable:
   \describe{
     \item{\code{DAX}}{a numeric vector}
   }

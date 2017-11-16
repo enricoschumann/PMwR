@@ -6,10 +6,15 @@ div_adjust <- function(x, t, div, backward = TRUE, additive = FALSE) {
     ##       matrices as well
     if (!is.null(dim(x)))
         stop(sQuote("x"), " must be a vector")
-
     tmp <- t > 1L & t <= length(x)
     if (all(!tmp))
         return(x)
+
+    if (length(div) == 1L && length(t) > 1L)
+        div <- rep(div, length(t))
+
+    div <- div[tmp]
+    t <- t[tmp]
 
     if (length(t) > 1L && length(div) == 1L)
         div <- rep(div, length(t))
@@ -50,7 +55,6 @@ split_adjust <- function(x, t, ratio, backward = TRUE) {
 
     if (length(t) > 1L && length(ratio) == 1L)
         ratio <- rep(ratio, length(t))
-
     
     ratio <- ratio[tmp]
     t <- t[tmp]

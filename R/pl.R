@@ -346,6 +346,7 @@ pl.default <- function(amount, price, timestamp = NULL,
                 real_ <- numeric(length(pnl)) + NA
                 real_[matchOrNext(timestamp1, along.timestamp)] <-
                     real[matchOrNext(timestamp1, along.timestamp) > 0]
+                ## FIXME: replace with simpler na.locf
                 real_ <- zoo::na.locf(real_, na.rm = FALSE)
                 real <- real_
                 volume <- numeric(length(along.timestamp))

@@ -1,3 +1,41 @@
+v0.6-0  (2017-11-16)
+
+  o btest: two arguments have been renamed
+
+	tradeOnOpen      =>  trade.at.open
+	assignInGlobals  =>  Globals
+
+  o plot_trading_hours: two arguments have been renamed
+
+	excludeWeekends  =>  exclude.weekends
+	do.plotAxis      =>  do.plot.axis
+
+  o Function 'isValidISIN' is no longer available; use
+    the drop-in replacement 'is_valid_ISIN' instead.
+
+  o Byte-compilation is now on by default.
+
+  o New vignette 'FinTeX'.
+
+  o New datasets DAX and REXP.
+
+  o New generic function instrument, also for
+    replacement.
+
+  o NAVseries: new method 'toLatex.summary.NAVseries';
+    see the vignette for examples.
+
+  o pricetable: the function is now a generic, with a
+    default and a zoo method. Methods for pricetable
+    have been added (print, `[`, as.matrix).
+
+  o quote32: the function now recognises both a hyphen
+    (-) or single quote (') as a separator
+
+  o A more-comprehensive list of changes is available
+    in the ChangeLog:
+    http://enricoschumann.net/R/packages/PMwR/ChangeLog
+
 v0.5-0  (2017-06-23)
 
   o A number of functions have been renamed:
@@ -64,14 +102,14 @@ v0.3-4  (2016-06-13)
     http://enricoschumann.net/R/packages/runStats/ .
     The PMwR package contains only R code now, so no
     special tools are required for installing from source.
-    
+
   o There is a public Git repository at
     https://github.com/enricoschumann/PMwR
 
 v0.1-96  (2016-03-13)
 
   o A draft of the manual chapter on computing profit
-    and loss is available:    
+    and loss is available:
     http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#ch:pl
 
 v0.1-90  (2016-02-25)

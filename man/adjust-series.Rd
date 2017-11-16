@@ -17,36 +17,36 @@ split_adjust(x, t, ratio, backward = TRUE)
     a numeric vector
   }
   \item{t}{
-
+    
     an integer vector, specifying the positions in \code{x} at which
     dividends were paid (\sQuote{ex-days}) or at which a split occurred
-
+    
   }
   \item{div}{
     a numeric vector, specifying the dividends.  If necessary, recycled
     to the length of \code{t}.
-}
-\item{ratio}{
-  
-  a numeric vector, specifying the split ratios. The ratio must be
-  \sQuote{American Style}: a 2-for-1 stock split, for example,
-  corresponds to a ratio of 2. (In other countries, for instance
-  Germany, a 2-for-1 stock split would be called a 1-for-1 split: you
-  keep your shares and receive one new share per share that you own.)
+  }
+  \item{ratio}{
     
-}
-\item{backward}{
-  logical
-}
-\item{additive}{
-  logical
-}
+    a numeric vector, specifying the split ratios. The ratio must be
+    \sQuote{American Style}: a 2-for-1 stock split, for example,
+    corresponds to a ratio of 2. (In other countries, for instance
+    Germany, a 2-for-1 stock split would be called a 1-for-1 split: you
+    keep your shares and receive one new share per share that you own.)
+
+  }
+  \item{backward}{
+    logical
+  }
+  \item{additive}{
+    logical
+  }
 }
 \details{
-
-  With \code{backward} set to \code{TRUE}, which is the default, the
-  final prices in the unadjusted series matches the final prices in the
-  adjusted series.
+  
+  With \code{backward} set to \code{TRUE}, which is the
+  default, the final prices in the unadjusted series
+  matches the final prices in the adjusted series.
 
 }
 \value{

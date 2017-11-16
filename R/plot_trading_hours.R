@@ -4,9 +4,9 @@ plot_trading_hours <-
     plotTradingHours <- function(x, t = NULL,
              interval = "5 min", labels = "hours",
              label.format = NULL,
-             excludeWeekends = TRUE, holidays = NULL,
+             exclude.weekends = TRUE, holidays = NULL,
              fromHHMMSS = "000000", toHHMMSS = "240000",
-             do.plotAxis = TRUE,
+             do.plot.axis = TRUE,
              ...,
              from = NULL, to = NULL,
              do.plot = TRUE,
@@ -44,7 +44,6 @@ plot_trading_hours <-
         }
     }
 
-    ## check/prepare times
     fromHHMMSS <- makeHHMMSS(fromHHMMSS)
     toHHMMSS   <- makeHHMMSS(toHHMMSS)
 
@@ -98,7 +97,7 @@ plot_trading_hours <-
                                y = values),
                           plot.par))
 
-        if (do.plotAxis && length(axis1.par) && !is.na(axis1.par))
+        if (do.plot.axis && length(axis1.par) && !is.na(axis1.par))
             do.call("axis", axis1.par)
         invisible(list(t = seq_len(length(grd))[rx],
                        x = values,

@@ -13,8 +13,8 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
       initial.position = 0, initial.cash = 0,
       final.position = FALSE,
       cashflow = NULL, tc = 0, \dots,
-      add = FALSE, lag = 1, convert.weights = FALSE, tradeOnOpen = TRUE,
-      tol = 1e-5, assignInGlobals = list(),
+      add = FALSE, lag = 1, convert.weights = FALSE, trade.at.open = TRUE,
+      tol = 1e-5, Globals = list(),
       prices0 = NULL, include.data = FALSE, timestamp, instrument,
       progressBar = FALSE)
 }
@@ -108,7 +108,7 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
     (fractional) position sizes.    
 
   }
-  \item{tradeOnOpen}{
+  \item{trade.at.open}{
     A logical vector of length one; default is \code{TRUE}.
   }
   \item{tol}{
@@ -119,7 +119,7 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
     rebalance).
 
   }
-  \item{assignInGlobals}{
+  \item{Globals}{
 
     A \code{list} of named elements. See Details.
 
@@ -193,7 +193,7 @@ btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
   \code{Globals} is special: it is an
   \code{\link{environment}}, which can be used to
   persistently store data during the run of
-  \code{btest}. Use the argument \code{assignInGlobals}
+  \code{btest}. Use the argument \code{Globals}
   to add initial objects to this list.
   
 }

@@ -10,18 +10,19 @@
 \usage{
 plot_trading_hours(x, t = NULL,
                    interval = "5 min", labels = "hours", label.format = NULL,
-                   excludeWeekends = TRUE, holidays = NULL,
+                   exclude.weekends = TRUE, holidays = NULL,
                    fromHHMMSS = "000000", toHHMMSS = "240000",
-                   do.plotAxis = TRUE,
+                   do.plot.axis = TRUE,
                    ...,
                    from = NULL, to = NULL,
                    do.plot = TRUE,
                    axis1.par = list())
+
 plotTradingHours(x, t = NULL,
                  interval = "5 min", labels = "hours", label.format = NULL,
-                 excludeWeekends = TRUE, holidays = NULL,
+                 exclude.weekends = TRUE, holidays = NULL,
                  fromHHMMSS = "000000", toHHMMSS = "240000",
-                 do.plotAxis = TRUE,
+                 do.plot.axis = TRUE,
                  ...,
                  from = NULL, to = NULL,
                  do.plot = TRUE,
@@ -44,13 +45,13 @@ plotTradingHours(x, t = NULL,
   }
   \item{labels}{
     A character vector of length one, determining the grid for
-    \code{plotTradingHours}: can be \dQuote{hour}, \dQuote{day},
+    \code{plot_trading_hours}: can be \dQuote{hour}, \dQuote{day},
     \dQuote{dayhour} or \dQuote{month}.
   }
   \item{label.format}{
     See \code{\link{strftime}}.
   }
-  \item{excludeWeekends}{
+  \item{exclude.weekends}{
     logical: default is \code{TRUE}
   }
   \item{holidays}{
@@ -63,7 +64,7 @@ plotTradingHours(x, t = NULL,
   \item{toHHMMSS}{
     a character vector of length one in format \dQuote{HHMMSS}
   }
-  \item{do.plotAxis}{
+  \item{do.plot.axis}{
     logical. Should \code{axis(1)} be plotted? Default is \code{TRUE}.
   }
   \item{\dots}{
@@ -109,8 +110,8 @@ plotTradingHours(x, t = NULL,
   B.D. Ripley and K. Hornik. \emph{Date-Time Classes}. R-News,
   \strong{1}(2):8--12, 2001.
 
-  Schumann, E. (2016) \emph{Portfolio Management
-  with R}. \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
+  E. Schumann (2017) \emph{Portfolio Management with \R}.
+  \url{http://enricoschumann.net/PMwR/}
 
 }
 \author{

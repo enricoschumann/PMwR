@@ -9,7 +9,7 @@
 }
 \usage{data("REXP")}
 \format{
-  A data frame with 502 observations on the following variable.
+  A data frame with 502 observations on the following variable:
   \describe{
     \item{\code{REXP}}{a numeric vector}
   }

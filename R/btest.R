@@ -16,13 +16,20 @@ btest  <- function(prices,
                    add = FALSE,          ## if TRUE, 'position' is flow
                    lag = 1,
                    convert.weights = FALSE,
-                   tradeOnOpen = TRUE,
+                   trade.at.open = TRUE,
                    tol = 1e-5,
-                   assignInGlobals = list(),
+                   Globals = list(),
                    prices0 = NULL,
                    include.data = FALSE,
                    timestamp, instrument,
                    progressBar = FALSE) {
+
+    if ("tradeOnOpen" %in% names(list(...))) {
+        warning("Did you mean 'trade.at.open'? See ChangeLog 2017-11-14.")
+    }
+    if ("assignInGlobals" %in% names(list(...))) {
+        warning("Did you mean 'Globals'? See ChangeLog 2017-11-14.")
+    }
 
     if (convert.weights && initial.cash == 0)
         warning(sQuote("convert.weights"), " is TRUE and ",
@@ -185,7 +192,7 @@ btest  <- function(prices,
         ii <- if (b > 0)
                   -seq_len(b)
               else
-                  TRUE        
+                  TRUE
         i_rdays <- match(aggregate(tmp[ii],
                                    by = list(format(tmp[ii], "%Y-%m")),
                                    FUN = head, 1)[[2L]],
@@ -201,7 +208,7 @@ btest  <- function(prices,
         ii <- if (b > 0)
                   -seq_len(b)
               else
-                  TRUE        
+                  TRUE
         i_rdays <- match(aggregate(tmp[ii],
                                    by = list(format(tmp[ii], "%Y-%m")),
                                    FUN = tail, 1)[[2L]],
@@ -256,7 +263,6 @@ btest  <- function(prices,
             cashflow[1L]
     }
 
-    
     doPrintInfo <- TRUE
     if (is.null(print.info)) {
         doPrintInfo <- FALSE
@@ -329,14 +335,10 @@ btest  <- function(prices,
         }
     } else
         Timestamp <- Time
-    
-    ## create Globals
-    Globals <- new.env()
-    tmp <- names(assignInGlobals)
-    for (i in seq_along(tmp))
-        assign(tmp[i], assignInGlobals[[i]], envir = Globals)
 
-    
+    ## create Globals
+    Globals <- list2env(Globals)
+
     ## check reserved names
     reservedNames <- c("Open", "High", "Low", "Close",
                        "Wealth", "Cash", "Time", "Timestamp",
@@ -363,11 +365,11 @@ btest  <- function(prices,
     formals(signal) <- c(formals(signal), add.args)
     if (db.signal)
         debug(signal)
-    
+
     formals(do.signal) <- c(formals(do.signal), add.args)
     if (db.do.signal)
         debug(do.signal)
-    
+
     formals(do.rebalance) <- c(formals(do.rebalance), add.args)
     if (db.do.rebalance)
         debug(do.rebalance)
@@ -375,16 +377,16 @@ btest  <- function(prices,
     formals(print.info) <- c(formals(print.info), add.args)
     if (db.print.info)
         debug(print.info)
-    
+
     formals(cashflow) <- c(formals(cashflow), add.args)
     if (db.cashflow)
         debug(cashflow)
-    
+
     if (is.list(prices)) {
 
         if (length(prices) == 1L) {
             mC <- as.matrix(prices[[1L]])
-            tradeOnOpen <- FALSE
+            trade.at.open <- FALSE
         } else if (length(prices) == 4L) {
             mO <- as.matrix(prices[[1L]])
             mH <- as.matrix(prices[[2L]])
@@ -398,7 +400,7 @@ btest  <- function(prices,
         prices <- as.matrix(prices)
         if (ncol(prices) == 1L) {
             mC <- prices
-            tradeOnOpen <- FALSE
+            trade.at.open <- FALSE
         } else if (ncol(prices) == 4L) {
             mO <- prices[ ,1L]
             mH <- prices[ ,2L]
@@ -417,7 +419,7 @@ btest  <- function(prices,
         warning("length(timestamp) does not match nrow(prices)")
     if (!missing(instrument) && length(instrument) != nA)
         warning("length(instrument) does not match ncol(prices)")
-    
+
     ## tc can be of length nA or length 1L
     tccum <- numeric(T)
 
@@ -495,7 +497,7 @@ btest  <- function(prices,
         if (rebalance) {
             dx <- fraction * dXs
 
-            if (tradeOnOpen) ## will convert m(O|C) to vector
+            if (trade.at.open) ## will convert m(O|C) to vector
                 open <- mO[t, ,drop = TRUE]
             else
                 open <- mC[t, ,drop = TRUE]
@@ -591,7 +593,7 @@ btest  <- function(prices,
         if (rebalance) {
             dx <- fraction * dXs
 
-            if (tradeOnOpen) ## will convert m(O|C) to vector (drop == TRUE)
+            if (trade.at.open) ## will convert m(O|C) to vector (drop == TRUE)
                 open <- mO[t, ]
             else
                 open <- mC[t, ]
