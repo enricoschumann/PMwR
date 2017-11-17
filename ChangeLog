@@ -1,3 +1,8 @@
+2017-11-17  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): fix handling of
+	'lag' (which had been ignored in some situations)
+
 2017-11-16  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): Version: 0.6-1

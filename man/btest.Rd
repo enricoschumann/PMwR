@@ -8,7 +8,8 @@
   Testing trading and investment strategies.
 }
 \usage{
-btest(prices, signal, do.signal = TRUE, do.rebalance = TRUE,
+btest(prices, signal,
+      do.signal = TRUE, do.rebalance = TRUE,
       print.info = NULL, b = 1L, fraction = 1,
       initial.position = 0, initial.cash = 0,
       final.position = FALSE,

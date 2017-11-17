@@ -24,6 +24,8 @@ btest  <- function(prices,
                    timestamp, instrument,
                    progressBar = FALSE) {
 
+    L <- lag
+
     if ("tradeOnOpen" %in% names(list(...))) {
         warning("Did you mean 'trade.at.open'? See ChangeLog 2017-11-14.")
     }
@@ -271,55 +273,55 @@ btest  <- function(prices,
     }
 
     ## functions available in functions such as 'signal'
-    Open <- function(lag = lag, n = NA) {
+    Open <- function(lag = L, n = NA) {
         if (!is.na(n))
             mO[t - (n:1), , drop = FALSE]
         else
             mO[t - lag, , drop = FALSE]
     }
-    High <- function(lag = 1, n = NA) {
+    High <- function(lag = L, n = NA) {
         if (!is.na(n))
             mH[t - (n:1), , drop = FALSE]
         else
             mH[t - lag, , drop = FALSE]
     }
-    Low <- function(lag = 1, n = NA) {
+    Low <- function(lag = L, n = NA) {
         if (!is.na(n))
             mL[t - (n:1), , drop = FALSE]
         else
             mL[t - lag, , drop = FALSE]
     }
-    Close <- function(lag = 1, n = NA) {
+    Close <- function(lag = L, n = NA) {
         if (!is.na(n))
             mC[t - (n:1), , drop = FALSE]
         else
             mC[t - lag, , drop = FALSE]
     }
-    Wealth <- function(lag = 1, n = NA) {
+    Wealth <- function(lag = L, n = NA) {
         if (!is.na(n))
             v[t - (n:1)]
         else
             v[t - lag]
     }
-    Cash <- function(lag = 1, n = NA) {
+    Cash <- function(lag = L, n = NA) {
         if (!is.na(n))
             cash[t - (n:1)]
         else
             cash[t - lag]
     }
-    Time <- function(lag = 1, n = NA) {
+    Time <- function(lag = L, n = NA) {
         if (!is.na(n))
             t - (n:1)
         else
             t - lag
     }
-    Portfolio <- function(lag = 1, n = NA) {
+    Portfolio <- function(lag = L, n = NA) {
         if (!is.na(n))
             X[t - (n:1), , drop = FALSE]
         else
             X[t - lag, , drop = FALSE]
     }
-    SuggestedPortfolio <- function(lag = 1, n = NA) {
+    SuggestedPortfolio <- function(lag = L, n = NA) {
         if (!is.na(n))
             Xs[t - (n:1), , drop = FALSE]
         else
@@ -327,7 +329,7 @@ btest  <- function(prices,
     }
 
     if (!missing(timestamp)) {
-        Timestamp <- function(lag = 1, n = NA) {
+        Timestamp <- function(lag = L, n = NA) {
             if (!is.na(n))
                 timestamp[t - (n:1)]
             else
@@ -514,15 +516,19 @@ btest  <- function(prices,
         }
 
         ## cashflow
-        cash[t] <- cash[t] + cashflow(...,
-                                      Open = Open, High = High,
-                                      Low = Low, Close = Close,
-                                      Wealth = Wealth,
-                                      Cash = Cash,
-                                      Time = Time, Timestamp = Timestamp,
-                                      Portfolio = Portfolio,
-                                      SuggestedPortfolio = SuggestedPortfolio,
-                                      Globals = Globals)
+        cash[t] <- cash[t] +
+                   cashflow(...,
+                            Open = Open,
+                            High = High,
+                            Low = Low,
+                            Close = Close,
+                            Wealth = Wealth,
+                            Cash = Cash,
+                            Time = Time,
+                            Timestamp = Timestamp,
+                            Portfolio = Portfolio,
+                            SuggestedPortfolio = SuggestedPortfolio,
+                            Globals = Globals)
 
         v[t] <- X[t, ] %*% mC[t, ] + cash[t]
         if (doPrintInfo)
@@ -541,7 +547,7 @@ btest  <- function(prices,
                                 char = if (.Platform$OS.type == "unix") "\u2588" else "|",
                                 width = ceiling(getOption("width")*0.8),
                                 style = 3, file = "")
-
+    
     for (t in max(2L, b+1L):T) {
         if (progressBar)
             setTxtProgressBar(progr, t)

@@ -419,6 +419,26 @@ test.btest <- function() {
     prices <- cbind(prices, prices)
     res <- btest(list(prices), signal = signal, include.data = TRUE)
     checkEquals(res$prices, prices)
+
+
+
+
+
+
+
+
+    ## lags
+    prices <- 101:110
+    signal <- function()
+        if (Close() >= 104)
+            1
+
+    btest(prices, signal,          b=3)$journal
+    btest(prices, signal, lag = 0, b=3)$journal
+    btest(prices, signal, lag = 2, b=3)$journal
+
+
+
     
 }
 
