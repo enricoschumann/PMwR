@@ -1,0 +1,50 @@
+%% \VignetteIndexEntry{Computing Returns}
+\documentclass[a4paper,11pt]{article}
+\usepackage[left = 3cm, top = 2cm, bottom = 2cm, right = 4cm]{geometry}
+\usepackage[noae,nogin]{Sweave}
+\usepackage{libertine}
+\usepackage[scaled=0.9]{inconsolata}
+\usepackage[T1]{fontenc}
+\renewcommand*\familydefault{\sfdefault} 
+\usepackage{amsmath,amstext}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{xcolor}
+\usepackage{framed}
+\usepackage[hang]{footmisc}
+\definecolor{grau2}{rgb}{.2,.2,.2}
+\definecolor{grau7}{rgb}{.7,.7,.7}
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{frame=single,
+  xleftmargin=0em, formatcom=\color{grau2},rulecolor=\color{grau7}}
+\DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=2em}
+\fvset{listparameters={\setlength{\topsep}{0pt}}}
+\renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
+\SweaveOpts{keep.source = TRUE, eps = TRUE}
+
+<<echo=false>>=
+options(continue = "  ", digits = 3, width = 60, useFancyQuotes = FALSE)
+@
+
+\begin{document}
+\title{Computing Returns}
+\author{Enrico Schumann\\\url{es@enricoschumann.net}}
+
+{\raggedright{\LARGE Computing Returns}}\medskip
+
+\noindent Enrico Schumann\\
+\noindent \url{es@enricoschumann.net}\\
+\bigskip
+
+<<echo=false>>=
+require("PMwR")
+require("zoo")
+@
+
+
+<<>>=
+x <- 1:10
+returns(x)
+@ 
+
+\end{document}
