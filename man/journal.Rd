@@ -77,13 +77,13 @@ is.journal(x)
     An atomic vector. Default is \code{NULL}.
   }
   \item{account}{
-    An atomic vector. default is \code{NULL}. 
+    An atomic vector. Default is \code{NULL}. 
   }
   \item{\dots}{    
     For \code{journal}: further arguments, which must all be named.
 
     For \code{subset}: an expression that evaluates to a logical vector. The
-    epxression may use all fields of the passed journal; see Examples.
+    expression may use all fields of the passed journal; see Examples.
 
     For \code{`[`}: arguments other than \code{ignore.case} to be passed
     to \code{\link{grep}}.

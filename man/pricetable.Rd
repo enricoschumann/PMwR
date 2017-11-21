@@ -1,5 +1,6 @@
 \name{pricetable}
 \alias{pricetable}
+\alias{[.pricetable}
 \title{
   Price Table
 }
@@ -37,8 +38,6 @@ pricetable(price, \dots)
 }
 \details{
   
-  Experimental: interface may change.
-
   \code{pricetable} is a helper function for extracting
   prices of particular instrument at specified dates.
   For this, it first creates a table that merges series

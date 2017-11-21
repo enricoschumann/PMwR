@@ -2,7 +2,7 @@
 \alias{DAX}
 \docType{data}
 \title{
-  DAX
+  Deutscher Aktienindex (DAX)
 }
 \description{
   Historical Prices of the DAX.

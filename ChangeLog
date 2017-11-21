@@ -1,3 +1,13 @@
+2017-11-21  Enrico Schumann  <es@enricoschumann.net>
+
+	* vignettes/q32.Rnw: add place-holder file
+
+	* R/position.R (position.default): for keyword
+	"endofday", coerce timestamp to 'Date'
+
+	* R/quote32.R (quote32, q32): the function now
+	also recognises a colon (:) as a separator
+
 2017-11-17  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R (btest): fix handling of

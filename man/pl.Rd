@@ -10,31 +10,32 @@
   Profit and Loss
 }
 \description{
-  Compute profit and (or) loss of financial transactions. 
+  Compute profit and (or) loss of financial transactions.
 }
 \usage{
-pl(amount, \dots)
+pl(amount, \dots )
 
 \method{pl}{default}(amount, price, timestamp = NULL,
    instrument = NULL, multiplier = 1,
    multiplier.regexp = FALSE,
    along.timestamp = FALSE, approx = FALSE,
    initial.position = NULL, initial.price = NULL,
-   vprice = NULL, tol = 1e-10, do.warn = TRUE, \dots)
+   vprice = NULL, tol = 1e-10, do.warn = TRUE, \dots )
 
 \method{pl}{journal}(amount, multiplier = 1,
    multiplier.regexp = FALSE,
    along.timestamp = FALSE, approx = FALSE,
    initial.position = NULL, initial.price = NULL,
-   vprice = NULL, tol = 1e-10, do.warn = TRUE, \dots)
+   vprice = NULL, tol = 1e-10, do.warn = TRUE, \dots )
 
-\method{pl}{pl}(amount, \dots)
-
-.pl(amount, price, tol = 1e-10, do.warn = TRUE)
+\method{pl}{pl}(amount, \dots )
 
 \method{print}{pl}(x, \dots, use.crayon = NULL, na.print = ".")
 
-\method{as.data.frame}{pl}(x, \dots)
+\method{as.data.frame}{pl}(x, \dots )
+
+.pl(amount, price, tol = 1e-10, do.warn = TRUE)
+
 }
 \arguments{
   \item{amount}{
@@ -100,14 +101,14 @@ pl(amount, \dots)
   several statistics (see Section Value, below). To get
   only the profit/loss numbers as a numeric vector,
   call \code{pl} twice (\code{pl(pl(...))}).
-  
+
   To use package crayon -- which is only sensible in
   interactive use --, either explicitly set
   \code{use.crayon} to \code{TRUE} or set an option
   \code{PMwR.use.crayon} to \code{TRUE}.
 
   Using \code{vprice}: when \code{along.timestamp} is
-  logical -- \code{FALSE} (the default) or TRUE -- ,
+  logical (\code{FALSE} or \code{TRUE}) ,
   \code{vprice} can be used to value an open
   position. For a single asset, it should be a single
   number; for several assets, it should be named
@@ -118,7 +119,7 @@ pl(amount, \dots)
   be a numeric matrix with dimension
   \code{length(along.timestamp)} times number of
   assets.
-      
+
 }
 \value{
 
@@ -132,13 +133,13 @@ pl(amount, \dots)
   profit/loss in units of the instrument, sum of
   absolute amounts, average buy price, average sell
   price.
-  
+
 }
 \references{
 Schumann, E. (2017) \emph{Portfolio Management
   with R}. \url{http://enricoschumann.net/PMwR/}
 
-} 
+}
 \author{
 Enrico Schumann <es@enricoschumann.net>
 }
@@ -159,18 +160,18 @@ J <- journal(timestamp  = c(  1,   2,   3,   1,   2,   3),
              instrument = c(rep("Bond A", 3), rep("Bond B", 3)))
 
 pl(J)
-## Bond A 
+## Bond A
 ##   P/L total       0
 ##   average buy   101
 ##   average sell  101
 ##   cum. volume     4
-## 
-## Bond B 
+##
+## Bond B
 ##   P/L total       8
 ##   average buy   101
 ##   average sell  105
 ##   cum. volume     4
-## 
+##
 ## 'P/L total' is in units of instrument;
 ## 'volume' is sum of /absolute/ amounts.
 
@@ -190,11 +191,11 @@ amount <- c(1, -2, 2, -1)
 price <- c(100, 101, 100, 105)
 
 ## ... no p/l because positions not closed:
-pl(amount, price, instrument = instrument, do.warn = FALSE) 
+pl(amount, price, instrument = instrument, do.warn = FALSE)
 
 ## ... but with vprice specified, p/l is computed:
 pl(amount, price, instrument = instrument,
-   vprice = c("Bond A" = 103, "Bond B" = 100)) 
+   vprice = c("Bond A" = 103, "Bond B" = 100))
 
 ### ... and is, except for volume, the same as here:
 instrument  <- c(rep("Bond A", 3), rep("Bond B", 3))

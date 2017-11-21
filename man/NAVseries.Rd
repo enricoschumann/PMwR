@@ -5,7 +5,7 @@
 \alias{print.NAVseries}
 \alias{summary.NAVseries}
 \title{
-  Net-asset-value (NAV) series
+  Net-Asset-Value (NAV) Series
 }
 \description{
   Create a net-asset-value (NAV) series.
@@ -16,11 +16,11 @@ NAVseries(NAV, timestamp,
 
 as.NAVseries(x, ...)
 
-\method{print}{NAVseries}(x, \dots)
+\method{print}{NAVseries}(x, \dots )
 
 \method{summary}{NAVseries}(object, monthly = TRUE, na.rm = FALSE, \dots )
 
-\method{plot}{NAVseries}(x, y, xlab = "", ylab = "", type = "l", \dots )
+\method{plot}{NAVseries}(x, y, \dots, xlab = "", ylab = "", type = "l")
 }
 \arguments{
   \item{NAV}{
@@ -72,7 +72,7 @@ as.NAVseries(x, ...)
   An NAVseries is a numeric vector (the actual series) and additional
   information, attached as attributes: timestamp, instrument, title,
   description. Of these attributes, timestamp is the most useful, as it
-  is used for several computations (e.g. when callung
+  is used for several computations (e.g. when calling
   \code{\link{summary}}) or for plotting.
 
   The summary method returns a list of the original NAVseries plus
@@ -94,7 +94,7 @@ as.NAVseries(x, ...)
 Enrico Schumann <es@enricoschumann.net>
 }
 \seealso{
-  \code{\link{journal}}
+  \code{\link{btest}}, \code{\link{journal}}
 }
 \examples{
 summary(NAVseries(DAX[[1]], as.Date(row.names(DAX)), title = "DAX"))

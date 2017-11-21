@@ -56,8 +56,9 @@ position.default <- function(amount, timestamp, instrument,
                                          first_of_month(max(timestamp)),
                                          by = "1 month"))
             } else if (when[[1L]] == "endofday") {
+                timestamp <- as.Date(timestamp)
                 when <- last(timestamp,
-                             format(as.Date(timestamp), "%Y-%m-%d"))
+                             format(timestamp, "%Y-%m-%d"))
             } else if (when[[1L]] == "first" ||
                      when[1L] == "oldest")
                 when <- min(timestamp)

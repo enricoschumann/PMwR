@@ -1,6 +1,6 @@
 ## -*- truncate-lines: t; fill-column: 60; -*-
 
-quote32 <- q32 <- function(price, sep = "(-|')", warn = TRUE) {
+quote32 <- q32 <- function(price, sep = "(-|'|:)", warn = TRUE) {
     if (is.character(price)) {
         if (warn &&
             any(!grepl(paste0("[0-9]+", sep, "?[0-9]+"), price)))

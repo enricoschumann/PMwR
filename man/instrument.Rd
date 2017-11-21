@@ -9,6 +9,8 @@
 }
 \usage{
 instrument(x, \dots)
+
+instrument(x, \dots) <- value
 }
 \arguments{
   \item{x}{
@@ -18,6 +20,9 @@ instrument(x, \dots)
     arguments passed to methods
     
   }
+  \item{value}{
+    an object
+  }    
 }
 \details{
 
@@ -38,9 +43,6 @@ instrument(x, \dots)
 }
 \author{
   Enrico Schumann
-}
-\section{Warning}{
-   Experimental. The interface may change.
 }
 \seealso{
   \code{\link{position}}

@@ -41,5 +41,5 @@ isin <- c("US0378331005", "AU0000XVGZA3",
 is_valid_ISIN(isin)
 
 is_valid_ISIN(c("US0378331005",
-              "us0378331005")) ## case is ignored
+                "us0378331005")) ## case is ignored
 }

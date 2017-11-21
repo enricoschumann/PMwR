@@ -17,16 +17,6 @@ plot_trading_hours(x, t = NULL,
                    from = NULL, to = NULL,
                    do.plot = TRUE,
                    axis1.par = list())
-
-plotTradingHours(x, t = NULL,
-                 interval = "5 min", labels = "hours", label.format = NULL,
-                 exclude.weekends = TRUE, holidays = NULL,
-                 fromHHMMSS = "000000", toHHMMSS = "240000",
-                 do.plot.axis = TRUE,
-                 ...,
-                 from = NULL, to = NULL,
-                 do.plot = TRUE,
-                 axis1.par = list())
 }
 \arguments{
   \item{x}{
@@ -86,9 +76,8 @@ plotTradingHours(x, t = NULL,
 }
 \details{
 
-  This function is still very \bold{experimental}. In particular, it
-  is recommended that arguments be always named.
-
+  Plot a timeseries during specific times of day.
+  
 }
 \value{
 

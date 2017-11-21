@@ -31,9 +31,9 @@ unit_prices(NAV, cashflows,
 }
 \details{
 
-  The function may be used to compute the P\&L for
-  portfolios with external cashflows (i.e. what is
-  usually called time-weighted return).
+  The function may be used to compute the returns for a
+  portfolio with external cashflows, i.e. what is
+  usually called time-weighted returns.
 
   Valuation (i.e. the computation of the NAV) must take
   place before external cashflows. Fairness suggests

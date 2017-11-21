@@ -71,9 +71,10 @@ position(amount, \dots)
   keywords: \code{last} (or \code{newest} or \code{latest}) provides the
   position at the latest timestamp; \code{first} (or \code{oldest})
   provides the position at the earliest timestamp; \code{all} provides
-  the positions at all timestamps in the journal; \code{endofmonth}
-  provides positions at the end of all calendar months within the
-  timestamp range of the journal. The latter can only work when
+  the positions at all timestamps in the journal. \code{endofday}
+  and \code{endofmonth}
+  provide positions at the end of all calendar days and months within the
+  timestamp range of the journal. The latter can only work if
   \code{timestamp} can be coerced to \code{\link{Date}}.
     
 }
@@ -81,9 +82,10 @@ position(amount, \dots)
 
   An object of class \code{position}, which is a numeric matrix with
   \code{instrument} and \code{timestamp} attributes. Note that
-  \code{position} will never drop the result's \code{dim} attribute; it
+  \code{position} will never drop the result's \code{dim} attribute: it
   will always be a matrix of size \code{length(when)} times
-  \code{length(unique(instrument))}.
+  \code{length(unique(instrument))}, which may not be obvious from the
+  printed output.
   
 }
 \references{

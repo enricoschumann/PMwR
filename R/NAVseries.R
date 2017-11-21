@@ -276,7 +276,9 @@ toLatex.summary.NAVseries <- function(object, ...,
                            paste(sparklines(NAVs[[i]],
                                            true.min = true.min,
                                            true.max = true.max,
-                                           sparklineheight = 2.5, width = 10), collapse = "\n"),
+                                           sparklineheight = 2.5,
+                                           width = 10),
+                                 collapse = "\n"),
                            ans[i], fixed = TRUE)
         }
         
@@ -290,8 +292,8 @@ toLatex.summary.NAVseries <- function(object, ...,
         ans
 }
 
-plot.NAVseries <- function(x, y,
-                           xlab = "", ylab = "", type = "l", ...) {
+plot.NAVseries <- function(x, y, ..., 
+                           xlab = "", ylab = "", type = "l") {
     if (!missing(y))
         stop("scatterplot of *returns* -- not implemented")
     plot(x = attr(x, "timestamp"),

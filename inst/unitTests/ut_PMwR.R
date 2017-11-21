@@ -54,6 +54,23 @@ test.position <- function() {
                 1:12)
 
     
+    ## ... endofday
+    t <- as.POSIXct(c("2017-11-17 12:00:00",
+                      "2017-11-17 13:00:00",
+                      "2017-11-21 12:00:00"))
+
+    res <- position(c(1,1,1), timestamp = t,
+                    when = "endofday")
+
+    checkEquals(as.numeric(res), 2:3)
+    checkEquals(attr(res, "timestamp"), unique(as.Date(t)))
+
+    res <- position(c(1,-1,1), timestamp = t,
+                    when = "endofday")
+
+    checkEquals(as.numeric(res), 0:1)
+    checkEquals(attr(res, "timestamp"), unique(as.Date(t)))
+    
 }
 
 test.split_trades <- function() {

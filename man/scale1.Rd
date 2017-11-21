@@ -6,18 +6,18 @@
   Scale Time Series
 }
 \description{
-  Scale time series so that they can better be compared.
+  Scale time series so that they can be better compared.
 }
 \usage{
 scale1(x, \dots)
 
 \method{scale1}{default}(x, \dots, when = "first.complete", level = 1,
-                         centre = FALSE, scale = FALSE, geometric = TRUE,
-                         total.g = NULL)
+       centre = FALSE, scale = FALSE, geometric = TRUE,
+       total.g = NULL)
 
 \method{scale1}{zoo}(x, \dots, when = "first.complete", level = 1,
-                     centre = FALSE, scale = FALSE, geometric = TRUE,
-                     inflate = NULL, total.g = NULL)
+       centre = FALSE, scale = FALSE, geometric = TRUE,
+       inflate = NULL, total.g = NULL)
 }
 \arguments{
   \item{x}{

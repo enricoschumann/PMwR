@@ -61,7 +61,7 @@ valuation(x, ...)
   Enrico Schumann
 }
 \note{
-  Very experimental.
+  \bold{Very experimental.}
 }
 %% \seealso{
 %% %% ~~objects to See Also as \code{\link{help}}, ~~~
