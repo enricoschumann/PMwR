@@ -233,6 +233,7 @@ Schumann, E. (2017) \emph{Portfolio Management
 ## For more examples, please see then Manual
 ## http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
 
+## 1 - a simple rule
 timestamp <- structure(c(16679L, 16680L, 16681L, 16682L, 
                          16685L, 16686L, 16687L, 16688L, 
                          16689L, 16692L, 16693L), 
@@ -256,4 +257,36 @@ journal(solution)
 solution <- btest(prices = prices, signal = signal,
                   timestamp = timestamp)
 journal(solution)
+
+
+
+## 2 - a simple MA model
+\dontrun{
+require("PMwR")
+require("NMOF")
+
+dax <- DAX[[1]]
+
+n <- 5
+ma <- MA(dax, n, pad = NA)
+
+ma_strat <-  function(ma) {
+    if (Close() > ma[Time()])
+        1
+    else
+        0
+}
+
+
+plot(as.Date(row.names(DAX)), dax, type = "l", xlab = "", ylab = "DAX")
+lines(as.Date(row.names(DAX)), ma, type = "l")
+
+res <- btest(dax, signal = ma_strat,
+             b = n, ma = ma)
+
+par(mfrow = c(3,1))
+plot(as.Date(row.names(DAX)), dax, type = "l", xlab = "", ylab = "DAX")
+plot(as.Date(row.names(DAX)), res$wealth, type = "l", xlab = "", ylab = "Equity")
+plot(as.Date(row.names(DAX)), position(res), type = "s", xlab = "", ylab = "Position")
+}
 }
