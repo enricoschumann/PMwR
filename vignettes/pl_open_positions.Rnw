@@ -36,8 +36,42 @@ options(continue = "  ", digits = 3, width = 60, useFancyQuotes = FALSE)
 \noindent \url{es@enricoschumann.net}\\
 \bigskip
 
-This vignette shows how the \texttt{vprice} argument of
-function \texttt{pl} can be used.
+\noindent This vignette shows how the \texttt{vprice}
+argument of function \texttt{pl} can be used.
+
+
+
+\section{How to use \texttt{vprice}}
+
+\subsection*{When timestamp is not used}
+
+If no timestamp information is used, i.e. if
+\texttt{along.timestamp} is \texttt{FALSE},
+\texttt{vprice} is used to value an open position (or,
+if you prefer, to simulate the close of an open
+position).  So for a single asset, it should be vector
+of length one; for $N$~assets, it should be a named
+vector of length~$N$.
+
+\subsection*{When timestamp is used}
+
+If \texttt{along.timestamp} is \texttt{TRUE},
+\texttt{vprice} is used to close the final, open
+position. So for a single asset, it should be vector of
+length one; for $N$~assets, it should be a named vector
+of length~$N$.
+
+If \texttt{along.timestamp} is a vector of timestamps,
+\texttt{vprice} is used to value any open position
+along those timestamps. For a single asset, it should
+then be a vector of prices, with length equal to that
+of \texttt{along.timestamp}.  For $N$~assets, it should
+be a matrix with \texttt{length(along.timestamp)}~rows
+and $N$ named columns.
+
+
+\section{Examples}
+
 
 <<echo=false>>=
 require("PMwR")
