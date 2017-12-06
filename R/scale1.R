@@ -90,7 +90,8 @@ scale1.default <- function (x, ...,
         x[,i] <- x[,i]/x[init.p, i]
     x <- level*x
     if (makevec)
-        x <- c(x) 
+        x <- c(x)
+    attr(x, "scale1_origin") <- init.p
     x
 
 }
@@ -115,7 +116,10 @@ scale1.zoo <- function(x, ..., when = "first.complete",
                           centre = centre, scale = scale,
                           geometric = geometric,
                           total.g = total.g)
-    zoo(ans, ii)
+    orig <- attr(ans, "scale1_origin")
+    ans <- zoo(ans, ii)
+    attr(ans, "scale1_origin") <- ii[orig]
+    ans
 }
 
 scale1.NAVseries <- function(x, ..., when = "first.complete",
@@ -139,6 +143,7 @@ scale1.NAVseries <- function(x, ..., when = "first.complete",
                           geometric = geometric,
                           total.g = total.g)
     x[] <- ans
+    attr(x, "scale1_origin") <- ii[attr(ans, "scale1_origin")]
     x
 }
 

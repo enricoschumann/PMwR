@@ -1,3 +1,10 @@
+2017-12-05  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/scale1.R (scale1): objects that are
+	modified by 'scale1' gain an attribute
+	"scale1_origin", which provides the timestamp
+	at which scaling starts
+
 2017-11-21  Enrico Schumann  <es@enricoschumann.net>
 
 	* vignettes/q32.Rnw: add place-holder file
