@@ -1,3 +1,7 @@
+2017-12-08  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pl.R (pl.data.frame): new method
+
 2017-12-05  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/scale1.R (scale1): objects that are

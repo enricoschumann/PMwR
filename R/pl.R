@@ -104,6 +104,8 @@ pl.journal <- function(amount, multiplier = 1,
                do.warn = do.warn, ...)
 }
 
+pl.data.frame <- pl.journal
+
 pl.default <- function(amount, price, timestamp = NULL,
                        instrument = NULL, multiplier = 1,
                        multiplier.regexp = FALSE,

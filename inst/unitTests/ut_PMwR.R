@@ -988,7 +988,13 @@ test.pl <- function() {
 
 
 
-
+    ## data.frame method
+    D <- data.frame(price = c(100,102),
+                    amount = c(1,-1))
+    J <- journal(price = c(100,102),
+                 amount = c(1,-1))
+    checkEquals(pl(D), pl(J))
+                
 
 
 
