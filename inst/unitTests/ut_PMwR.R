@@ -996,9 +996,21 @@ test.pl <- function() {
     checkEquals(pl(D), pl(J))
                 
 
-
-
-
+    ## empty journal: pl/volume should be zero
+    checkEquals(pl(journal()),
+                structure(list(
+                    structure(list(pl = 0,
+                                   realised = NA,
+                                   unrealised = NA, 
+                                   buy = NaN,
+                                   sell = NaN,
+                                   volume = 0),
+                              .Names = c("pl", "realised", "unrealised",
+                                         "buy", "sell", "volume"))),
+                    class = "pl",
+                    along.timestamp = FALSE,
+                    instrument = NA))
+    
 
 
 

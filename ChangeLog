@@ -1,3 +1,8 @@
+2017-12-12  Enrico Schumann  <es@enricoschumann.net>
+
+	* inst/unitTests/ut_PMwR.R: add check for empty
+	journal
+
 2017-12-08  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/pl.R (pl.data.frame): new method
