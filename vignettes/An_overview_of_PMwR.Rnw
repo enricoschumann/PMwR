@@ -45,15 +45,15 @@ require("zoo")
 provide a small set of reliable, efficient and convenient
 tools that help in processing and analysing trade and
 portfolio data. The package does not provide a complete
-application that could be used `as is', but building
-blocks for creating such an application.
+application that could be used `as is', but tools
+for creating such an application.
 
 \noindent The package grew out of various pieces of
 software that I have written since 2008.%
 \footnote{In the unlikely case that you come across a
-  really old version of the package: it was called
+  really-old version of the package: it was called
   \textsc{pm} before 2012.} %
-The package is currently under development and changes
+The package is under active development and changes
 frequently, simply because the code has been written
 over many years and is in need of being groomed for
 general use.%
@@ -66,19 +66,21 @@ nt <- gsub(".*\\(([0-9]+) checks?\\).*", "\\1",
 @ 
 Even if \textsc{pm}w\textsc{r} is under development: the package is to
 provide reliable code. Hence, for all computations, unit tests are included.
-As of package version \Sexpr{packageVersion("PMwR")},
+As of package version %
+\Sexpr{gsub("(.*)[.]([0-9]+)", "\\1-\\2", as.character(packageVersion("PMwR")))},
 there are \Sexpr{sum(as.numeric(nt))} tests included. 
 These tests are stored in subdirectory \texttt{unitTests}.} %
 
-Specifically, the interfaces to
-functions are not stable (e.g., argument names are currently being
-made consistent across functions); in some cases, generic functions
-will be introduced. The \textbf{recommended practice} is therefore to
-\textbf{explicitly name arguments in function calls} (and not pass
-arguments by position). Any changes in argument names will be
+Specifically, interfaces to functions may not be stable
+yet (e.g., argument names are currently being made
+consistent across functions); in some cases, generic
+functions may be introduced. The \textbf{recommended
+  practice} is therefore to \textbf{explicitly name
+  arguments in function calls} and not pass arguments
+by position. Any changes in argument names will be
 documented in the ChangeLog
-(\,\url{http://enricoschumann.net/R/packages/PMwR/ChangeLog}\,) and so
-can be easily followed.
+(\,\url{http://enricoschumann.net/R/packages/PMwR/ChangeLog}\,)
+and so can be easily followed.
 
 The latest version of the package is available from
 \url{http://enricoschumann.net/R/packages/PMwR/}. To install the
@@ -88,12 +90,14 @@ install.packages('PMwR', type = 'source',
                  repos = c('http://enricoschumann.net/R', 
                            getOption('repos')))
 @ 
-within a session. The package depends on several other packages,
-which can be obtained from the same repository.
+within a session. The package depends on several other
+packages, which can be obtained from the same
+repository.
 
-There is currently no automatic build for Windows. If you wish to use
-the package on Windows and have problems building it, then please
-contact me and I will provide you with a Windows version.
+There is currently no automatic build for Windows. If
+you wish to use the package on Windows and have
+problems building it, then please contact me and I will
+provide you with a Windows version.
 
 \section*{What the package provides}
 
@@ -104,9 +108,8 @@ the manual:
 
 \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}\,.
 
-\noindent The manual is a draft and it will change as
-frequently as the package. I am grateful for comments,
-suggestions and corrections.
+\noindent I am grateful for comments, suggestions and
+corrections.
 
 \subsection*{Testing strategies}
 
