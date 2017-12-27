@@ -1,5 +1,11 @@
 2017-12-27  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/quote32.R (print.quote32): use
+	'print.default' instead of 'cat'
+
+	* R/rebalance.R (print.rebalance): suppress
+	scientific notation
+
 	* R/internals.R (sparkline): rename internal
 	function sparklines => sparkline;
 	rename arguments/add arguments

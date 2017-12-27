@@ -116,6 +116,11 @@ rebalance <- function(current,
 }
 
 print.rebalance <- function(x, ..., drop.zero = TRUE) {
+
+    sp <- getOption("scipen")
+    on.exit(options(scipen = sp))
+    options(scipen = 1e8)
+    
     all.names <- x[["instrument"]]
     if (all(is.na(all.names)))
         all.names <- seq_along(x$current)

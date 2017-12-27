@@ -1,5 +1,3 @@
-## useDynLib(PMwR)
-
 importFrom(NMOF, drawdown)
 importFrom(NMOF, pm)
 importFrom(stats, aggregate)
@@ -19,7 +17,7 @@ importFrom(datetimeutils, first_of_month)
 importFrom(datetimeutils, roundPOSIXt)
 importFrom(datetimeutils, timegrid)
 importFrom(crayon, bold)
-importFrom(fastmatch, fmatch)
+importFrom("fastmatch", fmatch)
 
 importFrom("grDevices",
            "grey")

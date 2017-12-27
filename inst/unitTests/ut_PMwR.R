@@ -266,7 +266,7 @@ test.btest <- function() {
 
 
     ## with timestamp
-    require("datetimeutils")
+    require("datetimeutils", quietly = TRUE)
     timestamp <- seq(from = as.Date("2015-01-01"),
                      to   = as.Date("2015-04-15"),
                      by   = "1 day")
@@ -1557,16 +1557,16 @@ test.returns <- function() {
 test.scale1 <- function() {
 
     p <- c(104, 108, 104)
-    checkEquals(scale1(p), p/104)
-    checkEquals(scale1(p, when = 2), p/108)
+    checkEqualsNumeric(scale1(p), p/104)
+    checkEqualsNumeric(scale1(p, when = 2), p/108)
     checkEquals(sd(returns(scale1(p, scale = TRUE))), 1)
     checkEquals(scale1(p, when = 2, scale = TRUE)[2L], 1) 
 
     ## NA handling
     p <- cbind(c(104, 108, 104, 105),
                c( NA, 108, 104, 105))    
-    checkEquals(scale1(p), p/108)
-    checkEquals(scale1(p, level = 100), p/1.08)
+    checkEqualsNumeric(scale1(p), p/108)
+    checkEqualsNumeric(scale1(p, level = 100), p/1.08)
 
     p <- cbind(c(104, 108, 104, 105),
                c(103, 108, 104, 105))    
@@ -1687,8 +1687,8 @@ test.is_valid_ISIN <- function() {
 
 test.NAVseries <- function() {
 
-    require("PMwR")
-    require("RUnit")
+    ## require("PMwR")
+    ## require("RUnit")
 
     nav <- NAVseries(1:10)
     checkEquals(c(nav), 1:10)
@@ -1723,8 +1723,8 @@ test.NAVseries <- function() {
     checkEquals(sum.nav$nobs, 10)
 
     ## scale1
-    checkEquals(scale1(NAVseries(10:15), level = 100),
-                NAVseries((10:15)*10))
+    checkEqualsNumeric(scale1(NAVseries(10:15), level = 100),
+                       NAVseries((10:15)*10))
 
 
    

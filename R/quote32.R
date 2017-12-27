@@ -54,9 +54,9 @@ print.quote32 <- function(x, sep = "-",
     for (i in 0:3)
         frac[attr(x, "fraction") == i] <- fracsym[i+1]
     
-    cat(paste0(attr(x, "handle"), sep,
-               sprintf("%02d", attr(x, "ticks")),
-               frac, ""), sep = "")
+    print.default(paste0(attr(x, "handle"), sep,
+                         sprintf("%02d", attr(x, "ticks")),
+                         frac, ""), quote = FALSE)
     invisible(x)
 }
 

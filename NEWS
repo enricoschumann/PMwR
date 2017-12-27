@@ -1,3 +1,17 @@
+v0.7-0  (2017-12-31)
+
+  o scale1: objects that are modified by 'scale1' gain
+    an attribute "scale1_origin", which provides the
+    timestamp at which scaling starts
+
+  o btest: fix handling of argument 'lag' (which had
+    been ignored in some situations)
+
+  o quote32: the function now also recognises a colon
+    (:) as a separator
+
+  o pl: new method for data frames
+
 v0.6-0  (2017-11-16)
 
   o btest: two arguments have been renamed
