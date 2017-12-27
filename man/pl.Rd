@@ -1,6 +1,7 @@
 \name{pl}
 \alias{pl}
 \alias{.pl}
+\alias{pl.data.frame}
 \alias{pl.default}
 \alias{pl.journal}
 \alias{pl.pl}
@@ -102,8 +103,16 @@ pl(amount, \dots )
   only the profit/loss numbers as a numeric vector,
   call \code{pl} twice (\code{pl(pl(...))}).
 
-  To use package crayon -- which is only sensible in
-  interactive use --, either explicitly set
+  \code{pl} is a generic function: The default input is
+  vectors for amount, price, etc. Alternatively (and
+  often more conveniently), the function may also be
+  called with a \code{\link{journal}} or a
+  \code{\link{data.frame}} as its input. For data
+  frames, columns must be named \code{amount},
+  \code{price} and so on.
+  
+  To use package \pkg{crayon} -- which is only sensible
+  in interactive use --, either explicitly set
   \code{use.crayon} to \code{TRUE} or set an option
   \code{PMwR.use.crayon} to \code{TRUE}.
 
