@@ -40,9 +40,20 @@ options(continue = "  ", digits = 3, width = 60, useFancyQuotes = FALSE)
 require("PMwR")
 @
 
+\noindent The function \texttt{quote32} is meant for pretty-printing
+of US treasury bond quotes; it provides no other
+functionality. \texttt{q32} is a short-hand for \texttt{quote32}.
 
+If price is numeric, it is interpreted as a quote in decimal notation
+and translated into a price quoted in fractions of a point.
 <<>>=
-q32("100-31")
+quote32(100 + 17.5/32)
+@ 
+
+If price is character, it is interpreted as a quote in fractional
+notation.
+<<>>=
+q32("100'315") + 1/32
 @ 
 
 \end{document}
