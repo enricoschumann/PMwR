@@ -273,10 +273,10 @@ toLatex.summary.NAVseries <- function(object, ...,
         true.max <- max(unlist(NAVs))        
         for (i in seq_len(ns)) {            
             ans[i] <- gsub("%sparkline",
-                           paste(sparklines(NAVs[[i]],
+                           paste(sparkline(NAVs[[i]],
                                            true.min = true.min,
                                            true.max = true.max,
-                                           sparklineheight = 2.5,
+                                           height = 2.5,
                                            width = 10),
                                  collapse = "\n"),
                            ans[i], fixed = TRUE)

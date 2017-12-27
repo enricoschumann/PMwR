@@ -96,24 +96,34 @@ vname <- function(v, names) {
     ans    
 }
 
-sparklines <- function(x,
-                       width = 8,
-                       sparklineheight = 1.75,
-                       true.min = min(x),
-                       true.max = max(x),
-                       zero.line = TRUE) {
+sparkline <- function(x,
+                      width = 8,
+                      height = 1.75,  ## renewcommand sparklineheight
+                      lwd = 0.2,      ## setlength sparklinethickness
+                      col = "black",  ## definecolor sparklinecolor, not supported
+                      true.min = min(x),
+                      true.max = max(x),
+                      baseline = TRUE,
+                      baseline.lwd = 0.1,     ## not supported
+                      baseline.col = "black"  ## not supported
+                      ) {
     xx <- map01(x, omin = true.min, omax = true.max)
     sl <- c("{",
-            if (sparklineheight != 1.75)
-                paste0("\\renewcommand{\\sparklineheight}{", sparklineheight, "}"),
+
+            if (height != 1.75)
+                paste0("\\renewcommand{\\sparklineheight}{", height, "}"),
+
+            if (lwd != 0.2)
+                paste0("\\setlength{\\sparklinethickness}{", lwd, " pt}"),
+
             paste0("\\begin{sparkline}{", width, "}"), ## ...
             
-            ## zero.line
-            if (zero.line) {
+            if (baseline) {
                 c("\\spark ",
                   paste(0, xx[1], 1, xx[1]),
                   "/ \n")
             }, ## ...
+            
             
             "\\spark ",
             paste(seq(0,1, length.out = length(x)), xx),

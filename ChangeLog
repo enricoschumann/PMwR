@@ -1,3 +1,9 @@
+2017-12-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/internals.R (sparkline): rename internal
+	function sparklines => sparkline;
+	rename arguments/add arguments
+
 2017-12-12  Enrico Schumann  <es@enricoschumann.net>
 
 	* inst/unitTests/ut_PMwR.R: add check for empty
