@@ -1,3 +1,7 @@
+2018-01-01  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.7-0
+
 2017-12-27  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/quote32.R (print.quote32): use

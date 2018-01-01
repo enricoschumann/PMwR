@@ -1,17 +1,17 @@
 Package: PMwR
 Type: Package
 Title: Portfolio Management with R
-Version: 0.6-1
-Date: 2017-11-16
+Version: 0.7-0
+Date: 2018-01-01
 Maintainer: Enrico Schumann <es@enricoschumann.net>
 Authors@R: person(given = "Enrico", family = "Schumann", 
                   role  = c("aut", "cre"),
                   email = "es@enricoschumann.net")
-Description: Functions and examples for
-  'Portfolio Management with R':
-  backtesting investment and trading strategies, computing
-  profit/loss and returns, analysing trades, handling lists
-  of transactions, reporting, and more. 
+Description: Functions and examples for 'Portfolio
+  Management with R': backtesting investment and
+  trading strategies, computing profit/loss and
+  returns, analysing trades, handling lists of
+  transactions, reporting, and more.
 Imports: NMOF, crayon, datetimeutils, fastmatch, orgutils,
          textutils, utils, zoo
 Suggests: RUnit, rbenchmark
