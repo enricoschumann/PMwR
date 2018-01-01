@@ -74,8 +74,7 @@ and $N$ named columns.
 
 
 <<echo=false>>=
-require("PMwR")
-require("zoo")
+library("PMwR")
 @
 
 
@@ -83,6 +82,18 @@ require("zoo")
 j <- journal(amount = 1, price = 20)
 pl(j)
 pl(j, vprice = 21)
+@ 
+
+<<>>=
+j <- journal(amount = c(1, -1), 
+             price = c(102, 109),
+             timestamp = c(2.5, 9))
+pl(j, vprice = 101:110, along.timestamp = 1:10)
+@ 
+
+
+<<results=tex, echo=false>>=
+toLatex(sessionInfo())
 @ 
 
 \end{document}
