@@ -43,7 +43,7 @@
 
 2017-11-16  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): Version: 0.6-1
+	* DESCRIPTION (Version): 0.6-1
 
 	* R/div_adjust.R (split_adjust): fix handling
 	of several splits per series
@@ -57,7 +57,7 @@
 
 2017-11-16  Enrico Schumann  <es@enricoschumann.net>
 
-        * DESCRIPTION (Version): Version: 0.6-0
+        * DESCRIPTION (Version): 0.6-0
 
         * R/btest.R (btest): rename arguments
 
