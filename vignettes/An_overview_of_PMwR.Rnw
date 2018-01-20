@@ -109,7 +109,14 @@ the manual:
 \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}\,.
 
 \noindent I am grateful for comments, suggestions and
-corrections.
+corrections.  Please send bug reports  directly to the
+package maintainer, for instance by using
+\texttt{bug.report}.\index{bug reports}
+<<eval=false>>=
+utils::bug.report("[PMwR] Unexpected behaviour in function <XXX>", 
+                  maintainer("PMwR"), package = "PMwR")
+@ 
+
 
 \subsection*{Testing strategies}
 
