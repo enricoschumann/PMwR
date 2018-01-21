@@ -45,7 +45,7 @@ require("zoo")
 provide a small set of reliable, efficient and convenient
 tools that help in processing and analysing trade and
 portfolio data. The package does not provide a complete
-application that could be used `as is', but tools
+application to be used `as is', but tools
 for creating such an application.
 
 \noindent The package grew out of various pieces of
@@ -130,7 +130,7 @@ The package provides functions that work with journals
 
 \subsection*{Computing \textsc{p}\&\textsc{l} and returns}
 
-See \texttt{?returns}, \texttt{?pl} and
+See \texttt{?returns}, \texttt{?rc}, \texttt{?pl} and
 \texttt{?unit\_prices}.
 
 \end{document}
