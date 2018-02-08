@@ -196,7 +196,10 @@ print.position <- function(x, ..., sep = ":") {
     } else if (dim(x)[1L] > 1L) {
         print(unclass(x), na.print = "")
     } else {
-        print(t(unclass(x)), na.print = "")
+        if (is.na(timestamp))
+            write.table(t(unclass(x)), col.names = FALSE, quote = FALSE)
+        else
+            print(t(unclass(x)), na.print = "")
     }
     invisible(original.x)
 }
