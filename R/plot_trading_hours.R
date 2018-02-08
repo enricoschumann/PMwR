@@ -44,7 +44,8 @@ plot_trading_hours <-
     }
 
     if (inherits(t, "Date")) {
-        labels <- "day"
+        if (!labels %in% c("day", "month"))
+            labels <- "day"
         interval <- "1 day"
     }
     
@@ -97,7 +98,7 @@ plot_trading_hours <-
     } else if (grepl("month", labels, ignore.case = TRUE)) {
         pos <- which(abs(diff(as.POSIXlt(grd)$mon)) > 0) + 1
         fmt <- if (is.null(label.format))
-            "%d.%m." else label.format
+            "%b %y" else label.format
     }
     
     if (do.plot) {
