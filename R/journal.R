@@ -125,7 +125,9 @@ length.journal <- function(x)
 
 sort.journal <- function(x, decreasing = FALSE, by = "timestamp",
                          ..., na.last = TRUE) {
-    o <- order(x[[by]], na.last = na.last, decreasing = decreasing)    
+    o <- do.call(order,
+                 c(unclass(x)[by],
+                   na.last = na.last, decreasing = decreasing))
     for (i in seq_along(unclass(x)))
         x[[i]]<- x[[i]][o]
     x    
@@ -391,12 +393,15 @@ split.journal <- function(x, f, drop = FALSE, ...) {
 
 head.journal <- function(x, n = 6L, ..., by = TRUE) {
     if ((lenx <- length(x)) <= 1L)
-        x
+        return(x)
+    x <- sort(x)
     if (by) {
         insts <- sort(unique(x$instrument))
         ans <- journal()
         for (i in insts) {
             sx <- x[x$instrument == i]
+            if (length(sx) == 0L)
+                next
             ans <- c(ans, sx[seq_len(min(n, length(sx)))])            
         }
         ans
@@ -407,13 +412,14 @@ head.journal <- function(x, n = 6L, ..., by = TRUE) {
 
 tail.journal <- function(x, n = 6L, ..., by = TRUE) {
     if ((lenx <- length(x)) <= 1L)
-        x
+        return(x)
+    x <- sort(x, decreasing = TRUE)
     if (by) {
         insts <- sort(unique(x$instrument))
         ans <- journal()
         for (i in insts) {
             sx <- x[x$instrument == i]
-            if (length(sx == 0L))
+            if (length(sx) == 0L)
                 next
             ans <- c(ans, sx[seq_len(min(n, length(sx)))])            
         }

@@ -1,3 +1,9 @@
+2018-02-09  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (head.journal, tail.journal): fix
+	skipping of empty journals
+	(tail.journal): fix sorting in reverse order
+
 2018-02-08  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (print.position): do not print

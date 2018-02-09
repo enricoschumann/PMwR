@@ -532,12 +532,32 @@ test.journal <- function() {
     ## method: c
     jj <- c(j, j)
 
+    ## method: length
+    checkEquals(length(jj), 10L)
+
     ## method: sort
     checkEquals(sort(jj)$timestamp, rep(1:5, each = 2))
     checkEquals(sort(jj, decreasing = TRUE)$timestamp, rep(5:1, each = 2))
     
-    ## method: length
-    checkEquals(length(jj), 10L)
+
+    j <- journal(amount = 1:4,
+                 instrument = c("a", "b", "a", "b"),
+                 timestamp = c(1,1,2,2))
+    checkEquals(sort(j)$timestamp, c(1,1,2,2))
+    checkEquals(sort(j, decreasing = TRUE)$timestamp, c(2,2,1,1))
+
+    sj <- sort(j, by = c("instrument", "timestamp"))
+    checkEquals(sj$timestamp, c(1,2,1,2))
+    checkEquals(sj$instrument, c("a", "a", "b", "b"))
+    checkEquals(sj$amount, c(1,3,2,4))
+
+    sj <- sort(j, by = c("instrument", "timestamp"),
+               decreasing = TRUE)
+    checkEquals(sj$timestamp, rev(c(1,2,1,2)))
+    checkEquals(sj$instrument, rev(c("a", "a", "b", "b")))
+    checkEquals(sj$amount, rev(c(1,3,2,4)))
+
+    
 
     ## method: head/tail
     timestamp <- 1:20
