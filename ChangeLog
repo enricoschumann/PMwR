@@ -2,6 +2,11 @@
 
 	* NAMESPACE: import 'utils::write.table'
 
+	* R/pl.R (pl.default): new argument 'do.sum': if
+	TRUE, sum P/L across instruments
+	(pl.default): new argument 'pl.only': if TRUE,
+	return pl only as a numeric vector
+
 2018-02-24  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (journal.default): fixed -- if

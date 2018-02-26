@@ -78,6 +78,8 @@ library("PMwR")
 @
 
 
+With a single asset.
+
 <<>>=
 j <- journal(amount = 1, price = 20)
 pl(j)
@@ -90,6 +92,24 @@ j <- journal(amount = c(1, -1),
              timestamp = c(2.5, 9))
 pl(j, vprice = 101:110, along.timestamp = 1:10)
 @ 
+
+With several assets.
+
+<<>>=
+j <- journal(amount = c(1, -1, 1), 
+             instrument = c("A", "A", "B"),
+             timestamp = c(1, 2, 1),
+             price = c(100, 103, 10))
+
+P <- cbind(A = c(100, 102, 105),
+           B = c( 10,   5,  11))
+      
+pl(j, vprice = P, 
+   along.timestamp = 1:3)
+pl(j, vprice = P, 
+   along.timestamp = 1:3, do.sum = TRUE)
+@  
+
 
 
 <<results=tex, echo=false>>=
