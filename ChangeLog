@@ -9,6 +9,11 @@
 	returned (before, in some cases, instrument
 	became NA, i.e. of length one)
 
+2018-02-23  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/drawdowns.R (drawdowns): new generic function
+	(drawdowns.default, drawdowns.zoo): add methods
+
 2018-02-09  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (head.journal, tail.journal): fix
