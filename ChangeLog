@@ -1,5 +1,7 @@
 2018-02-26  Enrico Schumann  <es@enricoschumann.net>
 
+	* DESCRIPTION (Version): 0.7-1
+
 	* NAMESPACE: import 'utils::write.table'
 
 	* R/pl.R (pl.default): new argument 'do.sum': if
