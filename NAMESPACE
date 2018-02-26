@@ -28,7 +28,8 @@ importFrom("stats",
 importFrom("utils",
            "browseURL", "capture.output", "setTxtProgressBar",
            "str", "txtProgressBar",
-           "head", "tail", "toLatex")
+           "head", "tail", "toLatex",
+           "write.table")
 
 export(
     .expand,
