@@ -2,6 +2,13 @@
 
 	* NAMESPACE: import 'utils::write.table'
 
+2018-02-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (journal.default): fixed -- if
+	length of amount is zero, an empty journal is
+	returned (before, in some cases, instrument
+	became NA, i.e. of length one)
+
 2018-02-09  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (head.journal, tail.journal): fix

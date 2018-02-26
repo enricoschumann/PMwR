@@ -18,7 +18,24 @@ journal.position <- function(x, price, ...) {
 }
 
 journal.default <- function(amount, price, timestamp, instrument,
-                    id = NULL,  account = NULL, ...) {
+                            id = NULL,  account = NULL, ...) {
+
+    dots <- list(...)
+    nd <- names(dots)
+
+    if (!length(amount)) {
+        ## TODO: copy ... fields from journal
+
+        ## TODO: add warning if there
+        ##       are non--zero-length fields
+        ans <- list(timestamp = numeric(0),
+                    amount = numeric(0),
+                    price = numeric(0),
+                    instrument = character(0))
+        class(ans) <- "journal"
+        return(ans)
+    }
+    
     if (missing(timestamp))
         timestamp <- NA
     if (missing(instrument) || all(is.na(instrument)))
@@ -30,8 +47,6 @@ journal.default <- function(amount, price, timestamp, instrument,
         price <- NA
     instrument <- as.character(instrument)
 
-    dots <- list(...)
-    nd <- names(dots)
 
     len <- max(length(timestamp),
                length(amount),
