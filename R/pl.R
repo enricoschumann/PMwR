@@ -114,13 +114,13 @@ pl.default <- function(amount, price, timestamp = NULL,
                        initial.position = NULL,
                        initial.price = NULL,
                        vprice = NULL,
-                       tol = 1e-10, do.warn = TRUE,...) {
+                       tol = 1e-10, do.warn = TRUE,
+                       do.sum = FALSE, pl.only = FALSE, ...) {
 
     if (length(multiplier) > 1L && is.null(names(multiplier)))
         stop(sQuote("multiplier"), " must be a named vector")
     if (approx)
         .NotYetUsed("approx")
-
 
     custom.timestamp <- FALSE
     if (isTRUE(along.timestamp)) {
@@ -144,7 +144,7 @@ pl.default <- function(amount, price, timestamp = NULL,
 
         custom.timestamp <- TRUE
         if (is.null(vprice))
-            stop("user-defined timestamp: vprice needs be specified")
+            stop("user-defined timestamp: vprice must be specified")
         if (is.null(dim(vprice)))
             vprice <- as.matrix(vprice)
 
@@ -343,7 +343,7 @@ pl.default <- function(amount, price, timestamp = NULL,
                                 instrument = c(rep(i1, length(amount1)),
                                                rep("cash", length(amount1))),
                                 when = along.timestamp)[, c(i1, "cash")]
-                pnl <- rowSums(tmp * cbind(vprice, 1))
+                pnl <- rowSums(tmp * cbind(vprice1, 1))
 
                 real_ <- numeric(length(pnl)) + NA
                 real_[matchOrNext(timestamp1, along.timestamp)] <-
@@ -377,6 +377,35 @@ pl.default <- function(amount, price, timestamp = NULL,
         attr(ans, "instrument") <- uniq.i
         names(ans) <- uniq.i
     }
+
+    if (do.sum) {
+        ## if (!identical(along.timestamp, TRUE) &&
+        ##     !identical(along.timestamp, FALSE) &&
+        if ((n <- length(ans)) > 1L) {
+            ans1 <- ans[[1L]]
+            for (i in 2:n) {
+                ans1$pl <- ans1$pl + ans[[i]]$pl
+                ans1$realised <- ans1$realised + ans[[i]]$realised
+                ans1$unrealised <- ans1$unrealised + ans[[i]]$unrealised
+                ans1$volume <- ans1$volume + ans[[i]]$volume
+            }
+            ans1$buy <- NA
+            ans1$sell <- NA
+            ans1 <- list(ans1)
+            class(ans1) <- "pl"
+            attr(ans1, "along.timestamp") <- along.timestamp
+            attr(ans1, "instrument") <- NA
+            ans <- ans1
+        }        
+    }
+    if (pl.only) {
+        if (!identical(along.timestamp, FALSE))
+            stop("only supported for ",
+                 sQuote("along.timestamp = FALSE"))
+        ans1 <- unlist(lapply(ans, `[`, "pl"))
+        names(ans1) <- names(ans)
+        ans <- ans1
+    }
     ans
 }
 
@@ -398,7 +427,7 @@ pl.default <- function(amount, price, timestamp = NULL,
 }
 
 as.data.frame.pl <- function(x, ...) {
-    if (isTRUE(attr(x, "along.timestamp")))
+    if (!identical(attr(x, "along.timestamp"), FALSE))
         stop("currently only supported for ",
              sQuote("along.timestamp = FALSE"))
 

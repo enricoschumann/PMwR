@@ -1043,7 +1043,7 @@ test.pl <- function() {
                  timestamp = as.POSIXct(c("20070829  1400",
                                           "20070829  1724"),
                                         format = "%Y%m%d  %H%M"))
-    checkEquals(pl(pl(j)), 1525)
+    checkEquals(pl(j)[[1]]$pl, 1525)
     checkEquals(pl(j),
                 structure(list(structure(
                     list(pl = 1525,
@@ -1201,8 +1201,88 @@ test.vprice <- function() {
                  timestamp = 5)
     
     checkException(pl(j, along.timestamp = 4:6), silent = TRUE) ## should fail: vprice must be specified
-    pl(j, along.timestamp = 4:6, vprice = c(21,20,22))
+    p <- pl(j, along.timestamp = 4:6, vprice = c(21,20,22))
+    checkEqualsNumeric(p[[1]]$pl, c(0,0,2))
+    checkEqualsNumeric(p[[1]]$realised[-1], c(0,0))
+    checkEqualsNumeric(p[[1]]$unrealised[-1], c(0,2))
 
+
+
+    ## 
+    J <- journal(instrument = c("A", "B", "B"),
+                 amount = c(1, 1, -1),
+                 price = c(100, 10, 11),
+                 timestamp = c(1, 1, 2))
+    
+    P <- cbind(c(100, 101, 105),
+               c(10, 12, 9))
+    colnames(P) <- c("A", "B")
+
+    p <- pl(J,
+            along.timestamp = 1:3,
+            vprice = P)
+
+    checkEquals(length(p), 2)
+    checkEqualsNumeric(p[[1]]$pl,         c(0,1,5))
+    checkEqualsNumeric(p[[1]]$realised,   c(0,0,0))
+    checkEqualsNumeric(p[[1]]$unrealised, c(0,1,5))
+    checkEqualsNumeric(p[[2]]$pl,         c(0,1,1))
+    checkEqualsNumeric(p[[2]]$realised,   c(0,1,1))
+    checkEqualsNumeric(p[[2]]$unrealised, c(0,0,0))
+
+    ## switch columns
+    P <- cbind(c(10, 12, 9),
+               c(100, 101, 105))
+    colnames(P) <- c("B", "A")
+    p <- pl(J,
+            along.timestamp = 1:3,
+            vprice = P)
+
+    checkEquals(length(p), 2)
+    checkEqualsNumeric(p[[1]]$pl,         c(0,1,5))
+    checkEqualsNumeric(p[[1]]$realised,   c(0,0,0))
+    checkEqualsNumeric(p[[1]]$unrealised, c(0,1,5))
+    checkEqualsNumeric(p[[2]]$pl,         c(0,1,1))
+    checkEqualsNumeric(p[[2]]$realised,   c(0,1,1))
+    checkEqualsNumeric(p[[2]]$unrealised, c(0,0,0))
+
+    ## only single instrument
+    P <- cbind(c(10, 12, 9),
+               c(100, 101, 105))
+    colnames(P) <- c("B", "A")
+    p <- pl(J[1],
+            along.timestamp = 1:3,
+            vprice = P)
+
+    checkEquals(length(p), 1)
+    checkEqualsNumeric(p[[1]]$pl,         c(0,1,5))
+    checkEqualsNumeric(p[[1]]$realised,   c(0,0,0))
+    checkEqualsNumeric(p[[1]]$unrealised, c(0,1,5))
+
+    ## only single instrument, 2
+    P <- cbind(c(10, 12, 9),
+               c(100, 101, 105))
+    colnames(P) <- c("B", "A")
+    p <- pl(J[2:3],
+            along.timestamp = 1:3,
+            vprice = P)
+
+    checkEquals(length(p), 1)
+    checkEqualsNumeric(p[[1]]$pl,         c(0,1,1))
+    checkEqualsNumeric(p[[1]]$realised,   c(0,1,1))
+    checkEqualsNumeric(p[[1]]$unrealised, c(0,0,0))
+    
+
+    ## do.sum
+    p <- pl(J,
+            along.timestamp = 1:3,
+            vprice = P, do.sum = TRUE)
+
+    checkEqualsNumeric(p[[1]]$pl,         c(0,2,6))
+    checkEqualsNumeric(p[[1]]$realised,   c(0,1,1))
+    checkEqualsNumeric(p[[1]]$unrealised, c(0,1,5))
+    checkEquals(length(p), 1)
+    
 }
 
 

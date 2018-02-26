@@ -21,7 +21,8 @@ pl(amount, \dots )
    multiplier.regexp = FALSE,
    along.timestamp = FALSE, approx = FALSE,
    initial.position = NULL, initial.price = NULL,
-   vprice = NULL, tol = 1e-10, do.warn = TRUE, \dots )
+   vprice = NULL, tol = 1e-10, do.warn = TRUE,
+   do.sum = FALSE, pl.only = FALSE, \dots )
 
 \method{pl}{journal}(amount, multiplier = 1,
    multiplier.regexp = FALSE,
@@ -95,6 +96,9 @@ pl(amount, \dots )
   \item{use.crayon}{logical}
   \item{na.print}{character: how to print \code{NA} values}
   \item{do.warn}{logical: issue warnings?}
+  \item{do.sum}{logical: sum profit/loss across instruments?}
+  \item{pl.only}{logical: if \code{TRUE}, return only
+    numeric vector of profit/loss}
 }
 \details{
 
