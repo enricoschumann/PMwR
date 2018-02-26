@@ -101,36 +101,30 @@ provide you with a Windows version.
 
 \section*{What the package provides}
 
-The package provides functions that can serve as
-building blocks for many activities in portfolio
-management. Three examples follow; all details are in
-the manual:
+\begin{description}
+\item[Keep track of transactions] The package provides
+  functions that work with journals (sometimes called
+  blotters). See \texttt{?journal} and
+  \texttt{?position}.
+\item[Testing strategies] See \texttt{?btest}.
+\item[Computing \textsc{p}\&\textsc{l} and returns] See
+  \texttt{?returns}, \texttt{?rc}, \texttt{?pl} and
+  \texttt{?unit\_prices}.
+\end{description}
 
-\url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}\,.
+\noindent All details are in the manual:
+
+\begin{center}
+\url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
+\end{center}
 
 \noindent I am grateful for comments, suggestions and
-corrections.  Please send bug reports  directly to the
+corrections.  Please send bug reports directly to the
 package maintainer, for instance by using
 \texttt{bug.report}.\index{bug reports}
 <<eval=false>>=
 utils::bug.report("[PMwR] Unexpected behaviour in function <XXX>", 
                   maintainer("PMwR"), package = "PMwR")
 @ 
-
-
-\subsection*{Testing strategies}
-
-See \texttt{?btest}.
-
-\subsection*{Keeping track of transactions}
-
-The package provides functions that work with journals
-(sometimes called blotters). See \texttt{?journal} and
-\texttt{?position}.
-
-\subsection*{Computing \textsc{p}\&\textsc{l} and returns}
-
-See \texttt{?returns}, \texttt{?rc}, \texttt{?pl} and
-\texttt{?unit\_prices}.
 
 \end{document}
