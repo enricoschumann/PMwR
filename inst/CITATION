@@ -3,7 +3,7 @@ citHeader("To cite PMwR in publications, please use:")
 citEntry(entry = "manual",
          title = "Portfolio Management with {R}",
          author = person("Enrico", "Schumann", role = c("aut","cre")),
-         year = "2018",
+         year = "2008--2018",
          url  = "http://enricoschumann.net/PMwR/",
          textVersion = 
              paste("Enrico Schumann.", 
