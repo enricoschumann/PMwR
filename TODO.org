@@ -1,0 +1,23 @@
+#+TITLE: PMwR: To-dos, Ideas, ...
+#+AUTHOR: Enrico Schumann
+#+CATEGORY: PMwR
+
+* general
+
+* =btest=
+
+** support multiplier?
+
+* =pricetable=
+
+** add 'drop' argument to return matrix?
+
+* =position=
+
+** =when= keywords
+
+   endofday
+   endofyear
+   endofquarter
+
+
