@@ -111,7 +111,7 @@ test.split_trades <- function() {
 
 test.btest <- function() {
 
-    require("zoo", quietly = TRUE, warn.conflicts = FALSE)
+    library("zoo", quietly = TRUE, warn.conflicts = FALSE)
 
     btTable <- function(solution, prices)
         data.frame(prices = prices,
@@ -455,6 +455,14 @@ test.btest <- function() {
     btest(prices, signal, lag = 2, b=3)$journal
 
 
+    checkEquals(
+        journal(btest(
+            1:10,
+            signal = function() 1,
+            b = as.Date("2018-1-5"),
+            timestamp = as.Date("2018-1-1")+0:9))$timestamp,
+        as.Date("2018-1-6"))
+
 
     
 }
@@ -616,9 +624,7 @@ test.journal <- function() {
     
     ## not ok: replace journal as a whole
     checkException(j[1]$amount <- 10, silent = TRUE)
-
-
-   
+    
 }
 
 test..pl_stats <- function() {

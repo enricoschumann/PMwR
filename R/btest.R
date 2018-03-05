@@ -26,6 +26,12 @@ btest  <- function(prices,
 
     L <- lag
 
+    if (!missing(timestamp) &&
+        (inherits(timestamp, "Date") || inherits(timestamp, "POSIXct")) &&
+        inherits(b, class(timestamp))) {
+        b <- matchOrNext(b, timestamp)
+    }
+            
     if ("tradeOnOpen" %in% names(list(...))) {
         warning("Did you mean 'trade.at.open'? See ChangeLog 2017-11-14.")
     }
