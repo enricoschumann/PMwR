@@ -23,7 +23,7 @@ drawdowns(x, \dots)
 }
 \details{
 
-  \code{drawdowns} is a generic function. It computes drawdowns
+  \code{drawdowns} is a generic function. It computes drawdown
   statistics: maximum; and time of peak, trough and recovery.
 
 }
@@ -36,7 +36,10 @@ drawdowns(x, \dots)
   Enrico Schumann
 }
 \seealso{
-  \code{\link[NMOF]{drawdown}}
+
+  the actual computation of the drawdowns is done by function
+  \code{\link[NMOF]{drawdown}} in package \pkg{NMOF}
+
 }
 \examples{
 

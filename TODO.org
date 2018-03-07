@@ -26,3 +26,10 @@
 * =journal= [0/1]
 
 ** TODO all.equal method
+
+
+* =returns= [0/1]
+
+** TODO =YTM= holding-period returns
+
+   beginning of year to end of previous month
