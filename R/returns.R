@@ -722,13 +722,5 @@ as.matrix.p_returns <- function(x, ...) {
 
 }
 
-## TODO: as.data.frame.p_returns
-
-as.data.frame.p_returns <- function(x, ...) {
-
-    res <- unclass(x)
-    res <- as.data.frame(res)
-    rownames(res) <- as.character(attr(x, "t"))
-    res
-
-}
+as.data.frame.p_returns <- function(x, ...)
+    as.data.frame(as.matrix(x))
