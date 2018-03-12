@@ -1,3 +1,25 @@
+v0.8-0  (2018-04-01)
+
+  o drawdowns: new generic function with methods for
+    zoo and numeric vectors
+
+  o plot_trading_hours: better support for daily series
+
+  o pl: new argument 'do.sum'; if TRUE, P/L across
+    instruments is summed
+
+  o pl: new argument 'pl.only'; if TRUE, return P/L as
+    a numeric vector
+
+  o btest: if a timestamp of class Date or POSIXct is
+    specified, burnin 'b' may be an actual timestamp
+
+  o returns: add method for as.data.frame for
+    holding-period returns
+
+  o the manual has been substantially revised. See
+    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+
 v0.7-0  (2018-01-01)
 
   o scale1: objects that are modified by 'scale1' gain
