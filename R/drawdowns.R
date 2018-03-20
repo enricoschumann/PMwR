@@ -5,8 +5,10 @@ drawdowns.default <- function(x, ...) {
 
     D <- drawdown(x, summary = FALSE)
 
-    recover <- which(D[-1] == 0 & D[-length(D)] > 0) + 1
-    peak <- which(D[-length(D)] == 0 & D[-1] > 0)
+    recover <- which(D[-1] == 0 &
+                     D[-length(D)] > 0) + 1
+    peak    <- which(D[-length(D)] == 0 &
+                     D[-1] > 0)
 
     if ((n <- length(peak)) == 0L)
         return(data.frame(peak = numeric(0),
