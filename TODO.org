@@ -28,8 +28,10 @@
 ** TODO all.equal method
 
 
-* =returns= [0/1]
+* =returns= [0/2]
 
 ** TODO =YTM= holding-period returns
 
    beginning of year to end of previous month
+
+** TODO print: allow printing in basispoints
