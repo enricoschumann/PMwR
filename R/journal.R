@@ -1,4 +1,5 @@
 ## -*- truncate-lines: t; -*-
+## Copyright (C) 2008-18  Enrico Schumann
 
 journal <- function(amount, ...) {
     if (match.call() == "journal()") {

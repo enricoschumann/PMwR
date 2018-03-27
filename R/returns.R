@@ -1,3 +1,6 @@
+## -*- truncate-lines: t; -*-
+## Copyright (C) 2008-18  Enrico Schumann
+
 returns <- function(x, ...)
     UseMethod("returns")
 

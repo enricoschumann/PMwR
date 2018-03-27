@@ -1,4 +1,5 @@
 ## -*- truncate-lines: t; -*-
+## Copyright (C) 2008-18  Enrico Schumann
 
 makeHHMMSS <- function(x, label = "time specification (HHMMSS)") {
     x <- as.character(x)

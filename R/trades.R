@@ -1,4 +1,8 @@
-split_trades <- splitTrades <- function(amount, price, timestamp, aggregate = FALSE) {
+## -*- truncate-lines: t; -*-
+## Copyright (C) 2008-18  Enrico Schumann
+
+split_trades <- splitTrades <-
+    function(amount, price, timestamp, aggregate = FALSE) {
     n <- amount
     p <- price
 
