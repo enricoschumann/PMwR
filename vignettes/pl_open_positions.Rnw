@@ -24,13 +24,16 @@
 
 <<echo=false>>=
 options(continue = "  ", digits = 3, width = 60, useFancyQuotes = FALSE)
+pv <- packageVersion("PMwR")
+pv <- gsub("(.*)[.](.*)", "\\1-\\2", pv)
 @
 
 \begin{document}
 \title{Profit/Loss for Open Positions}
 \author{Enrico Schumann\\\url{es@enricoschumann.net}}
 
-{\raggedright{\LARGE Profit/Loss for Open Positions}}\medskip
+{\raggedright{\LARGE Profit/Loss for Open Positions}}\hspace*{\fill}
+{\footnotesize Package version \Sexpr{pv}}\medskip
 
 \noindent Enrico Schumann\\
 \noindent \url{es@enricoschumann.net}\\
@@ -110,10 +113,5 @@ pl(j, vprice = P,
    along.timestamp = 1:3, do.sum = TRUE)
 @  
 
-
-
-<<results=tex, echo=false>>=
-toLatex(sessionInfo())
-@ 
 
 \end{document}

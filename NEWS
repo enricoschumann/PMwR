@@ -1,4 +1,4 @@
-v0.8-0  (2018-04-01)
+v0.8-0  (2018-05-01)
 
   o drawdowns: new generic function with methods for
     zoo and numeric vectors

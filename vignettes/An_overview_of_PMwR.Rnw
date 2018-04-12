@@ -24,13 +24,16 @@
 
 <<echo=false>>=
 options(continue = "  ", digits = 3, width = 60, useFancyQuotes = FALSE)
+pv <- packageVersion("PMwR")
+pv <- gsub("(.*)[.](.*)", "\\1-\\2", pv)
 @
 
 \begin{document}
 \title{An Overview of the PMwR Package}
 \author{Enrico Schumann\\\url{es@enricoschumann.net}}
 
-{\raggedright{\LARGE An Overview of the PMwR Package}}\medskip
+{\raggedright{\LARGE An Overview of the PMwR Package}}\hspace*{\fill}
+{\footnotesize Package version \Sexpr{pv}}\medskip
 
 \noindent Enrico Schumann\\
 \noindent \url{es@enricoschumann.net}\\
@@ -67,7 +70,7 @@ nt <- gsub(".*\\(([0-9]+) checks?\\).*", "\\1",
 Even if \textsc{pm}w\textsc{r} is under development: the package is to
 provide reliable code. Hence, for all computations, unit tests are included.
 As of package version %
-\Sexpr{gsub("(.*)[.]([0-9]+)", "\\1-\\2", as.character(packageVersion("PMwR")))},
+\Sexpr{pv},
 there are \Sexpr{sum(as.numeric(nt))} tests included. 
 These tests are stored in subdirectory \texttt{unitTests}.} %
 
