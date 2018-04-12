@@ -1,4 +1,5 @@
-## -*- truncate-lines: t; fill-column: 60; -*-
+## -*- truncate-lines: t; -*-
+## Copyright (C) 2008-18  Enrico Schumann
 
 quote32 <- q32 <- function(price, sep = "(-|'|:)", warn = TRUE) {
     if (is.character(price)) {
