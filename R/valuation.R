@@ -24,13 +24,24 @@ valuation.default <- function(x, ...) {
 valuation.journal <- function(x,
                               multiplier = 1,                          
                               cashflow = function(x) x$amount * x$price,
+                              instrument = function(x) "cash",
                               flip.sign = TRUE,
                               ...) {
 
+
     if (!is.null(names(multiplier)))
         multiplier <- multiplier[x$instrument]
+
+    if (is.character(instrument))
+        istr  <- instrument
+    else if (is.function(instrument))
+        istr <- instrument(x)
+    else
+        istr <- as.character(instrument)
+
     ans <- x
-    ans$instrument[] <- "cash"
+    ans$instrument <- character(length(x))
+    ans$instrument[] <- istr
     ans$amount <- cashflow(x) * multiplier
     if (flip.sign)
         ans$amount <- ans$amount * -1    
