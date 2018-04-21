@@ -78,6 +78,7 @@ rebalance <- function(current,
                      sQuote("target"), " and ",
                      sQuote("price"), " must have same length")
         }
+        all.names <- NA
     }
 
     if (is.null(notional)) {
