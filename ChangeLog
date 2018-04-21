@@ -1,3 +1,10 @@
+2018-04-21  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/rebalance.R (rebalance): new argument
+	'current.weights' with default FALSE; if TRUE,
+	the current portfolio is assumed to be a vector
+	of weights
+
 2018-03-07  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/returns.R (as.data.frame.p_returns):

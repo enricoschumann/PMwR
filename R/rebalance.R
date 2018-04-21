@@ -10,41 +10,43 @@ rebalance <- function(current,
                       match.names = TRUE,
                       fraction = 1,
                       drop.zero = FALSE,
+                      current.weights = FALSE,
                       target.weights = TRUE) {
-
 
     if (inherits(current, "position")) {
         instr <- attr(current, "instrument")
         current <- as.numeric(current)
         names(current) <- instr
+        current.weights <- FALSE
     }
     if (inherits(target, "position")) {
         instr <- attr(target, "instrument")
         target <- as.numeric(target)
         names(target) <- instr
-        target.weights  <-  FALSE
+        target.weights <- FALSE
     }
-    
-    if (!match.names && length(current) == 1L && current == 0) {
+
+    if (length(current) == 1L &&
+        current == 0 &&
+        is.null(names(current))) {
         current <- rep.int(current, length(target))
         names(current) <- names(target)
     }
 
-    if (!match.names && length(target) == 1L) {
+    if (length(target) == 1L &&
+        is.null(names(target))) {
         target <- rep.int(target, length(current))
         names(target) <- names(current)
     }
 
-    
-    if (!match.names &&
-        (length(current) != length(target) ||
-         length(current) != length(price) ||
-         length(target)  != length(price))) {
-        stop(sQuote("current"), ", ", sQuote("target"), " and ",
-             sQuote("price"), " must have same length")
+    if (is.null(names(multiplier)) &&
+        length(multiplier) == 1L) {
+        multiplier <- rep(multiplier, length(price))
+        names(multiplier) <- names(price)
     }
 
     if (match.names) {
+
         if (is.null(names(price)) ||
             (is.null(names(current)) && !identical(unname(current), 0)) ||
             is.null(names(target))) {
@@ -56,54 +58,56 @@ rebalance <- function(current,
         if (any(is.na(match(names(current), names(price)))))
             warning("instrument in current without price")
         if (any(is.na(match(names(target), names(price)))))
-            warning("instrument in target without price")    
-    }
+            warning("instrument in target without price")
 
-
-    if (match.names &&
-        is.null(names(multiplier)) &&
-        length(multiplier) == 1L) {
-        multiplier <- rep(multiplier, length(price))
-        names(multiplier) <- names(price)
-    }
-
-    
-    if (is.null(notional)) {
-        if (match.names)
-            notional <- sum(current * price[names(current)] *
-                                multiplier[names(current)])
-        else
-            notional <- sum(current * price * multiplier)
-    }
-    
-    if (match.names) {
-        all.names <- sort(unique(c(names(target), names(current))))
+        all.names <- sort(unique(
+            c(names(target), names(current))))
+        multiplier <- multiplier[all.names]
         target_ <- current_ <- numeric(length(all.names))
         current_[match(names(current), all.names)] <- current
         target_[match(names(target), all.names)] <- target
         current <- current_
+        target <- target_
         price <- price[all.names]
-        if (target.weights)
-            ans <- target_ * notional / price / multiplier[all.names]
-        else
-            ans <- target_
+
     } else {
-        if (target.weights)            
-            ans <- target * notional / price / multiplier
-        else
-            ans <- target
-        all.names <- NA
+        if ( length(current) != length(target) ||
+             length(current) != length(price)  ||
+             length(target)  != length(price) ) {
+                stop(sQuote("current"), ", ",
+                     sQuote("target"), " and ",
+                     sQuote("price"), " must have same length")
+        }
     }
+
+    if (is.null(notional)) {
+        if (current.weights && target.weights)
+            stop(sQuote("notional"), " must be provided")
+        if (target.weights)
+            notional <- sum(current * price *
+                            multiplier)
+        else if (current.weights)
+            notional <- sum(target * price *
+                            multiplier)
+    }
+
+    if (current.weights)
+        current <- notional*current/
+            price/multiplier
+
+    if (target.weights)
+        target <- notional*target/
+            price/multiplier
     if (truncate) {
-        ans <- round(trunc(ans/10^(-truncate))*10^(-truncate))
-        diff <- fraction*(ans - current)
+        target <- round(trunc(target/10^(-truncate))*10^(-truncate))
+        diff <- fraction*(target - current)
         diff <- round(trunc(diff/10^(-truncate))*10^(-truncate))
     } else
-        diff <- fraction*(ans - current)
+        diff <- fraction*(target - current)
     rbl <- data.frame(instrument = all.names,
                       price = price,
                       current = current,
-                      target = ans,
+                      target = target,
                       difference = diff,
                       stringsAsFactors = FALSE)
     attr(rbl, "notional") <- notional
@@ -121,7 +125,7 @@ print.rebalance <- function(x, ..., drop.zero = TRUE) {
     sp <- getOption("scipen")
     on.exit(options(scipen = sp))
     options(scipen = 1e8)
-    
+
     all.names <- x[["instrument"]]
     if (all(is.na(all.names)))
         all.names <- seq_along(x$current)

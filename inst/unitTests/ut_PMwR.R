@@ -2,7 +2,7 @@
 
 test.position <- function() {
 
-    require("zoo", quietly = TRUE, warn.conflicts = FALSE)
+    library("zoo", quietly = TRUE, warn.conflicts = FALSE)
 
     checkEqualsNumeric(position(amount = 1:5), 15)
 
@@ -266,7 +266,7 @@ test.btest <- function() {
 
 
     ## with timestamp
-    require("datetimeutils", quietly = TRUE)
+    library("datetimeutils", quietly = TRUE)
     timestamp <- seq(from = as.Date("2015-01-01"),
                      to   = as.Date("2015-04-15"),
                      by   = "1 day")
@@ -861,8 +861,8 @@ test.pl <- function() {
     ## data.frame(cumsum(amount), price, pnl, real, unreal)
     
     
-    ## require("PMwR")
-    ## require("RUnit")
+    ## library("PMwR")
+    ## library("RUnit")
 
     ## multiplier
     checkEquals(pl(amount = c(1, -1),
@@ -1387,7 +1387,7 @@ test.rebalance <- function() {
 ## target <- c(0.2, 0, 0.3)
 ## rebalance(current, target, price, match.names = FALSE)
 
-## require("PMwR")
+## library("PMwR")
 
 ## j <- journal(amount = c(1, 2),
 ##              instrument = c("A", "B"),
@@ -1442,7 +1442,7 @@ test.as.journal <- function() {
 
 test.returns <- function() {
 
-    require("zoo", quietly = TRUE, warn.conflicts = FALSE)
+    library("zoo", quietly = TRUE, warn.conflicts = FALSE)
 
     ## numeric vector
     x <- 101:112
@@ -1793,8 +1793,8 @@ test.is_valid_ISIN <- function() {
 
 test.NAVseries <- function() {
 
-    ## require("PMwR")
-    ## require("RUnit")
+    ## library("PMwR")
+    ## library("RUnit")
 
     nav <- NAVseries(1:10)
     checkEquals(c(nav), 1:10)
