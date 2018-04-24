@@ -26,6 +26,17 @@ rebalance <- function(current,
         target.weights <- FALSE
     }
 
+    if (!match.names &&
+        length(current) == 1L &&
+        current == 0 &&
+        length(target) == 1L) {
+        ## current==0 and target is a single number
+        
+        current <- rep.int(current, length(prices))
+        target <- rep.int(target, length(prices))        
+        names(current) <- names(target) <- names(prices)
+    }
+
     if (length(current) == 1L &&
         current == 0 &&
         is.null(names(current))) {
@@ -151,7 +162,7 @@ print.rebalance <- function(x, ..., drop.zero = TRUE) {
 
     cat("\nNotional: ", attr(x, "notional"),
         ".  Amount invested: ", sum(x$target * x$price),
-        ".  Total (2-way) turnover: ", sum(abs(x$current - x$target) * x$price),
+        ".  Turnover (2-way): ", sum(abs(x$current - x$target) * x$price),
         ".\n", sep = "")
     invisible(x)
 }
