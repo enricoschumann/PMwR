@@ -26,20 +26,28 @@ rebalance <- function(current,
         target.weights <- FALSE
     }
 
+    if (length(current) == 1L &&
+        current == 0 &&
+        is.null(notional)) {
+
+        stop(sQuote("notional"), " must be specified")
+
+    }
     if (!match.names &&
         length(current) == 1L &&
         current == 0 &&
         length(target) == 1L) {
-        ## current==0 and target is a single number
-        
-        current <- rep.int(current, length(prices))
-        target <- rep.int(target, length(prices))        
-        names(current) <- names(target) <- names(prices)
+
+        ## current == 0 and target is a single number
+        current <- rep.int(current, length(price))
+        target <- rep.int(target, length(price))        
+        names(current) <- names(target) <- names(price)
     }
 
     if (length(current) == 1L &&
         current == 0 &&
         is.null(names(current))) {
+        
         current <- rep.int(current, length(target))
         names(current) <- names(target)
     }
@@ -58,6 +66,18 @@ rebalance <- function(current,
 
     if (match.names) {
 
+        ## special case: current and target are of
+        ## length 1 and unnamed
+        if (length(current) == 1L &&
+            current == 0 &&
+            is.null(names(current)) &&
+            length(target) == 1L &&
+            is.null(names(target))) {
+            current <- rep(0, length(price))
+            target <- rep(target, length(price))
+            names(current) <- names(target) <- names(price)            
+        }
+            
         if (is.null(names(price)) ||
             (is.null(names(current)) && !identical(unname(current), 0)) ||
             is.null(names(target))) {
@@ -161,7 +181,7 @@ print.rebalance <- function(x, ..., drop.zero = TRUE) {
     print(df, ...)
 
     cat("\nNotional: ", attr(x, "notional"),
-        ".  Amount invested: ", sum(x$target * x$price),
+        ".  Target net amount : ", sum(x$target * x$price),
         ".  Turnover (2-way): ", sum(abs(x$current - x$target) * x$price),
         ".\n", sep = "")
     invisible(x)

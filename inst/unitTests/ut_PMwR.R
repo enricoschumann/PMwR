@@ -1294,44 +1294,89 @@ test.vprice <- function() {
 
 test.rebalance <- function() {
 
+    ## WITHOUT NAMES
+
     current <- c(0,0,100,100)
     prices  <- c(1,1,1,1)
     target  <- c(0.25, 0.25, 0.25, 0.25)
-    x <- rebalance(current, target, prices, match.names = FALSE)
+    x <- rebalance(current, target, prices,
+                   match.names = FALSE)
     checkEquals(x$target, rep(50, 4))
-
     
-    ## no initial position: 'current' is 0
+    ### ... no initial position: 'current' is 0
     current <- 0
-    prices  <- c(1,1,1,2)
     target  <- c(0.25, 0.25, 0.25, 0.25)
     x <- rebalance(current, target, prices,
                    match.names = FALSE, notional = 100)
-    checkEquals(x$target, c(rep(25,3), 12))
+    checkEquals(x$target, rep(25, 4))
 
+    x <- rebalance(current, target, prices,
+                   match.names = FALSE, notional = 200)
+    checkEquals(x$target, rep(50, 4))
     
-    ## liquidate all: 'target' is 0
-    current <- c(0,0,100,100)
+    checkException(
+        rebalance(current, target, prices,  ## current is 0, so
+                  match.names = FALSE),     ## notional must be specified
+        silent = TRUE)
+    
+    ### ... liquidate all: 'target' is 0
+    current <- c(1,1,1,1)
     x <- rebalance(current, target = 0, prices,
-                   match.names = FALSE, notional = 100)
+                   match.names = FALSE)
+    checkEquals(x$target, rep(0, 4))
+
+    current <- c(0,0,-1,-1)
+    x <- rebalance(current, target = 0, prices,
+                   match.names = FALSE)
     checkEquals(x$target, rep(0,4))
 
-    current <- c(0,0,-100,-100)
-    x <- rebalance(current, target = 0, prices,
+    
+    ### ... no position and move to target weight
+    x <- rebalance(current = 0, target = 0.25, prices,
                    match.names = FALSE, notional = 100)
-    checkEquals(x$target, rep(0,4))
+    checkEquals(x$target, rep(25, 4))
+    checkEquals(x$difference, rep(25, 4))
+
+    x <- rebalance(current = 0, target = 0.25, prices,
+                   match.names = FALSE, notional = 1000)
+    checkEquals(x$target, rep(250, 4))
+    checkEquals(x$difference, rep(250, 4))
+    
+    checkException( ## target has 2 assets; prices has 4 assets
+        rebalance(current = 0, target = c(0.5,0.5),
+                  prices, match.names = FALSE, notional = 100))
+
 
     
-    ## with names
+    
+    ## WITH NAMES (match.names == TRUE is default)
+
     prices  <- c(1,1,1,1)
     names(prices) <- letters[1:4]
 
     current <- c(b = 10)
     target  <- c(d = 0.1)
 
-    x <- rebalance(current, target, prices, match.names = TRUE)
+    x <- rebalance(current, target, prices)
     checkEquals(x$target, c(0,1))
 
+    prices <- c(A = 1, B = 2, C = 3)
+    x <- rebalance(current = 0,
+                   target = 0.33,
+                   price = prices,
+                   notional = 100)
+    checkEquals(x$target, c(33, 16, 11))
+    checkEquals(x$target, x$difference)
+    
+    prices <- c(A = 1, B = 2, C = 3)
+    x <- rebalance(current = 0,
+              target = 0.1,
+              price = prices,
+              notional = 100)
+    checkEquals(x$target, c(10, 5, 3))
+    checkEquals(x$target, x$difference)
+
+    
     
     ##  with position/journal
     j <- journal(amount = c(1, 2),
