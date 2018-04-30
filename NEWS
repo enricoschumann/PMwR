@@ -1,9 +1,10 @@
-v0.8-0  (2018-05-01)
+v0.8-0  (2018-04-30)
 
   o drawdowns: new generic function with methods for
     zoo and numeric vectors
 
-  o plot_trading_hours: better support for daily series
+  o plot_trading_hours: improved support for daily
+    series (interval becomes "1 day", etc.)
 
   o pl: new argument 'do.sum'; if TRUE, P/L across
     instruments is summed
@@ -13,6 +14,10 @@ v0.8-0  (2018-05-01)
 
   o btest: if a timestamp of class Date or POSIXct is
     specified, burnin 'b' may be an actual timestamp
+
+  o rebalance: new new argument 'current.weights' with
+    default FALSE; if TRUE, the current portfolio is
+    assumed to be a vector of weights
 
   o returns: add method for as.data.frame for
     holding-period returns
