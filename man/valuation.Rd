@@ -12,8 +12,10 @@
 \usage{
 valuation(x, ...)
 
-\method{valuation}{journal}(x,  multiplier = 1, cashflow = function(x) x$amount * 
-    x$price, flip.sign = TRUE, \dots)
+\method{valuation}{journal}(x,  multiplier = 1,
+                  cashflow = function(x) x$amount * x$price,
+                  instrument = function(x) "cash",
+                  flip.sign = TRUE, \dots)
 
 \method{valuation}{position}(x, multiplier = 1, price.table, do.sum, unit, \dots)
 
@@ -28,6 +30,10 @@ valuation(x, ...)
   \item{cashflow}{
     either a numeric vector or a function that takes on argument (a
     journal) and transforms it into a numeric vector
+}
+  \item{instrument}{
+    either a character vector or a function that takes on argument (a
+    journal) and transforms it into a character vector
 }
   \item{flip.sign}{
     logical.  If \code{TRUE} (the default), a positive amount gets
