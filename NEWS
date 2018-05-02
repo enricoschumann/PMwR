@@ -15,7 +15,7 @@ v0.8-0  (2018-04-30)
   o btest: if a timestamp of class Date or POSIXct is
     specified, burnin 'b' may be an actual timestamp
 
-  o rebalance: new new argument 'current.weights' with
+  o rebalance: new argument 'current.weights' with
     default FALSE; if TRUE, the current portfolio is
     assumed to be a vector of weights
 
