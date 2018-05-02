@@ -59,15 +59,15 @@ unit_prices(NAV, cashflows,
 }
 \references{
 
-  Schumann, E. (2017) \emph{Portfolio Management with
-    \R}. \url{http://enricoschumann.net/R/packages/PMwR/}
+  Schumann, E. (2018) \emph{Portfolio Management with
+    \R}. \url{http://enricoschumann.net/PMwR/}
 
 }
 \author{
   Enrico Schumann
 }
 \seealso{
-  \code{\link{pl}}
+  \code{\link{returns}}, \code{\link{pl}}
 }
 \examples{
 NAV <- data.frame(timestamp = seq(as.Date("2017-1-1"),

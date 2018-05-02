@@ -105,7 +105,7 @@ pl(amount, \dots )
   Computes profit and/or loss and returns a list with
   several statistics (see Section Value, below). To get
   only the profit/loss numbers as a numeric vector,
-  call \code{pl} twice (\code{pl(pl(...))}).
+  set argument \code{pl.only} to \code{TRUE}.
 
   \code{pl} is a generic function: The default input is
   vectors for amount, price, etc. Alternatively (and
@@ -149,7 +149,7 @@ pl(amount, \dots )
 
 }
 \references{
-Schumann, E. (2017) \emph{Portfolio Management
+Schumann, E. (2018) \emph{Portfolio Management
   with R}. \url{http://enricoschumann.net/PMwR/}
 
 }

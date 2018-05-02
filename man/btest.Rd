@@ -223,7 +223,7 @@ btest(prices, signal,
 
 }
 \references{
-Schumann, E. (2017) \emph{Portfolio Management
+Schumann, E. (2018) \emph{Portfolio Management
   with R}. \url{http://enricoschumann.net/PMwR/}
 } 
 \author{

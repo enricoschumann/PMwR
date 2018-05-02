@@ -114,7 +114,7 @@ replace_weight(weights, ..., prefix = TRUE, sep = "::")
 }
 \references{
 
-  Schumann, E. (2016) \emph{Portfolio Management with
+  Schumann, E. (2018) \emph{Portfolio Management with
     R}. \url{http://enricoschumann.net/R/packages/PMwR/}
 
 }
