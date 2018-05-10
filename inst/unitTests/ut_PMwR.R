@@ -1299,9 +1299,18 @@ test.rebalance <- function() {
     current <- c(0,0,100,100)
     prices  <- c(1,1,1,1)
     target  <- c(0.25, 0.25, 0.25, 0.25)
+
+    ## missing names should raise error 
+    checkException(rebalance(current, target, prices),
+                   silent = TRUE)
+
     x <- rebalance(current, target, prices,
                    match.names = FALSE)
     checkEquals(x$target, rep(50, 4))
+
+    x <- rebalance(current, target, prices,
+                   multiplier = 10,
+                   match.names = FALSE)
     
     ### ... no initial position: 'current' is 0
     current <- 0

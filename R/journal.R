@@ -525,7 +525,7 @@ as.journal.rebalance <- function(x, ..., price = TRUE, timestamp = NA,
 }
 
 
-## ================= [ other methods ] =================
+## =========== [ methods for other generics ] ===========
 
 str.journal <- function(object, ...) {
     n <- length(object)
@@ -540,6 +540,68 @@ str.journal <- function(object, ...) {
 toOrg.journal <- function(x, inactive = TRUE, ...) {
     df <- as.data.frame.journal(x)
     if (inherits(df[["timestamp"]], "Date"))
-        df[["timestamp"]] <- toOrg(df[["timestamp"]], inactive = inactive)
+        df[["timestamp"]] <- toOrg(df[["timestamp"]],
+                                   inactive = inactive)
     toOrg(df)
+}
+
+
+## current <- journal(amount=1:5, portfolio = "A")
+## target <- journal(1:3, fees = 10)
+
+all.equal.journal <- function(target, current,
+                              ignore.sort = TRUE, ...) {
+
+    if (!(inherits(current, "journal")))
+        stop(sQuote("current"), " must be a journal")
+
+    
+    if (ignore.sort) {
+        ## TODO: may fail with duplicate timestamps
+        target <- sort(target)
+        current <- sort(current)        
+    }
+
+    msg <- NULL
+
+    ## length
+    t.len <- length(target)
+    c.len <- length(current)
+    if (t.len != c.len) {
+        msg <- c(msg,
+                 paste0("lengths differ: target ", t.len,
+                        ", current ", c.len))
+    }
+
+    ## fields
+    t.names <- sort(names(target))
+    c.names <- sort(names(current))
+    if (length(t.names) != length(c.names) ||
+        !all(t.names == c.names)) {
+
+        t.only <- setdiff(t.names, c.names)
+        c.only <- setdiff(c.names, t.names)
+
+        if (length(t.only))
+            t.only <- paste(sQuote(t.only), collapse = ", ")
+        if (length(c.only))
+            c.only <- paste(sQuote(c.only), collapse = ", ")
+        msg <- c(msg,
+                 paste0("fields differ: ",
+                        if (length(t.only))
+                            paste0("target has ", t.only),
+                        if (length(t.only) && length(c.only))
+                            "; ",
+                        if (length(c.only))
+                            paste0("current has ", c.only)))
+    }
+
+    ## contents
+    ## TODO
+    
+    if (is.null(msg))
+        TRUE
+    else
+        msg
+
 }
