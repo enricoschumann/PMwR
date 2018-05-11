@@ -1353,7 +1353,8 @@ test.rebalance <- function() {
     
     checkException( ## target has 2 assets; prices has 4 assets
         rebalance(current = 0, target = c(0.5,0.5),
-                  prices, match.names = FALSE, notional = 100))
+                  prices, match.names = FALSE, notional = 100),
+        silent = TRUE)
 
 
     
