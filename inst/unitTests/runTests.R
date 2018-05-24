@@ -6,7 +6,7 @@ if (tolower(Sys.getenv("ES_PACKAGE_TESTING")) == "true" &&
     path <- paste0("~/Packages/", pkg, "/inst/unitTests")
 
     ## if the package is installed and you want to run
-    ## the test, use this path:    
+    ## the tests, use this path:    
     ##
     ##     path <- system.file("unitTests", package = pkg)
     ##
