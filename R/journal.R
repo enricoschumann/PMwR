@@ -461,7 +461,7 @@ cashflows <- function(x, multiplier = 1, ...) {
 
 ## ================= [ is.journal ] =================
 
-is.journal <- function (x) 
+is.journal <- function (x)
     inherits(x, "journal")
 
 
@@ -545,26 +545,27 @@ toOrg.journal <- function(x, inactive = TRUE, ...) {
     toOrg(df)
 }
 
-
-## current <- journal(amount=1:5, portfolio = "A")
-## target <- journal(1:3, fees = 10)
-
 all.equal.journal <- function(target, current,
                               ignore.sort = TRUE, ...) {
 
     if (!(inherits(current, "journal")))
         stop(sQuote("current"), " must be a journal")
-
     
     if (ignore.sort) {
         ## TODO: may fail with duplicate timestamps
-        target <- sort(target)
-        current <- sort(current)        
+        default <- c("timestamp", "instrument", "price", "amount")
+        t.f <- names(target)
+        t.f <- sort(setdiff(t.f, default))
+        t.c <- names(current)
+        t.c <- sort(setdiff(t.c, default))
+        
+        target <- sort(target, by = c(default, t.f))
+        current <- sort(current, by = c(default, t.c))        
     }
 
     msg <- NULL
 
-    ## length
+    ## LENGTH
     t.len <- length(target)
     c.len <- length(current)
     if (t.len != c.len) {
@@ -573,7 +574,7 @@ all.equal.journal <- function(target, current,
                         ", current ", c.len))
     }
 
-    ## fields
+    ## FIELDS
     t.names <- sort(names(target))
     c.names <- sort(names(current))
     if (length(t.names) != length(c.names) ||
@@ -596,8 +597,13 @@ all.equal.journal <- function(target, current,
                             paste0("current has ", c.only)))
     }
 
-    ## contents
-    ## TODO
+    ## CONTENTS
+    for (f in intersect(t.names, c.names)) {
+        tmp <- all.equal(target[[f]], current[[f]])
+        if (!isTRUE(tmp))
+            msg <- c(msg, paste0(f, ": ", tmp))
+    }
+    
     
     if (is.null(msg))
         TRUE
