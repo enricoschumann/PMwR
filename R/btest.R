@@ -22,6 +22,7 @@ btest  <- function(prices,
                    Globals = list(),
                    prices0 = NULL,
                    include.data = FALSE,
+                   include.timestamp = TRUE,
                    timestamp, instrument,
                    progressBar = FALSE) {
 
@@ -706,6 +707,10 @@ btest  <- function(prices,
                 final.position = if (final.position) final.pos else NA,
                 Globals = Globals)
 
+    if (include.timestamp)
+        ans <- c(ans,
+                 timestamp = list(timestamp))
+
     if (include.data)
         ans <- c(ans,
                  prices = prices,
@@ -714,7 +719,7 @@ btest  <- function(prices,
                  timestamp = list(timestamp),
                  instrument = if (missing(instrument)) NULL else list(instrument),
                  call = match.call())
-
+        
     class(ans) <- "btest"
     ans
 }

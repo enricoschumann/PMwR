@@ -1,3 +1,8 @@
+2018-05-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): new argument
+	'include.timestamp', with default TRUE
+
 2018-05-10  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (all.equal.journal): add
