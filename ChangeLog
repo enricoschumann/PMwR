@@ -5,6 +5,9 @@
 	are of the same class (e.g., when 't' is of
 	class Date, 'rebalance.when' may also be
 	specified as a Date)
+	(returns.default): remove warning for the case
+	when 't' is specified, but neither 'period' nor
+	'rebalance.when' are
 
 2018-05-24  Enrico Schumann  <es@enricoschumann.net>
 

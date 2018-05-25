@@ -42,14 +42,6 @@ returns.default <- function(x, t = NULL, period = NULL,
         period <- NULL
     }
 
-    if (!is.null(t) &&
-        is.null(period) && is.null(rebalance.when)) {
-        ## TODO remove warning?
-        warning("timestamp information ignored because ",
-                sQuote("period/rebalance.when"), " is not specified")
-        t <- NULL
-    }
-
     if (is.null(t) &&  is.null(position) && is.null(weights)) {
         .returns(x, pad = pad, lag = lag)
     } else if (is.null(position) && !is.null(weights)) {
