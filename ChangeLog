@@ -1,3 +1,11 @@
+2018-05-25  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (returns): 'rebalance.when' is
+	now matched against the timestamp 't' when both
+	are of the same class (e.g., when 't' is of
+	class Date, 'rebalance.when' may also be
+	specified as a Date)
+
 2018-05-24  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R (btest): new argument

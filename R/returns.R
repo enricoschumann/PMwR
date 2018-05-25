@@ -26,6 +26,14 @@ returns.default <- function(x, t = NULL, period = NULL,
             period <- NULL
         }
     }
+    if (!is.null(t) &&
+        inherits(rebalance.when, class(t))) {
+        ii <- match(rebalance.when, t)
+        if (any(is.na(ii)))
+            warning(sQuote("rebalance.when") ,
+                    " does not match timestamp")
+        rebalance.when <- ii[!is.na(ii)]        
+    }
 
     if (is.null(t) &&
         is.character(period)) {
@@ -36,6 +44,7 @@ returns.default <- function(x, t = NULL, period = NULL,
 
     if (!is.null(t) &&
         is.null(period) && is.null(rebalance.when)) {
+        ## TODO remove warning?
         warning("timestamp information ignored because ",
                 sQuote("period/rebalance.when"), " is not specified")
         t <- NULL
@@ -43,7 +52,7 @@ returns.default <- function(x, t = NULL, period = NULL,
 
     if (is.null(t) &&  is.null(position) && is.null(weights)) {
         .returns(x, pad = pad, lag = lag)
-    } else if (is.null(t) && is.null(position) && !is.null(weights)) {
+    } else if (is.null(position) && !is.null(weights)) {
         returns_rebalance(prices = x, weights = weights,
                           when = rebalance.when, pad = pad)
     } else if (!is.null(t)) {
@@ -58,7 +67,7 @@ returns.default <- function(x, t = NULL, period = NULL,
     } else {
         if (lag != 1L)
             warning(sQuote("lag"), " is ignored")
-        warnings("tw returns not supported any more")
+        warning("tw returns not supported any more")
         twReturns(x, position, pad = pad)
     }
 }
@@ -66,11 +75,12 @@ returns.default <- function(x, t = NULL, period = NULL,
 
 ## ---[Handling of 'timestamp' and 'period' in methods]---
 ##
-## Methods are responsible for 'stripping down' the input
-## to x and t, calling 'returns.default' (or some other
-## method) and then for re-assembling the original class's
-## structure. When there is no period, methods should keep
-## timestamp information for themselves, not pass it on.
+## Methods are responsible for 'stripping down' the
+## input to x and t, calling 'returns.default' (or some
+## other method) and then for re-assembling the
+## original class's structure. When there is no period
+## and no rebalance.when, methods should keep timestamp
+## information for themselves and not pass it on.
 
 returns.NAVseries <- function(x, period = NULL, complete.first = TRUE,
                               pad = NULL, position = NULL, lag = 1, ...) {
@@ -102,10 +112,11 @@ returns.zoo <- function(x, period = NULL, complete.first = TRUE,
         returns.default(x, t = t, period = period,
                         complete.first = complete.first,
                         pad = pad, position = position,
-                        weights = weights, rebalance.when = rebalance.when,
+                        weights = weights,
+                        rebalance.when = rebalance.when,
                         lag = lag, ...)
     } else {
-        ans <- returns.default(x, period = NULL,
+        ans <- returns.default(x, t = t, period = NULL,
                                complete.first = complete.first,
                                pad = pad, position = position,
                                weights = weights,
@@ -546,7 +557,7 @@ returns_rebalance <- function(prices, weights, when = NULL, pad = NULL) {
         stop("less than 2 rows in prices: cannot compute returns")
 
     if (is.null(dim(weights)) && is.null(when)) {
-        ## TODO faster implementation
+        ## TODO faster implementation?
     }
 
     if (is.null(dim(weights)))

@@ -1623,7 +1623,7 @@ test.returns <- function() {
                                           "2012-12-31")),t)]))
 
     
-    ## returns with weights
+    ## portfolio returns with weights
     x <- 101:112
     t <- seq_along(x)
     x <- cbind(x+rnorm(length(x)), x+rnorm(length(x)))
@@ -1649,9 +1649,50 @@ test.returns <- function() {
         sort(names(attributes(returns(zoo(x,t), weights = c(1,0))))),
         c("class", "contributions", "holdings", "index"))
 
+    ## ... match rebalance.when against timestamp
+    h <- attr(returns(x, weights = c(0.2, 0.8),
+                      rebalance.when = 1),
+              "holdings")
+    checkTrue(all(apply(h, 2,
+                        function(x) length(unique(x))) == 1L))
+    h <- attr(returns(x, weights = c(0.2, 0.8),
+                      rebalance.when = 3),
+              "holdings")
+    checkTrue(all(apply(h, 2,
+                        function(x) length(unique(x))) == 2L))
 
-
+    h <- attr(returns(x, weights = c(0.2, 0.8),
+                      rebalance.when = 3),
+              "holdings")
+    h2 <- attr(returns(x, weights = c(0.2, 0.8),
+                      rebalance.when = c(1,3)),
+              "holdings")
+    checkEquals(h, h2)
     
+    
+    x <- 101:110
+    t <- as.Date("2017-1-1")+1:10
+    x <- cbind(x + rnorm(length(x)),
+               x + rnorm(length(x)))
+    h1 <- attr(returns(x, t = t, weights = c(0.2, 0.8),
+                      rebalance.when = as.Date("2017-1-4")),
+              "holdings")
+    checkTrue(all(apply(h1, 2,
+                        function(x) length(unique(x))) == 2L))
+    h2 <- attr(returns(zoo(x, t), weights = c(0.2, 0.8),
+                      rebalance.when = as.Date("2017-1-4")),
+              "holdings")
+    checkTrue(all(apply(h2, 2,
+                        function(x) length(unique(x))) == 2L))
+    checkEquals(h1, h2)
+    h3 <- attr(returns(x, t = t, weights = c(0.2, 0.8),
+                      rebalance.when = 3),
+              "holdings")
+    checkEquals(h1, h3)
+    h4 <- attr(returns(zoo(x, t), weights = c(0.2, 0.8),
+                      rebalance.when = 3),
+              "holdings")
+    checkEquals(h1, h4)
     
     
     ## time-weighted returns
