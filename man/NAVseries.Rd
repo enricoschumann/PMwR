@@ -77,16 +77,27 @@ as.NAVseries(x, ...)
 
   The summary method returns a list of the original NAVseries plus
   various statistics, such as return per year and volatility.
-    
+
+  
+}
+\section{Note}{
+
+  The semantics of handling NAVseries are not stable
+  yet. Currently, objects of class \code{NAVseries} are
+  univariate: you create a single NAVseries, summarise
+  it, plot it, and so one. In the future, at least some
+  of the methods will support the multi-variate case,
+  i.e. be able to handle several series at once.
+
 }
 \value{
-  an \code{NAVseries}: see Details.
 
+  an \code{NAVseries}: see Details.
   
 }
 \references{
 
-  Schumann, E. (2017) \emph{Portfolio Management with
+  Schumann, E. (2018) \emph{Portfolio Management with
   \R}. \url{http://enricoschumann.net/PMwR/}
 
 } 
