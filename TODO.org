@@ -9,7 +9,7 @@
 
 ** support multiplier?
 
-
+.
 * =pricetable=
 
 ** add 'drop' argument to return matrix?
@@ -23,9 +23,10 @@
    endofquarter
 
 
-* =journal= [0/1]
+* =journal= [1/1]
 
-** TODO all.equal method
+** DONE all.equal method
+   CLOSED: [2018-05-28 Mon 17:05]
 
 
 * =returns= [0/2]
@@ -35,3 +36,10 @@
    beginning of year to end of previous month
 
 ** TODO print: allow printing in basispoints
+
+* =valuation=
+
+** =position=
+
+   add attribute =valuation.data=, a list in which
+   every component has the same size as position

@@ -21,6 +21,8 @@ returns.default <- function(x, t = NULL, period = NULL,
         rebalance.when <- tolower(rebalance.when)
         if (rebalance.when == "endofmonth")
             rebalance.when  <- last(t, format(as.Date(t), "%Y-%m"), TRUE)
+        else if (rebalance.when == "endofyear")
+            rebalance.when  <- last(t, format(as.Date(t), "%Y"), TRUE)
         if (is.character(period)) {
             warning("rebalance.when is specified, so period is ignored")
             period <- NULL
@@ -65,20 +67,20 @@ returns.default <- function(x, t = NULL, period = NULL,
 }
 
 
-## ---[Handling of 'timestamp' and 'period' in methods]---
+## ---[Handling of 'timestamp' in methods]---
 ##
 ## Methods are responsible for 'stripping down' the
 ## input to x and t, calling 'returns.default' (or some
-## other method) and then for re-assembling the
-## original class's structure. When there is no period
-## and no rebalance.when, methods should keep timestamp
+## other method) and then re-assembling the
+## original class's structure. When there is no 'period'
+## and no 'rebalance.when', methods should keep timestamp
 ## information for themselves and not pass it on.
 
 returns.NAVseries <- function(x, period = NULL, complete.first = TRUE,
                               pad = NULL, position = NULL, lag = 1, ...) {
 
-    ## does *not* return a NAVseries since it is not defined for
-    ## returns, only for NAVs (levels)
+    ## does *not* return a NAVseries since it is not
+    ## defined for returns, only for NAVs (levels)
 
     if (!is.null(period)) {
         returns.default(x, t = attr(x, "timestamp"), period = period,
@@ -99,8 +101,7 @@ returns.zoo <- function(x, period = NULL, complete.first = TRUE,
     t <- time(x)
     x <- coredata(x)
 
-    if (!is.null(period) ||
-        (!is.null(rebalance.when) && is.character(rebalance.when))) {
+    if (!is.null(period) || !is.null(rebalance.when)) {
         returns.default(x, t = t, period = period,
                         complete.first = complete.first,
                         pad = pad, position = position,
@@ -108,7 +109,7 @@ returns.zoo <- function(x, period = NULL, complete.first = TRUE,
                         rebalance.when = rebalance.when,
                         lag = lag, ...)
     } else {
-        ans <- returns.default(x, t = t, period = NULL,
+        ans <- returns.default(x, t = NULL, period = NULL,
                                complete.first = complete.first,
                                pad = pad, position = position,
                                weights = weights,
@@ -247,7 +248,34 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
             xj <- x[ ,j]
             i <- which(years < max(years))
             if (!length(i)) {
-                ## all obs are with one year
+                ## all obs are within one year
+                i <- seq_along(xj)
+                t0 <- min(which(!is.na(xj[i])))
+            } else {
+                t0 <- max(which(!is.na(xj[i])))
+            }
+            t1 <- max(which(!is.na(xj)))
+            ans[j] <- drop(returns( xj[c(t0, t1)] ))
+            from.to[j,] <- c(t[t0], t[t1])
+        }
+        class(from.to) <- "Date"
+        attr(ans, "t") <- from.to
+        attr(ans, "period") <- "ytd"
+    } else if (grepl("^ytm", period, ignore.case = TRUE)) {
+        if (!is.null(pad))
+            warning(sQuote("pad"), " is ignored")
+        ymon <- as.numeric(format(t, "%Y%m"))
+        years <- as.numeric(format(t, "%Y"))
+        if (period != "ytm!" && max(years) != as.numeric(format(Sys.Date(), "%Y")))
+            warning("max. timestamp (", max(years), ") does not match current year")
+        ans <- numeric(nc)
+        from.to <- array(NA, dim = c(nc, 2))
+        colnames(from.to) <- c("from", "to")
+        for (j in 1:nc) {
+            xj <- x[ , j]
+            i <- which(years < max(years))
+            if (!length(i)) {
+                ## all obs are within one year
                 i <- seq_along(xj)
                 t0 <- min(which(!is.na(xj[i])))
             } else {

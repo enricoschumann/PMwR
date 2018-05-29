@@ -17,7 +17,7 @@ btest(prices, signal,
       add = FALSE, lag = 1, convert.weights = FALSE,
       trade.at.open = TRUE, tol = 1e-5, Globals = list(),
       prices0 = NULL,
-      include.data = FALSE, include.timestamp = FALSE,
+      include.data = FALSE, include.timestamp = TRUE,
       timestamp, instrument,
       progressBar = FALSE)
 }

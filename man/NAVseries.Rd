@@ -18,7 +18,8 @@ as.NAVseries(x, ...)
 
 \method{print}{NAVseries}(x, \dots )
 
-\method{summary}{NAVseries}(object, monthly = TRUE, na.rm = FALSE, \dots )
+\method{summary}{NAVseries}(object, \dots, monthly.vol = TRUE, na.rm =
+FALSE, assume.daily = FALSE )
 
 \method{plot}{NAVseries}(x, y, \dots, xlab = "", ylab = "", type = "l")
 }
@@ -93,7 +94,9 @@ as.NAVseries(x, ...)
 \value{
 
   an \code{NAVseries}: see Details.
-  
+
+  an \code{NAVseries} summary: a list
+
 }
 \references{
 
