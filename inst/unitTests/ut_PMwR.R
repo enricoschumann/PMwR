@@ -1891,8 +1891,8 @@ test.is_valid_ISIN <- function() {
 
 test.NAVseries <- function() {
 
-    ## library("PMwR")
-    ## library("RUnit")
+    library("PMwR")
+    library("RUnit")
 
     nav <- NAVseries(1:10)
     checkEquals(c(nav), 1:10)

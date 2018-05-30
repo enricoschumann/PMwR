@@ -18,7 +18,7 @@ NAVseries <- function(NAV, timestamp,
     ans <- NAV
     attr(ans, "timestamp") <- timestamp
     attr(ans, "instrument") <- instrument
-    attr(ans, "title") <- as.character(title)
+    attr(ans, "title") <- title
     attr(ans, "description") <- as.character(description)
     class(ans) <- "NAVseries"
     ans
@@ -30,6 +30,16 @@ NAVseries <- function(NAV, timestamp,
         format(x, big.mark = ",", decimal.mark = ".")
     else
         x
+}
+
+.may_be_Date <- function(x, ...) {
+    ans <- try(as.Date(x), silent = TRUE)
+    if (inherits(ans, "try-error"))
+        FALSE
+    else if (all(is.na(ans)))
+        FALSE
+    else
+        TRUE
 }
 
 print.NAVseries <- function(x, ...) {
@@ -111,7 +121,7 @@ summary.NAVseries <- function(object, ...,
     ##     timestampD <- timestamp
 
     ans <- list()
-    ## ans$NAVseries <- object  ## TODO: attach original series?
+    ans$NAVseries <- object
     ans$NAV <- NAV
     ans$timestamp <- timestamp
     ans$instrument  <- if (!is.null(attr(object, "instrument")))
@@ -129,27 +139,26 @@ summary.NAVseries <- function(object, ...,
     ans$low.when  <- timestamp[which.min(NAV)[1L]]
     ans$high.when <- timestamp[which.max(NAV)[1L]]
 
-    ## annualised returns
-    if (assume.daily ||
-        all(!is.na(as.Date(c(ans$start, ans$end))))) {
-        ans$return <-
-            if ((t <- as.numeric(as.Date(ans$end) -
-                                 as.Date(ans$start))) > 365)
-                (tail(NAV,1)/head(NAV,1))^(365/t) - 1
-            else
-                tail(NAV,1)/head(NAV,1) - 1
-        ans$return.annualised <- if (t >= 365)
-                                     TRUE
-                                 else
-                                     FALSE
-    } else {
-        ans$return <- tail(NAV,1)/head(NAV,1) - 1
-        ans$return.annualised <- FALSE
-    }
-    
-    tmp          <- drawdowns(NAV)
 
     
+    ## Returns, annualise
+    if (.may_be_Date(c(ans$start, ans$end))) {
+        t <- as.numeric(as.Date(ans$end) -
+                        as.Date(ans$start))
+    } else if (assume.daily)
+        t <- ans$end - ans$start
+    else
+        t <- NA
+
+    if (!is.na(t) && t > 365) {
+        ans$return <- (tail(NAV,1)/head(NAV, 1))^(365/t) - 1
+        ans$return.annualised <- TRUE
+    } else {
+        ans$return <- tail(NAV,1)/head(NAV,1) - 1
+        ans$return.annualised <- FALSE            
+    }
+        
+    tmp <- drawdowns(NAV)    
     dd.row <- if(nrow(tmp))
                   which.max(tmp[["max"]])
               else
@@ -170,24 +179,29 @@ summary.NAVseries <- function(object, ...,
         ans$mdd.recover.when <- NA
     }
     ans$underwater <- 1 - NAV[length(NAV)]/max(NAV)
-
-    is.Daty <- all(!is.na(as.Date(timestamp)))
-    if (is.Daty && monthly.vol) {
+    
+    if (.may_be_Date(timestamp) && monthly.vol) {
         tmp <- returns(NAV, t = timestamp, period = "month")
         sq12 <- sqrt(12)
-        ans$volatility      <- sd(tmp) * sq12
-        ans$volatility.up   <- pm(tmp, normalise = TRUE,
-                                  lower = FALSE) * sq12
+        ans$volatility <- sd(tmp) * sq12
+        ans$volatility.up <- pm(tmp,
+                                normalise = TRUE,
+                                lower = FALSE) * sq12
         ans$volatility.down <- pm(tmp, normalise = TRUE) * sq12
     } else if (assume.daily) {
-        ans$volatility      <- sd(returns(NAV))*16
-        ans$volatility.up   <- pm(returns(NAV), normalise = TRUE,
-                                  lower = FALSE)*16
-        ans$volatility.down <- pm(returns(NAV), normalise = TRUE)*16
+        ans$volatility <- sd(returns(NAV))*16
+        ans$volatility.up <- pm(returns(NAV),
+                                normalise = TRUE,
+                                lower = FALSE)*16
+        ans$volatility.down <- pm(returns(NAV),
+                                  normalise = TRUE)*16
     } else {
             ans$volatility      <- sd(returns(NAV))
-            ans$volatility.up   <- pm(returns(NAV), normalise = TRUE, lower = FALSE)
-            ans$volatility.down <- pm(returns(NAV), normalise = TRUE)
+            ans$volatility.up   <- pm(returns(NAV),
+                                      normalise = TRUE,
+                                      lower = FALSE)
+            ans$volatility.down <- pm(returns(NAV),
+                                      normalise = TRUE)
     }
 
     class(ans) <- "summary.NAVseries"
@@ -200,6 +214,8 @@ print.summary.NAVseries <- function(x, ...,
     datef <- function(x) {
         if (inherits(x[1L], "Date"))
             x <- format(x, "%d %b %Y")
+        else if (inherits(x[1L], "POSIXt"))
+            x <- format(x, "%d %b %Y %H:%M")
         x
     }
     percf <- function(x)
@@ -246,13 +262,14 @@ print.summary.NAVseries <- function(x, ...,
           "_ downside <>%volatility.down%|",
           "---------------------------------------------------------\n")
     nx <- names(x)
-    nx <- nx[nx != "NAVseries"]
-    nx <- nx[nx != "NAV"]
-    nx <- nx[nx != "timestamp"]
-    nx <- nx[nx != "title"]
-    nx <- nx[nx != "description"]
+    for (r in c("NAVseries", "NAV",
+                "timestamp", "title",
+                "description"))
+        nx <- nx[nx != r]
     for (n in nx)
-        template <- gsub(paste0("%", n, "%"), x[[n]], template, fixed = TRUE)
+        template <- gsub(paste0("%", n, "%"),
+                         if (is.na(x[[n]])) "NA" else x[[n]],
+                             template, fixed = TRUE)
     template <- valign(template)
     if (!x$return.annualised)
         template <- sub("(annualised)", "", template, fixed = TRUE)
