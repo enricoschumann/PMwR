@@ -1565,7 +1565,7 @@ test.returns <- function() {
     ## period, but no timestamp: period is ignored
     ## timestamp, but no period: timestamp is ignored
     ##
-    ## (when there is no period, methods are required
+    ## (when there is no period/rebalance.when, methods are required
     ## to keep timestamp information for themselves and
     ## then to re-assemble the necessary class
     ## structure)
@@ -1696,42 +1696,42 @@ test.returns <- function() {
     
     
     ## time-weighted returns
-    x <- 101:105
-    checkEquals(returns(x, position = c(1, 1, 1, 1, 1)),
-                returns(x))
-    checkEquals(returns(x, position = c(1, 1, 1, 1, 1), pad = NA),
-                returns(x, pad = NA))
+    ## x <- 101:105
+    ## checkEquals(returns(x, position = c(1, 1, 1, 1, 1)),
+    ##             returns(x))
+    ## checkEquals(returns(x, position = c(1, 1, 1, 1, 1), pad = NA),
+    ##             returns(x, pad = NA))
 
-    tmp <- returns(x)
-    tmp[4] <- 0
-    checkEquals(returns(x, position = c(1, 1, 1, 0, 0)),
-                tmp)
+    ## tmp <- returns(x)
+    ## tmp[4] <- 0
+    ## checkEquals(returns(x, position = c(1, 1, 1, 0, 0)),
+    ##             tmp)
     
-    checkEquals(returns(x, position = c(1,1,2,2,3)),
-                returns(x))
-    checkEquals(returns(x, position = c(0,0,0,0,0)),
-                rep(0, 4))
+    ## checkEquals(returns(x, position = c(1,1,2,2,3)),
+    ##             returns(x))
+    ## checkEquals(returns(x, position = c(0,0,0,0,0)),
+    ##             rep(0, 4))
     
-    pos <- c(1,1,1,2,2,0)
-    price <- c(100,100,100,100,100,100)
-    dim(pos) <- dim(price) <- c(3, 2)
-    checkEquals(returns(price, position = pos), returns(price[ ,1]))
-    checkEquals(returns(price, position = pos),
-                rowSums((price*pos / rowSums(price*pos))[-3, ] * returns(price)))
+    ## pos <- c(1,1,1,2,2,0)
+    ## price <- c(100,100,100,100,100,100)
+    ## dim(pos) <- dim(price) <- c(3, 2)
+    ## checkEquals(returns(price, position = pos), returns(price[ ,1]))
+    ## checkEquals(returns(price, position = pos),
+    ##             rowSums((price*pos / rowSums(price*pos))[-3, ] * returns(price)))
 
-    pos[ ,2] <- 0
-    checkEquals(returns(price, position = pos),
-                returns(price[,1]))
+    ## pos[ ,2] <- 0
+    ## checkEquals(returns(price, position = pos),
+    ##             returns(price[,1]))
     
-    pos1 <- c(1,1,1,2,2,2)
-    pos2 <- pos1 * 2
-    price <- c(101,102,103,103,105,107)
-    dim(price) <- dim(pos2) <- dim(pos1) <- c(3,2)
+    ## pos1 <- c(1,1,1,2,2,2)
+    ## pos2 <- pos1 * 2
+    ## price <- c(101,102,103,103,105,107)
+    ## dim(price) <- dim(pos2) <- dim(pos1) <- c(3,2)
 
-    checkEquals(returns(price, position = pos1),
-                rowSums((price*pos1 / rowSums(price*pos1))[-3, ] * returns(price)))
-    checkEquals(returns(price, position = pos1),
-                returns(price, position = pos2))
+    ## checkEquals(returns(price, position = pos1),
+    ##             rowSums((price*pos1 / rowSums(price*pos1))[-3, ] * returns(price)))
+    ## checkEquals(returns(price, position = pos1),
+    ##             returns(price, position = pos2))
     
 
     ## from journal to time-weighted returns
@@ -1747,11 +1747,6 @@ test.returns <- function() {
     rowSums(p*prices)
 
 
-    ## weights/rebalance.when
-    ## TODO: add tests
-
-
-    
     ## missing values
     x <- zoo(c(NA, 2:5), as.Date("2017-10-27") + 1:5)
     checkEqualsNumeric(unclass(returns(x, period = "month")), c(NA, 0.25))

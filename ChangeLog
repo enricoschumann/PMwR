@@ -1,3 +1,14 @@
+2018-05-31  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (returns.default): ignore
+	'position' (and warn when the argument
+	is specified)
+
+	* inst/unitTests/ut_PMwR.R (test.returns):
+	exclude tests on time-weighted returns,
+	i.e. those using the deprecated 'position'
+	argument
+
 2018-05-29  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/NAVseries.R (summary.NAVseries): add date

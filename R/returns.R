@@ -11,6 +11,14 @@ returns.default <- function(x, t = NULL, period = NULL,
                             rebalance.when = NULL,
                             lag = 1, ...) {
 
+    if (!is.null(position)) {
+        position <- NULL
+        warning("time-weighted returns not supported, so position is ignored")
+    }
+
+    ## if (is.null(period) && is.null(rebalance.when))
+    ##     t <- NULL
+    
     if (is.unsorted(t)) {  ## is.unsorted(NULL) == FALSE
         idx <- order(t)
         t <- t[idx]
@@ -23,7 +31,7 @@ returns.default <- function(x, t = NULL, period = NULL,
             rebalance.when  <- last(t, format(as.Date(t), "%Y-%m"), TRUE)
         else if (rebalance.when == "endofyear")
             rebalance.when  <- last(t, format(as.Date(t), "%Y"), TRUE)
-        if (is.character(period)) {
+        if (!is.null(period)) {
             warning("rebalance.when is specified, so period is ignored")
             period <- NULL
         }
@@ -44,12 +52,12 @@ returns.default <- function(x, t = NULL, period = NULL,
         period <- NULL
     }
 
-    if (is.null(t) &&  is.null(position) && is.null(weights)) {
+    if (is.null(period) &&  is.null(position) && is.null(weights)) {
         .returns(x, pad = pad, lag = lag)
     } else if (is.null(position) && !is.null(weights)) {
         returns_rebalance(prices = x, weights = weights,
                           when = rebalance.when, pad = pad)
-    } else if (!is.null(t)) {
+    } else if (!is.null(period)) {
         if (is.unsorted(t)) {
             idx <- order(t)
             t <- t[idx]

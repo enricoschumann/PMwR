@@ -89,8 +89,7 @@ returns(x, \dots)
   \item{position}{
 
     numeric; the same length/dimension as
-    \code{x}. \strong{Deprecated: will be removed in
-    the future.}
+    \code{x}. \strong{This argument is currently ignored.}
 
   }
   \item{weights}{
