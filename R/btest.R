@@ -179,7 +179,7 @@ btest  <- function(prices,
             computeSignal
     } else if (!missing(timestamp) && inherits(do.rebalance, class(timestamp))) {
         rebalancing_times <- matchOrNext(do.rebalance, timestamp)
-        do.signal <- function(...)
+        do.rebalance <- function(...)
             Time(0L) %in% rebalancing_times
     } else if (is.numeric(do.rebalance)) {
         rebalancing_times <- do.rebalance

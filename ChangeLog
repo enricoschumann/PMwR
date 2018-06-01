@@ -1,5 +1,8 @@
 2018-06-01  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/btest.R (do.rebalance): fix case when
+	do.rebalance is a vector of timestamps
+
 	* R/returns.R (returns.zoo): for portfolio
 	returns (i.e. when 'weights' are provided), the
 	method now always returns a 'zoo' object
