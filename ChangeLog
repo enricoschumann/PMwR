@@ -1,3 +1,8 @@
+2018-06-01  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (do.rebalance): fix case when
+	do.rebalance is a vector of timestamps
+
 2018-04-30  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): 0.8-0
