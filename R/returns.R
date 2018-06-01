@@ -109,7 +109,7 @@ returns.zoo <- function(x, period = NULL, complete.first = TRUE,
     t <- time(x)
     x <- coredata(x)
 
-    if (!is.null(period) || !is.null(rebalance.when)) {
+    if (!is.null(period)) {
         returns.default(x, t = t, period = period,
                         complete.first = complete.first,
                         pad = pad, position = position,
@@ -117,7 +117,7 @@ returns.zoo <- function(x, period = NULL, complete.first = TRUE,
                         rebalance.when = rebalance.when,
                         lag = lag, ...)
     } else {
-        ans <- returns.default(x, t = NULL, period = NULL,
+        ans <- returns.default(x, t = t, period = NULL,
                                complete.first = complete.first,
                                pad = pad, position = position,
                                weights = weights,
