@@ -32,16 +32,6 @@ NAVseries <- function(NAV, timestamp,
         x
 }
 
-.may_be_Date <- function(x, ...) {
-    ans <- try(as.Date(x), silent = TRUE)
-    if (inherits(ans, "try-error"))
-        FALSE
-    else if (all(is.na(ans)))
-        FALSE
-    else
-        TRUE
-}
-
 print.NAVseries <- function(x, ...) {
     if (!is.null(title <- attr(x, "title")))
         cat(title, "\n")
@@ -427,3 +417,32 @@ Volatility p.a. in \\% & %vol%        &                                         
 \\quad downside        & %vol.down%                                              \\\\
 \\end{tabular}"
 
+window.NAVseries <- function(x, start = NULL, end = NULL, ...) {
+
+    timestamp <- .timestamp(x)
+
+    ## TODO frequencies: monthly etc?
+    if (is.null(start))
+        start <- .timestamp(x)[1L]
+    else if (.may_be_Date(timestamp) &&
+             grepl("^[12][0-9][0-9][0-9]$", trim(as.character(start))))
+        start <- as.Date(paste0(start, "-1-1"))
+    
+    if (is.null(end))
+        end <- .timestamp(x)[length(.timestamp(x))]
+    else if (.may_be_Date(timestamp) &&
+             grepl("^[12][0-9][0-9][0-9]$", trim(as.character(end))))
+        end <- as.Date(paste0(end, "-12-31"))
+
+    if (start > end) 
+        stop(sQuote("start"), " cannot be after ", sQuote("end"))
+
+    i <- which(timestamp == start)[1L]
+    j <- tail(which(timestamp == end), 1)
+
+    ans <- x[i:j]
+    attributes(ans) <- attributes(x)
+    .timestamp(ans) <- .timestamp(ans)[i:j]
+    ans
+    
+}

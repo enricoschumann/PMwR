@@ -1149,7 +1149,7 @@ test.quote32 <- function() {
     
 }
 
-test.vprice <- function() {
+test.pl.vprice <- function() {
 
     ## single trade, instrument unnamed
     j <- journal(amount = 1, price = 20)
@@ -1961,6 +1961,18 @@ test.NAVseries <- function() {
                 b = 5, initial.cash = 100)
     checkEqualsNumeric(as.NAVseries(bt, drop.NA = FALSE),
                        c(NA, NA, NA, NA, 100, 100, 101, 102, 103, 104))
+
+
+}
+
+test.NAVseries.window <- function() {
+
+    x <- NAVseries(101:110, 1:10)
+
+    checkEquals(window(x, 2, 3),
+                structure(102:103, timestamp = 2:3,
+                          description = character(0),
+                          class = "NAVseries"))    
 }
 
 test.pricetable <- function() {

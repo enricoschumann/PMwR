@@ -4,6 +4,7 @@
 \alias{plot.NAVseries}
 \alias{print.NAVseries}
 \alias{summary.NAVseries}
+\alias{window.NAVseries}
 \title{
   Net-Asset-Value (NAV) Series
 }
@@ -19,9 +20,10 @@ as.NAVseries(x, ...)
 \method{print}{NAVseries}(x, \dots )
 
 \method{summary}{NAVseries}(object, \dots, monthly.vol = TRUE, na.rm =
-FALSE, assume.daily = FALSE )
+    FALSE, assume.daily = FALSE)
 
 \method{plot}{NAVseries}(x, y, \dots, xlab = "", ylab = "", type = "l")
+\method{window}{NAVseries}(x, start = NULL, end = NULL, \dots)
 }
 \arguments{
   \item{NAV}{
@@ -48,9 +50,14 @@ FALSE, assume.daily = FALSE )
 \item{\dots}{
   further arguments
 }
-\item{monthly}{
+\item{monthly.vol}{
+
   if \code{TRUE} (default), volatility computations
   are done on monthly returns
+
+}
+\item{assume.daily}{
+  logical
 }
 \item{na.rm}{
   logical
@@ -66,6 +73,12 @@ FALSE, assume.daily = FALSE )
 }
 \item{type}{
   character. See \code{\link{plot}}.
+}
+\item{start}{
+  same class as timestamp; \code{NULL} means the first timestamp
+}
+\item{end}{
+  same class as timestamp; \code{NULL} means the last timestamp
 }
 }
 \details{

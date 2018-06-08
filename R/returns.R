@@ -653,89 +653,91 @@ rc <- function(R, weights, timestamp, segments = NULL) {
          total_contributions = total)
 }
 
-if (FALSE) {
+
+## TODO move to dev
+##
+## if (FALSE) {
+
+##     prices <- c(100 ,102 ,104 ,104 ,104.5 ,
+##                 2   ,2.2 ,2.4 ,2.3 ,2.5   ,
+##                 3.5 ,3   ,3.1 ,3.2 ,3.1)
+    
+##     dim(prices) <- c(5,3)
+    
+##     weights <- c(1,0,0)
+##     when <- as.logical(c(1,0,1,0,1))
+##     when <- as.logical(c(1,1,1,1,1))
+##     when <- TRUE
+    
+    
+    
+##     ## TESTS
+##     weights <- c(1,0,0)
+##     all.equal(c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)),
+##               c(returns(prices[,1],pad=0)))
+##     weights <- c(0,1,0)
+##     all.equal(c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)),
+##               c(returns(prices[,2],pad=0)))
+##     weights <- c(0,0,1)
+##     all.equal(c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)),
+##               c(returns(prices[,3],pad=0)))
+##     weights <- c(.5,.4,.1)
+##     all.equal(c(returns(prices,pad=0) %*% weights),
+##               c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)))
+    
+##     when <- as.logical(c(1,0,0,0,0))
+##     !isTRUE(all.equal(
+##          c(returns(prices,pad=0) %*% weights),
+##          c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0))))
+    
+    
+    
+##     ## not exported
+##     prices <- c(100 ,102 ,104 ,104 ,104.5 ,
+##                 2   ,2.2 ,2.4 ,2.3 ,2.5   ,
+##                 3.5 ,3   ,3.1 ,3.2 ,3.1)
+    
+##     dim(prices) <- c(5,3)
+    
+##     weights <- c(1,0,0)
+##     when <- as.logical(c(1,1,1,1,1))
+##     when <- as.logical(c(1,0,1,0,1))
+    
+##     returns_rebalance2 <- function(prices, weights, when = NULL, pad = NULL) {
+##         prices <- as.matrix(prices)
+        
+##         nr <- nrow(prices)
+##         pos <- array(NA, dim = dim(prices))
+##         ## w <- array(NA, dim = dim(prices))
+        
+##         if (is.null(when && identical(when, TRUE)))
+##             when <- seq_len(nc)
+##         else if (is.logical(when))
+##             when <- which(when)
+    
+    
+##         for (i in when)
+##             pos[i, ] <- weights / prices[i, ] ## TODO: if w is matrix, w[i, ]
+##         ## TODO na.locf
+        
+##         pos <- na.locf(pos)
+##         pos[is.na(pos)] <- 0
+##         w <- pos * prices
+##         w <- w/rowSums(w)
+        
+##         rowSums(returns(prices) * w[-nr,])
+##     }
+    
+##     returns_rebalance2(prices, weights, when = TRUE)
+##     PMwR:::returns_rebalance(prices, weights, when = TRUE)
+    
+##     require("rbenchmark")
+##     benchmark(returns_rebalance2(prices, weights, when = TRUE),
+##               PMwR:::returns_rebalance(prices, weights, when = TRUE),
+##               columns = c("test", "relative", "elapsed"), replications = 1000)
 
     
-    prices <- c(100 ,102 ,104 ,104 ,104.5 ,
-                2   ,2.2 ,2.4 ,2.3 ,2.5   ,
-                3.5 ,3   ,3.1 ,3.2 ,3.1)
-    
-    dim(prices) <- c(5,3)
-    
-    weights <- c(1,0,0)
-    when <- as.logical(c(1,0,1,0,1))
-    when <- as.logical(c(1,1,1,1,1))
-    when <- TRUE
-    
-    
-    
-    ## TESTS
-    weights <- c(1,0,0)
-    all.equal(c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)),
-              c(returns(prices[,1],pad=0)))
-    weights <- c(0,1,0)
-    all.equal(c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)),
-              c(returns(prices[,2],pad=0)))
-    weights <- c(0,0,1)
-    all.equal(c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)),
-              c(returns(prices[,3],pad=0)))
-    weights <- c(.5,.4,.1)
-    all.equal(c(returns(prices,pad=0) %*% weights),
-              c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)))
-    
-    when <- as.logical(c(1,0,0,0,0))
-    !isTRUE(all.equal(
-         c(returns(prices,pad=0) %*% weights),
-         c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0))))
-    
-    
-    
-    ## not exported
-    prices <- c(100 ,102 ,104 ,104 ,104.5 ,
-                2   ,2.2 ,2.4 ,2.3 ,2.5   ,
-                3.5 ,3   ,3.1 ,3.2 ,3.1)
-    
-    dim(prices) <- c(5,3)
-    
-    weights <- c(1,0,0)
-    when <- as.logical(c(1,1,1,1,1))
-    when <- as.logical(c(1,0,1,0,1))
-    
-    returns_rebalance2 <- function(prices, weights, when = NULL, pad = NULL) {
-        prices <- as.matrix(prices)
-        
-        nr <- nrow(prices)
-        pos <- array(NA, dim = dim(prices))
-        ## w <- array(NA, dim = dim(prices))
-        
-        if (is.null(when && identical(when, TRUE)))
-            when <- seq_len(nc)
-        else if (is.logical(when))
-            when <- which(when)
-    
-    
-        for (i in when)
-            pos[i, ] <- weights / prices[i, ] ## TODO: if w is matrix, w[i, ]
-        ## TODO na.locf
-        
-        pos <- na.locf(pos)
-        pos[is.na(pos)] <- 0
-        w <- pos * prices
-        w <- w/rowSums(w)
-        
-        rowSums(returns(prices) * w[-nr,])
-    }
-    
-    returns_rebalance2(prices, weights, when = TRUE)
-    PMwR:::returns_rebalance(prices, weights, when = TRUE)
-    
-    require("rbenchmark")
-    benchmark(returns_rebalance2(prices, weights, when = TRUE),
-              PMwR:::returns_rebalance(prices, weights, when = TRUE),
-              columns = c("test", "relative", "elapsed"), replications = 1000)
-
-    
-}
+## }
 
 as.matrix.p_returns <- function(x, ...) {
     

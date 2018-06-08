@@ -24,7 +24,7 @@ importFrom("grDevices",
 importFrom("graphics",
            "abline", "axis", "hist", "lines", "par", "plot")
 importFrom("stats",
-           "quantile", "runif", "sd", "time", "uniroot")
+           "quantile", "runif", "sd", "time", "uniroot", "window")
 importFrom("utils",
            "browseURL", "capture.output", "setTxtProgressBar",
            "str", "txtProgressBar",
@@ -155,3 +155,4 @@ S3method(toOrg, journal)
 S3method(toText, p_returns)
 S3method(valuation, default)
 S3method(valuation, journal)
+S3method(window, NAVseries)

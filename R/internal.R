@@ -66,7 +66,7 @@ insert <- function(x, list, values) {
     seq_len(len)
 }
 
-matchOrNext <- function(x, y) {
+.match_or_next <- matchOrNext <- function(x, y) {
     pos <- match(x, y)
     NApos <- which(is.na(pos))
     for (i in NApos)
@@ -75,7 +75,7 @@ matchOrNext <- function(x, y) {
     pos
 }
 
-matchOrPrevious <- function(x, y) {
+.match_or_previous <- matchOrPrevious <- function(x, y) {
     pos <- match(x, y)
     NApos <- which(is.na(pos))
     for (i in NApos)
@@ -347,4 +347,22 @@ psim <- function(x, y) {
          max.abs.difference = max(abs(x-y)),
          mean.abs.difference = sum(abs(x-y))/length(x))
     
+}
+
+.timestamp <- function(x)
+    attr(x, "timestamp")
+
+`.timestamp<-` <- function(x, value) {
+    attr(x, "timestamp") <- value
+    x
+}        
+
+.may_be_Date <- function(x, ...) {
+    ans <- try(as.Date(x), silent = TRUE)
+    if (inherits(ans, "try-error"))
+        FALSE
+    else if (all(is.na(ans)))
+        FALSE
+    else
+        TRUE
 }

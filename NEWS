@@ -1,3 +1,31 @@
+v0.9-0  (2018-06-09)
+
+  o summary.NAVseries: argument monthly has been
+    renamed:
+
+	monthly   =>   monthly.vol
+
+  o summary.NAVseries: new argument assume.daily,
+    with default FALSE; when TRUE, numeric
+    timestamps are considered daily data, e.g. for
+    annualising returns
+  
+  o NAVseries: add a 'window' method
+    
+  o NAVseries: summary now includes recovery from
+    drawdown
+
+  o journal: add an 'all.equal' method
+
+  o btest: new argument 'include.timestamp', with
+    default TRUE
+
+  o returns: for portfolio returns, if a timestamp
+    is specified, 'rebalance.when' is matched
+    against this timestamp (e.g., 'rebalance.when'
+    may be specified as Date when the timestamp is
+    of class Date)
+
 v0.8-0  (2018-04-30)
 
   o drawdowns: new generic function with methods for
@@ -35,8 +63,8 @@ v0.7-0  (2018-01-01)
     fixed (the argument had been ignored in some
     situations)
 
-  o quote32: the function now also recognises a colon
-    (:) as a separator
+  o quote32: the function now also recognises a
+    colon (:) as a separator
 
   o pl: new method for data frames
 

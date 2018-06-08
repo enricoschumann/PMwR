@@ -1,3 +1,13 @@
+2018-06-08  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (window.NAVseries): add method
+
+	* R/internal.R (.may_be_Date): add internal
+	function; see ?.may_be_Date
+
+	* R/internals.R (.timestamp): add internal
+	function, also a replacement function
+
 2018-06-01  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R (do.rebalance): fix case when
@@ -22,7 +32,10 @@
 
 	* R/NAVseries.R (summary.NAVseries): add date
 	of recovery from drawdown ('mdd.recover.when')
-	to results
+	to results;
+	add new argument 'assume.daily': if TRUE,
+	numeric timestamps are considered daily data;
+	rename argument 'monthly' to 'monthly.vol'
 
 2018-05-25  Enrico Schumann  <es@enricoschumann.net>
 
