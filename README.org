@@ -1,12 +1,10 @@
 #+TITLE: Portfolio Management with R
 #+AUTHOR: Enrico Schumann
 
-
-
 * About PMwR
 
 Functions for the practical management of financial
-portfolios:: backtesting investment and trading
+portfolios: backtesting investment and trading
 strategies, computing profit-and-loss and returns,
 analysing trades, reporting, and more. The aim of PMwR
 is to provide a small set of reliable, efficient and
@@ -16,7 +14,7 @@ complete application that could be used 'as is', but
 building blocks for creating such an application.
 
 PMwR grew out of various pieces of software that I have
-written since 2008. The package is currently under
+written since 2008. The package is under
 active development and changes frequently, simply
 because the code has been written over many years and
 is in need of being groomed for general
@@ -27,9 +25,11 @@ functions will be introduced. The *recommended*
 *practice* is therefore to *explicitly* *name*
 *arguments* *in* *function* *calls* (and not pass
 arguments by position). Any changes in argument names
-will be documented in the ChangeLog
-([[http://enricoschumann.net/R/packages/PMwR/ChangeLog]])
-and so can be easily followed.
+will be documented in the NEWS file
+([[http://enricoschumann.net/R/packages/PMwR/NEWS]])
+and so can be followed easily. More details
+are in the ChangeLog
+([[http://enricoschumann.net/R/packages/PMwR/ChangeLog]]).
 
 
 
@@ -39,10 +39,10 @@ The package provides functions that can serve as
 building blocks for many activities in portfolio
 management.
 
-- Testing strategies :: See =?btest=.
 - Keeping track of transactions :: The package provides
      functions for handling journals (sometimes called
      blotters). See =?journal= and =?position=.
+- Testing strategies :: See =?btest=.
 - Computing profit/loss and returns :: See =?returns=,
      =?rc= =?pl= or =?unit_prices=.
 
@@ -57,7 +57,7 @@ corrections.
 
 * Installation
 
-The latest version of the package is available from
+The latest release of the package is available from
 [[http://enricoschumann.net/R/packages/PMwR/]]. You can
 install the package directly from within R:
 #+BEGIN_SRC R :eval never
@@ -72,3 +72,6 @@ There is currently no automatic build for Windows. If
 you wish to use the package on Windows and have
 problems building it, then please contact me and I will
 provide you with a Windows version.
+
+There is also a publicly-available repository at 
+https://github.com/enricoschumann/PMwR.

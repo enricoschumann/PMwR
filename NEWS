@@ -1,11 +1,11 @@
 v0.9-0  (2018-06-09)
 
-  o summary.NAVseries: argument monthly has been
+  o summary.NAVseries: argument 'monthly' has been
     renamed:
 
 	monthly   =>   monthly.vol
 
-  o summary.NAVseries: new argument assume.daily,
+  o summary.NAVseries: new argument 'assume.daily',
     with default FALSE; when TRUE, numeric
     timestamps are considered daily data, e.g. for
     annualising returns
