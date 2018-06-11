@@ -629,6 +629,17 @@ test.journal <- function() {
     
 }
 
+test.journal.all.equal <- function() {
+    j1 <- journal(amount = 1:10, fees = 5)
+    j2 <- journal(fees = 5, amount = 1:10)
+    checkTrue(isTRUE(all.equal(j1, j2)))
+
+    j1 <- journal(amount = 1:10, timestamp = 1:10)
+    j2 <- journal(amount = 10:1, timestamp = 10:1)
+    checkTrue(isTRUE(all.equal(j1, j2)))
+    checkTrue(!isTRUE(all.equal(j1, j2, ignore.sort = FALSE)))    
+}
+
 test..pl_stats <- function() {
 
     amount <- c(1); price <- 100
@@ -1973,6 +1984,7 @@ test.NAVseries.window <- function() {
                 structure(102:103, timestamp = 2:3,
                           description = character(0),
                           class = "NAVseries"))    
+    checkEquals(window(x), x)    
 }
 
 test.pricetable <- function() {
