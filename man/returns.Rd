@@ -137,7 +137,16 @@ returns(x, \dots)
 
   }
   \item{month.names}{
-    character: names of months
+
+    character: names of months. Default is an
+    abbreviated month name as provided by the
+    locale. That may cause trouble, notably with
+    \code{toLatex}, if such names contain
+    non-\acronym{ASCII} characters: a safe choice is
+    either the numbers 1 to 12, or the character vector
+    \code{\link{month.abb}}, which lives in the base
+    package.
+    
   }
   \item{digits}{
     number of digits in table
