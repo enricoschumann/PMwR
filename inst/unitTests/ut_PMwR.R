@@ -1705,7 +1705,18 @@ test.returns <- function() {
               "holdings")
     checkEquals(h1, h4)
     
-    
+
+
+    x  <- cumprod(1+rnorm(10, sd = 0.02))
+    x2 <- cumprod(1+rnorm(10, sd = 0.02))
+    X <- cbind(x, x2)
+
+    checkEquals(
+        tail(cumprod(1+returns(X, weights = c(.2,.8),
+                               rebalance.when = 1)),
+             1),
+    c((X[nrow(X), ] / X[1, ]) %*% c(.2,.8)))
+
     ## time-weighted returns
     ## x <- 101:105
     ## checkEquals(returns(x, position = c(1, 1, 1, 1, 1)),
