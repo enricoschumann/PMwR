@@ -66,6 +66,7 @@ export(
     scale_trades,
     split_adjust,
     split_trades,
+    toHTML,
     tw_exposure,
     unit_prices,
     valuation
@@ -128,6 +129,7 @@ S3method(print, NAVseries)
 S3method(print, btest)
 S3method(print, journal)
 S3method(print, p_returns)
+S3method(print, p_returns_monthly)
 S3method(print, pl)
 S3method(print, position)
 S3method(print, pricetable)
@@ -149,6 +151,7 @@ S3method(summary, NAVseries)
 S3method(summary, journal)
 S3method(tail, journal)
 S3method(toHTML, p_returns)
+S3method(toHTML, p_returns_monthly)
 S3method(toLatex, p_returns)
 S3method(toLatex, summary.NAVseries)
 S3method(toOrg, journal)

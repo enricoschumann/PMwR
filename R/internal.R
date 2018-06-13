@@ -349,11 +349,18 @@ psim <- function(x, y) {
     
 }
 
-.timestamp <- function(x)
-    attr(x, "timestamp")
+.timestamp <- function(x) {
+    if (inherits(x, "p_returns"))
+        attr(x, "t")
+    else
+        attr(x, "timestamp")
+}
 
 `.timestamp<-` <- function(x, value) {
-    attr(x, "timestamp") <- value
+    if (inherits(x, "p_returns"))
+        attr(x, "t") <- value
+    else
+        attr(x, "timestamp") <- value
     x
 }        
 

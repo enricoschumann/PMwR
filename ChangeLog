@@ -1,12 +1,26 @@
+2018-06-12  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: export 'toHTML'
+
+	* R/internal.R (.timestamp): make function work
+	for 'p_returns' objects as well
+
+	* DESCRIPTION (Depends): add 'R (>= 2.10)'
+
+2018-06-11  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.9-0
+
 2018-06-08  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/NAVseries.R (window.NAVseries): add method
 
 	* R/internal.R (.may_be_Date): add internal
-	function; see ?.may_be_Date
+	function; see `?.may_be_Date`
 
 	* R/internals.R (.timestamp): add internal
-	function, also a replacement function
+	function, also a replacement function;
+	see `?.timestamp`
 
 2018-06-01  Enrico Schumann  <es@enricoschumann.net>
 

@@ -355,6 +355,9 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         attr(ans, "period") <- period
     }
     class(ans) <- "p_returns"
+    if (period == "monthly")
+        class(ans) <- c("p_returns_monthly", class(ans))
+
     ans
 }
 
@@ -397,12 +400,14 @@ fmt <- function(x, plus, digits) {
 }
 
 ## not exported
-print.p_returns <- function(x, ..., year.rows = TRUE,
+print.p_returns_monthly <- function(x, ..., year.rows = TRUE,
                            month.names = NULL, zero.print = "0", plus = FALSE,
                            digits = 1, na.print = NULL) {
+
     period <- attr(x, "period")
     timestamp <- attr(x, "t")
-    if (period == "monthly" && is.null(dim(x))) {
+
+    if (is.null(dim(x))) {
         if (year.rows)
             print(.mtab(x, timestamp, ytd = "YTD", month.names = month.names,
                         zero.print = zero.print, plus = plus, digits = digits),
@@ -411,12 +416,22 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
             print(t(.mtab(x, timestamp, ytd = "YTD", month.names = month.names,
                        zero.print = zero.print, plus = plus, digits = digits)),
                   quote = FALSE, print.gap = 2, right = TRUE)
-    } else if (period == "monthly") {
+    } else {
         tmp <- x
-        tmp <- format(round(tmp*100,1), nsmall = digits)
+        tmp <- format(round(tmp*100, 1), nsmall = digits)
         row.names(tmp) <- as.character(timestamp)
         print(unclass(tmp), quote = FALSE, print.gap = 2)
-    } else if (period == "yearly" && is.null(dim(x))) {
+    }
+
+    invisible(x)
+}
+
+print.p_returns <- function(x, ..., year.rows = TRUE,
+                           month.names = NULL, zero.print = "0", plus = FALSE,
+                           digits = 1, na.print = NULL) {
+    period <- attr(x, "period")
+    timestamp <- attr(x, "t")
+    if (period == "yearly" && is.null(dim(x))) {
         tmp <- x
         names(tmp) <- format(timestamp, "%Y")
         if (year.rows)
@@ -486,16 +501,31 @@ toLatex.p_returns <- function(object, ..., year.rows = TRUE,
 
 ## not exported
 toHTML.p_returns <- function(x, ..., year.rows = TRUE,
-                            ytd = "YTD", month.names = NULL,
-                            stand.alone = TRUE,
-                            table.style = NULL,
-                            table.class = NULL,
-                            th.style = NULL,
-                            th.class = NULL,
-                            td.style = "text-align:right; padding:0.5em;",
-                            td.class = NULL,
-                            tr.style = NULL, tr.class = NULL,
-                            browse = FALSE) {
+                             ytd = "YTD", month.names = NULL,
+                             stand.alone = TRUE,
+                             table.style = NULL,
+                             table.class = NULL,
+                             th.style = NULL,
+                             th.class = NULL,
+                             td.style = "text-align:right; padding:0.5em;",
+                             td.class = NULL,
+                             tr.style = NULL, tr.class = NULL,
+                             browse = FALSE) {
+
+    stop("currently only supported for period ", sQuote("month"))
+}
+
+toHTML.p_returns_monthly <- function(x, ..., year.rows = TRUE,
+                                     ytd = "YTD", month.names = NULL,
+                                     stand.alone = TRUE,
+                                     table.style = NULL,
+                                     table.class = NULL,
+                                     th.style = NULL,
+                                     th.class = NULL,
+                                     td.style = "text-align:right; padding:0.5em;",
+                                     td.class = NULL,
+                                     tr.style = NULL, tr.class = NULL,
+                                     browse = FALSE) {
 
     period <- attr(x, "period")
     timestamp <- attr(x, "t")
@@ -519,14 +549,11 @@ toHTML.p_returns <- function(x, ..., year.rows = TRUE,
         paste0(open, x, "</tr>")
     }
 
-    if (grepl("month(ly)?", period)) {
-        if (year.rows)
-            mt <- .mtab(x, timestamp, ytd = ytd, month.names = month.names)
-        else
-            mt <- t(.mtab(x, timestamp, ytd = ytd, month.names = month.names))
-    } else {
-        stop("currently only supported for period ", sQuote("month"))
-    }
+    if (year.rows)
+        mt <- .mtab(x, timestamp, ytd = ytd, month.names = month.names)
+    else
+        mt <- t(.mtab(x, timestamp, ytd = ytd, month.names = month.names))
+
     mt <- rbind(colnames(mt), mt)
     mt <- cbind(rownames(mt), mt)
     mt <- unname(mt)

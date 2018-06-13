@@ -1592,8 +1592,8 @@ test.returns <- function() {
     ## z <- cbind(z,z,z)
     returns(z, period = "mtd")
     
-    checkTrue(class(returns(x, t = t, period = "month")) == "p_returns")
-    checkTrue(class(returns(z,        period = "month")) == "p_returns")
+    checkTrue("p_returns" %in% class(returns(x, t = t, period = "month")))
+    checkTrue("p_returns" %in% class(returns(z,        period = "month")))
     checkTrue(class(returns(z)) == "zoo")
 
     ## period -- zoo or specify t
@@ -1763,6 +1763,26 @@ test.returns <- function() {
     checkEqualsNumeric(unclass(returns(x, period = "month")), c(NA, 0.25))
 
 }
+
+test.returns.p_returns_monthly <- function () {
+
+    library("zoo")
+    t <- seq(as.Date("2012-01-01"), as.Date("2012-12-31"), by = "1 day")
+    x <- seq_along(t)/10 + 100
+    z <- zoo(x, t)
+    txt <- capture.output(returns(z, period = "month"))
+    checkEquals("2012 3.0 2.8 2.9 2.7 2.8 2.6 2.6 2.6 2.4 2.4 2.3 2.3 36.5",
+                txt[2])
+    checkEquals(length(txt), 2)
+
+    checkTrue(inherits(returns(x, t = t, period = "month"), "p_returns"))
+    checkTrue(inherits(returns(x, t = t, period = "month"), "p_returns_monthly"))
+
+    checkTrue(inherits(returns(z,        period = "month"), "p_returns"))
+    checkTrue(inherits(returns(z,        period = "month"), "p_returns_monthly"))
+
+}
+
 
 test.scale1 <- function() {
 
