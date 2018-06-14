@@ -52,9 +52,11 @@ returns(x, \dots)
   }
   \item{period}{
     
-    Typically \code{character}; supported are "month",
-    "quarter", "year" or "ann" (annualised), "ytd"
-    (year-to-date), "mtd" (month-to-date), "itd"
+    Typically \code{character}; supported are
+    \code{"hour"}, \code{"day"}, \code{"month"},
+    \code{"quarter"}, \code{"year"},
+    \code{"ann"} (annualised), \code{"ytd"}
+    (year-to-date), \code{"mtd"} (month-to-date), \code{"itd"}
     (inception-to-date) or a single year, such as
     "2012".  The value of \sQuote{period} is used only
     when timestamp information is available: for
@@ -62,14 +64,14 @@ returns(x, \dots)
     \code{zoo}/\code{xts} objects.
 
     All returns are computed as simple returns. They
-    will only be annualised with option "ann"; they
+    will only be annualised with option \code{"ann"}; they
     will not be annualised when the length of the time
     series is less than one year. To force annualising
     in such a case, use
     \sQuote{\code{ann!}}. Annualisation can only work
     when the timestamp \code{t} can be coerced to class
     \code{\link{Date}}. The result will have an
-    attribute "is.annualised", which is a logical
+    attribute \code{is.annualised}, which is a logical
     vector.
 
   }
@@ -170,10 +172,29 @@ returns(x, \dots)
 }
 \details{
 
-  \code{return} is a generic function.  It computes
+  \code{returns} is a generic function.  It computes
   simple returns: current values divided by prior
   values minus one.  The default method works for
   numeric vectors/matrices.
+  
+  \subsection{Holding-Period Returns}{
+    
+    When a timestamp is available, returns can compute returns for
+    specific calendar periods.
+    
+  }
+  
+  \subsection{Portfolio Returns}{
+    
+    \code{returns} may compute returns for a portfolio
+    specified in \code{weights}. The portfolio is
+    rebalanced at \code{rebalance.when}; the default is
+    every period.
+    
+    \code{rebalance.when} may either be integers or of
+    the same class as a \code{timestamp}
+    (e.g. \code{\link{Date}}).
+  }
 
 }
 \value{

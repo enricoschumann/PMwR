@@ -331,6 +331,9 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
     } else {
         if (length(period) > 1L) {
             by <- period
+        } else if (grepl("hour(ly)?", period, ignore.case = TRUE)) {
+            by <- format(t, "%Y%m%d%H")
+            period <- "hourly"
         } else if (grepl("da(y|i)", period, ignore.case = TRUE)) {
             by <- format(t, "%Y%m%d")
             period <- "daily"

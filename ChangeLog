@@ -1,3 +1,8 @@
+2018-06-14  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R: support 'hourly' holding-period
+	returns
+
 2018-06-12  Enrico Schumann  <es@enricoschumann.net>
 
 	* NAMESPACE: export 'toHTML'

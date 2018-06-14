@@ -13,7 +13,9 @@
 
 ** support multiplier?
 
-.
+** add =pl= method
+
+   for open positions, use last price as =vprice=
 
 
 * =pricetable=
@@ -27,9 +29,6 @@
 
    endofyear
    endofquarter
-
-
-* =journal= [0/0]
 
 
 * =returns= [0/2]
