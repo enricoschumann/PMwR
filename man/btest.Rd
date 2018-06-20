@@ -43,43 +43,66 @@ btest(prices, signal,
   }
   \item{signal}{
 
-    A function that evaluates to the position suggested by the trading
-    rule; see Details.
+    A function that evaluates to the position in units
+    of the instruments suggested by the trading
+    rule. If \code{convert.weights} is \code{TRUE},
+    \code{signal} should return the suggested position
+    as weights. See Details.
 
   }
   \item{do.signal}{
 
-    Logical/numeric vector or function that evaluates to \code{TRUE} or
-    \code{FALSE}. Default is \code{TRUE}: a signal is then computed in
-    every period. When a logical/numeric vector, its length must match
-    the number of observations in prices: \code{do.signal} then gives
-    the rows in \code{prices} at which a signal is computed.  Can also
-    be the string \dQuote{firstofmonth}, \dQuote{lastofmonth}, 
+    Logical or numeric vector, or a function that
+    evaluates to \code{TRUE} or \code{FALSE}.
+
+    When a logical vector, its length must match the
+    number of observations in prices: \code{do.signal}
+    then corresponds to the rows in \code{prices} at
+    which a signal is computed. Alternatively, these
+    rows may also be specified as integers.  If a
+    length-one \code{TRUE} or \code{FALSE}, the value
+    is recycled to match the number of observations in
+    prices.  Default is \code{TRUE}: a signal is then
+    computed in every period.
+
+    \code{do.signal} may also be the string
+    \dQuote{firstofmonth}, \dQuote{lastofmonth},
     \dQuote{firstofquarter} or \dQuote{lastofquarter};
-    in these cases, \code{timestamp} needs to
-    specified and must be coercable to \code{\link{Date}}.
+    in these cases, \code{timestamp} needs to specified
+    and must be coercable to \code{\link{Date}}.
 
   }
-  \item{do.rebalance}{    
-    Same as \code{do.signal}. Can also be the string \code{"do.signal"},
-    in which case the value of \code{do.signal} is copied.
+  \item{do.rebalance}{
+    
+    Same as \code{do.signal}. Can also be the string
+    \code{"do.signal"}, in which case the value of
+    \code{do.signal} is copied.
+
   }
   \item{print.info}{
-    A function or \code{NULL}. If \code{NULL}, nothing is printed. See Details.
+
+    A function or \code{NULL}. If \code{NULL}, nothing
+    is printed. See Details.
+
   }
   \item{cashflow}{
+    
     A function or \code{NULL} (default).
+
   }
   \item{b}{
+
     burn-in (an integer). Defaults to 1.
+
   }
   \item{fraction}{
     amount of rebalancing to be done (a scalar between 0 and 1)
   }
   \item{initial.position}{
 
-    initial portfolio (a numeric vector).  If supplied, this will also
-    be the initial suggested position.
+    a numeric vector: initial portfolio in units of
+    instruments.  If supplied, this will also be the
+    initial suggested position.
 
   }
   \item{initial.cash}{
@@ -180,7 +203,7 @@ btest(prices, signal,
   equally spaced) and several functions that map these
   series and other pieces of information into positions.
   
-  \code{backtest} runs a loop from \code{b + 1} to
+  \code{btest} runs a loop from \code{b + 1} to
   \code{NROW(prices)}. In iteration \code{t}, a
   \code{signal} can be computed based on information
   from periods prior to \code{t}. Trading then takes
@@ -195,8 +218,8 @@ btest(prices, signal,
   periods \code{<< t}).
 
   If no \acronym{ohlc} bars are available, a single
-  series per asset (assumed to be close prices) can be passed. In
-  effect, we might then use information up to the close
+  series per asset (assumed to be close prices) can be
+  passed. We may then use information up to the close
   of \code{t - 1}, and trade at the close of \code{t}.
 
   The \sQuote{trade logic} needs to be coded in the
@@ -218,25 +241,35 @@ btest(prices, signal,
 }
 \value{
   A list with class attribute \code{btest}. The list comprises:  
-  \item{\code{portfolio}}{The actual portfolio holdings}
-  \item{\code{suggested.portfolio}}{The suggested holdings}
+  \item{\code{position}}{actual portfolio holdings}
+  \item{\code{suggested.position}}{suggested holdings}
   \item{\code{cash}}{cash}
-  \item{\code{wealth}}{total portfolio value}
+  \item{\code{wealth}}{time-series of total portfolio value (aka equity curve)}
   \item{\code{cum.tc}}{transaction costs}
   \item{\code{journal}}{\code{\link{journal}} of trades}
   \item{\code{initial.wealth}}{initial wealth}
-  \item{\code{b}}{burnin}
-  \item{\code{final.position}}{final position}
-  \item{\code{Globals}}{environment Globals}
+  \item{\code{b}}{burn-in}
+  \item{\code{final.position}}{final position if \code{final.position} is
+    \code{TRUE}; otherwise \code{\link{NA}}}
+  \item{\code{Globals}}{environment \code{Globals}}
 
-  When \code{include.data} is \code{TRUE}, all information (prices,
-  timestamp, instrument, the actual \code{call} and functions
-  \code{signal} etc.) are stored in the list as well.
+  When \code{include.timestamp} is TRUE, the timestamp
+  is included. If no \code{timestamp} was specified,
+  integers \code{1, 2, ...} are used instead.
+  
+  When \code{include.data} is \code{TRUE}, essentially
+  all information (prices, instrument, the
+  actual \code{call} and functions \code{signal} etc.)
+  are stored in the list as well.
 
 }
 \references{
-Schumann, E. (2018) \emph{Portfolio Management
-  with R}. \url{http://enricoschumann.net/PMwR/}
+
+  Schumann, E. (2018) \emph{Portfolio Management
+    with R}. \url{http://enricoschumann.net/PMwR/};
+  in particular the Chapter on backtesting:
+  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#ch:backtesting}
+  
 } 
 \author{
   Enrico Schumann <es@enricoschumann.net>
