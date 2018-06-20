@@ -30,7 +30,7 @@ is_valid_ISIN(isin)
 \references{
   \url{http://en.wikipedia.org/wiki/ISO_6166}
 
-  \url{http://www.anna-web.com/index.php/home/isinsaiso6166}
+  \url{https://www.anna-web.org/standards/isin-iso-6166/}
 }
 \author{
   Enrico Schumann
