@@ -1,5 +1,8 @@
 2018-06-20  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/position.R (print.position): fix
+	use of 'sep' argument
+
 	* NAMESPACE: do not export 'toHTML'
 
 2018-06-14  Enrico Schumann  <es@enricoschumann.net>

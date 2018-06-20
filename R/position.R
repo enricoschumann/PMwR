@@ -170,9 +170,9 @@ print.position <- function(x, ..., sep = ":") {
     if (!is.null(account)) {
         instrument <- paste(account, instrument, sep = sep)
         if (nrow(x) == 1L) {
-            all_i <- .expand(instrument, sep = ":")
+            all_i <- .expand(instrument, sep = sep)
             instrument <- paste0(.tree(all_i$level, style = "ascii"),
-                                 .leaf(paste(all_i$description), ":"))
+                                 .leaf(paste(all_i$description), sep))
             pos <- numeric(nrow(all_i)) + NA
             dim(pos) <- c(1L, nrow(all_i))
             pos[all_i$position > 0] <- unclass(x)[all_i$position]
