@@ -716,7 +716,6 @@ btest  <- function(prices,
                  prices = prices,
                  signal = signal,
                  do.signal = do.signal,
-                 timestamp = list(timestamp),
                  instrument = if (missing(instrument)) NULL else list(instrument),
                  call = match.call())
         
