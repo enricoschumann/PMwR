@@ -88,7 +88,7 @@ position.default <- function(amount, timestamp, instrument,
     nw <- length(when)
     nm <- sort(unique(instrument))
     pos <- array(0, dim = c(nw, length(nm)))
-    colnames(pos) <- nm
+    colnames(pos) <- gsub("%SEP%", ".", nm, fixed = TRUE)
     rownames(pos) <- if (no.timestamp) rep("", length(when)) else as.character(when)
     for (j in seq_len(nw)) {
         for (i in seq_along(nm)) {

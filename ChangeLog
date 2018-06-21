@@ -1,3 +1,8 @@
+2018-06-21  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (position.default): replace
+	internal separator in column names with '.'
+
 2018-06-20  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R: fix duplication of timestamp when
