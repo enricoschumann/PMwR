@@ -1,3 +1,7 @@
+2018-06-26  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (summary): fix formatting
+
 2018-06-21  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/position.R (position.default): replace
