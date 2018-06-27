@@ -1,19 +1,26 @@
 \name{position}
 \alias{position}
 \alias{position.default}
+\alias{position.journal}
 \alias{print.position}
+\alias{as.matrix.position}
 \title{
-  Aggregate Transactions to Position
+  Aggregate Transactions to Positions
 }
 \description{
-  Use information on trades to compute a position at a specific point
-  in time.
+
+  Use information on single trades to compute a
+  position at a specific point in time.
+
 }
 \usage{
 position(amount, \dots)
 
 \method{position}{default}(amount, timestamp, instrument, when,
                  drop.zero = FALSE, account = NULL, \dots)
+
+\method{position}{journal}(amount, when, drop.zero = FALSE,
+                           use.account = FALSE, \dots)
 
 \method{print}{position}(x, \dots, sep = ":")
 
@@ -57,10 +64,9 @@ position(amount, \dots)
 }
 \details{
 
-  Only \code{instrument} can be specified, so to compute positions on an
-  \code{account} basis, paste \code{account} to \code{instrument}, or
-  split the journal.
-
+  \code{position} is a generic function; most useful is
+  the method for \code{\link{journal}}s.
+  
   The function checks if \code{timestamp} is sorted (see
   \code{\link{is.unsorted}}) and sorts the journal by \code{timestamp},
   if required. If there are (some) \code{NA} values in \code{timestamp},
@@ -74,7 +80,7 @@ position(amount, \dots)
   the positions at all timestamps in the journal. \code{endofday}
   and \code{endofmonth}
   provide positions at the end of all calendar days and months within the
-  timestamp range of the journal. The latter can only work if
+  timestamp range of the journal. The latter keywords can only work if
   \code{timestamp} can be coerced to \code{\link{Date}}.
     
 }
@@ -86,11 +92,15 @@ position(amount, \dots)
   will always be a matrix of size \code{length(when)} times
   \code{length(unique(instrument))}, which may not be obvious from the
   printed output.
+
+  To extract the numeric position matrix, say \code{as.matrix(p)}.
+  
+  
   
 }
 \references{
 
-  Schumann, E. (2017) \emph{Portfolio Management
+  Schumann, E. (2018) \emph{Portfolio Management
     with \R}. \url{http://enricoschumann.net/R/packages/PMwR/}
   
 }
