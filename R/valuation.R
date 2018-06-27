@@ -76,21 +76,33 @@ jcf <- function(x, multiplier = 1,
     ans
 }
 
-valuation.position <- function(x, multiplier = 1, price.table,
-                               do.sum = FALSE, unit, ...) {
+valuation.position <- function(x, price.table, multiplier = 1,
+                               do.sum = FALSE, price.unit,
+                               verbose = TRUE, ...) {
 
     instrument <- attr(x, "instrument")
     
     if (!is.null(names(multiplier)))
         multiplier <- multiplier[instrument]
 
-    ans <- x * price.table
+    pos <- x != 0
+    if (any(is.na(price.table[pos]))) {
+        miss <- which(is.na(price.table) & pos, TRUE)
+        warning("missing prices")
+        if (verbose)
+            print(data.frame(timestamp = .timestamp(x)[miss[,1]],
+                             instrument = instrument(x)[miss[,2]]))
+    }
+    price.table[!pos] <- 0
+    ans <- as.matrix(x) * price.table
     if (any(multiplier != 1))
         ans <- ans %*% diag(multiplier, length(instrument))
 
     colnames(ans) <- instrument
     if (do.sum)
         ans <- rowSums(ans)
+    ans <- as.matrix(ans)
+    attr(ans, "position") <- x
     ans
 }
 
