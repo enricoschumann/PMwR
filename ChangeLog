@@ -1,3 +1,8 @@
+2018-06-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/valuation.R (valuation.journal): accept
+	'instrument = NULL'
+
 2018-06-27  Enrico Schumann  <es@enricoschumann.net>
 
 	* man/position.Rd: update docs

@@ -24,21 +24,22 @@ valuation.default <- function(x, ...) {
 
 valuation.journal <- function(x,
                               multiplier = 1,                          
-                              cashflow = function(x) x$amount * x$price,
-                              instrument = function(x) "cash",
+                              cashflow = function(x, ...) x$amount * x$price,
+                              instrument = function(x, ...) "cash",
                               flip.sign = TRUE,
                               ...) {
-
 
     if (!is.null(names(multiplier)))
         multiplier <- multiplier[x$instrument]
 
-    if (is.character(instrument))
-        istr  <- instrument
-    else if (is.function(instrument))
-        istr <- instrument(x)
-    else
-        istr <- as.character(instrument)
+    istr <- if (is.null(instrument))
+                NA
+            else if (is.character(instrument))
+                instrument
+            else if (is.function(instrument))
+                instrument(x, ...)
+            else
+                as.character(instrument)
 
     ans <- x
     ans$instrument <- character(length(x))
@@ -50,7 +51,7 @@ valuation.journal <- function(x,
     ans
 }
 
-## TODO: add to internal documentation
+## TODO: add to internal documentation?
 jcf <- function(x, multiplier = 1,                          
                 cashflow   = function(x) x$amount * x$price,
                 instrument = function(x) "cash",

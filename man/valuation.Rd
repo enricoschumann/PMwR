@@ -6,8 +6,11 @@
   Valuation
 }
 \description{
-  Valuation of financial objects: map an object into a quantity that is
-  measured in some unit.
+
+  Valuation of financial objects: map an object into a
+  quantity that is measured in a concrete (typically
+  currency) unit.
+
 }
 \usage{
 valuation(x, ...)
@@ -53,25 +56,51 @@ valuation(x, ...)
 }
 }
 \details{
-  \emph{valuation} is a generic function.  Its semantics suggest that an
-  object (eg, a financial instrument or a position) is mapped into a
-  concrete quantity (such as an amount of some currency).
+
+  \emph{valuation} is a generic function.  Its
+  semantics suggest that an object (e.g., a financial
+  instrument or a position) is mapped into a concrete
+  quantity (such as an amount of some currency).
+
+  The \code{\link{journal}} method transforms the
+  transactions in a journal into amounts of currency
+  (e.g., a sale of 100 shares of a company is
+  transformed into the value of these 100 shares).
+
+  The \code{\link{position}} method takes a position
+  and returns the value (in currency units) of the
+  position.
+  
+  
 }
 \value{
   depends on the object
 }
-%% \references{
-%%   %% ~put references to the literature/web site here ~
-%% }
+\references{
+
+Schumann, E. (2018) \emph{Portfolio Management
+  with R}. \url{http://enricoschumann.net/R/packages/PMwR/}
+
+} 
 \author{
-  Enrico Schumann
+  Enrico Schumann <es@enricoschumann.net>
 }
 \note{
   \bold{Very experimental.}
 }
-%% \seealso{
-%% %% ~~objects to See Also as \code{\link{help}}, ~~~
-%% }
+\seealso{
+  \code{\link{journal}}
+}
 \examples{
-## ... will be provided when the function has become stable
+j <- journal(amount = 10, price = 2)
+##    amount  price
+## 1      10      2
+##
+## 1 transaction  
+
+valuation(j, instrument = NA)
+##    amount  price
+## 1     -20      1
+##
+## 1 transaction  
 }
