@@ -42,6 +42,9 @@ position(amount, \dots)
   \item{account}{
     character: description of account
   }
+  \item{use.account}{
+    logical
+  }
   \item{drop.zero}{
 
     If logical, drop instruments that have a zero
