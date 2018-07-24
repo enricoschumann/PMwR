@@ -258,7 +258,7 @@ instrument.journal <- function(x, ...) {
     x$instrument
 }
 
-`instrument.journal<-` <- function(x, ..., value) {
+`instrument<-.journal` <- function(x, ..., value) {
     len <- length(value)
     lenx <- length(x)
     if (len == lenx)

@@ -1,3 +1,8 @@
+2018-07-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (`instrument<-.journal`): export
+	method
+
 2018-06-28  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/valuation.R (valuation.journal): accept
