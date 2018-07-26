@@ -1301,6 +1301,22 @@ test.pl.vprice <- function() {
     checkEqualsNumeric(p[[1]]$realised,   c(0,1,1))
     checkEqualsNumeric(p[[1]]$unrealised, c(0,1,5))
     checkEquals(length(p), 1)
+
+
+
+
+    ## PL at completely different times
+    j <- journal(amount = c(1, -1),
+                 price = 1:2,
+                 timestamp = 1:2)
+    
+    res <- pl(j, along.timestamp = 6:10, vprice = 6:10)
+    checkEqualsNumeric(res[[1]]$pl, rep(1, 5))
+    checkEqualsNumeric(res[[1]]$realised, rep(1, 5))
+    checkEqualsNumeric(res[[1]]$unrealised, rep(0, 5))
+
+    ## TODO res <- pl(j, along.timestamp = -5:-1, vprice = 1:5)
+
     
 }
 
