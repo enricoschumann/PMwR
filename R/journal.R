@@ -36,7 +36,7 @@ journal.default <- function(amount, price, timestamp, instrument,
         class(ans) <- "journal"
         return(ans)
     }
-    
+
     if (missing(timestamp))
         timestamp <- NA
     if (missing(instrument) || all(is.na(instrument)))
@@ -110,7 +110,7 @@ print.journal <- function(x, ...,
     ndf <- colnames(df)
     first.cols <- c("instrument", "timestamp", "amount", "price")
     df <- df[TRUE, c(first.cols, setdiff(ndf, first.cols)), drop = FALSE]
-    
+
     if (!is.null(exclude))
         df <- df[TRUE, setdiff(ndf, exclude), drop = FALSE]
 
@@ -126,10 +126,10 @@ print.journal <- function(x, ...,
         insts <- as.character(trim(insts))
         if (length(insts))
             subs <- paste0(" in ", paste(insts, sep = "", collapse = ", "))
-    } 
+    }
     if (lx > 1L || lx == 0L)
         ps <- "s" else ps <- ""
-    
+
     msg <- strwrap(paste0("\n", lx, " transaction", ps, subs), width)
     msg <- paste(msg[1L], if (length(msg)>1L) "...", "\n")
     cat(msg)
@@ -146,21 +146,21 @@ sort.journal <- function(x, decreasing = FALSE, by = "timestamp",
                    na.last = na.last, decreasing = decreasing))
     for (i in seq_along(unclass(x)))
         x[[i]]<- x[[i]][o]
-    x    
+    x
 }
 
 c.journal <- function(..., recursive = FALSE) {
     tls <- list(...)
     tls <- tls[!unlist(lapply(tls, is.null))]
     if (!all(unlist(lapply(tls, inherits, "journal")) ))
-        warning("method only works for ", sQuote("journal"), " objects")    
+        warning("method only works for ", sQuote("journal"), " objects")
     ns <- unique(unlist(lapply(tls, names)))
     ans <- vector("list", length = length(ns))
     names(ans) <- ns
     for (n in seq_along(ns)) {
         nul <- unlist(lapply(lapply(tls, `[[`, ns[n]), is.null))
         for (i in which(nul))
-            tls[[i]][[ns[n]]] <- rep(NA, length(tls[[i]]))        
+            tls[[i]][[ns[n]]] <- rep(NA, length(tls[[i]]))
         ans[[ns[n]]] <- unlist(lapply(tls, `[[`, ns[n]))
     }
 
@@ -199,7 +199,7 @@ account <- function(x, ...) {
     if (!inherits(x, "journal"))
         stop(sQuote("x"), " must inherit from class ", sQuote("journal"))
 
-    if (is.null(x$account)) 
+    if (is.null(x$account))
         NULL
     else
         x$account
@@ -279,14 +279,14 @@ summary.journal <- function(object, ...) {
         class(ans) <- "summary.journal"
         return(ans)
     }
-    
+
     ## TODO aggregation level? instrument or account or factor ...
     no_instrument <- FALSE
     if (all(is.na(xi <- instrument(object)))) {
         xi <- object$instrument <- rep("_", length(object))
         no_instrument <- TRUE
     }
-    
+
     stats <- data.frame(instrument = character(0),
                         n_transactions = numeric(0),
                         average_buy = numeric(0),
@@ -307,7 +307,7 @@ summary.journal <- function(object, ...) {
     }
     if (no_instrument)
         stats$instrument <- NA
-    ans$stats  <- stats    
+    ans$stats  <- stats
     class(ans) <- "summary.journal"
     ans
 }
@@ -326,7 +326,7 @@ print.summary.journal <- function(x, ...) {
                            "first", "last")
         for (i in 3:4)
             ans[[i]][!is.finite(ans[[i]])] <- NA
-        
+
         if (has_instrument)
             ans[["instrument"]] <- paste0("",
                                           format(ans[["instrument"]], justify = "left"))
@@ -350,7 +350,7 @@ print.summary.journal <- function(x, ...) {
             if (is.null(x[[m]]))
                 next
             ii <- ii | grepl(i, x[[m]], ignore.case = ignore.case, ...)
-        }        
+        }
         if (reverse)
             ii <- !ii
     } else
@@ -368,18 +368,18 @@ print.summary.journal <- function(x, ...) {
 
 aggregate.journal <- function(x, by, FUN, ...) {
 
-    lenx <- length(x)    
+    lenx <- length(x)
     grp <- double(lenx)
     if (is.atomic(by))
         by <- list(by)
     for (ind in rev(by)) {
-        if (length(ind) != lenx) 
+        if (length(ind) != lenx)
             stop("all vectors in ", sQuote("by"),
                  " must have same length")
         ind <- as.factor(ind)
         grp <- grp * nlevels(ind) + (as.integer(ind) - 1L)
     }
-    
+
     if (mode(FUN) ==  "list") {
         funlist <- FUN
         FUN <- function(x, ...) {
@@ -391,8 +391,8 @@ aggregate.journal <- function(x, by, FUN, ...) {
             ans
         }
     }
-        
-    j <- journal()    
+
+    j <- journal()
     for (g in sort(unique(grp))) {
         sx <- x[g == grp]
         if (length(sx) == 0L)
@@ -403,8 +403,8 @@ aggregate.journal <- function(x, by, FUN, ...) {
 }
 
 split.journal <- function(x, f, drop = FALSE, ...) {
-    lapply(split(x = seq_len(length(x)), f = f, drop = drop, ...), 
-           function(ind) x[ind])  
+    lapply(split(x = seq_len(length(x)), f = f, drop = drop, ...),
+           function(ind) x[ind])
 }
 
 head.journal <- function(x, n = 6L, ..., by = TRUE) {
@@ -418,11 +418,11 @@ head.journal <- function(x, n = 6L, ..., by = TRUE) {
             sx <- x[x$instrument == i]
             if (length(sx) == 0L)
                 next
-            ans <- c(ans, sx[seq_len(min(n, length(sx)))])            
+            ans <- c(ans, sx[seq_len(min(n, length(sx)))])
         }
         ans
     } else {
-        x[seq_len(min(n, lenx))]        
+        x[seq_len(min(n, lenx))]
     }
 }
 
@@ -437,11 +437,11 @@ tail.journal <- function(x, n = 6L, ..., by = TRUE) {
             sx <- x[x$instrument == i]
             if (length(sx) == 0L)
                 next
-            ans <- c(ans, sx[seq_len(min(n, length(sx)))])            
+            ans <- c(ans, sx[seq_len(min(n, length(sx)))])
         }
         ans
     } else {
-        x[(lenx - min(n, lenx) + 1L):lenx]        
+        x[(lenx - min(n, lenx) + 1L):lenx]
     }
 }
 
@@ -492,14 +492,14 @@ as.journal.data.frame <- function(x, ...) {
 }
 
 as.journal.position <- function(x, price, ...) {
-    amount <- x    
-    if (!missing(price) && !is.null(names(price))) 
+    amount <- x
+    if (!missing(price) && !is.null(names(price)))
         price <- price[match(attr(amount, "instrument"), names(price))]
     else if (missing(price))
         price <- NA
     if (length(attr(amount, "timestamp")) > 1L)
         stop("must be position at *one* point in time")
-    
+
     journal(timestamp  = attr(amount, "timestamp"),
             amount     = c(amount),
             price      = price,
@@ -508,7 +508,7 @@ as.journal.position <- function(x, price, ...) {
 
 as.journal.rebalance <- function(x, ..., price = TRUE, timestamp = NA,
                                  drop.zero = TRUE) {
-    amount <- x    
+    amount <- x
     mn <- attr(amount, "match.names")
     if (drop.zero)
         amount <- amount[amount[["target"]] != 0 , , drop = FALSE]
@@ -550,7 +550,7 @@ all.equal.journal <- function(target, current,
 
     if (!(inherits(current, "journal")))
         stop(sQuote("current"), " must be a journal")
-    
+
     if (ignore.sort) {
         ## TODO: may fail with duplicate timestamps
         default <- c("timestamp", "instrument", "price", "amount")
@@ -558,9 +558,9 @@ all.equal.journal <- function(target, current,
         t.f <- sort(setdiff(t.f, default))
         t.c <- names(current)
         t.c <- sort(setdiff(t.c, default))
-        
+
         target <- sort(target, by = c(default, t.f))
-        current <- sort(current, by = c(default, t.c))        
+        current <- sort(current, by = c(default, t.c))
     }
 
     msg <- NULL
@@ -603,8 +603,8 @@ all.equal.journal <- function(target, current,
         if (!isTRUE(tmp))
             msg <- c(msg, paste0(f, ": ", tmp))
     }
-    
-    
+
+
     if (is.null(msg))
         TRUE
     else
