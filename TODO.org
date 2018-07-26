@@ -8,6 +8,13 @@
 
    only used in print methods
 
+** more methods
+
+   stats::time methods?
+
+   as.zoo for pl over time?
+   
+   window method for NAVseries
 
 * =btest=
 
