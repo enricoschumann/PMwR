@@ -193,8 +193,8 @@ pl.default <- function(amount, price, timestamp = NULL,
         instrument  <- c(instrument0, instrument)
         amount      <- c(amount0, amount)
         price       <- c(price0, price)
+        ## TODO: is there a case for timestamp0 / initial.timestamp?
 
-        ## timestamp0 ?? initial.timestamp
     }
 
     if (is.null(instrument) ||
@@ -320,11 +320,11 @@ pl.default <- function(amount, price, timestamp = NULL,
         } else {
 
             ## P/L along timestamp
-
+            
             cumcash <- cumsum(-price1 * amount1)
             cumpos  <- cumsum(amount1)
-
             real <- .pl_stats(amount1, price1)$realised
+
             if (isTRUE(along.timestamp)) {
 
                 ## use only timestamps in journal
@@ -334,9 +334,9 @@ pl.default <- function(amount, price, timestamp = NULL,
 
             } else {
 
-                ## compute position at any timestamp
+                ## compute position at every timestamp
                 ## specified by 'along.timestamp',
-                ## including the cash account
+                ## including position of cash account
 
                 ## total pnl
                 tmp <- position(amount = c(amount1, -price1 * amount1),
@@ -346,17 +346,25 @@ pl.default <- function(amount, price, timestamp = NULL,
                                 when = along.timestamp)[, c(i1, "cash")]
                 pnl <- rowSums(tmp * cbind(vprice1, 1))
 
-                real_ <- numeric(length(pnl)) + NA
-                real_[matchOrNext(timestamp1, along.timestamp)] <-
-                    real[matchOrNext(timestamp1, along.timestamp) > 0]
-                ## FIXME: replace with simpler na.locf
-                real_ <- zoo::na.locf(real_, na.rm = FALSE)
-                real <- real_
-                volume <- numeric(length(along.timestamp))
-                volume[matchOrNext(unique(timestamp1), along.timestamp)] <-
-                    abs(tapply(amount1, timestamp1,
-                               function(x) sum(abs(x))))
-                volume <- cumsum(volume)
+                ## MATCH the elements in timestamp1 to
+                ## along.timestamp. Several elements in
+                ## timestamp1 may match a single
+                ## timestamp in along.timestamp: Use
+                ## the tail.
+                matches <- matchOrNext(timestamp1, along.timestamp)
+                real <- approx(unique(matches),
+                               tapply(real, matches , tail, 1),
+                               xout = seq_len(length(pnl)),
+                               method = "constant", rule = 2,
+                               yleft = 0)$y
+
+                volume <- approx(unique(matches),
+                                 tapply(cumsum(abs(amount1)),
+                                        matches , tail, 1),
+                                 xout = seq_len(length(pnl)),
+                                 method = "constant", rule = 2,
+                                 yleft = 0)$y
+
             }
             tmp <- list(timestamp = if (isTRUE(along.timestamp))
                                         timestamp1 else

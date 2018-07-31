@@ -1,3 +1,15 @@
+2018-07-31  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pl.R (pl.default): rewrite along.timestamp
+	'pl' code, using stats::approx. In several
+	cases in which profit/loss was shown as NA, it
+	is now (more appropriately) shown as 0. For
+	instance, with a custom timestamp the
+	realised/unrealised profit/loss before the
+	first trade is now 0, not NA.
+
+	* NAMESPACE: import stats::approx
+
 2018-07-24  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/journal.R (`instrument<-.journal`): export

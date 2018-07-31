@@ -1,6 +1,5 @@
 importFrom(NMOF, drawdown)
 importFrom(NMOF, pm)
-importFrom(stats, aggregate)
 importFrom(zoo, as.zoo)
 importFrom(zoo, coredata)
 importFrom(zoo, index)
@@ -16,7 +15,7 @@ importFrom(datetimeutils, end_of_month)
 importFrom(datetimeutils, first_of_month)
 importFrom(datetimeutils, roundPOSIXt)
 importFrom(datetimeutils, timegrid)
-importFrom(crayon, bold)
+importFrom("crayon", bold)
 importFrom("fastmatch", fmatch)
 
 importFrom("grDevices",
@@ -24,7 +23,8 @@ importFrom("grDevices",
 importFrom("graphics",
            "abline", "axis", "hist", "lines", "par", "plot")
 importFrom("stats",
-           "quantile", "runif", "sd", "time", "uniroot", "window")
+           "aggregate", "approx", "quantile", "runif", "sd",
+           "time", "uniroot", "window")
 importFrom("utils",
            "browseURL", "capture.output", "setTxtProgressBar",
            "str", "txtProgressBar",
