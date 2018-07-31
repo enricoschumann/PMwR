@@ -2,7 +2,22 @@ v0.10-0  (2018-??-??; not yet released)
 
   o returns: argument 'period' may also be 'hourly'
     
-  o various documentation updates/fixes
+  o code for 'pl' has been rewritten. In several cases
+    in which profit/loss was shown as NA, it is now
+    (more appropriately) shown as 0. For instance, with
+    a custom timestamp the realised/unrealised
+    profit/loss before the first trade is now 0, not
+    NA.
+
+  o new replacement method `instrument<-.journal`
+
+  o valuation.position is now exported (though still
+    experimental)
+  
+  o various documentation updates/fixes; see the
+    ChangeLog for all details. The manual at
+    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    has also been updated.
 
 v0.9-0  (2018-06-09)
 
