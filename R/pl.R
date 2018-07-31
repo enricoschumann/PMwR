@@ -356,14 +356,14 @@ pl.default <- function(amount, price, timestamp = NULL,
                                tapply(real, matches , tail, 1),
                                xout = seq_len(length(pnl)),
                                method = "constant", rule = 2,
-                               yleft = 0)$y
+                               yleft = 0, ties = "ordered")$y
 
                 volume <- approx(unique(matches),
                                  tapply(cumsum(abs(amount1)),
                                         matches , tail, 1),
                                  xout = seq_len(length(pnl)),
                                  method = "constant", rule = 2,
-                                 yleft = 0)$y
+                                 yleft = 0, ties = "ordered")$y
 
             }
             tmp <- list(timestamp = if (isTRUE(along.timestamp))
