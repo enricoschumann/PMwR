@@ -3,9 +3,9 @@ v0.10-0  (2018-??-??; not yet released)
   o returns: argument 'period' may also be 'hourly'
     
   o code for 'pl' has been rewritten. In several cases
-    in which profit/loss was shown as NA, it is now
-    (more appropriately) shown as 0. For instance, with
-    a custom timestamp the realised/unrealised
+    in which profit/loss was set to NA, it now
+    defaults (more appropriately) to 0. For instance,
+    with a custom timestamp the realised/unrealised
     profit/loss before the first trade is now 0, not
     NA.
 
@@ -13,6 +13,8 @@ v0.10-0  (2018-??-??; not yet released)
 
   o valuation.position is now exported (though still
     experimental)
+
+  o pl.btest: fixed passing of additional arguments
   
   o various documentation updates/fixes; see the
     ChangeLog for all details. The manual at

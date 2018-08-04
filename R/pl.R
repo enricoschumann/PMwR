@@ -476,8 +476,5 @@ as.data.frame.pl <- function(x, ...) {
     }
 }
 
-avg <- .pl_stats
-
-pl.btest <- function(amount, ...) {
-    pl(amount$journal)
-}
+pl.btest <- function(amount, ...)
+    pl(amount$journal, ...)

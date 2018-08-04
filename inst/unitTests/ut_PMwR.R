@@ -837,17 +837,14 @@ test.pl <- function() {
     ## amount <- c(1,1,-1,1,-1)
     ## price <- c(100,99,101,100,101)
     ## pl(amount, price, along.timestamp = TRUE)
-    ## PMwR:::avg(amount, price)
     
     ## amount <- c(1,-2,1)
     ## price <- c(100,101,100)
     ## pl(amount, price)
     ## pl(amount, price, along.timestamp = TRUE)
-    ## PMwR:::avg(amount, price)
 
     ## tmp <- splitTrades(amount, price, timestamp = seq_along(amount),
     ##                    aggregate = TRUE)    
-    ## PMwR:::avg(tmp$amount, tmp$price)
 
     
     ## J <- journal(timestamp = c(1, 2, 3),
@@ -869,9 +866,6 @@ test.pl <- function() {
     ## cumcash <- cumsum(-price * amount)
     ## cumpos  <- cumsum(amount)
     ## pnl <- cumpos * price + cumcash
-    ## real <- avg(amount, price)$realised
-    ## unreal <- pnl-real
-    ## data.frame(cumsum(amount), price, pnl, real, unreal)
     
     
     ## library("PMwR")
