@@ -43,9 +43,17 @@ returns(x, \dots)
 }
 \arguments{
   \item{x}{
-    a \code{numeric} vector (possibly with a \code{dim} attribute; ie, a
-    matrix) of prices.  Can also be of class \code{zoo}, in which case
-    argument \code{t} should be \code{NULL}.
+
+    a \code{numeric} vector (possibly with a \code{dim}
+    attribute; i.e. a matrix) of prices. 
+    \code{returns} also supports \code{x} of other
+    classes, such as \code{zoo} or
+    \code{\link{NAVseries}}. (For time-series classes,
+     argument \code{t} should
+    be \code{NULL}.) For \code{.returns}, \code{x}
+    should be \code{numeric}; for other classes it may
+    not work properly.
+    
   }
   \item{t}{
         timestamps. See argument \code{"period"}.
@@ -176,6 +184,8 @@ returns(x, \dots)
   simple returns: current values divided by prior
   values minus one.  The default method works for
   numeric vectors/matrices.
+
+  \code{.returns} does the actual computations and may be used
   
   \subsection{Holding-Period Returns}{
     
