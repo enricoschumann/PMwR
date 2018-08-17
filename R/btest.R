@@ -24,10 +24,43 @@ btest  <- function(prices,
                    include.data = FALSE,
                    include.timestamp = TRUE,
                    timestamp, instrument,
-                   progressBar = FALSE) {
+                   progressBar = FALSE,
+                   variations,
+                   variations.settings) {
 
+    if (!missing(variations)) {
+        x <- match.call()
+        xx <- as.list(x)
+        xx[1L] <- NULL
+        xx <- lapply(xx, eval)
+        variations <- xx$variations
+        xx$variations <- NULL
+        
+        lens <- lengths(variations)
+        cases <- do.call(expand.grid,
+                         lapply(lens, seq_len))
+        args <- vector("list", length = nrow(cases))
+        
+        for (i in seq_along(args)) {
+            tmp <- mapply(`[`, variations, cases[i, ],
+                          SIMPLIFY = FALSE)
+            args[[i]] <- c(xx, tmp)
+            attr(args[[i]], "variation") <- tmp
+        }                            
+        ans <- vector("list", length(args))
+        for (i in seq_along(args)) {
+            ans[[i]] <- do.call(btest, args[[i]])
+            attr(ans[[i]], "variation") <- attr(args[[i]], "variation")
+        }
+        return(ans)
+    }
+    
+
+
+    
     L <- lag
 
+    
     if (!missing(timestamp) &&
         (inherits(timestamp, "Date") || inherits(timestamp, "POSIXct")) &&
         inherits(b, class(timestamp))) {
