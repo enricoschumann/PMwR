@@ -47,7 +47,7 @@ btest  <- function(prices,
         args <- vector("list", length = nrow(cases))
         
         for (i in seq_along(args)) {
-            tmp <- mapply(`[`, variations, cases[i, ],
+            tmp <- mapply(`[[`, variations, cases[i, ],
                           SIMPLIFY = FALSE)
             args[[i]] <- c(all_args, tmp)
             attr(args[[i]], "variation") <- tmp
