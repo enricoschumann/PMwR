@@ -13,6 +13,7 @@ rebalance(current, target, price,
           notional = NULL, multiplier = 1,
           truncate = TRUE, match.names = TRUE,
           fraction = 1, drop.zero = FALSE,
+          current.weights = FALSE,
           target.weights = TRUE)
 
 \method{print}{rebalance}(x, \dots, drop.zero = TRUE)
@@ -57,10 +58,15 @@ replace_weight(weights, ..., prefix = TRUE, sep = "::")
   \item{drop.zero}{
     logical; note the different defaults for computing and printing
   }
+  \item{current.weights}{
+    logical. If \code{TRUE} (the default), the values in \code{current} are
+    interpreted as weights. If \code{FALSE}, \code{current} is
+    interpreted as a position (i.e. notional/number of contracts).
+  }
   \item{target.weights}{
-    logical. If \code{TRUE} (the default), the values in target are
+    logical. If \code{TRUE} (the default), the values in \code{target} are
     interpreted as weights. If \code{FALSE}, \code{target} is
-    interpreted as a position (i.e. notional/number  of contracts).
+    interpreted as a position (i.e. notional/number of contracts).
   }
   \item{weights}{
     a numeric vector with named components
@@ -108,7 +114,7 @@ replace_weight(weights, ..., prefix = TRUE, sep = "::")
 }
 \references{
 
-  Schumann, E. (2016) \emph{Portfolio Management with
+  Schumann, E. (2018) \emph{Portfolio Management with
     R}. \url{http://enricoschumann.net/R/packages/PMwR/}
 
 }

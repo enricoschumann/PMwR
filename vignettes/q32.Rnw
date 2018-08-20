@@ -24,13 +24,16 @@
 
 <<echo=false>>=
 options(continue = "  ", digits = 3, width = 60, useFancyQuotes = FALSE)
+pv <- packageVersion("PMwR")
+pv <- gsub("(.*)[.](.*)", "\\1-\\2", pv)
 @
 
 \begin{document}
 \title{Treasury Quotes with 1/32 Fractions}
 \author{Enrico Schumann\\\url{es@enricoschumann.net}}
 
-{\raggedright{\LARGE Treasury Quotes with 1/32 Fractions}}\medskip
+{\raggedright{\LARGE Treasury Quotes with 1/32 Fractions}}\hspace*{\fill}
+{\footnotesize Package version \Sexpr{pv}}\medskip
 
 \noindent Enrico Schumann\\
 \noindent \url{es@enricoschumann.net}\\

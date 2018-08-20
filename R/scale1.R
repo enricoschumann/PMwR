@@ -1,4 +1,5 @@
 ## -*- truncate-lines: t; -*-
+## Copyright (C) 2008-18  Enrico Schumann
 
 scale1 <- function (x, ...)
     UseMethod("scale1", x)

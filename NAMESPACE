@@ -1,6 +1,5 @@
 importFrom(NMOF, drawdown)
 importFrom(NMOF, pm)
-importFrom(stats, aggregate)
 importFrom(zoo, as.zoo)
 importFrom(zoo, coredata)
 importFrom(zoo, index)
@@ -16,7 +15,7 @@ importFrom(datetimeutils, end_of_month)
 importFrom(datetimeutils, first_of_month)
 importFrom(datetimeutils, roundPOSIXt)
 importFrom(datetimeutils, timegrid)
-importFrom(crayon, bold)
+importFrom("crayon", bold)
 importFrom("fastmatch", fmatch)
 
 importFrom("grDevices",
@@ -24,11 +23,13 @@ importFrom("grDevices",
 importFrom("graphics",
            "abline", "axis", "hist", "lines", "par", "plot")
 importFrom("stats",
-           "quantile", "runif", "sd", "time", "uniroot")
+           "aggregate", "approx", "quantile", "runif", "sd",
+           "time", "uniroot", "window")
 importFrom("utils",
            "browseURL", "capture.output", "setTxtProgressBar",
            "str", "txtProgressBar",
-           "head", "tail", "toLatex")
+           "head", "tail", "toLatex",
+           "write.table")
 
 export(
     .expand,
@@ -42,6 +43,7 @@ export(
     btest,
     close_on_first,
     div_adjust,
+    drawdowns,
     "instrument<-",
     instrument,
     is.journal,
@@ -70,19 +72,24 @@ export(
     )
 
 ## S3method(`[`, position)
-S3method(`+`, quote32)
-S3method(`-`, quote32)
 S3method(Ops, position)
 S3method(Ops, quote32)
+S3method(`+`, quote32)
+S3method(`-`, quote32)
 S3method(`[<-`, journal)
 S3method(`[<-`, pricetable)
 S3method(`[`, journal)
 S3method(`[`, pricetable)
+S3method(`instrument<-`, journal)
+S3method(`instrument<-`, pricetable)
+S3method(`names<-`, pricetable)
 S3method(aggregate, journal)
+S3method(all.equal, journal)
 S3method(as.NAVseries, NAVseries)
 S3method(as.NAVseries, btest)
 S3method(as.NAVseries, zoo)
 S3method(as.data.frame, journal)
+S3method(as.data.frame, p_returns)
 S3method(as.data.frame, pl)
 S3method(as.data.frame, position)
 S3method(as.journal, data.frame)
@@ -96,15 +103,16 @@ S3method(as.zoo, NAVseries)
 S3method(as.zoo, p_returns)
 S3method(as.zoo, position)
 S3method(c, journal)
+S3method(drawdowns, default)
 S3method(head, journal)
 S3method(instrument, journal)
 S3method(instrument, position)
 S3method(instrument, pricetable)
-S3method(`instrument<-`, pricetable)
 S3method(journal, btest)
 S3method(journal, default)
 S3method(length, journal)
 S3method(lines, btest)
+S3method(names, pricetable)
 S3method(pl, btest)
 S3method(pl, data.frame)
 S3method(pl, default)
@@ -121,6 +129,7 @@ S3method(print, NAVseries)
 S3method(print, btest)
 S3method(print, journal)
 S3method(print, p_returns)
+S3method(print, p_returns_monthly)
 S3method(print, pl)
 S3method(print, position)
 S3method(print, pricetable)
@@ -142,11 +151,12 @@ S3method(summary, NAVseries)
 S3method(summary, journal)
 S3method(tail, journal)
 S3method(toHTML, p_returns)
+S3method(toHTML, p_returns_monthly)
 S3method(toLatex, p_returns)
 S3method(toLatex, summary.NAVseries)
 S3method(toOrg, journal)
 S3method(toText, p_returns)
 S3method(valuation, default)
 S3method(valuation, journal)
-S3method(names, pricetable)
-S3method(`names<-`, pricetable)
+S3method(valuation, position)
+S3method(window, NAVseries)

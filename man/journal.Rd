@@ -1,17 +1,18 @@
 \name{journal}
 \alias{journal}
+\alias{aggregate.journal}
+\alias{all.equal.journal}
 \alias{as.journal}
+\alias{c.journal}
+\alias{head.journal}
 \alias{is.journal}
 \alias{journal.default}
-\alias{aggregate.journal}
-\alias{c.journal}
 \alias{length.journal}
 \alias{print.journal}
 \alias{sort.journal}
-\alias{subset.journal}
-\alias{aggregate.journal}
 \alias{split.journal}
-\alias{head.journal}
+\alias{subset.journal}
+\alias{summary.journal}
 \alias{tail.journal}
 \alias{[.journal}
 \alias{[<-.journal}
@@ -155,31 +156,61 @@ is.journal(x)
 }
 \details{
   
-  The \code{journal} function creates a list of the arguments and
-  attaches a class attribute (\sQuote{journal}).  There are several
-  methods:
+  The \code{journal} function creates a list of the
+  arguments and attaches a class attribute
+  (\sQuote{journal}). It is a generic function; the
+  default method creates a journal from a atomic
+  vectors. The \code{btest} method extracts the journal
+  from the results of a backtest; see
+  \code{\link{btest}}.
+
+  \code{as.journal} coerces an object to a journal;
+  mostly used for creating a journal from a
+  \code{\link{data.frame}}.
+
+  \code{journal} methods are available for several
+  generic functions, for instance:
 
   \describe{
-    \item{\code{aggregate}}{Splits a journal according to by, applies a
-    function to every sub-journal and recombines the results into a
+
+    \item{\code{all.equal}}{compare contents of two
+    journals}
+
+    \item{\code{aggregate}}{Splits a journal according
+    to \code{by}, applies a function to every
+    sub-journal and recombines the results into a
     journal.}
+
+    \item{\code{as.data.frame}}{coerces journal to
+    \code{\link{data.frame}}}
   
-    \item{\code{split}}{Splits a journal according to \code{f}, yielding
-    a list of journals.  Often used interactively to have information
-    per sub-journal printed. }
+    \item{\code{c}}{Combine several journals into one.
+      Note that the first argument to \code{c.journal}
+      must inherit from \code{journal}, or else the
+      method dispatch will fail.  For empty journals,
+      use \code{journal()} (not \code{NULL}).}
 
-    \item{\code{c}}{Combine several journals into one.  Note that the
-      first argument to \code{c.journal} must inherit from
-      \code{journal}, or else the method dispatch will fail.  For empty
-      journals, use \code{journal()} (not \code{NULL}).}
-    
-    \item{\code{length}}{number of transactions in a journal; it uses
-    the length of \code{amount}.}
+    \item{\code{length}}{number of transactions in a
+    journal; it uses the length of \code{amount}.}
 
-    \item{\code{subset}}{evaluates an expression in an environment that
-    can access all fields of the journal.  The function is meant for
-    interactive analysis; care is needed when it is used within other
-    functions: see Examples and the Manual.}
+    \item{\code{split}}{Splits a journal according to
+    \code{f}, yielding a list of journals.  Often used
+    interactively to have information per sub-journal
+    printed. }
+
+    \item{\code{subset}}{evaluates an expression in an
+    environment that can access all fields of the
+    journal.  The function is meant for interactive
+    analysis; care is needed when it is used within
+    other functions: see Examples and the Manual.}
+
+    \item{\code{summary}}{provides summary statistics,
+    such as number of trades and average buy/sell
+    prices}
+
+    \item{\code{toOrg}}{converts a journal to an Org
+  table; package \pkg{orgutils} must be available}
+
   }  
   
   For journals that have a length, missing arguments will be coded as
@@ -198,7 +229,7 @@ is.journal(x)
 }
 \references{
 
-Schumann, E. (2017) \emph{Portfolio Management
+Schumann, E. (2018) \emph{Portfolio Management
   with R}. \url{http://enricoschumann.net/R/packages/PMwR/}
 
 } 

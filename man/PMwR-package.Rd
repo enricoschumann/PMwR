@@ -18,7 +18,7 @@
 The aim of \pkg{PMwR} is to provide a small set of
 reliable, efficient and convenient tools that help in
 processing and analysing trade/portfolio data. The
-Manual provides all the details. It is available from
+Manual provides all the details; it is available from
 \url{http://enricoschumann.net/PMwR/}.
 
 }
@@ -33,7 +33,7 @@ Gilli, M., Maringer, D. and Schumann, E. (2011) \emph{Numerical Methods
 and Optimization in Finance}. Elsevier.
 \url{http://www.elsevierdirect.com/product.jsp?isbn=9780123756626}
 
-Schumann, E. (2017) \emph{Portfolio Management
+Schumann, E. (2018) \emph{Portfolio Management
   with R}. \url{http://enricoschumann.net/PMwR/}
 
 } 

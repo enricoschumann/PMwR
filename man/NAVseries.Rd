@@ -4,6 +4,7 @@
 \alias{plot.NAVseries}
 \alias{print.NAVseries}
 \alias{summary.NAVseries}
+\alias{window.NAVseries}
 \title{
   Net-Asset-Value (NAV) Series
 }
@@ -18,9 +19,11 @@ as.NAVseries(x, ...)
 
 \method{print}{NAVseries}(x, \dots )
 
-\method{summary}{NAVseries}(object, monthly = TRUE, na.rm = FALSE, \dots )
+\method{summary}{NAVseries}(object, \dots, monthly.vol = TRUE, na.rm =
+    FALSE, assume.daily = FALSE)
 
 \method{plot}{NAVseries}(x, y, \dots, xlab = "", ylab = "", type = "l")
+\method{window}{NAVseries}(x, start = NULL, end = NULL, \dots)
 }
 \arguments{
   \item{NAV}{
@@ -47,9 +50,14 @@ as.NAVseries(x, ...)
 \item{\dots}{
   further arguments
 }
-\item{monthly}{
+\item{monthly.vol}{
+
   if \code{TRUE} (default), volatility computations
   are done on monthly returns
+
+}
+\item{assume.daily}{
+  logical
 }
 \item{na.rm}{
   logical
@@ -66,6 +74,12 @@ as.NAVseries(x, ...)
 \item{type}{
   character. See \code{\link{plot}}.
 }
+\item{start}{
+  same class as timestamp; \code{NULL} means the first timestamp
+}
+\item{end}{
+  same class as timestamp; \code{NULL} means the last timestamp
+}
 }
 \details{
 
@@ -77,16 +91,29 @@ as.NAVseries(x, ...)
 
   The summary method returns a list of the original NAVseries plus
   various statistics, such as return per year and volatility.
-    
-}
-\value{
-  an \code{NAVseries}: see Details.
 
   
 }
+\section{Note}{
+
+  The semantics of handling NAVseries are not stable
+  yet. Currently, objects of class \code{NAVseries} are
+  univariate: you create a single NAVseries, summarise
+  it, plot it, and so one. In the future, at least some
+  of the methods will support the multi-variate case,
+  i.e. be able to handle several series at once.
+
+}
+\value{
+
+  an \code{NAVseries}: see Details.
+
+  an \code{NAVseries} summary: a list
+
+}
 \references{
 
-  Schumann, E. (2017) \emph{Portfolio Management with
+  Schumann, E. (2018) \emph{Portfolio Management with
   \R}. \url{http://enricoschumann.net/PMwR/}
 
 } 

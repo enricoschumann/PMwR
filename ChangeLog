@@ -1,3 +1,226 @@
+2018-08-18  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): 'variations': support
+	serial and parallel backtests, the latter
+	relying on package 'parallel'
+
+2018-08-17  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): experimental -- new
+	arguments 'variations' and 'variations.settings'
+
+2018-08-04  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pl.R (.pl_stats): remove 'avg'; see
+	ChangeLog entry of 2017-07-05
+
+2018-08-03  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pl.R (pl.btest): fixed -- method had not
+	passed on additional arguments (`...`)
+
+2018-07-31  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pl.R (pl.default): rewrite along.timestamp
+	'pl' code, using stats::approx. In several
+	cases in which profit/loss was shown as NA, it
+	is now (more appropriately) shown as 0. For
+	instance, with a custom timestamp the
+	realised/unrealised profit/loss before the
+	first trade is now 0, not NA.
+
+	* NAMESPACE: import stats::approx
+
+2018-07-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (`instrument<-.journal`): export
+	method
+
+2018-06-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/valuation.R (valuation.journal): accept
+	'instrument = NULL'
+
+2018-06-27  Enrico Schumann  <es@enricoschumann.net>
+
+	* man/position.Rd: update docs
+
+	* NAMESPACE: export 'valuation.position'
+
+	* R/valuation.R (valuation.position): ignore
+	zero-positions; warn about missing prices
+
+2018-06-26  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (summary): fix formatting
+
+2018-06-21  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (position.default): replace
+	internal separator in column names with '.'
+
+2018-06-20  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R: fix duplication of timestamp when
+	both 'include.timestamp' and 'include.data' are
+	TRUE
+
+	* R/position.R (print.position): fix
+	use of 'sep' argument
+
+	* NAMESPACE: do not export 'toHTML'
+
+2018-06-14  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R: support 'hourly' holding-period
+	returns
+
+2018-06-12  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: export 'toHTML'
+
+	* R/internal.R (.timestamp): make function work
+	for 'p_returns' objects as well
+
+	* DESCRIPTION (Depends): add 'R (>= 2.10)'
+
+2018-06-11  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.9-0
+
+2018-06-08  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (window.NAVseries): add method
+
+	* R/internal.R (.may_be_Date): add internal
+	function; see `?.may_be_Date`
+
+	* R/internals.R (.timestamp): add internal
+	function, also a replacement function;
+	see `?.timestamp`
+
+2018-06-01  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (do.rebalance): fix case when
+	do.rebalance is a vector of timestamps
+
+	* R/returns.R (returns.zoo): for portfolio
+	returns (i.e. when 'weights' are provided), the
+	method now always returns a 'zoo' object
+
+2018-05-31  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (returns.default): ignore
+	'position' (and warn when the argument
+	is specified)
+
+	* inst/unitTests/ut_PMwR.R (test.returns):
+	exclude tests on time-weighted returns,
+	i.e. those using the deprecated 'position'
+	argument
+
+2018-05-29  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (summary.NAVseries): add date
+	of recovery from drawdown ('mdd.recover.when')
+	to results;
+	add new argument 'assume.daily': if TRUE,
+	numeric timestamps are considered daily data;
+	rename argument 'monthly' to 'monthly.vol'
+
+2018-05-25  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (returns): 'rebalance.when' is
+	now matched against the timestamp 't' when both
+	are of the same class (e.g., when 't' is of
+	class Date, 'rebalance.when' may also be
+	specified as a Date)
+	(returns.default): remove warning for the case
+	when 't' is specified, but neither 'period' nor
+	'rebalance.when' are
+
+2018-05-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): new argument
+	'include.timestamp', with default TRUE
+
+2018-05-10  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (all.equal.journal): add
+	method (incomplete)
+
+2018-04-30  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.8-0
+
+2018-04-21  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/rebalance.R (rebalance): refactor
+	implementation;
+	new argument 'current.weights' with default
+	FALSE; if TRUE, the current portfolio is
+	assumed to be a vector of weights
+
+2018-03-07  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (as.data.frame.p_returns):
+	add/export method: the method calls
+	as.matrix.p_returns and then coerces to
+	data.frame
+
+2018-03-05  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/btest.R (btest): if a timestamp of class
+        Date or POSIXct is specified, burnin 'b' may be
+        an actual timestamp. Example:
+
+           btest(prices = 1:10,
+                 signal = function() 1,
+                 b = as.Date("2018-01-05"),
+                 timestamp = as.Date("2018-1-1") + 0:9)
+
+        => first trade will be at 2018-01-06
+
+2018-02-26  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.7-1
+
+	* NAMESPACE: import 'utils::write.table'
+
+	* R/pl.R (pl.default): new argument 'do.sum': if
+	TRUE, sum P/L across instruments
+	(pl.default): new argument 'pl.only': if TRUE,
+	return pl only as a numeric vector
+
+2018-02-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (journal.default): fixed -- if
+	length of amount is zero, an empty journal is
+	returned (before, in some cases, instrument
+	became NA, i.e. of length one)
+
+2018-02-23  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/drawdowns.R (drawdowns): new generic function
+	(drawdowns.default, drawdowns.zoo): add methods
+
+2018-02-09  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/journal.R (head.journal, tail.journal): fix
+	skipping of empty journals
+	(tail.journal): fix sorting in reverse order
+
+2018-02-08  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (print.position): do not print
+	column number for position without timestamp
+
+2018-01-22  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/plot_trading_hours.R: set useful defaults
+	when timestamp is of class 'Date' (interval
+	becomes "1 day", etc.)
+
 2018-01-01  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): 0.7-0
@@ -1744,7 +1967,7 @@
 
 2015-05-12  Enrico Schumann  <es@enricoschumann.net>
 
-        * NAMESPACE: moved function 'pm' to package NMOF
+        * NAMESPACE (pm): moved function 'pm' to package NMOF
 
         * inst/unitTests/ut_Datetime.R: moved tests to new
         'datetimeutils'

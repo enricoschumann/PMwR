@@ -1,4 +1,5 @@
 ## -*- truncate-lines: t; -*-
+## Copyright (C) 2008-18  Enrico Schumann
 
 pl <- function(amount, ...)
     UseMethod("pl")
@@ -114,13 +115,13 @@ pl.default <- function(amount, price, timestamp = NULL,
                        initial.position = NULL,
                        initial.price = NULL,
                        vprice = NULL,
-                       tol = 1e-10, do.warn = TRUE,...) {
+                       tol = 1e-10, do.warn = TRUE,
+                       do.sum = FALSE, pl.only = FALSE, ...) {
 
     if (length(multiplier) > 1L && is.null(names(multiplier)))
         stop(sQuote("multiplier"), " must be a named vector")
     if (approx)
         .NotYetUsed("approx")
-
 
     custom.timestamp <- FALSE
     if (isTRUE(along.timestamp)) {
@@ -144,7 +145,7 @@ pl.default <- function(amount, price, timestamp = NULL,
 
         custom.timestamp <- TRUE
         if (is.null(vprice))
-            stop("user-defined timestamp: vprice needs be specified")
+            stop("user-defined timestamp: vprice must be specified")
         if (is.null(dim(vprice)))
             vprice <- as.matrix(vprice)
 
@@ -192,8 +193,8 @@ pl.default <- function(amount, price, timestamp = NULL,
         instrument  <- c(instrument0, instrument)
         amount      <- c(amount0, amount)
         price       <- c(price0, price)
+        ## TODO: is there a case for timestamp0 / initial.timestamp?
 
-        ## timestamp0 ?? initial.timestamp
     }
 
     if (is.null(instrument) ||
@@ -319,11 +320,11 @@ pl.default <- function(amount, price, timestamp = NULL,
         } else {
 
             ## P/L along timestamp
-
+            
             cumcash <- cumsum(-price1 * amount1)
             cumpos  <- cumsum(amount1)
-
             real <- .pl_stats(amount1, price1)$realised
+
             if (isTRUE(along.timestamp)) {
 
                 ## use only timestamps in journal
@@ -333,9 +334,9 @@ pl.default <- function(amount, price, timestamp = NULL,
 
             } else {
 
-                ## compute position at any timestamp
+                ## compute position at every timestamp
                 ## specified by 'along.timestamp',
-                ## including the cash account
+                ## including position of cash account
 
                 ## total pnl
                 tmp <- position(amount = c(amount1, -price1 * amount1),
@@ -343,19 +344,27 @@ pl.default <- function(amount, price, timestamp = NULL,
                                 instrument = c(rep(i1, length(amount1)),
                                                rep("cash", length(amount1))),
                                 when = along.timestamp)[, c(i1, "cash")]
-                pnl <- rowSums(tmp * cbind(vprice, 1))
+                pnl <- rowSums(tmp * cbind(vprice1, 1))
 
-                real_ <- numeric(length(pnl)) + NA
-                real_[matchOrNext(timestamp1, along.timestamp)] <-
-                    real[matchOrNext(timestamp1, along.timestamp) > 0]
-                ## FIXME: replace with simpler na.locf
-                real_ <- zoo::na.locf(real_, na.rm = FALSE)
-                real <- real_
-                volume <- numeric(length(along.timestamp))
-                volume[matchOrNext(unique(timestamp1), along.timestamp)] <-
-                    abs(tapply(amount1, timestamp1,
-                               function(x) sum(abs(x))))
-                volume <- cumsum(volume)
+                ## MATCH the elements in timestamp1 to
+                ## along.timestamp. Several elements in
+                ## timestamp1 may match a single
+                ## timestamp in along.timestamp: Use
+                ## the tail.
+                matches <- matchOrNext(timestamp1, along.timestamp)
+                real <- approx(unique(matches),
+                               tapply(real, matches , tail, 1),
+                               xout = seq_len(length(pnl)),
+                               method = "constant", rule = 2,
+                               yleft = 0, ties = "ordered")$y
+
+                volume <- approx(unique(matches),
+                                 tapply(cumsum(abs(amount1)),
+                                        matches , tail, 1),
+                                 xout = seq_len(length(pnl)),
+                                 method = "constant", rule = 2,
+                                 yleft = 0, ties = "ordered")$y
+
             }
             tmp <- list(timestamp = if (isTRUE(along.timestamp))
                                         timestamp1 else
@@ -376,6 +385,35 @@ pl.default <- function(amount, price, timestamp = NULL,
     } else {
         attr(ans, "instrument") <- uniq.i
         names(ans) <- uniq.i
+    }
+
+    if (do.sum) {
+        ## if (!identical(along.timestamp, TRUE) &&
+        ##     !identical(along.timestamp, FALSE) &&
+        if ((n <- length(ans)) > 1L) {
+            ans1 <- ans[[1L]]
+            for (i in 2:n) {
+                ans1$pl <- ans1$pl + ans[[i]]$pl
+                ans1$realised <- ans1$realised + ans[[i]]$realised
+                ans1$unrealised <- ans1$unrealised + ans[[i]]$unrealised
+                ans1$volume <- ans1$volume + ans[[i]]$volume
+            }
+            ans1$buy <- NA
+            ans1$sell <- NA
+            ans1 <- list(ans1)
+            class(ans1) <- "pl"
+            attr(ans1, "along.timestamp") <- along.timestamp
+            attr(ans1, "instrument") <- NA
+            ans <- ans1
+        }        
+    }
+    if (pl.only) {
+        if (!identical(along.timestamp, FALSE))
+            stop("only supported for ",
+                 sQuote("along.timestamp = FALSE"))
+        ans1 <- unlist(lapply(ans, `[`, "pl"))
+        names(ans1) <- names(ans)
+        ans <- ans1
     }
     ans
 }
@@ -398,7 +436,7 @@ pl.default <- function(amount, price, timestamp = NULL,
 }
 
 as.data.frame.pl <- function(x, ...) {
-    if (isTRUE(attr(x, "along.timestamp")))
+    if (!identical(attr(x, "along.timestamp"), FALSE))
         stop("currently only supported for ",
              sQuote("along.timestamp = FALSE"))
 
@@ -438,8 +476,5 @@ as.data.frame.pl <- function(x, ...) {
     }
 }
 
-avg <- .pl_stats
-
-pl.btest <- function(amount, ...) {
-    pl(amount$journal)
-}
+pl.btest <- function(amount, ...)
+    pl(amount$journal, ...)

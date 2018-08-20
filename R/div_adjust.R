@@ -1,4 +1,5 @@
 ## -*- truncate-lines: t; -*-
+## Copyright (C) 2008-18  Enrico Schumann
 
 div_adjust <- function(x, t, div, backward = TRUE, additive = FALSE) {
 

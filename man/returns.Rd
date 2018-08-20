@@ -43,18 +43,28 @@ returns(x, \dots)
 }
 \arguments{
   \item{x}{
-    a \code{numeric} vector (possibly with a \code{dim} attribute; ie, a
-    matrix) of prices.  Can also be of class \code{zoo}, in which case
-    argument \code{t} should be \code{NULL}.
+
+    a \code{numeric} vector (possibly with a \code{dim}
+    attribute; i.e. a matrix) of prices. 
+    \code{returns} also supports \code{x} of other
+    classes, such as \code{zoo} or
+    \code{\link{NAVseries}}. (For time-series classes,
+     argument \code{t} should
+    be \code{NULL}.) For \code{.returns}, \code{x}
+    should be \code{numeric}; for other classes it may
+    not work properly.
+    
   }
   \item{t}{
         timestamps. See argument \code{"period"}.
   }
   \item{period}{
     
-    Typically \code{character}; supported are "month",
-    "quarter", "year" or "ann" (annualised), "ytd"
-    (year-to-date), "mtd" (month-to-date), "itd"
+    Typically \code{character}; supported are
+    \code{"hour"}, \code{"day"}, \code{"month"},
+    \code{"quarter"}, \code{"year"},
+    \code{"ann"} (annualised), \code{"ytd"}
+    (year-to-date), \code{"mtd"} (month-to-date), \code{"itd"}
     (inception-to-date) or a single year, such as
     "2012".  The value of \sQuote{period} is used only
     when timestamp information is available: for
@@ -62,14 +72,14 @@ returns(x, \dots)
     \code{zoo}/\code{xts} objects.
 
     All returns are computed as simple returns. They
-    will only be annualised with option "ann"; they
+    will only be annualised with option \code{"ann"}; they
     will not be annualised when the length of the time
     series is less than one year. To force annualising
     in such a case, use
     \sQuote{\code{ann!}}. Annualisation can only work
     when the timestamp \code{t} can be coerced to class
     \code{\link{Date}}. The result will have an
-    attribute "is.annualised", which is a logical
+    attribute \code{is.annualised}, which is a logical
     vector.
 
   }
@@ -89,8 +99,7 @@ returns(x, \dots)
   \item{position}{
 
     numeric; the same length/dimension as
-    \code{x}. \strong{Deprecated: will be removed in
-    the future.}
+    \code{x}. \strong{This argument is currently ignored.}
 
   }
   \item{weights}{
@@ -138,7 +147,16 @@ returns(x, \dots)
 
   }
   \item{month.names}{
-    character: names of months
+
+    character: names of months. Default is an
+    abbreviated month name as provided by the
+    locale. That may cause trouble, notably with
+    \code{toLatex}, if such names contain
+    non-\acronym{ASCII} characters: a safe choice is
+    either the numbers 1 to 12, or the character vector
+    \code{\link{month.abb}}, which lives in the base
+    package.
+    
   }
   \item{digits}{
     number of digits in table
@@ -162,10 +180,31 @@ returns(x, \dots)
 }
 \details{
 
-  \code{return} is a generic function.  It computes
+  \code{returns} is a generic function.  It computes
   simple returns: current values divided by prior
   values minus one.  The default method works for
   numeric vectors/matrices.
+
+  \code{.returns} does the actual computations and may be used
+  
+  \subsection{Holding-Period Returns}{
+    
+    When a timestamp is available, returns can compute returns for
+    specific calendar periods.
+    
+  }
+  
+  \subsection{Portfolio Returns}{
+    
+    \code{returns} may compute returns for a portfolio
+    specified in \code{weights}. The portfolio is
+    rebalanced at \code{rebalance.when}; the default is
+    every period.
+    
+    \code{rebalance.when} may either be integers or of
+    the same class as a \code{timestamp}
+    (e.g. \code{\link{Date}}).
+  }
 
 }
 \value{

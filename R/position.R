@@ -1,4 +1,5 @@
 ## -*- truncate-lines: t; -*-
+## Copyright (C) 2008-18  Enrico Schumann
 
 position <- function(amount, ...)
     UseMethod("position")
@@ -87,7 +88,7 @@ position.default <- function(amount, timestamp, instrument,
     nw <- length(when)
     nm <- sort(unique(instrument))
     pos <- array(0, dim = c(nw, length(nm)))
-    colnames(pos) <- nm
+    colnames(pos) <- gsub("%SEP%", ".", nm, fixed = TRUE)
     rownames(pos) <- if (no.timestamp) rep("", length(when)) else as.character(when)
     for (j in seq_len(nw)) {
         for (i in seq_along(nm)) {
@@ -169,9 +170,9 @@ print.position <- function(x, ..., sep = ":") {
     if (!is.null(account)) {
         instrument <- paste(account, instrument, sep = sep)
         if (nrow(x) == 1L) {
-            all_i <- .expand(instrument, sep = ":")
+            all_i <- .expand(instrument, sep = sep)
             instrument <- paste0(.tree(all_i$level, style = "ascii"),
-                                 .leaf(paste(all_i$description), ":"))
+                                 .leaf(paste(all_i$description), sep))
             pos <- numeric(nrow(all_i)) + NA
             dim(pos) <- c(1L, nrow(all_i))
             pos[all_i$position > 0] <- unclass(x)[all_i$position]
@@ -196,7 +197,10 @@ print.position <- function(x, ..., sep = ":") {
     } else if (dim(x)[1L] > 1L) {
         print(unclass(x), na.print = "")
     } else {
-        print(t(unclass(x)), na.print = "")
+        if (is.na(timestamp))
+            write.table(t(unclass(x)), col.names = FALSE, quote = FALSE)
+        else
+            print(t(unclass(x)), na.print = "")
     }
     invisible(original.x)
 }

@@ -21,7 +21,8 @@ pl(amount, \dots )
    multiplier.regexp = FALSE,
    along.timestamp = FALSE, approx = FALSE,
    initial.position = NULL, initial.price = NULL,
-   vprice = NULL, tol = 1e-10, do.warn = TRUE, \dots )
+   vprice = NULL, tol = 1e-10, do.warn = TRUE,
+   do.sum = FALSE, pl.only = FALSE, \dots )
 
 \method{pl}{journal}(amount, multiplier = 1,
    multiplier.regexp = FALSE,
@@ -95,13 +96,16 @@ pl(amount, \dots )
   \item{use.crayon}{logical}
   \item{na.print}{character: how to print \code{NA} values}
   \item{do.warn}{logical: issue warnings?}
+  \item{do.sum}{logical: sum profit/loss across instruments?}
+  \item{pl.only}{logical: if \code{TRUE}, return only
+    numeric vector of profit/loss}
 }
 \details{
 
   Computes profit and/or loss and returns a list with
   several statistics (see Section Value, below). To get
   only the profit/loss numbers as a numeric vector,
-  call \code{pl} twice (\code{pl(pl(...))}).
+  set argument \code{pl.only} to \code{TRUE}.
 
   \code{pl} is a generic function: The default input is
   vectors for amount, price, etc. Alternatively (and
@@ -145,7 +149,7 @@ pl(amount, \dots )
 
 }
 \references{
-Schumann, E. (2017) \emph{Portfolio Management
+Schumann, E. (2018) \emph{Portfolio Management
   with R}. \url{http://enricoschumann.net/PMwR/}
 
 }

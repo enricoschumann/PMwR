@@ -24,13 +24,16 @@
 
 <<echo=false>>=
 options(continue = "  ", digits = 3, width = 60, useFancyQuotes = FALSE)
+pv <- packageVersion("PMwR")
+pv <- gsub("(.*)[.](.*)", "\\1-\\2", pv)
 @
 
 \begin{document}
 \title{An Overview of the PMwR Package}
 \author{Enrico Schumann\\\url{es@enricoschumann.net}}
 
-{\raggedright{\LARGE An Overview of the PMwR Package}}\medskip
+{\raggedright{\LARGE An Overview of the PMwR Package}}\hspace*{\fill}
+{\footnotesize Package version \Sexpr{pv}}\medskip
 
 \noindent Enrico Schumann\\
 \noindent \url{es@enricoschumann.net}\\
@@ -45,7 +48,7 @@ require("zoo")
 provide a small set of reliable, efficient and convenient
 tools that help in processing and analysing trade and
 portfolio data. The package does not provide a complete
-application that could be used `as is', but tools
+application to be used `as is', but tools
 for creating such an application.
 
 \noindent The package grew out of various pieces of
@@ -67,7 +70,7 @@ nt <- gsub(".*\\(([0-9]+) checks?\\).*", "\\1",
 Even if \textsc{pm}w\textsc{r} is under development: the package is to
 provide reliable code. Hence, for all computations, unit tests are included.
 As of package version %
-\Sexpr{gsub("(.*)[.]([0-9]+)", "\\1-\\2", as.character(packageVersion("PMwR")))},
+\Sexpr{pv},
 there are \Sexpr{sum(as.numeric(nt))} tests included. 
 These tests are stored in subdirectory \texttt{unitTests}.} %
 
@@ -78,9 +81,11 @@ functions may be introduced. The \textbf{recommended
   practice} is therefore to \textbf{explicitly name
   arguments in function calls} and not pass arguments
 by position. Any changes in argument names will be
-documented in the ChangeLog
-(\,\url{http://enricoschumann.net/R/packages/PMwR/ChangeLog}\,)
-and so can be easily followed.
+documented in the \textsc{news} file
+(\,\url{http://enricoschumann.net/R/packages/PMwR/NEWS}\,)
+and so can be easily followed. More details
+are in the ChangeLog
+(\,\url{http://enricoschumann.net/R/packages/PMwR/ChangeLog}\,).
 
 The latest version of the package is available from
 \url{http://enricoschumann.net/R/packages/PMwR/}. To install the
@@ -101,29 +106,30 @@ provide you with a Windows version.
 
 \section*{What the package provides}
 
-The package provides functions that can serve as
-building blocks for many activities in portfolio
-management. Three examples follow; all details are in
-the manual:
+\begin{description}
+\item[Keep track of transactions] The package provides
+  functions that work with journals (sometimes called
+  blotters). See \texttt{?journal} and
+  \texttt{?position}.
+\item[Testing strategies] See \texttt{?btest}.
+\item[Computing \textsc{p}\&\textsc{l} and returns] See
+  \texttt{?returns}, \texttt{?rc}, \texttt{?pl} and
+  \texttt{?unit\_prices}.
+\end{description}
 
-\url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}\,.
+\noindent All details are in the manual:
+
+\begin{center}
+\url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
+\end{center}
 
 \noindent I am grateful for comments, suggestions and
-corrections.
-
-\subsection*{Testing strategies}
-
-See \texttt{?btest}.
-
-\subsection*{Keeping track of transactions}
-
-The package provides functions that work with journals
-(sometimes called blotters). See \texttt{?journal} and
-\texttt{?position}.
-
-\subsection*{Computing \textsc{p}\&\textsc{l} and returns}
-
-See \texttt{?returns}, \texttt{?pl} and
-\texttt{?unit\_prices}.
+corrections.  Please send bug reports directly to the
+package maintainer, for instance by using
+\texttt{bug.report}.\index{bug reports}
+<<eval=false>>=
+utils::bug.report("[PMwR] Unexpected behaviour in function <XXX>", 
+                  maintainer("PMwR"), package = "PMwR")
+@ 
 
 \end{document}

@@ -1,0 +1,55 @@
+#+TITLE: PMwR: Things to do, ideas, ...
+#+AUTHOR: Enrico Schumann
+#+CATEGORY: PMwR
+
+* general
+
+** make a list of options
+
+   only used in print methods
+
+** more methods
+
+   stats::time methods?
+
+   as.zoo for pl over time?
+   
+
+* =btest=
+
+** support multiplier?
+
+** add =pl= method
+
+   for open positions, use last price as =vprice=
+
+
+* =pricetable=
+
+** add 'drop' argument to return matrix?
+
+
+* =position= [0/1]
+
+** TODO =when= keywords
+
+   endofyear
+   endofquarter
+
+
+* =returns= [0/2]
+
+** TODO =YTM= holding-period returns
+
+   beginning of year to end of previous month
+
+** TODO print: allow printing in basispoints
+
+
+
+* =valuation=
+
+** =position=
+
+   add attribute =valuation.data=, a list in which
+   every component has the same size as position

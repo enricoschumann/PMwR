@@ -1,3 +1,6 @@
+## -*- truncate-lines: t; -*-
+## Copyright (C) 2008-18  Enrico Schumann
+
 returns <- function(x, ...)
     UseMethod("returns")
 
@@ -8,6 +11,14 @@ returns.default <- function(x, t = NULL, period = NULL,
                             rebalance.when = NULL,
                             lag = 1, ...) {
 
+    if (!is.null(position)) {
+        position <- NULL
+        warning("time-weighted returns not supported, so position is ignored")
+    }
+
+    ## if (is.null(period) && is.null(rebalance.when))
+    ##     t <- NULL
+    
     if (is.unsorted(t)) {  ## is.unsorted(NULL) == FALSE
         idx <- order(t)
         t <- t[idx]
@@ -18,10 +29,20 @@ returns.default <- function(x, t = NULL, period = NULL,
         rebalance.when <- tolower(rebalance.when)
         if (rebalance.when == "endofmonth")
             rebalance.when  <- last(t, format(as.Date(t), "%Y-%m"), TRUE)
-        if (is.character(period)) {
+        else if (rebalance.when == "endofyear")
+            rebalance.when  <- last(t, format(as.Date(t), "%Y"), TRUE)
+        if (!is.null(period)) {
             warning("rebalance.when is specified, so period is ignored")
             period <- NULL
         }
+    }
+    if (!is.null(t) &&
+        inherits(rebalance.when, class(t))) {
+        ii <- match(rebalance.when, t)
+        if (any(is.na(ii)))
+            warning(sQuote("rebalance.when") ,
+                    " does not match timestamp")
+        rebalance.when <- ii[!is.na(ii)]        
     }
 
     if (is.null(t) &&
@@ -31,19 +52,12 @@ returns.default <- function(x, t = NULL, period = NULL,
         period <- NULL
     }
 
-    if (!is.null(t) &&
-        is.null(period) && is.null(rebalance.when)) {
-        warning("timestamp information ignored because ",
-                sQuote("period/rebalance.when"), " is not specified")
-        t <- NULL
-    }
-
-    if (is.null(t) &&  is.null(position) && is.null(weights)) {
+    if (is.null(period) &&  is.null(position) && is.null(weights)) {
         .returns(x, pad = pad, lag = lag)
-    } else if (is.null(t) && is.null(position) && !is.null(weights)) {
+    } else if (is.null(position) && !is.null(weights)) {
         returns_rebalance(prices = x, weights = weights,
                           when = rebalance.when, pad = pad)
-    } else if (!is.null(t)) {
+    } else if (!is.null(period)) {
         if (is.unsorted(t)) {
             idx <- order(t)
             t <- t[idx]
@@ -55,25 +69,26 @@ returns.default <- function(x, t = NULL, period = NULL,
     } else {
         if (lag != 1L)
             warning(sQuote("lag"), " is ignored")
-        warnings("tw returns not supported any more")
+        warning("tw returns not supported any more")
         twReturns(x, position, pad = pad)
     }
 }
 
 
-## ---[Handling of 'timestamp' and 'period' in methods]---
+## ---[Handling of 'timestamp' in methods]---
 ##
-## Methods are responsible for 'stripping down' the input
-## to x and t, calling 'returns.default' (or some other
-## method) and then for re-assembling the original class's
-## structure. When there is no period, methods should keep
-## timestamp information for themselves, not pass it on.
+## Methods are responsible for 'stripping down' the
+## input to x and t, calling 'returns.default' (or some
+## other method) and then re-assembling the
+## original class's structure. When there is no 'period'
+## and no 'rebalance.when', methods should keep timestamp
+## information for themselves and not pass it on.
 
 returns.NAVseries <- function(x, period = NULL, complete.first = TRUE,
                               pad = NULL, position = NULL, lag = 1, ...) {
 
-    ## does *not* return a NAVseries since it is not defined for
-    ## returns, only for NAVs (levels)
+    ## does *not* return a NAVseries since it is not
+    ## defined for returns, only for NAVs (levels)
 
     if (!is.null(period)) {
         returns.default(x, t = attr(x, "timestamp"), period = period,
@@ -94,15 +109,15 @@ returns.zoo <- function(x, period = NULL, complete.first = TRUE,
     t <- time(x)
     x <- coredata(x)
 
-    if (!is.null(period) ||
-        (!is.null(rebalance.when) && is.character(rebalance.when))) {
+    if (!is.null(period)) {
         returns.default(x, t = t, period = period,
                         complete.first = complete.first,
                         pad = pad, position = position,
-                        weights = weights, rebalance.when = rebalance.when,
+                        weights = weights,
+                        rebalance.when = rebalance.when,
                         lag = lag, ...)
     } else {
-        ans <- returns.default(x, period = NULL,
+        ans <- returns.default(x, t = t, period = NULL,
                                complete.first = complete.first,
                                pad = pad, position = position,
                                weights = weights,
@@ -241,7 +256,34 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
             xj <- x[ ,j]
             i <- which(years < max(years))
             if (!length(i)) {
-                ## all obs are with one year
+                ## all obs are within one year
+                i <- seq_along(xj)
+                t0 <- min(which(!is.na(xj[i])))
+            } else {
+                t0 <- max(which(!is.na(xj[i])))
+            }
+            t1 <- max(which(!is.na(xj)))
+            ans[j] <- drop(returns( xj[c(t0, t1)] ))
+            from.to[j,] <- c(t[t0], t[t1])
+        }
+        class(from.to) <- "Date"
+        attr(ans, "t") <- from.to
+        attr(ans, "period") <- "ytd"
+    } else if (grepl("^ytm", period, ignore.case = TRUE)) {
+        if (!is.null(pad))
+            warning(sQuote("pad"), " is ignored")
+        ymon <- as.numeric(format(t, "%Y%m"))
+        years <- as.numeric(format(t, "%Y"))
+        if (period != "ytm!" && max(years) != as.numeric(format(Sys.Date(), "%Y")))
+            warning("max. timestamp (", max(years), ") does not match current year")
+        ans <- numeric(nc)
+        from.to <- array(NA, dim = c(nc, 2))
+        colnames(from.to) <- c("from", "to")
+        for (j in 1:nc) {
+            xj <- x[ , j]
+            i <- which(years < max(years))
+            if (!length(i)) {
+                ## all obs are within one year
                 i <- seq_along(xj)
                 t0 <- min(which(!is.na(xj[i])))
             } else {
@@ -289,6 +331,9 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
     } else {
         if (length(period) > 1L) {
             by <- period
+        } else if (grepl("hour(ly)?", period, ignore.case = TRUE)) {
+            by <- format(t, "%Y%m%d%H")
+            period <- "hourly"
         } else if (grepl("da(y|i)", period, ignore.case = TRUE)) {
             by <- format(t, "%Y%m%d")
             period <- "daily"
@@ -313,6 +358,9 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         attr(ans, "period") <- period
     }
     class(ans) <- "p_returns"
+    if (period == "monthly")
+        class(ans) <- c("p_returns_monthly", class(ans))
+
     ans
 }
 
@@ -355,12 +403,14 @@ fmt <- function(x, plus, digits) {
 }
 
 ## not exported
-print.p_returns <- function(x, ..., year.rows = TRUE,
+print.p_returns_monthly <- function(x, ..., year.rows = TRUE,
                            month.names = NULL, zero.print = "0", plus = FALSE,
                            digits = 1, na.print = NULL) {
+
     period <- attr(x, "period")
     timestamp <- attr(x, "t")
-    if (period == "monthly" && is.null(dim(x))) {
+
+    if (is.null(dim(x))) {
         if (year.rows)
             print(.mtab(x, timestamp, ytd = "YTD", month.names = month.names,
                         zero.print = zero.print, plus = plus, digits = digits),
@@ -369,12 +419,22 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
             print(t(.mtab(x, timestamp, ytd = "YTD", month.names = month.names,
                        zero.print = zero.print, plus = plus, digits = digits)),
                   quote = FALSE, print.gap = 2, right = TRUE)
-    } else if (period == "monthly") {
+    } else {
         tmp <- x
-        tmp <- format(round(tmp*100,1), nsmall = digits)
+        tmp <- format(round(tmp*100, 1), nsmall = digits)
         row.names(tmp) <- as.character(timestamp)
         print(unclass(tmp), quote = FALSE, print.gap = 2)
-    } else if (period == "yearly" && is.null(dim(x))) {
+    }
+
+    invisible(x)
+}
+
+print.p_returns <- function(x, ..., year.rows = TRUE,
+                           month.names = NULL, zero.print = "0", plus = FALSE,
+                           digits = 1, na.print = NULL) {
+    period <- attr(x, "period")
+    timestamp <- attr(x, "t")
+    if (period == "yearly" && is.null(dim(x))) {
         tmp <- x
         names(tmp) <- format(timestamp, "%Y")
         if (year.rows)
@@ -444,16 +504,31 @@ toLatex.p_returns <- function(object, ..., year.rows = TRUE,
 
 ## not exported
 toHTML.p_returns <- function(x, ..., year.rows = TRUE,
-                            ytd = "YTD", month.names = NULL,
-                            stand.alone = TRUE,
-                            table.style = NULL,
-                            table.class = NULL,
-                            th.style = NULL,
-                            th.class = NULL,
-                            td.style = "text-align:right; padding:0.5em;",
-                            td.class = NULL,
-                            tr.style = NULL, tr.class = NULL,
-                            browse = FALSE) {
+                             ytd = "YTD", month.names = NULL,
+                             stand.alone = TRUE,
+                             table.style = NULL,
+                             table.class = NULL,
+                             th.style = NULL,
+                             th.class = NULL,
+                             td.style = "text-align:right; padding:0.5em;",
+                             td.class = NULL,
+                             tr.style = NULL, tr.class = NULL,
+                             browse = FALSE) {
+
+    stop("currently only supported for period ", sQuote("month"))
+}
+
+toHTML.p_returns_monthly <- function(x, ..., year.rows = TRUE,
+                                     ytd = "YTD", month.names = NULL,
+                                     stand.alone = TRUE,
+                                     table.style = NULL,
+                                     table.class = NULL,
+                                     th.style = NULL,
+                                     th.class = NULL,
+                                     td.style = "text-align:right; padding:0.5em;",
+                                     td.class = NULL,
+                                     tr.style = NULL, tr.class = NULL,
+                                     browse = FALSE) {
 
     period <- attr(x, "period")
     timestamp <- attr(x, "t")
@@ -477,14 +552,11 @@ toHTML.p_returns <- function(x, ..., year.rows = TRUE,
         paste0(open, x, "</tr>")
     }
 
-    if (grepl("month(ly)?", period)) {
-        if (year.rows)
-            mt <- .mtab(x, timestamp, ytd = ytd, month.names = month.names)
-        else
-            mt <- t(.mtab(x, timestamp, ytd = ytd, month.names = month.names))
-    } else {
-        stop("currently only supported for period ", sQuote("month"))
-    }
+    if (year.rows)
+        mt <- .mtab(x, timestamp, ytd = ytd, month.names = month.names)
+    else
+        mt <- t(.mtab(x, timestamp, ytd = ytd, month.names = month.names))
+
     mt <- rbind(colnames(mt), mt)
     mt <- cbind(rownames(mt), mt)
     mt <- unname(mt)
@@ -543,7 +615,7 @@ returns_rebalance <- function(prices, weights, when = NULL, pad = NULL) {
         stop("less than 2 rows in prices: cannot compute returns")
 
     if (is.null(dim(weights)) && is.null(when)) {
-        ## TODO faster implementation
+        ## TODO faster implementation?
     }
 
     if (is.null(dim(weights)))
@@ -611,89 +683,91 @@ rc <- function(R, weights, timestamp, segments = NULL) {
          total_contributions = total)
 }
 
-if (FALSE) {
+
+## TODO move to dev
+##
+## if (FALSE) {
+
+##     prices <- c(100 ,102 ,104 ,104 ,104.5 ,
+##                 2   ,2.2 ,2.4 ,2.3 ,2.5   ,
+##                 3.5 ,3   ,3.1 ,3.2 ,3.1)
+    
+##     dim(prices) <- c(5,3)
+    
+##     weights <- c(1,0,0)
+##     when <- as.logical(c(1,0,1,0,1))
+##     when <- as.logical(c(1,1,1,1,1))
+##     when <- TRUE
+    
+    
+    
+##     ## TESTS
+##     weights <- c(1,0,0)
+##     all.equal(c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)),
+##               c(returns(prices[,1],pad=0)))
+##     weights <- c(0,1,0)
+##     all.equal(c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)),
+##               c(returns(prices[,2],pad=0)))
+##     weights <- c(0,0,1)
+##     all.equal(c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)),
+##               c(returns(prices[,3],pad=0)))
+##     weights <- c(.5,.4,.1)
+##     all.equal(c(returns(prices,pad=0) %*% weights),
+##               c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)))
+    
+##     when <- as.logical(c(1,0,0,0,0))
+##     !isTRUE(all.equal(
+##          c(returns(prices,pad=0) %*% weights),
+##          c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0))))
+    
+    
+    
+##     ## not exported
+##     prices <- c(100 ,102 ,104 ,104 ,104.5 ,
+##                 2   ,2.2 ,2.4 ,2.3 ,2.5   ,
+##                 3.5 ,3   ,3.1 ,3.2 ,3.1)
+    
+##     dim(prices) <- c(5,3)
+    
+##     weights <- c(1,0,0)
+##     when <- as.logical(c(1,1,1,1,1))
+##     when <- as.logical(c(1,0,1,0,1))
+    
+##     returns_rebalance2 <- function(prices, weights, when = NULL, pad = NULL) {
+##         prices <- as.matrix(prices)
+        
+##         nr <- nrow(prices)
+##         pos <- array(NA, dim = dim(prices))
+##         ## w <- array(NA, dim = dim(prices))
+        
+##         if (is.null(when && identical(when, TRUE)))
+##             when <- seq_len(nc)
+##         else if (is.logical(when))
+##             when <- which(when)
+    
+    
+##         for (i in when)
+##             pos[i, ] <- weights / prices[i, ] ## TODO: if w is matrix, w[i, ]
+##         ## TODO na.locf
+        
+##         pos <- na.locf(pos)
+##         pos[is.na(pos)] <- 0
+##         w <- pos * prices
+##         w <- w/rowSums(w)
+        
+##         rowSums(returns(prices) * w[-nr,])
+##     }
+    
+##     returns_rebalance2(prices, weights, when = TRUE)
+##     PMwR:::returns_rebalance(prices, weights, when = TRUE)
+    
+##     require("rbenchmark")
+##     benchmark(returns_rebalance2(prices, weights, when = TRUE),
+##               PMwR:::returns_rebalance(prices, weights, when = TRUE),
+##               columns = c("test", "relative", "elapsed"), replications = 1000)
 
     
-    prices <- c(100 ,102 ,104 ,104 ,104.5 ,
-                2   ,2.2 ,2.4 ,2.3 ,2.5   ,
-                3.5 ,3   ,3.1 ,3.2 ,3.1)
-    
-    dim(prices) <- c(5,3)
-    
-    weights <- c(1,0,0)
-    when <- as.logical(c(1,0,1,0,1))
-    when <- as.logical(c(1,1,1,1,1))
-    when <- TRUE
-    
-    
-    
-    ## TESTS
-    weights <- c(1,0,0)
-    all.equal(c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)),
-              c(returns(prices[,1],pad=0)))
-    weights <- c(0,1,0)
-    all.equal(c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)),
-              c(returns(prices[,2],pad=0)))
-    weights <- c(0,0,1)
-    all.equal(c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)),
-              c(returns(prices[,3],pad=0)))
-    weights <- c(.5,.4,.1)
-    all.equal(c(returns(prices,pad=0) %*% weights),
-              c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0)))
-    
-    when <- as.logical(c(1,0,0,0,0))
-    !isTRUE(all.equal(
-         c(returns(prices,pad=0) %*% weights),
-         c(returns.rebalance(prices, weights, when = when, aggregate = TRUE, pad = 0))))
-    
-    
-    
-    ## not exported
-    prices <- c(100 ,102 ,104 ,104 ,104.5 ,
-                2   ,2.2 ,2.4 ,2.3 ,2.5   ,
-                3.5 ,3   ,3.1 ,3.2 ,3.1)
-    
-    dim(prices) <- c(5,3)
-    
-    weights <- c(1,0,0)
-    when <- as.logical(c(1,1,1,1,1))
-    when <- as.logical(c(1,0,1,0,1))
-    
-    returns_rebalance2 <- function(prices, weights, when = NULL, pad = NULL) {
-        prices <- as.matrix(prices)
-        
-        nr <- nrow(prices)
-        pos <- array(NA, dim = dim(prices))
-        ## w <- array(NA, dim = dim(prices))
-        
-        if (is.null(when && identical(when, TRUE)))
-            when <- seq_len(nc)
-        else if (is.logical(when))
-            when <- which(when)
-    
-    
-        for (i in when)
-            pos[i, ] <- weights / prices[i, ] ## TODO: if w is matrix, w[i, ]
-        ## TODO na.locf
-        
-        pos <- na.locf(pos)
-        pos[is.na(pos)] <- 0
-        w <- pos * prices
-        w <- w/rowSums(w)
-        
-        rowSums(returns(prices) * w[-nr,])
-    }
-    
-    returns_rebalance2(prices, weights, when = TRUE)
-    PMwR:::returns_rebalance(prices, weights, when = TRUE)
-    
-    require("rbenchmark")
-    benchmark(returns_rebalance2(prices, weights, when = TRUE),
-              PMwR:::returns_rebalance(prices, weights, when = TRUE),
-              columns = c("test", "relative", "elapsed"), replications = 1000)
-
-    
-}
+## }
 
 as.matrix.p_returns <- function(x, ...) {
     
@@ -722,13 +796,5 @@ as.matrix.p_returns <- function(x, ...) {
 
 }
 
-## TODO: as.data.frame.p_returns
-
-as.data.frame.p_returns <- function(x, ...) {
-
-    res <- unclass(x)
-    res <- as.data.frame(res)
-    rownames(res) <- as.character(attr(x, "t"))
-    res
-
-}
+as.data.frame.p_returns <- function(x, ...)
+    as.data.frame(as.matrix(x))

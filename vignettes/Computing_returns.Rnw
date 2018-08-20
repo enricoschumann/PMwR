@@ -5,13 +5,13 @@
 \usepackage{libertine}
 \usepackage[scaled=0.9]{inconsolata}
 \usepackage[T1]{fontenc}
-\renewcommand*\familydefault{\sfdefault} 
+\renewcommand*\familydefault{\sfdefault}
 \usepackage{amsmath,amstext}
 \usepackage{hyperref}
 \usepackage{natbib}
 \usepackage{xcolor}
 \usepackage{framed}
-\usepackage[hang]{footmisc}
+\usepackage[hang,flushmargin]{footmisc}
 \definecolor{grau2}{rgb}{.2,.2,.2}
 \definecolor{grau7}{rgb}{.7,.7,.7}
 \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
@@ -23,22 +23,25 @@
 \SweaveOpts{keep.source = TRUE, eps = TRUE}
 
 <<echo=false>>=
-options(continue = "  ", digits = 3, width = 68, useFancyQuotes = FALSE)
+options(continue = "  ", digits = 3, width = 62, useFancyQuotes = FALSE)
+pv <- packageVersion("PMwR")
+pv <- gsub("(.*)[.](.*)", "\\1-\\2", pv)
 @
 
 \begin{document}
 \title{Computing Returns}
 \author{Enrico Schumann\\\url{es@enricoschumann.net}}
 
-{\raggedright{\LARGE Computing Returns}}\medskip
+{\raggedright{\LARGE Computing Returns}}\hspace*{\fill}
+{\footnotesize Package version \Sexpr{pv}}\medskip
 
 \noindent Enrico Schumann\\
 \noindent \url{es@enricoschumann.net}\\
 \bigskip\raggedbottom
 
 <<echo=false>>=
-require("PMwR")
-require("zoo")
+library("PMwR")
+library("zoo")
 @
 
 \noindent In the simplest case, the function \texttt{returns} takes a
@@ -49,13 +52,14 @@ returns(100:105)
 @ 
 
 \noindent The function will recognise when the input argument has
-several columns, i.e. is a matrix or a dataframe. In such a case, it
+several columns, i.e. is a matrix or a data frame. In such a case, it
 computes returns for each column.
 
-\texttt{returns} also understands time-series, such as zoo objects.
+In fact, \texttt{returns} is a generic function, and 
+also understands time-series such as zoo objects.
 To demonstrate this functionality, we use the datasets \texttt{DAX}
-and \texttt{REXP}, which are provided by PMwR. Both are data-frames of
-one column; the rownames are the dates.
+and \texttt{REXP}, which are provided by \textsc{pmwr}. 
+Both are data frames of one column; the rownames are the dates.
 
 <<>>=
 library("zoo")
@@ -63,12 +67,21 @@ DAX <- zoo(DAX[[1]], as.Date(row.names(DAX)))
 REXP <- zoo(REXP[[1]], as.Date(row.names(REXP)))
 @ 
 
+
 \noindent Calling returns on a zoo series will result in a
 \texttt{zoo} series.
 <<>>=
 str(DAX)
-head(returns(DAX))
 @ 
+<<echo=false>>=
+options(width = 70)
+@ 
+
+<<>>=
+head(returns(DAX))
+@
+
+
 
 \noindent Matrices work as well: As an example, we combine both
 \texttt{zoo} series into a two-column matrix.
@@ -104,11 +117,13 @@ range(returns(DAX, period = "month"))
 \noindent There are methods for \texttt{toLatex} and \texttt{toHTML}
 for monthly returns. For instance, the table\medskip
 
+\begin{center}\small
 \begin{tabular}{lrrrrrrrrrrrrr}
 <<results = tex, echo = false>>=
 toLatex(returns(DAX, period = "month"))
 @ 
-\end{tabular}\medskip
+\end{tabular}
+\end{center}
 
 \noindent is essentially prepared by the call
 <<eval = false>>=
@@ -121,11 +136,5 @@ examples are in the Fin\TeX\ vignette; say
 vignette("FinTeX", package = "PMwR" )
 @ 
 to open it.
-
-<<>>=
-sessionInfo()
-@ 
-
-
 
 \end{document}
