@@ -132,4 +132,12 @@ utils::bug.report("[PMwR] Unexpected behaviour in function <XXX>",
                   maintainer("PMwR"), package = "PMwR")
 @ 
 
+%% \section*{Examples}
+
+%% \subsection*{Keeping track of transactions}
+
+%% \subsection*{Testing investment strategies}
+
+%% \subsection*{Computing P\&L and Returns}
+
 \end{document}
