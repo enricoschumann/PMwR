@@ -26,12 +26,13 @@ btest  <- function(prices,
                    timestamp, instrument,
                    progressBar = FALSE,
                    variations,
-                   variations.settings = list()) {
+                   variations.settings = list(),
+                   replications) {
 
-    if (!missing(variations)) {
+    if (!missing(variations) ||
+        !missing(replications)) {
         x <- match.call()
-        all_args <- as.list(x)
-        all_args[1L] <- NULL
+        all_args <- as.list(x)[-1L]
         all_args <- lapply(all_args, eval)
         variations <- all_args$variations
         all_args$variations <- NULL
@@ -66,13 +67,14 @@ btest  <- function(prices,
                    vsettings$method == "snow") {
             if (!requireNamespace("parallel"))
                 stop("package ", sQuote("parallel"), " not available")
-            ## parallel
             if (is.null(vsettings$cl) && is.numeric(vsettings$cores))
-                cl <- parallel::makeCluster(c(rep("localhost", vsettings$cores)), type = "SOCK")
+                cl <- parallel::makeCluster(c(rep("localhost", vsettings$cores)),
+                                            type = "SOCK")
             on.exit(parallel::stopCluster(cl))
             ans <- parallel::parLapplyLB(cl, X = args,
                                          fun = function(x) do.call("btest", x))
             return(ans)
+
         } else if (vsettings$method == "multicore") {
             if (!requireNamespace("parallel"))
                 stop("package ", sQuote("parallel"), " not available")
@@ -80,6 +82,7 @@ btest  <- function(prices,
                                       FUN = function(x) do.call("btest", x),
                                       mc.cores = vsettings$cores)
             return(ans)
+
         }
     }
 
