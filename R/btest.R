@@ -37,7 +37,8 @@ btest  <- function(prices,
         all_args$variations <- NULL
 
         vsettings <- list(method = "loop",
-                          load.balancing = FALSE)
+                          load.balancing = FALSE,
+                          cores = getOption("mc.cores", 2L))
         vsettings[names(variations.settings)] <- variations.settings
         all_args$variations.settings <- NULL
         
@@ -66,21 +67,18 @@ btest  <- function(prices,
             if (!requireNamespace("parallel"))
                 stop("package ", sQuote("parallel"), " not available")
             ## parallel
-            if (is.null(vsettings$cl))
-                cl <- parallel::detectCores()
-            else if (is.numeric(vsettings$cl))
-                cl <- parallel::makeCluster(c(rep("localhost", vsettings$cl)), type = "SOCK")
+            if (is.null(vsettings$cl) && is.numeric(vsettings$cores))
+                cl <- parallel::makeCluster(c(rep("localhost", vsettings$cores)), type = "SOCK")
             on.exit(parallel::stopCluster(cl))
-            ans <- parallel::parLapplyLB(
-                                 cl, X = args,
-                                 fun = function(x) do.call("btest", x))
+            ans <- parallel::parLapplyLB(cl, X = args,
+                                         fun = function(x) do.call("btest", x))
             return(ans)
         } else if (vsettings$method == "multicore") {
             if (!requireNamespace("parallel"))
                 stop("package ", sQuote("parallel"), " not available")
             ans <- parallel::mclapply(X = args,
                                       FUN = function(x) do.call("btest", x),
-                                      mc.cores = parallel::detectCores())
+                                      mc.cores = vsettings$cores)
             return(ans)
         }
     }
