@@ -349,6 +349,12 @@ psim <- function(x, y) {
     
 }
 
+time.p_returns <- function(x, ...)
+    attr(x, "t")
+
+time.btest <- function(x, ...)
+    x$timestamp
+
 .timestamp <- function(x) {
     if (inherits(x, "p_returns"))
         attr(x, "t")
@@ -372,4 +378,10 @@ psim <- function(x, y) {
         FALSE
     else
         TRUE
+}
+
+debug_prices <- function(nobs, na, base = 100) {    
+    a <- base + seq_len(nobs)
+    A <- array(a, dim = c(nobs, na))
+    t(t(A) + seq(1, na) / 10^nchar(na))    
 }
