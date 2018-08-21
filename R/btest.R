@@ -709,7 +709,8 @@ btest  <- function(prices,
 
 
         ## WEALTH
-        v[t] <- X[t, ] %*% mC[t, ] + cash[t]
+        nzero <- X[t, ] != 0
+        v[t] <- X[t, nzero] %*% mC[t, nzero] + cash[t]
 
         if (doPrintInfo)
             print.info(..., Open = Open,

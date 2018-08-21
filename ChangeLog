@@ -1,5 +1,8 @@
 2018-08-21  Enrico Schumann  <es@enricoschumann.net>
 
+	* inst/unitTests/ut_PMwR.R (test.btest_NA):
+	new test function
+
 	* R/btest.R (btest): new argument 'tol.p': if
 	specified, only rebalance those positions for
 	which the relative suggested change is greater
