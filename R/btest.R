@@ -25,10 +25,70 @@ btest  <- function(prices,
                    include.data = FALSE,
                    include.timestamp = TRUE,
                    timestamp, instrument,
-                   progressBar = FALSE) {
+                   progressBar = FALSE,
+                   variations,
+                   variations.settings = list(),
+                   replications) {
+
+    if (!missing(variations) ||
+        !missing(replications)) {
+        x <- match.call()
+        all_args <- as.list(x)[-1L]
+        all_args <- lapply(all_args, eval)
+        variations <- all_args$variations
+        all_args$variations <- NULL
+
+        vsettings <- list(method = "loop",
+                          load.balancing = FALSE,
+                          cores = getOption("mc.cores", 2L))
+        vsettings[names(variations.settings)] <- variations.settings
+        all_args$variations.settings <- NULL
+        
+        lens <- lengths(variations)
+        cases <- do.call(expand.grid,
+                         lapply(lens, seq_len))
+        args <- vector("list", length = nrow(cases))
+        
+        for (i in seq_along(args)) {
+            tmp <- mapply(`[[`, variations, cases[i, ],
+                          SIMPLIFY = FALSE)
+            args[[i]] <- c(all_args, tmp)
+            attr(args[[i]], "variation") <- tmp
+        }
+        if (is.null(vsettings$method) ||
+            vsettings$method == "loop") {
+            ans <- vector("list", length(args))
+            for (i in seq_along(args)) {
+                ans[[i]] <- do.call(btest, args[[i]])
+                attr(ans[[i]], "variation") <- attr(args[[i]], "variation")
+            }
+            return(ans)
+
+        } else if (vsettings$method == "parallel" ||
+                   vsettings$method == "snow") {
+            if (!requireNamespace("parallel"))
+                stop("package ", sQuote("parallel"), " not available")
+            if (is.null(vsettings$cl) && is.numeric(vsettings$cores))
+                cl <- parallel::makeCluster(c(rep("localhost", vsettings$cores)),
+                                            type = "SOCK")
+            on.exit(parallel::stopCluster(cl))
+            ans <- parallel::parLapplyLB(cl, X = args,
+                                         fun = function(x) do.call("btest", x))
+            return(ans)
+
+        } else if (vsettings$method == "multicore") {
+            if (!requireNamespace("parallel"))
+                stop("package ", sQuote("parallel"), " not available")
+            ans <- parallel::mclapply(X = args,
+                                      FUN = function(x) do.call("btest", x),
+                                      mc.cores = vsettings$cores)
+            return(ans)
+
+        }
+    }
 
     L <- lag
-
+    
     if (!missing(timestamp) &&
         (inherits(timestamp, "Date") || inherits(timestamp, "POSIXct")) &&
         inherits(b, class(timestamp))) {

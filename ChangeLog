@@ -12,6 +12,17 @@
 	allows to have NAs in price series, as long as
 	no position in such series is taken.
 
+2018-08-18  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): 'variations': support
+	serial and parallel backtests, the latter
+	relying on package 'parallel'
+
+2018-08-17  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): experimental -- new
+	arguments 'variations' and 'variations.settings'
+
 2018-08-04  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/pl.R (.pl_stats): remove 'avg'; see

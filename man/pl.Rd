@@ -113,25 +113,33 @@ pl(amount, \dots )
   called with a \code{\link{journal}} or a
   \code{\link{data.frame}} as its input. For data
   frames, columns must be named \code{amount},
-  \code{price} and so on.
-  
-  To use package \pkg{crayon} -- which is only sensible
-  in interactive use --, either explicitly set
-  \code{use.crayon} to \code{TRUE} or set an option
-  \code{PMwR.use.crayon} to \code{TRUE}.
+  \code{price}, and so on, as in a \code{\link{journal}}.
+
+  \code{pl} may be called in two ways: either to compute
+  \emph{total profit/loss} from a list of trades, possibly
+  broken down by \code{instrument} and \code{account};
+  or to compute \emph{profit/loss over time}. The latter case
+  typically requires setting arguments \code{along.timestamp}
+  and/or \code{vprice} (see Examples).
 
   Using \code{vprice}: when \code{along.timestamp} is
   logical (\code{FALSE} or \code{TRUE}) ,
   \code{vprice} can be used to value an open
   position. For a single asset, it should be a single
   number; for several assets, it should be named
-  vector. When \code{along.timestamp} is used to pass a
+  vector, with names indicating the \code{instrument}.
+  When \code{along.timestamp} is used to pass a
   custom timestamp: for a single asset, \code{vprice}
   must be a vector with the same length as
   \code{along.timestamp}; for several assets, it must
   be a numeric matrix with dimension
   \code{length(along.timestamp)} times number of
   assets.
+  
+  To use package \pkg{crayon} -- which is only sensible
+  in interactive use --, either explicitly set
+  \code{use.crayon} to \code{TRUE} or set an option
+  \code{PMwR.use.crayon} to \code{TRUE}.
 
 }
 \value{
@@ -218,8 +226,9 @@ pl(amount, price, instrument = instrument)
 
 
 
-## Example for 'along.timestamp' and 'vprice'
-j <- journal(amount = c(1, -1), price = c(100, 101),
+## p/l over time: example for 'along.timestamp' and 'vprice'
+j <- journal(amount = c(1, -1),
+             price = c(100, 101),
              timestamp  = as.Date(c("2017-07-05", "2017-07-06")))
 pl(j)
 

@@ -19,7 +19,8 @@ btest(prices, signal,
       prices0 = NULL,
       include.data = FALSE, include.timestamp = TRUE,
       timestamp, instrument,
-      progressBar = FALSE)
+      progressBar = FALSE,
+      variations, variations.settings)
 }
 \arguments{
   \item{prices}{
@@ -198,7 +199,14 @@ btest(prices, signal,
   \item{progressBar}{      
     logical: display \code{\link{txtProgressBar}}?
   }
-
+  \item{variations}{      
+     a list
+  }
+  \item{variations.settings}{a list with the following defaults
+    %% \item{\code{method}}{character}
+    %% \item{\code{load.balancing}}{logical}
+    %% \item{\code{cores}}{numeric}
+  }
 }
 \details{
   
@@ -245,6 +253,11 @@ btest(prices, signal,
   persistently store data during the run of
   \code{btest}. Use the argument \code{Globals}
   to add initial objects.
+
+  \code{variations.settings} is a list with the following defaults
+  %% \item{\code{method}}{character}
+  %% \item{\code{load.balancing}}{logical}
+  %% \item{\code{cores}}{numeric}
   
 }
 \value{

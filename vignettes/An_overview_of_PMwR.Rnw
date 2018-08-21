@@ -81,9 +81,11 @@ functions may be introduced. The \textbf{recommended
   practice} is therefore to \textbf{explicitly name
   arguments in function calls} and not pass arguments
 by position. Any changes in argument names will be
-documented in the ChangeLog
-(\,\url{http://enricoschumann.net/R/packages/PMwR/ChangeLog}\,)
-and so can be easily followed.
+documented in the \textsc{news} file
+(\,\url{http://enricoschumann.net/R/packages/PMwR/NEWS}\,)
+and so can be easily followed. More details
+are in the ChangeLog
+(\,\url{http://enricoschumann.net/R/packages/PMwR/ChangeLog}\,).
 
 The latest version of the package is available from
 \url{http://enricoschumann.net/R/packages/PMwR/}. To install the
@@ -129,5 +131,13 @@ package maintainer, for instance by using
 utils::bug.report("[PMwR] Unexpected behaviour in function <XXX>", 
                   maintainer("PMwR"), package = "PMwR")
 @ 
+
+%% \section*{Examples}
+
+%% \subsection*{Keeping track of transactions}
+
+%% \subsection*{Testing investment strategies}
+
+%% \subsection*{Computing P\&L and Returns}
 
 \end{document}
