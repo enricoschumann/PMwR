@@ -13,6 +13,7 @@
    stats::time methods?
 
    as.zoo for pl over time?
+
    
 
 * =btest=
@@ -53,3 +54,5 @@
 
    add attribute =valuation.data=, a list in which
    every component has the same size as position
+
+* add =streaks=
