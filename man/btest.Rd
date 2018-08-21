@@ -143,10 +143,18 @@ btest(prices, signal,
   \item{tol}{
     
     A numeric vector of length one: only rebalance if the maximum
-    absolute suggested change in any position is greater than
+    absolute suggested change for at least one position is greater than
     \code{tol}. Default is 0.00001 (which practically means always
     rebalance).
 
+  }
+  \item{tol.p}{
+    
+    A numeric vector of length one: only rebalance those positions 
+    for which the relative suggested change is greater than
+    \code{tol.p}. Default is \code{\link{NA}}: always rebalance.
+    
+    
   }
   \item{Globals}{
 

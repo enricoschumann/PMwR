@@ -19,6 +19,7 @@ btest  <- function(prices,
                    convert.weights = FALSE,
                    trade.at.open = TRUE,
                    tol = 1e-5,
+                   tol.p = NA,
                    Globals = list(),
                    prices0 = NULL,
                    include.data = FALSE,
@@ -450,8 +451,9 @@ btest  <- function(prices,
 
     ## initial wealth
     if (initial.position != 0 && !is.null(prices0)) {
-        initial.wealth <- sum(prices0 * initial.position) +initial.cash
+        initial.wealth <- sum(prices0 * initial.position) + initial.cash
     } else if (initial.position != 0) {
+        warning(sQuote("initial.position"), " specified, but no ", sQuote("prices0"))
         initial.wealth <- initial.cash ## TODO: initial position needs be evaluated
     } else
         initial.wealth <- initial.cash
@@ -498,9 +500,10 @@ btest  <- function(prices,
                                   SuggestedPortfolio = SuggestedPortfolio,
                                   Globals = Globals)
 
+            
         dXs <- Xs[t, ] - if (any(initial.position != 0))
                              initial.position else 0
-
+        
         if (max(abs(dXs)) < tol)
             rebalance <- FALSE
 
@@ -508,9 +511,9 @@ btest  <- function(prices,
             dx <- fraction * dXs
 
             if (trade.at.open) ## will convert m(O|C) to vector
-                open <- mO[t, ,drop = TRUE]
+                open <- mO[t, , drop = TRUE]
             else
-                open <- mC[t, ,drop = TRUE]
+                open <- mC[t, , drop = TRUE]
             sx <- dx %*% open
             abs_sx <- (abs(dx) * tc) %*% open
             tccum[t] <- abs_sx
@@ -603,7 +606,15 @@ btest  <- function(prices,
         dXs <- Xs[t, ] - X[t1, ]  ## b0
         if (max(abs(dXs)) < tol)
             rebalance <- FALSE
+        else if (!is.na(tol.p) && initial.wealth > 0 && v[t1] > 0 ) {
+            dXs.p <- dXs * mC[t1, ]/v[t1]
+            small <- abs(dXs.p) < tol.p
+            dXs[small] <- 0
+            if (all(small))
+                rebalance  <- FALSE
+        }
 
+        
         if (rebalance) {
             dx <- fraction * dXs
 
