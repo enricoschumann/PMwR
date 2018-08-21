@@ -443,7 +443,7 @@ btest  <- function(prices,
     v <- cash <- numeric(T)
     v[] <- NA
     if (b > 0L) {
-        Xs[b,] <- X[b, ] <- initial.position
+        Xs[b, ] <- X[b, ] <- initial.position
         cash[b] <- initial.cash
         v[b] <- initial.cash + if (initial.position != 0)
                                    initial.position %*% mC[b, ] else 0
@@ -623,16 +623,17 @@ btest  <- function(prices,
             else
                 open <- mC[t, ]
 
-            sx <- dx %*% open
-            abs_sx <- (abs(dx) * tc) %*% open
+            nzero <- dx != 0
+            sx <- dx[nzero] %*% open[nzero]
+            abs_sx <- (abs(dx[nzero]) * tc) %*% open[nzero]
             tccum[t] <- tccum[t1] + abs_sx
             cash[t] <- cash[t1] - sx - abs_sx
-            X[t, ] <- X[t1, ] + dx  ## b0
+            X[t, ] <- X[t1, ] + dx
             rebalance <- FALSE
         } else {
-            tccum[t] <- tccum[t1]## b0
-            cash[t] <- cash[t1]  ## b0
-            X[t, ] <- X[t1, ]    ## b0
+            tccum[t] <- tccum[t1]
+            cash[t] <- cash[t1]
+            X[t, ] <- X[t1, ]
         }
 
         ## cashflow
