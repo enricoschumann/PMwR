@@ -1,3 +1,9 @@
+2018-08-23  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/quote32.R (quote32,q32): accept "+" in
+	character input; for instance, "127-00+" is
+	now recognised as "127-005"
+
 2018-08-21  Enrico Schumann  <es@enricoschumann.net>
 
 	* inst/unitTests/ut_PMwR.R (test.btest_NA):

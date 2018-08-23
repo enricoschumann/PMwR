@@ -14,6 +14,7 @@ quote32 <- q32 <- function(price, sep = "(-|'|:)", warn = TRUE) {
         frac[frac == "0"] <- 0
         frac[frac == "2"] <- 1
         frac[frac == "5"] <- 2
+        frac[frac == "+"] <- 2
         frac[frac == "7"] <- 3
 
         handle <- as.numeric(handle)

@@ -1175,12 +1175,16 @@ test.quote32 <- function() {
                           class = "quote32"))
 
     
+
+
     
      ## q32("100-272") - q32("100-270")
      ## as.numeric(q32("100-272") - q32("100-270"))
      
     checkEqualsNumeric(as.numeric(q32("109-047")), 109+4.75/32)
     
+    checkEquals(q32("127-00+"), q32("127-005"))
+
 }
 
 test.pl.volume <- function() {
