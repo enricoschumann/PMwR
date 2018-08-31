@@ -1,36 +1,46 @@
 v0.10-0  (2018-??-??; not yet released)
 
-  o [btest] Support automatic computation of variations,
-    both serially and in parallel.  See new arguments
-    'variations', 'variatiations.settings' and
-    'replications'. See also the examples at
-    .....
+  o btest: Support automatic computation of
+    variations, both serially and in parallel.  See new
+    arguments 'variations', 'variatiations.settings'
+    and 'replications'. See also the examples at .....
 
-  o [streaks] New generic function with methods for
-    zoo and numeric vectors.
+  o New generic function 'streaks' with methods for
+    zoo, NAVseries and numeric vectors.
 
-  o [returns] argument 'period' may also be 'hourly'
+  o returns: argument 'period' may also be 'hourly'
     
-  o [pl] In several cases in which profit/loss was set
+  o pl: In several cases in which profit/loss was set
     to NA, it now defaults (more appropriately) to 0.
     For instance, with a custom timestamp the
     realised/unrealised profit/loss before the first
     trade is now 0, not NA.
 
-  o new replacement method `instrument<-.journal`
+  o quote32: the function now also recognises a
+    colon (:) as a separator
 
-  o valuation.position is now exported (though still
-    experimental)
+  o instrument: new replacement method
+    `instrument<-.journal`
+
+  o drawdowns: new method for NAVseries
+
+  o valuation.position method is now exported (though
+    still experimental)
 
   o pl.btest: fixed passing of additional arguments
-  
+
+  o quote32: the function can now parse more variations;
+    see ................
+
+  o New vignette on 'drawdowns and streaks'.
+
   o various documentation updates/fixes; see the
     ChangeLog for all details. The manual at
     http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
     has also been updated.
 
-  o updates on package will in future be posted at
-    http://enricoschumann.net/notes/PMwR/
+  o notes regarding the package will in future be
+    posted at http://enricoschumann.net/notes/PMwR/
   
 
 v0.9-0  (2018-06-09)

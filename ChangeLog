@@ -1,3 +1,13 @@
+2018-08-31  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/streaks.R (streaks): new generic, with
+	methods for NAVseries, zoo and numeric vectors
+
+	* vignettes/Drawdowns_streaks.Rnw: add vignette
+
+	* R/drawdowns.R (drawdowns.NAVseries): add and
+	export method
+
 2018-08-23  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/quote32.R (quote32,q32): accept "+" in
@@ -13,13 +23,14 @@
 	specified, only rebalance those positions for
 	which the relative suggested change is greater
 	than 'tol.p'
-	(btest): rebalance only for those positions
-	with non-zero change. This may entail a (very
-	small) performance penalty for backtests with
-	very few assets, and a (small) performance gain
-	for backtests with many assets. This change
-	allows to have NAs in price series, as long as
-	no position in such series is taken.
+	(btest): rebalance arithmetic is now only
+	performed for those positions with non-zero
+	change. This may entail a (very small)
+	performance penalty for backtests with very few
+	assets, and a (small) performance gain for
+	backtests with many assets. This change allows
+	to have NAs in price series, as long as no
+	position in such a series is taken.
 
 2018-08-18  Enrico Schumann  <es@enricoschumann.net>
 

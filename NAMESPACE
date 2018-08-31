@@ -66,6 +66,7 @@ export(
     scale_trades,
     split_adjust,
     split_trades,
+    streaks,
     tw_exposure,
     unit_prices,
     valuation
@@ -104,6 +105,8 @@ S3method(as.zoo, p_returns)
 S3method(as.zoo, position)
 S3method(c, journal)
 S3method(drawdowns, default)
+S3method(drawdowns, NAVseries)
+S3method(drawdowns, zoo)
 S3method(head, journal)
 S3method(instrument, journal)
 S3method(instrument, position)
@@ -146,6 +149,9 @@ S3method(scale1, default)
 S3method(scale1, zoo)
 S3method(sort, journal)
 S3method(str, journal)
+S3method(streaks, NAVseries)
+S3method(streaks, default)
+S3method(streaks, zoo)
 S3method(subset, journal)
 S3method(summary, NAVseries)
 S3method(summary, journal)

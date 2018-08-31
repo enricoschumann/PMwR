@@ -2263,3 +2263,10 @@ test.split_adjust <- function() {
 
 
 }
+
+test.streaks <- function() {
+
+    x <- c(112, 102, 101, 104, 111, 98, 82, 93, 99, 105, 103, 110)
+
+
+}

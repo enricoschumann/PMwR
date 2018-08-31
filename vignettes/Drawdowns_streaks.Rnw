@@ -1,0 +1,110 @@
+%% \VignetteIndexEntry{Drawdowns and Streaks}
+\documentclass[a4paper,11pt]{article}
+\usepackage[left = 3cm, top = 2cm, bottom = 2cm, right = 4cm]{geometry}
+\usepackage[noae,nogin]{Sweave}
+\usepackage{libertine}
+\usepackage[scaled=0.9]{inconsolata}
+\usepackage[T1]{fontenc}
+\renewcommand*\familydefault{\sfdefault} 
+\usepackage{amsmath,amstext}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{xcolor}
+\usepackage{framed}
+\usepackage[hang]{footmisc}
+\definecolor{grau2}{rgb}{.2,.2,.2}
+\definecolor{grau7}{rgb}{.7,.7,.7}
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{frame=single,
+  xleftmargin=0em, formatcom=\color{grau2},rulecolor=\color{grau7}}
+\DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=2em}
+\fvset{listparameters={\setlength{\topsep}{0pt}}}
+\renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
+\SweaveOpts{keep.source = TRUE, eps = TRUE}
+
+<<echo=false>>=
+options(continue = "  ", digits = 3, width = 60, useFancyQuotes = FALSE)
+pv <- packageVersion("PMwR")
+pv <- gsub("(.*)[.](.*)", "\\1-\\2", pv)
+@
+
+\begin{document}
+\title{Drawdowns and Streaks}
+\author{Enrico Schumann\\\url{es@enricoschumann.net}}
+
+{\raggedright{\LARGE Drawdowns and Streaks}}\hspace*{\fill}
+{\footnotesize Package version \Sexpr{pv}}\medskip
+
+\noindent Enrico Schumann\\
+\noindent \url{es@enricoschumann.net}\\
+\bigskip
+
+<<echo=false>>=
+library("PMwR")
+library("zoo")
+data("DAX")
+dax <- zoo(DAX[[1]], as.Date(row.names(DAX)))
+@
+
+\section*{Drawdowns}
+
+The \texttt{drawdowns} function returns magnitudes of
+drawdowns, as well as their peaks, troughs, and times
+of recovery.
+<<>>=
+library("PMwR")
+library("zoo")
+dax <- zoo(DAX[[1]], as.Date(row.names(DAX)))
+dd <- drawdowns(dax)
+
+## sort by size
+dd <- dd[order(dd$max, decreasing = TRUE), ]
+dd
+@ 
+
+<<fig=true, width=5, height=2.3>>=
+par(bty = "n", las = 1, tck = 0.01, 
+    mar = c(3, 3, 1, 1), mgp = c(2, 0.5, 0), ps = 9)
+plot(dax, xlab = "", ylab = "DAX")
+abline(v = dd$peak[1])
+abline(v = dd$trough[1])
+@ 
+
+
+\section*{Streaks}
+
+The \texttt{streaks} function returns a data-frame of
+uninterrupted up and down movements. 
+
+<<>>=
+up_down <- streaks(dax, up = 0.1, down = -0.1)
+up_down
+@ 
+
+<<fig=true, width=5, height=3>>=
+rets <- 100*dax[up_down$end]/coredata(dax[up_down$start])
+
+par(bty = "n", las = 1, tck = 0.01, 
+    mar = c(3, 3, 1, 1), mgp = c(2, 0.5, 0), ps = 9)
+plot(index(dax), rep(100, length(index(dax))), type = "l",
+     lwd = 0.5, col = grey(.5), ylim = range(rets),
+     xlab = "", main = "", log = "y", 
+     xaxt = "n", yaxt = "n",
+     ylab = "Streak in %")
+x <- axis.Date(1, index(dax), lwd = 0)
+abline(v = x, col = grey(0.7), lwd = 0.25)
+axis(2, lwd = 0, at = axTicks(2), labels = axTicks(2)-100)
+abline(h = 100, lwd = .5, col = grey(.5))
+abline(h = axTicks(2), col = grey(0.7), lwd = 0.25)
+abline(h = 10^par("usr")[3])
+
+for (i in seq_len(nrow(up_down))) {    
+    lines(scale1(window(dax, 
+                        start = up_down$start[i],
+                        end = up_down$end[i]),
+                 level = 100))
+}
+@ 
+
+
+\end{document}

@@ -49,3 +49,8 @@ drawdowns.zoo <- function(x, ...) {
     d$recover <- t[d$recover]
     d
 }
+
+drawdowns.NAVseries <- function(x, ...) {
+    xx <- as.zoo(x)
+    drawdowns.zoo(xx)
+}
