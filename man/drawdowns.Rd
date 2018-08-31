@@ -34,9 +34,12 @@ drawdowns(x, \dots)
 }
 \seealso{
 
-  the actual computation of the drawdowns is done by function
-  \code{\link[NMOF]{drawdown}} in package \pkg{NMOF}
+  The actual computation of the drawdowns is done by function
+  \code{\link[NMOF]{drawdown}} in package \pkg{NMOF}.
 
+  Series of uninterrupted up and down movements can be computed
+  with \code{\link{streaks}}.
+  
 }
 \author{
   Enrico Schumann

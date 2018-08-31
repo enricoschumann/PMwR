@@ -15,12 +15,13 @@ btest(prices, signal,
       final.position = FALSE,
       cashflow = NULL, tc = 0, \dots,
       add = FALSE, lag = 1, convert.weights = FALSE,
-      trade.at.open = TRUE, tol = 1e-5, Globals = list(),
+      trade.at.open = TRUE, tol = 1e-5, tol.p = NA,
+      Globals = list(),
       prices0 = NULL,
       include.data = FALSE, include.timestamp = TRUE,
       timestamp, instrument,
       progressBar = FALSE,
-      variations, variations.settings)
+      variations, variations.settings, replications)
 }
 \arguments{
   \item{prices}{
@@ -206,6 +207,9 @@ btest(prices, signal,
     %% \item{\code{method}}{character}
     %% \item{\code{load.balancing}}{logical}
     %% \item{\code{cores}}{numeric}
+  }
+  \item{replications}{
+    an integer
   }
 }
 \details{
