@@ -40,10 +40,12 @@ pv <- gsub("(.*)[.](.*)", "\\1-\\2", pv)
 \bigskip
 
 <<echo=false>>=
-require("PMwR")
-require("zoo")
-DAX <- as.zoo(DAX, as.Date(row.names(DAX)))
-REXP <- as.zoo(REXP, as.Date(row.names(REXP)))
+library("PMwR")
+library("zoo")
+data("DAX")
+data("REXP")
+DAX <- zoo(DAX[[1]], as.Date(row.names(DAX)))
+REXP <- zoo(REXP[[1]], as.Date(row.names(REXP)))
 @
 
 \noindent\textsc{pm}w\textsc{r} provides several

@@ -43,20 +43,24 @@ pv <- gsub("(.*)[.](.*)", "\\1-\\2", pv)
 require("PMwR")
 @
 
-\noindent The function \texttt{quote32} is meant for pretty-printing
-of US treasury bond quotes; it provides no other
-functionality. \texttt{q32} is a short-hand for \texttt{quote32}.
+\noindent The function \texttt{quote32} has two purposes: it is meant
+for pretty-printing of \textsc{us} treasury bond quotes; and it provides
+a parser for prices quoted in 1/32 fractions.
+\texttt{q32} is a short-hand for \texttt{quote32}.
 
-If price is numeric, it is interpreted as a quote in decimal notation
-and translated into a price quoted in fractions of a point.
+If price is numeric, it is interpreted as a quote in
+decimal notation and translated into a price quoted in
+fractions of a point.
 <<>>=
 quote32(100 + 17.5/32)
 @ 
 
-If price is character, it is interpreted as a quote in fractional
-notation.
+If price is character, it is interpreted as a quote in
+fractional notation.
 <<>>=
-q32("100'315") + 1/32
+q32("100'105") + 1/32
+q32("100'10+") + 1/32
+q32("100'10+") + 0.5/32
 @ 
 
 \end{document}
