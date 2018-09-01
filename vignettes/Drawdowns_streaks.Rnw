@@ -56,9 +56,7 @@ library("PMwR")
 library("zoo")
 dax <- zoo(DAX[[1]], as.Date(row.names(DAX)))
 dd <- drawdowns(dax)
-
-## sort by size
-dd <- dd[order(dd$max, decreasing = TRUE), ]
+dd <- dd[order(dd$max, decreasing = TRUE), ]  ## sort by size
 dd
 @ 
 
@@ -74,29 +72,39 @@ abline(v = dd$trough[1])
 \section*{Streaks}
 
 The \texttt{streaks} function returns a data-frame of
-uninterrupted up and down movements. 
+uninterrupted up and down movements, with uninterrupted
+meaning that no countermovement occured of \texttt{down}
+(\texttt{up}) percent or more during  up (down) movements.
 
 <<>>=
 up_down <- streaks(dax, up = 0.1, down = -0.1)
 up_down
 @ 
 
-<<fig=true, width=5, height=3>>=
-rets <- 100*dax[up_down$end]/coredata(dax[up_down$start])
+You may use this information, for instance, to produce
+charts of up and down phases, such as the
+following. Note that the vertical scale is a log scale,
+i.e. a drop of 50\% takes the same vertical distance as
+a rise of 100\%.
 
-par(bty = "n", las = 1, tck = 0.01, 
+
+<<fig=true, width=5, height=3, echo=false>>=
+par(bty = "n", 
+    las = 1, 
+    tck = 0.01, 
     mar = c(3, 3, 1, 1), mgp = c(2, 0.5, 0), ps = 9)
-plot(index(dax), rep(100, length(index(dax))), type = "l",
-     lwd = 0.5, col = grey(.5), ylim = range(rets),
-     xlab = "", main = "", log = "y", 
-     xaxt = "n", yaxt = "n",
-     ylab = "Streak in %")
+plot(index(dax), rep(100, length(index(dax))), 
+     type = "n",
+     main = "", xlab = "", ylab = "Streak in %",
+     log = "y", ylim = range(100*up_down$return+100),
+     xaxt = "n", yaxt = "n")
+
 x <- axis.Date(1, index(dax), lwd = 0)
 abline(v = x, col = grey(0.7), lwd = 0.25)
+
 axis(2, lwd = 0, at = axTicks(2), labels = axTicks(2)-100)
-abline(h = 100, lwd = .5, col = grey(.5))
+abline(h = 100, lwd = 0.5, col = grey(.5))
 abline(h = axTicks(2), col = grey(0.7), lwd = 0.25)
-abline(h = 10^par("usr")[3])
 
 for (i in seq_len(nrow(up_down))) {    
     lines(scale1(window(dax, 
