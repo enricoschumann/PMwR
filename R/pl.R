@@ -344,6 +344,10 @@ pl.default <- function(amount, price, timestamp = NULL,
                                 instrument = c(rep(i1, length(amount1)),
                                                rep("cash", length(amount1))),
                                 when = along.timestamp)[, c(i1, "cash")]
+
+                ## replace vprice1 with zero whenever there is no
+                ## position in instrument: NA values are ignored
+                vprice1[ abs(tmp[, i1])  < tol ] <- 0
                 pnl <- rowSums(tmp * cbind(vprice1, 1))
 
                 ## MATCH the elements in timestamp1 to
@@ -388,8 +392,6 @@ pl.default <- function(amount, price, timestamp = NULL,
     }
 
     if (do.sum) {
-        ## if (!identical(along.timestamp, TRUE) &&
-        ##     !identical(along.timestamp, FALSE) &&
         if ((n <- length(ans)) > 1L) {
             ans1 <- ans[[1L]]
             for (i in 2:n) {
