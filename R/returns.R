@@ -195,6 +195,10 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
     ## TODO add also: 'previous month' and pattern 'YYYY-?MM'
 
     x <- as.matrix(x)
+    if (!is.null(colnames(x)))
+        instr <- colnames(x)
+    else
+        instr <- NULL
     nc <- ncol(x)
     period <- tolower(period)
     if (grepl("^ann", period, ignore.case = TRUE)) {
@@ -202,12 +206,13 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
             warning(sQuote("pad"), " is ignored")
         force <- grepl("!$", period)
         ans <- numeric(nc)
+        names(ans) <- instr
         is.ann  <- logical(nc)
         from.to <- array(NA, dim = c(nc, 2))
         colnames(from.to) <- c("from", "to")
         t <- as.Date(t)
         for (j in 1:nc) {
-            xj <- x[ ,j]
+            xj <- x[, j]
             t1 <- max(which(!is.na(xj)))
             t0 <- min(which(!is.na(xj)))
             tt <- as.numeric( t[t1] - t[t0] )/365
@@ -228,6 +233,7 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
         ans <- numeric(nc)
+        names(ans) <- instr
         from.to <- array(NA, dim = c(nc, 2))
         colnames(from.to) <- c("from", "to")
         for (j in 1:nc) {
@@ -250,6 +256,7 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         if (period != "ytd!" && max(years) != as.numeric(format(Sys.Date(), "%Y")))
             warning("max. timestamp (", max(years), ") does not match current year")
         ans <- numeric(nc)
+        names(ans) <- instr
         from.to <- array(NA, dim = c(nc, 2))
         colnames(from.to) <- c("from", "to")
         for (j in 1:nc) {
@@ -301,6 +308,7 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
             warning(sQuote("pad"), " is ignored")
         ymon <- as.numeric(format(t, "%Y%m"))
         ans <- numeric(nc)
+        names(ans) <- instr
         from.to <- array(NA, dim = c(nc, 2))
         colnames(from.to) <- c("from", "to")
         for (j in 1:nc) {
@@ -434,6 +442,7 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
                            digits = 1, na.print = NULL) {
     period <- attr(x, "period")
     timestamp <- attr(x, "t")
+    instr <- names(x)
     if (period == "yearly" && is.null(dim(x))) {
         tmp <- x
         names(tmp) <- format(timestamp, "%Y")
@@ -452,6 +461,12 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
             print(fmt(t(tmp), plus, digits), quote = FALSE, print.gap = 1, right = TRUE)
         }
     } else if (grepl("annualised", period)) {
+        if (!is.null(instr))
+            nn <- paste0(format(instr,
+                         width = max(nchar(instr)),
+                         justify = "right"), ": ")
+        else
+            nn <- ""
         r_str <- paste0(format(round(x*100, digits), nsmall = digits), "%  ")
         cal_str <- paste0("[",
                        format(timestamp[,1],"%d %b %Y"), " -- ",
@@ -464,15 +479,21 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
         note[as.numeric(timestamp[,2L]-timestamp[,1L])/365 < 1 &
               !attr(x, "is.annualised")] <-
             "; less than one year, not annualised]"
-        cat(paste0(r_str, cal_str, note, collapse = "\n"), "\n")
+        cat(paste0(nn, r_str, cal_str, note, collapse = "\n"), "\n")
     } else if (period == "ytd" || period == "mtd" || period == "itd" ||
                grepl("^[0-9][0-9][0-9][0-9]$", period)) {
+        if (!is.null(instr))
+            nn <- paste0(format(instr,
+                         width = max(nchar(instr)),
+                         justify = "right"), ": ")
+        else
+            nn <- ""
         r_str <- paste0(format(round(x*100, digits), nsmall = digits), "%  ")
         cal_str <- paste0("[",
                           format(timestamp[,1],"%d %b %Y"), " -- ",
                           format(timestamp[,2],"%d %b %Y"),
                           "]")
-        cat(paste0(r_str, cal_str, collapse = "\n"), "\n")
+        cat(paste0(nn, r_str, cal_str, collapse = "\n"), "\n")
     } else {
         print(unclass(x))
     }
