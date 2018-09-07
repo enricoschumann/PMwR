@@ -62,6 +62,8 @@ btest  <- function(prices,
                 ans[[i]] <- do.call(btest, args[[i]])
                 attr(ans[[i]], "variation") <- attr(args[[i]], "variation")
             }
+            if (!is.null(vsettings$label))
+                names(ans) <- vsettings$label
             return(ans)
 
         } else if (vsettings$method == "parallel" ||
@@ -74,6 +76,8 @@ btest  <- function(prices,
             on.exit(parallel::stopCluster(cl))
             ans <- parallel::parLapplyLB(cl, X = args,
                                          fun = function(x) do.call("btest", x))
+            if (!is.null(vsettings$label))
+                names(ans) <- vsettings$label
             return(ans)
 
         } else if (vsettings$method == "multicore") {
@@ -82,8 +86,9 @@ btest  <- function(prices,
             ans <- parallel::mclapply(X = args,
                                       FUN = function(x) do.call("btest", x),
                                       mc.cores = vsettings$cores)
+            if (!is.null(vsettings$label))
+                names(ans) <- vsettings$label
             return(ans)
-
         }
     }
 

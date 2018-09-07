@@ -1,5 +1,9 @@
 2018-09-07  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/btest.R (btest): 'variations.settings' may
+	take a 'label', which is used to name the
+	resulting list
+
 	* R/returns.R (pReturns): if column names are
 	present, keep them and print them for various
 	holding periods, e.g. ytd or itd
