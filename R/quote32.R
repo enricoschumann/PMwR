@@ -7,10 +7,21 @@ quote32 <- q32 <- function(price, sep = "(-|'|:)", warn = TRUE) {
             any(!grepl(paste0("[0-9]+", sep, "?[0-9]+"), price)))
             warning("(some) prices do not match pattern <number> <sep> <number>")
 
+        price <- trimws(price)
         tmp <- strsplit(price, sep)
         handle <- unlist(lapply(tmp, `[[`, 1))
-        ticks <- substr(unlist(lapply(tmp, `[[`, 2)), 1, 2)
-        frac <- substr(unlist(lapply(tmp, `[[`, 2)), 3,3)
+
+        ticks <- frac <- character(length(tmp))
+
+        with_tf <- lengths(tmp) > 1L
+        ticks_ <- substr(unlist(lapply(tmp[with_tf], `[[`, 2)), 1, 2)
+        ticks[with_tf] <- ticks_
+        ticks[is.na(ticks)| ticks == ""] <- "0"
+
+        frac_ <- substr(unlist(lapply(tmp[with_tf], `[[`, 2)), 3, 3)
+        frac[with_tf] <- frac_
+        frac[is.na(frac)| frac == ""] <- "0"
+        
         frac[frac == "0"] <- 0
         frac[frac == "2"] <- 1
         frac[frac == "5"] <- 2

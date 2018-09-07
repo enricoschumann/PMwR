@@ -1175,15 +1175,13 @@ test.quote32 <- function() {
                           class = "quote32"))
 
     
-
-
-    
-     ## q32("100-272") - q32("100-270")
-     ## as.numeric(q32("100-272") - q32("100-270"))
-     
-    checkEqualsNumeric(as.numeric(q32("109-047")), 109+4.75/32)
-    
+    checkEqualsNumeric(as.numeric(q32("109")),     109)
+    checkEqualsNumeric(as.numeric(q32("109'00+")), 109 + 1/32/2)
+    checkEqualsNumeric(as.numeric(q32("109'10")),  109 + 10/32)
+    checkEqualsNumeric(as.numeric(q32("109-047")), 109+4.75/32)    
     checkEquals(q32("127-00+"), q32("127-005"))
+
+    checkEquals(q32("127:00+"), q32("127'005"))
 
 }
 

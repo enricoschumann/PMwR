@@ -1,12 +1,12 @@
 v0.10-0  (2018-??-??; not yet released)
 
-  o btest: Support automatic computation of
+  o btest: support automatic computation of
     variations, both serially and in parallel.  See new
-    arguments 'variations', 'variatiations.settings'
+    arguments 'variations', 'variations.settings'
     and 'replications'. See also the examples at .....
 
-  o New generic function 'streaks' with methods for
-    zoo, NAVseries and numeric vectors.
+  o new generic function 'streaks' with methods for
+    zoo, NAVseries and numeric vectors
 
   o returns: argument 'period' may also be 'hourly'
     
@@ -29,8 +29,8 @@ v0.10-0  (2018-??-??; not yet released)
 
   o pl.btest: fixed passing of additional arguments
 
-  o quote32: the function can now parse more variations;
-    see ................
+  o quote32: the function can now parse more
+    variations; see ................
 
   o New vignette on 'drawdowns and streaks'.
 

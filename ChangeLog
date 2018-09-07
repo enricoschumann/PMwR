@@ -1,5 +1,9 @@
 2018-09-07  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/quote32.R (quote32, q32): fixed -- the
+	function would not parse a price without fractions,
+	such as "120"
+
 	* R/btest.R (btest): 'variations.settings' may
 	take a 'label', which is used to name the
 	resulting list
