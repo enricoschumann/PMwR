@@ -3,8 +3,8 @@
 
 div_adjust <- function(x, t, div, backward = TRUE, additive = FALSE) {
 
-    ## TODO: the function should work for
-    ##       matrices as well
+    ## TODO  the function should work for
+    ##       matrices of one column as well
     if (!is.null(dim(x)))
         stop(sQuote("x"), " must be a vector")
     tmp <- t > 1L & t <= length(x)
@@ -22,31 +22,31 @@ div_adjust <- function(x, t, div, backward = TRUE, additive = FALSE) {
     else if (length(div) != length(t))
         stop("different lengths for ",
              sQuote("div"), " and ", sQuote("t"))
-    
+
     div <- div[tmp]
     t <- t[tmp]
     n <- length(x)
     if (!additive) {
         x_ <- x
-        x_[t] <- x_[t] + div        
+        x_[t] <- x_[t] + div
         rets <- c(0, x_[-1L]/x_[-n] - 1)
-        new.series <- x[1L] * cumprod(1 + rets)        
+        new.series <- x[1L] * cumprod(1 + rets)
         if (backward)
             new.series <- new.series * x[n] / new.series[n]
     } else {
         dif <- c(0, x[-1L] - x[-n])
         dif[t] <- dif[t] + div
-        new.series <- x[1L] + cumsum(dif)                
+        new.series <- x[1L] + cumsum(dif)
         if (backward)
             new.series <- new.series - new.series[n] + x[n]
     }
-    new.series        
+    new.series
 }
 
 split_adjust <- function(x, t, ratio, backward = TRUE) {
 
-    ## TODO: the function should work for
-    ##       matrices as well
+    ## TODO  the function should work for
+    ##       matrices of one column as well
     if (!is.null(dim(x)))
         stop(sQuote("x"), " must be a vector")
 
@@ -56,7 +56,7 @@ split_adjust <- function(x, t, ratio, backward = TRUE) {
 
     if (length(t) > 1L && length(ratio) == 1L)
         ratio <- rep(ratio, length(t))
-    
+
     ratio <- ratio[tmp]
     t <- t[tmp]
 
@@ -69,6 +69,6 @@ split_adjust <- function(x, t, ratio, backward = TRUE) {
         new.series[t1] <- new.series[t1]/ratio[s == t]
     }
     if (!backward)
-        new.series <- x[1L] * new.series/new.series[1L] 
-    new.series        
+        new.series <- x[1L] * new.series/new.series[1L]
+    new.series
 }
