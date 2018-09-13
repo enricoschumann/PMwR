@@ -254,4 +254,12 @@ is.ann <- function(x)
 is.ann(returns(x, t = t, period = "ann"))   ## FALSE
 is.ann(returns(x, t = t, period = "ann!"))  ## TRUE
 
+
+## with weights and fixed rebalancing times
+prices <- cbind(p1 = 101:105,
+                p2 = rep(100, 5))
+R <- returns(prices, weights = c(0.5, 0.5), rebalance.when = 1)
+## ... => resulting weights
+h <- attr(R, "holdings")
+h*prices / rowSums(h*prices)
 }
