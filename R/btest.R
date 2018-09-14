@@ -30,8 +30,7 @@ btest  <- function(prices,
                    variations.settings = list(),
                    replications) {
 
-    if (!missing(variations) ||
-        !missing(replications)) {
+    if (!missing(variations)) {
         x <- match.call()
         all_args <- as.list(x)[-1L]
         all_args <- lapply(all_args, eval)
@@ -76,6 +75,53 @@ btest  <- function(prices,
             on.exit(parallel::stopCluster(cl))
             ans <- parallel::parLapplyLB(cl, X = args,
                                          fun = function(x) do.call("btest", x))
+            if (!is.null(vsettings$label))
+                names(ans) <- vsettings$label
+            return(ans)
+
+        } else if (vsettings$method == "multicore") {
+            if (!requireNamespace("parallel"))
+                stop("package ", sQuote("parallel"), " not available")
+            ans <- parallel::mclapply(X = args,
+                                      FUN = function(x) do.call("btest", x),
+                                      mc.cores = vsettings$cores)
+            if (!is.null(vsettings$label))
+                names(ans) <- vsettings$label
+            return(ans)
+        }
+    } else if (!missing(replications)) {
+        x <- match.call()
+        all_args <- as.list(x)[-1L]
+        all_args <- lapply(all_args, eval)
+        replications <- all_args$replications
+        all_args$replications <- NULL
+
+        vsettings <- list(method = "loop",
+                          load.balancing = FALSE,
+                          cores = getOption("mc.cores", 2L))
+        vsettings[names(variations.settings)] <- variations.settings
+        all_args$variations.settings <- NULL
+        
+        if (is.null(vsettings$method) ||
+            vsettings$method == "loop") {
+            ans <- vector("list", replications)
+            for (i in seq_len(replications)) {
+                ans[[i]] <- do.call(btest, all_args)
+                attr(ans[[i]], "variation") <- i
+            }
+            if (!is.null(vsettings$label))
+                names(ans) <- vsettings$label
+            return(ans)
+
+        } else if (vsettings$method == "parallel" ||
+                   vsettings$method == "snow") {
+            if (!requireNamespace("parallel"))
+                stop("package ", sQuote("parallel"), " not available")
+            if (is.null(vsettings$cl) && is.numeric(vsettings$cores))
+                cl <- parallel::makeCluster(c(rep("localhost", vsettings$cores)),
+                                            type = "SOCK")
+            on.exit(parallel::stopCluster(cl))
+            ans <- parallel::clusterCall(cl, "btest", all_args)
             if (!is.null(vsettings$label))
                 names(ans) <- vsettings$label
             return(ans)
