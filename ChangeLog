@@ -1,3 +1,11 @@
+2018-09-14  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): setting 'replications' to
+	a positive integer repeats the backtest as many
+	times (which is useful only for tests with
+	stochastic components, such as data resampling
+	or stochastics optimisation techniques)
+
 2018-09-07  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/quote32.R (quote32, q32): fixed -- the

@@ -107,7 +107,7 @@ btest  <- function(prices,
             ans <- vector("list", replications)
             for (i in seq_len(replications)) {
                 ans[[i]] <- do.call(btest, all_args)
-                attr(ans[[i]], "variation") <- i
+                attr(ans[[i]], "replication") <- i
             }
             if (!is.null(vsettings$label))
                 names(ans) <- vsettings$label
@@ -118,10 +118,24 @@ btest  <- function(prices,
             if (!requireNamespace("parallel"))
                 stop("package ", sQuote("parallel"), " not available")
             if (is.null(vsettings$cl) && is.numeric(vsettings$cores))
-                cl <- parallel::makeCluster(c(rep("localhost", vsettings$cores)),
-                                            type = "SOCK")
+                cl <- parallel::makeCluster(
+                                    c(rep("localhost", vsettings$cores)),
+                                    type = "SOCK")
             on.exit(parallel::stopCluster(cl))
-            ans <- parallel::clusterCall(cl, "btest", all_args)
+            clusterExport(cl, "all_args", environment())
+            if (vsettings$load.balancing)
+                ans <- parallel::parLapplyLB(cl, X = seq_len(replications),
+                                             fun = function(i) {
+                                                 ans <- do.call("btest", all_args)
+                                                 attr(ans, "replication") <- i
+                                                 ans})
+            else
+                ans <- parallel::parLapply(cl, X = seq_len(replications),
+                                           fun = function(i) {
+                                               ans <- do.call("btest", all_args)
+                                               attr(ans, "replication") <- i
+                                               ans})
+                
             if (!is.null(vsettings$label))
                 names(ans) <- vsettings$label
             return(ans)
@@ -129,8 +143,12 @@ btest  <- function(prices,
         } else if (vsettings$method == "multicore") {
             if (!requireNamespace("parallel"))
                 stop("package ", sQuote("parallel"), " not available")
-            ans <- parallel::mclapply(X = args,
-                                      FUN = function(x) do.call("btest", x),
+            ans <- parallel::mclapply(X = seq_len(replications),
+                                      FUN = function(i) {
+                                          ans <- do.call("btest", all_args)
+                                             attr(ans, "replication") <- i
+                                             ans
+                                      },
                                       mc.cores = vsettings$cores)
             if (!is.null(vsettings$label))
                 names(ans) <- vsettings$label
