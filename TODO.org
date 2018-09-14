@@ -8,6 +8,7 @@
 
    only used in print methods
 
+
 ** more methods
 
    stats::time methods?
@@ -19,6 +20,7 @@
 * =btest=
 
 ** support multiplier?
+
 
 ** add =pl= method
 
@@ -55,4 +57,3 @@
    add attribute =valuation.data=, a list in which
    every component has the same size as position
 
-* add =streaks=
