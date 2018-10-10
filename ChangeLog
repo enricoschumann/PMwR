@@ -1,3 +1,8 @@
+2018-10-10  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Package): import from package
+	'parallel' (i.e. Suggests => Imports)
+
 2018-09-23  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/internal.R (sparkline): new argument
