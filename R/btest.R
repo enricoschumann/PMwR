@@ -42,12 +42,12 @@ btest  <- function(prices,
                           cores = getOption("mc.cores", 2L))
         vsettings[names(variations.settings)] <- variations.settings
         all_args$variations.settings <- NULL
-        
+
         lens <- lengths(variations)
         cases <- do.call(expand.grid,
                          lapply(lens, seq_len))
         args <- vector("list", length = nrow(cases))
-        
+
         for (i in seq_along(args)) {
             tmp <- mapply(`[[`, variations, cases[i, ],
                           SIMPLIFY = FALSE)
@@ -101,7 +101,7 @@ btest  <- function(prices,
                           cores = getOption("mc.cores", 2L))
         vsettings[names(variations.settings)] <- variations.settings
         all_args$variations.settings <- NULL
-        
+
         if (is.null(vsettings$method) ||
             vsettings$method == "loop") {
             ans <- vector("list", replications)
@@ -135,7 +135,7 @@ btest  <- function(prices,
                                                ans <- do.call("btest", all_args)
                                                attr(ans, "replication") <- i
                                                ans})
-                
+
             if (!is.null(vsettings$label))
                 names(ans) <- vsettings$label
             return(ans)
@@ -157,13 +157,12 @@ btest  <- function(prices,
     }
 
     L <- lag
-    
     if (!missing(timestamp) &&
         (inherits(timestamp, "Date") || inherits(timestamp, "POSIXct")) &&
         inherits(b, class(timestamp))) {
         b <- matchOrNext(b, timestamp)
     }
-            
+
     if ("tradeOnOpen" %in% names(list(...))) {
         warning("Did you mean 'trade.at.open'? See ChangeLog 2017-11-14.")
     }
@@ -607,12 +606,11 @@ btest  <- function(prices,
                            SuggestedPortfolio = SuggestedPortfolio,
                            Globals = Globals)
 
-            if (convert.weights)
-                temp <- temp * initial.wealth/prices0
-
-            if (!is.null(temp))
+            if (!is.null(temp)) {
+                if (convert.weights)
+                    temp <- temp * initial.wealth/prices0
                 Xs[t, ] <- temp
-            else
+            } else
                 Xs[t, ] <- 0
             computeSignal <- FALSE
         } else {
@@ -629,10 +627,9 @@ btest  <- function(prices,
                                   SuggestedPortfolio = SuggestedPortfolio,
                                   Globals = Globals)
 
-            
         dXs <- Xs[t, ] - if (any(initial.position != 0))
                              initial.position else 0
-        
+
         if (max(abs(dXs)) < tol)
             rebalance <- FALSE
 
@@ -687,7 +684,7 @@ btest  <- function(prices,
                                 char = if (.Platform$OS.type == "unix") "\u2588" else "|",
                                 width = ceiling(getOption("width")*0.8),
                                 style = 3, file = "")
-    
+
     for (t in max(2L, b+1L):T) {
         if (progressBar)
             setTxtProgressBar(progr, t)
@@ -711,13 +708,14 @@ btest  <- function(prices,
                            Portfolio = Portfolio,
                            SuggestedPortfolio = SuggestedPortfolio,
                            Globals = Globals)
-            if (convert.weights)
-                temp <- temp * v[t1] / mC[t1, ]
 
-            if (!is.null(temp))
+            if (!is.null(temp)) {
+                if (convert.weights)
+                    temp <- temp * initial.wealth/prices0
                 Xs[t, ] <- temp
-            else
+            } else
                 Xs[t, ] <- Xs[t1, ] ## b0
+
             computeSignal <- FALSE
         } else {
             Xs[t, ] <- Xs[t1, ] ## b0
@@ -743,7 +741,6 @@ btest  <- function(prices,
                 rebalance  <- FALSE
         }
 
-        
         if (rebalance) {
             dx <- fraction * dXs
 
@@ -860,7 +857,7 @@ btest  <- function(prices,
                  do.signal = do.signal,
                  instrument = if (missing(instrument)) NULL else list(instrument),
                  call = match.call())
-        
+
     class(ans) <- "btest"
     ans
 }
