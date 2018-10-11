@@ -701,8 +701,6 @@ btest  <- function(prices,
                                    Globals = Globals)
 
         if (computeSignal) {
-            ##:ess-bp-start::browser@nil:##
-browser(expr=is.null(.ESSBP.[["@2@"]]));##:ess-bp-end:##
             temp <- signal(..., Open = Open, High = High,
                            Low = Low, Close = Close, Wealth = Wealth,
                            Cash = Cash, Time = Time,
