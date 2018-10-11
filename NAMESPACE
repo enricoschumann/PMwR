@@ -31,6 +31,8 @@ importFrom("utils",
            "head", "tail", "toLatex",
            "write.table")
 
+importFrom(parallel, "clusterExport")
+
 export(
     .expand,
     .pl,
