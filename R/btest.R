@@ -701,6 +701,8 @@ btest  <- function(prices,
                                    Globals = Globals)
 
         if (computeSignal) {
+            ##:ess-bp-start::browser@nil:##
+browser(expr=is.null(.ESSBP.[["@2@"]]));##:ess-bp-end:##
             temp <- signal(..., Open = Open, High = High,
                            Low = Low, Close = Close, Wealth = Wealth,
                            Cash = Cash, Time = Time,
@@ -711,7 +713,7 @@ btest  <- function(prices,
 
             if (!is.null(temp)) {
                 if (convert.weights)
-                    temp <- temp * initial.wealth/prices0
+                    temp <- temp * v[t1] / mC[t1, ]
                 Xs[t, ] <- temp
             } else
                 Xs[t, ] <- Xs[t1, ] ## b0

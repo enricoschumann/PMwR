@@ -10,6 +10,7 @@
 \usepackage{natbib}
 \usepackage{xcolor}
 \usepackage{framed}
+\usepackage{multicol}
 \usepackage{sparklines}
 \usepackage[hang]{footmisc}
 \definecolor{grau2}{rgb}{.2,.2,.2}
@@ -136,9 +137,44 @@ toLatex(DAX, REXP,
 toLatex(DAX, REXP,
         template = "%title & %sparkline & %return & %volatility  \\\\" )
 @ 
-When several NAV series are passed to \texttt{toLatex}, all sparkline plots
-use the same y-scale.
+
+When several NAV series are passed to \texttt{toLatex},
+all sparkline plots use the same y-scale.  
+<<random-series, echo=false, results=hide>>=
+na <- 50  
+no <- 250
+P <- array(rnorm(no*na, sd = 0.01), dim = c(no, na))
+P <- rbind(1, apply(P, 2, function(x) cumprod(x + 1)))
+str(P)
+@ 
+It is then straightforward to produce tables such as
+the following one, in which we have sorted 50 random
+series by total return (see the vignette source for the
+code).\medskip
+
+\begin{tabular}{rrl@{\hspace{5ex}}rrl@{\hspace{5ex}}rrl}
+  Return & Vol &  & Return & Vol &  & Return & Vol & \\
+<<echo=false,results=tex>>=
+matrixify <- function(s, cols) {
+    s <- as.character(s)
+    nrow <- ceiling(length(s)/cols)
+    s <- c(s, rep("", nrow*cols - length(s)))
+    dim(s) <- c(nrow, cols)
+    s
+}
 
 
-
+## make LaTeX table
+Plist <- unname(lapply(split(P, col(P)), 
+                       function(x) 
+                           summary(NAVseries(x), 
+                                   assume.daily = TRUE)))
+s <- do.call(toLatex, 
+             c(Plist, 
+               template = "%return & %volatility & %sparkline"))
+o <- order(P[nrow(P), ], decreasing = TRUE)
+s <- s[o]
+cat(toLatex(as.data.frame(matrixify(s, 3))))
+@ 
+\end{tabular}
 \end{document}

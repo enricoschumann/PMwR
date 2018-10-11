@@ -106,9 +106,18 @@ sparkline <- function(x,
                       true.max = max(x),
                       baseline = TRUE,
                       baseline.lwd = 0.1,     ## not supported
-                      baseline.col = "black"  ## not supported
+                      baseline.col = "black", ## not supported
+                      points = 1000
                       ) {
-    xx <- map01(x, omin = true.min, omax = true.max)
+    lx <- length(x)
+    if (lx > points) {
+        i <- seq(from = 1, to = length(x),
+                 by = ceiling(lx/points))
+        if (tail(i, 1) != length(x))
+            i <- c(i, length(x))
+        x <- x[i]
+    }
+    xx <- .map01(x, omin = true.min, omax = true.max)
     sl <- c("{",
 
             if (height != 1.75)
@@ -118,14 +127,15 @@ sparkline <- function(x,
                 paste0("\\setlength{\\sparklinethickness}{", lwd, " pt}"),
 
             paste0("\\begin{sparkline}{", width, "}"), ## ...
-            
+
+            "\\definecolor{sparklinecolor}{rgb}{0.7,0.7,0.7}",
+
             if (baseline) {
-                c("\\spark ",
-                  paste(0, xx[1], 1, xx[1]),
-                  "/ \n")
+                c("\\spark ", paste(0, xx[1], 1, xx[1]), "/ \n")
             }, ## ...
-            
-            
+
+            "\\definecolor{sparklinecolor}{named}{black}",
+
             "\\spark ",
             paste(seq(0,1, length.out = length(x)), xx),
             "/ \n",
@@ -150,7 +160,7 @@ sparkplot <- function(x, blocks = 7, xmin = NULL, xmax = NULL, ymin = NULL) {
     invisible(res)
 }
 
-map01 <- function (x, min = 0, max = 1,
+.map01 <- function (x, min = 0, max = 1,
                    omin = min(x), omax = max(x)) {
     new.range <- max - min
     old.range <- omax - omin

@@ -6,6 +6,17 @@
 	'convert.weights' is TRUE. This behaviour is
 	now also documented.
 
+2018-10-10  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Package): import from package
+	'parallel' (i.e. Suggests => Imports)
+
+2018-09-23  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/internal.R (sparkline): new argument
+	'points', for down-sampling the plotted
+	time-series
+
 2018-09-14  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R (btest): setting 'replications' to
