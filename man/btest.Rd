@@ -49,7 +49,9 @@ btest(prices, signal,
     of the instruments suggested by the trading
     rule. If \code{convert.weights} is \code{TRUE},
     \code{signal} should return the suggested position
-    as weights. See Details.
+    as weights.
+    If signal returns \code{NULL}, the current position is kept.
+    See Details.
 
   }
   \item{do.signal}{

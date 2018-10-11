@@ -3,6 +3,12 @@
 	* R/btest.R (btest): experimental -- argument
 	'tc' may also be a function
 
+	* R/btest.R (btest): fixed -- when a signal
+	function evaluates to NULL, the suggested
+	position is carried forward also when
+	'convert.weights' is TRUE. This behaviour is
+	now also documented.
+
 2018-10-10  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Package): import from package
