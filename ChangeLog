@@ -1,3 +1,8 @@
+2018-10-11  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): experimental -- argument
+	'tc' may also be a function
+
 2018-10-10  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Package): import from package

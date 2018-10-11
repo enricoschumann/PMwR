@@ -526,6 +526,23 @@ test.btest_NA <- function() {
     
 }
 
+test.btest_tc <- function() {
+    prices <- 1:10
+    signal <- function()
+        Time()
+    tc <- function()
+        Time()
+
+    journal(bt <- btest(prices, signal, tc = tc))
+    checkEquals(bt$cum.tc,
+                c(0, cumsum(prices[-1]*seq_len(9))))
+                ###                    ^^^^^^^^^^ tc
+    
+    journal(bt <- btest(prices, signal, tc = 1))
+
+    checkEquals(bt$cum.tc,
+                c(0, cumsum(prices[-1])))    
+}
 
 test.journal <- function() {
 

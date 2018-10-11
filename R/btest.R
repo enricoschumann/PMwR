@@ -157,19 +157,21 @@ btest  <- function(prices,
     }
 
     L <- lag
-    
+
+    tc_fun <- if (is.function(tc))
+                  tc
+
     if (!missing(timestamp) &&
         (inherits(timestamp, "Date") || inherits(timestamp, "POSIXct")) &&
         inherits(b, class(timestamp))) {
         b <- matchOrNext(b, timestamp)
     }
             
-    if ("tradeOnOpen" %in% names(list(...))) {
+    if ("tradeOnOpen" %in% names(list(...)))
         warning("Did you mean 'trade.at.open'? See ChangeLog 2017-11-14.")
-    }
-    if ("assignInGlobals" %in% names(list(...))) {
+
+    if ("assignInGlobals" %in% names(list(...)))
         warning("Did you mean 'Globals'? See ChangeLog 2017-11-14.")
-    }
 
     if (convert.weights && initial.cash == 0)
         warning(sQuote("convert.weights"), " is TRUE and ",
@@ -200,9 +202,12 @@ btest  <- function(prices,
     else
         db.print.info <- FALSE
 
-    db.cashflow <-  if (is.function(cashflow) && isdebugged(cashflow))
-                        TRUE else FALSE
+    db.cashflow <- if (is.function(cashflow) && isdebugged(cashflow))
+                       TRUE else FALSE
 
+    db.tc_fun <- if (is.function(tc) && isdebugged(tc))
+                       TRUE else FALSE
+    
     if (is.null(do.signal) || identical(do.signal, TRUE)) {
         do.signal <- function(...)
             TRUE
@@ -410,7 +415,7 @@ btest  <- function(prices,
             NULL
     }
 
-    ## functions available in functions such as 'signal'
+    ## functions available in within functions such as 'signal'
     Open <- function(lag = L, n = NA) {
         if (!is.na(n))
             mO[t - (n:1), , drop = FALSE]
@@ -484,6 +489,8 @@ btest  <- function(prices,
                        "Wealth", "Cash", "Time", "Timestamp",
                        "Portfolio", "SuggestedPortfolio", "Globals")
     funs <- c("signal", "do.signal", "do.rebalance", "print.info", "cashflow")
+    if (!is.null(tc_fun))
+        funs <- c(funs, "tc_fun")
     for (thisfun in funs) {
         fNames <- names(formals(get(thisfun)))
         for (rname in reservedNames)
@@ -521,6 +528,12 @@ btest  <- function(prices,
     formals(cashflow) <- c(formals(cashflow), add.args)
     if (db.cashflow)
         debug(cashflow)
+
+    if (!is.null(tc_fun)) {
+        formals(tc_fun) <- c(formals(tc_fun), add.args)
+        if (db.tc_fun)
+            debug(tc_fun)
+    }
 
     if (is.list(prices)) {
 
@@ -637,6 +650,17 @@ btest  <- function(prices,
             rebalance <- FALSE
 
         if (rebalance) {
+
+            if (!is.null(tc_fun))
+                tc <- tc_fun(...,
+                             Open = Open, High = High,
+                             Low = Low, Close = Close,
+                             Wealth = Wealth, Cash = Cash,
+                             Time = Time, Timestamp = Timestamp,
+                             Portfolio = Portfolio,
+                             SuggestedPortfolio = SuggestedPortfolio,
+                             Globals = Globals)
+
             dx <- fraction * dXs
 
             if (trade.at.open) ## will convert m(O|C) to vector
@@ -746,6 +770,16 @@ btest  <- function(prices,
         
         if (rebalance) {
             dx <- fraction * dXs
+
+            if (!is.null(tc_fun))
+                tc <- tc_fun(...,
+                             Open = Open, High = High,
+                             Low = Low, Close = Close,
+                             Wealth = Wealth, Cash = Cash,
+                             Time = Time, Timestamp = Timestamp,
+                             Portfolio = Portfolio,
+                             SuggestedPortfolio = SuggestedPortfolio,
+                             Globals = Globals)
 
             if (trade.at.open) ## will convert m(O|C) to vector (drop == TRUE)
                 open <- mO[t, ]

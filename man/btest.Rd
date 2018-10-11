@@ -114,7 +114,13 @@ btest(prices, signal,
     logical
   }
   \item{tc}{
-    transaction costs as a fraction of turnover (e.g., 0.001 means 0.1\%)
+
+    transaction costs as a fraction of turnover (e.g.,
+    0.001 means 0.1\%). May also be a function that
+    evaluates to such a fraction. More-complex
+    computations may be specified with
+    argument \code{cashflow}.
+
   }
   \item{\dots}{
     
