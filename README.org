@@ -61,12 +61,12 @@ The latest release of the package is available from
 [[http://enricoschumann.net/R/packages/PMwR/]]. You can
 install the package directly from within R:
 #+BEGIN_SRC R :eval never
-  install.packages('PMwR', type = 'source',
+  install.packages('PMwR',
                    repos = c('http://enricoschumann.net/R', 
                              getOption('repos')))
 #+END_SRC
 The package depends on several other packages, which
-can be obtained from the same repository.
+can be obtained from the same repository and from CRAN.
 
 There is currently no automatic build for Windows. If
 you wish to use the package on Windows and have
