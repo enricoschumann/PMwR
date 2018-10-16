@@ -137,7 +137,8 @@ test.btest <- function() {
     checkEquals(solution$journal, journal())
 
     ## ... initial position not zero
-    solution <- btest(prices = prices, signal = signal, initial.position = 2)
+    solution <- suppressWarnings( ## suppress "no ‘prices0’" warning
+        btest(prices = prices, signal = signal, initial.position = 2))
     checkEquals(drop(solution$position), rep(2, length(prices)))
     checkEquals(drop(solution$wealth), prices*2)
     checkEquals(solution$journal, journal())
@@ -2314,6 +2315,5 @@ test.split_adjust <- function() {
 test.streaks <- function() {
 
     x <- c(112, 102, 101, 104, 111, 98, 82, 93, 99, 105, 103, 110)
-
 
 }

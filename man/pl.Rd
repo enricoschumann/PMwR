@@ -162,7 +162,7 @@ Schumann, E. (2018) \emph{Portfolio Management
 
 }
 \author{
-Enrico Schumann <es@enricoschumann.net>
+  Enrico Schumann <es@enricoschumann.net>
 }
 \seealso{
   \code{\link{btest}},   \code{\link{returns}}

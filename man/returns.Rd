@@ -183,14 +183,17 @@ returns(x, \dots)
   \code{returns} is a generic function.  It computes
   simple returns: current values divided by prior
   values minus one.  The default method works for
-  numeric vectors/matrices.
+  numeric vectors/matrices.  The function
+  \code{.returns} does the actual computations and may
+  be used when a \sQuote{raw} return computation is
+  needed.
 
-  \code{.returns} does the actual computations and may be used
   
   \subsection{Holding-Period Returns}{
     
-    When a timestamp is available, returns can compute returns for
-    specific calendar periods.
+    When a timestamp is available, \code{returns} can
+    compute returns for specific calendar periods. See
+    argument \code{period}.
     
   }
   
@@ -210,7 +213,8 @@ returns(x, \dots)
 \value{
 
   If called as \code{returns(x)}: a numeric vector or
-  matrix, possibly of class \code{zoo}.
+  matrix, possibly with a class attribute (e.g. for a
+  \code{zoo} series).
 
   If called with a \code{period} argument: an object of
   class \code{"p_returns"} (period returns), which is a
@@ -221,12 +225,21 @@ returns(x, \dots)
   \code{\link{toLatex}} and
   \code{\link[tools]{toHTML}}.
 
+  In some cases, additional attributes may be attached:
+  when portfolio returns were computed (i.e. weights
+  was specified), there are attributes \code{holdings}
+  and \code{contributions}. For holding-period returns,
+  there may be a logical attribute
+  \code{is.annualised}, and an attribute
+  \code{from.to}, which tells the start and end date of
+  the holding period.
+      
 }
 \author{
-  Enrico Schumann
+  Enrico Schumann <es@enricoschumann.net>
 }
 \seealso{
-  \code{\link{btest}}
+  \code{\link{btest}}, \code{\link{pl}}
 }
 \examples{
 x <- 101:105
