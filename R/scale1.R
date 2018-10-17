@@ -19,7 +19,7 @@ scale1.default <- function (x, ...,
 
     makevec <- FALSE
     if (!is.matrix(x)) {
-        ## x is always coerced to matrix. But if it had not dim
+        ## x is always coerced to matrix. But if it had no dim
         ## attribute, it will be coerced back to a vector at the
         ## end        
         makevec <- TRUE
@@ -34,6 +34,8 @@ scale1.default <- function (x, ...,
         ## TODO faster? rowSums(is.na(matrix(0, nrow=5,ncol=2)))
     } else if (when == "first") {
         init.p <- 1
+    } else if (when == "last") {
+        init.p <- nrow(x)
     } else if (is.numeric(when)) {
         init.p <- when
     }

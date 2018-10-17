@@ -373,7 +373,7 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
 }
 
 as.zoo.p_returns <- function (x, ...) {
-    zoo(x, attr(x, "t"))
+    zoo(x, order.by = attr(x, "t"), ...)
 }
 
 ## not exported

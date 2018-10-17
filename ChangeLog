@@ -1,3 +1,8 @@
+2018-10-17  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/scale1.R (scale1.default): 'when' may also
+	be "last"
+
 2018-10-11  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R (btest): experimental -- argument

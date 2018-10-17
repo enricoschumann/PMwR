@@ -11,7 +11,7 @@
 \usepackage{natbib}
 \usepackage{xcolor}
 \usepackage{framed}
-\usepackage[hang]{footmisc}
+\usepackage[flushmargin]{footmisc}
 \definecolor{grau2}{rgb}{.2,.2,.2}
 \definecolor{grau7}{rgb}{.7,.7,.7}
 \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
@@ -92,18 +92,19 @@ The latest version of the package is available from
 \url{http://enricoschumann.net/R/packages/PMwR/}. To install the
 package from within R, type
 <<eval=false, results=hide>>=
-install.packages('PMwR', type = 'source',
-                 repos = c('http://enricoschumann.net/R', 
-                           getOption('repos')))
+install.packages('PMwR', 
+                 repos = c('http://enricoschumann.net/R', getOption('repos')))
 @ 
 within a session. The package depends on several other
 packages, which can be obtained from the same
-repository.
+repository and from \textsc{cran}.
 
-There is currently no automatic build for Windows. If
-you wish to use the package on Windows and have
-problems building it, then please contact me and I will
-provide you with a Windows version.
+There is currently no automatic Windows build for the
+latest version. If you wish to use the package on
+Windows and have problems building/installing it, then
+please contact me and I will provide you with a Windows
+version.
+
 
 \section*{What the package provides}
 

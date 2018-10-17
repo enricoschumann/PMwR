@@ -25,11 +25,15 @@ scale1(x, \dots)
   }
   \item{when}{
     
-    origin: for the default method, either character or numeric
-    (integer). For the \code{zoo} method, a value that matches the class
-    of the \code{index} of \code{x}; for instance, with an index of
-    class \code{\link{Date}}, when should inherit from
-    \code{\link{Date}}.
+    origin: for the default method, either a string or
+    numeric (integer). Allowed strings are
+    \code{"first.complete"} (the default),
+    \code{"first"}, and \code{"last"}.
+    For the \code{zoo} method, a
+    value that matches the class of the \code{index} of
+    \code{x}; for instance, with an index of class
+    \code{\link{Date}}, \code{when} should inherit from
+    \code{\link{Date}}. 
     
   }
   \item{level}{
@@ -58,8 +62,10 @@ scale1(x, \dots)
 }
 }
 \details{
-  This is a generic function, with methods for numeric vectors and
-  matrices, and \code{zoo} objects.
+
+  This is a generic function, with methods for numeric
+  vectors and matrices, and \code{zoo} objects.
+
 }
 \value{
 An object of the same type as \code{x}.

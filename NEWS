@@ -11,8 +11,6 @@ v0.10-0  (2018-10-19; not yet released)
 
   o new vignette on 'drawdowns and streaks'
 
-  o returns: argument 'period' may also be 'hourly'
-    
   o pl: In several cases in which profit/loss was set
     to NA, it now defaults (more appropriately) to 0.
     For instance, with a custom timestamp the
@@ -34,6 +32,10 @@ v0.10-0  (2018-10-19; not yet released)
 
   o pl.btest: fixed passing of additional arguments
 
+  o returns: argument 'period' may also be 'hourly'
+    
+  o scale1: argument 'when' may also be 'last'
+  
   o various documentation updates/fixes; see the
     ChangeLog for all details. The manual at
     http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html

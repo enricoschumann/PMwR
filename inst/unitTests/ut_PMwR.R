@@ -2030,6 +2030,17 @@ test.scale1 <- function() {
                 cor(returns(P1_scaled), returns(P2_scaled)))
 
 
+    ## when: last, first
+    P <- cumprod(1 + c(0, rnorm(20, sd = 0.02)))
+
+    P.scaled <- scale1(P, when = "last", level = 42)
+    checkEquals(returns(P), returns(P.scaled))
+    checkEquals(P.scaled[length(P.scaled)], 42)
+
+    P.scaled <- scale1(P, when = "first", level = 42)
+    checkEquals(returns(P), returns(P.scaled))
+    checkEquals(P.scaled[1], 42)    
+    
 }
 
 test.replace_weight <- function() {

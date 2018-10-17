@@ -22,10 +22,6 @@ makeHHMMSS <- function(x, label = "time specification (HHMMSS)") {
     x
 }
 
-wait <- function(x) 
-    if (length(x) == 1L)
-        Sys.sleep(x) else Sys.sleep(runif(1L, min(x), max(x)))
-
 last <- function(x, by, index = FALSE) {
     lby <- length(by)
     rby <- by[lby:1L]
@@ -58,12 +54,6 @@ letter2month <- function(s, instrument = "option"){
                            "N", "Q", "U", "V", "X", "Z"))]
     } else
         stop("unknown instrument")
-}
-
-insert <- function(x, list, values) {
-    len <- length(list) * (length(values) - 1L) + length(x)
-    ans <- vector(typeof(x), length = len)
-    seq_len(len)
 }
 
 .match_or_next <- matchOrNext <- function(x, y) {
