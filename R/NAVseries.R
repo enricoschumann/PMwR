@@ -392,7 +392,7 @@ as.NAVseries.btest <- function(x, ...,
         NAV <- NAV[-leading.na]
         timestamp <- timestamp[-leading.na]
     }
-    NAVseries(NAV = scale1(NAV, level = 100),
+    NAVseries(NAV = NAV,
               timestamp = timestamp)
 }
 

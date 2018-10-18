@@ -853,12 +853,14 @@ btest  <- function(prices,
         colnames(X) <- paste("asset", seq_len(ncol(X)))
     if (missing(timestamp))
         timestamp <- seq_len(nrow(X))
+
+    ## TODO include cash in journal
     trades <- diff(rbind(initial.position, X))
     keep <- abs(trades) > sqrt(.Machine$double.eps) & !is.na(trades)
     jnl <- journal()
     if (any(keep)) {
         for (cc in seq_len(ncol(X))) {
-            ic <- keep[ ,cc]
+            ic <- keep[, cc]
             if (!any(ic))
                 next
             jnl0 <- journal(timestamp  = timestamp[ic],

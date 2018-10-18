@@ -1,262 +1,268 @@
+2018-10-18  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/NAVseries.R (as.NAVseries.btest): do not
+        use scale1 on NAVseries (which would not work
+        when the NAVseries start with 0)
+
 2018-10-17  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/scale1.R (scale1.default): 'when' may also
-	be "last"
+        * R/scale1.R (scale1.default): 'when' may also
+        be "last"
 
 2018-10-11  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R (btest): experimental -- argument
-	'tc' may also be a function
+        * R/btest.R (btest): experimental -- argument
+        'tc' may also be a function
 
-	* R/btest.R (btest): fixed -- when a signal
-	function evaluates to NULL, the suggested
-	position is carried forward also when
-	'convert.weights' is TRUE. This behaviour is
-	now also documented.
+        * R/btest.R (btest): fixed -- when a signal
+        function evaluates to NULL, the suggested
+        position is carried forward also when
+        'convert.weights' is TRUE. This behaviour is
+        now also documented.
 
 2018-10-10  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Package): import from package
-	'parallel' (i.e. Suggests => Imports)
+        * DESCRIPTION (Package): import from package
+        'parallel' (i.e. Suggests => Imports)
 
 2018-09-23  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/internal.R (sparkline): new argument
-	'points', for down-sampling the plotted
-	time-series
+        * R/internal.R (sparkline): new argument
+        'points', for down-sampling the plotted
+        time-series
 
 2018-09-14  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R (btest): setting 'replications' to
-	a positive integer repeats the backtest as many
-	times (which is useful only for tests with
-	stochastic components, such as data resampling
-	or stochastics optimisation techniques)
+        * R/btest.R (btest): setting 'replications' to
+        a positive integer repeats the backtest as many
+        times (which is useful only for tests with
+        stochastic components, such as data resampling
+        or stochastics optimisation techniques)
 
 2018-09-07  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/quote32.R (quote32, q32): fixed -- the
-	function would not parse a price without fractions,
-	such as "120"
+        * R/quote32.R (quote32, q32): fixed -- the
+        function would not parse a price without fractions,
+        such as "120"
 
-	* R/btest.R (btest): 'variations.settings' may
-	take a 'label', which is used to name the
-	resulting list
+        * R/btest.R (btest): 'variations.settings' may
+        take a 'label', which is used to name the
+        resulting list
 
-	* R/returns.R (pReturns): if column names are
-	present, keep them and print them for various
-	holding periods, e.g. ytd or itd
+        * R/returns.R (pReturns): if column names are
+        present, keep them and print them for various
+        holding periods, e.g. ytd or itd
 
 2018-09-04  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pl.R (pl.default): pl along a timestamp now
-	ignores NA values in the prices when there is
-	no position in the instrument; see also
-	ChangeLog 2018-07-31
+        * R/pl.R (pl.default): pl along a timestamp now
+        ignores NA values in the prices when there is
+        no position in the instrument; see also
+        ChangeLog 2018-07-31
 
 2018-08-31  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/streaks.R (streaks): new generic, with
-	methods for NAVseries, zoo and numeric vectors
+        * R/streaks.R (streaks): new generic, with
+        methods for NAVseries, zoo and numeric vectors
 
-	* vignettes/Drawdowns_streaks.Rnw: add vignette
+        * vignettes/Drawdowns_streaks.Rnw: add vignette
 
-	* R/drawdowns.R (drawdowns.NAVseries): add and
-	export method
+        * R/drawdowns.R (drawdowns.NAVseries): add and
+        export method
 
 2018-08-23  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/quote32.R (quote32,q32): accept "+" in
-	character input; for instance, "127-00+" is
-	now recognised as "127-005"
+        * R/quote32.R (quote32,q32): accept "+" in
+        character input; for instance, "127-00+" is
+        now recognised as "127-005"
 
 2018-08-21  Enrico Schumann  <es@enricoschumann.net>
 
-	* inst/unitTests/ut_PMwR.R (test.btest_NA):
-	new test function
+        * inst/unitTests/ut_PMwR.R (test.btest_NA):
+        new test function
 
-	* R/btest.R (btest): new argument 'tol.p': if
-	specified, only rebalance those positions for
-	which the relative suggested change is greater
-	than 'tol.p'
-	(btest): rebalance arithmetic is now only
-	performed for those positions with non-zero
-	change. This may entail a (very small)
-	performance penalty for backtests with very few
-	assets, and a (small) performance gain for
-	backtests with many assets. This change allows
-	to have NAs in price series, as long as no
-	position in such a series is taken.
+        * R/btest.R (btest): new argument 'tol.p': if
+        specified, only rebalance those positions for
+        which the relative suggested change is greater
+        than 'tol.p'
+        (btest): rebalance arithmetic is now only
+        performed for those positions with non-zero
+        change. This may entail a (very small)
+        performance penalty for backtests with very few
+        assets, and a (small) performance gain for
+        backtests with many assets. This change allows
+        to have NAs in price series, as long as no
+        position in such a series is taken.
 
 2018-08-18  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R (btest): 'variations': support
-	serial and parallel backtests, the latter
-	relying on package 'parallel'
+        * R/btest.R (btest): 'variations': support
+        serial and parallel backtests, the latter
+        relying on package 'parallel'
 
 2018-08-17  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R (btest): experimental -- new
-	arguments 'variations' and 'variations.settings'
+        * R/btest.R (btest): experimental -- new
+        arguments 'variations' and 'variations.settings'
 
 2018-08-04  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pl.R (.pl_stats): remove 'avg'; see
-	ChangeLog entry of 2017-07-05
+        * R/pl.R (.pl_stats): remove 'avg'; see
+        ChangeLog entry of 2017-07-05
 
 2018-08-03  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pl.R (pl.btest): fixed -- method had not
-	passed on additional arguments (`...`)
+        * R/pl.R (pl.btest): fixed -- method had not
+        passed on additional arguments (`...`)
 
 2018-07-31  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pl.R (pl.default): rewrite along.timestamp
-	'pl' code, using stats::approx. In several
-	cases in which profit/loss was shown as NA, it
-	is now (more appropriately) shown as 0. For
-	instance, with a custom timestamp the
-	realised/unrealised profit/loss before the
-	first trade is now 0, not NA.
+        * R/pl.R (pl.default): rewrite along.timestamp
+        'pl' code, using stats::approx. In several
+        cases in which profit/loss was shown as NA, it
+        is now (more appropriately) shown as 0. For
+        instance, with a custom timestamp the
+        realised/unrealised profit/loss before the
+        first trade is now 0, not NA.
 
-	* NAMESPACE: import stats::approx
+        * NAMESPACE: import stats::approx
 
 2018-07-24  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/journal.R (`instrument<-.journal`): export
-	method
+        * R/journal.R (`instrument<-.journal`): export
+        method
 
 2018-06-28  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/valuation.R (valuation.journal): accept
-	'instrument = NULL'
+        * R/valuation.R (valuation.journal): accept
+        'instrument = NULL'
 
 2018-06-27  Enrico Schumann  <es@enricoschumann.net>
 
-	* man/position.Rd: update docs
+        * man/position.Rd: update docs
 
-	* NAMESPACE: export 'valuation.position'
+        * NAMESPACE: export 'valuation.position'
 
-	* R/valuation.R (valuation.position): ignore
-	zero-positions; warn about missing prices
+        * R/valuation.R (valuation.position): ignore
+        zero-positions; warn about missing prices
 
 2018-06-26  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/NAVseries.R (summary): fix formatting
+        * R/NAVseries.R (summary): fix formatting
 
 2018-06-21  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (position.default): replace
-	internal separator in column names with '.'
+        * R/position.R (position.default): replace
+        internal separator in column names with '.'
 
 2018-06-20  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R: fix duplication of timestamp when
-	both 'include.timestamp' and 'include.data' are
-	TRUE
+        * R/btest.R: fix duplication of timestamp when
+        both 'include.timestamp' and 'include.data' are
+        TRUE
 
-	* R/position.R (print.position): fix
-	use of 'sep' argument
+        * R/position.R (print.position): fix
+        use of 'sep' argument
 
-	* NAMESPACE: do not export 'toHTML'
+        * NAMESPACE: do not export 'toHTML'
 
 2018-06-14  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R: support 'hourly' holding-period
-	returns
+        * R/returns.R: support 'hourly' holding-period
+        returns
 
 2018-06-12  Enrico Schumann  <es@enricoschumann.net>
 
-	* NAMESPACE: export 'toHTML'
+        * NAMESPACE: export 'toHTML'
 
-	* R/internal.R (.timestamp): make function work
-	for 'p_returns' objects as well
+        * R/internal.R (.timestamp): make function work
+        for 'p_returns' objects as well
 
-	* DESCRIPTION (Depends): add 'R (>= 2.10)'
+        * DESCRIPTION (Depends): add 'R (>= 2.10)'
 
 2018-06-11  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.9-0
+        * DESCRIPTION (Version): 0.9-0
 
 2018-06-08  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/NAVseries.R (window.NAVseries): add method
+        * R/NAVseries.R (window.NAVseries): add method
 
-	* R/internal.R (.may_be_Date): add internal
-	function; see `?.may_be_Date`
+        * R/internal.R (.may_be_Date): add internal
+        function; see `?.may_be_Date`
 
-	* R/internals.R (.timestamp): add internal
-	function, also a replacement function;
-	see `?.timestamp`
+        * R/internals.R (.timestamp): add internal
+        function, also a replacement function;
+        see `?.timestamp`
 
 2018-06-01  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R (do.rebalance): fix case when
-	do.rebalance is a vector of timestamps
+        * R/btest.R (do.rebalance): fix case when
+        do.rebalance is a vector of timestamps
 
-	* R/returns.R (returns.zoo): for portfolio
-	returns (i.e. when 'weights' are provided), the
-	method now always returns a 'zoo' object
+        * R/returns.R (returns.zoo): for portfolio
+        returns (i.e. when 'weights' are provided), the
+        method now always returns a 'zoo' object
 
 2018-05-31  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (returns.default): ignore
-	'position' (and warn when the argument
-	is specified)
+        * R/returns.R (returns.default): ignore
+        'position' (and warn when the argument
+        is specified)
 
-	* inst/unitTests/ut_PMwR.R (test.returns):
-	exclude tests on time-weighted returns,
-	i.e. those using the deprecated 'position'
-	argument
+        * inst/unitTests/ut_PMwR.R (test.returns):
+        exclude tests on time-weighted returns,
+        i.e. those using the deprecated 'position'
+        argument
 
 2018-05-29  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/NAVseries.R (summary.NAVseries): add date
-	of recovery from drawdown ('mdd.recover.when')
-	to results;
-	add new argument 'assume.daily': if TRUE,
-	numeric timestamps are considered daily data;
-	rename argument 'monthly' to 'monthly.vol'
+        * R/NAVseries.R (summary.NAVseries): add date
+        of recovery from drawdown ('mdd.recover.when')
+        to results;
+        add new argument 'assume.daily': if TRUE,
+        numeric timestamps are considered daily data;
+        rename argument 'monthly' to 'monthly.vol'
 
 2018-05-25  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (returns): 'rebalance.when' is
-	now matched against the timestamp 't' when both
-	are of the same class (e.g., when 't' is of
-	class Date, 'rebalance.when' may also be
-	specified as a Date)
-	(returns.default): remove warning for the case
-	when 't' is specified, but neither 'period' nor
-	'rebalance.when' are
+        * R/returns.R (returns): 'rebalance.when' is
+        now matched against the timestamp 't' when both
+        are of the same class (e.g., when 't' is of
+        class Date, 'rebalance.when' may also be
+        specified as a Date)
+        (returns.default): remove warning for the case
+        when 't' is specified, but neither 'period' nor
+        'rebalance.when' are
 
 2018-05-24  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R (btest): new argument
-	'include.timestamp', with default TRUE
+        * R/btest.R (btest): new argument
+        'include.timestamp', with default TRUE
 
 2018-05-10  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/journal.R (all.equal.journal): add
-	method (incomplete)
+        * R/journal.R (all.equal.journal): add
+        method (incomplete)
 
 2018-04-30  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.8-0
+        * DESCRIPTION (Version): 0.8-0
 
 2018-04-21  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/rebalance.R (rebalance): refactor
-	implementation;
-	new argument 'current.weights' with default
-	FALSE; if TRUE, the current portfolio is
-	assumed to be a vector of weights
+        * R/rebalance.R (rebalance): refactor
+        implementation;
+        new argument 'current.weights' with default
+        FALSE; if TRUE, the current portfolio is
+        assumed to be a vector of weights
 
 2018-03-07  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (as.data.frame.p_returns):
-	add/export method: the method calls
-	as.matrix.p_returns and then coerces to
-	data.frame
+        * R/returns.R (as.data.frame.p_returns):
+        add/export method: the method calls
+        as.matrix.p_returns and then coerces to
+        data.frame
 
 2018-03-05  Enrico Schumann  <es@enricoschumann.net>
 
@@ -273,104 +279,104 @@
 
 2018-02-26  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.7-1
+        * DESCRIPTION (Version): 0.7-1
 
-	* NAMESPACE: import 'utils::write.table'
+        * NAMESPACE: import 'utils::write.table'
 
-	* R/pl.R (pl.default): new argument 'do.sum': if
-	TRUE, sum P/L across instruments
-	(pl.default): new argument 'pl.only': if TRUE,
-	return pl only as a numeric vector
+        * R/pl.R (pl.default): new argument 'do.sum': if
+        TRUE, sum P/L across instruments
+        (pl.default): new argument 'pl.only': if TRUE,
+        return pl only as a numeric vector
 
 2018-02-24  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/journal.R (journal.default): fixed -- if
-	length of amount is zero, an empty journal is
-	returned (before, in some cases, instrument
-	became NA, i.e. of length one)
+        * R/journal.R (journal.default): fixed -- if
+        length of amount is zero, an empty journal is
+        returned (before, in some cases, instrument
+        became NA, i.e. of length one)
 
 2018-02-23  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/drawdowns.R (drawdowns): new generic function
-	(drawdowns.default, drawdowns.zoo): add methods
+        * R/drawdowns.R (drawdowns): new generic function
+        (drawdowns.default, drawdowns.zoo): add methods
 
 2018-02-09  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/journal.R (head.journal, tail.journal): fix
-	skipping of empty journals
-	(tail.journal): fix sorting in reverse order
+        * R/journal.R (head.journal, tail.journal): fix
+        skipping of empty journals
+        (tail.journal): fix sorting in reverse order
 
 2018-02-08  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (print.position): do not print
-	column number for position without timestamp
+        * R/position.R (print.position): do not print
+        column number for position without timestamp
 
 2018-01-22  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/plot_trading_hours.R: set useful defaults
-	when timestamp is of class 'Date' (interval
-	becomes "1 day", etc.)
+        * R/plot_trading_hours.R: set useful defaults
+        when timestamp is of class 'Date' (interval
+        becomes "1 day", etc.)
 
 2018-01-01  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.7-0
+        * DESCRIPTION (Version): 0.7-0
 
 2017-12-27  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/quote32.R (print.quote32): use
-	'print.default' instead of 'cat'
+        * R/quote32.R (print.quote32): use
+        'print.default' instead of 'cat'
 
-	* R/rebalance.R (print.rebalance): suppress
-	scientific notation
+        * R/rebalance.R (print.rebalance): suppress
+        scientific notation
 
-	* R/internals.R (sparkline): rename internal
-	function sparklines => sparkline;
-	rename arguments/add arguments
+        * R/internals.R (sparkline): rename internal
+        function sparklines => sparkline;
+        rename arguments/add arguments
 
 2017-12-12  Enrico Schumann  <es@enricoschumann.net>
 
-	* inst/unitTests/ut_PMwR.R: add check for empty
-	journal
+        * inst/unitTests/ut_PMwR.R: add check for empty
+        journal
 
 2017-12-08  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pl.R (pl.data.frame): new method
+        * R/pl.R (pl.data.frame): new method
 
 2017-12-05  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/scale1.R (scale1): objects that are
-	modified by 'scale1' gain an attribute
-	"scale1_origin", which provides the timestamp
-	at which scaling starts
+        * R/scale1.R (scale1): objects that are
+        modified by 'scale1' gain an attribute
+        "scale1_origin", which provides the timestamp
+        at which scaling starts
 
 2017-11-21  Enrico Schumann  <es@enricoschumann.net>
 
-	* vignettes/q32.Rnw: add place-holder file
+        * vignettes/q32.Rnw: add place-holder file
 
-	* R/position.R (position.default): for keyword
-	"endofday", coerce timestamp to 'Date'
+        * R/position.R (position.default): for keyword
+        "endofday", coerce timestamp to 'Date'
 
-	* R/quote32.R (quote32, q32): the function now
-	also recognises a colon (:) as a separator
+        * R/quote32.R (quote32, q32): the function now
+        also recognises a colon (:) as a separator
 
 2017-11-17  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R (btest): fix handling of
-	'lag' (which had been ignored in some situations)
+        * R/btest.R (btest): fix handling of
+        'lag' (which had been ignored in some situations)
 
 2017-11-16  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.6-1
+        * DESCRIPTION (Version): 0.6-1
 
-	* R/div_adjust.R (split_adjust): fix handling
-	of several splits per series
+        * R/div_adjust.R (split_adjust): fix handling
+        of several splits per series
 
-	* R/div_adjust.R (div_adjust): fix handling of
-	several dividends per series
+        * R/div_adjust.R (div_adjust): fix handling of
+        several dividends per series
 
-	* inst/unitTests/ut_PMwR.R (test.div_adjust):
-	add tests
-	(test.split_adjust): add tests
+        * inst/unitTests/ut_PMwR.R (test.div_adjust):
+        add tests
+        (test.split_adjust): add tests
 
 2017-11-16  Enrico Schumann  <es@enricoschumann.net>
 
@@ -381,10 +387,10 @@
             tradeOnOpen      =>  trade.at.open
             assignInGlobals  =>  Globals
 
-	* R/plot_trading_hours.R: rename arguments
+        * R/plot_trading_hours.R: rename arguments
 
-	    excludeWeekends  =>  exclude.weekends
-	    do.plotAxis      =>  do.plot.axis
+            excludeWeekends  =>  exclude.weekends
+            do.plotAxis      =>  do.plot.axis
 
 2017-11-13  Enrico Schumann  <es@enricoschumann.net>
 
@@ -401,39 +407,39 @@
 
 2017-10-30  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (as.matrix.p_returns): do not use
-	NextMethod but directly unclass/coerce
+        * R/returns.R (as.matrix.p_returns): do not use
+        NextMethod but directly unclass/coerce
 
 2017-10-27  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.5-12
+        * DESCRIPTION (Version): 0.5-12
 
-	* R/NAVseries.R (summary.NAVseries): fix NA
-	handling: with missing values in NAVs, the
-	timestamp was incorrectly stored, which led to
-	wrong monthly returns in 'print.summary.NAVseries'
-	(summary.NAVseries): new argument 'na.rm'
+        * R/NAVseries.R (summary.NAVseries): fix NA
+        handling: with missing values in NAVs, the
+        timestamp was incorrectly stored, which led to
+        wrong monthly returns in 'print.summary.NAVseries'
+        (summary.NAVseries): new argument 'na.rm'
 
 2017-10-25  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.5-11
+        * DESCRIPTION (Version): 0.5-11
 
-	* R/journal.R (journal.default): fix NA
-	handling in 'journal': 'journal' would stop
-	if there were NA values in instrument
+        * R/journal.R (journal.default): fix NA
+        handling in 'journal': 'journal' would stop
+        if there were NA values in instrument
 
 2017-10-19  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.5-10
+        * DESCRIPTION (Version): 0.5-10
 
-	* R/returns.R (returns_rebalance): call
-	.returns instead of returns
-	(returns,returns_rebalance): 'rebalance.when'
-	may now be the string 'endofmonth'
+        * R/returns.R (returns_rebalance): call
+        .returns instead of returns
+        (returns,returns_rebalance): 'rebalance.when'
+        may now be the string 'endofmonth'
 
 2017-10-16  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.5-9
+        * DESCRIPTION (Version): 0.5-9
 
         * R/pl.R (pl.default): 'pl' is now less lenient
         when trades are passed without instrument, but
@@ -454,212 +460,212 @@
 
 2017-09-29  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/journal.R (`instrument<-`): add generic
-	function
+        * R/journal.R (`instrument<-`): add generic
+        function
 
-	* R/pricetable.R (names.pricetable): add names
-	and instrument methods, both for extraction and
-	replacement
+        * R/pricetable.R (names.pricetable): add names
+        and instrument methods, both for extraction and
+        replacement
 
-	* inst/unitTests/ut_PMwR.R (btest): add tests
-	for argument 'include.data'
+        * inst/unitTests/ut_PMwR.R (btest): add tests
+        for argument 'include.data'
 
-	* DESCRIPTION (Package): set ByteCompile: yes
+        * DESCRIPTION (Package): set ByteCompile: yes
 
 2017-09-28  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pricetable.R (as.matrix.pricetable): add
-	method
-	(`[.pricetable`): argument missing may now be
-	'locf', as in Last Observation Carried Forward
-	(print.pricetable): method now returns original
-	pricetable, not matrix
+        * R/pricetable.R (as.matrix.pricetable): add
+        method
+        (`[.pricetable`): argument missing may now be
+        'locf', as in Last Observation Carried Forward
+        (print.pricetable): method now returns original
+        pricetable, not matrix
 
 2017-09-11  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (position.btest): new argument
-	'include.cash'
+        * R/position.R (position.btest): new argument
+        'include.cash'
 
-	* R/NAVseries.R (as.NAVseries.btest): new
-	argument 'drop.NA' that controls whether
-	leading NAs are dropped. Default is TRUE.
+        * R/NAVseries.R (as.NAVseries.btest): new
+        argument 'drop.NA' that controls whether
+        leading NAs are dropped. Default is TRUE.
 
 2017-09-04  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/NAVseries.R (as.NAVseries.btest): fixed --
-	the method would fail when there are no leading
-	NAs (i.e. no burnin in the test)
+        * R/NAVseries.R (as.NAVseries.btest): fixed --
+        the method would fail when there are no leading
+        NAs (i.e. no burnin in the test)
 
 2017-08-24  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/NAVseries.R (plot.NAVseries): set default
-	plot type "l"
+        * R/NAVseries.R (plot.NAVseries): set default
+        plot type "l"
 
 2017-08-23  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.5-8
+        * DESCRIPTION (Version): 0.5-8
 
-	* R/NAVseries.R (print.summary.NAVseries):
-	remove double-printing of title
-	(toLatex.summary.NAVseries): 'template' is only
-	repeated when of length 1
-	(toLatex.summary.NAVseries): rewrote
-	replacement of values (with fewer regexes)
+        * R/NAVseries.R (print.summary.NAVseries):
+        remove double-printing of title
+        (toLatex.summary.NAVseries): 'template' is only
+        repeated when of length 1
+        (toLatex.summary.NAVseries): rewrote
+        replacement of values (with fewer regexes)
 
 2017-08-18  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.5-7
+        * DESCRIPTION (Version): 0.5-7
 
-	* vignettes/FinTeX.Rnw: add vignette
+        * vignettes/FinTeX.Rnw: add vignette
 
-	* R/NAVseries.R (as.NAVseries.NAVseries): add
-	method (return the input argument unchanged)
+        * R/NAVseries.R (as.NAVseries.NAVseries): add
+        method (return the input argument unchanged)
 
-	* data/DAX.csv: add datasets DAX and REXP
+        * data/DAX.csv: add datasets DAX and REXP
 
-	* NAMESPACE: 'isValidISIN' is no longer
-	available; use the drop-in replacement
-	'is_valid_ISIN' instead
+        * NAMESPACE: 'isValidISIN' is no longer
+        available; use the drop-in replacement
+        'is_valid_ISIN' instead
 
 2017-08-17  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.5-6
+        * DESCRIPTION (Version): 0.5-6
 
-	* R/NAVseries.R (toLatex.summary.NAVseries):
-	export method
+        * R/NAVseries.R (toLatex.summary.NAVseries):
+        export method
 
-	* R/pricetable.R
-	(`[.pricetable`, print.pricetable): dimnames
-	are only used for printing, not for subsetting
-	any more
+        * R/pricetable.R
+        (`[.pricetable`, print.pricetable): dimnames
+        are only used for printing, not for subsetting
+        any more
 
-	* R/internals.R (map01): copy esutils::map01,
-	for internal use only; not exported
-	(sparklines): add internal function that
-	transforms timeseries for use with LaTeX
-	package sparklines (https://ctan.org/pkg/sparklines)
-
-2017-08-16  Enrico Schumann  <es@enricoschumann.net>
-
-	* R/pricetable.R (pricetable.zoo): experimental
-	-- have pricetable merge zoo series passed
-	via ...
+        * R/internals.R (map01): copy esutils::map01,
+        for internal use only; not exported
+        (sparklines): add internal function that
+        transforms timeseries for use with LaTeX
+        package sparklines (https://ctan.org/pkg/sparklines)
 
 2017-08-16  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.5-5
+        * R/pricetable.R (pricetable.zoo): experimental
+        -- have pricetable merge zoo series passed
+        via ...
 
-	* NAMESPACE: export pricetable methods
+2017-08-16  Enrico Schumann  <es@enricoschumann.net>
 
-	* inst/unitTests/ut_PMwR.R (test.pricetable):
-	add tests
+        * DESCRIPTION (Version): 0.5-5
 
-	* R/pricetable.R (print.pricetable): add method
-	(pricetable.zoo): add method
+        * NAMESPACE: export pricetable methods
+
+        * inst/unitTests/ut_PMwR.R (test.pricetable):
+        add tests
+
+        * R/pricetable.R (print.pricetable): add method
+        (pricetable.zoo): add method
 
 2017-08-15  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/NAVseries.R (as.zoo.NAVseries): fix method
-	-- was broken after update (ChangeLog of
-	2017-08-14)
-	* R/returns.R (returns.NAVseries): fix method
+        * R/NAVseries.R (as.zoo.NAVseries): fix method
+        -- was broken after update (ChangeLog of
+        2017-08-14)
+        * R/returns.R (returns.NAVseries): fix method
 
 2017-08-14  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.5-4
+        * DESCRIPTION (Version): 0.5-4
 
-	* R/NAVseries.R (NAVseries): change structure
-	of NAVseries to a numeric vector with attributes;
-	update methods, such as scale1.NAVseries
+        * R/NAVseries.R (NAVseries): change structure
+        of NAVseries to a numeric vector with attributes;
+        update methods, such as scale1.NAVseries
 
-	* inst/unitTests/ut_PMwR.R (test.NAVseries):
-	add tests
+        * inst/unitTests/ut_PMwR.R (test.NAVseries):
+        add tests
 
 2017-08-11  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (print.position): drop dimension
-	when _printing_ the position of a single,
-	unnamed instrument
+        * R/position.R (print.position): drop dimension
+        when _printing_ the position of a single,
+        unnamed instrument
 
 2017-08-10  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.5-3
+        * DESCRIPTION (Version): 0.5-3
 
-	* R/pl.R (pl.default): fixed -- the function
-	had not checked whether a supplied timestamp
-	was actually sorted
+        * R/pl.R (pl.default): fixed -- the function
+        had not checked whether a supplied timestamp
+        was actually sorted
 
 2017-08-07  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.5-2
+        * DESCRIPTION (Version): 0.5-2
 
-	* R/returns.R (*.p_returns): remove warning
-	when input is a list (see ChangeLog 2015-06-26)
+        * R/returns.R (*.p_returns): remove warning
+        when input is a list (see ChangeLog 2015-06-26)
 
-	* inst/unitTests/ut_PMwR.R (test.btest):
-	suppress _expected_ warnings during tests
+        * inst/unitTests/ut_PMwR.R (test.btest):
+        suppress _expected_ warnings during tests
 
-	* R/quote32.R (quote32): the function now
-	recognises a hyphen (-) and single quote (') as
-	a separator
+        * R/quote32.R (quote32): the function now
+        recognises a hyphen (-) and single quote (') as
+        a separator
 
-	* R/quote32.R (c.quote32, Summary.quote32)
-	(diff.quote32): add rudimentary group generic
-	support: 'min', 'max' and 'range' now return
-	'quote32' objects, as do 'c' and 'diff'
+        * R/quote32.R (c.quote32, Summary.quote32)
+        (diff.quote32): add rudimentary group generic
+        support: 'min', 'max' and 'range' now return
+        'quote32' objects, as do 'c' and 'diff'
 
 2017-07-11  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pricetable.R (pricetable): 'pricetable' is
-	now generic
+        * R/pricetable.R (pricetable): 'pricetable' is
+        now generic
 
-	* R/journal.R (instrument.pricetable): add method
+        * R/journal.R (instrument.pricetable): add method
 
 2017-07-10  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pl.R (pl.default): fix realised/unrealised
-	p/l computation for custom timestamp (i.e.
-	along.timestamp = <dates>)
+        * R/pl.R (pl.default): fix realised/unrealised
+        p/l computation for custom timestamp (i.e.
+        along.timestamp = <dates>)
 
 2017-07-07  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.5-1
+        * DESCRIPTION (Version): 0.5-1
 
-	* inst/unitTests/ut_PMwR.R (test..pl_stats):
-	add unit tests
+        * inst/unitTests/ut_PMwR.R (test..pl_stats):
+        add unit tests
 
-	* R/pl.R (.pl_stats): fix profit/loss
-	computation when position changes sign: the
-	function was originally written for long-only
-	cases; also zero-amount trades are no longer
-	filtered. Experimentally, the function is also
-	exported.
+        * R/pl.R (.pl_stats): fix profit/loss
+        computation when position changes sign: the
+        function was originally written for long-only
+        cases; also zero-amount trades are no longer
+        filtered. Experimentally, the function is also
+        exported.
 
 2017-07-06  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pl.R (pl.default): clean code/remove
-	comments
+        * R/pl.R (pl.default): clean code/remove
+        comments
 
-	* R/journal.R (summary.journal): safeguard
-	summary method and the associated print method
-	for zero-transaction journals
+        * R/journal.R (summary.journal): safeguard
+        summary method and the associated print method
+        for zero-transaction journals
 
 2017-07-05  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pl.R (pl.default): warn if multiplier is
-	named but instrument is not specified
-	(.pl_stats <- avg): introduce alias '.pl_stats'
-	for 'avg' (the latter will be removed in the
-	future)
+        * R/pl.R (pl.default): warn if multiplier is
+        named but instrument is not specified
+        (.pl_stats <- avg): introduce alias '.pl_stats'
+        for 'avg' (the latter will be removed in the
+        future)
 
 2017-06-23  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.5-0
+        * DESCRIPTION (Version): 0.5-0
 
-	* R/: a number of functions have been
-	renamed:
+        * R/: a number of functions have been
+        renamed:
 
-	isValidISIN      => is_valid_ISIN
+        isValidISIN      => is_valid_ISIN
         closeOnFirst     => close_on_first
         plotTradingHours => plot_trading_hours
         scaleToUnity     => scale_to_unity
@@ -667,176 +673,176 @@
         splitTrades      => split_trades
         twExposure       => tw_exposure
 
-	for the time being, the old functions
-	can still be called with
-	    PMwR:::<old-fun-name>
-	but the new names are preferred
+        for the time being, the old functions
+        can still be called with
+            PMwR:::<old-fun-name>
+        but the new names are preferred
 
-	* inst/unitTests/ut_PMwR.R
-	(test.is_valid_ISIN): add tests
+        * inst/unitTests/ut_PMwR.R
+        (test.is_valid_ISIN): add tests
 
 2017-06-13  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.4-10
+        * DESCRIPTION (Version): 0.4-10
 
-	* R/journal.R (summary.journal)
-	(print.summary.journal): fix summary
-	computation when instrument is omitted
+        * R/journal.R (summary.journal)
+        (print.summary.journal): fix summary
+        computation when instrument is omitted
 
 2017-06-12  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.4-9
+        * DESCRIPTION (Version): 0.4-9
 
-	* R/pl.R (print.pl): when along.timestamp is not
-	FALSE, print timestamp
-	(pl.default): when there is only a single named
-	instrument, 'vprice' need not be named (but a
-	warning will be generated if it is not). Before,
-
-          pl(amount = 10, price = 10,
-	     vprice = 10)                 ## OK
-
-	would have worked and still does, but
+        * R/pl.R (print.pl): when along.timestamp is not
+        FALSE, print timestamp
+        (pl.default): when there is only a single named
+        instrument, 'vprice' need not be named (but a
+        warning will be generated if it is not). Before,
 
           pl(amount = 10, price = 10,
-	     instrument = "A", vprice = 10)
+             vprice = 10)                 ## OK
 
-	would fail because 'pl' expected a named
-	vector of valuation prices, i.e.
+        would have worked and still does, but
 
-	  vprice = c(A = 10)
+          pl(amount = 10, price = 10,
+             instrument = "A", vprice = 10)
 
-	The call will now succeed, but with a
-	warning. Also, with a missing valuation price
-	as in
+        would fail because 'pl' expected a named
+        vector of valuation prices, i.e.
 
-	  pl(amount = 10, price = 10,
-	     instrument = "A", vprice = c(B = 10))
+          vprice = c(A = 10)
 
-	'pl' does not fail any more, but returns NA.
+        The call will now succeed, but with a
+        warning. Also, with a missing valuation price
+        as in
+
+          pl(amount = 10, price = 10,
+             instrument = "A", vprice = c(B = 10))
+
+        'pl' does not fail any more, but returns NA.
 
 2017-06-08  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R: fix inclusion of instrument vector
-	when 'include.data' is TRUE
+        * R/btest.R: fix inclusion of instrument vector
+        when 'include.data' is TRUE
 
 2017-06-02  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.4-8
+        * DESCRIPTION (Version): 0.4-8
 
-	* R/btest.R (plot.btest, lines.btest): let
-	'xlab' and 'ylab' default to ""
+        * R/btest.R (plot.btest, lines.btest): let
+        'xlab' and 'ylab' default to ""
 
-	* R/pl.R (pl.pl): remove 'pl' suffix from names
-
-2017-05-29  Enrico Schumann  <es@enricoschumann.net>
-
-	* DESCRIPTION (Version): 0.4-7
-
-	* R/returns.R (returns.NAVseries): fix and
-	export method
-
-	* R/NAVseries.R (plot.NAVseries): let 'xlab'
-	and 'ylab' default to ""
-
-	* R/returns.R (as.matrix.p_returns): new
-	method, which places monthly returns into a
-	numeric matrix with years in rows and months in
-	columns. For other holding periods, as.matrix
-	is called on the raw numeric data.
+        * R/pl.R (pl.pl): remove 'pl' suffix from names
 
 2017-05-29  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.4-6
+        * DESCRIPTION (Version): 0.4-7
 
-	* R/returns.R (returns): 'period' may also
-	be a single year, such as "2007"
+        * R/returns.R (returns.NAVseries): fix and
+        export method
+
+        * R/NAVseries.R (plot.NAVseries): let 'xlab'
+        and 'ylab' default to ""
+
+        * R/returns.R (as.matrix.p_returns): new
+        method, which places monthly returns into a
+        numeric matrix with years in rows and months in
+        columns. For other holding periods, as.matrix
+        is called on the raw numeric data.
+
+2017-05-29  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 0.4-6
+
+        * R/returns.R (returns): 'period' may also
+        be a single year, such as "2007"
 
 2017-05-24  Enrico Schumann  <es@enricoschumann.net>
 
-	* inst/unitTests/ut_PMwR.R (btest): update for
-	changes in package datetimeutils (0.2-0)
+        * inst/unitTests/ut_PMwR.R (btest): update for
+        changes in package datetimeutils (0.2-0)
 
 2017-05-23  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (toLatex.p_returns): fixed --
-	'na.print' had been ignored
+        * R/returns.R (toLatex.p_returns): fixed --
+        'na.print' had been ignored
 
 2017-05-08  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.4-5
+        * DESCRIPTION (Version): 0.4-5
 
-	* R/position.R (position.default): update for
-	changes in package datetimeutils (0.2-0)
+        * R/position.R (position.default): update for
+        changes in package datetimeutils (0.2-0)
 
 2017-05-07  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.4-4
+        * DESCRIPTION (Version): 0.4-4
 
-	* R/returns.R (print.p_returns): fix printing
-	of yearly returns of multivariate price series
+        * R/returns.R (print.p_returns): fix printing
+        of yearly returns of multivariate price series
 
 2017-04-14  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.4-3
 
-	* R/btest.R (do.signal): 'do.signal' and
-	'do.rebalance' can also be the string
-	'lastofquarter' to rebalance on last day of
-	quarter
+        * R/btest.R (do.signal): 'do.signal' and
+        'do.rebalance' can also be the string
+        'lastofquarter' to rebalance on last day of
+        quarter
 
 2017-03-28  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.4-2
 
-	* R/btest.R (do.signal): 'do.signal' and
-	'do.rebalance' can also be the string
-	'firstofquarter' to rebalance on first day of
-	quarter
+        * R/btest.R (do.signal): 'do.signal' and
+        'do.rebalance' can also be the string
+        'firstofquarter' to rebalance on first day of
+        quarter
 
 2017-03-16  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.4-1
+        * DESCRIPTION (Version): 0.4-1
 
-	* R/returns.R (returns): 'period' may now also
-	be 'quarterly'
+        * R/returns.R (returns): 'period' may now also
+        be 'quarterly'
 
 2017-02-28  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/journal.R (aggregate.journal): fix handling
-	of named lists
+        * R/journal.R (aggregate.journal): fix handling
+        of named lists
 
 2017-02-07  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.4-0
 
-	* R/btest.R (btest): fixed -- 'do.signal' and
-	'do.rebalance' ignored the burnin 'b' when
-	keywords 'firstofmonth' etc. were used
+        * R/btest.R (btest): fixed -- 'do.signal' and
+        'do.rebalance' ignored the burnin 'b' when
+        keywords 'firstofmonth' etc. were used
 
 2017-01-28  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/journal.R (c.journal): fix concatenating
-	empty journals: 'c(journal(), journal())' had
-	thrown an error
+        * R/journal.R (c.journal): fix concatenating
+        empty journals: 'c(journal(), journal())' had
+        thrown an error
 
-	* R/position.R (.expand, .tree): refactor
-	'acc.split' into two functions .expand and
-	.tree, both exported. These functions are now
-	used in 'print.position'. For example:
+        * R/position.R (.expand, .tree): refactor
+        'acc.split' into two functions .expand and
+        .tree, both exported. These functions are now
+        used in 'print.position'. For example:
 
            j <- journal(amount     = 1:3,
                         instrument = c("a", "a", "b"),
                         account    = c("A", "B", "B"))
 
            position(j)
-	   ## ... produces
+           ## ... produces
            ##   [,1]
            ## a    3
            ## b    3
 
            position(j, use.account = TRUE)
-	   ## ... produces
+           ## ... produces
            ##       [,1]
            ## A
            ## `-- a    1
@@ -846,794 +852,794 @@
 
 2017-01-26  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R (btest): fixed -- error message for
-	reserved names showed the wrong function name
+        * R/btest.R (btest): fixed -- error message for
+        reserved names showed the wrong function name
 
-	* inst/unitTests/ut_PMwR.R (btest): add
-	tests for 'do.signal'/'do.rebalance'
+        * inst/unitTests/ut_PMwR.R (btest): add
+        tests for 'do.signal'/'do.rebalance'
 
 2017-01-25  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (acc.split): fixed --
-	'acc.split' had ignored the 'sep' argument
+        * R/position.R (acc.split): fixed --
+        'acc.split' had ignored the 'sep' argument
 
-	* R/btest.R: add environment 'Globals' to the
-	list of returned objects
+        * R/btest.R: add environment 'Globals' to the
+        list of returned objects
 
-	* man/btest.Rd: update docs
+        * man/btest.Rd: update docs
 
 2017-01-23  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (acc.split): add attribute
-	"positions" (=positions of initial accounts in
-	expanded list of accounts)
+        * R/position.R (acc.split): add attribute
+        "positions" (=positions of initial accounts in
+        expanded list of accounts)
 
-	* R/position.R (.tree): simplify/clarify
-	computations
+        * R/position.R (.tree): simplify/clarify
+        computations
 
 2017-01-22  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (.tree): new internal function
-	for producing account hierarchies; used in
-	'acc.split' (see ChangeLog entry of 2017-01-04)
+        * R/position.R (.tree): new internal function
+        for producing account hierarchies; used in
+        'acc.split' (see ChangeLog entry of 2017-01-04)
 
 2017-01-20  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R (lines.btest): new method
+        * R/btest.R (lines.btest): new method
 
-	* R/journal.R (journal.position): new method,
-	which issues a warning that 'as.journal' may be
-	more appropriate (see ChangeLog entry of
-	2016-12-16)
+        * R/journal.R (journal.position): new method,
+        which issues a warning that 'as.journal' may be
+        more appropriate (see ChangeLog entry of
+        2016-12-16)
 
 2017-01-16  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R: add warnings when length of
-	timestamp/instrument do not match the price
-	data
+        * R/btest.R: add warnings when length of
+        timestamp/instrument do not match the price
+        data
 
-	* R/btest.R (plot.btest): set default plot
-	type to "l"
+        * R/btest.R (plot.btest): set default plot
+        type to "l"
 
 2017-01-14  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/unit_prices.R (unit_prices): new argument
-	'cf.included'
+        * R/unit_prices.R (unit_prices): new argument
+        'cf.included'
 
 2017-01-13  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (position.default): support
-	keyword 'endofmonth' for argument 'when'
+        * R/position.R (position.default): support
+        keyword 'endofmonth' for argument 'when'
 
-	* NAMESPACE: import functions 'firstOfMonth',
-	'endOfMonth' from package datetimeutils
+        * NAMESPACE: import functions 'firstOfMonth',
+        'endOfMonth' from package datetimeutils
 
 2017-01-12  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/journal.R (summary.journal): the function
-	now provides information per instrument
-	(print.summary.journal): update for new
-	'summary.journal' structure
+        * R/journal.R (summary.journal): the function
+        now provides information per instrument
+        (print.summary.journal): update for new
+        'summary.journal' structure
 
 2017-01-11  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/unit_prices.R (unit_prices): add function
+        * R/unit_prices.R (unit_prices): add function
 
 2017-01-04  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (acc.split): experimental
-	support for computing trees that visualise
-	account hierarchies, for instance:
+        * R/position.R (acc.split): experimental
+        support for computing trees that visualise
+        account hierarchies, for instance:
 
-	  "tree_ascii"       "tree_indent"
-	 ----------------------------------
+          "tree_ascii"       "tree_indent"
+         ----------------------------------
           Bonds              Bonds
-	  `-- long-only        long-only
-	      |-- Germany        Germany
-	      `-- Italy          Italy
-	  Equity             Equity
-	  |-- long-short       long-short
-	  `-- long-only        long-only
-	      |-- Europe         Europe
-	      |-- Japan          Japan
-	      `-- USA            USA
+          `-- long-only        long-only
+              |-- Germany        Germany
+              `-- Italy          Italy
+          Equity             Equity
+          |-- long-short       long-short
+          `-- long-only        long-only
+              |-- Europe         Europe
+              |-- Japan          Japan
+              `-- USA            USA
 
         ('acc.split' is still internal, i.e. not
-	exported)
+        exported)
 
 2017-01-02  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (URL): update URL
+        * DESCRIPTION (URL): update URL
 
 2016-12-20  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/rebalance.R (replace_weight): add function
+        * R/rebalance.R (replace_weight): add function
 
 2016-12-19  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (position.default): recycle
-	arguments 'amount', 'instrument', 'timestamp'
-	and 'account'
+        * R/position.R (position.default): recycle
+        arguments 'amount', 'instrument', 'timestamp'
+        and 'account'
 
-	* R/position.R (position.default)
-	(print.position): position does no longe use
-	the 'articifial' timestamp 1 when no timestamp
-	information is provided; instead, timestamp is
-	set to NA
+        * R/position.R (position.default)
+        (print.position): position does no longe use
+        the 'articifial' timestamp 1 when no timestamp
+        information is provided; instead, timestamp is
+        set to NA
 
-	* R/journal.R (as.journal.default): add and
-	export method, which is restricted to
-	possibly-named numeric vectors
+        * R/journal.R (as.journal.default): add and
+        export method, which is restricted to
+        possibly-named numeric vectors
 
 2016-12-17  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/rebalance.R (rebalance): 'target' may now
-	be a position. The function also gains a new
-	argument 'target.weights'; the argument
-	'check.match' is no longer used and removed.
+        * R/rebalance.R (rebalance): 'target' may now
+        be a position. The function also gains a new
+        argument 'target.weights'; the argument
+        'check.match' is no longer used and removed.
 
 2016-12-16  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/journal.R
-	(as.journal.position, as.journal.rebalance):
-	methods 'journal.position' and
-	'journal.rebalance' have been replaced by
-	'as.journal.position' and
-	'as.journal.rebalance'. [The first argument of
-	'journal' is called 'amount', but the first
-	argument of 'as.journal' is called 'x'.]
+        * R/journal.R
+        (as.journal.position, as.journal.rebalance):
+        methods 'journal.position' and
+        'journal.rebalance' have been replaced by
+        'as.journal.position' and
+        'as.journal.rebalance'. [The first argument of
+        'journal' is called 'amount', but the first
+        argument of 'as.journal' is called 'x'.]
 
-	* R/rebalance.R (rebalance): the function now
-	returns a data.frame instead of a list, with
-	additional information attached as attributes;
-	argument 'fraction' is now supported
+        * R/rebalance.R (rebalance): the function now
+        returns a data.frame instead of a list, with
+        additional information attached as attributes;
+        argument 'fraction' is now supported
 
-	* R/journal.R (journal.rebalance): update for
-	new structure of 'rebalance' objects
+        * R/journal.R (journal.rebalance): update for
+        new structure of 'rebalance' objects
 
-	* man/rebalance.Rd: update docs
+        * man/rebalance.Rd: update docs
 
-	* R/journal.R (toOrg.journal): add method
+        * R/journal.R (toOrg.journal): add method
 
 2016-12-15  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/NAVseries.R (as.NAVseries.btest): fix
-	timestamp handling
+        * R/NAVseries.R (as.NAVseries.btest): fix
+        timestamp handling
 
 2016-12-14  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-19
 
-	* R/trades.R (splitTrades): the elements of the
-	returned lists are now called 'amount' and
-	'price' (instead of 'n' and 'p') in order to be
-	consistent with other functions
+        * R/trades.R (splitTrades): the elements of the
+        returned lists are now called 'amount' and
+        'price' (instead of 'n' and 'p') in order to be
+        consistent with other functions
 
-	* man/scale1.Rd: update docs (argument 'total.g')
+        * man/scale1.Rd: update docs (argument 'total.g')
 
-	* man/tradeanalysis.Rd: update docs
+        * man/tradeanalysis.Rd: update docs
 
-	* NAMESPACE: import 'stats::uniroot'
+        * NAMESPACE: import 'stats::uniroot'
 
-	* inst/unitTests/ut_PMwR.R (test.splitTrades):
-	add tests
+        * inst/unitTests/ut_PMwR.R (test.splitTrades):
+        add tests
 
 2016-12-01  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (position.default): only add
-	attribute 'account' when it is specified
-	(Ops.position): experimental -- support for
-	unary/binary operators:
-	  `+`  add the positions,
-	  `-`  take difference between positions,
-	  `/`  compute ratio of positions,
+        * R/position.R (position.default): only add
+        attribute 'account' when it is specified
+        (Ops.position): experimental -- support for
+        unary/binary operators:
+          `+`  add the positions,
+          `-`  take difference between positions,
+          `/`  compute ratio of positions,
                with each operator taking care of
-	       specified instruments
+               specified instruments
 
 2016-11-21  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/scale1.R (scale1.default): new argument
-	'total.g' (="total growth"). Geometric return
-	scaling, as used when 'centre' is TRUE and when
-	'total.g' is specified, is now exact for simple
-	returns, which is more intuitive than then the
-	log approximations used before.
+        * R/scale1.R (scale1.default): new argument
+        'total.g' (="total growth"). Geometric return
+        scaling, as used when 'centre' is TRUE and when
+        'total.g' is specified, is now exact for simple
+        returns, which is more intuitive than then the
+        log approximations used before.
 
 2016-11-06  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-18
 
-	* inst/unitTests/ut_q32.R (test.quote32): add
-	tests for quote32/q32
+        * inst/unitTests/ut_q32.R (test.quote32): add
+        tests for quote32/q32
 
-	* R/quote32.R (quote32, q32): fixed -- quarters
-	of 1/32 of a point are now rounded. Without
-	rounding, `q32(109.1484)` would print
-	    109-04
-	instead of the correct
-	    109-047  (plus a warning about rounding
-	error)
+        * R/quote32.R (quote32, q32): fixed -- quarters
+        of 1/32 of a point are now rounded. Without
+        rounding, `q32(109.1484)` would print
+            109-04
+        instead of the correct
+            109-047  (plus a warning about rounding
+        error)
 
 2016-11-03  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-17
 
-	* vignettes/An_overview_of_PMwR.Rnw: update
-	install instructions
+        * vignettes/An_overview_of_PMwR.Rnw: update
+        install instructions
 
-	* man/rebalance.Rd: update docs
+        * man/rebalance.Rd: update docs
 
 2016-10-27  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (position.default): fixed --
-	`%SEP%` would always be prepended to
-	`instrument`, even when no `account` was
-	provided
+        * R/position.R (position.default): fixed --
+        `%SEP%` would always be prepended to
+        `instrument`, even when no `account` was
+        provided
 
 2016-10-19  Enrico Schumann  <es@enricoschumann.net>
 
-	* man/rc.Rd: add help file
+        * man/rc.Rd: add help file
 
 2016-10-17  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (rc): weights can be missing, for
-	cases when only segment contributions but not
-	segment weights are known
+        * R/returns.R (rc): weights can be missing, for
+        cases when only segment contributions but not
+        segment weights are known
 
 2016-10-11  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (rc): compute also total return
+        * R/returns.R (rc): compute also total return
 
 2016-10-11  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-16
 
-	* R/internals.R (vname): use c() instead of
-	as.vector() to ensure vector. With 'c', class
-	is not dropped if a method exists. Which is the
-	case for Date: 'c(Dates)' gives a vector of
-	Dates, where 'as.vector(Dates)' returns the the
-	number of days since 1 Jan 1970 (i.e. the
-	Date's numeric representation).
+        * R/internals.R (vname): use c() instead of
+        as.vector() to ensure vector. With 'c', class
+        is not dropped if a method exists. Which is the
+        case for Date: 'c(Dates)' gives a vector of
+        Dates, where 'as.vector(Dates)' returns the the
+        number of days since 1 Jan 1970 (i.e. the
+        Date's numeric representation).
 
-	* R/journal.R (as.journal.data.frame): zero-row
-	data.frames are now properly coerced to
-	zero-length (i.e. empty) journals
+        * R/journal.R (as.journal.data.frame): zero-row
+        data.frames are now properly coerced to
+        zero-length (i.e. empty) journals
 
 2016-10-10  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (rc): new function for computing
-	return contributions; may be 'merged' later
-	into 'returns'
+        * R/returns.R (rc): new function for computing
+        return contributions; may be 'merged' later
+        into 'returns'
 
 2016-09-30  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-15
 
-	* man/pl.Rd: update docs
+        * man/pl.Rd: update docs
 
 2016-09-28  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-14
 
-	* R/pl.R (pl.default): remove warning when
-	'vprice' was specified for zero position
+        * R/pl.R (pl.default): remove warning when
+        'vprice' was specified for zero position
 
-	* R/position.R (position.default): fixed --
-	'account' was not sorted by time
+        * R/position.R (position.default): fixed --
+        'account' was not sorted by time
 
-	* R/position.R (position.journal): new argument
-	'use.account', with default FALSE
+        * R/position.R (position.journal): new argument
+        'use.account', with default FALSE
 
 2016-09-21  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-13
 
-	* R/pl.R (pl.default, pl.journal): new argument
-	'do.warn'; default is TRUE, which matches
-	previous behaviour
+        * R/pl.R (pl.default, pl.journal): new argument
+        'do.warn'; default is TRUE, which matches
+        previous behaviour
 
-	* NAMESPACE: export methods for instrument
+        * NAMESPACE: export methods for instrument
 
-	* R/journal.R (c.journal): skip NULL arguments
+        * R/journal.R (c.journal): skip NULL arguments
 
-	* R/instrument.R (## instrument):
-	remove/comment old function definition
+        * R/instrument.R (## instrument):
+        remove/comment old function definition
 
 2016-09-20  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-12
 
-	* NAMESPACE: import from graphics, stats,
-	utils, grDevices
+        * NAMESPACE: import from graphics, stats,
+        utils, grDevices
 
-	* R/position.R (acc.split): stringsAsFactors is
-	now FALSE
+        * R/position.R (acc.split): stringsAsFactors is
+        now FALSE
 
-	* man/instrument.Rd: add file
+        * man/instrument.Rd: add file
 
-	* R/pl.R (print.pl): remove NA printing
+        * R/pl.R (print.pl): remove NA printing
 
 2016-09-19  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (acc.split): evaluate to
-	data.frame of `account` and `level`
+        * R/position.R (acc.split): evaluate to
+        data.frame of `account` and `level`
 
 2016-09-18  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (print.position): fixed --
-	printing empty positions threw an error; now
-	nothing is printed
+        * R/position.R (print.position): fixed --
+        printing empty positions threw an error; now
+        nothing is printed
 
-	* R/pl.R (pl.pl): add method, which retrieves
-	raw p/l numbers from 'pl' object
+        * R/pl.R (pl.pl): add method, which retrieves
+        raw p/l numbers from 'pl' object
 
 2016-09-11  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/journal.R (instrument): new generic
-	'instrument', with methods for 'position' and
-	'journal'
-	(`instrument.journal<-`): replacement function
+        * R/journal.R (instrument): new generic
+        'instrument', with methods for 'position' and
+        'journal'
+        (`instrument.journal<-`): replacement function
 
-	* R/position.R (position.default): use `%SEP%`
-	as internal separator string, instead of `:::`
+        * R/position.R (position.default): use `%SEP%`
+        as internal separator string, instead of `:::`
 
-	* R/amount.R (amount): experimental/not
-	exported: add function 'amount', which adds a
-	'unit' attribute to numeric vectors
+        * R/amount.R (amount): experimental/not
+        exported: add function 'amount', which adds a
+        'unit' attribute to numeric vectors
 
 2016-09-06  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (position.default): fix handling
-	of NA amounts: such positions are always
-	kept (which is as before, but then the instrument
-	was overwritten with NA as well)
+        * R/position.R (position.default): fix handling
+        of NA amounts: such positions are always
+        kept (which is as before, but then the instrument
+        was overwritten with NA as well)
 
-	* man/journal.Rd: fix entry for `[<-.journal`
+        * man/journal.Rd: fix entry for `[<-.journal`
 
 2016-09-01  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/journal.R (`[<-.journal`): add method, with
-	the only purpose of providing an informative error
-	message
+        * R/journal.R (`[<-.journal`): add method, with
+        the only purpose of providing an informative error
+        message
 
 2016-08-29  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/journal.R (aggregate.journal): if 'by' is
-	atomic, it is put into a list
+        * R/journal.R (aggregate.journal): if 'by' is
+        atomic, it is put into a list
 
 2016-08-19  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-11
 
-	* R/plotTradingHours.R (maptime): fixed -- the
-	'map' function returned by 'plotTradingHours'
-	did not always report the correct positions to
-	plot
+        * R/plotTradingHours.R (maptime): fixed -- the
+        'map' function returned by 'plotTradingHours'
+        did not always report the correct positions to
+        plot
 
 2016-08-16  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-10
 
-	* vignettes/An_overview_of_PMwR.Rnw: add
-	footnote on unit tests
+        * vignettes/An_overview_of_PMwR.Rnw: add
+        footnote on unit tests
 
-	* R/pl.R (pl.default): 'along.timestamp' can
-	now be a vector, compatible with 'timestamp'.
+        * R/pl.R (pl.default): 'along.timestamp' can
+        now be a vector, compatible with 'timestamp'.
 
 2016-08-09  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (as.zoo.position): add and
-	export method
+        * R/position.R (as.zoo.position): add and
+        export method
 
 2016-08-04  Enrico Schumann  <es@enricoschumann.net>
 
         * R/quote32.R (quote32): disable warnings for
-	strings without separator; for instance,
-	'q32("130")' will be printed as '130-000'
+        strings without separator; for instance,
+        'q32("130")' will be printed as '130-000'
 
 2016-08-03  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-9
 
-	* R/position.R (position.default): add basic
-	support for 'account'
+        * R/position.R (position.default): add basic
+        support for 'account'
 
-	* inst/unitTests/ut_position.R (test.position):
-	add tests
+        * inst/unitTests/ut_position.R (test.position):
+        add tests
 
 2016-08-02  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (acc.split): add function (not
-	exported)
+        * R/position.R (acc.split): add function (not
+        exported)
 
 2016-07-28  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R (do.signal, do.rebalance): when
-	'do.signal' or 'do.rebalance' is a vector and
-	of the same class as 'timestamp' -- typically
-	Date or POSIXct --, their elements will be
-	matched against 'timestamp'
+        * R/btest.R (do.signal, do.rebalance): when
+        'do.signal' or 'do.rebalance' is a vector and
+        of the same class as 'timestamp' -- typically
+        Date or POSIXct --, their elements will be
+        matched against 'timestamp'
 
 2016-07-27  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-8
 
-	* R/returns.R (returns.zoo): copy attributes
-	'holdings' and 'contributions' when weights are
-	supplied
+        * R/returns.R (returns.zoo): copy attributes
+        'holdings' and 'contributions' when weights are
+        supplied
 
-	* inst/unitTests/ut_returns.R (test.returns):
-	add tests for 'returns' when 'weights' are
-	supplied
+        * inst/unitTests/ut_returns.R (test.returns):
+        add tests for 'returns' when 'weights' are
+        supplied
 
 2016-07-26  Enrico Schumann  <es@enricoschumann.net>
 
-	* inst/unitTests/ut_pl.R (test.pl): add tests
-	for 'pl' when initial position is a 'journal'
-	or a 'position'
+        * inst/unitTests/ut_pl.R (test.pl): add tests
+        for 'pl' when initial position is a 'journal'
+        or a 'position'
 
 2016-07-20  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-7
 
-	* R/pl.R (pl): rename argument 'eval.price'
-	to 'vprice'
+        * R/pl.R (pl): rename argument 'eval.price'
+        to 'vprice'
 
-	* inst/CITATION: add file
+        * inst/CITATION: add file
 
 2016-07-13  Enrico Schumann  <es@enricoschumann.net>
 
-	* NAMESPACE: remove 'jcf' from exported functions
+        * NAMESPACE: remove 'jcf' from exported functions
 
 2016-07-11  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/quote32.R (quote32 <- q32): fixed --
-	rounding-error warning
+        * R/quote32.R (quote32 <- q32): fixed --
+        rounding-error warning
 
 2016-07-09  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-6
 
-	* inst/unitTests/ut_pl.R (test.pl): add more
-	tests for 'initial.position'
+        * inst/unitTests/ut_pl.R (test.pl): add more
+        tests for 'initial.position'
 
-	* man/quote32.Rd: doc fix
+        * man/quote32.Rd: doc fix
 
 2016-07-08  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pl.R (pl.default): refactor/simplify p/l
-	computation
+        * R/pl.R (pl.default): refactor/simplify p/l
+        computation
 
 2016-07-07  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pl.R (pl.default): fixed -- names of
-	initial.position were ignored
+        * R/pl.R (pl.default): fixed -- names of
+        initial.position were ignored
 
-	* R/internals.R (vname): new internal function
-	for creating named vectors
+        * R/internals.R (vname): new internal function
+        for creating named vectors
 
-	* R/quote32.R (quote32/q32): add warning when
-	large rounding errors occur
+        * R/quote32.R (quote32/q32): add warning when
+        large rounding errors occur
 
-	* R/quote32.R (Ops.quote32): add method for `-`
+        * R/quote32.R (Ops.quote32): add method for `-`
 
 2016-07-05  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/valuation.R (jcf): fixed -- 'instrument'
-	was recycled
+        * R/valuation.R (jcf): fixed -- 'instrument'
+        was recycled
 
 2016-07-04  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pl.R (pl.btest): add method
+        * R/pl.R (pl.btest): add method
 
 2016-06-18  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-5
 
-	* R/quote32.R (Ops.quote32): add method for Ops and `-`
+        * R/quote32.R (Ops.quote32): add method for Ops and `-`
 
-	* R/position.R (as.data.frame.position): add method
+        * R/position.R (as.data.frame.position): add method
 
 2016-06-15  Enrico Schumann  <es@enricoschumann.net>
 
-	* NAMESPACE: export print.quote32
+        * NAMESPACE: export print.quote32
 
 2016-06-14  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/yield.R, src/computeyield.c: remove code
+        * R/yield.R, src/computeyield.c: remove code
 
-	* R/position.R (position.btest): fixed -- the method
-	always returned NULL, not the position; it now also
-	includes 'instrument' and 'timestamp' (if available)
+        * R/position.R (position.btest): fixed -- the method
+        always returned NULL, not the position; it now also
+        includes 'instrument' and 'timestamp' (if available)
 
 2016-06-13  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-4
 
-	* R/runStats.R: move function 'runStats' to separate
-	package 'runStats'
-	http://enricoschumann.net/R/packages/runStats/
+        * R/runStats.R: move function 'runStats' to separate
+        package 'runStats'
+        http://enricoschumann.net/R/packages/runStats/
 
-	* R/quote32.R (quote32): new function to create
-	quotes with 32nds of points
+        * R/quote32.R (quote32): new function to create
+        quotes with 32nds of points
 
 2016-06-10  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (as.matrix.position): add method
+        * R/position.R (as.matrix.position): add method
 
 2016-04-24  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/NAVseries.R (summary.NAVseries): new argument
-	'monthly'; if TRUE (the default), vol computations
-	are done on monthly returns
+        * R/NAVseries.R (summary.NAVseries): new argument
+        'monthly'; if TRUE (the default), vol computations
+        are done on monthly returns
 
 2016-04-08  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-3
 
-	* R/journal.R (journal.rebalance): fixed -- works
-	now with 'match.names' set to TRUE
+        * R/journal.R (journal.rebalance): fixed -- works
+        now with 'match.names' set to TRUE
 
-	* R/position.R (position.default): add warning when
-	there are NA values in timestamp
+        * R/position.R (position.default): add warning when
+        there are NA values in timestamp
 
 2016-04-05  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-2
 
-	* R/pl.R (pl.default): new argument 'multiplier.regexp'
+        * R/pl.R (pl.default): new argument 'multiplier.regexp'
 
 2016-04-04  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.3-1
 
-	* R/pl.R (pl.default): add support for 'multiplier'
+        * R/pl.R (pl.default): add support for 'multiplier'
 
 2016-04-01  Enrico Schumann  <enrico.schumann@aq-investment.ch>
 
-	* DESCRIPTION (Version): 0.3-0
+        * DESCRIPTION (Version): 0.3-0
 
-	* R/position.R (position.default): remove argument
-	'sort.instruments': 'instruments', when supplied,
-	are always sorted
+        * R/position.R (position.default): remove argument
+        'sort.instruments': 'instruments', when supplied,
+        are always sorted
 
 2016-04-01  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (position.btest): add method
+        * R/position.R (position.btest): add method
 
 2016-03-31  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-101
 
-	* R/journal.R (journal.default): fixed -- 'journal'
-	did not recycle arguments (fields) passed via '...'
+        * R/journal.R (journal.default): fixed -- 'journal'
+        did not recycle arguments (fields) passed via '...'
 
 2016-03-26  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/scale1.R (scale1.default): use 'anyNA()' instead
-	of 'any(is.na())'
-	(scale1.NAVseries): add method
+        * R/scale1.R (scale1.default): use 'anyNA()' instead
+        of 'any(is.na())'
+        (scale1.NAVseries): add method
 
 2016-03-25  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-100
 
-	* R/NAVseries.R (as.NAVseries.btest): use
-	'timestamp' information
-	(toLatex.summary.NAVseries): add skeleton for method
+        * R/NAVseries.R (as.NAVseries.btest): use
+        'timestamp' information
+        (toLatex.summary.NAVseries): add skeleton for method
 
-	* R/btest.R (btest): fixed -- with 'include.data'
-	set TRUE and a 'timestamp' specified, 'timestamp'
-	was not included in the final result
+        * R/btest.R (btest): fixed -- with 'include.data'
+        set TRUE and a 'timestamp' specified, 'timestamp'
+        was not included in the final result
 
 2016-03-24  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-99
 
-	* R/journal.R (str.journal): call 'str' directly to
-	avoid error message, which happens because 'journal'
-	defines 'length' and `[[` methods; see
-	https://stat.ethz.ch/pipermail/r-package-devel/2016q1/000687.html
+        * R/journal.R (str.journal): call 'str' directly to
+        avoid error message, which happens because 'journal'
+        defines 'length' and `[[` methods; see
+        https://stat.ethz.ch/pipermail/r-package-devel/2016q1/000687.html
 
 2016-03-23  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R (do.signal): switch off 'never trade'
-	warning when 'final.position' is TRUE
+        * R/btest.R (do.signal): switch off 'never trade'
+        warning when 'final.position' is TRUE
 
 2016-03-23  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-98
 
-	* R/btest.R (do.signal): switch off 'never trade'
-	warning for 'atest'
+        * R/btest.R (do.signal): switch off 'never trade'
+        warning for 'atest'
 
 2016-03-22  Enrico Schumann  <es@enricoschumann.net>
 
-	* man/btest.Rd: add example
+        * man/btest.Rd: add example
 
-	* R/btest.R (btest): argument 'do.rebalance' can be
-	specified as string 'do.signal', in which case the
-	value of 'do.signal' is copied
+        * R/btest.R (btest): argument 'do.rebalance' can be
+        specified as string 'do.signal', in which case the
+        value of 'do.signal' is copied
 
 2016-03-14  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-97
 
-	* R/pl.R (print.pl): improve formatting (alignment
-	of numbers)
-	(print.pl): new argument 'na.print', with default '.'
+        * R/pl.R (print.pl): improve formatting (alignment
+        of numbers)
+        (print.pl): new argument 'na.print', with default '.'
 
 2016-03-13  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-96
 
-	* R/pl.R (pl.journal): fixed -- 'pl.journal' had not
-	passed on 'initial.position' and 'initial.price'
+        * R/pl.R (pl.journal): fixed -- 'pl.journal' had not
+        passed on 'initial.position' and 'initial.price'
 
 2016-03-09  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-95
 
-	* R/pl.R (as.data.frame.pl): new method
-	(pl.default): refactor function; result now has an
-	attribute 'along.timestamp' (logical)
+        * R/pl.R (as.data.frame.pl): new method
+        (pl.default): refactor function; result now has an
+        attribute 'along.timestamp' (logical)
 
-	* man/pl.Rd: document 'as.data.frame.pl'; add example for
-	using package 'crayon'
+        * man/pl.Rd: document 'as.data.frame.pl'; add example for
+        using package 'crayon'
 
 2016-03-08  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pl.R (print.pl): call 'prettyNum' before computing
-	width of numbers (to avoid that numbers such as
-	1.10000000001 are measured as 13 characters wide, despite
-	being printed as 1.1)
+        * R/pl.R (print.pl): call 'prettyNum' before computing
+        width of numbers (to avoid that numbers such as
+        1.10000000001 are measured as 13 characters wide, despite
+        being printed as 1.1)
 
 2016-03-08  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-94
 
-	* inst/unitTests/ut_pl.R (test.pl): pnl => pl
+        * inst/unitTests/ut_pl.R (test.pl): pnl => pl
 
-	* R/pl.R (print.pl): add '[...]' when pl along.timestamp
-	is cut off
-	(pl.default): 'initial.position' and 'initial.price' are
-	now used
+        * R/pl.R (print.pl): add '[...]' when pl along.timestamp
+        is cut off
+        (pl.default): 'initial.position' and 'initial.price' are
+        now used
 
 2016-03-07  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pl.R (pl.default): rename 'pnl' to 'pl' (for
-	consistency)
+        * R/pl.R (pl.default): rename 'pnl' to 'pl' (for
+        consistency)
 
 2016-03-07  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-93
 
-	* R/pl.R (print.pl): align 'pl' stats (total, realised,
-	unrealised, volume) for printing
+        * R/pl.R (print.pl): align 'pl' stats (total, realised,
+        unrealised, volume) for printing
 
 2016-03-01  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.1-92
+        * DESCRIPTION (Version): 0.1-92
 
-	* R/btest.R (btest): experimental -- new argument
-	'final.position', with default FALSE. If TRUE, 'btest'
-	computes a final position that uses all available data
-	and computes a position, without any lags. (Most
-	settings, such as 'do.rebalance', are ignored for this
-	final position; but 'convert.weights' is honoured.)
+        * R/btest.R (btest): experimental -- new argument
+        'final.position', with default FALSE. If TRUE, 'btest'
+        computes a final position that uses all available data
+        and computes a position, without any lags. (Most
+        settings, such as 'do.rebalance', are ignored for this
+        final position; but 'convert.weights' is honoured.)
 
-	* R/btest.R (atest): experimental -- new function.
-	Essentially a copy of 'btest', but with 'do.signal' and
-	'do.rebalance' set to FALSE, and 'final.position' set to
-	TRUE. The effect will be skip all data and only use the
-	latest data to compute the final position (see
-	above). This may be useful for checking the computations
-	of the 'signal' function, or for really computing the
-	final (i.e. current) position. The function is currently
-	not exported, but can be accessed with 'PMwR:::atest'.
+        * R/btest.R (atest): experimental -- new function.
+        Essentially a copy of 'btest', but with 'do.signal' and
+        'do.rebalance' set to FALSE, and 'final.position' set to
+        TRUE. The effect will be skip all data and only use the
+        latest data to compute the final position (see
+        above). This may be useful for checking the computations
+        of the 'signal' function, or for really computing the
+        final (i.e. current) position. The function is currently
+        not exported, but can be accessed with 'PMwR:::atest'.
 
 2016-02-29  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-91
 
-	* R/rebalance.R (rebalance): fixed -- the function did not
-	handle 'current' when it was a 'position' (thanks to Torsten
-	von Bartenwerffer for reporting)
-	(rebalance): new argument 'drop.zero'
+        * R/rebalance.R (rebalance): fixed -- the function did not
+        handle 'current' when it was a 'position' (thanks to Torsten
+        von Bartenwerffer for reporting)
+        (rebalance): new argument 'drop.zero'
 
-	* R/journal.R (journal.rebalance): experimental -- new
-	method (suggested by Torsten von Bartenwerffer)
+        * R/journal.R (journal.rebalance): experimental -- new
+        method (suggested by Torsten von Bartenwerffer)
 
-	* inst/unitTests/ut_rebalance.R (test.rebalance): added tests
-	for 'journal.rebalance'
+        * inst/unitTests/ut_rebalance.R (test.rebalance): added tests
+        for 'journal.rebalance'
 
 2016-02-25  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-90
 
-	* R/scale1.R (scale1.zoo): added 'inflate' argument
+        * R/scale1.R (scale1.zoo): added 'inflate' argument
 
 2016-02-20  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-89
 
-	* updated manual
+        * updated manual
 
 2016-02-20  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-88
 
-	* R/returns.R (.mtab): now takes returns and timestamps as
-	separate arguments; the function is no longer exported
+        * R/returns.R (.mtab): now takes returns and timestamps as
+        separate arguments; the function is no longer exported
 
 2016-02-19  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-87
 
-	* R/returns.R (pReturns): period 'itd' also
-	handles NA values
+        * R/returns.R (pReturns): period 'itd' also
+        handles NA values
 
-	* R/returns.R (print.p_returns): for period 'itd',
-	the timestamps of the observations that were used
-	to compute the returns are printed (same as for
-	'mtd' and 'ytd')
+        * R/returns.R (print.p_returns): for period 'itd',
+        the timestamps of the observations that were used
+        to compute the returns are printed (same as for
+        'mtd' and 'ytd')
 
 2016-02-19  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-86
 
-	* R/returns.R (returns): period 'mtd' and 'ytd'
-	now handle NA values
+        * R/returns.R (returns): period 'mtd' and 'ytd'
+        now handle NA values
 
-	* R/returns.R (print.p_returns): when period is
-	'mtd', 'ytd' or 'ann', the timestamps (dates) of
-	the observations that were used to compute the
-	returns are printed. This is particularly useful
-	when returns are computed from a matrix of series
-	and some series have NA values.
+        * R/returns.R (print.p_returns): when period is
+        'mtd', 'ytd' or 'ann', the timestamps (dates) of
+        the observations that were used to compute the
+        returns are printed. This is particularly useful
+        when returns are computed from a matrix of series
+        and some series have NA values.
 
-	* man/returns.Rd: added examples for annualised returns
+        * man/returns.Rd: added examples for annualised returns
 
 2016-02-18  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (returns): period 'annualised' now
-	also works with matrices/data.frames, not just
-	single series; NAs are also handled now
+        * R/returns.R (returns): period 'annualised' now
+        also works with matrices/data.frames, not just
+        single series; NAs are also handled now
 
-	* R/returns.R (pReturns): when 'period = "ann"',
-	the result's attribute 'annualised' is renamed to
-	'is.annualised'; see ChangeLog 2016-01-14
+        * R/returns.R (pReturns): when 'period = "ann"',
+        the result's attribute 'annualised' is renamed to
+        'is.annualised'; see ChangeLog 2016-01-14
 
 
 2016-02-18  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-85
 
-	* R/scale1.R (scale1.zoo): fixed -- 'when' was not
-	properly matched against the series's index
+        * R/scale1.R (scale1.zoo): fixed -- 'when' was not
+        properly matched against the series's index
 
 2016-02-12  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (toLatex.p_returns)
-	(toHTML.p_returns): added warning when 'x' uses
-	old list strucuture; see ChangeLog 2015-06-26
+        * R/returns.R (toLatex.p_returns)
+        (toHTML.p_returns): added warning when 'x' uses
+        old list strucuture; see ChangeLog 2015-06-26
 
 2016-02-03  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-84
 
         * R/journal.R (str.journal): added 'str' method
-	for 'journal'
+        for 'journal'
 
 2016-01-19  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-83
 
         * R/returns.R (returns): argument 'pad' is now
-	ignored for periods 'mtd' and 'ytd' (with a
-	warning); the 'print' method shows the period (not
-	just the end date) for which returns were computed
+        ignored for periods 'mtd' and 'ytd' (with a
+        warning); the 'print' method shows the period (not
+        just the end date) for which returns were computed
 
         * R/returns.R (print.p_returns): fixed -- print with
         period 'annualised' now also uses the 'digits' argument
@@ -1959,7 +1965,7 @@
         * R/btest.R (do.signal): 'do.signal' can be a numeric
         vector of times (i.e., row numbers) or a logical
         vector (indicating the rows); 'do.signal' can also be the
-	string 'endofmonth' to rebalance on last day of month
+        string 'endofmonth' to rebalance on last day of month
 
         * R/scale1.R (scale1.default): fixed -- scale1 did not
         scale correctly with 'geometric = TRUE'
@@ -1978,10 +1984,10 @@
         * man/scale1.Rd: describe argument 'geometric'
 
         * R/returns.R (pReturns): renamed class 'preturns' to 'p_returns'.
-	An object of that class is now a numeric vector/matrix with
-	attributes 't' and 'period'. Before, it had been a list with
-	elements 'returns', 't' and 'period'. So, when 'x' is of class
-	'p_returns':
+        An object of that class is now a numeric vector/matrix with
+        attributes 't' and 'period'. Before, it had been a list with
+        elements 'returns', 't' and 'period'. So, when 'x' is of class
+        'p_returns':
 
           WHAT                  NEW                  OLD
           retrieve returns      x                    x$returns
@@ -2006,16 +2012,16 @@
 2015-05-29  Enrico Schumann  <es@enricoschumann.net>
 
         * R/scale1.R (scale1.default): new argument
-	'geometric', with default TRUE: centre by
-	subtracting the geometric mean; if FALSE, the
-	arithmetic mean is subtracted
+        'geometric', with default TRUE: centre by
+        subtracting the geometric mean; if FALSE, the
+        arithmetic mean is subtracted
 
         * inst/unitTests/ut_returns.R (test.returns):
-	added test cases for returns.data.frame
+        added test cases for returns.data.frame
 
         * R/returns.R (.returns): renamed 'returns0' to
-	'.returns' (under neither name is the function
-	exported)
+        '.returns' (under neither name is the function
+        exported)
         (returns.data.frame): fixed -- propagate 'row.names' of
         dataframe
 
@@ -2225,21 +2231,21 @@
         * DESCRIPTION (Version): 0.1-54
 
         * R/returns.R (returns): behaviour of
-	'returns(z)' when 'z' is of class 'zoo' has
-	changed: the returned object now has class
-	zoo. To get the old behaviour, use something
-	like
+        'returns(z)' when 'z' is of class 'zoo' has
+        changed: the returned object now has class
+        zoo. To get the old behaviour, use something
+        like
 
           r <- return(z) ## r is of class 'zoo'
-	  r <- list(returns = coredata(r), t = index(r))
+          r <- list(returns = coredata(r), t = index(r))
 
         * R/returns.R (returns.zoo): fixed -- when
-	'period' is specified, the returned object
-	should not be of class 'zoo', but 'preturns'.
-	Conversion is possible with 'as.zoo(x)'.
+        'period' is specified, the returned object
+        should not be of class 'zoo', but 'preturns'.
+        Conversion is possible with 'as.zoo(x)'.
 
         * inst/unitTests/ut_returns.R (test.returns):
-	added more tests for 'returns.zoo'
+        added more tests for 'returns.zoo'
 
 2015-01-13  Enrico Schumann  <es@enricoschumann.net>
 
@@ -2581,7 +2587,7 @@
 2014-02-10  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.1-41 (supersedes the release
-	branch 0.2-x)
+        branch 0.2-x)
 
         * R/returns.R (returns): if "x" is of class "zoo": use
         "time"
@@ -2629,8 +2635,8 @@
         * DESCRIPTION (Version): 0.2-1
 
         * R/valuation.R (valuation): renamed 'value' to
-	'valuation' ('value' is too common; package 'tseries' has
-	a generic of that name)
+        'valuation' ('value' is too common; package 'tseries' has
+        a generic of that name)
 
 2013-11-18  Enrico Schumann  <es@enricoschumann.net>
 
@@ -2672,7 +2678,7 @@
 2013-10-16  Enrico Schumann  <es@enricoschumann.net>
 
         * R/totext.R (toText.default): coerce to
-	character before write
+        character before write
 
 2013-10-14  Enrico Schumann  <es@enricoschumann.net>
 
@@ -2690,7 +2696,7 @@
 2013-09-18  Enrico Schumann  <es@enricoschumann.net>
 
         * R/returns.R (.tr): toHTML.preturns allows
-	specification of class/style
+        specification of class/style
 
 2013-09-17  Enrico Schumann  <es@enricoschumann.net>
 
@@ -2699,7 +2705,7 @@
         the function failed
 
         * R/drawdown.R (drawdown): fixed -- 'summary'
-	argument was ignored
+        argument was ignored
 
 2013-09-16  Enrico Schumann  <es@enricoschumann.net>
 
@@ -2743,7 +2749,7 @@
 2013-09-06  Enrico Schumann  <es@enricoschumann.net>
 
         * man/journal.Rd: updated examples for
-	aggregate.journal
+        aggregate.journal
 
         * NAMESPACE: export method aggregate.journal
 
@@ -2883,12 +2889,12 @@
 2013-07-22  Enrico Schumann  <es@enricoschumann.net>
 
         * R/trades.R (monthlyStats): removed function
-	definition and Rd file
+        definition and Rd file
 
         * NAMESPACE: removed 'monthlyStats'
 
         * R/isValidISIN.R (isValidISIN): ISINs are now
-	converted to upper case before being tested
+        converted to upper case before being tested
 
 2013-07-19  Enrico Schumann  <es@enricoschumann.net>
 
@@ -3217,8 +3223,8 @@
         class 'Tradelist'
 
         * R/Tradelist.R, PL.R: made arguments more consistent: 'amount'
-	[before sometimes 'n' or 'notional']; 'timestamp' [was:
-	'datetime', 'times']; all in singular (eg, 'price' not 'prices')
+        [before sometimes 'n' or 'notional']; 'timestamp' [was:
+        'datetime', 'times']; all in singular (eg, 'price' not 'prices')
 
 2013-04-10  Enrico Schumann  <es@enricoschumann.net>
 
@@ -3414,6 +3420,6 @@
 
 2012-02-11  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/dayOfMonth.R (isWeekend): changed 'tmp$w' into 'tmp$wday'.
-	(getNextBusinessDay): added function.
-	(getPreviousBusinessDay): added function.
+        * R/dayOfMonth.R (isWeekend): changed 'tmp$w' into 'tmp$wday'.
+        (getNextBusinessDay): added function.
+        (getPreviousBusinessDay): added function.
