@@ -159,7 +159,7 @@ is.journal(x)
   The \code{journal} function creates a list of the
   arguments and attaches a class attribute
   (\sQuote{journal}). It is a generic function; the
-  default method creates a journal from a atomic
+  default method creates a journal from atomic
   vectors. The \code{btest} method extracts the journal
   from the results of a backtest; see
   \code{\link{btest}}.
@@ -285,6 +285,5 @@ fun <- function(x) {
             instrument = x$instrument[1L])
 }
 aggregate(j, by = by, FUN = fun)
-
 
 }
