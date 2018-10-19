@@ -1,4 +1,4 @@
-v0.10-0  (2018-10-19; not yet released)
+v0.10-0  (2018-10-19)
 
   o btest: support automatic computation of
     variations, both serially and in parallel.  See new
