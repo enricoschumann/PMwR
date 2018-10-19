@@ -1,5 +1,11 @@
 2018-10-19  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Version): 0.10-1
+
+	* man/pl.Rd: remove textConnection in example
+
+2018-10-19  Enrico Schumann  <es@enricoschumann.net>
+
         * DESCRIPTION (Version): 0.10-0
 
 	* R/position.R (Ops.position): allow +,-,/ only

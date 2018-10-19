@@ -244,15 +244,16 @@ pl(j,
 
 
 ## Example for 'multiplier'
-jnl <- read.table(textConnection(
+jnl <- read.table(text =
 "instrument, price, amount
  FGBL MAR 16, 165.20,  1
  FGBL MAR 16, 165.37, -1
  FGBL JUN 16, 164.12,  1
  FGBL JUN 16, 164.13, -1
  FESX JUN 16,   2910,  5
- FESX JUN 16,   2905, -5"
-), header = TRUE, stringsAsFactors = FALSE, sep = ",")
+ FESX JUN 16,   2905, -5",
+header = TRUE, stringsAsFactors = FALSE, sep = ",")
+
 
 jnl <- as.journal(jnl)
 pl(jnl,  multiplier.regexp = TRUE, ## regexp matching is case sensitive
