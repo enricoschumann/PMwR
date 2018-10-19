@@ -1,3 +1,9 @@
+2018-10-19  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (Ops.position): allow +,-,/ only
+	when both operands (i.e. positions) have
+	instrument information
+
 2018-10-18  Enrico Schumann  <es@enricoschumann.net>
 
         * R/NAVseries.R (as.NAVseries.btest): do not

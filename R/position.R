@@ -235,8 +235,10 @@ Ops.position <- function(e1, e2) {
         return(e1)
     }
 
-    if (inherits(e1, "position") && inherits(e2, "position")) {
-        allI <- sort(unique(c(instrument(e1), instrument(e2))))
+    if (inherits(e1, "position") && inherits(e2, "position") &&
+        all(!is.na(i1 <- instrument(e1))) &&
+        all(!is.na(i2 <- instrument(e2))) ) {
+        allI <- sort(unique(c(i1, i2)))
         ans <- numeric(length(allI))
         ans[match(instrument(e1), allI)] <- as.numeric(e1)
         ii <- match(instrument(e2), allI)
@@ -248,8 +250,8 @@ Ops.position <- function(e1, e2) {
             ans[ii] <- ans[ii] / as.numeric(e2)
         }
         position.default(ans, instrument = allI,
-                                timestamp = rep(attr(e1, "timestamp"),
-                                                length(allI)))
+                         timestamp = rep(attr(e1, "timestamp"),
+                                         length(allI)))
     } else
         NextMethod(.Generic)
 }
