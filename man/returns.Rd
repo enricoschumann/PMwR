@@ -16,47 +16,53 @@
 \usage{
 returns(x, \dots)
 
-\method{returns}{default}(x, t = NULL, period = NULL, complete.first = TRUE, pad = NULL,
-        position = NULL, weights = NULL, rebalance.when = NULL,
+\method{returns}{default}(x, t = NULL, period = NULL, complete.first = TRUE,
+        pad = NULL, position = NULL, 
+        weights = NULL, rebalance.when = NULL,
         lag = 1, \dots)
 
 \method{returns}{zoo}(x, period = NULL, complete.first = TRUE,
-                      pad = NULL, position = NULL,
-                      weights = NULL, rebalance.when = NULL, lag = 1, \dots)
+        pad = NULL, position = NULL,
+        weights = NULL, rebalance.when = NULL, lag = 1, \dots)
 
 \method{print}{p_returns}(x, \dots, year.rows = TRUE, month.names = NULL,
-                         zero.print = "0", plus = FALSE, digits = 1,
-                         na.print = NULL)
+      zero.print = "0", plus = FALSE, digits = 1,
+      na.print = NULL)
 
 \method{toLatex}{p_returns}(object, \dots,
-       year.rows = TRUE, ytd = "YTD", month.names = NULL, 
-       eol = "\\\\\\\\", stand.alone = FALSE)
+        year.rows = TRUE, ytd = "YTD", month.names = NULL, 
+        eol = "\\\\\\\\", stand.alone = FALSE)
 
 \method{toHTML}{p_returns}(x, \dots,
-    year.rows = TRUE, ytd = "YTD", month.names = NULL, 
-    stand.alone = TRUE, table.style = NULL, table.class = NULL, 
-    th.style = NULL, th.class = NULL,
-    td.style = "text-align:right; padding:0.5em;", 
-    td.class = NULL, tr.style = NULL, tr.class = NULL, browse = FALSE)
+       year.rows = TRUE, ytd = "YTD", month.names = NULL, 
+       stand.alone = TRUE, table.style = NULL, table.class = NULL, 
+       th.style = NULL, th.class = NULL,
+       td.style = "text-align:right; padding:0.5em;", 
+       td.class = NULL, tr.style = NULL, tr.class = NULL, 
+       browse = FALSE)
 
 .returns(x, pad = NULL, lag)
 }
 \arguments{
   \item{x}{
 
-    a \code{numeric} vector (possibly with a \code{dim}
-    attribute; i.e. a matrix) of prices. 
-    \code{returns} also supports \code{x} of other
-    classes, such as \code{zoo} or
-    \code{\link{NAVseries}}. (For time-series classes,
-     argument \code{t} should
-    be \code{NULL}.) For \code{.returns}, \code{x}
-    should be \code{numeric}; for other classes it may
-    not work properly.
+    for the default method, a \code{numeric} vector
+    (possibly with a \code{dim} attribute; i.e. a
+    matrix) of prices.  \code{returns} also supports
+    \code{x} of other classes, such as \code{zoo} or
+    \code{\link{NAVseries}}. For time-series classes,
+    argument \code{t} should be \code{NULL}.
+
+    For \code{.returns}, \code{x} must be
+    \code{numeric} (for other classes, \code{.returns}
+    may not work properly).
     
   }
   \item{t}{
-        timestamps. See argument \code{"period"}.
+    
+    timestamps. See arguments \code{period} and
+    \code{rebalance.when}.
+    
   }
   \item{period}{
     
@@ -76,24 +82,26 @@ returns(x, \dots)
     will not be annualised when the length of the time
     series is less than one year. To force annualising
     in such a case, use
-    \sQuote{\code{ann!}}. Annualisation can only work
+    \code{"ann!"}. Annualisation can only work
     when the timestamp \code{t} can be coerced to class
     \code{\link{Date}}. The result will have an
     attribute \code{is.annualised}, which is a logical
-    vector.
+    vector of length one.
 
   }
   \item{complete.first}{
 
-    logical. For monthly returns, should the first
-    month (if incomplete) be used.
+    logical. For holding-period returns such an monthly
+    or yearly, should the first period (if incomplete)
+    be used.
 
   }
   \item{pad}{
 
     either \code{NULL} (no padding of initial lost
     observation) or a value used for padding
-    (reasonable values might be \link{NA} or 0)
+    (reasonable values might be \code{\link{NA}} or
+    \code{0})
 
   }
   \item{position}{
@@ -103,13 +111,23 @@ returns(x, \dots)
 
   }
   \item{weights}{
-    numeric
+
+    either a numeric vector of the same length as the
+    number of assets (i.e. \code{ncol(x)}), or a
+    numeric matrix whose dimensions match those of
+    prices (i.e. \code{dim(x)} must equal
+    \code{dim(weights)})
+
   }
   \item{rebalance.when}{
-    numeric
+
+    logical or numeric. If \code{x} is a time-series
+    class (such as \code{zoo}), it may also be of the
+    same class as the time index of \code{x}.
+
   }
   \item{\dots}{
-    further arguments
+    further arguments to be passed to methods
   }
 
   \item{year.rows}{
@@ -119,7 +137,9 @@ returns(x, \dots)
 
   }
   \item{zero.print}{
+
     character.  How to print zero values.
+
   }
   \item{na.print}{
 
@@ -159,10 +179,14 @@ returns(x, \dots)
     
   }
   \item{digits}{
+
     number of digits in table
+
   }
   \item{ytd}{
+
     header for YTD
+
   }
   \item{eol}{character}
   \item{stand.alone}{logical or character}
@@ -175,7 +199,9 @@ returns(x, \dots)
   \item{tr.class}{character}
   \item{tr.style}{character}
   \item{browse}{
+
     logical: open table in browser?
+
   }
 }
 \details{
@@ -204,8 +230,8 @@ returns(x, \dots)
     rebalanced at \code{rebalance.when}; the default is
     every period.
     
-    \code{rebalance.when} may either be integers or of
-    the same class as a \code{timestamp}
+    \code{rebalance.when} may either be logical,
+    integers or of the same class as a \code{timestamp}
     (e.g. \code{\link{Date}}).
   }
 
@@ -226,7 +252,7 @@ returns(x, \dots)
   \code{\link[tools]{toHTML}}.
 
   In some cases, additional attributes may be attached:
-  when portfolio returns were computed (i.e. weights
+  when portfolio returns were computed (i.e. argument \code{weights}
   was specified), there are attributes \code{holdings}
   and \code{contributions}. For holding-period returns,
   there may be a logical attribute
