@@ -467,7 +467,7 @@ test.btest <- function() {
     
 }
 
-test.btest_position <- function() {
+test.btest.position <- function() {
 
     ## single instrument
     prices <- 1:10
@@ -499,7 +499,7 @@ test.btest_position <- function() {
     
 }
 
-test.btest_NA <- function() {
+test.btest.NA <- function() {
 
     prices <- 1:10    
     signal <- function()
@@ -527,7 +527,7 @@ test.btest_NA <- function() {
     
 }
 
-test.btest_tc <- function() {
+test.btest.tc <- function() {
     prices <- 1:10
     signal <- function()
         Time()
@@ -1729,13 +1729,13 @@ test.returns <- function() {
     checkTrue(coredata(returns(z, pad = 1)[1L]) == 1)
 
     
-    ## period, but no timestamp: period is ignored
-    ## timestamp, but no period: timestamp is ignored
+    ## period, but no timestamp: period is ignored.
+    ## timestamp, but no period: timestamp is ignored.
     ##
-    ## (when there is no period/rebalance.when, methods are required
-    ## to keep timestamp information for themselves and
-    ## then to re-assemble the necessary class
-    ## structure)
+    ## (when there is no period/rebalance.when, methods
+    ## are required to keep timestamp information for
+    ## themselves and then to re-assemble the necessary
+    ## class structure)
     x <- 101:112
     t <- seq_along(x)
     suppressWarnings(checkEquals(returns(x, period = "month"), returns(x)))
@@ -1790,7 +1790,86 @@ test.returns <- function() {
                                           "2012-12-31")),t)]))
 
     
-    ## portfolio returns with weights
+
+    ## from journal to time-weighted returns
+
+    prices <- cbind(a = 101:110, b = 201:210)
+
+    j <- journal(timestamp  = c(1,4,4,5,5,7),
+                 amount     = c(1,1,1,-1,1,-1),
+                 instrument = c("a", "a", "b", "a", "b", "a"),
+                 price      = c(100.5,104.1,203,105,205.2,108))
+
+    p <- position(j, when = 1:10)
+    rowSums(p*prices)
+
+
+    ## missing values
+    x <- zoo(c(NA, 2:5), as.Date("2017-10-27") + 1:5)
+    checkEqualsNumeric(unclass(returns(x, period = "month")), c(NA, 0.25))
+
+}
+
+test.returns.rebalance  <- function() {
+
+    prices <- cbind(a = 101:105, b = 201:205)
+
+    ## 2 assets
+    weights <- c(0.8, 0.2)
+    ans <- returns(prices, weights = weights)
+    checkEqualsNumeric(ans, returns(prices) %*% weights)
+    
+    weights <- c(0.8, 0.2)
+    ans <- returns(prices, weights = weights,
+                   rebalance.when = 1)
+    checkEqualsNumeric(ans, returns(prices %*% (weights/prices[1, ])))
+    
+    weights <- c(0.8, 0.2)
+    ans <- returns(prices, weights = weights,
+                   rebalance.when = 2)
+    tmp <- returns(prices %*% (weights/prices[2, ]))
+    tmp[1] <- 0
+    checkEqualsNumeric(ans, tmp)
+
+    weights <- c(0.8, 0.2)
+    ans <- returns(prices,
+                   weights = weights,
+                   rebalance.when = c(1, 3))
+    tmp1 <- returns(prices[1:3, ] %*% (weights/prices[1L, ]))
+    tmp2 <- returns(prices[3:5, ] %*% (weights/prices[3L, ]))
+    checkEqualsNumeric(ans, c(tmp1, tmp2))
+
+    weights <- c(0.8, 0.2)
+    ans <- returns(prices,
+                   weights = weights,
+                   rebalance.when = FALSE)
+    checkEqualsNumeric(ans, rep(0, nrow(prices)-1))
+    
+    weights <- rbind(c(0.8, 0.2),
+                     c(0.5, 0.5))
+    ans <- returns(prices,
+                   weights = weights,
+                   rebalance.when = c(1, 3))    
+    tmp1 <- returns(prices[1:3, ] %*% (weights[1L, ]/prices[1L, ]))
+    tmp2 <- returns(prices[3:5, ] %*% (weights[2L, ]/prices[3L, ]))
+    checkEqualsNumeric(ans, c(tmp1, tmp2))
+
+
+    weights <- rbind(c(0.8, 0.2),
+                     c(0.8, 0.2),
+                     c(0.5, 0.5),
+                     c(0.5, 0.5),
+                     c(0.5, 0.5))
+    ans <- returns(prices,
+                   weights = weights,
+                   rebalance.when = c(1, 3))    
+    tmp1 <- returns(prices[1:3, ] %*% (weights[1L, ]/prices[1L, ]))
+    tmp2 <- returns(prices[3:5, ] %*% (weights[3L, ]/prices[3L, ]))
+    checkEqualsNumeric(ans, c(tmp1, tmp2))
+
+
+
+        ## portfolio returns with weights
     x <- 101:112
     t <- seq_along(x)
     x <- cbind(x+rnorm(length(x)), x+rnorm(length(x)))
@@ -1817,26 +1896,16 @@ test.returns <- function() {
         c("class", "contributions", "holdings", "index"))
 
     ## ... match rebalance.when against timestamp
-    h <- attr(returns(x, weights = c(0.2, 0.8),
-                      rebalance.when = 1),
+    h <- attr(returns(x, weights = c(0.2, 0.8), rebalance.when = 1),
               "holdings")
     checkTrue(all(apply(h, 2,
                         function(x) length(unique(x))) == 1L))
-    h <- attr(returns(x, weights = c(0.2, 0.8),
-                      rebalance.when = 3),
+
+    h <- attr(returns(x, weights = c(0.2, 0.8), rebalance.when = 3),
               "holdings")
     checkTrue(all(apply(h, 2,
                         function(x) length(unique(x))) == 2L))
 
-    h <- attr(returns(x, weights = c(0.2, 0.8),
-                      rebalance.when = 3),
-              "holdings")
-    h2 <- attr(returns(x, weights = c(0.2, 0.8),
-                      rebalance.when = c(1,3)),
-              "holdings")
-    checkEquals(h, h2)
-    
-    
     x <- 101:110
     t <- as.Date("2017-1-1")+1:10
     x <- cbind(x + rnorm(length(x)),
@@ -1912,26 +1981,9 @@ test.returns <- function() {
     ##             returns(price, position = pos2))
     
 
-    ## from journal to time-weighted returns
-
-    prices <- cbind(a = 101:110, b = 201:210)
-
-    j <- journal(timestamp  = c(1,4,4,5,5,7),
-                 amount     = c(1,1,1,-1,1,-1),
-                 instrument = c("a", "a", "b", "a", "b", "a"),
-                 price      = c(100.5,104.1,203,105,205.2,108))
-
-    p <- position(j, when = 1:10)
-    rowSums(p*prices)
-
-
-    ## missing values
-    x <- zoo(c(NA, 2:5), as.Date("2017-10-27") + 1:5)
-    checkEqualsNumeric(unclass(returns(x, period = "month")), c(NA, 0.25))
-
 }
 
-test.returns.p_returns_monthly <- function () {
+test.returns.p_returns_monthly <- function() {
 
     library("zoo")
     t <- seq(as.Date("2012-01-01"), as.Date("2012-12-31"), by = "1 day")

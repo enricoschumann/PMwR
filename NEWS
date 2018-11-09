@@ -1,5 +1,10 @@
 v0.11-0  (2018-??-??; not yet released)
 
+  o returns: 'weights' may now also be a matrix with as
+    many rows as 'rebalance.when'. Also, rebalancing at
+    the first timestamp is no longer implied (see
+    ChangeLog entry 2018-11-09)
+
 v0.10-0  (2018-10-19)
 
   o btest: support automatic computation of
@@ -35,9 +40,9 @@ v0.10-0  (2018-10-19)
   o pl.btest: fixed passing of additional arguments
 
   o returns: argument 'period' may also be 'hourly'
-    
+
   o scale1: argument 'when' may also be 'last'
-  
+
   o various documentation updates/fixes; see the
     ChangeLog for all details. The manual at
     http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
@@ -54,9 +59,9 @@ v0.9-0  (2018-06-09)
     with default FALSE; when TRUE, numeric
     timestamps are considered daily data, e.g. for
     annualising returns
-  
+
   o NAVseries: add a 'window' method
-    
+
   o NAVseries: summary now includes recovery from
     drawdown
 

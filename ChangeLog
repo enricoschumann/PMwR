@@ -1,16 +1,34 @@
+2018-11-09  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/returns.R (returns,returns_rebalance):
+	'weights' may now also be a matrix with as many
+	rows as 'rebalance.when'. Also,
+	rebalancing at the first timestamp is no longer
+	implied, i.e. a function invocation such as
+
+            returns(x, weights = <...>,
+	            rebalance.when = 2)
+
+	will only rebalance at the second timestamp,
+	and the first return will be zero. To get back
+	the old behaviour, say
+
+            returns(x, weights = <...>,
+	            rebalance.when = c(1, 2))
+
 2018-10-19  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.10-1
 
-	* man/pl.Rd: remove textConnection in example
+        * man/pl.Rd: remove textConnection in example
 
 2018-10-19  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.10-0
 
-	* R/position.R (Ops.position): allow +,-,/ only
-	when both operands (i.e. positions) have
-	instrument information
+        * R/position.R (Ops.position): allow +,-,/ only
+        when both operands (i.e. positions) have
+        instrument information
 
 2018-10-18  Enrico Schumann  <es@enricoschumann.net>
 
