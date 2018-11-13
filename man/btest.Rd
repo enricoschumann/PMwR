@@ -308,10 +308,10 @@ btest(prices, signal,
   
 } 
 \author{
-  Enrico Schumann \email{<es@enricoschumann.net>}
+  Enrico Schumann \email{es@enricoschumann.net}
 }
 \examples{
-## For more examples, please see then Manual
+## For more examples, please see the Manual
 ## http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
 
 ## 1 - a simple rule
