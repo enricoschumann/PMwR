@@ -1,3 +1,9 @@
+2018-11-13  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R: make journal creation more memory
+	efficient, noticeable especially for backtests
+	with many (>100) assets
+
 2018-11-09  Enrico Schumann  <es@enricoschumann.net>
 
         * R/returns.R (returns,returns_rebalance):

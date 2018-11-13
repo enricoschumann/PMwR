@@ -266,11 +266,14 @@ btest(prices, signal,
   \code{btest}. Use the argument \code{Globals}
   to add initial objects.
 
-  \code{variations.settings} is a list with the following defaults
-  %% \item{\code{method}}{character}
-  %% \item{\code{load.balancing}}{logical}
-  %% \item{\code{cores}}{numeric}
-  
+  \code{variations.settings} is a list with the
+  following defaults:
+  \describe{    
+    \item{\code{method}}{character: supported are loop, parallel (or
+      snow) and multicore}
+    \item{\code{load.balancing}}{logical}    
+    \item{\code{cores}}{numeric}
+  }
 }
 \value{
   A list with class attribute \code{btest}. The list comprises:  
@@ -301,11 +304,11 @@ btest(prices, signal,
   Schumann, E. (2018) \emph{Portfolio Management
     with R}. \url{http://enricoschumann.net/PMwR/};
   in particular the Chapter on backtesting:
-  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#ch:backtesting}
+  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#backtesting}
   
 } 
 \author{
-  Enrico Schumann <es@enricoschumann.net>
+  Enrico Schumann \email{<es@enricoschumann.net>}
 }
 \examples{
 ## For more examples, please see then Manual
@@ -359,7 +362,8 @@ ma_strat <-  function(ma) {
 plot(as.Date(row.names(DAX)), dax, type = "l", xlab = "", ylab = "DAX")
 lines(as.Date(row.names(DAX)), ma, type = "l")
 
-res <- btest(dax, signal = ma_strat,
+res <- btest(prices = dax,
+             signal = ma_strat,
              b = n, ma = ma)
 
 par(mfrow = c(3,1))

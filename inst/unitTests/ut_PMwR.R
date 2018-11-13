@@ -302,7 +302,7 @@ test.btest <- function() {
 
 
     ## check whether date is matched against
-    ## timestamp. The 31 Jan is not in timestamp, so
+    ## timestamp. The 31 Jan 2015 is not in timestamp, so
     ## trade takes place on next day (2 Feb)
     res <- btest(list(prices),
                  signal = function() c(0.5,0.5),
@@ -532,7 +532,7 @@ test.btest.tc <- function() {
     signal <- function()
         Time()
     tc <- function()
-        Time()
+        Time() ## will be 0:9
 
     journal(bt <- btest(prices, signal, tc = tc))
     checkEquals(bt$cum.tc,
@@ -543,6 +543,67 @@ test.btest.tc <- function() {
 
     checkEquals(bt$cum.tc,
                 c(0, cumsum(prices[-1])))    
+}
+
+test.btest.journal <- function() {
+
+    require(PMwR)
+    require(RUnit)
+    prices <- 1:10    
+    signal <- function()
+        if (Time() < 5)
+            1 else 0
+
+    j <- journal(btest(prices, signal))
+    checkEquals(j,
+                dput(journal(amount = c(1, -1),
+                        timestamp = c(2, 6),
+                        instrument = "asset 1",
+                        price = c(2, 6))))
+
+    j <- journal(btest(prices, signal, instrument = "A"))
+    checkEquals(j,
+                dput(journal(amount = c(1, -1),
+                        timestamp = c(2, 6),
+                        instrument = "A",
+                        price = c(2, 6))))
+    checkEquals(j,
+                dput(journal(amount = c(1, -1),
+                        timestamp = c(2, 6),
+                        instrument = c("A", "A"),
+                        price = c(2, 6))))
+
+    prices <- 1:10
+    prices <- cbind(A = prices, B = prices+0.5)
+    signal <- function()
+        if (Time() < 5L)
+            c(1,1) else c(0,0)
+    j <- journal(btest(list(prices), signal))
+    checkEquals(j,
+                dput(journal(amount = c(1, 1, -1, -1),
+                        timestamp = c(2, 2, 6, 6),
+                        instrument = c("A", "B", "A", "B"),
+                        price = c(2, 2.5, 6, 6.5))))
+    
+    j <- journal(btest(list(prices), signal,
+                       ## overwrite instruments
+                       instrument = c("a", "b"))) 
+    checkEquals(j,
+                dput(journal(amount = c(1, 1, -1, -1),
+                        timestamp = c(2, 2, 6, 6),
+                        instrument = c("a", "b", "a", "b"),
+                        price = c(2, 2.5, 6, 6.5))))
+    
+    signal <- function()
+        if (Time() < 5L)
+            c(0,1) else c(0,0)
+    j <- journal(btest(list(prices), signal))
+    checkEquals(j,
+                dput(journal(amount = c(1, -1),
+                        timestamp = c(2, 6),
+                        instrument = "B",
+                        price = c(2.5, 6.5))))
+
 }
 
 test.journal <- function() {

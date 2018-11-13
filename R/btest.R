@@ -854,23 +854,37 @@ btest  <- function(prices,
     if (missing(timestamp))
         timestamp <- seq_len(nrow(X))
 
+
+    ##  ------------- [[ journal ]] -------------
     ## TODO include cash in journal
     trades <- diff(rbind(initial.position, X))
     keep <- abs(trades) > sqrt(.Machine$double.eps) & !is.na(trades)
-    jnl <- journal()
     if (any(keep)) {
+        j.timestamp <- list()
+        j.amount <- list()
+        j.price <- list()
+        j.instrument <- list()
         for (cc in seq_len(ncol(X))) {
             ic <- keep[, cc]
             if (!any(ic))
                 next
-            jnl0 <- journal(timestamp  = timestamp[ic],
-                            amount     = unname(trades[ic, cc]),
-                            price      = mC[ic, cc],
-                            instrument = colnames(X)[cc])
-            jnl <- c(jnl, jnl0)
+            j.timestamp[[cc]] <- timestamp[ic]
+            j.amount[[cc]] <- trades[ic, cc]
+            j.price[[cc]] <- mC[ic, cc]
+            j.instrument[[cc]] <- rep(colnames(X)[cc], sum(ic))
         }
+        j.timestamp <- do.call(c, j.timestamp)
+        j.amount <- do.call(c, j.amount)
+        j.price <- do.call(c, j.price)
+        j.instrument <- do.call(c, j.instrument)
+        jnl <- journal(timestamp  = j.timestamp,
+                       amount     = unname(j.amount),
+                       price      = j.price,
+                       instrument = j.instrument)
         jnl <- sort(jnl)
-    }
+    } else
+        jnl <- journal()
+
 
     ans <- list(position = X,
                 suggested.position = Xs,
