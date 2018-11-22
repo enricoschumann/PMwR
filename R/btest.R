@@ -868,19 +868,20 @@ btest  <- function(prices,
             ic <- keep[, cc]
             if (!any(ic))
                 next
-            j.timestamp[[cc]] <- timestamp[ic]
-            j.amount[[cc]] <- trades[ic, cc]
-            j.price[[cc]] <- mC[ic, cc]
-            j.instrument[[cc]] <- rep(colnames(X)[cc], sum(ic))
+            ccc <- as.character(cc)
+            j.timestamp[[ccc]] <- timestamp[ic]
+            j.amount[[ccc]] <- trades[ic, cc]
+            j.price[[ccc]] <- mC[ic, cc]
+            j.instrument[[ccc]] <- rep(colnames(X)[cc], sum(ic))
         }
         j.timestamp <- do.call(c, j.timestamp)
         j.amount <- do.call(c, j.amount)
         j.price <- do.call(c, j.price)
         j.instrument <- do.call(c, j.instrument)
-        jnl <- journal(timestamp  = j.timestamp,
+        jnl <- journal(timestamp  = unname(j.timestamp),
                        amount     = unname(j.amount),
-                       price      = j.price,
-                       instrument = j.instrument)
+                       price      = unname(j.price),
+                       instrument = unname(j.instrument))
         jnl <- sort(jnl)
     } else
         jnl <- journal()

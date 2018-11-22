@@ -1,3 +1,9 @@
+2018-11-22  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R: when the journal is constructed,
+	make sure that class attributes are
+	preserved (notably the for timestamp)
+
 2018-11-13  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R: make journal creation more memory
