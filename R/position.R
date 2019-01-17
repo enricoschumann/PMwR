@@ -1,14 +1,21 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-18  Enrico Schumann
+## Copyright (C) 2008-19  Enrico Schumann
 
 position <- function(amount, ...)
     UseMethod("position")
 
 position.default <- function(amount, timestamp, instrument,
                              when, drop.zero = FALSE,
-                             account = NULL, ...) {
-    
+                             account = NULL,
+                             use.names = NULL, ...) {
+
     no.instruments <- FALSE ## are all instruments missing/NA?
+    if (!isFALSE(use.names) &&
+        missing(instrument) &&
+        !is.null(names(amount))) {
+        instrument <- names(amount)
+    }
+
     if (missing(instrument) ||
         !length(instrument) ||
         all(is.na(instrument))) {
@@ -41,7 +48,7 @@ position.default <- function(amount, timestamp, instrument,
         if (no.timestamp)
             warning(sQuote("when"),
                     " specified, but no valid timestamp supplied")
-        if (is.character(when)) {            
+        if (is.character(when)) {
             if (when[[1L]] == "last" ||
                 when[[1L]] == "newest" ||
                 when[[1L]] == "latest")
@@ -50,6 +57,7 @@ position.default <- function(amount, timestamp, instrument,
                 when <- unique(timestamp)
             else if (when[[1L]] == "endofmonth" ||
                      when[[1L]] == "lastofmonth") {
+                ## TODO preferable?
                 ## when <- last(timestamp,
                 ##              format(as.Date(timestamp), "%Y-%m"))
                 timestamp <- as.Date(timestamp)
@@ -82,14 +90,17 @@ position.default <- function(amount, timestamp, instrument,
     if (anyNA(timestamp) && !is.unsorted(timestamp, na.rm = TRUE))
         warning("timestamp has NA values")
 
-    if (!is.null(account) && !identical(account, FALSE))                      
+    if (!is.null(account) && !identical(account, FALSE))
         instrument <- paste(account, "%SEP%", instrument, sep = "")
-        
+
     nw <- length(when)
     nm <- sort(unique(instrument))
     pos <- array(0, dim = c(nw, length(nm)))
     colnames(pos) <- gsub("%SEP%", ".", nm, fixed = TRUE)
-    rownames(pos) <- if (no.timestamp) rep("", length(when)) else as.character(when)
+    rownames(pos) <- if (no.timestamp)
+                         rep("", length(when))
+                     else
+                         as.character(when)
     for (j in seq_len(nw)) {
         for (i in seq_along(nm)) {
             ri  <-  nm[i] == instrument
@@ -113,8 +124,8 @@ position.default <- function(amount, timestamp, instrument,
         nm[] <- NA
     attr(pos, "timestamp") <- if (no.timestamp) NA else when
     attr(pos, "instrument") <- gsub(".*%SEP%(.*?)", "\\1", nm)
-    if (!is.null(account))         
-        attr(pos, "account") <- gsub("(.*)%SEP%.*", "\\1", nm)    
+    if (!is.null(account))
+        attr(pos, "account") <- gsub("(.*)%SEP%.*", "\\1", nm)
     class(pos) <- "position"
     pos
 }
@@ -159,7 +170,7 @@ position.btest <- function(amount, when, ...,
 }
 
 print.position <- function(x, ..., sep = ":") {
-    if (dim(x)[[2L]] == 0L) ## empty position
+    if (dim(x)[[2L]] == 0L)  ## empty position
         return(invisible(x))
     original.x <- x
     ## if (!is.na(sep))
@@ -178,13 +189,15 @@ print.position <- function(x, ..., sep = ":") {
             pos[all_i$position > 0] <- unclass(x)[all_i$position]
             x <- pos
         }
-    }        
+    }
     if (!all(is.na(instrument)))
         colnames(x) <- instrument
 
-    if (all(is.na(timestamp)) || (is.character(timestamp) && all(timestamp == "")))
+    if (all(is.na(timestamp)) ||
+        (is.character(timestamp) && all(timestamp == "")))
         rownames(x) <- NULL
-    if (all(is.na(instrument)) || (is.character(instrument) && all(instrument == "")))
+    if (all(is.na(instrument)) ||
+        (is.character(instrument) && all(instrument == "")))
         colnames(x) <- NULL
 
     attr(x, "account") <- NULL
@@ -218,7 +231,7 @@ as.data.frame.position <- function(x, ...) {
     ans <- c(x)
     dim(ans) <- dim(x)
     ans <- as.data.frame(ans)
-    
+
     row.names(ans) <- as.character(attr(x, "timestamp"))
     names(ans) <- attr(x, "instrument")
     ans
@@ -267,22 +280,22 @@ as.zoo.position <- function(x, ...) {
     }
     s[is.na(s)] <- ""
     gs <- sort(unique(s))
-    
+
     list.gs <- strsplit(gs, sep, perl = perl)
 
     all.acc <- NULL
     for (i in seq_along(list.gs)) {
         if ((lg <- length(list.gs[[i]])) == 1L)
             next
-        
+
         tmp <- NULL
         for (j in seq_len(lg-1))
             tmp <- c(tmp, paste(list.gs[[i]][1:j],
                                 collapse = sep))
         all.acc <- c(all.acc, tmp)
-    }    
+    }
     all.acc <- sort(unique(c(all.acc, s)))
-    
+
     ## LEVEL
     level <- as.numeric(
         unlist(lapply(gregexpr(sep, all.acc),
@@ -300,23 +313,23 @@ acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
     .Deprecated(".expand")
     account[is.na(account)] <- ""
     gs <- sort(unique(account))
-    
+
     list.gs <- strsplit(gs, sep, perl = perl)
 
     all.acc <- NULL
     for (i in seq_along(list.gs)) {
         if ((lg <- length(list.gs[[i]])) == 1L)
             next
-        
+
         tmp <- NULL
         for (j in seq_len(lg-1))
             tmp <- c(tmp, paste(list.gs[[i]][1:j],
                                 collapse = sep))
         all.acc <- c(all.acc, tmp)
-    }    
+    }
     all.acc <- sort(unique(c(all.acc, account)))
     positions <- match(account, all.acc)
-    
+
     ## LEVEL
     level <- as.numeric(
         unlist(lapply(gregexpr(sep, all.acc),
@@ -332,14 +345,14 @@ acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
             gsub(paste0(".*", sep, "([^", substr(sep,1,1), "]+)$"),
                  "\\1", x, perl = TRUE)
         }
-        
+
         sp <- spaces(4*(level - 1))
-        tree1 <- paste0(sp, leaf(all.acc)) 
+        tree1 <- paste0(sp, leaf(all.acc))
 
         tree2 <- paste0(.tree(level), leaf(all.acc))
         tree3 <- paste0(.tree(level, TRUE), leaf(all.acc))
         tree3 <- enc2utf8(tree3)
-        
+
         res <- data.frame(account = all.acc,
                           level,
                           tree_indent  = tree1,
@@ -351,10 +364,10 @@ acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
     }
     attr(res, "positions") <- positions
     res
-} 
+}
 
 .leaf <- function(x, sep, perl = TRUE) {
-    ## return last level 
+    ## return last level
     ## level::sublevel::...::subbest_sublevel
     ## => the regexp used greedy matching
     gsub(paste0(".*", sep, "(.*)"), "\\1", x, perl = TRUE)
@@ -382,10 +395,10 @@ acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
                             lv == i+1))
                     group.end[g] <- max(which(next_l))
             }
-            
+
             group.start <- group.start[-length(group.start)]
             group.end <- group.end[-length(group.end)]
-            
+
             for (g in 1:length(group.start)) {
                 if (group.start[g] == group.end[g])
                     next
@@ -407,5 +420,5 @@ acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
             indent <- gsub("|  ", "\u2502  ", indent, fixed = TRUE)
         }
         indent
-    } 
+    }
 }

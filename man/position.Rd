@@ -17,7 +17,8 @@
 position(amount, \dots)
 
 \method{position}{default}(amount, timestamp, instrument, when,
-                 drop.zero = FALSE, account = NULL, \dots)
+                 drop.zero = FALSE, account = NULL,
+                 use.names = NULL, \dots)
 
 \method{position}{journal}(amount, when, drop.zero = FALSE,
                            use.account = FALSE, \dots)
@@ -43,6 +44,9 @@ position(amount, \dots)
     character: description of account
   }
   \item{use.account}{
+    logical
+  }
+  \item{use.names}{
     logical
   }
   \item{drop.zero}{

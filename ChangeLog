@@ -1,3 +1,13 @@
+2019-01-17  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (position.default): add argument
+	'use.names'
+
+2018-11-30  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/trades.R (split_trades): when 'price' is
+	missing, NA is used
+
 2018-11-22  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R: when the journal is constructed,
