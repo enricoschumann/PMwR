@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-18  Enrico Schumann
+## Copyright (C) 2008-19  Enrico Schumann
 
 journal <- function(amount, ...) {
     if (match.call() == "journal()") {
@@ -296,13 +296,14 @@ summary.journal <- function(object, ...) {
                         stringsAsFactors = FALSE)
     for (i in sort(unique(xi))) {
         ji <- object[ i==xi ]
-        si <- data.frame(instrument   = i,
-                         n_t          = length(ji),
-                         average_buy  = mean(ji$price[ji$amount > 0], na.rm=TRUE),
-                         average_sell = mean(ji$price[ji$amount < 0], na.rm=TRUE),
-                         first_t      = min(ji$timestamp)[[1L]],
-                         last_t       = max(ji$timestamp)[[1L]],
-                         stringsAsFactors = FALSE)
+        si <- data.frame(
+            instrument   = i,
+            n_t          = length(ji),
+            average_buy  = mean(ji$price[ji$amount > 0], na.rm=TRUE),
+            average_sell = mean(ji$price[ji$amount < 0], na.rm=TRUE),
+            first_t      = min(ji$timestamp)[[1L]],
+            last_t       = max(ji$timestamp)[[1L]],
+            stringsAsFactors = FALSE)
         stats <- rbind(stats, si)
     }
     if (no_instrument)
@@ -328,8 +329,9 @@ print.summary.journal <- function(x, ...) {
             ans[[i]][!is.finite(ans[[i]])] <- NA
 
         if (has_instrument)
-            ans[["instrument"]] <- paste0("",
-                                          format(ans[["instrument"]], justify = "left"))
+            ans[["instrument"]] <-
+                paste0("",
+                       format(ans[["instrument"]], justify = "left"))
         print.data.frame(ans, na.print = "",
                          print.gap = 2, row.names = FALSE)
     } else {
@@ -339,10 +341,11 @@ print.summary.journal <- function(x, ...) {
 }
 
 `[.journal`  <- function(x, i, match.against = NULL,
-                         ignore.case = TRUE, ..., reverse = FALSE) {
+                         ignore.case = TRUE, ...,
+                         reverse = FALSE) {
     if (is.character(i)) {
         if (is.null(match.against))
-            match.against  <- names(x)[unlist(lapply(x, mode)) == "character"]
+            match.against <- names(x)[unlist(lapply(x, mode)) == "character"]
         ii <- logical(length(x))
         if (length(i) > 1L)
             i <- paste(i, collapse = "|")
@@ -481,6 +484,9 @@ as.journal.default <- function(x, ...) {
     else
         stop("no default method")
 }
+
+as.journal.list <- function(x, ...)
+    do.call("journal", x)
 
 as.journal.data.frame <- function(x, ...) {
     lx <- as.list(x)

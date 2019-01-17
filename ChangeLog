@@ -1,5 +1,8 @@
 2019-01-17  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/journal.R (as.journal.list): add (bare-bones)
+	method
+
 	* R/position.R (position.default): add argument
 	'use.names'
 
