@@ -57,3 +57,8 @@
    add attribute =valuation.data=, a list in which
    every component has the same size as position
 
+
+* split_trades
+
+  should results be converted to list of journals?
+  (argument 'as.journal')
