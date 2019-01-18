@@ -75,7 +75,7 @@ test.position <- function() {
 
 test.split_trades <- function() {
     amount <- c(1, -1)
-    price <- c(1,2)
+    price <- c(1, 2)
     ans <- split_trades(amount, price, seq_along(amount))
     checkEquals(length(ans), 1)
     checkEquals(ans,
@@ -105,7 +105,9 @@ test.split_trades <- function() {
     n <- c(1,1,-3,1)
     p <- c(1,2,3,2)
     tradetimes <- seq_along(n)
-    split_trades(n,p,tradetimes)
+    ans <- split_trades(n, p, tradetimes)
+    checkEquals(length(ans), 2)
+    
 }
 
 

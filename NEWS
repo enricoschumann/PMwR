@@ -1,9 +1,9 @@
-v0.11-0  (2018-??-??; not yet released)
+v0.11-0  (2019-??-??; not yet released)
 
   o returns: 'weights' may now also be a matrix with as
     many rows as 'rebalance.when'. Also, rebalancing at
     the first timestamp is no longer implied (see
-    ChangeLog entry 2018-11-09)
+    ChangeLog entry of 2018-11-09 for details)
 
 v0.10-0  (2018-10-19)
 
