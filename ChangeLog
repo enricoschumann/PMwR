@@ -1,5 +1,8 @@
 2019-01-22  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/returns.R (toLatex.p_returns_monthly):
+	clean up code
+
 	* R/trades.R (scale_trades, split_trades):
 	remove 'scaleTrades', 'splitTrades'.
 	See ChangeLog 2017-06-23.
