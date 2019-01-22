@@ -209,70 +209,81 @@ btest(prices, signal,
     logical: display \code{\link{txtProgressBar}}?
   }
   \item{variations}{      
-     a list
+     a list. See Details.
   }
-  \item{variations.settings}{a list with the following defaults
-    %% \item{\code{method}}{character}
-    %% \item{\code{load.balancing}}{logical}
-    %% \item{\code{cores}}{numeric}
+
+  \item{variations.settings}{
+    a list. See Details.
   }
+  
   \item{replications}{
     an integer
   }
 }
 \details{
   
-  The function provides infrastructure for testing trading
-  rules. Essentially, \code{btest} does accounting: keep track of
-  transactions and positions, value open positions, etc.
+  The function provides infrastructure for testing
+  trading rules. Essentially, \code{btest} does
+  accounting: keep track of transactions and positions,
+  value open positions, etc. The ingredients are price
+  time-series (either single series or \acronym{OHLC}
+  bars), which need not be equally spaced; and several
+  functions that map these series and other pieces of
+  information into positions.
 
-  The basic ingredients are time series
-  in the form of \acronym{OHLC} bars (which need not be
-  equally spaced) and several functions that map these
-  series and other pieces of information into positions.
-  
-  \code{btest} runs a loop from \code{b + 1} to
-  \code{NROW(prices)}. In iteration \code{t}, a
-  \code{signal} can be computed based on information
-  from periods prior to \code{t}. Trading then takes
-  place at the opening price of \code{t}. For
-  slow-to-compute signals this is reasonable if there
-  is a time lag between close and open. For daily prices,
-  for instance, signals could be computed
-  overnight. For higher frequencies, such as every
-  second, the signal function should be fast to
-  compute; alternatively, it may be better to use a
-  larger time offset (i.e. use information from
-  periods \code{<< t}).
+  \subsection{How \code{btest} works}{
 
-  If no \acronym{ohlc} bars are available, a single
-  series per asset (assumed to be close prices) can be
-  passed. We may then use information up to the close
-  of \code{t - 1}, and trade at the close of \code{t}.
+    \code{btest} runs a loop from \code{b + 1} to
+    \code{NROW(prices)}. In iteration \code{t}, a
+    \code{signal} can be computed based on information
+    from periods prior to \code{t}. Trading then takes
+    place at the opening price of \code{t}. For
+    slow-to-compute signals this is reasonable if there
+    is a time lag between close and open. For daily prices,
+    for instance, signals could be computed
+    overnight. For higher frequencies, such as every
+    second, the signal function should be fast to
+    compute; alternatively, it may be better to use a
+    larger time offset (i.e. use a longer time lag).
+    
+    If no \acronym{OHLC} bars are available, a single
+    series per asset (assumed to be close prices) can be
+    used. We may then use information up to the close
+    of \code{t - 1}, and trade at the close of \code{t}.
+    
+    The \sQuote{trade logic} needs to be coded in the
+    function \code{signal}. Arguments to that function
+    must be named and need to be passed with
+    \code{...}.  Reserved argument names are currently
+    these: \code{Open}, \code{High}, \code{Low},
+    \code{Close}, \code{Wealth}, \code{Cash},
+    \code{Time}, \code{Timestamp}, \code{Portfolio},
+    \code{SuggestedPortfolio}, \code{Globals}.
 
-  The \sQuote{trade logic} needs to be coded in the
-  function \code{signal}; arguments to that function
-  should be named and need to be passed with \code{...}.
-  
-  Reserved argument names are currently these:
-  \code{Open}, \code{High}, \code{Low}, \code{Close},
-  \code{Wealth}, \code{Cash}, \code{Time},
-  \code{Timestamp}, \code{Portfolio},
-  \code{SuggestedPortfolio}, \code{Globals}.
+  }
 
-  \code{Globals} is special: it is an
-  \code{\link{environment}}, which can be used to
-  persistently store data during the run of
-  \code{btest}. Use the argument \code{Globals}
-  to add initial objects.
+  \subsection{Accessing data}{
 
-  \code{variations.settings} is a list with the
-  following defaults:
-  \describe{    
-    \item{\code{method}}{character: supported are loop, parallel (or
-      snow) and multicore}
-    \item{\code{load.balancing}}{logical}    
-    \item{\code{cores}}{numeric}
+    \code{Globals} is special: it is an
+    \code{\link{environment}}, which can be used to
+    persistently store data during the run of
+    \code{btest}. Use the argument \code{Globals}
+    to add initial objects.
+    
+  }  
+
+  \subsection{Replications and variations}{
+
+    \code{variations.settings} is a list with the
+    following defaults:
+    \describe{    
+      \item{\code{method}}{character: supported are
+	\code{"loop"}, \code{"parallel"} (or \code{"snow"})
+	and \code{"multicore"}}
+      \item{\code{load.balancing}}{logical}    
+      \item{\code{cores}}{numeric}
+    }
+
   }
 }
 \value{
@@ -280,7 +291,8 @@ btest(prices, signal,
   \item{\code{position}}{actual portfolio holdings}
   \item{\code{suggested.position}}{suggested holdings}
   \item{\code{cash}}{cash}
-  \item{\code{wealth}}{time-series of total portfolio value (aka equity curve)}
+  \item{\code{wealth}}{time-series of total portfolio
+    value (aka equity curve)}
   \item{\code{cum.tc}}{transaction costs}
   \item{\code{journal}}{\code{\link{journal}} of trades}
   \item{\code{initial.wealth}}{initial wealth}
@@ -301,7 +313,7 @@ btest(prices, signal,
 }
 \references{
 
-  Schumann, E. (2018) \emph{Portfolio Management
+  Schumann, E. (2019) \emph{Portfolio Management
     with R}. \url{http://enricoschumann.net/PMwR/};
   in particular the Chapter on backtesting:
   \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#backtesting}
