@@ -1,9 +1,10 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-18  Enrico Schumann
+## Copyright (C) 2008-19  Enrico Schumann
 
-split_trades <- splitTrades <-
-    function(amount, price, timestamp, aggregate = FALSE) {
+split_trades <- function(amount, price, timestamp, aggregate = FALSE) {
     n <- amount
+    if (missing(price))
+        price <- rep(NA, length(amount))
     p <- price
 
     if (missing(timestamp))
@@ -44,16 +45,16 @@ split_trades <- splitTrades <-
             }
         } else {
             ## there is only one trade, and it is still open
-            res <- list(amount = n, price = p, timestamp = timestamp)
+            res <- list(list(amount = n, price = p, timestamp = timestamp))
         }
-        res
     } else {
-        list(amount = n, price = p, timestamp = timestamp)
+        res <- list(amount = n, price = p, timestamp = timestamp)
     }
+    res
 }
 
-scale_trades <- scaleTrades <- function(amount, price, timestamp, aggregate = FALSE,
-                        fun = NULL, ...) {
+scale_trades <- function(amount, price, timestamp, aggregate = FALSE,
+                         fun = NULL, ...) {
     trades <- splitTrades(amount, price, timestamp, aggregate = FALSE)
     if (is.null(fun))
         fun <- scaleToUnity

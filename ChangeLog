@@ -1,5 +1,9 @@
 2019-01-22  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/trades.R (scale_trades, split_trades):
+	remove 'scaleTrades', 'splitTrades'.
+	See ChangeLog 2017-06-23.
+
 	* R/valuation.R (valuation.journal): argument
 	'cashflow' may also be a numeric vector
 
