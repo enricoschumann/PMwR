@@ -55,9 +55,9 @@ split_trades <- function(amount, price, timestamp, aggregate = FALSE) {
 
 scale_trades <- function(amount, price, timestamp, aggregate = FALSE,
                          fun = NULL, ...) {
-    trades <- splitTrades(amount, price, timestamp, aggregate = FALSE)
+    trades <- split_trades(amount, price, timestamp, aggregate = FALSE)
     if (is.null(fun))
-        fun <- scaleToUnity
+        fun <- scale_to_unity
     for (i in seq_along(trades)) {
         trades[[i]]$amount <- fun(trades[[i]]$amount, ...)
         zero <- trades[[i]]$amount == 0
@@ -78,7 +78,7 @@ scale_trades <- function(amount, price, timestamp, aggregate = FALSE,
     }
 }
 
-scale_to_unity <- scaleToUnity <- function(amount) {
+scale_to_unity <- function(amount) {
     maxn <- max(abs(cumsum(amount)))
     amount/maxn
 }

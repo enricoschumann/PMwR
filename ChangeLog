@@ -1,5 +1,8 @@
 2019-01-23  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/trades.R (scale_to_unity): remove
+	'scaleToUnity'. See ChangeLog 2017-06-23.
+
 	* R/NAVseries.R (summary.NAVseries): the
 	function now returns a list of lists
 
