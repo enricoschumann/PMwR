@@ -163,15 +163,11 @@ matrixify <- function(s, cols) {
     s
 }
 
-
 ## make LaTeX table
-Plist <- unname(lapply(split(P, col(P)), 
-                       function(x) 
-                           summary(NAVseries(x), 
-                                   assume.daily = TRUE)))
-s <- do.call(toLatex, 
-             c(Plist, 
-               template = "%return & %volatility & %sparkline"))
+Plist <- unname(
+  lapply(split(P, col(P)), function(x) NAVseries(x)))
+s <- toLatex(do.call(summary, Plist),
+        template = "%return & %volatility & %sparkline")
 o <- order(P[nrow(P), ], decreasing = TRUE)
 s <- s[o]
 cat(toLatex(as.data.frame(matrixify(s, 3))))

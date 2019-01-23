@@ -2235,7 +2235,7 @@ test.NAVseries <- function() {
     checkEquals(c(nav), 1:10)
     checkEquals(attr(nav, "timestamp"), 1:10)  ## integer timestamp added
     ## summary
-    sum.nav <- summary(nav)
+    sum.nav <- summary(nav)[[1]]
     checkEquals(sum.nav$return, tail(nav,1)/head(nav, 1)-1)
     checkEquals(sum.nav$nna, 0)
     checkEquals(sum.nav$nobs, 10)
@@ -2246,7 +2246,7 @@ test.NAVseries <- function() {
     nav <- NAVseries(c(1, NA, 3:10))
     checkEquals(attr(nav, "timestamp"), 1:10)  ## integer timestamp added
     ## summary
-    sum.nav <- summary(nav)
+    sum.nav <- summary(nav)[[1]]
     checkEquals(sum.nav$return, tail(nav,1)/head(nav, 1)-1)
     checkEquals(sum.nav$nna, 1)
     checkEquals(sum.nav$nobs, 10)
@@ -2258,7 +2258,7 @@ test.NAVseries <- function() {
     checkEquals(c(nav), 1:10)
     checkEquals(attr(nav, "timestamp"), as.Date("2017-1-1")+0:9)
     ## summary
-    sum.nav <- summary(nav)
+    sum.nav <- summary(nav)[[1]]
     checkEquals(sum.nav$return, tail(nav,1)/head(nav, 1)-1)
     checkEquals(sum.nav$nna, 0)
     checkEquals(sum.nav$nobs, 10)
@@ -2303,7 +2303,6 @@ test.NAVseries <- function() {
                 b = 5, initial.cash = 100)
     checkEqualsNumeric(as.NAVseries(bt, drop.NA = FALSE),
                        c(NA, NA, NA, NA, 100, 100, 101, 102, 103, 104))
-
 
 }
 

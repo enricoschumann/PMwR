@@ -23,6 +23,7 @@ as.NAVseries(x, ...)
     FALSE, assume.daily = FALSE)
 
 \method{plot}{NAVseries}(x, y, \dots, xlab = "", ylab = "", type = "l")
+
 \method{window}{NAVseries}(x, start = NULL, end = NULL, \dots)
 }
 \arguments{
@@ -48,7 +49,10 @@ as.NAVseries(x, ...)
   an \code{NAVseries}
 }
 \item{\dots}{
-  further arguments
+
+  further arguments. For \code{summary}, these can be
+  \code{NAVseries}.
+
 }
 \item{monthly.vol}{
 
@@ -108,12 +112,12 @@ as.NAVseries(x, ...)
 
   an \code{NAVseries}: see Details.
 
-  an \code{NAVseries} summary: a list
+  an \code{NAVseries} summary: a list of lists
 
 }
 \references{
 
-  Schumann, E. (2018) \emph{Portfolio Management with
+  Schumann, E. (2019) \emph{Portfolio Management with
   \R}. \url{http://enricoschumann.net/PMwR/}
 
 } 

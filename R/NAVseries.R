@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-18  Enrico Schumann
+## Copyright (C) 2008-19  Enrico Schumann
 
 NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
@@ -86,112 +86,118 @@ summary.NAVseries <- function(object, ...,
                               monthly.vol = TRUE,
                               na.rm = FALSE,
                               assume.daily = FALSE) {
-    ## TODO: assuming daily timestamps -- too restrictive? hourly?
-    ## TODO: timestamp can also be numeric 1 .. n_obs
-    isna <- is.na(object)
-    nna <- sum(isna)
-    nobs <- length(attr(object, "timestamp"))    
-    if (na.rm) {
-        timestamp <- attr(object, "timestamp")[!isna]
-        NAV <- object[!isna]
-    } else {
-        timestamp <- attr(object, "timestamp")
-        NAV <- c(object)
-    }
 
-    ## TODO: argument 'aggregate': daily, ...?
-    ## if (!is.null(timestamp) &&
-    ##     !inherits(try(timestampD <- as.Date(timestamp),
-    ##                   silent = TRUE), "try-error") &&
-    ##     !any(is.na(timestampD))) {
-    ##     NAV <- aggregate(NAV, by = list(as.Date(timestamp)), tail, 1L)[[2L]]
-    ##     timestamp <- aggregate(timestamp,
-    ##                            by = list(as.Date(timestamp)), tail, 1L)[[2L]]
-    ## } else
-    ##     timestampD <- timestamp
+    all_series <- c(list(object), list(...))
+    ans <- vector("list", length = length(all_series))
 
-    ans <- list()
-    ans$NAVseries <- object
-    ans$NAV <- NAV
-    ans$timestamp <- timestamp
-    ans$instrument  <- if (!is.null(attr(object, "instrument")))
-                          attr(object, "instrument") else NA
-    ans$title       <- if (!is.null(attr(object, "title")))
-                          attr(object, "title") else NA
-    ans$description <- if (!is.null(attr(object, "description")))
-                          attr(object, "description") else NA
-    ans$start <- min(timestamp)
-    ans$end   <- max(timestamp)
-    ans$nobs <- nobs
-    ans$nna  <- nna
-    ans$low  <- min(NAV)
-    ans$high <- max(NAV)
-    ans$low.when  <- timestamp[which.min(NAV)[1L]]
-    ans$high.when <- timestamp[which.max(NAV)[1L]]
-
-
-    
-    ## Returns, annualise
-    if (.may_be_Date(c(ans$start, ans$end))) {
-        t <- as.numeric(as.Date(ans$end) -
-                        as.Date(ans$start))
-    } else if (assume.daily)
-        t <- ans$end - ans$start
-    else
-        t <- NA
-
-    if (!is.na(t) && t > 365) {
-        ans$return <- (tail(NAV,1)/head(NAV, 1))^(365/t) - 1
-        ans$return.annualised <- TRUE
-    } else {
-        ans$return <- tail(NAV,1)/head(NAV,1) - 1
-        ans$return.annualised <- FALSE            
-    }
+    for (i in seq_along(ans)) {
         
-    tmp <- drawdowns(NAV)    
-    dd.row <- if(nrow(tmp))
-                  which.max(tmp[["max"]])
-              else
-                  0
-    if (dd.row > 0) {
-        ans$mdd      <- tmp[["max"]][dd.row]
-        ans$mdd.high <- NAV[tmp[["peak"]][dd.row]]
-        ans$mdd.low <- NAV[tmp[["trough"]][dd.row]]
-        ans$mdd.high.when <- timestamp[tmp[["peak"]][dd.row]]
-        ans$mdd.low.when <- timestamp[tmp[["trough"]][dd.row]]
-        ans$mdd.recover.when <- timestamp[tmp[["recover"]][dd.row]]
-    } else {
-        ans$mdd      <- 0
-        ans$mdd.high <- max(NAV)
-        ans$mdd.low   <- NA
-        ans$mdd.high.when <- timestamp[which.max(NAV)]
-        ans$mdd.low.when   <- NA
-        ans$mdd.recover.when <- NA
-    }
-    ans$underwater <- 1 - NAV[length(NAV)]/max(NAV)
+        ## TODO: assuming daily timestamps -- too restrictive? hourly?
+        ## TODO: timestamp can also be numeric 1 .. n_obs
+        isna <- is.na(all_series[[i]])
+        nna <- sum(isna)
+        nobs <- length(attr(all_series[[i]], "timestamp"))    
+        if (na.rm) {
+            timestamp <- attr(all_series[[i]], "timestamp")[!isna]
+            NAV <- all_series[[i]][!isna]
+        } else {
+            timestamp <- attr(all_series[[i]], "timestamp")
+            NAV <- c(all_series[[i]])
+        }
+
+        ## TODO: argument 'aggregate': daily, ...?
+        ## if (!is.null(timestamp) &&
+        ##     !inherits(try(timestampD <- as.Date(timestamp),
+        ##                   silent = TRUE), "try-error") &&
+        ##     !any(is.na(timestampD))) {
+        ##     NAV <- aggregate(NAV, by = list(as.Date(timestamp)), tail, 1L)[[2L]]
+        ##     timestamp <- aggregate(timestamp,
+        ##                            by = list(as.Date(timestamp)), tail, 1L)[[2L]]
+        ## } else
+        ##     timestampD <- timestamp
+
+        ans1 <- list()
+        ans1$NAVseries <- all_series[[i]]
+        ans1$NAV <- NAV
+        ans1$timestamp <- timestamp
+        ans1$instrument  <- if (!is.null(attr(all_series[[i]], "instrument")))
+                                attr(all_series[[i]], "instrument") else NA
+        ans1$title       <- if (!is.null(attr(all_series[[i]], "title")))
+                                attr(all_series[[i]], "title") else NA
+        ans1$description <- if (!is.null(attr(all_series[[i]], "description")))
+                                attr(all_series[[i]], "description") else NA
+        ans1$start <- min(timestamp)
+        ans1$end   <- max(timestamp)
+        ans1$nobs <- nobs
+        ans1$nna  <- nna
+        ans1$low  <- min(NAV)
+        ans1$high <- max(NAV)
+        ans1$low.when  <- timestamp[which.min(NAV)[1L]]
+        ans1$high.when <- timestamp[which.max(NAV)[1L]]
     
-    if (.may_be_Date(timestamp) && monthly.vol) {
-        tmp <- returns(NAV, t = timestamp, period = "month")
-        sq12 <- sqrt(12)
-        ans$volatility <- sd(tmp) * sq12
-        ans$volatility.up <- pm(tmp,
-                                normalise = TRUE,
-                                lower = FALSE) * sq12
-        ans$volatility.down <- pm(tmp, normalise = TRUE) * sq12
-    } else if (assume.daily) {
-        ans$volatility <- sd(returns(NAV))*16
-        ans$volatility.up <- pm(returns(NAV),
-                                normalise = TRUE,
-                                lower = FALSE)*16
-        ans$volatility.down <- pm(returns(NAV),
-                                  normalise = TRUE)*16
-    } else {
-            ans$volatility      <- sd(returns(NAV))
-            ans$volatility.up   <- pm(returns(NAV),
-                                      normalise = TRUE,
-                                      lower = FALSE)
-            ans$volatility.down <- pm(returns(NAV),
-                                      normalise = TRUE)
+        ## Returns, annualised
+        if (.may_be_Date(c(ans1$start, ans1$end))) {
+            t <- as.numeric(as.Date(ans1$end) -
+                            as.Date(ans1$start))
+        } else if (assume.daily)
+            t <- ans1$end - ans1$start
+        else
+            t <- NA
+        
+        if (!is.na(t) && t > 365) {
+            ans1$return <- (tail(NAV,1)/head(NAV, 1))^(365/t) - 1
+            ans1$return.annualised <- TRUE
+        } else {
+            ans1$return <- tail(NAV,1)/head(NAV,1) - 1
+            ans1$return.annualised <- FALSE            
+        }
+        
+        tmp <- drawdowns(NAV)    
+        dd.row <- if(nrow(tmp))
+                      which.max(tmp[["max"]])
+                  else
+                      0
+        if (dd.row > 0) {
+            ans1$mdd      <- tmp[["max"]][dd.row]
+            ans1$mdd.high <- NAV[tmp[["peak"]][dd.row]]
+            ans1$mdd.low <- NAV[tmp[["trough"]][dd.row]]
+            ans1$mdd.high.when <- timestamp[tmp[["peak"]][dd.row]]
+            ans1$mdd.low.when <- timestamp[tmp[["trough"]][dd.row]]
+            ans1$mdd.recover.when <- timestamp[tmp[["recover"]][dd.row]]
+        } else {
+            ans1$mdd      <- 0
+            ans1$mdd.high <- max(NAV)
+            ans1$mdd.low   <- NA
+            ans1$mdd.high.when <- timestamp[which.max(NAV)]
+            ans1$mdd.low.when   <- NA
+            ans1$mdd.recover.when <- NA
+        }
+        ans1$underwater <- 1 - NAV[length(NAV)]/max(NAV)
+        
+        if (.may_be_Date(timestamp) && monthly.vol) {
+            tmp <- returns(NAV, t = timestamp, period = "month")
+            sq12 <- sqrt(12)
+            ans1$volatility <- sd(tmp) * sq12
+            ans1$volatility.up <- pm(tmp,
+                                     normalise = TRUE,
+                                     lower = FALSE) * sq12
+            ans1$volatility.down <- pm(tmp, normalise = TRUE) * sq12
+        } else if (assume.daily) {
+            ans1$volatility <- sd(returns(NAV))*16
+            ans1$volatility.up <- pm(returns(NAV),
+                                     normalise = TRUE,
+                                     lower = FALSE)*16
+            ans1$volatility.down <- pm(returns(NAV),
+                                       normalise = TRUE)*16
+        } else {
+            ans1$volatility      <- sd(returns(NAV))
+            ans1$volatility.up   <- pm(returns(NAV),
+                                       normalise = TRUE,
+                                       lower = FALSE)
+            ans1$volatility.down <- pm(returns(NAV),
+                                       normalise = TRUE)
+        }
+        ans[[i]] <- ans1
     }
 
     class(ans) <- "summary.NAVseries"
@@ -214,65 +220,73 @@ print.summary.NAVseries <- function(x, ...,
         format(x, justify = "right", width = 7, nsmall = 2, digits = 2,
                scientific = FALSE)
 
-    ## format: dates
-    fields <- c("from", "to", "low.when", "high.when",
-                "mdd.high.when", "mdd.low.when",
-                "mdd.recover.when")
-    for (f in fields)
-        x[[f]] <- datef(x[[f]])
+    if (length(x) == 1L) {
 
-    ## format: %
-    fields <- c("mdd", "underwater",
-                "volatility", "volatility.up", "volatility.down", "return")
-    for (f in fields)
-        x[[f]] <- percf(x[[f]])
-
-    ## format: prices
-    fields <- c("high", "low", "mdd.high", "mdd.low")
-    for (f in fields)
-        x[[f]] <- numf(x[[f]])
-
-    cat("---------------------------------------------------------\n")
-    print(x$NAVseries, ...)
-    template <-
-        c("---------------------------------------------------------",
-          "High<>%high%|  (%high.when%)",
-          "Low<>%low%|  (%low.when%)",
-          "---------------------------------------------------------",
-          "Return (%)<>%return%|  (annualised)",
-          "---------------------------------------------------------",
-          "Max. drawdown (%)  <> %mdd%|",
-          "_ peak<>%mdd.high%|  (%mdd.high.when%)",
-          "_ trough<>%mdd.low%|  (%mdd.low.when%)",
-          "_ recovery<>|  (%mdd.recover.when%)",
-          "_ underwater now (%)<>%underwater%|",
-          "---------------------------------------------------------",
-          "Volatility (%)<>%volatility%|  (annualised)",
-          "_ upside<>%volatility.up%|",
-          "_ downside<>%volatility.down%|",
-          "---------------------------------------------------------\n")
-    nx <- names(x)
-    for (r in c("NAVseries", "NAV",
-                "timestamp", "title",
-                "description"))
-        nx <- nx[nx != r]
-    for (n in nx)
-        template <- gsub(paste0("%", n, "%"),
-                         if (is.na(x[[n]])) "NA" else x[[n]],
+        x <- x[[1L]]
+        ## format: dates
+        fields <- c("from", "to", "low.when", "high.when",
+                    "mdd.high.when", "mdd.low.when",
+                    "mdd.recover.when")
+        for (f in fields)
+            x[[f]] <- datef(x[[f]])
+        
+        ## format: %
+        fields <- c("mdd", "underwater",
+                    "volatility", "volatility.up", "volatility.down", "return")
+        for (f in fields)
+            x[[f]] <- percf(x[[f]])
+        
+        ## format: prices
+        fields <- c("high", "low", "mdd.high", "mdd.low")
+        for (f in fields)
+            x[[f]] <- numf(x[[f]])
+        
+        cat("---------------------------------------------------------\n")
+        print(x$NAVseries, ...)
+        template <-
+            c("---------------------------------------------------------",
+              "High<>%high%|  (%high.when%)",
+              "Low<>%low%|  (%low.when%)",
+              "---------------------------------------------------------",
+              "Return (%)<>%return%|  (annualised)",
+              "---------------------------------------------------------",
+              "Max. drawdown (%)  <> %mdd%|",
+              "_ peak<>%mdd.high%|  (%mdd.high.when%)",
+              "_ trough<>%mdd.low%|  (%mdd.low.when%)",
+              "_ recovery<>|  (%mdd.recover.when%)",
+              "_ underwater now (%)<>%underwater%|",
+              "---------------------------------------------------------",
+              "Volatility (%)<>%volatility%|  (annualised)",
+              "_ upside<>%volatility.up%|",
+              "_ downside<>%volatility.down%|",
+              "---------------------------------------------------------\n")
+        nx <- names(x)
+        for (r in c("NAVseries", "NAV",
+                    "timestamp", "title",
+                    "description"))
+            nx <- nx[nx != r]
+        for (n in nx)
+            template <- gsub(paste0("%", n, "%"),
+                             if (is.na(x[[n]])) "NA" else x[[n]],
                              template, fixed = TRUE)
-    template <- valign(template)
-    if (!x$return.annualised)
-        template <- sub("(annualised)", "", template, fixed = TRUE)
-    cat(template, sep = "\n")
-    if (monthly.returns && inherits(x$timestamp, "Date")) {
-        cat("Monthly returns  ")
-        mr <- returns(x = x$NAV,
-                      t = x$timestamp,
-                      period = "month")
-        if (.Platform$OS.type == "unix")
-            sparkplot(mr)
-        cat("\n")
-        print(mr, ...)
+        template <- valign(template)
+        if (!x$return.annualised)
+            template <- sub("(annualised)", "", template, fixed = TRUE)
+        cat(template, sep = "\n")
+        if (monthly.returns && inherits(x$timestamp, "Date")) {
+            cat("Monthly returns  ")
+            mr <- returns(x = x$NAV,
+                          t = x$timestamp,
+                          period = "month")
+            if (.Platform$OS.type == "unix")
+                sparkplot(mr)
+            cat("\n")
+            print(mr, ...)
+        }
+    } else {
+        ## TODO: add summary useful for
+        ##       several series
+        print(lapply(x, summary))
     }
     invisible(x)
 }
@@ -281,14 +295,15 @@ print.summary.NAVseries <- function(x, ...,
 toLatex.summary.NAVseries <- function(object, ...,
                                       template = " %title & %return & %volatility & %sparkline \\\\",
                                       file = NULL) {
-    dots <- c(list(object), list(...))
+    ## dots <- c(list(object), list(...))
 
     fmt_p <- function(x, ...) {
         if (is.numeric(x))
             format(round(x*100, 1), nsmall = 1)
-        else x
+        else
+            x
     }
-    ns <- length(dots)
+    ns <- length(object)
     ans <- if (length(template) == 1L) 
         rep(template, ns)
     else
@@ -301,14 +316,15 @@ toLatex.summary.NAVseries <- function(object, ...,
                 "mdd.high.when", "mdd.low.when",
                 "mdd.high", "mdd.low",
                 "mdd", "underwater",
-                "volatility.up", "volatility.down", "volatility")
+                "volatility.up", "volatility.down",
+                "volatility")
 
     perc_fields <- c("return", 
                      "mdd", "underwater",
                      "volatility", "volatility.up", "volatility.down")
 
     for (field in fields) {
-        field_values <- unlist(lapply(dots, `[[`, field))
+        field_values <- unlist(lapply(object, `[[`, field))
         if (is.null(field_values) ||
             length(field_values) == 0L ||
             all(is.na(field_values)))
@@ -320,7 +336,7 @@ toLatex.summary.NAVseries <- function(object, ...,
                            fixed = TRUE)
     }
 
-    NAVs <- lapply(dots, `[[`, "NAV")
+    NAVs <- lapply(object, `[[`, "NAV")
     NAVs <- lapply(NAVs, scale1)
     if (any(grepl("%sparkline", template, fixed = TRUE))) {
         
@@ -358,13 +374,11 @@ plot.NAVseries <- function(x, y, ...,
     invisible()
 }
 
-as.NAVseries <- function(x, ...) {
+as.NAVseries <- function(x, ...)
     UseMethod("as.NAVseries")
-}
 
-as.NAVseries.NAVseries <- function(x, ...) {
+as.NAVseries.NAVseries <- function(x, ...)
     x
-}
 
 as.NAVseries.zoo <- function(x,
                              instrument = NULL,

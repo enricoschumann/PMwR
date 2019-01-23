@@ -1,3 +1,8 @@
+2019-01-23  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (summary.NAVseries): the
+	function now returns a list of lists
+
 2019-01-22  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/returns.R (toLatex.p_returns_monthly):
