@@ -394,6 +394,9 @@ as.NAVseries.zoo <- function(x,
 }
 
 as.NAVseries.btest <- function(x, ...,
+                               instrument = NULL,
+                               title = NULL,
+                               description = NULL,
                                drop.NA = TRUE){
     NAV <- x$wealth
     timestamp <- if (!is.null(x$timestamp))
@@ -407,7 +410,10 @@ as.NAVseries.btest <- function(x, ...,
         timestamp <- timestamp[-leading.na]
     }
     NAVseries(NAV = NAV,
-              timestamp = timestamp)
+              timestamp = timestamp,
+              instrument = instrument,
+              title = title,
+              description = description)
 }
 
 as.zoo.NAVseries <- function(x, ...){
