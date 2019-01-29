@@ -19,8 +19,9 @@ as.NAVseries(x, ...)
 
 \method{print}{NAVseries}(x, \dots )
 
-\method{summary}{NAVseries}(object, \dots, monthly.vol = TRUE, na.rm =
-    FALSE, assume.daily = FALSE)
+\method{summary}{NAVseries}(object, \dots, monthly.vol = TRUE,
+                            bm = NULL, monthly.te = TRUE,
+                            na.rm = FALSE, assume.daily = FALSE)
 
 \method{plot}{NAVseries}(x, y, \dots, xlab = "", ylab = "", type = "l")
 
@@ -54,9 +55,22 @@ as.NAVseries(x, ...)
   \code{NAVseries}.
 
 }
+\item{bm}{
+
+  an optional NAVseries. If \code{bm} does not inherit
+  from \code{NAVseries}, \code{\link{as.NAVseries}} is
+  tried.
+
+}
 \item{monthly.vol}{
 
   if \code{TRUE} (default), volatility computations
+  are done on monthly returns
+
+}
+\item{monthly.te}{
+
+  if \code{TRUE} (default), tracking error computations
   are done on monthly returns
 
 }
@@ -96,7 +110,6 @@ as.NAVseries(x, ...)
   The summary method returns a list of the original NAVseries plus
   various statistics, such as return per year and volatility.
 
-  
 }
 \section{Note}{
 
@@ -120,7 +133,7 @@ as.NAVseries(x, ...)
   Schumann, E. (2019) \emph{Portfolio Management with
   \R}. \url{http://enricoschumann.net/PMwR/}
 
-} 
+}
 \author{
 Enrico Schumann <es@enricoschumann.net>
 }

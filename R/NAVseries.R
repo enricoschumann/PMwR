@@ -14,7 +14,7 @@ NAVseries <- function(NAV, timestamp,
         NAV <- rep(NAV, length(timestamp)/length(NAV))
     else if (length(NAV) > length(timestamp))
         warning("length(NAV) > length(timestamp)")
-        
+
     ans <- NAV
     attr(ans, "timestamp") <- timestamp
     attr(ans, "instrument") <- instrument
@@ -84,19 +84,34 @@ print.NAVseries <- function(x, ...) {
 
 summary.NAVseries <- function(object, ...,
                               monthly.vol = TRUE,
+                              bm = NULL,
+                              monthly.te = TRUE,
                               na.rm = FALSE,
                               assume.daily = FALSE) {
 
     all_series <- c(list(object), list(...))
+    if (!is.null(bm)) {
+        if (!inherits(bm, "NAVseries"))
+            bm <- as.NAVseries(bm)
+
+        if (na.rm) {
+            bm.timestamp <- attr(bm, "timestamp")[!isna]
+            bm.NAV <- bm[!isna]
+        } else {
+            bm.timestamp <- attr(bm, "timestamp")
+            bm.NAV <- c(bm)
+        }
+        all_series <- c(all_series, list(bm))
+    }
     ans <- vector("list", length = length(all_series))
 
     for (i in seq_along(ans)) {
-        
+
         ## TODO: assuming daily timestamps -- too restrictive? hourly?
         ## TODO: timestamp can also be numeric 1 .. n_obs
         isna <- is.na(all_series[[i]])
         nna <- sum(isna)
-        nobs <- length(attr(all_series[[i]], "timestamp"))    
+        nobs <- length(attr(all_series[[i]], "timestamp"))
         if (na.rm) {
             timestamp <- attr(all_series[[i]], "timestamp")[!isna]
             NAV <- all_series[[i]][!isna]
@@ -134,7 +149,7 @@ summary.NAVseries <- function(object, ...,
         ans1$high <- max(NAV)
         ans1$low.when  <- timestamp[which.min(NAV)[1L]]
         ans1$high.when <- timestamp[which.max(NAV)[1L]]
-    
+
         ## Returns, annualised
         if (.may_be_Date(c(ans1$start, ans1$end))) {
             t <- as.numeric(as.Date(ans1$end) -
@@ -143,16 +158,16 @@ summary.NAVseries <- function(object, ...,
             t <- ans1$end - ans1$start
         else
             t <- NA
-        
+
         if (!is.na(t) && t > 365) {
             ans1$return <- (tail(NAV,1)/head(NAV, 1))^(365/t) - 1
             ans1$return.annualised <- TRUE
         } else {
             ans1$return <- tail(NAV,1)/head(NAV,1) - 1
-            ans1$return.annualised <- FALSE            
+            ans1$return.annualised <- FALSE
         }
-        
-        tmp <- drawdowns(NAV)    
+
+        tmp <- drawdowns(NAV)
         dd.row <- if(nrow(tmp))
                       which.max(tmp[["max"]])
                   else
@@ -173,7 +188,8 @@ summary.NAVseries <- function(object, ...,
             ans1$mdd.recover.when <- NA
         }
         ans1$underwater <- 1 - NAV[length(NAV)]/max(NAV)
-        
+
+        ## Volatility
         if (.may_be_Date(timestamp) && monthly.vol) {
             tmp <- returns(NAV, t = timestamp, period = "month")
             sq12 <- sqrt(12)
@@ -197,6 +213,22 @@ summary.NAVseries <- function(object, ...,
             ans1$volatility.down <- pm(returns(NAV),
                                        normalise = TRUE)
         }
+
+        ## Tracking Error
+        if (!is.null(bm)) {
+            tmp.NAV <- merge(zoo(NAV, timestamp),
+                             zoo(bm.NAV, bm.timestamp))
+            if (.may_be_Date(timestamp) && monthly.te) {
+                r.te <- returns(tmp.NAV, period = "month")
+                r.te <- sd(diff(t(coredata(r.te))), na.rm = TRUE)*sqrt(12)
+            } else {
+                r.te <- returns(tmp.NAV)
+                r.te <- sd(diff(t(coredata(r.te))), na.rm = TRUE) *
+                        if (assume.daily) 16 else 1
+            }
+            ans1$tracking.error <- r.te
+        }
+
         ans[[i]] <- ans1
     }
 
@@ -310,18 +342,34 @@ toLatex.summary.NAVseries <- function(object, ...,
         template
     
     fields <- c("instrument", "title", "description", 
-                "start", "end", "nobs", "nna",
-                "low.when", "high.when", "low", "high", 
-                "return.annualised", "return", 
-                "mdd.high.when", "mdd.low.when",
-                "mdd.high", "mdd.low",
-                "mdd", "underwater",
-                "volatility.up", "volatility.down",
-                "volatility")
+                "start",
+                "end",
+                "nobs",
+                "nna",
+                "low.when",
+                "high.when",
+                "low",
+                "high", 
+                "return", 
+                "return.annualised",
+                "mdd.high.when",
+                "mdd.low.when",
+                "mdd.high",
+                "mdd.low",
+                "mdd",
+                "underwater",
+                "volatility.up",
+                "volatility.down",
+                "volatility",
+                "tracking.error")
 
     perc_fields <- c("return", 
-                     "mdd", "underwater",
-                     "volatility", "volatility.up", "volatility.down")
+                     "mdd",
+                     "underwater",
+                     "volatility",
+                     "volatility.up",
+                     "volatility.down",
+                     "tracking.error")
 
     for (field in fields) {
         field_values <- unlist(lapply(object, `[[`, field))

@@ -1,3 +1,9 @@
+2019-01-29  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (summary.NAVseries): method
+	gains argument 'bm' ("benchmark"). If set, a
+	'tracking.error' is computed
+
 2019-01-28  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/NAVseries.R (as.NAVseries.btest): method

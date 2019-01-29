@@ -2322,6 +2322,28 @@ test.NAVseries <- function() {
     checkEqualsNumeric(as.NAVseries(bt, drop.NA = FALSE),
                        c(NA, NA, NA, NA, 100, 100, 101, 102, 103, 104))
 
+    
+}
+
+test.NAVseries.summary <- function() {
+
+    library("PMwR")
+    library("RUnit")
+    nav <- NAVseries(1:10)
+    bm <- NAVseries(1:10)
+    checkEquals(summary(nav)[[1]]$tracking.error, NULL)
+    checkEquals(summary(nav, bm = bm)[[1]]$tracking.error, 0)
+
+    nav <- NAVseries(cumprod(1+rnorm(10, sd = 0.01)))
+    bm <- NAVseries(cumprod(1+rnorm(10, sd = 0.01)))    
+    checkEquals(summary(nav, bm = bm)[[1]]$tracking.error,
+                sd(returns(nav) - returns(bm)))
+    checkEquals(summary(nav, bm = bm)[[2]]$tracking.error, 0)
+    checkEquals(summary(nav,
+                        bm = bm,
+                        assume.daily = TRUE)[[1]]$tracking.error,
+                16*sd(returns(nav) - returns(bm)))
+
 }
 
 test.NAVseries.window <- function() {
