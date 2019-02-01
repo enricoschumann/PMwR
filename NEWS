@@ -215,10 +215,10 @@ v0.4-0  (2017-02-07)
     'position' and 'quote32' objects.
 
   o Updated manual chapter on computing returns:
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#ch:returns
+    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#computing-returns
 
   o Updated manual chapter on backtesting:
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#ch:backtesting
+    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#backtesting
 
 v0.3-4  (2016-06-13)
 
@@ -234,19 +234,19 @@ v0.1-96  (2016-03-13)
 
   o A draft of the manual chapter on computing profit
     and loss is available:
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#ch:pl
+    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#profit-and-loss
 
 v0.1-90  (2016-02-25)
 
   o A draft of the manual chapter on scaling series is
     available:
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#ch:scale
+    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#scaling-series
 
 v0.1-89  (2016-02-19)
 
   o A draft of the manual chapter on computing returns
     is available:
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#ch:returns
+    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#computing-returns
 
 v0.1-81  (2015-12-08)
 
