@@ -1909,6 +1909,30 @@ test.returns <- function() {
 
 }
 
+test.returns.period <- function() {
+
+    ## yearly returns
+    library("datetimeutils", quietly = TRUE)
+
+    dates <- sort(as.Date("1990-01-01") + sample(3700, 1000))
+    x <- seq_along(dates)
+    R <- returns(x, t = dates, period = "year")
+
+    n <- nth_day(dates, period = "year", n = "last")
+    ni <- nth_day(dates, period = "year", n = "last", index = TRUE)
+    if (!1 %in% ni)
+        ni <- c(1, ni)
+    checkEqualsNumeric(.returns(x[ni], lag = 1), R)
+    checkEquals(attr(R, "t"), n)
+
+    R <- returns(x, t = dates, period = "year", complete.first = FALSE)
+    n <- nth_day(dates, period = "year", n = "last")
+    ni <- nth_day(dates, period = "year", n = "last", index = TRUE)
+    checkEqualsNumeric(.returns(x[ni], lag = 1), R)
+    checkEquals(attr(R, "t"), n[-1])
+    
+}
+
 test.returns.rebalance  <- function() {
 
     prices <- cbind(a = 101:105, b = 201:205)

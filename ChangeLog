@@ -1,3 +1,8 @@
+2019-02-01  Enrico Schumann  <es@enricoschumann.net>
+
+	* inst/unitTests/ut_PMwR.R (test.returns.period):
+	add test for yearly returns
+
 2019-01-29  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/NAVseries.R (summary.NAVseries): method
