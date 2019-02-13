@@ -58,7 +58,19 @@
    every component has the same size as position
 
 
-* split_trades
+* =split_trades=
 
-  should results be converted to list of journals?
+- should results be converted to list of journals?
   (argument 'as.journal')
+
+- make generic? method for journals
+
+* =journal=
+
+- add 'when' argument for fast/convenient period
+  selection?
+
+    j[when = "YYYY-MM"
+             "YYYY"
+             "YYYY-MM-DD"
+             "YYYY-Q1"]
