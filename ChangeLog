@@ -1,3 +1,9 @@
+2019-02-06  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/valuation.R (valuation.position): warn
+	explicitly when no prices at all are available
+	for an instrument
+
 2019-02-01  Enrico Schumann  <es@enricoschumann.net>
 
 	* inst/unitTests/ut_PMwR.R (test.returns.period):
@@ -7,7 +13,7 @@
 
 	* R/NAVseries.R (summary.NAVseries): method
 	gains argument 'bm' ("benchmark"). If set, a
-	'tracking.error' is computed
+	'tracking.error' is computed.
 
 2019-01-28  Enrico Schumann  <es@enricoschumann.net>
 

@@ -96,9 +96,14 @@ valuation.position <- function(x, price.table, multiplier = 1,
     if (any(is.na(price.table[pos]))) {
         miss <- which(is.na(price.table) & pos, TRUE)
         warning("missing prices")
-        if (verbose)
-            print(data.frame(timestamp = .timestamp(x)[miss[,1]],
-                             instrument = instrument(x)[miss[,2]]))
+        if (verbose) {
+            for (i in seq_len(ncol(x)))
+                if (any(pos[, i]) && all(miss[, i]))
+                    warning("no prices at all for ", instrument[i])
+            print(data.frame(timestamp  = .timestamp(x)[miss[, 1L]],
+                             instrument = instrument(x)[miss[, 2L]]))
+
+        }
     }
     price.table[!pos] <- 0
     ans <- as.matrix(x) * price.table
