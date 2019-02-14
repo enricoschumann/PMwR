@@ -1,3 +1,12 @@
+2019-02-14  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Depends): revert to R >= 2.10
+
+	* R/internal.R (.isFALSE): add function, which
+	is used instead of isFALSE. This is a temporary
+	workaround to allow the package to work with
+	older R versions (temporary == a few years)
+
 2019-02-13  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Depends): R (>= 3.5), because of

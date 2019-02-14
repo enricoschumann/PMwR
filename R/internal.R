@@ -385,3 +385,11 @@ debug_prices <- function(nobs, na, base = 100) {
     A <- array(a, dim = c(nobs, na))
     t(t(A) + seq(1, na) / 10^nchar(na))    
 }
+
+
+## base package has had a function 'isFALSE'
+## since version R 3.5-0, and '.isFALSE'
+## copies this functionality so that PMwR can
+## be used with older versions of R
+.isFALSE <- function(x)
+    is.logical(x) && length(x) == 1L && !is.na(x) && !x

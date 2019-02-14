@@ -10,7 +10,7 @@ position.default <- function(amount, timestamp, instrument,
                              use.names = NULL, ...) {
 
     no.instruments <- FALSE ## are all instruments missing/NA?
-    if (!isFALSE(use.names) &&
+    if (!.isFALSE(use.names) &&
         missing(instrument) &&
         !is.null(names(amount))) {
         instrument <- names(amount)
