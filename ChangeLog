@@ -1,3 +1,8 @@
+2019-02-15  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/plot_trading_hours.R: fix axis tick
+	positions when 'label' == "days"
+
 2019-02-14  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Depends): revert to R >= 2.10

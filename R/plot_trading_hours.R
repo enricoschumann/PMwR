@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-18  Enrico Schumann
+## Copyright (C) 2008-19  Enrico Schumann
 
 plot_trading_hours <-
     plotTradingHours <- function(x, t = NULL,
@@ -93,7 +93,7 @@ plot_trading_hours <-
         fmt <- if (is.null(label.format))
                    "%H:%M" else label.format
     } else if (grepl("day", labels, ignore.case = TRUE)) {
-        pos <- which(abs(diff(as.Date(grd))) > 0) + 1
+        pos <- which(abs(diff(as.Date(as.POSIXlt(grd)))) > 0) + 1
         fmt <- if (is.null(label.format))
                    "%d.%m." else label.format
     } else if (grepl("month", labels, ignore.case = TRUE)) {
