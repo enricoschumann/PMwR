@@ -1,107 +1,126 @@
+2019-02-24  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/NAVseries.R (summary.NAVseries): rewrite
+        method and print method to support several
+        NAVseries, i.e.  calling
+
+            summary(as.NAVseries(series1),
+                    as.NAVseries(series2))
+
+        should print a summary that allows comparing
+        both series ((the print method is still
+        rudimentary)
+
+2019-02-19  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/NAVseries.R (NAVseries): new argument 'drop.NA'
+        (NAVseries): if 'NAV' inherits from 'btest',
+        call 'as.NAVseries.btest'
+
 2019-02-15  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/plot_trading_hours.R: fix axis tick
-	positions when 'label' == "days"
+        * R/plot_trading_hours.R: fix axis tick
+        positions when 'label' == "days"
 
 2019-02-14  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Depends): revert to R >= 2.10
+        * DESCRIPTION (Depends): revert to R >= 2.10
 
-	* R/internal.R (.isFALSE): add function, which
-	is used instead of isFALSE. This is a temporary
-	workaround to allow the package to work with
-	older R versions (temporary == a few years)
+        * R/internal.R (.isFALSE): add function, which
+        is used instead of isFALSE. This is a temporary
+        workaround to allow the package to work with
+        older R versions (temporary == a few years)
 
 2019-02-13  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Depends): R (>= 3.5), because of
-	'isFALSE'
+        * DESCRIPTION (Depends): R (>= 3.5), because of
+        'isFALSE'
 
 2019-02-06  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/valuation.R (valuation.position): warn
-	explicitly when no prices at all are available
-	for an instrument
+        * R/valuation.R (valuation.position): warn
+        explicitly when no prices at all are available
+        for an instrument
 
 2019-02-01  Enrico Schumann  <es@enricoschumann.net>
 
-	* inst/unitTests/ut_PMwR.R (test.returns.period):
-	add test for yearly returns
+        * inst/unitTests/ut_PMwR.R (test.returns.period):
+        add test for yearly returns
 
 2019-01-29  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/NAVseries.R (summary.NAVseries): method
-	gains argument 'bm' ("benchmark"). If set, a
-	'tracking.error' is computed.
+        * R/NAVseries.R (summary.NAVseries): method
+        gains argument 'bm' ("benchmark"). If set, a
+        'tracking.error' is computed.
 
 2019-01-28  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/NAVseries.R (as.NAVseries.btest): method
-	gains optional arguments 'instrument', 'title'
-	and 'description'
+        * R/NAVseries.R (as.NAVseries.btest): method
+        gains optional arguments 'instrument', 'title'
+        and 'description'
 
 2019-01-23  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/trades.R (scale_to_unity): remove
-	'scaleToUnity'. See ChangeLog 2017-06-23.
+        * R/trades.R (scale_to_unity): remove
+        'scaleToUnity'. See ChangeLog 2017-06-23.
 
-	* R/NAVseries.R (summary.NAVseries): the
-	function now returns a list of lists
+        * R/NAVseries.R (summary.NAVseries): the
+        function now returns a list of lists
 
 2019-01-22  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (toLatex.p_returns_monthly):
-	clean up code
+        * R/returns.R (toLatex.p_returns_monthly):
+        clean up code
 
-	* R/trades.R (scale_trades, split_trades):
-	remove 'scaleTrades', 'splitTrades'.
-	See ChangeLog 2017-06-23.
+        * R/trades.R (scale_trades, split_trades):
+        remove 'scaleTrades', 'splitTrades'.
+        See ChangeLog 2017-06-23.
 
-	* R/valuation.R (valuation.journal): argument
-	'cashflow' may also be a numeric vector
+        * R/valuation.R (valuation.journal): argument
+        'cashflow' may also be a numeric vector
 
 2019-01-17  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/journal.R (as.journal.list): add (bare-bones)
-	method
+        * R/journal.R (as.journal.list): add (bare-bones)
+        method
 
-	* R/position.R (position.default): add argument
-	'use.names'
+        * R/position.R (position.default): add argument
+        'use.names'
 
 2018-11-30  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/trades.R (split_trades): when 'price' is
-	missing, NA is used
+        * R/trades.R (split_trades): when 'price' is
+        missing, NA is used
 
 2018-11-22  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R: when the journal is constructed,
-	make sure that class attributes are
-	preserved (notably the for timestamp)
+        * R/btest.R: when the journal is constructed,
+        make sure that class attributes are
+        preserved (notably the for timestamp)
 
 2018-11-13  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R: make journal creation more memory
-	efficient, noticeable especially for backtests
-	with many (>100) assets
+        * R/btest.R: make journal creation more memory
+        efficient, noticeable especially for backtests
+        with many (>100) assets
 
 2018-11-09  Enrico Schumann  <es@enricoschumann.net>
 
         * R/returns.R (returns,returns_rebalance):
-	'weights' may now also be a matrix with as many
-	rows as 'rebalance.when'. Also,
-	rebalancing at the first timestamp is no longer
-	implied, i.e. a function invocation such as
+        'weights' may now also be a matrix with as many
+        rows as 'rebalance.when'. Also,
+        rebalancing at the first timestamp is no longer
+        implied, i.e. a function invocation such as
 
             returns(x, weights = <...>,
-	            rebalance.when = 2)
+                    rebalance.when = 2)
 
-	will only rebalance at the second timestamp,
-	and the first return will be zero. To get back
-	the old behaviour, say
+        will only rebalance at the second timestamp,
+        and the first return will be zero. To get back
+        the old behaviour, say
 
             returns(x, weights = <...>,
-	            rebalance.when = c(1, 2))
+                    rebalance.when = c(1, 2))
 
 2018-10-19  Enrico Schumann  <es@enricoschumann.net>
 

@@ -4,7 +4,21 @@
 NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
                       title = NULL,
-                      description = NULL) {
+                      description = NULL,
+                      drop.NA = NULL) {
+
+    ## 'NAVseries(<btest>)' is natural since the NAV
+    ## series ('wealth') is only extracted from the
+    ## 'btest' object
+    if (inherits(NAV, "btest"))
+        return(as.NAVseries.btest(
+            NAV,
+            instrument = instrument,
+            title = title,
+            description = description,
+            drop.NA = if (is.null(drop.NA))
+                          TRUE else FALSE))
+
     if (missing(timestamp))
         timestamp <- seq_along(NAV)
     else if (anyDuplicated(timestamp))
@@ -23,7 +37,6 @@ NAVseries <- function(NAV, timestamp,
     class(ans) <- "NAVseries"
     ans
 }
-
 
 .bigmark <- function(x) {
     if (x >= 10000)
@@ -139,7 +152,8 @@ summary.NAVseries <- function(object, ...,
                                 attr(all_series[[i]], "instrument") else NA
         ans1$title       <- if (!is.null(attr(all_series[[i]], "title")))
                                 attr(all_series[[i]], "title") else NA
-        ans1$description <- if (!is.null(attr(all_series[[i]], "description")))
+        ans1$description <- if (!is.null(attr(all_series[[i]], "description")) &&
+                                length(attr(all_series[[i]], "description")))
                                 attr(all_series[[i]], "description") else NA
         ans1$start <- min(timestamp)
         ans1$end   <- max(timestamp)
@@ -180,11 +194,11 @@ summary.NAVseries <- function(object, ...,
             ans1$mdd.low.when <- timestamp[tmp[["trough"]][dd.row]]
             ans1$mdd.recover.when <- timestamp[tmp[["recover"]][dd.row]]
         } else {
-            ans1$mdd      <- 0
+            ans1$mdd <- 0
             ans1$mdd.high <- max(NAV)
-            ans1$mdd.low   <- NA
+            ans1$mdd.low <- NA
             ans1$mdd.high.when <- timestamp[which.max(NAV)]
-            ans1$mdd.low.when   <- NA
+            ans1$mdd.low.when <- NA
             ans1$mdd.recover.when <- NA
         }
         ans1$underwater <- 1 - NAV[length(NAV)]/max(NAV)
@@ -236,9 +250,62 @@ summary.NAVseries <- function(object, ...,
     ans
 }
 
+.summary.NAVseries_fields <-
+    c("instrument",
+      "title",
+      "description",
+      "start",
+      "end",
+      "nobs",
+      "nna",
+      "low.when",
+      "high.when",
+      "low",
+      "high",
+      "return",
+      "return.annualised",
+      "mdd.high.when",
+      "mdd.low.when",
+      "mdd.high",
+      "mdd.low",
+      "mdd",
+      "mdd.recover.when",
+      "underwater",
+      "volatility.up",
+      "volatility.down",
+      "volatility",
+      "tracking.error"
+      )
+
+.summary.NAVseries_perc_fields <-
+    c("return",
+      "mdd",
+      "underwater",
+      "volatility",
+      "volatility.up",
+      "volatility.down",
+      "tracking.error")
+
+.summary.NAVseries_date_fields <-
+    c("start",
+      "end",
+      "low.when",
+      "high.when",
+      "mdd.high.when",
+      "mdd.low.when",
+      "mdd.recover.when")
+
+.summary.NAVseries_price_fields <-
+    c("high",
+      "low",
+      "mdd.high",
+      "mdd.low")
+
+
 print.summary.NAVseries <- function(x, ...,
                                     sparkplot = TRUE,
                                     monthly.returns = TRUE) {
+    x.original <- x
     datef <- function(x) {
         if (inherits(x[1L], "Date"))
             x <- format(x, "%d %b %Y")
@@ -246,33 +313,35 @@ print.summary.NAVseries <- function(x, ...,
             x <- format(x, "%d %b %Y %H:%M")
         x
     }
+
     percf <- function(x)
-        format(round(100*x, 1), nsmall = 1, justify = "right", width = 7)
-    numf <- function(x)
-        format(x, justify = "right", width = 7, nsmall = 2, digits = 2,
+        if (!is.null(x))
+            format(round(100*x, 1),
+                   justify = "right",
+                   width = 7,
+                   nsmall = 1)
+
+    pricef <- function(x)
+        format(x,
+               justify = "right",
+               width = 7,
+               nsmall = 2,
+               digits = 2,
                scientific = FALSE)
 
-    if (length(x) == 1L) {
+    if ((lx <- length(x)) == 1L) {
 
         x <- x[[1L]]
-        ## format: dates
-        fields <- c("from", "to", "low.when", "high.when",
-                    "mdd.high.when", "mdd.low.when",
-                    "mdd.recover.when")
-        for (f in fields)
-            x[[f]] <- datef(x[[f]])
-        
-        ## format: %
-        fields <- c("mdd", "underwater",
-                    "volatility", "volatility.up", "volatility.down", "return")
-        for (f in fields)
-            x[[f]] <- percf(x[[f]])
-        
-        ## format: prices
-        fields <- c("high", "low", "mdd.high", "mdd.low")
-        for (f in fields)
-            x[[f]] <- numf(x[[f]])
-        
+
+        for (f in .summary.NAVseries_date_fields)
+            x[[f]] <- datef(x[[f]]) ## format: dates
+
+        for (f in .summary.NAVseries_perc_fields)
+            x[[f]] <- percf(x[[f]]) ## format: %
+
+        for (f in .summary.NAVseries_price_fields)
+            x[[f]] <- pricef(x[[f]]) ## format: prices
+
         cat("---------------------------------------------------------\n")
         print(x$NAVseries, ...)
         template <-
@@ -299,7 +368,7 @@ print.summary.NAVseries <- function(x, ...,
             nx <- nx[nx != r]
         for (n in nx)
             template <- gsub(paste0("%", n, "%"),
-                             if (is.na(x[[n]])) "NA" else x[[n]],
+                             if (is.null(x[[n]]) || is.na(x[[n]])) "NA" else x[[n]],
                              template, fixed = TRUE)
         template <- valign(template)
         if (!x$return.annualised)
@@ -315,19 +384,52 @@ print.summary.NAVseries <- function(x, ...,
             cat("\n")
             print(mr, ...)
         }
+
     } else {
-        ## TODO: add summary useful for
-        ##       several series
-        print(lapply(x, summary))
+        res <- vector("list", length(.summary.NAVseries_fields))
+        names(res) <- .summary.NAVseries_fields
+
+        for (i in seq_along(res)) {
+            res.i <- character(lx)
+            for (j in seq_len(lx)) {
+                field.i <- .summary.NAVseries_fields[i]
+                tmp <- x[[j]][[field.i]]
+
+                if (is.null(tmp) || is.na(tmp))
+                    tmp <- ""
+                else if (field.i %in% .summary.NAVseries_date_fields)
+                    tmp <- datef(tmp)
+                else if (field.i %in% .summary.NAVseries_perc_fields)
+                    tmp <- percf(tmp)
+                else if (field.i %in% .summary.NAVseries_price_fields)
+                    tmp <- pricef(tmp)
+                else
+                    format(tmp, justify = "right")
+
+                res.i[j] <- tmp
+            }
+
+            ## res.i has length >=2
+            if (length(unique(res.i)) == 1L)
+                res.i[-1L] <- ""
+            res[[ .summary.NAVseries_fields[i] ]] <- res.i
+        }
+        tmp <- t(as.data.frame(res))
+        colnames(tmp) <- rep("", ncol(tmp))
+        tmp[1, ] <- ifelse(tmp[1, ] == "",
+                           paste0("series.", seq_len(ncol(tmp))),
+                           tmp[1, ])
+        print(tmp, right = TRUE, quote = FALSE)
     }
-    invisible(x)
+
+    invisible(x.original)
 }
 
 
-toLatex.summary.NAVseries <- function(object, ...,
-                                      template = " %title & %return & %volatility & %sparkline \\\\",
-                                      file = NULL) {
-    ## dots <- c(list(object), list(...))
+toLatex.summary.NAVseries <-
+    function(object, ...,
+             template = " %title & %return & %volatility & %sparkline \\\\",
+             file = NULL) {
 
     fmt_p <- function(x, ...) {
         if (is.numeric(x))
@@ -336,48 +438,18 @@ toLatex.summary.NAVseries <- function(object, ...,
             x
     }
     ns <- length(object)
-    ans <- if (length(template) == 1L) 
+    ans <- if (length(template) == 1L)
         rep(template, ns)
     else
         template
-    
-    fields <- c("instrument", "title", "description", 
-                "start",
-                "end",
-                "nobs",
-                "nna",
-                "low.when",
-                "high.when",
-                "low",
-                "high", 
-                "return", 
-                "return.annualised",
-                "mdd.high.when",
-                "mdd.low.when",
-                "mdd.high",
-                "mdd.low",
-                "mdd",
-                "underwater",
-                "volatility.up",
-                "volatility.down",
-                "volatility",
-                "tracking.error")
 
-    perc_fields <- c("return", 
-                     "mdd",
-                     "underwater",
-                     "volatility",
-                     "volatility.up",
-                     "volatility.down",
-                     "tracking.error")
-
-    for (field in fields) {
+    for (field in .summary.NAVseries_fields) {
         field_values <- unlist(lapply(object, `[[`, field))
         if (is.null(field_values) ||
             length(field_values) == 0L ||
             all(is.na(field_values)))
             field_values <- rep("NA", ns)
-        else if (field %in% perc_fields)
+        else if (field %in% .summary.NAVseries_perc_fields)
             field_values <- fmt_p(field_values)
         for (i in seq_len(ns))
             ans[i] <- gsub(paste0("%", field), field_values[i], ans[i],
@@ -387,10 +459,10 @@ toLatex.summary.NAVseries <- function(object, ...,
     NAVs <- lapply(object, `[[`, "NAV")
     NAVs <- lapply(NAVs, scale1)
     if (any(grepl("%sparkline", template, fixed = TRUE))) {
-        
+
         true.min <- min(unlist(NAVs))
-        true.max <- max(unlist(NAVs))        
-        for (i in seq_len(ns)) {            
+        true.max <- max(unlist(NAVs))
+        for (i in seq_len(ns)) {
             ans[i] <- gsub("%sparkline",
                            paste(sparkline(NAVs[[i]],
                                            true.min = true.min,
@@ -400,8 +472,7 @@ toLatex.summary.NAVseries <- function(object, ...,
                                  collapse = "\n"),
                            ans[i], fixed = TRUE)
         }
-        
-        
+
     }
     class(ans) <- "Latex"
     if (!is.null(file)) {
@@ -411,7 +482,7 @@ toLatex.summary.NAVseries <- function(object, ...,
         ans
 }
 
-plot.NAVseries <- function(x, y, ..., 
+plot.NAVseries <- function(x, y, ...,
                            xlab = "", ylab = "", type = "l") {
     if (!missing(y))
         stop("scatterplot of *returns* -- not implemented")
@@ -468,9 +539,9 @@ as.zoo.NAVseries <- function(x, ...){
     zoo(x, attr(x, "timestamp"))
 }
 
-.summary.NAVseries.template <- 
+.summary.NAVseries.template <-
 "\\begin{tabular}{lrl}
-\\multicolumn{3}{l}{NAV series starts %from%, ends %to%}                         \\\\[-0.25ex]
+\\multicolumn{3}{l}{NAV series starts %start%, ends %end%}                       \\\\[-0.25ex]
 \\multicolumn{3}{l}{\\footnotesize(%nobs% oberservations, no missing values)}    \\\\[1ex]
 High                   & %high%    & \\footnotesize(%high.when%)                 \\\\
 Low                    & %low%     & \\footnotesize(%low.when%)                  \\\\[1ex]
@@ -495,14 +566,14 @@ window.NAVseries <- function(x, start = NULL, end = NULL, ...) {
     else if (.may_be_Date(timestamp) &&
              grepl("^[12][0-9][0-9][0-9]$", trim(as.character(start))))
         start <- as.Date(paste0(start, "-1-1"))
-    
+
     if (is.null(end))
         end <- .timestamp(x)[length(.timestamp(x))]
     else if (.may_be_Date(timestamp) &&
              grepl("^[12][0-9][0-9][0-9]$", trim(as.character(end))))
         end <- as.Date(paste0(end, "-12-31"))
 
-    if (start > end) 
+    if (start > end)
         stop(sQuote("start"), " cannot be after ", sQuote("end"))
 
     i <- which(timestamp == start)[1L]
@@ -512,5 +583,4 @@ window.NAVseries <- function(x, start = NULL, end = NULL, ...) {
     attributes(ans) <- attributes(x)
     .timestamp(ans) <- .timestamp(ans)[i:j]
     ans
-    
 }
