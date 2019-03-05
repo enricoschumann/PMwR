@@ -13,7 +13,8 @@
 }
 \usage{
 NAVseries(NAV, timestamp,
-          instrument = NULL, title = NULL, description = NULL)
+          instrument = NULL, title = NULL, description = NULL,
+          drop.NA = NULL)
 
 as.NAVseries(x, ...)
 
@@ -54,6 +55,9 @@ as.NAVseries(x, ...)
   further arguments. For \code{summary}, these can be
   \code{NAVseries}.
 
+}
+\item{drop.NA}{
+  logical
 }
 \item{bm}{
 

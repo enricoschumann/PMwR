@@ -73,6 +73,146 @@ test.position <- function() {
 
 }
 
+test.position_named <- function() {
+
+    amount <- c(1, 1, 1)
+    checkEquals(position(amount),
+                structure(3,
+                          .Dim = c(1L, 1L),
+                          .Dimnames = list("", ""),
+                          timestamp = NA,
+                          instrument = NA_character_,
+                          class = "position"))
+
+    instrument <- c("A", "A", "B")
+    checkEquals(position(amount = amount, instrument = instrument),
+                structure(c(2, 1),
+                          .Dim = 1:2,
+                          .Dimnames = list("", c("A", "B" )),
+                          timestamp = NA,
+                          instrument = c("A", "B"),
+                          class = "position"))
+
+
+    amount <- c(A = 1, B = 1, C = 1)
+    checkEquals(position(amount),
+                structure(c(1, 1, 1), .Dim = c(1L, 3L),
+                          .Dimnames = list("", c("A", "B", "C")),
+                          timestamp = NA,
+                          instrument = c("A", "B", "C"),
+                          class = "position"))
+
+
+    amount <- c(A = 1, A = 1, C = 1)
+    position(amount)
+    checkEquals(position(amount),
+                structure(c(2, 1), .Dim = c(1L, 2L),
+                          .Dimnames = list("", c("A", "C")),
+                          timestamp = NA,
+                          instrument = c("A", "C"),
+                          class = "position"))
+    
+    checkEquals(position(amount, use.names = FALSE),
+                structure(3, .Dim = c(1L, 1L),
+                          .Dimnames = list("", ""),
+                          timestamp = NA,
+                          instrument = NA_character_,
+                          class = "position"))
+
+    ## row vector
+    A <- array(1:3, dim = c(1, 3))
+    colnames(A) <- letters[1:3]
+    checkEquals(position(A),
+                structure(c(1, 2, 3), .Dim = c(1L, 3L),
+                          .Dimnames = list("", c("a", "b", "c")),
+                          timestamp = NA,
+                          instrument = c("a", "b", "c"),
+                          class = "position"))
+
+    checkEquals(position(A, instrument = letters[1:3]),
+                structure(c(1, 2, 3), .Dim = c(1L, 3L),
+                          .Dimnames = list("", c("a", "b", "c")),
+                          timestamp = NA,
+                          instrument = c("a", "b", "c"),
+                          class = "position"))
+    
+    checkEquals(position(A, instrument = letters[4:6]),
+                structure(c(1, 2, 3), .Dim = c(1L, 3L),
+                          .Dimnames = list("", c("d", "e", "f")),
+                          timestamp = NA,
+                          instrument = c("d", "e", "f"),
+                          class = "position"))
+    
+    checkEquals(position(A, use.names = TRUE),
+                structure(c(1, 2, 3), .Dim = c(1L, 3L),
+                          .Dimnames = list("", c("a", "b", "c")),
+                          timestamp = NA,
+                          instrument = c("a", "b", "c"),
+                          class = "position"))
+    checkEquals(position(A, use.names = FALSE),
+                structure(6, .Dim = c(1L, 1L),
+                          .Dimnames = list("", ""),
+                          timestamp = NA,
+                          instrument = NA_character_,
+                          class = "position"))
+
+
+    ## col vector
+    A <- array(1:3, dim = c(3, 1))
+    colnames(A) <- "a"
+    checkEquals(position(A),
+                structure(6,
+                          .Dim = c(1L, 1L),
+                          .Dimnames = list("", "a"),
+                          timestamp = NA,
+                          instrument = "a",
+                          class = "position"))
+    
+    checkEquals(position(A, use.names = TRUE),
+                structure(6,
+                          .Dim = c(1L, 1L),
+                          .Dimnames = list("", "a"),
+                          timestamp = NA,
+                          instrument = "a",
+                          class = "position"))
+
+    checkEquals(position(A, use.names = FALSE),
+                structure(6, .Dim = c(1L, 1L),
+                          .Dimnames = list("", ""),
+                          timestamp = NA,
+                          instrument = NA_character_,
+                          class = "position"))
+
+    ## matrix
+    A <- array(1:6, dim = c(2, 3))
+    colnames(A) <- letters[1:3]
+    checkException(position(A, use.names = FALSE),
+                   silent = TRUE)
+
+    checkEquals(position(A),
+                structure(c(3, 7, 11), .Dim = c(1L, 3L),
+                          .Dimnames = list("", c("a", "b", "c")),
+                          timestamp = NA,
+                          instrument = c("a", "b", "c"),
+                          class = "position"))
+    checkEquals(position(A, use.names = TRUE),
+                structure(c(3, 7, 11), .Dim = c(1L, 3L),
+                          .Dimnames = list("", c("a", "b", "c")),
+                          timestamp = NA,
+                          instrument = c("a", "b", "c"),
+                          class = "position"))
+
+    checkEquals(position(A, timestamp = 3:1),
+                structure(c(3, 7, 11), .Dim = c(1L, 3L),
+                          .Dimnames = list("3", c("a", "b", "c")),
+                          timestamp = 3L,
+                          instrument = c("a", "b", "c"),
+                          class = "position"))
+
+}
+
+
+
 test.split_trades <- function() {
     amount <- c(1, -1)
     price <- c(1, 2)

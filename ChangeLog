@@ -8,8 +8,8 @@
                     as.NAVseries(series2))
 
         should print a summary that allows comparing
-        both series ((the print method is still
-        rudimentary)
+	both series (though the print method is still
+	rudimentary)
 
 2019-02-19  Enrico Schumann  <es@enricoschumann.net>
 

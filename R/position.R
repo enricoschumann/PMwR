@@ -9,28 +9,52 @@ position.default <- function(amount, timestamp, instrument,
                              account = NULL,
                              use.names = NULL, ...) {
 
+    dim.amount <- dim(amount)
+    is.amount.matrix  <- !is.null(dim.amount) &&
+                         sum(dim.amount > 1L) == 2L
+    is.amount.matrix1 <- !is.null(dim.amount) &&
+                         sum(dim.amount > 1L) == 1L
+
     no.instruments <- FALSE ## are all instruments missing/NA?
-    if (!.isFALSE(use.names) &&
-        missing(instrument) &&
-        !is.null(names(amount))) {
-        instrument <- names(amount)
+    if (((!.isFALSE(use.names) && missing(instrument)) ||
+            isTRUE(use.names))) {
+
+        if (is.amount.matrix1) {
+            nm <- colnames(amount)
+            amount <- c(amount)
+        } else if (is.amount.matrix) {
+            ## instrument is required
+            nm <- rep(colnames(amount), each = dim.amount[1L])
+            amount <- c(amount)
+        } else
+            nm <- names(amount)
+        if (!is.null(nm))
+            instrument <- nm
     }
+
 
     if (missing(instrument) ||
         !length(instrument) ||
         all(is.na(instrument))) {
+        if (is.amount.matrix)
+            stop(sQuote("amount"), " is a matrix but ",
+                 sQuote("instrument"), " is missing")
         instrument <- rep.int("", length(amount))
         no.instruments <- TRUE
-    }
+    } else if (is.amount.matrix && length(instrument) == dim.amount[2L])
+        instrument <- rep(instrument, each = dim.amount[1L])
 
     no.timestamp <- FALSE
     if (missing(timestamp) ||
         !length(timestamp) ||
         all(is.na(timestamp))) {
-        timestamp <- rep(1, length(amount))
+        timestamp <- if (is.amount.matrix)
+                         seq_len(dim.amount[1L])
+                     else
+                         rep(1, length(amount))
         no.timestamp <- TRUE
     }
-
+    
     len <- max(length(amount),
                length(timestamp),
                length(instrument),
@@ -69,7 +93,7 @@ position.default <- function(amount, timestamp, instrument,
                 when <- last(timestamp,
                              format(timestamp, "%Y-%m-%d"))
             } else if (when[[1L]] == "first" ||
-                     when[1L] == "oldest")
+                       when[1L] == "oldest")
                 when <- min(timestamp)
         }
     }
@@ -142,7 +166,9 @@ position.journal <- function(amount, when,
 
     position.default(amount, timestamp, instrument, when,
                      drop.zero = drop.zero,
-                     account = account, ...)
+                     account = account,
+                     use.names = FALSE,
+                     ...)
 }
 
 position.btest <- function(amount, when, ...,

@@ -1,9 +1,23 @@
-v0.11-0  (2019-??-??; not yet released)
+v0.11-0  (2019-04-01; not yet released)
 
   o returns: 'weights' may now also be a matrix with as
     many rows as 'rebalance.when'. Also, rebalancing at
     the first timestamp is no longer implied (see
-    ChangeLog entry of 2018-11-09 for details)
+    ChangeLog entry of 2018-11-09 for details).
+
+  o position: new argument 'use.names', which allows to
+    use names/colnames as instrument information. Also,
+    matrix input is now treated specially; see examples at
+    http://enricoschumann.net/notes/computing-positions.html
+
+  o NAVseries: new argument 'drop.NA'. Also, if 'NAV'
+    inherits from 'btest', the function now calls
+    'as.NAVseries.btest'.
+
+  o summary.NAVseries: new argument 'bm' ("benchmark").
+    If set, a 'tracking.error' is computed. The summary
+    method now can handle several NAVseries as inputs,
+    which allows easier comparison of series.
 
 v0.10-0  (2018-10-19)
 
