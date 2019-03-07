@@ -194,6 +194,7 @@ twReturns <- function(price, position, pad = NULL) {
 ## not exported
 pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
     ## TODO add also: 'previous month' and pattern 'YYYY-?MM'
+    ## TODO add also: 'ytm'
 
     x <- as.matrix(x)
     if (!is.null(colnames(x)))
@@ -202,7 +203,21 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         instr <- NULL
     nc <- ncol(x)
     period <- tolower(period)
-    if (grepl("^ann", period, ignore.case = TRUE)) {
+    if ((best <- grepl("best", period, ignore.case = TRUE)) ||
+                 grepl("worst", period, ignore.case = TRUE)) {
+        
+        if (grepl("year", period, ignore.case = TRUE)) {
+            
+        } else if (grepl("quarter", period, ignore.case = TRUE)) {
+            
+        } else if (grepl("month",   period, ignore.case = TRUE)) {
+            
+        } else if (grepl("day",     period, ignore.case = TRUE)) {
+            
+        } else if (grepl("hour",    period, ignore.case = TRUE)) {
+
+        }     
+    } else if (grepl("^ann", period, ignore.case = TRUE)) {
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
         force <- grepl("!$", period)
