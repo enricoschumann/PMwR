@@ -93,8 +93,8 @@ valuation.position <- function(x, price.table, multiplier = 1,
         multiplier <- multiplier[instrument]
 
     pos <- x != 0
-    if (any(is.na(price.table[pos]))) {
-        miss <- which(is.na(price.table) & pos, TRUE)
+    miss <- which(is.na(price.table) & pos, TRUE)
+    if (nrow(miss)) {
         warning("missing prices")
         if (verbose) {
             for (i in seq_len(ncol(x)))
