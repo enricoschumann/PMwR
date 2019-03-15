@@ -37,10 +37,11 @@ btest(prices, signal,
     prices should be arranged in a matrix \code{p} of size 100 times 5;
     and \code{prices = list(p)}.
 
-    The series in \code{prices} are used both as transaction prices
-    and for valuing open positions. If signals are to
-    be based on other series, such other series
-    should be passed via the \dots argument.
+    The series in \code{prices} are used both as
+    transaction prices and for valuing open
+    positions. If signals are to be based on other
+    series, such other series should be passed via the
+    \dots argument.
     
   }
   \item{signal}{
@@ -49,15 +50,16 @@ btest(prices, signal,
     of the instruments suggested by the trading
     rule. If \code{convert.weights} is \code{TRUE},
     \code{signal} should return the suggested position
-    as weights.
-    If signal returns \code{NULL}, the current position is kept.
+    as weights (which need not sum to 1).  If \code{signal}
+    returns \code{NULL}, the current position is kept.
     See Details.
 
   }
   \item{do.signal}{
 
-    Logical or numeric vector, or a function that
-    evaluates to \code{TRUE} or \code{FALSE}.
+    Logical or numeric vector, a function that
+    evaluates to \code{TRUE} or \code{FALSE}, or a
+    string.
 
     When a logical vector, its length must match the
     number of observations in prices: \code{do.signal}
@@ -74,7 +76,7 @@ btest(prices, signal,
     \dQuote{firstofquarter} or \dQuote{lastofquarter};
     in these cases, \code{timestamp} needs to specified
     and must be coercable to \code{\link{Date}}.
-
+    
   }
   \item{do.rebalance}{
     
@@ -85,8 +87,7 @@ btest(prices, signal,
   }
   \item{print.info}{
 
-    A function or \code{NULL}. If \code{NULL}, nothing
-    is printed. See Details.
+    A function or \code{NULL}. If \code{NULL}, nothing is printed.
 
   }
   \item{cashflow}{
@@ -100,7 +101,9 @@ btest(prices, signal,
 
   }
   \item{fraction}{
-    amount of rebalancing to be done (a scalar between 0 and 1)
+
+    amount of rebalancing to be done: a scalar between 0 and 1
+
   }
   \item{initial.position}{
 
@@ -110,10 +113,14 @@ btest(prices, signal,
 
   }
   \item{initial.cash}{
+
     a numeric vector of length 1. Defaults to 0.
+
   }
   \item{final.position}{
+
     logical
+
   }
   \item{tc}{
 
@@ -134,12 +141,17 @@ btest(prices, signal,
   }
   \item{add}{
 
-    Default is \code{FALSE}. \code{TRUE} is \strong{not implemented} --
-    but would mean that \code{signal} should evaluate to \emph{changes}
-    in position, i.e. orders.
+    Default is \code{FALSE}. \code{TRUE} is \strong{not
+    implemented} -- but would mean that \code{signal}
+    should evaluate to \emph{changes} in position,
+    i.e. orders.
 
   }
-  \item{lag}{default is 1}
+  \item{lag}{
+
+    default is 1
+
+  }
   \item{convert.weights}{
 
     Default is \code{FALSE}.  If \code{TRUE}, the value of signal will
@@ -148,7 +160,9 @@ btest(prices, signal,
 
   }
   \item{trade.at.open}{
+
     A logical vector of length one; default is \code{TRUE}.
+
   }
   \item{tol}{
     
@@ -209,70 +223,98 @@ btest(prices, signal,
     logical: display \code{\link{txtProgressBar}}?
   }
   \item{variations}{      
-     a list
+     a list. See Details.
   }
-  \item{variations.settings}{a list with the following defaults
-    %% \item{\code{method}}{character}
-    %% \item{\code{load.balancing}}{logical}
-    %% \item{\code{cores}}{numeric}
+
+  \item{variations.settings}{
+    a list. See Details.
   }
+  
   \item{replications}{
     an integer
   }
 }
 \details{
   
-  The function provides infrastructure for testing trading
-  rules. Essentially, \code{btest} does accounting: keep track of
-  transactions and positions, value open positions, etc.
+  The function provides infrastructure for testing
+  trading rules. Essentially, \code{btest} does
+  accounting: keep track of transactions and positions,
+  value open positions, etc. The ingredients are price
+  time-series (single series or \acronym{OHLC}
+  bars), which need not be equally spaced; and several
+  functions that map these series and other pieces of
+  information into positions.
 
-  The basic ingredients are time series
-  in the form of \acronym{OHLC} bars (which need not be
-  equally spaced) and several functions that map these
-  series and other pieces of information into positions.
-  
-  \code{btest} runs a loop from \code{b + 1} to
-  \code{NROW(prices)}. In iteration \code{t}, a
-  \code{signal} can be computed based on information
-  from periods prior to \code{t}. Trading then takes
-  place at the opening price of \code{t}. For
-  slow-to-compute signals this is reasonable if there
-  is a time lag between close and open. For daily prices,
-  for instance, signals could be computed
-  overnight. For higher frequencies, such as every
-  second, the signal function should be fast to
-  compute; alternatively, it may be better to use a
-  larger time offset (i.e. use information from
-  periods \code{<< t}).
+  \subsection{How \code{btest} works}{
 
-  If no \acronym{ohlc} bars are available, a single
-  series per asset (assumed to be close prices) can be
-  passed. We may then use information up to the close
-  of \code{t - 1}, and trade at the close of \code{t}.
+    \code{btest} runs a loop from \code{b + 1} to
+    \code{NROW(prices)}. In iteration \code{t}, a
+    \code{signal} can be computed based on information
+    from periods prior to \code{t}. Trading then takes
+    place at the opening price of \code{t}.  For
+    slow-to-compute signals this is reasonable if there
+    is a time lag between close and open. For daily
+    prices, for instance, signals could be computed
+    overnight. For higher frequencies, such as every
+    minute, the signal function should be fast to
+    compute. Alternatively, it may be better to use a
+    larger time offset (i.e. use a longer time lag) and
+    to trade at the close of \code{t} by setting
+    argument \code{trade.at.open} to \code{FALSE}.
+      
+    If no \acronym{OHLC} bars are available, a single
+    series per asset (assumed to be close prices) can
+    be used.
+    
+    The trade logic needs to be coded in the
+    function \code{signal}. Arguments to that function
+    must be named and need to be passed with
+    \code{...}.  Certain names are reserved and cannot
+    be used arguments: \code{Open}, \code{High},
+    \code{Low}, \code{Close}, \code{Wealth},
+    \code{Cash}, \code{Time}, \code{Timestamp},
+    \code{Portfolio}, \code{SuggestedPortfolio},
+    \code{Globals}. The function must evaluate to the
+    target position in units
+    of the instruments. To work with weights, set
+    \code{convert.weights} to \code{TRUE},
+    and \code{btest} will translate the weights into positions.
+    
+   
+  }
 
-  The \sQuote{trade logic} needs to be coded in the
-  function \code{signal}; arguments to that function
-  should be named and need to be passed with \code{...}.
-  
-  Reserved argument names are currently these:
-  \code{Open}, \code{High}, \code{Low}, \code{Close},
-  \code{Wealth}, \code{Cash}, \code{Time},
-  \code{Timestamp}, \code{Portfolio},
-  \code{SuggestedPortfolio}, \code{Globals}.
+  \subsection{Accessing data}{
 
-  \code{Globals} is special: it is an
-  \code{\link{environment}}, which can be used to
-  persistently store data during the run of
-  \code{btest}. Use the argument \code{Globals}
-  to add initial objects.
+    Within \code{signal} (and also other function
+    arguments, such as \code{do.signal}), you can
+    access data via special functions such as
+    \code{Close}. These are added as arguments to
+    \code{signal}. Currently, the following functions
+    are available: \code{Open}, \code{High},
+    \code{Low}, \code{Close}, \code{Wealth},
+    \code{Cash}, \code{Time}, \code{Timestamp},
+    \code{Portfolio}, \code{SuggestedPortfolio},
+    \code{Globals}.  \code{Globals} is special: it is
+    an \code{\link{environment}}, which can be used to
+    persistently store data during the run of
+    \code{btest}. Use the argument \code{Globals} to
+    add initial objects. See the Examples below and the
+    manual.
+    
+  }  
 
-  \code{variations.settings} is a list with the
-  following defaults:
-  \describe{    
-    \item{\code{method}}{character: supported are loop, parallel (or
-      snow) and multicore}
-    \item{\code{load.balancing}}{logical}    
-    \item{\code{cores}}{numeric}
+  \subsection{Replications and variations}{
+
+    \code{variations.settings} is a list with the
+    following defaults:
+    \describe{    
+      \item{\code{method}}{character: supported are
+	\code{"loop"}, \code{"parallel"} (or \code{"snow"})
+	and \code{"multicore"}}
+      \item{\code{load.balancing}}{logical}    
+      \item{\code{cores}}{numeric}
+    }
+
   }
 }
 \value{
@@ -280,7 +322,8 @@ btest(prices, signal,
   \item{\code{position}}{actual portfolio holdings}
   \item{\code{suggested.position}}{suggested holdings}
   \item{\code{cash}}{cash}
-  \item{\code{wealth}}{time-series of total portfolio value (aka equity curve)}
+  \item{\code{wealth}}{time-series of total portfolio
+    value (aka equity curve)}
   \item{\code{cum.tc}}{transaction costs}
   \item{\code{journal}}{\code{\link{journal}} of trades}
   \item{\code{initial.wealth}}{initial wealth}
@@ -289,9 +332,10 @@ btest(prices, signal,
     \code{TRUE}; otherwise \code{\link{NA}}}
   \item{\code{Globals}}{environment \code{Globals}}
 
-  When \code{include.timestamp} is TRUE, the timestamp
-  is included. If no \code{timestamp} was specified,
-  integers \code{1, 2, ...} are used instead.
+  When \code{include.timestamp} is \code{TRUE}, the
+  timestamp is included. If no \code{timestamp} was
+  specified, integers \code{1, 2, ...} are used
+  instead.
   
   When \code{include.data} is \code{TRUE}, essentially
   all information (prices, instrument, the
@@ -301,7 +345,7 @@ btest(prices, signal,
 }
 \references{
 
-  Schumann, E. (2018) \emph{Portfolio Management
+  Schumann, E. (2019) \emph{Portfolio Management
     with R}. \url{http://enricoschumann.net/PMwR/};
   in particular the Chapter on backtesting:
   \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#backtesting}
