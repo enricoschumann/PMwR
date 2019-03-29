@@ -123,7 +123,7 @@ print.journal <- function(x, ...,
     subs <- ""
     if (!is.null(x$instruments)) {
         insts <- sort(unique(x$instrument))
-        insts <- as.character(trim(insts))
+        insts <- as.character(trimws(insts))
         if (length(insts))
             subs <- paste0(" in ", paste(insts, sep = "", collapse = ", "))
     }

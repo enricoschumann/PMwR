@@ -1,7 +1,14 @@
+2019-03-28  Enrico Schumann  <es@enricoschumann.net>
+
+	* NAMESPACE: 'textutils::trim' is now longer
+	imported ('base::trimws' is used instead);
+	* DESCRIPTION (Depends, Suggests): move package
+	'crayon' to Suggests
+
 2019-03-07  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/valuation.R (valuation.position): fix
-	missing-prices warning
+        * R/valuation.R (valuation.position): fix
+        missing-prices warning
 
 2019-02-24  Enrico Schumann  <es@enricoschumann.net>
 
@@ -13,8 +20,8 @@
                     as.NAVseries(series2))
 
         should print a summary that allows comparing
-	both series (though the print method is still
-	rudimentary)
+        both series (though the print method is still
+        rudimentary)
 
 2019-02-19  Enrico Schumann  <es@enricoschumann.net>
 
@@ -32,9 +39,10 @@
         * DESCRIPTION (Depends): revert to R >= 2.10
 
         * R/internal.R (.isFALSE): add function, which
-        is used instead of isFALSE. This is a temporary
-        workaround to allow the package to work with
-        older R versions (temporary == a few years)
+        is used instead of 'isFALSE'. This is a
+        temporary workaround (temporary == a few years)
+        to allow the package to work with older R
+        versions
 
 2019-02-13  Enrico Schumann  <es@enricoschumann.net>
 
@@ -101,7 +109,7 @@
 
         * R/btest.R: when the journal is constructed,
         make sure that class attributes are
-        preserved (notably the for timestamp)
+        preserved (notably for timestamp)
 
 2018-11-13  Enrico Schumann  <es@enricoschumann.net>
 
