@@ -19,6 +19,24 @@ v0.11-0  (2019-04-01; not yet released)
     method now can handle several NAVseries as inputs,
     which allows easier comparison of series.
 
+  o as.NAVseries.btest: method gains optional arguments
+    'instrument', 'title' and 'description'
+
+  o plot_trading_hours.R: fix axis-tick positions when
+    'label' is "days"
+        
+  o functions 'scaleTrades' and 'splitTrades' have
+    finally been removed: they had not been exported
+    for a long time (see ChangeLog entry of 2017-06-23).
+    Use drop-in replacements 'scale_trades' and
+    'split_trades' instead.
+
+  o split_trades: 'price' may now be missing (and NA is
+    used)
+
+  o various documentation updates/fixes; see the
+    ChangeLog for all details.
+
 v0.10-0  (2018-10-19)
 
   o btest: support automatic computation of
@@ -67,7 +85,7 @@ v0.9-0  (2018-06-09)
   o summary.NAVseries: argument 'monthly' has been
     renamed:
 
-	monthly   =>   monthly.vol
+        monthly   =>   monthly.vol
 
   o summary.NAVseries: new argument 'assume.daily',
     with default FALSE; when TRUE, numeric
@@ -140,13 +158,13 @@ v0.6-0  (2017-11-16)
 
   o btest: two arguments have been renamed
 
-	tradeOnOpen      =>  trade.at.open
-	assignInGlobals  =>  Globals
+        tradeOnOpen      =>  trade.at.open
+        assignInGlobals  =>  Globals
 
   o plot_trading_hours: two arguments have been renamed
 
-	excludeWeekends  =>  exclude.weekends
-	do.plotAxis      =>  do.plot.axis
+        excludeWeekends  =>  exclude.weekends
+        do.plotAxis      =>  do.plot.axis
 
   o Function 'isValidISIN' is no longer available; use
     the drop-in replacement 'is_valid_ISIN' instead.
