@@ -1,14 +1,19 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-18  Enrico Schumann
+## Copyright (C) 2008-19  Enrico Schumann
 
 pl <- function(amount, ...)
     UseMethod("pl")
 
 print.pl <- function(x, ..., use.crayon = NULL, na.print = ".") {
-    use.crayon <- if (is.null(use.crayon) &&
-                      !is.null(tmp <- getOption("PMwR.use.crayon")))
-                      tmp else FALSE
-    if (!use.crayon)
+    if (is.null(use.crayon))
+        use.crayon <- getOption("PMwR.use.crayon")
+
+    if (is.null(use.crayon))
+        use.crayon <- FALSE
+
+    if (use.crayon && requireNamespace("crayon"))
+        bold <- crayon::bold
+    else
         bold <- identity
 
     oo <- getOption("scipen")
@@ -320,7 +325,7 @@ pl.default <- function(amount, price, timestamp = NULL,
         } else {
 
             ## P/L along timestamp
-            
+
             cumcash <- cumsum(-price1 * amount1)
             cumpos  <- cumsum(amount1)
             real <- .pl_stats(amount1, price1)$realised
@@ -407,7 +412,7 @@ pl.default <- function(amount, price, timestamp = NULL,
             attr(ans1, "along.timestamp") <- along.timestamp
             attr(ans1, "instrument") <- NA
             ans <- ans1
-        }        
+        }
     }
     if (pl.only) {
         if (!identical(along.timestamp, FALSE))

@@ -564,13 +564,13 @@ window.NAVseries <- function(x, start = NULL, end = NULL, ...) {
     if (is.null(start))
         start <- .timestamp(x)[1L]
     else if (.may_be_Date(timestamp) &&
-             grepl("^[12][0-9][0-9][0-9]$", trim(as.character(start))))
+             grepl("^[12][0-9][0-9][0-9]$", trimws(as.character(start))))
         start <- as.Date(paste0(start, "-1-1"))
 
     if (is.null(end))
         end <- .timestamp(x)[length(.timestamp(x))]
     else if (.may_be_Date(timestamp) &&
-             grepl("^[12][0-9][0-9][0-9]$", trim(as.character(end))))
+             grepl("^[12][0-9][0-9][0-9]$", trimws(as.character(end))))
         end <- as.Date(paste0(end, "-12-31"))
 
     if (start > end)
