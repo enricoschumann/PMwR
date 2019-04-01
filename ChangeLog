@@ -1,9 +1,19 @@
+2019-04-01  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 0.11-0
+
+        * R/position.R (print.position): fix condition (length
+        was > 1)
+
+        * R/plot_trading_hours.R (plot_trading_hours):
+	fix condition (length was > 1)
+
 2019-03-28  Enrico Schumann  <es@enricoschumann.net>
 
-	* NAMESPACE: 'textutils::trim' is now longer
-	imported ('base::trimws' is used instead);
-	* DESCRIPTION (Depends, Suggests): move package
-	'crayon' to Suggests
+        * NAMESPACE: 'textutils::trim' is now longer
+        imported ('base::trimws' is used instead);
+        * DESCRIPTION (Depends, Suggests): move package
+        'crayon' to Suggests
 
 2019-03-07  Enrico Schumann  <es@enricoschumann.net>
 

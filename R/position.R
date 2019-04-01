@@ -229,7 +229,7 @@ print.position <- function(x, ..., sep = ":") {
     attr(x, "account") <- NULL
     attr(x, "instrument") <- NULL
     attr(x, "timestamp") <- NULL
-    if (dim(x) == c(1L,1L) &&
+    if (all(dim(x) == c(1L, 1L)) &&
         is.null(rownames(x)) &&
         is.null(colnames(x))) {
         cat(x, "\n")

@@ -14,7 +14,7 @@
 }
 \details{
 
-  \code{.timestamp} extracts or replaces an objects timestamp.
+  \code{.timestamp} extracts or replaces an object's timestamp.
 
   \code{.may_be_Date} checks whether a vector could be
   coerced to class \code{\link{Date}}, in which case it
@@ -24,7 +24,8 @@
 }
 \references{
 
-  PMwR manual
+  E. Schumann (2019) \emph{Portfolio Management with \R}.
+  \url{http://enricoschumann.net/PMwR}
 }
 \author{
   Enrico Schumann

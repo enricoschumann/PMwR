@@ -8,8 +8,8 @@
   Plot a time series after removing weekends and specific times of the day.
 }
 \usage{
-plot_trading_hours(x, t = NULL,
-                   interval = "5 min", labels = "hours", label.format = NULL,
+plot_trading_hours(x, t = NULL, interval = "5 min",
+                   labels = "hours", label.format = NULL,
                    exclude.weekends = TRUE, holidays = NULL,
                    fromHHMMSS = "000000", toHHMMSS = "240000",
                    do.plot.axis = TRUE,
@@ -22,7 +22,7 @@ plot_trading_hours(x, t = NULL,
   \item{x}{
     A numeric vector. Can also be of class \code{zoo}.
   }
-  \item{t}{    
+  \item{t}{
     A vector that inherits from class \code{POSIXt}. If \code{x}
     inherits from class \code{zoo}, then \code{index(x)} is used (and
     any supplied value for \code{t} is ignored).
@@ -45,8 +45,8 @@ plot_trading_hours(x, t = NULL,
     logical: default is \code{TRUE}
   }
   \item{holidays}{
-    a vector of class \code{\link{Date}} or a character vector in a format that
-    is understood by \code{\link{as.Date}}.
+    a vector of class \code{\link{Date}} or a character
+    vector in a format that is understood by \code{\link{as.Date}}.
   }
   \item{fromHHMMSS}{
     a character vector of length one in format \dQuote{HHMMSS}
@@ -58,13 +58,16 @@ plot_trading_hours(x, t = NULL,
     logical. Should \code{axis(1)} be plotted? Default is \code{TRUE}.
   }
   \item{\dots}{
-    parameters passed to \code{\link{plot}} (and typically \code{\link{par}})
+    parameters passed to \code{\link{plot}}
+    (and typically \code{\link{par}})
   }
   \item{from}{
-    POSIXct: start plot at (if not specified, plot starts at first data point)
+    POSIXct: start plot at (if not specified,
+    plot starts at first data point)
   }
   \item{to}{
-    POSIXct: end plot at (if not specified, plot end at last data point)
+    POSIXct: end plot at (if not specified,
+    plot ends at last data point)
   }
   \item{do.plot}{
     logical. Should anything be plotted? Default is \code{TRUE}. If
@@ -77,7 +80,7 @@ plot_trading_hours(x, t = NULL,
 \details{
 
   Plot a timeseries during specific times of day.
-  
+
 }
 \value{
 
@@ -92,15 +95,15 @@ plot_trading_hours(x, t = NULL,
  \item{timegrid}{a POSIXct vector}
  \item{map}{a function. See the manual (a link is under References).}
 
-  
+
 }
 \references{
 
   B.D. Ripley and K. Hornik. \emph{Date-Time Classes}. R-News,
   \strong{1}(2):8--12, 2001.
 
-  E. Schumann (2017) \emph{Portfolio Management with \R}.
-  \url{http://enricoschumann.net/PMwR/}
+  E. Schumann (2019) \emph{Portfolio Management with \R}.
+  \url{http://enricoschumann.net/PMwR}
 
 }
 \author{

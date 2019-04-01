@@ -107,7 +107,7 @@ plot_trading_hours <-
                                y = values),
                           plot.par))
 
-        if (do.plot.axis && length(axis1.par) && !is.na(axis1.par))
+        if (do.plot.axis && length(axis1.par) && !all(is.na(axis1.par)))
             do.call("axis", axis1.par)
         invisible(list(t = seq_len(length(grd))[rx],
                        x = values,

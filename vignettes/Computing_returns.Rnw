@@ -44,22 +44,25 @@ library("PMwR")
 library("zoo")
 @
 
-\noindent In the simplest case, the function \texttt{returns} takes a
-numeric vector of prices and evaluates to a numeric vector of returns.
+\noindent In the simplest case, the function
+\texttt{returns} takes a numeric vector of prices and
+evaluates to a numeric vector of returns.
 <<>>=
 library("PMwR")
 returns(100:105)
 @ 
 
-\noindent The function will recognise when the input argument has
-several columns, i.e. is a matrix or a data frame. In such a case, it
-computes returns for each column.
+\noindent The function will recognise when the input
+argument has several columns, i.e. is a matrix or a
+data frame. In such a case, it computes returns for
+each column.
 
-In fact, \texttt{returns} is a generic function, and 
-also understands time-series such as zoo objects.
-To demonstrate this functionality, we use the datasets \texttt{DAX}
-and \texttt{REXP}, which are provided by \textsc{pmwr}. 
-Both are data frames of one column; the rownames are the dates.
+In fact, \texttt{returns} is a generic function, and
+also understands time-series such as zoo objects.  To
+demonstrate this functionality, we use the datasets
+\texttt{DAX} and \texttt{REXP}, which are provided by
+\textsc{pmwr}.  Both are data frames of one column; the
+rownames are the dates.
 
 <<>>=
 library("zoo")
@@ -81,16 +84,17 @@ options(width = 70)
 head(returns(DAX))
 @
 
+\noindent Matrices work as well: As an example, we
+combine both \texttt{zoo} series into a two-column
+matrix.
 
-
-\noindent Matrices work as well: As an example, we combine both
-\texttt{zoo} series into a two-column matrix.
 <<>>=
 returns(head(cbind(DAX, REXP), 5))
 @ 
 
-\noindent When a calendar timestamp is available, \texttt{returns} may
-also aggregate prices over specific holding periods.
+\noindent When a calendar timestamp is available,
+\texttt{returns} may also aggregate prices over
+specific holding periods.
 
 <<>>=
 returns(DAX, period = "year")
@@ -105,17 +109,19 @@ returns(cbind(DAX, REXP), period = "year")
 returns(cbind(DAX, REXP), period = "month")
 @ 
 
-\noindent Despite the way these holding-period returns are printed:
-the result of the function call is a numeric vector (the return
-numbers), with additional information added through attributes.  It is
-thus natural to compute with the returns, e.g. to calculate means,
-extremes or similar quantities.
+\noindent Despite the way these holding-period returns
+are printed: the result of the function call is a
+numeric vector (the return numbers), with additional
+information added through attributes.  It is thus
+natural to compute with the returns, e.g. to calculate
+means, extremes or similar quantities.
 <<>>=
 range(returns(DAX, period = "month"))
 @ 
 
-\noindent There are methods for \texttt{toLatex} and \texttt{toHTML}
-for monthly returns. For instance, the table\medskip
+\noindent There are methods for \texttt{toLatex} and
+\texttt{toHTML} for monthly returns. For instance, the
+table\medskip
 
 \begin{center}\small
 \begin{tabular}{lrrrrrrrrrrrrr}
@@ -133,7 +139,7 @@ toLatex(returns(DAX, period = "month"))
 \noindent See the vignette source for the tabular header. More
 examples are in the Fin\TeX\ vignette; say
 <<eval = false>>=
-vignette("FinTeX", package = "PMwR" )
+vignette("FinTeX", package = "PMwR")
 @ 
 to open it.
 

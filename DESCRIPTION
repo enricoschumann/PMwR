@@ -7,7 +7,7 @@ Maintainer: Enrico Schumann <es@enricoschumann.net>
 Authors@R: person(given = "Enrico", family = "Schumann",
                   role  = c("aut", "cre"),
                   email = "es@enricoschumann.net",
-		  comment = c(ORCID = "0000-0001-7601-6576"))
+                  comment = c(ORCID = "0000-0001-7601-6576"))
 Description: Functions and examples for 'Portfolio
   Management with R': backtesting investment and
   trading strategies, computing profit/loss and

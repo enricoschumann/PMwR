@@ -98,11 +98,12 @@ can be placed into \LaTeX\ templates.
 returns(DAX, period = "annualised")
 @ 
 
-We first compute summaries.
+\noindent To do so, call \texttt{toLatex}
+with a summary of one or more NAVseries, and a \texttt{template}.
 <<>>=
-DAX  <- summary(as.NAVseries(DAX,  title = "DAX"))
-REXP <- summary(as.NAVseries(REXP, title = "REXP"))
-toLatex(DAX, REXP, template = "%title: %return\\% \\\\")
+toLatex(summary(as.NAVseries(DAX,  title = "DAX"),
+                as.NAVseries(REXP, title = "REXP")),
+        template = "%title: %return\\% \\\\")
 @ 
 \noindent Note that the template was recycled, i.e. it
 was used for both series. We may also pass
@@ -111,12 +112,15 @@ separate templates for each series.
 <<>>=
 tmpl <- c("Equities (%title) made %return\\%, with a drawdown of %mdd\\%;",
           "bonds (%title) returned %return\\%.")
-toLatex(DAX, REXP, template = tmpl)
+toLatex(summary(as.NAVseries(DAX,  title = "DAX"),
+                as.NAVseries(REXP, title = "REXP")),
+        template = tmpl)
 @ 
 
 \noindent The keyword \texttt{\%sparkline} adds a sparkline:
 <<results=tex>>=
-toLatex(DAX, template = "The DAX %sparkline made %return\\% during the period.")
+toLatex(summary(as.NAVseries(DAX,  title = "DAX")),
+        template = "The DAX %sparkline made %return\\% during the period.")
 @ 
 
 \noindent Since templates are recycled, we can easily create rows for
@@ -125,8 +129,9 @@ toLatex(DAX, template = "The DAX %sparkline made %return\\% during the period.")
 \begin{tabular}{llrr}
 & & Return p.a. & Volatility \\
 <<results=tex,echo=false>>=
-toLatex(DAX, REXP,
-        template = "%title & %sparkline & %return & %volatility  \\\\" )
+toLatex(summary(as.NAVseries(DAX,  title = "DAX"),
+                as.NAVseries(REXP, title = "REXP")),
+        template = "%title & %sparkline & %return & %volatility  \\\\")
 @ 
 \end{tabular}
 \end{center}
@@ -134,8 +139,9 @@ toLatex(DAX, REXP,
 
 \noindent\ldots which is produced by the following call:
 <<results=hide,eval=false>>=
-toLatex(DAX, REXP,
-        template = "%title & %sparkline & %return & %volatility  \\\\" )
+toLatex(summary(as.NAVseries(DAX,  title = "DAX"),
+                as.NAVseries(REXP, title = "REXP")),
+        template = "%title & %sparkline & %return & %volatility  \\\\")
 @ 
 
 When several NAV series are passed to \texttt{toLatex},

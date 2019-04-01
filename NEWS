@@ -1,4 +1,4 @@
-v0.11-0  (2019-04-01; not yet released)
+v0.11-0  (2019-04-01)
 
   o returns: 'weights' may now also be a matrix with as
     many rows as 'rebalance.when'. Also, rebalancing at
@@ -24,15 +24,15 @@ v0.11-0  (2019-04-01; not yet released)
 
   o plot_trading_hours.R: fix axis-tick positions when
     'label' is "days"
-        
+
   o functions 'scaleTrades' and 'splitTrades' have
-    finally been removed: they had not been exported
-    for a long time (see ChangeLog entry of 2017-06-23).
+    finally been removed (they had not been exported
+    for a long time; see ChangeLog entry of 2017-06-23).
     Use drop-in replacements 'scale_trades' and
     'split_trades' instead.
 
-  o split_trades: 'price' may now be missing (and NA is
-    used)
+  o split_trades: 'price' may now be missing (in which
+    case NA is used)
 
   o various documentation updates/fixes; see the
     ChangeLog for all details.
