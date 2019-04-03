@@ -85,12 +85,22 @@ rebalance <- function(current,
                  " is TRUE but vectors are not named")
         }
 
-        ## TODO say for which instruments there is no price
-        if (any(is.na(match(names(current), names(price)))))
-            warning("instrument in current without price")
-        if (any(is.na(match(names(target), names(price)))))
-            warning("instrument in target without price")
-
+        if (any(miss.name <- is.na(match(names(current),
+                                         names(price))))) {
+            warning("instrument in current without price: ",
+                    if (sum(miss.name) > 3) "\n",
+                    paste(names(current)[miss.name],
+                          collapse = if (sum(miss.name) > 3) "\n" else ","),
+                    immediate. = TRUE)
+        }
+        if (any(miss.name <- is.na(match(names(target),
+                                         names(price))))) {
+            warning("instrument in target without price: ",
+                    if (sum(miss.name) > 3) "\n",
+                    paste(names(current)[miss.name],
+                          collapse = if (sum(miss.name) > 3) "\n" else ","),
+                    immediate. = TRUE)
+        }
         all.names <- sort(unique(
             c(names(target), names(current))))
         multiplier <- multiplier[all.names]

@@ -1,3 +1,8 @@
+2019-04-03  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/rebalance.R (rebalance): list instruments
+	for which prices are missing
+
 2019-04-01  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.11-0
@@ -6,7 +11,7 @@
         was > 1)
 
         * R/plot_trading_hours.R (plot_trading_hours):
-	fix condition (length was > 1)
+        fix condition (length was > 1)
 
 2019-03-28  Enrico Schumann  <es@enricoschumann.net>
 
