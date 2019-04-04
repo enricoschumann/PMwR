@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-18  Enrico Schumann
+## Copyright (C) 2008-19  Enrico Schumann
 
 scale1 <- function (x, ...)
     UseMethod("scale1", x)
@@ -21,10 +21,10 @@ scale1.default <- function (x, ...,
     if (!is.matrix(x)) {
         ## x is always coerced to matrix. But if it had no dim
         ## attribute, it will be coerced back to a vector at the
-        ## end        
+        ## end
         makevec <- TRUE
         x <- as.matrix(x)
-    }    
+    }
     if (when == "first.complete") {
         tmp <- which(apply(x, 1, function(i) !anyNA(i)))
         if (length(tmp))
@@ -54,7 +54,7 @@ scale1.default <- function (x, ...,
 
         ## m <- if (geometric) {
         ##     apply(x0, 2, function(x) (tail(z, 1)/head(z,1))^(1/(nrow(x)-1)))
-        ##     ## exp(colMeans(log(1+x0[-1L, , drop = FALSE]), na.rm = TRUE)) - 1 
+        ##     ## exp(colMeans(log(1+x0[-1L, , drop = FALSE]), na.rm = TRUE)) - 1
         ##     ((tail(z, 1)/head(z,1))^(1/length(zr)))
         ## } else
         ##     colMeans(x0[-1L, , drop = FALSE], na.rm = TRUE)
@@ -112,7 +112,7 @@ scale1.zoo <- function(x, ..., when = "first.complete",
         inflate.d <- (1+inflate)^(1/365)
         x <- x*inflate.d^as.numeric(dates-dates[1L])
     }
-    
+
     if (inherits(when, class(ii)))
         when <- matchOrNext(when, ii)
     ans <- scale1.default(x, when = when, level = level,
@@ -138,7 +138,7 @@ scale1.NAVseries <- function(x, ..., when = "first.complete",
         inflate.d <- (1+inflate)^(1/365)
         xx <- xx*inflate.d^as.numeric(dates-dates[1L])
     }
-    
+
     if (inherits(when, class(ii)))
         when <- matchOrNext(when, ii)
     ans <- scale1.default(xx, when = when, level = level,
@@ -164,27 +164,29 @@ scale0 <- function(x, when = "first.complete", first = 100, scale = FALSE) {
         x <- as.matrix(x)
         makevec <- TRUE
     }
-    
+
     if (when == "first.complete") {
         init.p <- min(which(apply(x, 1, function(i) !any(is.na(i)))))
-        ## TODO: add check if all NA        
+        ## TODO: add check if all NA
     } else if (when == "first") {
         init.p <- 1
     } else if (is.numeric(when)) {
         init.p <- when
     }
     for (i in seq_len(ncol(x)))
-        x[,i] <- x[,i]/x[init.p, i]
+        x[,i] <- x[, i]/x[init.p, i]
     if (scale) {
         x0 <- returns(x, pad = 0)
         s <- apply(x0, 2, sd)
         for (i in seq_len(ncol(x0)))
-            x0[ ,i] <- x0[ ,i]/s[i] * scale
+            x0[, i] <- x0[, i]/s[i] * scale
         for (i in seq_len(ncol(x)))
-            x[,i] <- cumprod(1+x0[ ,i])
+            x[, i] <- cumprod(1+x0[, i])
     }
     if (makevec)
-        x <- c(first*x) else x <- first*x
+        x <- c(first*x)
+    else
+        x <- first*x
     if (ZOO)
         x <- zoo(x, ii)
     x

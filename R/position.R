@@ -54,7 +54,7 @@ position.default <- function(amount, timestamp, instrument,
                          rep(1, length(amount))
         no.timestamp <- TRUE
     }
-    
+
     len <- max(length(amount),
                length(timestamp),
                length(instrument),
@@ -366,7 +366,7 @@ acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
     ## TREE
     if (tree) {
         leaf <- function(x, sep = sep) {
-            ## return last subaccount 
+            ## return last subaccount
             ## account::subaccount::...::deepest_subaccount
             gsub(paste0(".*", sep, "([^", substr(sep,1,1), "]+)$"),
                  "\\1", x, perl = TRUE)

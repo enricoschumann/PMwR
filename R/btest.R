@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-18  Enrico Schumann
+## Copyright (C) 2008-19  Enrico Schumann
 
 btest  <- function(prices,
                    signal,
@@ -166,7 +166,7 @@ btest  <- function(prices,
         inherits(b, class(timestamp))) {
         b <- matchOrNext(b, timestamp)
     }
-            
+
     if ("tradeOnOpen" %in% names(list(...)))
         warning("Did you mean 'trade.at.open'? See ChangeLog 2017-11-14.")
 
@@ -207,7 +207,7 @@ btest  <- function(prices,
 
     db.tc_fun <- if (is.function(tc) && isdebugged(tc))
                        TRUE else FALSE
-    
+
     if (is.null(do.signal) || identical(do.signal, TRUE)) {
         do.signal <- function(...)
             TRUE

@@ -78,13 +78,13 @@ lag <- function(x, k, pad = NA) {
     if (!is.null(dim(x))) {
         stop("please apply columnwise")
     } else c(rep(pad, k),
-             x[seq_len(length(x)-k)])    
+             x[seq_len(length(x)-k)])
 }
 
 vname <- function(v, names) {
     ans <- c(v)
     names(ans) <- names
-    ans    
+    ans
 }
 
 sparkline <- function(x,
@@ -130,7 +130,7 @@ sparkline <- function(x,
             paste(seq(0,1, length.out = length(x)), xx),
             "/ \n",
             "\\end{sparkline}",
-            "}" )    
+            "}" )
     sl
 }
 
@@ -138,7 +138,7 @@ sparkplot <- function(x, blocks = 7, xmin = NULL, xmax = NULL, ymin = NULL) {
     tmp <- hist(x, seq(min(x), max(x), length.out = blocks + 1L), plot = FALSE)
     if (.Platform$OS.type == "windows")
         warning("Unicode characters will probably not be correctly displayed.")
-    
+
     bars <- c("\u2581","\u2582","\u2583","\u2584",
               "\u2585","\u2586","\u2587","\u2588")
     rx <- range(tmp$counts)
@@ -170,7 +170,6 @@ make_neighbour <- function(wmin = 0,
     if (!is.null(kmin))
         stop("no such neighbourhood yet")
 
-    
     if (!isTRUE(budget) && length(budget) == 2L && !random && !update) {
         ## budget is a _range_ , i.e. a numeric vector of length two
 
@@ -317,7 +316,7 @@ make_neighbour <- function(wmin = 0,
             tol <- 1e-12
             x <- w[[1]]
             J <- sum(x > tol)
-            if (J == kmax) 
+            if (J == kmax)
                 to_buy <- which(x > tol & w < wmax)
             else
                 to_buy <- which(x < wmax)
@@ -331,7 +330,6 @@ make_neighbour <- function(wmin = 0,
             Rw <- x[[2]] + R[ , c(i, j)] %*% c(-eps, eps)
             list(w = x, Rw = Rw)
         }
-        
     } else
         stop("no matches")
 }
@@ -346,7 +344,6 @@ psim <- function(x, y) {
                                    abs(y[same.sign]))),
          max.abs.difference = max(abs(x-y)),
          mean.abs.difference = sum(abs(x-y))/length(x))
-    
 }
 
 time.p_returns <- function(x, ...)
@@ -368,7 +365,7 @@ time.btest <- function(x, ...)
     else
         attr(x, "timestamp") <- value
     x
-}        
+}
 
 .may_be_Date <- function(x, ...) {
     ans <- try(as.Date(x), silent = TRUE)
@@ -380,10 +377,10 @@ time.btest <- function(x, ...)
         TRUE
 }
 
-debug_prices <- function(nobs, na, base = 100) {    
+debug_prices <- function(nobs, na, base = 100) {
     a <- base + seq_len(nobs)
     A <- array(a, dim = c(nobs, na))
-    t(t(A) + seq(1, na) / 10^nchar(na))    
+    t(t(A) + seq(1, na) / 10^nchar(na))
 }
 
 

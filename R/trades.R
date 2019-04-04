@@ -109,7 +109,7 @@ limit <- function(amount, price, timestamp, lim, tol = 1e-8) {
 periodObs <- function(x, t = NULL, period = "month", missing = "NA") {
     if (is.null(t)) {
         if (!inherits(x, "zoo"))
-            stop(sQuote("t"), " not supplied, so ", sQuote("x"), 
+            stop(sQuote("t"), " not supplied, so ", sQuote("x"),
                  " must inherit from class ", sQuote("zoo"))
         t <- index(x)
         x <- coredata(x)
@@ -122,15 +122,16 @@ periodObs <- function(x, t = NULL, period = "month", missing = "NA") {
         by <- strftime(t, "%Y")
     else if (period == "hour")
         by <- strftime(t, "%Y%m%d%H")
-    
+
     i <- last(x, by, TRUE)
     if (length(dim(x)))
         x[i, ]
     else
-        x[i]        
+        x[i]
 }
 
-tw_exposure <- twExposure <- function(amount, timestamp, start, end, abs.value = TRUE) {
+tw_exposure <- twExposure <- function(amount, timestamp,
+                                      start, end, abs.value = TRUE) {
     if (missing(start))
         start <- min(timestamp)
     else {

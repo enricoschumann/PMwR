@@ -23,7 +23,7 @@ unit_prices <- function(NAV, cashflows,
         stop("cashflow without matching NAV timestamp")
     res[["cashflow"]][ii] <- cashflows[[2]]
 
-    
+
     if (res[["NAV"]][[1]] - cf.included * res[["cashflow"]][[1]] == 0)
         res[["price"]][[1]] <- initial.price
 
@@ -33,7 +33,7 @@ unit_prices <- function(NAV, cashflows,
         if (i > 1)
             res[["shares"]][[i]] <- res[["total_shares"]][[i-1]]
 
-        if (res[["shares"]][[i]] > 0)            
+        if (res[["shares"]][[i]] > 0)
             res[["price"]][[i]]    <- (res[["NAV"]][[i]] -
                                        cf.included * res[["cashflow"]][[i]]) /
                                       res[["shares"]][[i]]

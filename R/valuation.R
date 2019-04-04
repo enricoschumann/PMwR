@@ -22,7 +22,7 @@ valuation.default <- function(x, ...) {
 
 valuation.journal <-
     function(x,
-             multiplier = 1,                          
+             multiplier = 1,
              cashflow = function(x, ...) x$amount * x$price,
              instrument = function(x, ...) "cash",
              flip.sign = TRUE,
@@ -30,7 +30,7 @@ valuation.journal <-
 
         if (!is.null(names(multiplier)))
             multiplier <- multiplier[x$instrument]
-        
+
         istr <- if (is.null(instrument))
                     NA
                 else if (is.character(instrument))
@@ -39,26 +39,26 @@ valuation.journal <-
                     instrument(x, ...)
                 else
                     as.character(instrument)
-        
+
         cf <- if (is.null(cashflow))
                   NA
               else if (is.numeric(cashflow))
                   cashflow
               else if (is.function(cashflow))
                   cashflow(x, ...)
-        
+
     ans <- x
     ans$instrument <- character(length(x))
     ans$instrument[] <- istr
     ans$amount <- cf * multiplier
     if (flip.sign)
-        ans$amount <- ans$amount * -1    
+        ans$amount <- ans$amount * -1
     ans$price[] <- 1
     ans
 }
 
 ## TODO: add to internal documentation?
-jcf <- function(x, multiplier = 1,                          
+jcf <- function(x, multiplier = 1,
                 cashflow   = function(x) x$amount * x$price,
                 instrument = function(x) "cash",
                 flip.sign  = TRUE, ...) {
@@ -78,7 +78,7 @@ jcf <- function(x, multiplier = 1,
     ans$instrument[] <- istr
     ans$amount <- cashflow(x) * multiplier
     if (flip.sign)
-        ans$amount <- ans$amount * -1    
+        ans$amount <- ans$amount * -1
     ans$price[] <- 1
     ans
 }
@@ -88,7 +88,7 @@ valuation.position <- function(x, price.table, multiplier = 1,
                                verbose = TRUE, ...) {
 
     instrument <- attr(x, "instrument")
-    
+
     if (!is.null(names(multiplier)))
         multiplier <- multiplier[instrument]
 
@@ -123,7 +123,7 @@ pv <- function(x, multiplier = 1, price.table, price.unit,
                do.sum = FALSE, ...) {
 
     instrument <- attr(x, "instrument")
-    
+
     if (!is.null(names(multiplier)))
         multiplier <- multiplier[instrument]
 

@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-18  Enrico Schumann
+## Copyright (C) 2008-19  Enrico Schumann
 
 drawdowns <- function(x, ...)
     UseMethod("drawdowns")
@@ -20,13 +20,13 @@ drawdowns.default <- function(x, ...) {
                           max = numeric(0)))
 
     trough <- numeric(n)
-    
+
     if (length(recover) < length(peak)) {
         recover <- c(recover, length(x))
         not_recovered <- TRUE
     } else
         not_recovered <- FALSE
-    
+
     for (i in seq_len(n)) {
         subs <- x[peak[i]:recover[i]]
         trough[i] <- peak[i] + which.min(subs) - 1L

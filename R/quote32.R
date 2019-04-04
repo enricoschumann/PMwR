@@ -21,7 +21,7 @@ quote32 <- q32 <- function(price, sep = "(-|'|:)", warn = TRUE) {
         frac_ <- substr(unlist(lapply(tmp[with_tf], `[[`, 2)), 3, 3)
         frac[with_tf] <- frac_
         frac[is.na(frac)| frac == ""] <- "0"
-        
+
         frac[frac == "0"] <- 0
         frac[frac == "2"] <- 1
         frac[frac == "5"] <- 2
@@ -33,7 +33,7 @@ quote32 <- q32 <- function(price, sep = "(-|'|:)", warn = TRUE) {
         frac <- as.numeric(frac)
         ans <- handle + ticks/32 + frac/32/4
     } else {
-        ans <- price    
+        ans <- price
 
         handle <- trunc(price)
         tmp <- price - handle
@@ -66,7 +66,7 @@ print.quote32 <- function(x, sep = "-",
     frac <- rep("", length(x))
     for (i in 0:3)
         frac[attr(x, "fraction") == i] <- fracsym[i+1]
-    
+
     print.default(paste0(attr(x, "handle"), sep,
                          sprintf("%02d", attr(x, "ticks")),
                          frac, ""), quote = FALSE)
