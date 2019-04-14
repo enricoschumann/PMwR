@@ -2,7 +2,7 @@ Package: PMwR
 Type: Package
 Title: Portfolio Management with R
 Version: 0.12-0
-Date: 2019-04-04
+Date: 2019-04-14
 Maintainer: Enrico Schumann <es@enricoschumann.net>
 Authors@R: person(given = "Enrico", family = "Schumann",
                   role  = c("aut", "cre"),
@@ -21,4 +21,6 @@ License: GPL-3
 LazyLoad: yes
 LazyData: yes
 ByteCompile: yes
-URL: http://enricoschumann.net/PMwR/
+URL: http://enricoschumann.net/PMwR/,
+     https://github.com/enricoschumann/PMwR,
+     https://gitlab.com/enricoschumann/PMwR
