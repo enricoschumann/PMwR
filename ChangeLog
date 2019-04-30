@@ -1,7 +1,16 @@
+2019-04-30  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/rebalance.R (rebalance): 'drop.zero' now
+	drops instruments for which 'current' and
+	'target' are the same, i.e. for which no
+	rebalancing is necessary (before, it would only
+	drop instruments for which both 'current' and
+	'target' are zero)
+
 2019-04-03  Enrico Schumann  <es@enricoschumann.net>
 
         * R/rebalance.R (rebalance): list instruments
-	for which prices are missing
+        for which prices are missing
 
 2019-04-01  Enrico Schumann  <es@enricoschumann.net>
 

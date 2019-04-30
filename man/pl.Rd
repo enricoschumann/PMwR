@@ -59,7 +59,12 @@ pl(amount, \dots )
 
   }
   \item{along.timestamp}{
-    a logical
+
+    logical; or a a vector of timestamps. If the latter,
+    \code{vprice} must be specified as well. See the vignette
+    \dQuote{Profit/Loss for Open Positions} (\code{pl_open_positions})
+    for details.
+
   }
   \item{initial.position}{
     a \code{\link{position}}.
@@ -123,7 +128,7 @@ pl(amount, \dots )
   and/or \code{vprice} (see Examples).
 
   Using \code{vprice}: when \code{along.timestamp} is
-  logical (\code{FALSE} or \code{TRUE}) ,
+  logical (\code{FALSE} or \code{TRUE}),
   \code{vprice} can be used to value an open
   position. For a single asset, it should be a single
   number; for several assets, it should be named
@@ -135,7 +140,7 @@ pl(amount, \dots )
   be a numeric matrix with dimension
   \code{length(along.timestamp)} times number of
   assets.
-  
+
   To use package \pkg{crayon} -- which is only sensible
   in interactive use --, either explicitly set
   \code{use.crayon} to \code{TRUE} or set an option

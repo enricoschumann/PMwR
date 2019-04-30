@@ -6,7 +6,7 @@
   Rebalance Portfolio
 }
 \description{
-  Compute the differences between two portfolios.  
+  Compute the differences between two portfolios.
 }
 \usage{
 rebalance(current, target, price,
@@ -18,7 +18,7 @@ rebalance(current, target, price,
 
 \method{print}{rebalance}(x, \dots, drop.zero = TRUE)
 
-replace_weight(weights, ..., prefix = TRUE, sep = "::") 
+replace_weight(weights, ..., prefix = TRUE, sep = "::")
 }
 \arguments{
   \item{current}{
@@ -32,7 +32,7 @@ replace_weight(weights, ..., prefix = TRUE, sep = "::")
   \item{price}{
     the current prices
   }
-  \item{notional}{    
+  \item{notional}{
     the value of the portfolio; if missing, replaced by
     \code{sum(current*prices)}
   }
@@ -56,7 +56,13 @@ replace_weight(weights, ..., prefix = TRUE, sep = "::")
     \code{replace_weight}: numeric vectors
   }
   \item{drop.zero}{
-    logical; note the different defaults for computing and printing
+
+    logical: should instruments with no difference
+    between \code{current} and \code{target} be included?
+
+    Note the different defaults for computing and
+    printing.
+
   }
   \item{current.weights}{
     logical. If \code{TRUE} (the default), the values in \code{current} are
@@ -90,14 +96,14 @@ replace_weight(weights, ..., prefix = TRUE, sep = "::")
   \code{\link{make.names}}), quote them. The passed
   vectors themselves should be passed as named
   arguments: see examples.
-  
+
 
 }
 \value{
 
   An object of class \code{rebalance}, which is a
   \code{data.frame}:
-  
+
   \item{instrument}{character, or \code{NA} when
                     \code{match.names} is \code{FALSE}}
   \item{price}{prices}
@@ -106,11 +112,11 @@ replace_weight(weights, ..., prefix = TRUE, sep = "::")
   \item{difference}{the difference between current and target}
 
   Attached to the data.frame are several attributes:
-  
+
   \item{notional}{notional}
   \item{match.names}{logical}
   \item{multiplier}{multipliers}
-  
+
 }
 \references{
 

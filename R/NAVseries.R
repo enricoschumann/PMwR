@@ -552,7 +552,7 @@ Drawdown                                                                        
 \\quad trough          & %mdd.low%    & \\footnotesize(%mdd.low.when%)           \\\\
 \\quad underwater  now & %underwater% &                                          \\\\[1ex]
 Volatility p.a. in \\% & %vol%        &                                          \\\\
-\\quad upside          & %vol.up%                                                \\\\ 
+\\quad upside          & %vol.up%                                                \\\\
 \\quad downside        & %vol.down%                                              \\\\
 \\end{tabular}"
 
