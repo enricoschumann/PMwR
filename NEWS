@@ -1,3 +1,8 @@
+v0.12-0  (2019-??-??; not yet released)
+
+  o a tutorial on backtesting is available at
+    https://ssrn.com/abstract=3374195
+
 v0.11-0  (2019-04-01)
 
   o returns: 'weights' may now also be a matrix with as
