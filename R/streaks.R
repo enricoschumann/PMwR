@@ -118,7 +118,9 @@ streaks.default <- function(x, up =  0.2, down = -0.2,
         }
     }
     results <- rbind(results,
-                     data.frame(start = start, end = length(x), state = state))
+                     data.frame(start = start,
+                                end = length(x),
+                                state = state))
     results[["return"]] <- x[results$end]/x[results$start] - 1
     results
 }
