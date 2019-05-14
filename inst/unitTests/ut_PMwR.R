@@ -607,6 +607,29 @@ test.btest <- function() {
 
 }
 
+test.btest.b <- function() {
+    prices <- 1:5
+    timestamp <- Sys.Date() + 0:4
+
+    res <- btest(prices = 1:5,
+                 signal = function() 1,
+                 timestamp = timestamp, 
+                 b = timestamp[1L] + 0.5)
+    checkEquals(res$b, 1)
+
+    res <- btest(prices = 1:5,
+                 signal = function() 1,
+                 timestamp = timestamp, 
+                 b = timestamp[1L])
+    checkEquals(res$b, 1)
+
+    res <- btest(prices = 1:5,
+                 signal = function() 1,
+                 timestamp = timestamp, 
+                 b = timestamp[1L] - 0.5)
+    checkEquals(res$b, 1)
+}
+    
 test.btest.position <- function() {
 
     ## single instrument

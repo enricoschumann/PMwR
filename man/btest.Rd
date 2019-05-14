@@ -104,7 +104,10 @@ btest(prices, signal,
   }
   \item{b}{
 
-    burn-in (an integer). Defaults to 1.
+    burn-in (an integer). Defaults to 1. This may also
+    be a length-one timestamp of the same class as
+    \code{timestamp}, in which case the data up to (and
+    including) \code{b} are skipped.
 
   }
   \item{fraction}{

@@ -1,3 +1,8 @@
+2019-05-14  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): clarify documentation of
+	burnin 'b'
+
 2019-04-30  Enrico Schumann  <es@enricoschumann.net>
 
         * R/rebalance.R (rebalance): 'drop.zero' now

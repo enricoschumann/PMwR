@@ -164,7 +164,10 @@ btest  <- function(prices,
     if (!missing(timestamp) &&
         (inherits(timestamp, "Date") || inherits(timestamp, "POSIXct")) &&
         inherits(b, class(timestamp))) {
-        b <- matchOrNext(b, timestamp)
+        b <- if (b < min(timestamp))
+                 0
+             else
+                 .match_or_previous(b, timestamp)
     }
 
     if ("tradeOnOpen" %in% names(list(...)))
