@@ -320,9 +320,9 @@ test.btest <- function() {
     solution <- btest(prices = prices, signal = signal, convert.weights = TRUE,
                       initial.cash = 1000)
     checkEquals((solution$wealth * signal()/prices)[-length(prices)],
-                solution$suggested.position[-1]) 
+                solution$suggested.position[-1])
     checkEquals((solution$wealth * signal()/prices)[-length(prices)],
-                solution$position[-1]) 
+                solution$position[-1])
 
 
     ## signal returns a weight, 2 assets
@@ -532,7 +532,7 @@ test.btest <- function() {
     ## })
     ## warning only, no trades
     options(warn = 0)
-    checkEquals(length(journal(suppressWarnings(btest(prices = prices, signal = signal, 
+    checkEquals(length(journal(suppressWarnings(btest(prices = prices, signal = signal,
                               do.signal = TRUE,
                               do.rebalance = FALSE)))),
                 0L)
@@ -613,23 +613,23 @@ test.btest.b <- function() {
 
     res <- btest(prices = 1:5,
                  signal = function() 1,
-                 timestamp = timestamp, 
+                 timestamp = timestamp,
                  b = timestamp[1L] + 0.5)
     checkEquals(res$b, 1)
 
     res <- btest(prices = 1:5,
                  signal = function() 1,
-                 timestamp = timestamp, 
+                 timestamp = timestamp,
                  b = timestamp[1L])
     checkEquals(res$b, 1)
 
     res <- btest(prices = 1:5,
                  signal = function() 1,
-                 timestamp = timestamp, 
+                 timestamp = timestamp,
                  b = timestamp[1L] - 0.5)
-    checkEquals(res$b, 1)
+    checkEquals(res$b, 0)
 }
-    
+
 test.btest.position <- function() {
 
     ## single instrument
@@ -853,7 +853,7 @@ test.journal <- function() {
                 c(journal(), journal(), journal()))
     checkEquals(summary(journal()),
                 structure(list(n_transactions = 0L, stats = NA),
-                          .Names = c("n_transactions", 
+                          .Names = c("n_transactions",
                                      "stats"),
                           class = "summary.journal"))
 
@@ -1414,9 +1414,9 @@ test.pl <- function() {
                7418.04, 7426.8 , 7414.65, 7433.29, 7478.72,
                7464.2 , 7475.08, 7456.95, 7429.93, 7444.99,
                7420.8 , 7479.4 , 7487.42, 7554.82, 7552.3)
-    
+
     checkEquals(pl(j, along.timestamp = timestamp, vprice = close)[[1]]$pl,
-                structure(c(0, 0, 0, 0, 0, 0, 876, -339, 1525, 1525, 1525, 1525, 
+                structure(c(0, 0, 0, 0, 0, 0, 876, -339, 1525, 1525, 1525, 1525,
                             1525, 1525, 1525, 1525, 1525, 1525, 1525, 1525),
                           .Names = c("2007-08-29 09:00:00",
                                      "2007-08-29 10:00:00",
@@ -1472,11 +1472,11 @@ test.quote32 <- function() {
                           fraction = 3,
                           class = "quote32"))
 
-    
+
     checkEqualsNumeric(as.numeric(q32("109")),     109)
     checkEqualsNumeric(as.numeric(q32("109'00+")), 109 + 1/32/2)
     checkEqualsNumeric(as.numeric(q32("109'10")),  109 + 10/32)
-    checkEqualsNumeric(as.numeric(q32("109-047")), 109+4.75/32)    
+    checkEqualsNumeric(as.numeric(q32("109-047")), 109+4.75/32)
     checkEquals(q32("127-00+"), q32("127-005"))
 
     checkEquals(q32("127:00+"), q32("127'005"))
@@ -1484,7 +1484,7 @@ test.quote32 <- function() {
 }
 
 test.pl.volume <- function() {
-   
+
     checkEquals(pl(amount = c(1,-1),
                    price  = c(1,2))[[1]][["volume"]], 2)
 
@@ -1496,7 +1496,7 @@ test.pl.volume <- function() {
     j <- journal(amount = c(1, -1),
                  price = 1:2,
                  timestamp = 1:2)
-    
+
     res <- pl(j, along.timestamp = 6:10, vprice = 6:10)
     checkEqualsNumeric(res[[1]][["volume"]], rep(2, 5))
     ## TODO res <- pl(j, along.timestamp = -5:-1, vprice = 1:5)
@@ -1513,7 +1513,7 @@ test.pl.volume <- function() {
     j <- journal(amount = c(1, -1),
                  price = 1:2,
                  timestamp = as.Date("2018-1-1") + 0:1)
-    
+
     res <- pl(j, along.timestamp = as.Date("2018-1-1") + 6:10, vprice = 6:10)
     checkEqualsNumeric(res[[1]][["volume"]], rep(2, 5))
     ## TODO res <- pl(j, along.timestamp = -5:-1, vprice = 1:5)
@@ -1536,18 +1536,18 @@ test.pl.vprice <- function() {
     p <- suppressWarnings(pl(j))   ## NA
     checkTrue(is.na(p[[1]]$pl))
     pl(j, vprice = 21)  ## 1
-    
+
     pl(j, vprice = c(A = 21))
     pl(j, vprice = c(B = 21))
     checkException(pl(j, vprice = c(B = 19, A = 21)), silent = TRUE)
 
     ## TODO: make tests
-    
+
     ## ## single trade, instrument named
     ## j <- journal(amount = 1,
     ##              price = 20,
     ##              instrument = "A")
-    
+
     ## pl(j)
     ## pl(j, vprice = 21)
     ## pl(j, vprice = c(A = 21))
@@ -1561,32 +1561,32 @@ test.pl.vprice <- function() {
     ##              price = 20,
     ##              instrument = "A",
     ##              timestamp = 5)
-    
+
     ## pl(j)
     ## pl(j, vprice = 21)
     ## pl(j, vprice = c(A = 21))
     ## pl(j, vprice = c(B = 21))
     ## pl(j, vprice = c(B = 21, A = 21))
-    
-    
-    
+
+
+
     ## ## single trade, along.timestamp is TRUE
     ## j <- journal(amount = 1,
     ##              price = 20,
     ##              instrument = "A",
     ##              timestamp = 5)
-    
+
     ## pl(j, along.timestamp = TRUE)
     ## pl(j, along.timestamp = TRUE, vprice = 21)  ## FIXME INCORRECT: profit is labelled realised
-    
-    
-    
-    ## 
+
+
+
+    ##
     j <- journal(amount = 1,
                  price = 20,
                  instrument = "A",
                  timestamp = 5)
-    
+
     checkException(pl(j, along.timestamp = 4:6), silent = TRUE) ## should fail: vprice must be specified
     p <- pl(j, along.timestamp = 4:6, vprice = c(21,20,22))
     checkEqualsNumeric(p[[1]]$pl, c(0,0,2))
@@ -1595,12 +1595,12 @@ test.pl.vprice <- function() {
 
 
 
-    ## 
+    ##
     J <- journal(instrument = c("A", "B", "B"),
                  amount = c(1, 1, -1),
                  price = c(100, 10, 11),
                  timestamp = c(1, 1, 2))
-    
+
     P <- cbind(c(100, 101, 105),
                c(10, 12, 9))
     colnames(P) <- c("A", "B")
@@ -1658,7 +1658,7 @@ test.pl.vprice <- function() {
     checkEqualsNumeric(p[[1]]$pl,         c(0,1,1))
     checkEqualsNumeric(p[[1]]$realised,   c(0,1,1))
     checkEqualsNumeric(p[[1]]$unrealised, c(0,0,0))
-    
+
 
     ## do.sum
     p <- pl(J,
@@ -1677,7 +1677,7 @@ test.pl.vprice <- function() {
     j <- journal(amount = c(1, -1),
                  price = 1:2,
                  timestamp = 1:2)
-    
+
     res <- pl(j, along.timestamp = 6:10, vprice = 6:10)
     checkEqualsNumeric(res[[1]]$pl, rep(1, 5))
     checkEqualsNumeric(res[[1]]$realised, rep(1, 5))
@@ -1705,7 +1705,7 @@ test.pl.vprice <- function() {
     checkEqualsNumeric(res[[1]]$unrealised, rep(0, 5))
     checkEqualsNumeric(res[[1]]$volume, rep(4, 5))
 
-    
+
 }
 
 
@@ -1717,7 +1717,7 @@ test.rebalance <- function() {
     prices  <- c(1,1,1,1)
     target  <- c(0.25, 0.25, 0.25, 0.25)
 
-    ## missing names should raise error 
+    ## missing names should raise error
     checkException(rebalance(current, target, prices),
                    silent = TRUE)
 
@@ -1728,7 +1728,7 @@ test.rebalance <- function() {
     x <- rebalance(current, target, prices,
                    multiplier = 10,
                    match.names = FALSE)
-    
+
     ### ... no initial position: 'current' is 0
     current <- 0
     target  <- c(0.25, 0.25, 0.25, 0.25)
@@ -1739,12 +1739,12 @@ test.rebalance <- function() {
     x <- rebalance(current, target, prices,
                    match.names = FALSE, notional = 200)
     checkEquals(x$target, rep(50, 4))
-    
+
     checkException(
         rebalance(current, target, prices,  ## current is 0, so
                   match.names = FALSE),     ## notional must be specified
         silent = TRUE)
-    
+
     ### ... liquidate all: 'target' is 0
     current <- c(1,1,1,1)
     x <- rebalance(current, target = 0, prices,
@@ -1756,7 +1756,7 @@ test.rebalance <- function() {
                    match.names = FALSE)
     checkEquals(x$target, rep(0,4))
 
-    
+
     ### ... no position and move to target weight
     x <- rebalance(current = 0, target = 0.25, prices,
                    match.names = FALSE, notional = 100)
@@ -1767,15 +1767,15 @@ test.rebalance <- function() {
                    match.names = FALSE, notional = 1000)
     checkEquals(x$target, rep(250, 4))
     checkEquals(x$difference, rep(250, 4))
-    
+
     checkException( ## target has 2 assets; prices has 4 assets
         rebalance(current = 0, target = c(0.5,0.5),
                   prices, match.names = FALSE, notional = 100),
         silent = TRUE)
 
 
-    
-    
+
+
     ## WITH NAMES (match.names == TRUE is default)
 
     prices  <- c(1,1,1,1)
@@ -1794,7 +1794,7 @@ test.rebalance <- function() {
                    notional = 100)
     checkEquals(x$target, c(33, 16, 11))
     checkEquals(x$target, x$difference)
-    
+
     prices <- c(A = 1, B = 2, C = 3)
     x <- rebalance(current = 0,
               target = 0.1,
@@ -1803,13 +1803,13 @@ test.rebalance <- function() {
     checkEquals(x$target, c(10, 5, 3))
     checkEquals(x$target, x$difference)
 
-    
-    
+
+
     ##  with position/journal
     j <- journal(amount = c(1, 2),
                  instrument = c("A", "B"))
     w <- c(A = 0.5, B = 0.5)
-    
+
     amount <- rebalance(position(j), w, price = c(A = 1, B = 12))
     checkEquals(as.journal(amount),
                 structure(list(instrument = c("A", "B"),
@@ -1820,7 +1820,7 @@ test.rebalance <- function() {
                                      "amount", "price"),
                           class = "journal"))
 
-    
+
     checkEquals(as.journal(amount, price = FALSE),
                 structure(list(instrument = c("A", "B"),
                                timestamp  = c(NA, NA),
@@ -1828,7 +1828,7 @@ test.rebalance <- function() {
                                price      = c(NA, NA)),
                           .Names = c("instrument", "timestamp",
                                      "amount", "price"),
-                          class = "journal"))    
+                          class = "journal"))
 
     ##  with two positions
     prices  <- c(1,1,1,1)
@@ -1923,7 +1923,7 @@ test.returns <- function() {
     checkTrue(is.na(returns(x, pad = NA)[1]))
 
 
-    ## numeric matrix 
+    ## numeric matrix
     x <- cbind(x,x)
     checkEqualsNumeric(returns(x), x[-1,]/x[-nrow(x),] - 1)
     checkEqualsNumeric(returns(x, pad = NA)[-1,], x[-1, ]/x[-nrow(x),]-1)
@@ -1939,7 +1939,7 @@ test.returns <- function() {
     row.names(y) <- letters[1:nrow(y)]
     checkEquals(returns(y), y[-1,]/y[-nrow(x),] - 1)
     checkEquals(returns(x, pad = NA)[-1,], x[-1, ]/x[-nrow(x),]-1)
-    
+
 
     ## lagged returns -- numeric vector
     x <- 101:112; lag <- 4
@@ -1950,7 +1950,7 @@ test.returns <- function() {
     checkTrue(all(is.na(returns(x, pad = NA, lag = lag)[1:lag])))
 
 
-    ## lagged returns -- matrix 
+    ## lagged returns -- matrix
     x <- cbind(x,x)
     checkEqualsNumeric(returns(x, lag = lag),
                        x[-(1:lag), ]/x[-((nrow(x)-lag+1):nrow(x)), ] - 1)
@@ -1970,13 +1970,13 @@ test.returns <- function() {
     checkEquals(returns(z, pad = 0),
                 zoo(returns(as.numeric(z), pad = 0), index(z)))
 
-    
+
     ## padding in zoo -- numeric vector
     checkTrue(is.na(returns(z, pad = NA)[1L]))
     checkTrue(coredata(returns(z, pad = 0)[1L]) == 0)
     checkTrue(coredata(returns(z, pad = 1)[1L]) == 1)
 
-    
+
     ## period, but no timestamp: period is ignored.
     ## timestamp, but no period: timestamp is ignored.
     ##
@@ -1988,14 +1988,14 @@ test.returns <- function() {
     t <- seq_along(x)
     suppressWarnings(checkEquals(returns(x, period = "month"), returns(x)))
     suppressWarnings(checkEquals(returns(x, t = t),            returns(x)))
-    
+
     ## period -- check class
     t <- seq(as.Date("2012-01-01"), as.Date("2012-12-31"), by = "1 day")
     x <- seq_along(t)/10 + 100
     z <- zoo(x, t)
     ## z <- cbind(z,z,z)
     returns(z, period = "mtd")
-    
+
     checkTrue("p_returns" %in% class(returns(x, t = t, period = "month")))
     checkTrue("p_returns" %in% class(returns(z,        period = "month")))
     checkTrue(class(returns(z)) == "zoo")
@@ -2019,12 +2019,12 @@ test.returns <- function() {
     checkEquals(c(returns(x, t = t, period = "month")),
                 returns(x[c(1,ti)]))
 
-    
+
     ## period -- ytd
     ## --> supress warning that 2012 is not the current year
     checkEquals(c(suppressWarnings(returns(x, t = t, period = "ytd"))),
                 tail(x,1)/head(x,1) - 1)
-    
+
     ## period -- mtd
     checkEquals(c(returns(x, t = t, period = "mtd")),
                 tail(x, 1) / x[match(as.Date("2012-11-30"),t)] - 1)
@@ -2037,7 +2037,7 @@ test.returns <- function() {
                                           "2012-9-30",
                                           "2012-12-31")),t)]))
 
-    
+
 
     ## from journal to time-weighted returns
 
@@ -2079,7 +2079,7 @@ test.returns.period <- function() {
     ni <- nth_day(dates, period = "year", n = "last", index = TRUE)
     checkEqualsNumeric(.returns(x[ni], lag = 1), R)
     checkEquals(attr(R, "t"), n[-1])
-    
+
 }
 
 test.returns.rebalance  <- function() {
@@ -2090,12 +2090,12 @@ test.returns.rebalance  <- function() {
     weights <- c(0.8, 0.2)
     ans <- returns(prices, weights = weights)
     checkEqualsNumeric(ans, returns(prices) %*% weights)
-    
+
     weights <- c(0.8, 0.2)
     ans <- returns(prices, weights = weights,
                    rebalance.when = 1)
     checkEqualsNumeric(ans, returns(prices %*% (weights/prices[1, ])))
-    
+
     weights <- c(0.8, 0.2)
     ans <- returns(prices, weights = weights,
                    rebalance.when = 2)
@@ -2116,12 +2116,12 @@ test.returns.rebalance  <- function() {
                    weights = weights,
                    rebalance.when = FALSE)
     checkEqualsNumeric(ans, rep(0, nrow(prices)-1))
-    
+
     weights <- rbind(c(0.8, 0.2),
                      c(0.5, 0.5))
     ans <- returns(prices,
                    weights = weights,
-                   rebalance.when = c(1, 3))    
+                   rebalance.when = c(1, 3))
     tmp1 <- returns(prices[1:3, ] %*% (weights[1L, ]/prices[1L, ]))
     tmp2 <- returns(prices[3:5, ] %*% (weights[2L, ]/prices[3L, ]))
     checkEqualsNumeric(ans, c(tmp1, tmp2))
@@ -2134,7 +2134,7 @@ test.returns.rebalance  <- function() {
                      c(0.5, 0.5))
     ans <- returns(prices,
                    weights = weights,
-                   rebalance.when = c(1, 3))    
+                   rebalance.when = c(1, 3))
     tmp1 <- returns(prices[1:3, ] %*% (weights[1L, ]/prices[1L, ]))
     tmp2 <- returns(prices[3:5, ] %*% (weights[3L, ]/prices[3L, ]))
     checkEqualsNumeric(ans, c(tmp1, tmp2))
@@ -2155,13 +2155,13 @@ test.returns.rebalance  <- function() {
         sort(names(attributes(returns(x, weights = c(1,0))))),
         c("contributions", "holdings"))
 
-    
+
     ## ... with zoo
     checkEquals(returns(zoo(x,t))[,1],
                 c(returns(zoo(x,t), weights = c(1,0))))
     checkEquals(returns(zoo(x,t))[,2],
                 c(returns(zoo(x,t), weights = c(0,1))))
-    
+
     ## ... check attr with zoo
     checkEquals(
         sort(names(attributes(returns(zoo(x,t), weights = c(1,0))))),
@@ -2201,7 +2201,7 @@ test.returns.rebalance  <- function() {
                       rebalance.when = 3),
               "holdings")
     checkEquals(h1, h4)
-    
+
 
 
     x  <- cumprod(1+rnorm(10, sd = 0.02))
@@ -2280,27 +2280,27 @@ test.scale1 <- function() {
     checkEqualsNumeric(scale1(p), p/104)
     checkEqualsNumeric(scale1(p, when = 2), p/108)
     checkEquals(sd(returns(scale1(p, scale = TRUE))), 1)
-    checkEquals(scale1(p, when = 2, scale = TRUE)[2L], 1) 
+    checkEquals(scale1(p, when = 2, scale = TRUE)[2L], 1)
 
     ## NA handling
     p <- cbind(c(104, 108, 104, 105),
-               c( NA, 108, 104, 105))    
+               c( NA, 108, 104, 105))
     checkEqualsNumeric(scale1(p), p/108)
     checkEqualsNumeric(scale1(p, level = 100), p/1.08)
 
     p <- cbind(c(104, 108, 104, 105),
-               c(103, 108, 104, 105))    
+               c(103, 108, 104, 105))
 
     ## centring (aka de-meaning) -- arithmetic
     checkEquals(apply(returns(scale1(p, centre = TRUE, geometric=FALSE)),
-                      2, mean, na.rm = TRUE), 
+                      2, mean, na.rm = TRUE),
                 rep(0, ncol(p)))
 
     ## TODO: de-mean: geometric
     ## checkEquals(apply(returns(scale1(p, centre = TRUE, geometric=TRUE)),
-    ##                   2, mean, na.rm = TRUE), 
+    ##                   2, mean, na.rm = TRUE),
     ##             rep(0, ncol(p)))
-    
+
     ## vol scaling -- target vol is 0.01
     checkEquals(apply(returns(scale1(p, scale = 0.01)),
                       2, sd, na.rm = TRUE),
@@ -2311,21 +2311,21 @@ test.scale1 <- function() {
                                      centre = TRUE,
                                      scale = 0.01,
                                      geometric=FALSE)),
-                      2, mean, na.rm = TRUE), 
+                      2, mean, na.rm = TRUE),
                 rep(0, ncol(p))) ## arith. mean is zero
 
     checkEquals(apply(returns(scale1(p,
                                      centre = TRUE,
                                      scale = 0.01,
                                      geometric=FALSE)),
-                      2, sd, na.rm = TRUE), 
+                      2, sd, na.rm = TRUE),
                 rep(0.01, ncol(p))) ## sd is 0.01
 
     ## de-mean & scale -- geometric
     P <- scale1(p, centre = TRUE,
                 scale = 0.01,
                 geometric = TRUE)
-    checkEquals(P[nrow(P), ]/P[1, ], 
+    checkEquals(P[nrow(P), ]/P[1, ],
                 rep(1, ncol(p))) ## geom. mean is zero ==
                                  ## total return is zero
 
@@ -2362,8 +2362,8 @@ test.scale1 <- function() {
 
     P.scaled <- scale1(P, when = "first", level = 42)
     checkEquals(returns(P), returns(P.scaled))
-    checkEquals(P.scaled[1], 42)    
-    
+    checkEquals(P.scaled[1], 42)
+
 }
 
 test.replace_weight <- function() {
@@ -2386,16 +2386,16 @@ test.unit_prices  <- function() {
                                   as.Date("2017-1-10"),
                                   by = "1 day"),
                   NAV = c(100,101:103,204:209))
-    
+
     x1 <- unit_prices(NAV, cf, cf.included = TRUE)
-    
+
     NAV <- data.frame(timestamp = seq(as.Date("2017-1-1"),
                                       as.Date("2017-1-10"),
                                       by = "1 day"),
                       NAV = c(0,101:104,205:209))
-    
+
     x2 <- unit_prices(NAV, cf, cf.included = FALSE)
-    
+
     checkEquals(x1$price,x2$price)
 
 }
@@ -2408,7 +2408,7 @@ test.is_valid_ISIN <- function() {
               "not_an_isin")
     checkEquals(unname(is_valid_ISIN(isin)),
                 c(TRUE, TRUE,  TRUE, FALSE))
-    
+
     ## case is ignored
     checkEquals(unname(is_valid_ISIN(c("US0378331005",
                                        "us0378331005"))),
