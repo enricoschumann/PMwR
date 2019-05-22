@@ -1,16 +1,21 @@
+2019-05-22  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/div_adjust.R (div_adjust): fix handling of
+        case additive = FALSE
+
 2019-05-14  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R (btest): clarify documentation of
-	burnin 'b'
+        * R/btest.R (btest): clarify documentation of
+        burnin 'b'
 
 2019-04-30  Enrico Schumann  <es@enricoschumann.net>
 
         * R/rebalance.R (rebalance): 'drop.zero' now
-	drops instruments for which 'current' and
-	'target' are the same, i.e. for which no
-	rebalancing is necessary (before, it would only
-	drop instruments for which both 'current' and
-	'target' are zero)
+        drops instruments for which 'current' and
+        'target' are the same, i.e. for which no
+        rebalancing is necessary (before, it would only
+        drop instruments for which both 'current' and
+        'target' are zero)
 
 2019-04-03  Enrico Schumann  <es@enricoschumann.net>
 
