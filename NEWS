@@ -1,7 +1,13 @@
-v0.12-0  (2019-??-??; not yet released)
+v0.11-1  (2019-06-02)
 
   o div_adjust: fix handling of dividends for case
     additive = FALSE
+
+  o rebalance: 'drop.zero' now drops instruments for
+    which 'current' and 'target' are the same, i.e. for
+    which no rebalancing is necessary (before, it would
+    only drop instruments for which both 'current' and
+    'target' are zero)
 
   o a tutorial on backtesting is available at
     https://ssrn.com/abstract=3374195
