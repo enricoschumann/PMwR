@@ -624,8 +624,11 @@ btest  <- function(prices,
                            Globals = Globals)
 
             if (!is.null(temp)) {
-                if (convert.weights)
-                    temp <- temp * initial.wealth/prices0
+                if (convert.weights) {
+                    temp0 <- temp != 0
+                    temp[temp0] <- temp[temp0] *
+                                   initial.wealth/prices0[temp0]
+                }
                 Xs[t, ] <- temp
             } else
                 Xs[t, ] <- 0
@@ -738,8 +741,10 @@ btest  <- function(prices,
                            Globals = Globals)
 
             if (!is.null(temp)) {
-                if (convert.weights)
-                    temp <- temp * v[t1] / mC[t1, ]
+                if (convert.weights) {
+                    temp0 <- temp != 0
+                    temp[temp0] <- temp[temp0] * v[t1] / mC[t1, temp0]
+                }
                 Xs[t, ] <- temp
             } else
                 Xs[t, ] <- Xs[t1, ] ## b0

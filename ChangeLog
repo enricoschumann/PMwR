@@ -1,3 +1,8 @@
+2019-06-05  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/btest.R (btest): when 'convert.weights' is
+        TRUE, only convert non-zero weights
+
 2019-06-02  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.11-1
