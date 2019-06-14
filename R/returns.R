@@ -13,17 +13,17 @@ returns.default <- function(x, t = NULL, period = NULL,
 
     if (!is.null(position)) {
         position <- NULL
-        warning("time-weighted returns not supported, ",
+        warning("time-weighted returns not supported (currently), ",
                 "so position is ignored")
     }
 
-    ## if (is.null(period) && is.null(rebalance.when))
-    ##     t <- NULL
-
-    if (is.unsorted(t)) {  ## is.unsorted(NULL) == FALSE
-        idx <- order(t)
+    if (is.unsorted(t)) {  ## this works because
+        idx <- order(t)    ## is.unsorted(NULL) == FALSE
         t <- t[idx]
-        x <- x[idx]
+        if (is.null(dim(x)))
+            x <- x[idx]
+        else
+            x <- x[idx, ]
     }
 
     if (is.character(rebalance.when)) {
@@ -47,23 +47,18 @@ returns.default <- function(x, t = NULL, period = NULL,
     }
 
     if (is.null(t) &&
-        is.character(period)) {
+        is.character(period) && period != "itd") {
         warning("no timestamp information available, so ",
                 sQuote("period"), " is ignored")
         period <- NULL
     }
 
-    if (is.null(period) &&  is.null(position) && is.null(weights)) {
+    if (is.null(period) && is.null(position) && is.null(weights)) {
         .returns(x, pad = pad, lag = lag)
     } else if (is.null(position) && !is.null(weights)) {
         returns_rebalance(prices = x, weights = weights,
                           when = rebalance.when, pad = pad)
     } else if (!is.null(period)) {
-        if (is.unsorted(t)) {
-            idx <- order(t)
-            t <- t[idx]
-            x <- x[idx]
-        }
         if (lag != 1L)
             warning(sQuote("lag"), " is ignored")
         pReturns(x, t, period, complete.first, pad = pad)
@@ -163,7 +158,7 @@ returns.data.frame <- function(x, t = NULL, period = NULL,
         if (do.pad)
             rets <- c(rep.int(pad, lag), rets)
     } else {
-        rets <- x[-a, ,drop = FALSE] / x[-b, ,drop = FALSE] - 1
+        rets <- x[-a, , drop = FALSE] / x[-b, , drop = FALSE] - 1
         if (do.pad)
             rets <- do.call("rbind",
                             c(as.list(rep(pad, lag)), list(rets)))
@@ -193,7 +188,7 @@ twReturns <- function(price, position, pad = NULL) {
 
 ## not exported
 pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
-    ## TODO add also: 'previous month' and pattern 'YYYY-?MM'
+    ## TODO add also: 'previous month' and pattern 'YYYY-MM'?
     ## TODO add also: 'ytm'
 
     x <- as.matrix(x)
@@ -205,18 +200,18 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
     period <- tolower(period)
     if ((best <- grepl("best", period, ignore.case = TRUE)) ||
                  grepl("worst", period, ignore.case = TRUE)) {
-        
+
         if (grepl("year", period, ignore.case = TRUE)) {
-            
+
         } else if (grepl("quarter", period, ignore.case = TRUE)) {
-            
+
         } else if (grepl("month",   period, ignore.case = TRUE)) {
-            
+
         } else if (grepl("day",     period, ignore.case = TRUE)) {
-            
+
         } else if (grepl("hour",    period, ignore.case = TRUE)) {
 
-        }     
+        }
     } else if (grepl("^ann", period, ignore.case = TRUE)) {
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
@@ -253,11 +248,17 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         from.to <- array(NA, dim = c(nc, 2))
         colnames(from.to) <- c("from", "to")
         for (j in 1:nc) {
-            xj <- x[ ,j]
-            t0 <- min(which(!is.na(xj)))
-            t1 <- max(which(!is.na(xj)))
-            ans[j] <- drop(returns( xj[c(t0, t1)] ))
-            from.to[j,] <- c(t[t0], t[t1])
+            xj <- x[, j]
+            na <- which(!is.na(xj))
+            if (length(na) <= 1) {
+                ans[j] <- NA
+            } else {
+                t0 <- min(na)
+                t1 <- max(na)
+                ans[j] <- drop(.returns(xj[c(t0, t1)], lag = 1))
+                if (!is.null(t))
+                    from.to[j, ] <- c(t[t0], t[t1])
+            }
         }
         attr(ans, "period") <- "itd"
         class(from.to) <- "Date"

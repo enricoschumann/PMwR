@@ -2104,6 +2104,10 @@ test.returns.period <- function() {
     checkEqualsNumeric(.returns(x[ni], lag = 1), R)
     checkEquals(attr(R, "t"), n[-1])
 
+
+    checkEqualsNumeric(returns(rep(1, 10), period = "itd"), 0)
+    checkEqualsNumeric(returns(rep(NA, 10), period = "itd"), NA_real_)
+
 }
 
 test.returns.rebalance  <- function() {

@@ -1,3 +1,9 @@
+2019-06-14  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/returns.R (returns): returns will now be
+        computed for period "itd" even when no
+        timestamp is provided
+
 2019-06-05  Enrico Schumann  <es@enricoschumann.net>
 
         * R/btest.R (btest): when 'convert.weights' is
