@@ -539,32 +539,45 @@ btest  <- function(prices,
     }
 
     if (is.list(prices)) {
-
         if (length(prices) == 1L) {
-            mC <- as.matrix(prices[[1L]])
+
+            mC <- prices[[1L]]
+            if (is.vector(mC, "numeric"))
+                mC <- as.matrix(mC)
             trade.at.open <- FALSE
+
         } else if (length(prices) == 4L) {
-            mO <- as.matrix(prices[[1L]])
-            mH <- as.matrix(prices[[2L]])
-            mL <- as.matrix(prices[[3L]])
-            mC <- as.matrix(prices[[4L]])
+            mO <- prices[[1L]]
+            mH <- prices[[2L]]
+            mL <- prices[[3L]]
+            mC <- prices[[4L]]
+   
+            if (is.vector(mO, "numeric"))
+                mO <- as.matrix(mO)
+            if (is.vector(mH, "numeric"))
+                mH <- as.matrix(mH)
+            if (is.vector(mL, "numeric"))
+                mL <- as.matrix(mL)
+            if (is.vector(mC, "numeric"))
+                mC <- as.matrix(mC)
         } else
             stop("see documentation on ", sQuote("prices"))
 
     } else {
 
-        prices <- as.matrix(prices)
+        if (is.vector(prices, "numeric"))
+            prices <- as.matrix(prices)
+
         if (ncol(prices) == 1L) {
             mC <- prices
             trade.at.open <- FALSE
         } else if (ncol(prices) == 4L) {
-            mO <- prices[ ,1L]
-            mH <- prices[ ,2L]
-            mL <- prices[ ,3L]
-            mC <- prices[ ,4L]
+            mO <- prices[, 1L]
+            mH <- prices[, 2L]
+            mL <- prices[, 3L]
+            mC <- prices[, 4L]
         } else
             stop("see documentation on ", sQuote("prices"))
-
     }
 
     ## param .... settings

@@ -607,6 +607,21 @@ test.btest <- function() {
 
 }
 
+test.btest.prices <- function() {
+    prices <- 1:5
+    checkEquals(
+        btest(prices, signal = function() 1),
+        btest(as.matrix(prices), signal = function() 1))
+
+    checkEquals(
+        btest(prices, signal = function() 1),
+        btest(list(prices), signal = function() 1))
+
+    checkEquals(
+        btest(prices, signal = function() 1),
+        btest(list(as.matrix(prices)), signal = function() 1))
+}
+
 test.btest.b <- function() {
     prices <- 1:5
     timestamp <- Sys.Date() + 0:4
@@ -693,7 +708,6 @@ test.btest.NA <- function() {
     prices <- 1:5
     prices[4:5] <- NA
     signal <- function() {
-        message(Time(0))
         if (Time(0) <= 3)
             0.5 else 0
     }

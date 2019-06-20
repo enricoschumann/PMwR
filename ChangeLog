@@ -1,3 +1,13 @@
+2019-06-20  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): [experimental]
+	'as.matrix' is no longer generally called on
+	'prices', but only if 'prices' are numeric
+	vectors. This allows alternative classes to
+	be used for 'prices', as long as they define
+	subsetting via integers/logicals in the same
+	way as numeric matrices
+
 2019-06-14  Enrico Schumann  <es@enricoschumann.net>
 
         * R/returns.R (returns): returns will now be
@@ -211,8 +221,8 @@
 
 2018-10-11  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/btest.R (btest): experimental -- argument
-        'tc' may also be a function
+        * R/btest.R (btest): [experimental]
+	argument 'tc' may also be a function
 
         * R/btest.R (btest): fixed -- when a signal
         function evaluates to NULL, the suggested
@@ -302,8 +312,9 @@
 
 2018-08-17  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/btest.R (btest): experimental -- new
-        arguments 'variations' and 'variations.settings'
+        * R/btest.R (btest): [experimental]
+	new arguments 'variations' and
+	'variations.settings'
 
 2018-08-04  Enrico Schumann  <es@enricoschumann.net>
 
@@ -747,9 +758,8 @@
 
 2017-08-16  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/pricetable.R (pricetable.zoo): experimental
-        -- have pricetable merge zoo series passed
-        via ...
+        * R/pricetable.R (pricetable.zoo): [experimental]
+        have pricetable merge zoo series passed via ...
 
 2017-08-16  Enrico Schumann  <es@enricoschumann.net>
 
