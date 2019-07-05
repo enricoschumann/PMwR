@@ -22,7 +22,8 @@ pl(amount, \dots )
    along.timestamp = FALSE, approx = FALSE,
    initial.position = NULL, initial.price = NULL,
    vprice = NULL, tol = 1e-10, do.warn = TRUE,
-   do.sum = FALSE, pl.only = FALSE, \dots )
+   do.sum = FALSE, pl.only = FALSE,
+   footnotes = TRUE, \dots )
 
 \method{pl}{journal}(amount, multiplier = 1,
    multiplier.regexp = FALSE,
@@ -32,7 +33,8 @@ pl(amount, \dots )
 
 \method{pl}{pl}(amount, \dots )
 
-\method{print}{pl}(x, \dots, use.crayon = NULL, na.print = ".")
+\method{print}{pl}(x, \dots, use.crayon = NULL, na.print = ".",
+        footnotes = TRUE)
 
 \method{as.data.frame}{pl}(x, \dots )
 
@@ -104,6 +106,8 @@ pl(amount, \dots )
   \item{do.sum}{logical: sum profit/loss across instruments?}
   \item{pl.only}{logical: if \code{TRUE}, return only
     numeric vector of profit/loss}
+  \item{footnotes}{logical, with default \code{TRUE}:
+    collect and print notes?}
 }
 \details{
 
@@ -162,7 +166,7 @@ pl(amount, \dots )
 
 }
 \references{
-Schumann, E. (2018) \emph{Portfolio Management
+Schumann, E. (2019) \emph{Portfolio Management
   with R}. \url{http://enricoschumann.net/PMwR/}
 
 }
@@ -170,14 +174,16 @@ Schumann, E. (2018) \emph{Portfolio Management
   Enrico Schumann <es@enricoschumann.net>
 }
 \seealso{
-  \code{\link{btest}},   \code{\link{returns}}
+  \code{\link{btest}}, \code{\link{returns}}
 }
 \examples{
 J <- journal(timestamp = c(  1,   2,   3),
              amount    = c(  1,   1,  -2),
              price     = c(100, 102, 101))
 pl(J)
-pl(c(1, 1, -2), c(100,102, 101))  ## without a 'journal'
+
+pl(amount = c(  1,   1,  -2),
+   price  = c(100, 102, 101))  ## without a 'journal'
 
 
 J <- journal(timestamp  = c(  1,   2,   3,   1,   2,   3),

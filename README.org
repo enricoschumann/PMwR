@@ -73,6 +73,6 @@ you wish to use the package on Windows and have
 problems building it, then please contact me and I will
 provide you with a Windows version.
 
-There are also a publicly-available repositories at
+There are also publicly-available repositories at
 https://github.com/enricoschumann/PMwR and
 https://gitlab.com/enricoschumann/PMwR.

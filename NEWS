@@ -1,6 +1,15 @@
 v0.12-0  (2019-??-??; not yet released)
 
-  o
+  o see the ChangeLog for all details
+
+  o returns: returns will now be computed for period
+    "itd" even when no timestamp is provided
+
+  o 'btest' works in more cases with NAs in prices:
+    when 'convert.weights' is TRUE, only non-zero
+    weights are converted. So as long as a strategy
+    does not specify positions in series with missing
+    prices, positions and so on can be computed.
 
 v0.11-1  (2019-06-02)
 

@@ -1,3 +1,13 @@
+2019-07-03  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/pl.R (pl.default, print.pl): new argument
+	'footnotes', with default TRUE. If FALSE, less
+	information is printed for 'pl' objects. In
+	particular, open positions no longer produce a
+	warning ("sum(amount) is not zero"), but only a
+	message, which is only shown when 'footnotes'
+	is TRUE.
+
 2019-06-20  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/btest.R (btest): [experimental]
@@ -6,7 +16,7 @@
 	vectors. This allows alternative classes to
 	be used for 'prices', as long as they define
 	subsetting via integers/logicals in the same
-	way as numeric matrices
+	way as numeric matrices.
 
 2019-06-14  Enrico Schumann  <es@enricoschumann.net>
 

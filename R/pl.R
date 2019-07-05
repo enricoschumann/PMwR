@@ -4,7 +4,10 @@
 pl <- function(amount, ...)
     UseMethod("pl")
 
-print.pl <- function(x, ..., use.crayon = NULL, na.print = ".") {
+print.pl <- function(x, ...,
+                     use.crayon = NULL,
+                     na.print = ".",
+                     footnotes = TRUE) {
     if (is.null(use.crayon))
         use.crayon <- getOption("PMwR.use.crayon")
 
@@ -74,9 +77,13 @@ print.pl <- function(x, ..., use.crayon = NULL, na.print = ".") {
         if (i < ni)
             cat("\n")
     }
-    cat("\n", sQuote("P/L total"), " is in units of instrument;\n",
-        sQuote("volume"), " is sum of /absolute/ amounts.\n",
-        sep = "")
+    if (footnotes) {
+        cat("\n", sQuote("P/L total"), " is in units of instrument;\n",
+            sQuote("volume"), " is sum of /absolute/ amounts.\n",
+            sep = "")
+        if (!is.null(fn <- attr(x, "footnotes")))
+            message(paste(fn, collapse = "\n"))
+    }
     invisible(x)
 }
 
@@ -121,12 +128,16 @@ pl.default <- function(amount, price, timestamp = NULL,
                        initial.price = NULL,
                        vprice = NULL,
                        tol = 1e-10, do.warn = TRUE,
-                       do.sum = FALSE, pl.only = FALSE, ...) {
+                       do.sum = FALSE, pl.only = FALSE,
+                       footnotes = TRUE, ...) {
 
     if (length(multiplier) > 1L && is.null(names(multiplier)))
         stop(sQuote("multiplier"), " must be a named vector")
     if (approx)
         .NotYetUsed("approx")
+
+    if (footnotes)
+        fn <- NULL
 
     custom.timestamp <- FALSE
     if (isTRUE(along.timestamp)) {
@@ -298,18 +309,17 @@ pl.default <- function(amount, price, timestamp = NULL,
 
         open <- abs(sum(amount1)) > tol
         if (open && !custom.timestamp) {
-            if (do.warn && (is.null(vprice) || is.na(vprice1)))
-                warning(sQuote("sum(amount)"), " is not zero",
-                        if (!no.i) paste0(" for ",  uniq.i[i]),
-                        ": specify ",
-                        sQuote("vprice")," to compute p/l")
+            if (footnotes && (is.null(vprice) || is.na(vprice1)))
+                fn <- c(fn, paste0(sQuote("sum(amount)"), " is not zero",
+                                   if (!no.i) paste0(" for ",  uniq.i[i]),
+                                   ": specify ",
+                                   sQuote("vprice")," to compute P/L."))
             subtr <- subtr + abs(sum(amount1))
             amount1 <- c(amount1, -sum(amount1))
             price1 <- c(price1, vprice1)
         }
 
         pl1 <- .pl(amount1, price1, tol = tol, do.warn = FALSE)
-
 
         if (identical(along.timestamp, FALSE)) {
 
@@ -422,6 +432,8 @@ pl.default <- function(amount, price, timestamp = NULL,
         names(ans1) <- names(ans)
         ans <- ans1
     }
+    if (footnotes)
+        attr(ans, "footnotes") <- fn
     ans
 }
 
