@@ -4,8 +4,28 @@
 pricetable <- function(price, ...)
     UseMethod("pricetable")
 
-pricetable.default <- function(price, instrument, timestamp, ...) {
-    price <- as.matrix(price)
+pricetable.default <- function(price, instrument, timestamp,
+                               use.names = NULL, ...) {
+
+    if (.isFALSE(use.names))
+        unname(price)
+
+    if (!is.matrix(price)) {
+
+        if ((!.isFALSE(use.names) && missing(instrument)) ||
+            isTRUE(use.names)) {
+            instrument <- names(price)
+            price <- unname(price)
+        }
+
+        if (!missing(instrument) &&
+            length(price) == length(instrument) &&
+            (missing(timestamp) || length(timestamp) == 1L))
+            price <- t(price)
+        else
+            price <- as.matrix(price)
+    }
+
     if (missing(instrument))
         if (is.null(instrument <- colnames(price)))
             instrument <- paste0("P", seq_len(ncol(price)))
@@ -23,9 +43,6 @@ pricetable.default <- function(price, instrument, timestamp, ...) {
     ans <- price
     attr(ans, "instrument") <- instrument
     attr(ans, "timestamp") <- timestamp
-
-    ## colnames(ans) <- as.character(instrument)
-    ## rownames(ans) <- as.character(timestamp)
 
     class(ans) <- "pricetable"
     ans

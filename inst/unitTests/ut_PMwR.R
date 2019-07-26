@@ -2629,6 +2629,13 @@ test.pricetable <- function() {
                           instrument = c("A", "B", "A"),
                           class = "pricetable"))
 
+
+    ## setting up a pt: vector => matrix
+    checkTrue(all(dim(pricetable(1:2, instrument = c("A", "B"))) == c(1, 2)))
+    checkTrue(all(dim(pricetable(1:2, timestamp = 1:2)) == c(2,1)))
+    checkEquals(pricetable(1:2, instrument = c("A", "B")),
+                pricetable(c(A = 1, B = 2)))
+    
 }
 
 test.div_adjust <- function() {
@@ -2761,5 +2768,13 @@ test.split_adjust <- function() {
 test.streaks <- function() {
 
     x <- c(112, 102, 101, 104, 111, 98, 82, 93, 99, 105, 103, 110)
+
+}
+
+test.valuation <- function() {
+    pos <- position(c(A = 10, B = 5))
+    checkEqualsNumeric(valuation(pos, t(c(2, 1))),
+                       c(20,5))
+
 
 }

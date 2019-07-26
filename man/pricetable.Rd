@@ -59,7 +59,7 @@ pricetable(price, \dots)
 
 }
 \references{
-  Schumann, E. (2017) \emph{Portfolio Management with
+  Schumann, E. (2019) \emph{Portfolio Management with
     R}. \url{http://enricoschumann.net/R/packages/PMwR/}
 }
 \author{
@@ -69,6 +69,14 @@ pricetable(price, \dots)
   \code{\link{match}}
 }
 \examples{
+## quickly creating a pricetable
+pricetable(1:3)
+pricetable(1:3, instrument = c("A", "B", "C"))
+### ... and the same
+pricetable(c(A = 1, B = 2, C = 3))
+
+
+## subsetting examples
 m <- 3
 n <- 2
 price <- array(c(1:m, 1:m + 100), dim = c(m,n))

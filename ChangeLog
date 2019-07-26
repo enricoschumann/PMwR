@@ -1,28 +1,38 @@
 2019-07-26  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/position.R (toHTML.position): add
-	method. Currently only works for positions at a
-	single point in time.
+        * R/pricetable.R (pricetable.default): support
+        shortcuts for setting up a pricetable with a
+        single timestamp but several instruments. For
+        instance,
+
+          pricetable(c(A = 1, B = 2))  ## or
+          pricetable(1:2, instrument = c("A", "B"))
+
+        now create a pricetable.
+
+        * R/position.R (toHTML.position): add
+        method. Currently only works for positions at a
+        single point in time.
 
 2019-07-03  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/pl.R (pl.default, print.pl): new argument
-	'footnotes', with default TRUE. If FALSE, less
-	information is printed for 'pl' objects. In
-	particular, open positions no longer produce a
-	warning ("sum(amount) is not zero"), but only a
-	message, which is only shown when 'footnotes'
-	is TRUE.
+        * R/pl.R (pl.default, print.pl): new argument
+        'footnotes', with default TRUE. If FALSE, less
+        information is printed for 'pl' objects. In
+        particular, open positions no longer produce a
+        warning ("sum(amount) is not zero"), but only a
+        message, which is only shown when 'footnotes'
+        is TRUE.
 
 2019-06-20  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R (btest): [experimental]
-	'as.matrix' is no longer generally called on
-	'prices', but only if 'prices' are numeric
-	vectors. This allows alternative classes to
-	be used for 'prices', as long as they define
-	subsetting via integers/logicals in the same
-	way as numeric matrices.
+        * R/btest.R (btest): [experimental]
+        'as.matrix' is no longer generally called on
+        'prices', but only if 'prices' are numeric
+        vectors. This allows alternative classes to
+        be used for 'prices', as long as they define
+        subsetting via integers/logicals in the same
+        way as numeric matrices.
 
 2019-06-14  Enrico Schumann  <es@enricoschumann.net>
 
@@ -238,7 +248,7 @@
 2018-10-11  Enrico Schumann  <es@enricoschumann.net>
 
         * R/btest.R (btest): [experimental]
-	argument 'tc' may also be a function
+        argument 'tc' may also be a function
 
         * R/btest.R (btest): fixed -- when a signal
         function evaluates to NULL, the suggested
@@ -329,8 +339,8 @@
 2018-08-17  Enrico Schumann  <es@enricoschumann.net>
 
         * R/btest.R (btest): [experimental]
-	new arguments 'variations' and
-	'variations.settings'
+        new arguments 'variations' and
+        'variations.settings'
 
 2018-08-04  Enrico Schumann  <es@enricoschumann.net>
 
