@@ -1,3 +1,9 @@
+2019-07-26  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (toHTML.position): add
+	method. Currently only works for positions at a
+	single point in time.
+
 2019-07-03  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/pl.R (pl.default, print.pl): new argument

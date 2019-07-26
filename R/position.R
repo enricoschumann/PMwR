@@ -16,8 +16,8 @@ position.default <- function(amount, timestamp, instrument,
                          sum(dim.amount > 1L) == 1L
 
     no.instruments <- FALSE ## are all instruments missing/NA?
-    if (((!.isFALSE(use.names) && missing(instrument)) ||
-            isTRUE(use.names))) {
+    if ((!.isFALSE(use.names) && missing(instrument)) ||
+        isTRUE(use.names)) {
 
         if (is.amount.matrix1) {
             nm <- colnames(amount)
@@ -447,4 +447,19 @@ acc.split <- function(account, sep, perl = FALSE, tree = FALSE) {
         }
         indent
     }
+}
+
+toHTML.position <- function(x, ..., template = NULL) {
+
+    x <- unclass(x)
+    x <- unname(x)
+
+    if (nrow(x) <= 1L) {
+        .template <- c("<tr><td>%instrument%</td><td>%amount</td></tr>")
+        textutils::toHTML(
+                       data.frame(Instrument = attr(x, "instrument"),
+                                  Quantity = c(x),
+                                  stringsAsFactors = FALSE))
+    } else
+        stop("not supported")
 }
