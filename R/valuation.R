@@ -85,16 +85,20 @@ jcf <- function(x, multiplier = 1,
 
 valuation.position <- function(x, price.table, multiplier = 1,
                                do.sum = FALSE, price.unit,
-                               verbose = TRUE, ...) {
+                               verbose = TRUE, do.warn = TRUE, ...) {
 
     instrument <- attr(x, "instrument")
 
     if (!is.null(names(multiplier)))
         multiplier <- multiplier[instrument]
 
+    if (do.warn && any(is.na(multiplier))) {
+        warning("NAs in ", sQuote("multiplier"))
+    }
+
     pos <- x != 0
     miss <- which(is.na(price.table) & pos, TRUE)
-    if (nrow(miss)) {
+    if (do.warn && nrow(miss)) {
         warning("missing prices")
         if (verbose) {
             for (i in seq_len(ncol(x)))
@@ -102,7 +106,6 @@ valuation.position <- function(x, price.table, multiplier = 1,
                     warning("no prices at all for ", instrument[i])
             print(data.frame(timestamp  = .timestamp(x)[miss[, 1L]],
                              instrument = instrument(x)[miss[, 2L]]))
-
         }
     }
     price.table[!pos] <- 0
@@ -118,7 +121,7 @@ valuation.position <- function(x, price.table, multiplier = 1,
     ans
 }
 
-## TODO: add to internal documentation
+## TODO: use valuation instead
 pv <- function(x, multiplier = 1, price.table, price.unit,
                do.sum = FALSE, ...) {
 

@@ -1,5 +1,8 @@
 2019-07-26  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/valuation.R (valuation.position): warn when
+	there are missing values in multiplier
+
         * R/pricetable.R (pricetable.default): support
         shortcuts for setting up a pricetable with a
         single timestamp but several instruments. For
