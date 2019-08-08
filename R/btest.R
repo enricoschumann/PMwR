@@ -542,7 +542,7 @@ btest  <- function(prices,
         if (length(prices) == 1L) {
 
             mC <- prices[[1L]]
-            if (is.vector(mC, "numeric"))
+            if (is.null(dim(mC)))
                 mC <- as.matrix(mC)
             trade.at.open <- FALSE
 
@@ -551,21 +551,21 @@ btest  <- function(prices,
             mH <- prices[[2L]]
             mL <- prices[[3L]]
             mC <- prices[[4L]]
-   
-            if (is.vector(mO, "numeric"))
+
+            if (is.null(dim(mO)))
                 mO <- as.matrix(mO)
-            if (is.vector(mH, "numeric"))
+            if (is.null(dim(mH)))
                 mH <- as.matrix(mH)
-            if (is.vector(mL, "numeric"))
+            if (is.null(dim(mL)))
                 mL <- as.matrix(mL)
-            if (is.vector(mC, "numeric"))
+            if (is.null(dim(mC)))
                 mC <- as.matrix(mC)
         } else
             stop("see documentation on ", sQuote("prices"))
 
     } else {
 
-        if (is.vector(prices, "numeric"))
+        if (is.null(dim(prices)))
             prices <- as.matrix(prices)
 
         if (ncol(prices) == 1L) {

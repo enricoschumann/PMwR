@@ -1,7 +1,15 @@
+2019-08-08  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/btest.R (btest): 'btest' now checks the
+        'dim' attribute of 'prices' (after having them
+        unlisted, in the case of several assets). If
+        none is found, 'as.matrix' is called. See
+        ChangeLog 2019-06-20.
+
 2019-07-26  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/valuation.R (valuation.position): warn when
-	there are missing values in multiplier
+        * R/valuation.R (valuation.position): warn when
+        there are missing values in multiplier
 
         * R/pricetable.R (pricetable.default): support
         shortcuts for setting up a pricetable with a

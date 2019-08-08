@@ -620,6 +620,12 @@ test.btest.prices <- function() {
     checkEquals(
         btest(prices, signal = function() 1),
         btest(list(as.matrix(prices)), signal = function() 1))
+
+    library("zoo")
+    checkEquals(
+        btest(prices, signal = function() 1),
+        btest(zoo(prices), signal = function() 1))
+    
 }
 
 test.btest.b <- function() {

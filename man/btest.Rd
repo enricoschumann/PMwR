@@ -318,6 +318,12 @@ btest(prices, signal,
     add initial objects. See the Examples below and the
     manual.
 
+    Additional functions may be added to \code{btest}
+    in the future. The names of those functions will
+    always be in title case. Hence, it is recommended
+    to not use argument names for \code{signal},
+    etc. that start with a capital letter.
+
   }
 
   \subsection{Replications and variations}{
