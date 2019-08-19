@@ -23,10 +23,10 @@ rc(R, weights, timestamp, segments = NULL)
   character or numeric
 }
 \item{segments}{
-  
+
   character. If missing, column names of \code{R} or of \code{weights}
   are used (if they are not \code{NULL}).
-  
+
 }
 }
 \details{
@@ -38,7 +38,7 @@ rc(R, weights, timestamp, segments = NULL)
 
   Weights can be missing, in which case \code{R} is
   assumed to already comprise segment returns.
-  
+
 }
 \value{
   A list of two components
@@ -66,4 +66,16 @@ R <- rbind(c( 1  ,    0),
            c(-2  ,  0.5))/100
 
 rc(R, weights, segment = c("equities", "bonds"))
+
+
+## contribution for btest:
+##   run a portfolio 10\% equities, 90\% bonds
+P <- as.matrix(merge(DAX, REXP, by = "row.names")[, -1])
+(bt <- btest(prices = list(P),
+            signal = function() c(0.1, 0.9),
+            convert.weights = TRUE,
+            initial.cash = 100))
+
+W <- bt$position*P/bt$wealth
+rc(returns(P)*W[-nrow(W), ])$total_contributions
 }
