@@ -1,3 +1,10 @@
+2019-08-22  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/returns.R (returns.zoo): fixed -- with a
+        lag different from 1 (and no padding), the
+        timestamp of the resulting returns series was
+        wrong
+
 2019-08-08  Enrico Schumann  <es@enricoschumann.net>
 
         * R/btest.R (btest): 'btest' now checks the

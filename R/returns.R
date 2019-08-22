@@ -123,7 +123,7 @@ returns.zoo <- function(x, period = NULL, complete.first = TRUE,
         ans <- if (!is.null(pad))
                    zoo(ans, t)
                else
-                   zoo(ans, t[-1L])
+                   zoo(ans, t[-seq_len(lag)])
         attr(ans, "holdings") <- attrs$holdings
         attr(ans, "contributions") <- attrs$contributions
         ans

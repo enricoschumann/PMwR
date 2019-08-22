@@ -608,6 +608,7 @@ test.btest <- function() {
 }
 
 test.btest.prices <- function() {
+
     prices <- 1:5
     checkEquals(
         btest(prices, signal = function() 1),
@@ -622,10 +623,13 @@ test.btest.prices <- function() {
         btest(list(as.matrix(prices)), signal = function() 1))
 
     library("zoo")
-    checkEquals(
-        btest(prices, signal = function() 1),
-        btest(zoo(prices), signal = function() 1))
-    
+    bt1 <- btest(prices, signal = function() 1)
+    bt2 <- btest(zoo(prices), signal = function() 1)
+    checkEqualsNumeric(bt1$wealth, bt2$wealth)
+    checkEqualsNumeric(bt1$position, bt2$position)
+    checkEqualsNumeric(bt1$suggested.position,
+                       bt2$suggested.position)
+
 }
 
 test.btest.b <- function() {
@@ -2321,6 +2325,29 @@ test.returns.p_returns_monthly <- function() {
 
 }
 
+test.returns.lag <- function() {
+    x <- 1:10
+    checkEquals(returns(x),
+                returns(x, lag = 1))
+
+    checkEquals(returns(x, lag = 2),
+                x[3:10]/x[1:8] - 1)
+
+    library("zoo")
+    t <- as.Date("2000-1-1")+1:10
+    checkEquals(returns(x, t, lag = 2),  ## 't' is ignored
+                returns(x, lag = 2))
+    checkEqualsNumeric(returns(zoo(x, t), lag = 2),
+                       returns(x, lag = 2))
+
+    checkEquals(index(returns(zoo(x, t), lag = 2)), t[-c(1:2)])
+
+    checkEquals(index(returns(zoo(x, t), lag = 2, pad = NA)), t)
+
+    checkTrue(all(is.na(
+        coredata(returns(zoo(x, t), lag = 2, pad = NA))[1:2])))
+
+}
 
 test.scale1 <- function() {
 
@@ -2641,7 +2668,7 @@ test.pricetable <- function() {
     checkTrue(all(dim(pricetable(1:2, timestamp = 1:2)) == c(2,1)))
     checkEquals(pricetable(1:2, instrument = c("A", "B")),
                 pricetable(c(A = 1, B = 2)))
-    
+
 }
 
 test.div_adjust <- function() {
