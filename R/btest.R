@@ -869,9 +869,9 @@ btest  <- function(prices,
     }
 
     if (!missing(instrument))
-        colnames(X) <- instrument
+        colnames(Xs) <- colnames(X) <- instrument
     if (is.null(colnames(X)))
-        colnames(X) <- paste("asset", seq_len(ncol(X)))
+        colnames(Xs) <- colnames(X) <- paste("asset", seq_len(ncol(X)))
     if (missing(timestamp))
         timestamp <- seq_len(nrow(X))
 
