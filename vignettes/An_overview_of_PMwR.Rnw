@@ -94,7 +94,7 @@ and so can be easily followed. More details
 are in the ChangeLog
 (\,\url{http://enricoschumann.net/R/packages/PMwR/ChangeLog}\,).
 
-The latest version of the package is available from
+The very latest version of the package is available from
 \url{http://enricoschumann.net/R/packages/PMwR/}. To install the
 package from within R, type
 <<eval=false, results=hide>>=
@@ -111,27 +111,7 @@ Windows and have problems building/installing it, then
 please contact me and I will provide you with a Windows
 version.
 
-
-\section*{What the package provides}
-
-\begin{description}
-\item[Keep track of transactions] The package provides
-  functions that work with journals (sometimes called
-  blotters). See \texttt{?journal} and
-  \texttt{?position}.
-\item[Testing strategies] See \texttt{?btest}.
-\item[Computing \textsc{p}\&\textsc{l} and returns] See
-  \texttt{?pl}, \texttt{?returns}, \texttt{?rc} and
-  \texttt{?unit\_prices}.
-\end{description}
-
-\noindent All details are in the manual:
-
-\begin{center}
-\url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
-\end{center}
-
-\noindent I am grateful for comments, suggestions and
+I am grateful for comments, suggestions and
 corrections.  Please send bug reports directly to the
 package maintainer, for instance by using
 \texttt{bug.report}.\index{bug reports}
@@ -140,12 +120,89 @@ utils::bug.report("[PMwR] Unexpected behaviour in function <XXX>",
                   maintainer("PMwR"), package = "PMwR")
 @
 
-%% \section*{Examples}
 
-%% \subsection*{Keeping track of transactions}
+\section*{What the package provides}
 
-%% \subsection*{Testing investment strategies}
+There are three main topics for which the package
+provides functionality:
 
-%% \subsection*{Computing P\&L and Returns}
+\begin{description}
+\item[Keep track of transactions] The package provides
+  functions that work with journals (sometimes called
+  blotters). See \texttt{?journal} and
+  \texttt{?position}.
+\item[Computing \textsc{p}\&\textsc{l} and returns] See
+  \texttt{?pl}, \texttt{?returns}, \texttt{?rc} and
+  \texttt{?unit\_prices}.
+\item[Testing strategies] See \texttt{?btest}.
+\end{description}
+
+Several examples will be provided in the next section.
+Other than that, there are a number of helper
+functions. All details are in the manual:
+\begin{center}
+\url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
+\end{center}
+
+<<<<<<< HEAD
+\noindent I am grateful for comments, suggestions and
+corrections.  Please send bug reports directly to the
+package maintainer, for instance by using
+\texttt{bug.report}.\index{bug reports}
+<<eval=false>>=
+utils::bug.report("[PMwR] Unexpected behaviour in function <XXX>",
+                  maintainer("PMwR"), package = "PMwR")
+@
+=======
+
+\section*{Examples}
+
+\subsection*{Keeping track of transactions}
+
+Suppose you have traded financial futures.
+FGBL, FESX
+
+summary(J)
+
+position(J, when)
+
+\subsection*{Computing P\&L and Returns}
+
+We continue the previous example.
+
+pl(J)
+
+pl(along.timestamp, vprice)
+
+\subsection*{Testing investment strategies}
+
+<<>>=
+library("PMwR")
+timestamp <- as.Date(row.names(DAX))
+P <- DAX[[1]]
+
+signal <- function(k) {
+  av <- sum(Close(n = k))/k
+  if (Close() > av)
+    1
+  else
+    -1
+}
+
+btest(P, signal, k = 5,
+      b = 5)
+@ 
+>>>>>>> Add outline of expanded vignette
+
+single instrument: moving average
+
+returns in unit of instrument
+
+
+vol targeting
+A trivial strategy
+
+
+
 
 \end{document}
