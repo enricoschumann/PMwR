@@ -1,3 +1,7 @@
+2019-08-26  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.12-0
+
 2019-08-22  Enrico Schumann  <es@enricoschumann.net>
 
         * R/returns.R (returns.zoo): fixed -- with a
@@ -16,7 +20,8 @@
 2019-07-26  Enrico Schumann  <es@enricoschumann.net>
 
         * R/valuation.R (valuation.position): warn when
-        there are missing values in multiplier
+        there are missing values in multiplier, and add
+        an argument 'do.warn' to switch off the warning
 
         * R/pricetable.R (pricetable.default): support
         shortcuts for setting up a pricetable with a
@@ -29,8 +34,8 @@
         now create a pricetable.
 
         * R/position.R (toHTML.position): add
-        method. Currently only works for positions at a
-        single point in time.
+	method. Currently only works for positions at a
+	single point in time.
 
 2019-07-03  Enrico Schumann  <es@enricoschumann.net>
 

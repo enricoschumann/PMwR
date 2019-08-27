@@ -22,7 +22,7 @@ valuation(x, ...)
 
 \method{valuation}{position}(x, price.table, multiplier = 1,
           do.sum = FALSE,
-          price.unit, verbose = TRUE, \dots)
+          price.unit, verbose = TRUE, do.warn = TRUE, \dots)
 
 }
 \arguments{
@@ -56,6 +56,9 @@ valuation(x, ...)
   \item{verbose}{
     logical
   }
+  \item{do.warn}{
+    logical
+  }
   \item{\dots}{
     other arguments passed to methods
 }
@@ -78,7 +81,7 @@ valuation(x, ...)
 
 }
 \value{
-  depends on the object
+  depends on the object: for journals, a \code{\link{journal}}
 }
 \references{
 

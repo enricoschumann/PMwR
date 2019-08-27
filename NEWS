@@ -1,15 +1,48 @@
-v0.12-0  (2019-??-??; not yet released)
+v0.12-0  (2019-08-26)
 
-  o see the ChangeLog for all details
+  o 'returns': fix returns computation for zoo series
+    with a lag different from 1 and no padding (the
+    timestamp of the resulting returns series was wrong)
 
-  o returns: returns will now be computed for period
+  o 'returns': returns will now be computed for period
     "itd" even when no timestamp is provided
+
+  o 'pl' gains a new argument 'footnotes' , with
+    default TRUE. If FALSE, less information is
+    printed for 'pl' objects. Also, open positions no
+    longer produce a warning ("sum(amount) is not
+    zero"), but only a message, which is only shown
+    when 'footnotes' is TRUE.
+
+  o 'pricetable' supports shortcuts for setting up a
+    pricetable with a single timestamp but several
+    instruments. See the Examples at ?pricetable.
+
+  o 'valuation' now warns when there are missing
+    values in 'multiplier', and gains an argument
+    'do.warn' to switch off the warning
 
   o 'btest' works in more cases with NAs in prices:
     when 'convert.weights' is TRUE, only non-zero
     weights are converted. So as long as a strategy
-    does not specify positions in series with missing
-    prices, positions and so on can be computed.
+    does not specify positions in series with
+    missing prices, positions and so on can be
+    computed.
+
+  o experimental: 'btest' now checks the 'dim'
+    attribute of 'prices' (after having them unlisted,
+    in the case of several assets). Only if none is
+    found, 'as.matrix' is called. This allows
+    alternative classes to be used for 'prices', as
+    long as they define subsetting via
+    integers/logicals in the same way as numeric
+    matrices.
+
+  o there is now a textutils::toHTML method for
+    'position'; it currently only supports positions
+    at a single point in time
+
+  o see the ChangeLog for all details
 
 v0.11-1  (2019-06-02)
 
