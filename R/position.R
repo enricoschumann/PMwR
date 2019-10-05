@@ -150,6 +150,7 @@ position.default <- function(amount, timestamp, instrument,
     attr(pos, "instrument") <- gsub(".*%SEP%(.*?)", "\\1", nm)
     if (!is.null(account))
         attr(pos, "account") <- gsub("(.*)%SEP%.*", "\\1", nm)
+    attr(pos, "unit") <- "amount"
     class(pos) <- "position"
     pos
 }
@@ -192,6 +193,7 @@ position.btest <- function(amount, when, ...,
     }
 
     attr(ans, "instrument") <- instrument
+    attr(ans, "unit") <- "amount"
     ans
 }
 
@@ -229,6 +231,7 @@ print.position <- function(x, ..., sep = ":") {
     attr(x, "account") <- NULL
     attr(x, "instrument") <- NULL
     attr(x, "timestamp") <- NULL
+    attr(x, "unit") <- NULL
     if (all(dim(x) == c(1L, 1L)) &&
         is.null(rownames(x)) &&
         is.null(colnames(x))) {
@@ -462,4 +465,42 @@ toHTML.position <- function(x, ..., template = NULL) {
                                   stringsAsFactors = FALSE))
     } else
         stop("not supported")
+}
+
+.compare_position <- function(x, y,
+                              use.names = FALSE,
+                              ignore.case = FALSE,
+                              exclude.zero = use.names) {
+
+    if (exclude.zero) {
+        tol <- sqrt(.Machine$double.eps)
+        x <- x[ abs(x) > tol ]
+        y <- y[ abs(y) > tol ]
+    }
+
+    if (!use.names) {
+        stopifnot(length(x) == length(y))
+    } else {
+        if (is.null(names(x)) || is.null(names(y)))
+            stop(sQuote("use.names"), " is TRUE but no names")
+        if (ignore.case) {
+            names(x) <- tolower(x)
+            names(y) <- tolower(y)
+        }
+        all.names <- sort(unique(c(names(x), names(y))))
+        new.y <- new.x <- numeric(length(all.names))
+        names(new.y) <- names(new.x) <- all.names
+        new.x[names(x)] <- x
+        new.y[names(y)] <- y
+        x <- new.x
+        y <- new.y
+    }
+
+    same.sign <- sign(x) == sign(y)
+
+    list(same.assets = sum(same.sign),
+         weight.overlap = sum(pmin(abs(x[same.sign]),
+                                   abs(y[same.sign]))),
+         max.abs.difference = max(abs(x-y)),
+         mean.abs.difference = sum(abs(x-y))/length(x))
 }

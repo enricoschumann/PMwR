@@ -1,3 +1,13 @@
+2019-10-05  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (.compare_position): add draft
+	of function, useful when positions are
+	specified as weights
+	(position): experimental -- new attribute
+	"unit": a position might be something other
+	than "amount"; for instance, "weight" or
+	"notional"
+
 2019-08-26  Enrico Schumann  <es@enricoschumann.net>
 
 	* DESCRIPTION (Version): 0.12-0
