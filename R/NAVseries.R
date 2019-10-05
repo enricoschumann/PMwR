@@ -576,8 +576,8 @@ window.NAVseries <- function(x, start = NULL, end = NULL, ...) {
     if (start > end)
         stop(sQuote("start"), " cannot be after ", sQuote("end"))
 
-    i <- which(timestamp == start)[1L]
-    j <- tail(which(timestamp == end), 1)
+    i <- which(timestamp >= start)[1L]
+    j <- tail(which(timestamp <= end), 1)
 
     ans <- x[i:j]
     attributes(ans) <- attributes(x)

@@ -1,5 +1,9 @@
 2019-10-05  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/NAVseries.R (window.NAVseries): fix method,
+	which did not work properly when 'start' or
+	'end' were not included in 'timestamp'
+
 	* R/position.R (.compare_position): add draft
 	of function, useful when positions are
 	specified as weights
