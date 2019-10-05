@@ -17,6 +17,9 @@ returns.default <- function(x, t = NULL, period = NULL,
                 "so position is ignored")
     }
 
+    if (!is.null(period) && period == "total")
+        period <- "itd"
+
     if (is.unsorted(t)) {  ## this works because
         idx <- order(t)    ## is.unsorted(NULL) == FALSE
         t <- t[idx]

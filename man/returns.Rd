@@ -72,11 +72,13 @@ returns(x, \dots)
     \code{"ann"} (annualised), \code{"ytd"}
     (year-to-date), \code{"mtd"} (month-to-date), \code{"itd"}
     (inception-to-date) or a single year, such as
-    "2012".  The value of \sQuote{period} is used only
+    "2012". Instead of \code{"itd"}, \code{"total"} may also be used.
+    The value of \sQuote{period} is used only
     when timestamp information is available: for
     instance, when \code{t} is not \code{NULL} or with
-    \code{zoo}/\code{xts} objects.
-
+    \code{zoo}/\code{xts} objects. The exception is \code{"itd"}:
+    it can be computed without timestamp information.
+    
     All returns are computed as simple returns. They
     will only be annualised with option \code{"ann"}; they
     will not be annualised when the length of the time
