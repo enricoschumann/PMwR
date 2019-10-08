@@ -1,3 +1,8 @@
+2019-10-08  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/NAVseries.R (lines.NAVseries): add 'lines'
+	method
+
 2019-10-05  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/NAVseries.R (window.NAVseries): fix method,

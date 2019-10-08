@@ -482,9 +482,9 @@ toLatex.summary.NAVseries <-
         ans
 }
 
-plot.NAVseries <- function(x, y, ...,
+plot.NAVseries <- function(x, y = NULL, ...,
                            xlab = "", ylab = "", type = "l") {
-    if (!missing(y))
+    if (!is.null(y))
         stop("scatterplot of *returns* -- not implemented")
     plot(x = attr(x, "timestamp"),
          y = x, type = type,
@@ -492,6 +492,14 @@ plot.NAVseries <- function(x, y, ...,
 
     invisible()
 }
+
+lines.NAVseries <- function(x, ..., type = "l") {
+    lines(x = attr(x, "timestamp"),
+          y = x, type = type, ...)
+
+    invisible()
+}
+
 
 as.NAVseries <- function(x, ...)
     UseMethod("as.NAVseries")
