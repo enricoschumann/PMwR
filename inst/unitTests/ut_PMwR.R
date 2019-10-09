@@ -852,6 +852,17 @@ test.btest.rc <- function() {
 
 }
 
+test.btest.initial.position <- function() {
+    prices <- 1:10
+    checkEquals(
+        length(journal(btest(prices = prices,
+                             signal = function() NULL,
+                             initial.position = 1,
+                             prices0 = 1,
+                             b = 0))),
+        0) ## => there should be no trade at all
+}
+
 test.journal <- function() {
 
     ## a simple journal

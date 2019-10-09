@@ -644,7 +644,7 @@ btest  <- function(prices,
                 }
                 Xs[t, ] <- temp
             } else
-                Xs[t, ] <- 0
+                Xs[t, ] <- initial.position
             computeSignal <- FALSE
         } else {
             Xs[t, ] <- rep.int(0, nA)
