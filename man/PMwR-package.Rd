@@ -15,11 +15,13 @@
 }
 \details{
 
-The aim of \pkg{PMwR} is to provide a small set of
-reliable, efficient and convenient tools that help in
-processing and analysing trade/portfolio data. The
-Manual provides all the details; it is available from
-\url{http://enricoschumann.net/PMwR/}.
+\pkg{PMwR} provides a small set of reliable, efficient
+and convenient tools that help in processing and
+analysing trade/portfolio data. The Manual provides all
+the details; it is available from
+\url{http://enricoschumann.net/PMwR/}. Examples and
+descriptions of new features are described at 
+\url{http://enricoschumann.net/notes/PMwR/}.
 
 }
 \author{

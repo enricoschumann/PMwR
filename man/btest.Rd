@@ -287,9 +287,9 @@ btest(prices, signal,
     \code{Close}, \code{Wealth}, \code{Cash},
     \code{Time}, \code{Timestamp}, \code{Portfolio},
     \code{SuggestedPortfolio}, \code{Globals}. Further
-    reserved names may be added in the future: it is
-    suggested to not start an argument name with
-    capital letter.
+    reserved names may be added in the future:
+    \strong{it is suggested to not start an argument
+    name with capital letter}.
 
     The function \code{signal} must evaluate to the
     target position in units of the instruments. To
@@ -377,6 +377,8 @@ btest(prices, signal,
   in particular the chapter on backtesting:
   \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#backtesting}
 
+  Schumann, E. (2018) \emph{Backtesting}. \url{https://ssrn.com/abstract=3374195}
+  
 }
 \author{
   Enrico Schumann \email{es@enricoschumann.net}
