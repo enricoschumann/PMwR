@@ -1,3 +1,24 @@
+v0.13-0  (2019-10-19; not yet released)
+
+  o 'btest': fix handling of initial position -- with
+    an initial position specified and burnin set to
+    zero, the suggested position now equals the
+    initial position (as it does for a burnin greater
+    than zero)
+
+  o 'NAVseries': fix method, which did not work
+    properly when 'start' or 'end' were not included
+    in 'timestamp'
+
+  o 'NAVseries': add a 'lines' method
+
+  o 'returns': period "total" is now an alias for
+    "itd" (inception to date)
+	
+  o various documentation updates; new features are
+    now described at
+      http://enricoschumann.net/notes/PMwR/
+
 v0.12-0  (2019-08-26)
 
   o 'returns': fix returns computation for zoo series

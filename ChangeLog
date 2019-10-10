@@ -1,31 +1,34 @@
 2019-10-09  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R: fixed -- with an initial position
-	specified and burnin set to zero, the suggested
-	position should equal the initial position
+        * R/btest.R: fixed -- with an initial position
+        specified and burnin set to zero, the suggested
+        position should equal the initial position
 
 2019-10-08  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/NAVseries.R (lines.NAVseries): add 'lines'
-	method
+        * R/NAVseries.R (lines.NAVseries): add 'lines'
+        method
 
 2019-10-05  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/NAVseries.R (window.NAVseries): fix method,
-	which did not work properly when 'start' or
-	'end' were not included in 'timestamp'
+        * R/NAVseries.R (window.NAVseries): fix method,
+        which did not work properly when 'start' or
+        'end' were not included in 'timestamp'
 
-	* R/position.R (.compare_position): add draft
-	of function, useful when positions are
-	specified as weights
-	(position): experimental -- new attribute
-	"unit": a position might be something other
-	than "amount"; for instance, "weight" or
-	"notional"
+        * R/position.R (.compare_position): add draft
+        of function, useful when positions are
+        specified as weights
+        (position): experimental -- new attribute
+        "unit": a position might be something other
+        than "amount"; for instance, "weight" or
+        "notional"
+
+        * R/returns.R (returns): "total" is now an
+        alias for "itd"
 
 2019-08-26  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.12-0
+        * DESCRIPTION (Version): 0.12-0
 
 2019-08-22  Enrico Schumann  <es@enricoschumann.net>
 
@@ -59,8 +62,8 @@
         now create a pricetable.
 
         * R/position.R (toHTML.position): add
-	method. Currently only works for positions at a
-	single point in time.
+        method. Currently only works for positions at a
+        single point in time.
 
 2019-07-03  Enrico Schumann  <es@enricoschumann.net>
 
