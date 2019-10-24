@@ -1,3 +1,17 @@
+2019-10-19  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 0.12-0
+
+        * DESCRIPTION (Suggests): use 'tinytest', but
+        keep 'RUnit' (for now)
+
+        * R/journal.R (`[.journal`): rename 'reverse'
+        to 'invert' [the name 'reverse' rather implied
+        reversing the order, not inverting the
+        selection]. Also, apply inversion to numeric
+        and logical subsetting (it had only worked for
+        character arguments)
+
 2019-10-09  Enrico Schumann  <es@enricoschumann.net>
 
         * R/btest.R: fixed -- with an initial position

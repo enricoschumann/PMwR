@@ -341,8 +341,16 @@ print.summary.journal <- function(x, ...) {
 }
 
 `[.journal`  <- function(x, i, match.against = NULL,
-                         ignore.case = TRUE, ...,
-                         reverse = FALSE) {
+                         ignore.case = TRUE,
+                         perl = FALSE,
+                         fixed = FALSE,
+                         useBytes = FALSE, ...,
+                         invert = FALSE) {
+    if (match("reverse", names(list(...)), nomatch = 0L)) {
+        message(sQuote("reverse"), " is deprecated ==> use ",
+                sQuote("invert"), " instead")
+        invert <- list(...)$reverse
+    }
     if (is.character(i)) {
         if (is.null(match.against))
             match.against <- names(x)[unlist(lapply(x, mode)) == "character"]
@@ -352,21 +360,32 @@ print.summary.journal <- function(x, ...) {
         for (m in match.against) {
             if (is.null(x[[m]]))
                 next
-            ii <- ii | grepl(i, x[[m]], ignore.case = ignore.case, ...)
+            ii <- ii | grepl(i, x[[m]],
+                             ignore.case = ignore.case,
+                             perl = perl,
+                             fixed = fixed,
+                             useBytes = useBytes)
         }
-        if (reverse)
-            ii <- !ii
     } else
         ii <- i
+
+    if (invert) {
+        if (is.numeric(ii)) {
+            ii_ <- !logical(length(x))
+            ii_[ii] <- FALSE
+            ii <- ii_
+        } else
+            ii <- !ii
+    }
     ans <- lapply(unclass(x), `[`, ii)
     class(ans) <- "journal"
     ans
 }
 
 `[<-.journal`  <- function(x, i, match.against = NULL,
-                           ignore.case = TRUE, ..., reverse = FALSE, value) {
+                           ignore.case = TRUE, ..., invert = FALSE, value) {
 
-    stop("extraction only: use x$amount[] etc. for replacement")
+    stop("extraction only ==> use x$amount[] etc. for replacement")
 }
 
 aggregate.journal <- function(x, by, FUN, ...) {

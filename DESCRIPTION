@@ -15,7 +15,7 @@ Description: Functions and examples for 'Portfolio
   transactions, reporting, and more.
 Imports: NMOF, datetimeutils, fastmatch,
          orgutils, parallel, textutils, utils, zoo
-Suggests: RUnit, crayon, rbenchmark
+Suggests: RUnit, crayon, rbenchmark, tinytest
 Depends: R (>= 2.10)
 License: GPL-3
 LazyLoad: yes

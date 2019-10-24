@@ -48,10 +48,11 @@ is.journal(x)
 \method{subset}{journal}(x, \dots)
 
 \method{[}{journal}(x, i, match.against = NULL,
-                    ignore.case = TRUE, \dots, reverse = FALSE)
+                    ignore.case = TRUE, perl = FALSE, fixed = FALSE,
+                    useBytes = FALSE, \dots, invert = FALSE)
 
 \method{[}{journal}(x, i, match.against = NULL,
-                    ignore.case = TRUE, \dots, reverse = FALSE) <- value
+                    ignore.case = TRUE, \dots, invert = FALSE) <- value
 
 \method{as.data.frame}{journal}(x, row.names = NULL, optional = FALSE, \dots)
 
@@ -78,9 +79,9 @@ is.journal(x)
     An atomic vector. Default is \code{NULL}.
   }
   \item{account}{
-    An atomic vector. Default is \code{NULL}. 
+    An atomic vector. Default is \code{NULL}.
   }
-  \item{\dots}{    
+  \item{\dots}{
     For \code{journal}: further arguments, which must all be named.
 
     For \code{subset}: an expression that evaluates to a logical vector. The
@@ -91,7 +92,7 @@ is.journal(x)
 
     For \code{sort}: arguments passed to \code{\link{sort}}.
   }
-  \item{x}{    
+  \item{x}{
 
     a \code{journal} or an object to be coerced to class \code{journal} (for
     \code{as.journal}) or to be checked if it inherits from journal (for
@@ -107,9 +108,6 @@ is.journal(x)
   \item{by}{
     \code{sort}: sort by field. \code{head}/\code{tail}: by instrument.
   }
-  \item{ignore.case}{
-    logical
-  }
   \item{na.last}{
     arguments passed to sort
   }
@@ -120,13 +118,13 @@ is.journal(x)
     character: fields that should not be printed
   }
   \item{include.only}{
-    character: print only those fields. (Not supported yet.) 
+    character: print only those fields. (Not supported yet.)
   }
   \item{row.names}{
     see \code{\link{as.data.frame}}
   }
   \item{optional}{
-    see \code{\link{as.data.frame}}    
+    see \code{\link{as.data.frame}}
   }
   \item{recursive}{
     ignored (see \code{\link{c}})
@@ -136,15 +134,30 @@ is.journal(x)
   regexp (see \code{\link{grep}})
   }
   \item{n}{
-    integer.
+    integer
   }
   \item{match.against}{
     character vector of field names. Default is \code{NULL}, which
     means to match against all character fields.
   }
-  \item{reverse}{
-    logical. If \code{TRUE}, select journal entries that do not match
-    regular expression.
+  \item{ignore.case}{
+    logical: passed to \code{\link{grepl}}
+  }
+  \item{perl}{
+    logical: passed to \code{\link{grepl}}
+  }
+  \item{fixed}{
+    logical: passed to \code{\link{grepl}}
+  }
+  \item{useBytes}{
+    logical: passed to \code{\link{grepl}}
+  }
+  \item{invert}{
+
+    logical. If \code{TRUE}, invert selection (when \code{i} is of mode
+    \code{character}, select journal entries that do not match regular
+    expression)
+
   }
   \item{FUN}{
     either a function that takes as input a journal and evaluates to a
@@ -155,7 +168,7 @@ is.journal(x)
   }
 }
 \details{
-  
+
   The \code{journal} function creates a list of the
   arguments and attaches a class attribute
   (\sQuote{journal}). It is a generic function; the
@@ -183,7 +196,7 @@ is.journal(x)
 
     \item{\code{as.data.frame}}{coerces journal to
     \code{\link{data.frame}}}
-  
+
     \item{\code{c}}{Combine several journals into one.
       Note that the first argument to \code{c.journal}
       must inherit from \code{journal}, or else the
@@ -211,28 +224,28 @@ is.journal(x)
     \item{\code{toOrg}}{converts a journal to an Org
   table; package \pkg{orgutils} must be available}
 
-  }  
-  
+  }
+
   For journals that have a length, missing arguments will be coded as
   \code{\link{NA}} except for \code{id} and \code{account}, which become
   \code{\link{NULL}}. In zero-length (i.e. \sQuote{empty}) journals, all
   fields have length 0. A zero-length journal is created, of instance,
   by saying \code{journal()} or when an zero-row \code{data.frame} is
   passed to \code{as.journal}.
-  
+
 }
 \value{
-  
+
   An object of class \code{journal}, which is a list of atomic
   vectors.
 
 }
 \references{
 
-Schumann, E. (2018) \emph{Portfolio Management
-  with R}. \url{http://enricoschumann.net/R/packages/PMwR/}
+Schumann, E. (2019) \emph{Portfolio Management with R}.
+\url{http://enricoschumann.net/R/packages/PMwR/}
 
-} 
+}
 \author{
 Enrico Schumann <es@enricoschumann.net>
 }
@@ -247,13 +260,13 @@ j <- journal(timestamp = 1:3,
 
 ## *** subset *** in functions
 ##   this should work as expected ...
-t0 <- 2.5                         
+t0 <- 2.5
 subset(j, timestamp > t0)
 
 ##   ... but here?!
-tradesAfterT <- function(j, t0)   
-    subset(j, timestamp > t0)        
-tradesAfterT(j, 0)               
+tradesAfterT <- function(j, t0)
+    subset(j, timestamp > t0)
+tradesAfterT(j, 0)
 
 ##   if really required
 tradesAfterT <- function(j, t0) {
@@ -266,6 +279,7 @@ tradesAfterT(j, 0)
 tradesAfterT <- function(j, t0)
     j[j$timestamp > t0]
 tradesAfterT(j, 0)
+
 
 ## *** aggregate ***
 ##   several buys and sells on two days

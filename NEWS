@@ -1,4 +1,4 @@
-v0.13-0  (2019-10-19; not yet released)
+v0.13-0  (2019-10-19)
 
   o 'btest': fix handling of initial position -- with
     an initial position specified and burnin set to
@@ -15,6 +15,12 @@ v0.13-0  (2019-10-19; not yet released)
   o 'returns': period "total" is now an alias for
     "itd" (inception to date)
 	
+  o 'journal': argument 'reverse', for subsetting, has
+    been renamed to 'invert' ('reverse' still works,
+    but with a warning, and will be removed in the
+    future). Also, for consistency, the argument now
+    applies to numeric and logical subscripts as well.
+  
   o various documentation updates; new features are
     now described at
       http://enricoschumann.net/notes/PMwR/
