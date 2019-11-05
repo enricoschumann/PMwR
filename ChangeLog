@@ -1,6 +1,11 @@
+2019-11-05  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/streaks.R: add argument 'y'. If not NULL,
+        returns of 'x' are computed relative to 'y'.
+
 2019-10-30  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Enhances): add 'zoo'
+        * DESCRIPTION (Enhances): add 'zoo'
 
 2019-10-19  Enrico Schumann  <es@enricoschumann.net>
 
