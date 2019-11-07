@@ -12,30 +12,39 @@
 \usage{
 streaks(x, ...)
 
-\method{streaks}{default}(x, up =  0.2, down = -0.2,
-                initial.state = NA, \dots)
-\method{streaks}{zoo}(x, up =  0.2, down = -0.2,
-                initial.state = NA, \dots)
-\method{streaks}{NAVseries}(x, up =  0.2, down = -0.2,
-                initial.state = NA, \dots)
+\method{streaks}{default}(x, up =  0.2, down = -up,
+        initial.state = NA, y = NULL, \dots)
+\method{streaks}{zoo}(x, up =  0.2, down = -up,
+        initial.state = NA, y = NULL, \dots)
+\method{streaks}{NAVseries}(x, up =  0.2, down = -up,
+        initial.state = NA, bm = NULL, \dots)
 
 }
 \arguments{
   \item{x}{
     a price series
-}
+  }
   \item{initial.state}{
     \code{\link{NA}}, \code{"up"} or \code{"down"}
-}
+  }
   \item{up}{
     a number, such as 0.1 (i.e. 10\%)
-}
+  }
   \item{down}{
     a negative number, such as -0.1 (i.e. -10\%)
-}
+  }
+  \item{y}{
+    another price series
+  }
+  \item{bm}{
+
+    another price series. Mapped to \sQuote{\code{y}}
+    in the default method.
+
+  }
   \item{\dots}{
     other arguments passed to methods
-}
+  }
 }
 \details{
 

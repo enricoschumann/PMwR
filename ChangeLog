@@ -1,3 +1,8 @@
+2019-11-07  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/streaks.R (streaks): set default value for
+        'down' to '-up', in all method
+
 2019-11-05  Enrico Schumann  <es@enricoschumann.net>
 
         * R/streaks.R: add argument 'y'. If not NULL,

@@ -4,9 +4,10 @@
 streaks <- function(x, ...)
     UseMethod("streaks")
 
-streaks.default <- function(x, y = NULL,
-                            up =  0.2, down = -0.2,
+streaks.default <- function(x,
+                            up =  0.2, down = -up,
                             initial.state = NA,
+                            y = NULL,
                             ...) {
 
     start <- 1
@@ -132,7 +133,7 @@ streaks.default <- function(x, y = NULL,
 
 streaks.zoo <- function(x,
                         up   =  0.2,
-                        down = -0.2,
+                        down = -up,
                         initial.state = NA,
                         y = NULL, ...) {
     t <- index(x)
@@ -148,7 +149,7 @@ streaks.zoo <- function(x,
 
 streaks.NAVseries <- function(x,
                               up   =  0.2,
-                              down = -0.2,
+                              down = -up,
                               initial.state = NA,
                               bm = NULL, ...) {
     xx <- as.zoo(x)
