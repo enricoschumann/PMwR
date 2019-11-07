@@ -1,5 +1,8 @@
 2019-11-07  Enrico Schumann  <es@enricoschumann.net>
 
+        * DESCRIPTION (Enhances): remove 'zoo' from
+        'Enhances' since it is already in 'Imports'
+
         * R/streaks.R (streaks): set default value for
         'down' to '-up', in all method
 
