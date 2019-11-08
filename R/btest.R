@@ -39,15 +39,18 @@ btest  <- function(prices,
 
         vsettings <- list(method = "loop",
                           load.balancing = FALSE,
-                          cores = getOption("mc.cores", 2L))
+                          cores = getOption("mc.cores", 2L),
+                          expand.grid = TRUE)
         vsettings[names(variations.settings)] <- variations.settings
         all_args$variations.settings <- NULL
 
         lens <- lengths(variations)
-        cases <- do.call(expand.grid,
-                         lapply(lens, seq_len))
+        if (vsettings$expand.grid)
+            cases <- do.call(expand.grid,
+                             lapply(lens, seq_len))
+        else
+            cases <- as.data.frame(lapply(lens, seq_len))
         args <- vector("list", length = nrow(cases))
-
         for (i in seq_along(args)) {
             tmp <- mapply(`[[`, variations, cases[i, ],
                           SIMPLIFY = FALSE)

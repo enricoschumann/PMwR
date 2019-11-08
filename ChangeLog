@@ -1,3 +1,11 @@
+2019-11-08  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/btest.R (btest): 'variations.settings' with
+        new option 'expand.grid'. If FALSE, do not
+        compute combinations of variations. See
+        http://enricoschumann.net/notes/backtest-strategy-on-different-datasets.html
+        for an example.
+
 2019-11-07  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Enhances): remove 'zoo' from
