@@ -251,7 +251,8 @@ as.matrix.position <- function(x, ...) {
     ans <- c(x)
     dim(ans) <- dim(x)
 
-    rownames(ans) <- as.character(attr(x, "timestamp"))
+    if (!is.na(attr(x, "timestamp")))
+        rownames(ans) <- as.character(attr(x, "timestamp"))
     colnames(ans) <- attr(x, "instrument")
     ans
 }
@@ -259,20 +260,33 @@ as.matrix.position <- function(x, ...) {
 as.data.frame.position <- function(x, ...) {
     ans <- c(x)
     dim(ans) <- dim(x)
-    ans <- as.data.frame(ans)
+    ans <- as.data.frame(ans, ...)
 
-    row.names(ans) <- as.character(attr(x, "timestamp"))
+    if (!is.na(attr(x, "timestamp"))) {
+        timestamp <- make.unique(as.character(attr(x, "timestamp")))
+        row.names(ans) <- timestamp
+    }
     names(ans) <- attr(x, "instrument")
     ans
 }
 
 Ops.position <- function(e1, e2) {
-    if (nargs() == 1) {
-        switch(.Generic, `+` = {
-        }, `-` = {
-            e1[] <- -unclass(e1)
-        },
-        NextMethod(.Generic)
+    if (nargs() == 1L) {
+        switch(.Generic,
+               `+` = {},
+               `-` = {
+                      e1[] <- -unclass(e1)
+                     },
+               `!` = {
+                      tmp <- !as.logical(c(e1))
+                      dim(tmp) <- dim(e1)
+                      colnames(tmp) <- attr(e1, "instrument")
+                      if (!is.na(attr(e1, "timestamp")))
+                          rownames(tmp) <- as.character(attr(e1, "timestamp"))
+                      colnames(tmp) <- attr(e1, "instrument")
+                      e1 <- tmp
+                     },
+               NextMethod(.Generic)
         )
         return(e1)
     }
