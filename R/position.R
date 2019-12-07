@@ -251,7 +251,7 @@ as.matrix.position <- function(x, ...) {
     ans <- c(x)
     dim(ans) <- dim(x)
 
-    if (!is.na(attr(x, "timestamp")))
+    if (!all(is.na(attr(x, "timestamp"))))
         rownames(ans) <- as.character(attr(x, "timestamp"))
     colnames(ans) <- attr(x, "instrument")
     ans
@@ -262,7 +262,7 @@ as.data.frame.position <- function(x, ...) {
     dim(ans) <- dim(x)
     ans <- as.data.frame(ans, ...)
 
-    if (!is.na(attr(x, "timestamp"))) {
+    if (!all(is.na(attr(x, "timestamp")))) {
         timestamp <- make.unique(as.character(attr(x, "timestamp")))
         row.names(ans) <- timestamp
     }
