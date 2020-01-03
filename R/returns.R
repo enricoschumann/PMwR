@@ -145,7 +145,7 @@ returns.data.frame <- function(x, t = NULL, period = NULL,
                            weights = weights,
                            rebalance.when = rebalance.when,
                            lag = lag, ...)
-    as.data.frame(ans)
+    ans
 }
 
 .returns <- function(x, pad = NULL, lag) {
