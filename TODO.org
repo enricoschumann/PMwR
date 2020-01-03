@@ -32,12 +32,16 @@
 ** add 'drop' argument to return matrix?
 
 
-* =position= [0/1]
+* =position= [0/2]
 
-** TODO =when= keywords
+** TODO =when= keywords?
 
    endofyear
    endofquarter
+
+** TODO Ops
+
+
 
 
 * =returns= [0/2]
@@ -64,6 +68,7 @@
   (argument 'as.journal')
 
 - make generic? method for journals
+
 
 * =journal=
 

@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-18  Enrico Schumann
+## Copyright (C) 2008-20  Enrico Schumann
 
 makeHHMMSS <- function(x, label = "time specification (HHMMSS)") {
     x <- as.character(x)
@@ -157,195 +157,6 @@ sparkplot <- function(x, blocks = 7, xmin = NULL, xmax = NULL, ymin = NULL) {
     (new.range * x + min * omax - max * omin)/old.range
 }
 
-make_neighbour <- function(wmin = 0,
-                           wmax = 1,
-                           kmin = NULL,
-                           kmax = NULL,
-                           stepsize,
-                           budget = TRUE,
-                           random = TRUE,
-                           update = FALSE,
-                           R = NULL, ...) {
-
-    if (!is.null(kmin))
-        stop("no such neighbourhood yet")
-
-    if (!isTRUE(budget) && length(budget) == 2L && !random && !update) {
-        ## budget is a _range_ , i.e. a numeric vector of length two
-
-        stop("not implemented")
-
-    } else if (isTRUE(budget) && random && update) {
-
-        stop("not implemented")
-
-        ## if (length(wmin) > 1L || length(wmax) > 1L) {
-        ##     if (length(wmin) == 1L)
-        ##         wmin <- rep(wmin, length(wmax))
-        ##     if (length(wmax) == 1L)
-        ##         wmax <- rep(wmax, length(wmin))
-        ##     function(w, ...) {
-        ##         toSell <- which(w > wmin)
-        ##         toBuy  <- which(w < wmax)
-        ##         i <- toSell[sample.int(length(toSell), size = 1L)]
-        ##         j <- toBuy[ sample.int(length(toBuy),  size = 1L)]
-        ##         stepsize <- runif(1) * stepsize
-        ##         stepsize <- min(w[i] - wmin[i], wmax[j] - w[j], stepsize)
-        ##         w[i] <- w[i] - stepsize
-        ##         w[j] <- w[j] + stepsize
-        ##         w
-        ##     }
-        ## } else {
-        ##     function(w, ...) {
-        ##         toSell <- which(w > wmin)
-        ##         toBuy  <- which(w < wmax)
-        ##         i <- toSell[sample.int(length(toSell), size = 1L)]
-        ##         j <- toBuy[ sample.int(length(toBuy),  size = 1L)]
-        ##         stepsize <- runif(1) * stepsize
-        ##         stepsize <- min(w[i] - wmin, wmax - w[j], stepsize)
-        ##         w[i] <- w[i] - stepsize
-        ##         w[j] <- w[j] + stepsize
-        ##         w
-        ##     }
-        ## }
-
-    } else if (isTRUE(budget) && random && !update) {
-        if (length(wmin) > 1L || length(wmax) > 1L) {
-            if (length(wmin) == 1L)
-                wmin <- rep(wmin, length(wmax))
-            if (length(wmax) == 1L)
-                wmax <- rep(wmax, length(wmin))
-            function(w, ...) {
-                toSell <- which(w > wmin)
-                toBuy  <- which(w < wmax)
-                i <- toSell[sample.int(length(toSell), size = 1L)]
-                j <- toBuy[ sample.int(length(toBuy),  size = 1L)]
-                stepsize <- runif(1) * stepsize
-                stepsize <- min(w[i] - wmin[i], wmax[j] - w[j], stepsize)
-                w[i] <- w[i] - stepsize
-                w[j] <- w[j] + stepsize
-                w
-            }
-        } else {
-            function(w, ...) {
-                toSell <- which(w > wmin)
-                toBuy  <- which(w < wmax)
-                i <- toSell[sample.int(length(toSell), size = 1L)]
-                j <- toBuy[ sample.int(length(toBuy),  size = 1L)]
-                stepsize <- runif(1) * stepsize
-                stepsize <- min(w[i] - wmin, wmax - w[j], stepsize)
-                w[i] <- w[i] - stepsize
-                w[j] <- w[j] + stepsize
-                w
-            }
-        }
-    } else if (budget && length(budget) == 1L && !random && !update) {
-        if (length(wmin) > 1L || length(wmax) > 1L) {
-            if (length(wmin) == 1L)
-                wmin <- rep(wmin, length(wmax))
-            if (length(wmax) == 1L)
-                wmax <- rep(wmax, length(wmin))
-            function(w, ...) {
-                toSell <- which(w > wmin)
-                toBuy  <- which(w < wmax)
-                i <- toSell[sample.int(length(toSell), size = 1L)]
-                j <- toBuy[ sample.int(length(toBuy),  size = 1L)]
-                stepsize <- min(w[i] - wmin[i], wmax[j] - w[j], stepsize)
-                w[i] <- w[i] - stepsize
-                w[j] <- w[j] + stepsize
-                w
-            }
-        } else {
-            function(w, ...) {
-                toSell <- which(w > wmin)
-                toBuy  <- which(w < wmax)
-                i <- toSell[sample.int(length(toSell), size = 1L)]
-                j <- toBuy[ sample.int(length(toBuy),  size = 1L)]
-                stepsize <- min(w[i] - wmin, wmax - w[j], stepsize)
-                w[i] <- w[i] - stepsize
-                w[j] <- w[j] + stepsize
-                w
-            }
-        }
-    } else if (budget && length(budget) == 2L && !random && !update) {
-        if (length(wmin) > 1L || length(wmax) > 1L) {
-            if (length(wmin) == 1L)
-                wmin <- rep(wmin, length(wmax))
-            if (length(wmax) == 1L)
-                wmax <- rep(wmax, length(wmin))
-            function(w, ...) {
-                i <- sample.int(length(w), size = 1L)
-                stepsize <- sample(c(-1,1), size = 1)*stepsize
-                stepsize <- if (stepsize < 0) {
-                    max(wmin[i]-w[i], stepsize, budget[1]-sum(w))
-                } else {
-                    min(wmax[i]-w[i], stepsize, budget[2]-sum(w))
-                }
-                w[i] <- w[i] + stepsize
-                w
-            }
-        } else {
-            function(w, ...) {
-                i <- sample.int(length(w), size = 1L)
-                stepsize <- sample(c(-1,1), size = 1)*stepsize
-                stepsize <- if (stepsize < 0) {
-                    max(wmin-w[i], stepsize, budget[1]-sum(w))
-                } else {
-                    min(wmax-w[i], stepsize, budget[2]-sum(w))
-                }
-                w[i] <- w[i] + stepsize
-                w
-            }
-        }
-    } else if (budget &&
-               length(budget) == 1L &&
-               !is.null(kmax) &&
-               random
-               && update) {
-
-        if (is.null(R))
-            stop(sQuote("R"), " must be provided when ",
-                 sQuote("update"), " is TRUE")
-        if (length(wmin) > 1L || length(wmax) > 1L) {
-            if (length(wmin) == 1L)
-                wmin <- rep(wmin, length(wmax))
-            if (length(wmax) == 1L)
-                wmax <- rep(wmax, length(wmin))
-        }
-        function(w, ...) {
-            tol <- 1e-12
-            x <- w[[1]]
-            J <- sum(x > tol)
-            if (J == kmax)
-                to_buy <- which(x > tol & w < wmax)
-            else
-                to_buy <- which(x < wmax)
-            to_sell <- which(x > tol)
-            i <- to_sell[sample.int(length(to_sell), size = 1L)]
-            j <- to_buy[sample.int(length(to_buy), size = 1L)]
-            eps <- runif(1) * stepsize
-            eps <- min(x[i], wmax - x[j], eps)
-            x[i] <- x[i] - eps
-            x[j] <- x[j] + eps
-            Rw <- x[[2]] + R[ , c(i, j)] %*% c(-eps, eps)
-            list(w = x, Rw = Rw)
-        }
-    } else
-        stop("no matches")
-}
-
-psim <- function(x, y) {
-
-    stopifnot(length(x) == length(y))
-    same.sign <- sign(x) == sign(y)
-
-    list(same.assets = sum(same.sign),
-         weight.overlap = sum(pmin(abs(x[same.sign]),
-                                   abs(y[same.sign]))),
-         max.abs.difference = max(abs(x-y)),
-         mean.abs.difference = sum(abs(x-y))/length(x))
-}
-
 time.p_returns <- function(x, ...)
     attr(x, "t")
 
@@ -369,12 +180,15 @@ time.btest <- function(x, ...)
 
 .may_be_Date <- function(x, ...) {
     ans <- try(as.Date(x), silent = TRUE)
-    if (inherits(ans, "try-error"))
-        FALSE
-    else if (all(is.na(ans)))
-        FALSE
-    else
-        TRUE
+    res <- if (inherits(ans, "try-error"))
+               FALSE
+           else if (all(is.na(ans)))
+               FALSE
+           else
+               TRUE
+    if (res)
+        attr(res, "Date") <- ans
+    res
 }
 
 debug_prices <- function(nobs, na, base = 100) {
