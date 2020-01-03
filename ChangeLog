@@ -1,9 +1,12 @@
 2020-01-03  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (returns.data.frame): fix method
-	for cases when holding-period results in a
-	single number, such as annual. The result is
-	then an atomic vector, not a data.frame.
+        * R/scale1.R (scale1.default): the default
+        method now also works for data.frames
+
+        * R/returns.R (returns.data.frame): fix method
+        for cases when holding-period results in a
+        single number, such as annual. The result is
+        then an atomic vector, not a data.frame.
 
         * R/internal.R (make_neighbour): move code --
         into package 'neighbours'

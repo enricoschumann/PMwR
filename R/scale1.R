@@ -5,7 +5,7 @@ scale1 <- function (x, ...)
     UseMethod("scale1", x)
 
 ## TODO: make a wrapper scale100 that uses a default
-##       level of 100
+##       level of 100?
 
 scale1.default <- function (x, ...,
                             when = "first.complete",
@@ -18,7 +18,7 @@ scale1.default <- function (x, ...,
     ## TODO: add a formal 'na.rm' argument
 
     makevec <- FALSE
-    if (!is.matrix(x)) {
+    if (!is.matrix(x) && !is.data.frame(x)) {
         ## x is always coerced to matrix. But if it had no dim
         ## attribute, it will be coerced back to a vector at the
         ## end
