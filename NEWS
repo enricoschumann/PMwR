@@ -1,6 +1,28 @@
-v0.14-0  (2019-XX-XX; not yet released)
+v0.14-0  (2020-XX-XX; not yet released)
+
+  o 'streaks': the function now also allows to compute
+    streaks relative to a benchmark
+
+  o 'streaks': default value for 'down' has been
+    changed to '-up'
+
+  o 'journal': the summary method now allows
+    aggregation by timestamp and instrument
+
+  o 'btest': 'variations.settings' gains an option
+    'expand.grid'.  If FALSE, 'btest' does not compute
+    combinations of variations. See
+    http://enricoschumann.net/notes/backtest-strategy-on-different-datasets.html
+    for an example.
+
+  o objects of class 'position' support the unary `!`
+    operator: the result is a logical matrix of the
+    same dimension as the original position
 
   o ....
+
+  o various minor bug fixes and documentation
+    updates.  See the ChangeLog for all details.
 
 v0.13-0  (2019-10-19)
 
