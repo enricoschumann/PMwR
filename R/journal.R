@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-19  Enrico Schumann
+## Copyright (C) 2008-20  Enrico Schumann
 
 journal <- function(amount, ...) {
     if (match.call() == "journal()") {
@@ -271,7 +271,12 @@ instrument.journal <- function(x, ...) {
 
 }
 
-summary.journal <- function(object, ...) {
+summary.journal <- function(object,
+                            by.timestamp = FALSE,
+                            by.instrument = FALSE,
+                            drop.zero = TRUE,
+                            sort.order = c("year", "month", "instrument"),
+                            ...) {
     ans <- list()
     ans$n_transactions <- length(object)
     if (ans$n_transactions == 0L) {
@@ -281,31 +286,88 @@ summary.journal <- function(object, ...) {
     }
 
     ## TODO aggregation level? instrument or account or factor ...
+    INDEX <- NULL
+
+    if (isTRUE(by.timestamp)) {
+        by.timestamp <- object$timestamp
+        tmp <- .may_be_Date(by.timestamp)
+        if (tmp) {
+            tmp <- attr(tmp, "Date")
+            INDEX <- c(INDEX,
+                       list(year = datetimeutils::year(tmp),
+                            month = datetimeutils::month(tmp)))
+        }
+    }
+
     no_instrument <- FALSE
     if (all(is.na(xi <- instrument(object)))) {
         xi <- object$instrument <- rep("_", length(object))
         no_instrument <- TRUE
     }
+    if (isTRUE(by.instrument))
+        INDEX <- c(INDEX,
+                   instrument = list(object$instrument))
 
-    stats <- data.frame(instrument = character(0),
-                        n_transactions = numeric(0),
-                        average_buy = numeric(0),
-                        average_sell = numeric(0),
-                        first_t = numeric(0),
-                        last_t = numeric(0),
+
+    if (is.null(INDEX))
+        INDEX <- rep(1, ans$n_transactions)
+
+    stats <- as.data.frame(table(INDEX),
+                           responseName = "n_transactions0",
+                           stringsAsFactors = FALSE)
+    if ("month" %in% colnames(stats) &&
+        is.character(stats[["month"]]) &&
+        all(stats[["month"]] %in% as.character(1:12)))
+        stats[["month"]] <- as.numeric(stats[["month"]])
+    if ("year" %in% colnames(stats) &&
+        is.character(stats[["year"]]) &&
+        all(stats[["year"]] %in% as.character(1:12)))
+        stats[["year"]] <- as.numeric(stats[["year"]])
+
+
+    stats <- data.frame(stats,
+                        n_transactions = as.matrix(
+                            c(tapply(object$amount, INDEX = INDEX,
+                                   length, default = 0))),
+                        average_buy = as.matrix(
+                            c(tapply(
+                                object, INDEX = INDEX,
+                                function(x) mean(x$price[x$amount > 0], na.rm = TRUE)))),
+                        average_sell = as.matrix(
+                            c(tapply(
+                                object, INDEX = INDEX,
+                                function(x) mean(x$price[x$amount < 0], na.rm = TRUE)))),
+                        turnover = as.matrix(
+                            c(tapply(
+                                object, INDEX = INDEX,
+                                function(x) sum(x$price * abs(x$amount))))),
+                        first_t = as.matrix(
+                            c(tapply(
+                                object$timestamp, INDEX = INDEX, min))),
+                        last_t = as.matrix(
+                            c(tapply(
+                                object$timestamp, INDEX = INDEX, min))),
                         stringsAsFactors = FALSE)
-    for (i in sort(unique(xi))) {
-        ji <- object[ i==xi ]
-        si <- data.frame(
-            instrument   = i,
-            n_t          = length(ji),
-            average_buy  = mean(ji$price[ji$amount > 0], na.rm=TRUE),
-            average_sell = mean(ji$price[ji$amount < 0], na.rm=TRUE),
-            first_t      = min(ji$timestamp)[[1L]],
-            last_t       = max(ji$timestamp)[[1L]],
-            stringsAsFactors = FALSE)
-        stats <- rbind(stats, si)
+
+    stopifnot(all(stats$n_transactions0 == stats$n_transctions))
+    stats$n_transactions0 <- NULL
+
+    if (!is.null(stats[["first_t"]]))
+        class(stats[["first_t"]]) <-
+            class(stats[["last_t"]]) <- class(object$timestamp)
+
+    if (drop.zero)
+        stats <- stats[stats$n_transactions > 0L, ]
+
+    ## sort.order <- c("year", "month", "instrument")
+    for (i in rev(seq_along(sort.order))) {
+        if (!sort.order[i] %in% colnames(stats))
+            sort.order <- sort.order[-i]
     }
+
+    if (length(sort.order))
+        stats <- stats[do.call(order, stats[, sort.order]), ]
+
     if (no_instrument)
         stats$instrument <- NA
     ans$stats  <- stats
@@ -313,27 +375,75 @@ summary.journal <- function(object, ...) {
     ans
 }
 
-print.summary.journal <- function(x, ...) {
+.repeated <- function(x, ...)
+    c(FALSE, x[-1L] == x[-length(x)])
+
+print.summary.journal <- function(x, month.names = month.abb,
+                                  digits = NULL, na.print = "",
+                                  use.crayon = NULL, ...) {
     if (x$n_transactions > 0L) {
-        ans <- x$stats
+        stats <- x$stats
         has_instrument <- !all(is.na(x$stats$instrument))
         if (!has_instrument)
-            ans$instrument <- NULL
-        cat("journal: ", x$n_transactions, " transactions ",
-            "in ", nrow(ans), " instrument",
-            if (nrow(ans) > 1L) "s", "\n\n", sep = "")
-        colnames(ans) <- c(if (has_instrument) "instrument",
-                           "n", "avg buy", "avg sell",
-                           "first", "last")
-        for (i in 3:4)
-            ans[[i]][!is.finite(ans[[i]])] <- NA
+            stats$instrument <- NULL
+        msg <- c("journal: ", x$n_transactions, " transactions ")
+        if (has_instrument) {
+            if ( (ni <- length(unique(x$stats$instrument))) != 1L )
+                msg <- c(msg, "in ", ni, " instruments")
+            else
+                msg <- c(msg, "in 1 instrument")
+            }
+        cat(msg, "\n\n", sep = "")
+        ex <- colnames(stats) %in% c("first_t", "last_t")
+        stats <- stats[, !ex]
 
-        if (has_instrument)
-            ans[["instrument"]] <-
-                paste0("",
-                       format(ans[["instrument"]], justify = "left"))
-        print.data.frame(ans, na.print = "",
-                         print.gap = 2, row.names = FALSE)
+
+        if ("year" %in% colnames(stats))
+            stats[["year"]][ .repeated(stats[["year"]]) ] <- ""
+
+        if ("month" %in% colnames(stats) &&
+            !.isFALSE(month.names) &&
+            is.numeric(stats[["month"]]))
+            stats[["month"]][] <- month.names[ stats[["month"]] ]
+
+        if ("month" %in% colnames(stats))
+            stats[["month"]][ .repeated(stats[["month"]]) ] <- ""
+
+        pretty.colnames <- c("n_transactions" = "n",
+                             "average_buy"  = "avg buy",
+                             "average_sell" = "avg sell")
+
+        tmp <- pretty.colnames[colnames(stats)]
+        colnames(stats)[!is.na(tmp)] <- tmp[!is.na(tmp)]
+
+        is.char <- which(unlist(lapply(stats, is.character)))
+        ans <- rbind(stats[1, ], stats)
+        for (j in seq_len(ncol(stats))) {
+            na <- if (is.numeric(stats[[j]]))
+                      !is.finite(stats[[j]])
+                  else
+                      is.na(stats[[j]])
+            na <- c(FALSE, na)
+            if (j %in% is.char) {
+                tmp <- trimws(c(colnames(stats)[j], stats[[j]]))
+                tmp[na] <- na.print
+                ans[[j]] <- I(format(tmp,
+                                   width = max(nchar(tmp)) +1,
+                                   justify = "left"))
+            } else {
+                tmp <- trimws(c(colnames(stats)[j],
+                                format(stats[[j]], digits = digits, ...)))
+                tmp[na] <- na.print
+                ans[[j]] <- I(format(tmp,
+                                   width = max(nchar(tmp)) +1,
+                                   justify = "right"))
+            }
+        }
+
+        write.table(ans,
+                    row.names = FALSE,
+                    col.names  = FALSE,
+                    quote = FALSE)
     } else {
         cat("no transactions\n")
     }

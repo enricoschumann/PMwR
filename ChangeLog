@@ -1,3 +1,9 @@
+2020-01-07  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/journal.R (summary.journal)
+        (print.summary.journal): allow aggregation of
+        journal by timestamp and instrument
+
 2020-01-03  Enrico Schumann  <es@enricoschumann.net>
 
         * R/scale1.R (scale1.default): the default
@@ -9,8 +15,8 @@
         then an atomic vector, not a data.frame.
 
         * R/internal.R (make_neighbour): move code --
-        into package 'neighbours'
-        [ https://github.com/enricoschumann/neighbours ]
+        into package 'neighbours' [ repository at
+        https://github.com/enricoschumann/neighbours ]
 
 2020-01-02  Enrico Schumann  <es@enricoschumann.net>
 
