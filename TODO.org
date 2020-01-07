@@ -79,3 +79,7 @@
              "YYYY"
              "YYYY-MM-DD"
              "YYYY-Q1"]
+
+* =streaks=
+
+  allow absolute streaks? (i.e. not percentage moves)
