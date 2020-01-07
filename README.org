@@ -50,6 +50,8 @@ All details are in the manual:
 
 [[http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html]]
 
+New features are often described in these [[http://enricoschumann.net/notes/PMwR/][notes]].
+
 I am grateful for comments, suggestions and
 corrections.
 
@@ -62,7 +64,7 @@ The latest release of the package is available from
 install the package directly from within R:
 #+BEGIN_SRC R :eval never
   install.packages('PMwR',
-                   repos = c('http://enricoschumann.net/R', 
+                   repos = c('http://enricoschumann.net/R',
                              getOption('repos')))
 #+END_SRC
 The package depends on several other packages, which
