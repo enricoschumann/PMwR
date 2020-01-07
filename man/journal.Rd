@@ -300,4 +300,8 @@ fun <- function(x) {
 }
 aggregate(j, by = by, FUN = fun)
 
+
+## *** iterate over transactions in (previously defined) journal ***
+for (j in split(j, seq_along(j)))
+    print(j)
 }
