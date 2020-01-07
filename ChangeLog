@@ -1,5 +1,9 @@
 2020-01-07  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/streaks.R (streaks.default): new argument
+	'return.arithmetic', which specifies how
+	reported streak returns are computed
+
         * R/journal.R (summary.journal)
         (print.summary.journal): allow aggregation of
         journal by timestamp and instrument
@@ -50,7 +54,7 @@
         'Enhances' since it is already in 'Imports'
 
         * R/streaks.R (streaks): set default value for
-        'down' to '-up', in all method
+        'down' to '-up', in all methods
 
 2019-11-05  Enrico Schumann  <es@enricoschumann.net>
 
