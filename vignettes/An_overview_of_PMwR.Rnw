@@ -40,8 +40,8 @@ pv <- gsub("(.*)[.](.*)", "\\1-\\2", pv)
 \bigskip
 
 <<echo=false>>=
-require("PMwR")
-require("zoo")
+library("PMwR")
+library("zoo")
 @
 
 \noindent The aim of \textsc{pm}w\textsc{r} is to
@@ -61,17 +61,25 @@ frequently, simply because the code has been written
 over many years and is in need of being groomed for
 general use.%
 \footnote{
-<<echo=false>>=
+<<echo=false,results=hide>>=
 test.rep <- readLines(system.file("unitTests/test_results.txt", 
                                   package = "PMwR"))
 nt <- gsub(".*\\(([0-9]+) checks?\\).*", "\\1",
            test.rep[grep("\\(\\d+ checks?\\)", test.rep)])
+
+if (requireNamespace("tinytest")) {
+    tinytest.results <- suppressMessages(
+        suppressWarnings(tinytest::test_package("PMwR")))
+    nt <- nrow(as.data.frame(tinytest.results)) +
+          sum(as.numeric(nt))
+} else
+    nt <- "several hundred"
 @ 
 Even if \textsc{pm}w\textsc{r} is under development:
 the package is to provide well-documented and reliable
 code.  For all computations, unit tests are included.
 As of package version %
-\Sexpr{pv}, there are \Sexpr{sum(as.numeric(nt))} tests
+\Sexpr{pv}, there are \Sexpr{nt} tests
 included.  These tests are stored in subdirectory
 \texttt{unitTests}.} %
 
