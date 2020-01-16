@@ -244,7 +244,7 @@ btest(prices, signal,
   }
 
   \item{replications}{
-    an integer (ignored if \code{1})
+    an integer
   }
 }
 \details{

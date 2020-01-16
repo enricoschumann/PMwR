@@ -92,7 +92,7 @@ btest  <- function(prices,
                 names(ans) <- vsettings$label
             return(ans)
         }
-    } else if (!missing(replications) && replications > 1L) {
+    } else if (!missing(replications)) {
         x <- match.call()
         all_args <- as.list(x)[-1L]
         all_args <- lapply(all_args, eval)
