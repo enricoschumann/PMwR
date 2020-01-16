@@ -244,7 +244,12 @@ btest(prices, signal,
   }
 
   \item{replications}{
-    an integer
+
+    an integer. If set, the function returns a list of
+    \code{btest} objects.  Each \code{btest} has an
+    attribute \code{replication}, which records the
+    replication number.
+
   }
 }
 \details{
@@ -378,7 +383,7 @@ btest(prices, signal,
   \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#backtesting}
 
   Schumann, E. (2018) \emph{Backtesting}. \url{https://ssrn.com/abstract=3374195}
-  
+
 }
 \author{
   Enrico Schumann \email{es@enricoschumann.net}

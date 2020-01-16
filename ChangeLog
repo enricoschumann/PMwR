@@ -1,3 +1,9 @@
+2020-01-16  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/btest.R (btest): for consistency, even
+	replicate if replications == 1; reverts changes
+	of 2020-01-02
+
 2020-01-07  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/streaks.R (streaks.default): new argument
