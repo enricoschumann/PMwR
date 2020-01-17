@@ -41,7 +41,21 @@
 
 ** TODO Ops
 
+ +/- if both named: use names
 
+     if one named: warn but ignore names
+                   warn if lengths differ
+
+     if none are named: warn if lengths differ
+
+ / same as above, but result is named numeric vector
+
+ * not supported
+
+
+ min/max, pmin/pmax?
+
+ & | < > -- match by name
 
 
 * =returns= [0/2]
@@ -79,6 +93,7 @@
              "YYYY"
              "YYYY-MM-DD"
              "YYYY-Q1"]
+
 
 * =streaks=
 
