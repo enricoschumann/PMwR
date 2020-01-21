@@ -8,7 +8,6 @@ streaks.default <- function(x,
                             up =  0.2, down = -up,
                             initial.state = NA,
                             y = NULL,
-                            return.arithmetic = FALSE,
                             ...) {
 
     start <- 1
@@ -127,12 +126,8 @@ streaks.default <- function(x,
                      data.frame(start = start,
                                 end = length(x),
                                 state = state))
-    if (return.arithmetic)
-        results[["return"]] <- x[results$end]/x[results$start] -
-                               y[results$end]/y[results$start]
-    else
-        results[["return"]] <- x[results$end]/x[results$start] /
-                              (y[results$end]/y[results$start]) - 1
+    results[["return"]] <- x[results$end]/x[results$start] /
+                          (y[results$end]/y[results$start]) - 1
     results
 }
 

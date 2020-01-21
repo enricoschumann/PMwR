@@ -1,5 +1,10 @@
 2020-01-21  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/streaks.R (streaks): remove argument
+	'return.arithmetic' (see ChangeLog 2020-01-07).
+	The alternative return computations are added as
+	examples.
+
         * R/NAVseries.R (summary.NAVseries): if a
         benchmark is present, an attribute 'bm' is
         added
