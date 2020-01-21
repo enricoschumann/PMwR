@@ -129,8 +129,11 @@ as.NAVseries(x, ...)
 
   an \code{NAVseries}: see Details.
 
-  an \code{NAVseries} summary: a list of lists
-
+  an \code{NAVseries} summary: a list of lists. If a
+  benchmark series is present, the summary has an
+  attribute \code{bm}: an integer, specifying the
+  position of the benchmark.
+  
 }
 \references{
 

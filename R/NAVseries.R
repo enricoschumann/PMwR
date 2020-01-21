@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-19  Enrico Schumann
+## Copyright (C) 2008-20  Enrico Schumann
 
 NAVseries <- function(NAV, timestamp,
                       instrument = NULL,
@@ -103,7 +103,9 @@ summary.NAVseries <- function(object, ...,
                               assume.daily = FALSE) {
 
     all_series <- c(list(object), list(...))
+    has.bm <- FALSE
     if (!is.null(bm)) {
+        has.bm <- TRUE
         if (!inherits(bm, "NAVseries"))
             bm <- as.NAVseries(bm)
 
@@ -229,17 +231,20 @@ summary.NAVseries <- function(object, ...,
         }
 
         ## Tracking Error
-        if (!is.null(bm)) {
-            tmp.NAV <- merge(zoo(NAV, timestamp),
-                             zoo(bm.NAV, bm.timestamp))
-            if (.may_be_Date(timestamp) && monthly.te) {
-                r.te <- returns(tmp.NAV, period = "month")
-                r.te <- sd(diff(t(coredata(r.te))), na.rm = TRUE)*sqrt(12)
-            } else {
-                r.te <- returns(tmp.NAV)
-                r.te <- sd(diff(t(coredata(r.te))), na.rm = TRUE) *
+        if (has.bm) {
+            if (i < length(ans)) {
+                tmp.NAV <- merge(zoo(NAV, timestamp),
+                                 zoo(bm.NAV, bm.timestamp))
+                if (.may_be_Date(timestamp) && monthly.te) {
+                    r.te <- returns(tmp.NAV, period = "month")
+                    r.te <- sd(diff(t(coredata(r.te))), na.rm = TRUE)*sqrt(12)
+                } else {
+                    r.te <- returns(tmp.NAV)
+                    r.te <- sd(diff(t(coredata(r.te))), na.rm = TRUE) *
                         if (assume.daily) 16 else 1
-            }
+                }
+            } else
+                r.te <- 0
             ans1$tracking.error <- r.te
         }
 
@@ -247,6 +252,8 @@ summary.NAVseries <- function(object, ...,
     }
 
     class(ans) <- "summary.NAVseries"
+    if (has.bm)
+        attr(ans, "bm") <- length(ans)
     ans
 }
 
@@ -427,9 +434,10 @@ print.summary.NAVseries <- function(x, ...,
 
 
 toLatex.summary.NAVseries <-
-    function(object, ...,
-             template = " %title & %return & %volatility & %sparkline \\\\",
-             file = NULL) {
+function(object, ...,
+         template = " %title & %return & %volatility & %sparkline \\\\",
+         file = NULL,
+         include.bm = FALSE) {
 
     fmt_p <- function(x, ...) {
         if (is.numeric(x))
@@ -438,8 +446,9 @@ toLatex.summary.NAVseries <-
             x
     }
     ns <- length(object)
-    ans <- if (length(template) == 1L)
-        rep(template, ns)
+    ans <- if (length(template) == 1L && ns > 1L)
+               rep(template, ns - if (!is.null(attr(object, "bm")) &&
+                                      !include.bm) 1 else 0)
     else
         template
 

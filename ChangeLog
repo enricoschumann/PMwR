@@ -1,14 +1,27 @@
+2020-01-21  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/NAVseries.R (summary.NAVseries): if a
+        benchmark is present, an attribute 'bm' is
+        added
+        (toLatex.summary.NAVseries): new argument
+        'include.bm', with default FALSE
+
+2020-01-17  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/NAVseries.R (toLatex.summary.NAVseries):
+        new argument 'include.bm', with default FALSE
+
 2020-01-16  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/btest.R (btest): for consistency, even
-	replicate if replications == 1; reverts changes
-	of 2020-01-02
+        * R/btest.R (btest): for consistency, even
+        replicate if replications == 1; reverts changes
+        of 2020-01-02
 
 2020-01-07  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/streaks.R (streaks.default): new argument
-	'return.arithmetic', which specifies how
-	reported streak returns are computed
+        * R/streaks.R (streaks.default): new argument
+        'return.arithmetic', which specifies how
+        reported streak returns are computed
 
         * R/journal.R (summary.journal)
         (print.summary.journal): allow aggregation of
