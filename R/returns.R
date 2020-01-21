@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-19  Enrico Schumann
+## Copyright (C) 2008-20  Enrico Schumann
 
 returns <- function(x, ...)
     UseMethod("returns")
@@ -763,7 +763,9 @@ rc <- function(R, weights, timestamp, segments = NULL) {
                         cr
                     else
                         paste0("segment_", 1:ncol(weights))
-    }
+    } else if (length(segments) != ncol(R))
+        warning("length(segments) != ncol(R)")
+
     if (missing(timestamp))
         timestamp <- 1:nrow(R)
     ns <- length(segments)
