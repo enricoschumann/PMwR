@@ -1,77 +1,77 @@
 ## -*- truncate-lines: t; -*-
 
-test.position <- function() {
+## test.position <- function() {
 
-    library("zoo", quietly = TRUE, warn.conflicts = FALSE)
+##     library("zoo", quietly = TRUE, warn.conflicts = FALSE)
 
-    checkEqualsNumeric(position(amount = 1:5), 15)
+##     checkEqualsNumeric(position(amount = 1:5), 15)
 
-    ## ERROR: at least 'amount' needs to be specified
-    checkException(position(), silent = TRUE)
-
-
-    ## Construct position from raw data or from journal
-    t <- 1:5
-    n <- c(1, 1, -1, 3, -4)
-    j <- journal(timestamp = t, amount = n)
-
-    ## ... 1) check correct position for *vector* input
-    checkEquals(c(position(amount = n, timestamp = t, when = 4.9)),
-                4)
-    checkEquals(c(position(amount = n, timestamp = t,
-                           when = c(-10,1.4,4.9,10))),
-                c(0, 1, 4, 0))
-
-    ## ... 2) check correct position for *journal* input
-    checkEquals(c(position(j, when = 4.9)), 4)
-    checkEquals(c(position(j, when = c(-10,1.4,4.9,10))), c(0,1,4,0))
-
-    ## ... 3) check equal output for *vector* and *journal* input
-    checkEquals(position(amount = n, timestamp = t, when = 4.9),
-                position(j, when = 4.9))
-    checkEquals(position(amount = n, timestamp = t, when = c(-10,1.4,4.9,10)),
-                position(j, when = c(-10,1.4,4.9,10)))
+##     ## ERROR: at least 'amount' needs to be specified
+##     checkException(position(), silent = TRUE)
 
 
-    ## Ops
-    x <- position(amount = 1, instrument = c("a"))
-    y <- position(amount = 1:2, instrument = c("a","b"))
-    checkEquals(x, +x)
-    checkEquals(y, +y)
-    checkEquals(x+y,
-                structure(c(2, 2),
-                          .Dim = 1:2,
-                          .Dimnames = list("", c("a", "b")),
-                          timestamp = NA,
-                          instrument = c("a", "b"),
-                          class = "position"))
+##     ## Construct position from raw data or from journal
+##     t <- 1:5
+##     n <- c(1, 1, -1, 3, -4)
+##     j <- journal(timestamp = t, amount = n)
 
-    ## 'when' specifications
-    t <- as.Date("2015-1-15") + seq(10, 350, by = 30)
-    checkEquals(as.numeric(position(rep(1, length(t)),
-                                    timestamp = t,
-                                    when = "endofmonth")),
-                1:12)
+##     ## ... 1) check correct position for *vector* input
+##     checkEquals(c(position(amount = n, timestamp = t, when = 4.9)),
+##                 4)
+##     checkEquals(c(position(amount = n, timestamp = t,
+##                            when = c(-10,1.4,4.9,10))),
+##                 c(0, 1, 4, 0))
+
+##     ## ... 2) check correct position for *journal* input
+##     checkEquals(c(position(j, when = 4.9)), 4)
+##     checkEquals(c(position(j, when = c(-10,1.4,4.9,10))), c(0,1,4,0))
+
+##     ## ... 3) check equal output for *vector* and *journal* input
+##     checkEquals(position(amount = n, timestamp = t, when = 4.9),
+##                 position(j, when = 4.9))
+##     checkEquals(position(amount = n, timestamp = t, when = c(-10,1.4,4.9,10)),
+##                 position(j, when = c(-10,1.4,4.9,10)))
 
 
-    ## ... endofday
-    t <- as.POSIXct(c("2017-11-17 12:00:00",
-                      "2017-11-17 13:00:00",
-                      "2017-11-21 12:00:00"))
+##     ## Ops
+##     x <- position(amount = 1, instrument = c("a"))
+##     y <- position(amount = 1:2, instrument = c("a","b"))
+##     checkEquals(x, +x)
+##     checkEquals(y, +y)
+##     checkEquals(x+y,
+##                 structure(c(2, 2),
+##                           .Dim = 1:2,
+##                           .Dimnames = list("", c("a", "b")),
+##                           timestamp = NA,
+##                           instrument = c("a", "b"),
+##                           class = "position"))
 
-    res <- position(c(1,1,1), timestamp = t,
-                    when = "endofday")
+##     ## 'when' specifications
+##     t <- as.Date("2015-1-15") + seq(10, 350, by = 30)
+##     checkEquals(as.numeric(position(rep(1, length(t)),
+##                                     timestamp = t,
+##                                     when = "endofmonth")),
+##                 1:12)
 
-    checkEquals(as.numeric(res), 2:3)
-    checkEquals(attr(res, "timestamp"), unique(as.Date(t)))
 
-    res <- position(c(1,-1,1), timestamp = t,
-                    when = "endofday")
+##     ## ... endofday
+##     t <- as.POSIXct(c("2017-11-17 12:00:00",
+##                       "2017-11-17 13:00:00",
+##                       "2017-11-21 12:00:00"))
 
-    checkEquals(as.numeric(res), 0:1)
-    checkEquals(attr(res, "timestamp"), unique(as.Date(t)))
+##     res <- position(c(1,1,1), timestamp = t,
+##                     when = "endofday")
 
-}
+##     checkEquals(as.numeric(res), 2:3)
+##     checkEquals(attr(res, "timestamp"), unique(as.Date(t)))
+
+##     res <- position(c(1,-1,1), timestamp = t,
+##                     when = "endofday")
+
+##     checkEquals(as.numeric(res), 0:1)
+##     checkEquals(attr(res, "timestamp"), unique(as.Date(t)))
+
+## }
 
 test.position_named <- function() {
 
@@ -2682,143 +2682,143 @@ test.pricetable <- function() {
 
 }
 
-test.div_adjust <- function() {
+## test.div_adjust <- function() {
 
-    ## no adjustments
-    x <- 10
-    div <- 5
-    t <- 0
-    checkEquals(div_adjust(x, t, div), 10)
-    checkEquals(div_adjust(x, t, div, backward = FALSE), 10)
-    t <- 1
-    checkEquals(div_adjust(x, t, div), 10)
-    checkEquals(div_adjust(x, t, div, backward = FALSE), 10)
-    t <- 2
-    checkEquals(div_adjust(x, t, div), 10)
-    checkEquals(div_adjust(x, t, div, backward = FALSE), 10)
-
-
-    ## one adjustment
-    x <- c(10, 5)
-    div <- 5
-    t <- 2
-    checkEquals(div_adjust(x, t, div),
-                c(5, 5))
-    checkEquals(div_adjust(x, t, div, backward = FALSE),
-                c(10, 10))
+##     ## no adjustments
+##     x <- 10
+##     div <- 5
+##     t <- 0
+##     checkEquals(div_adjust(x, t, div), 10)
+##     checkEquals(div_adjust(x, t, div, backward = FALSE), 10)
+##     t <- 1
+##     checkEquals(div_adjust(x, t, div), 10)
+##     checkEquals(div_adjust(x, t, div, backward = FALSE), 10)
+##     t <- 2
+##     checkEquals(div_adjust(x, t, div), 10)
+##     checkEquals(div_adjust(x, t, div, backward = FALSE), 10)
 
 
-    ## two adjustments
-    x <- c(10,9,9,8)
-    div <- 1
-    t <- c(2,4)
-    checkEquals(div_adjust(x, t, div), rep(8, 4))
-    checkEquals(div_adjust(x, t, div, backward = FALSE), rep(10, 4))
+##     ## one adjustment
+##     x <- c(10, 5)
+##     div <- 5
+##     t <- 2
+##     checkEquals(div_adjust(x, t, div),
+##                 c(5, 5))
+##     checkEquals(div_adjust(x, t, div, backward = FALSE),
+##                 c(10, 10))
 
 
-    ## ADDITIVE tests
-    x <- c(10,10,8,8,8)
-    div <- 2
-    t <- 3
-    checkEquals(
-        div_adjust(x, t, div, additive = TRUE),
-        rep(8, 5))
-    checkEquals(
-        div_adjust(x, t, div, additive = TRUE, backward = FALSE),
-        rep(10, 5))
+##     ## two adjustments
+##     x <- c(10,9,9,8)
+##     div <- 1
+##     t <- c(2,4)
+##     checkEquals(div_adjust(x, t, div), rep(8, 4))
+##     checkEquals(div_adjust(x, t, div, backward = FALSE), rep(10, 4))
 
 
-    x <- c(10,10,8,8,6)
-    div <- c(2, 2)
-    t <- c(3, 5)
-    checkEquals(
-        div_adjust(x, t, div, additive = TRUE),
-        rep(6, 5))
-    checkEquals(
-        div_adjust(x, t, div, additive = TRUE, backward = FALSE),
-        rep(10, 5))
+##     ## ADDITIVE tests
+##     x <- c(10,10,8,8,8)
+##     div <- 2
+##     t <- 3
+##     checkEquals(
+##         div_adjust(x, t, div, additive = TRUE),
+##         rep(8, 5))
+##     checkEquals(
+##         div_adjust(x, t, div, additive = TRUE, backward = FALSE),
+##         rep(10, 5))
+
+
+##     x <- c(10,10,8,8,6)
+##     div <- c(2, 2)
+##     t <- c(3, 5)
+##     checkEquals(
+##         div_adjust(x, t, div, additive = TRUE),
+##         rep(6, 5))
+##     checkEquals(
+##         div_adjust(x, t, div, additive = TRUE, backward = FALSE),
+##         rep(10, 5))
 
 
 
-    ## MULTIPLICATIVE tests
-    ### 1 div
-    x <- c(10,11,10,11,12)
-    div <- 2
-    t <- 3
-    R <- returns(x, pad = 0)
-    R[t] <- (x[t]+div)/x[t-1] - 1
+##     ## MULTIPLICATIVE tests
+##     ### 1 div
+##     x <- c(10,11,10,11,12)
+##     div <- 2
+##     t <- 3
+##     R <- returns(x, pad = 0)
+##     R[t] <- (x[t]+div)/x[t-1] - 1
 
-    checkEqualsNumeric(
-        div_adjust(x, t, div),
-        scale1(cumprod(R+1), level = x[length(x)], when = length(x)))
-    checkEqualsNumeric(
-        div_adjust(x, t, div, backward = FALSE),
-        scale1(cumprod(R+1), level = x[1], when = 1))
+##     checkEqualsNumeric(
+##         div_adjust(x, t, div),
+##         scale1(cumprod(R+1), level = x[length(x)], when = length(x)))
+##     checkEqualsNumeric(
+##         div_adjust(x, t, div, backward = FALSE),
+##         scale1(cumprod(R+1), level = x[1], when = 1))
 
-    ### 2 divs
-    x <- c(10,11,9,10,8)
-    div <- c(2, 2)
-    t <- c(3, 5)
-    R <- returns(x, pad = 0)
-    R[t] <- (x[t]+div)/x[t-1] - 1
+##     ### 2 divs
+##     x <- c(10,11,9,10,8)
+##     div <- c(2, 2)
+##     t <- c(3, 5)
+##     R <- returns(x, pad = 0)
+##     R[t] <- (x[t]+div)/x[t-1] - 1
 
-    checkEqualsNumeric(
-        div_adjust(x, t, div),
-        scale1(cumprod(R+1), level = x[length(x)], when = length(x)))
-    checkEqualsNumeric(
-        div_adjust(x, t, div, backward = FALSE),
-        scale1(cumprod(R+1), level = x[1], when = 1))
-}
-
-
-test.split_adjust <- function() {
-
-    ## no adjustments
-    x <- 10
-    t <- 0
-    ratio <- 5
-    checkEquals(split_adjust(x, t, ratio), 10)
-    checkEquals(split_adjust(x, t, ratio, backward = FALSE), 10)
-    t <- 1
-    checkEquals(split_adjust(x, t, ratio), 10)
-    checkEquals(split_adjust(x, t, ratio, backward = FALSE), 10)
-    t <- 2
-    checkEquals(split_adjust(x, t, ratio), 10)
-    checkEquals(split_adjust(x, t, ratio, backward = FALSE), 10)
+##     checkEqualsNumeric(
+##         div_adjust(x, t, div),
+##         scale1(cumprod(R+1), level = x[length(x)], when = length(x)))
+##     checkEqualsNumeric(
+##         div_adjust(x, t, div, backward = FALSE),
+##         scale1(cumprod(R+1), level = x[1], when = 1))
+## }
 
 
-    ## one adjustment
-    x <- c(10, 2)
-    t <- 2
-    ratio <- 5
-    checkEquals(split_adjust(x, t, ratio),
-                c(2, 2))
-    checkEquals(split_adjust(x, t, ratio, backward = FALSE),
-                c(10, 10))
+## test.split_adjust <- function() {
+
+##     ## no adjustments
+##     x <- 10
+##     t <- 0
+##     ratio <- 5
+##     checkEquals(split_adjust(x, t, ratio), 10)
+##     checkEquals(split_adjust(x, t, ratio, backward = FALSE), 10)
+##     t <- 1
+##     checkEquals(split_adjust(x, t, ratio), 10)
+##     checkEquals(split_adjust(x, t, ratio, backward = FALSE), 10)
+##     t <- 2
+##     checkEquals(split_adjust(x, t, ratio), 10)
+##     checkEquals(split_adjust(x, t, ratio, backward = FALSE), 10)
 
 
-    ## two adjustments
-    x <- c(10, 5, 5, 1)
-    t <- c(2, 4)
-    ratio <- c(2,5)
-    checkEquals(split_adjust(x, t, ratio),
-                rep(1,4))
-    checkEquals(split_adjust(x, t, ratio, backward = FALSE),
-                rep(10,4))
+##     ## one adjustment
+##     x <- c(10, 2)
+##     t <- 2
+##     ratio <- 5
+##     checkEquals(split_adjust(x, t, ratio),
+##                 c(2, 2))
+##     checkEquals(split_adjust(x, t, ratio, backward = FALSE),
+##                 c(10, 10))
 
 
-}
-
-test.streaks <- function() {
-
-    x <- c(112, 102, 101, 104, 111, 98, 82, 93, 99, 105, 103, 110)
-
-}
-
-test.valuation <- function() {
-    pos <- position(c(A = 10, B = 5))
-    checkEqualsNumeric(valuation(pos, t(c(2, 1))),
-                       c(20,5))
+##     ## two adjustments
+##     x <- c(10, 5, 5, 1)
+##     t <- c(2, 4)
+##     ratio <- c(2,5)
+##     checkEquals(split_adjust(x, t, ratio),
+##                 rep(1,4))
+##     checkEquals(split_adjust(x, t, ratio, backward = FALSE),
+##                 rep(10,4))
 
 
-}
+## }
+
+## test.streaks <- function() {
+
+##     x <- c(112, 102, 101, 104, 111, 98, 82, 93, 99, 105, 103, 110)
+
+## }
+
+## test.valuation <- function() {
+##     pos <- position(c(A = 10, B = 5))
+##     checkEqualsNumeric(valuation(pos, t(c(2, 1))),
+##                        c(20,5))
+
+
+## }
