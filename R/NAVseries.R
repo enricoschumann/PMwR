@@ -446,9 +446,10 @@ function(object, ...,
             x
     }
     ns <- length(object)
+    if (!include.bm && !is.null(attr(object, "bm")))
+        ns <- ns - 1
     ans <- if (length(template) == 1L && ns > 1L)
-               rep(template, ns - if (!is.null(attr(object, "bm")) &&
-                                      !include.bm) 1 else 0)
+               rep(template, ns)
     else
         template
 

@@ -43,7 +43,7 @@ streaks.default <- function(x,
                     hi <- xy.i
                     hi.t <- t
                 }
-                if (x[t]/x[lo.t] - y[t]/y[lo.t] >= up) {
+                if ( (x[t]/x[lo.t]) / (y[t]/y[lo.t]) - 1 >= up) {
                     state <- "up"
                     if (lo.t == 1) {
                         lo <- NA
@@ -64,7 +64,7 @@ streaks.default <- function(x,
                     lo <- xy.i
                     lo.t <- t
                 }
-                if (x[t]/x[hi.t] - y[t]/y[hi.t] <= down) {
+                if ( (x[t]/x[hi.t]) / (y[t]/y[hi.t]) - 1 <= down) {
                     state <- "down"
                     if (hi.t == 1) {
                         hi <- NA
@@ -87,7 +87,7 @@ streaks.default <- function(x,
                     hi <- xy.i
                     hi.t <- t
                 }
-            } else if (dx < 1 && x[t]/x[hi.t] - y[t]/y[hi.t] < down) {
+            } else if (dx < 1 && (x[t]/x[hi.t]) / (y[t]/y[hi.t]) - 1 < down) {
                 results <- rbind(results,
                                  data.frame(start = start,
                                             end = hi.t,
@@ -107,7 +107,7 @@ streaks.default <- function(x,
                     lo <- xy.i
                     lo.t <- t
                 }
-            } else if (dx > 1 && x[t]/x[lo.t] - y[t]/y[lo.t] > up) {
+            } else if (dx > 1 && (x[t]/x[lo.t]) / (y[t]/y[lo.t]) - 1 > up) {
                 results <- rbind(results,
                                  data.frame(start = start,
                                             end = lo.t,
