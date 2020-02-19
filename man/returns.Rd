@@ -232,7 +232,7 @@ returns(x, \dots)
     rebalanced at \code{rebalance.when}; the default is
     every period.  Weights need not sum to one. A
     zero-weight portfolio, or a portfolio that never
-    rebalances (e.g. with rebalance.when is set to
+    rebalances (e.g. with \code{rebalance.when} set to
     \code{FALSE}), will result in a zero return.
 
     \code{rebalance.when} may either be logical,

@@ -1,7 +1,7 @@
 2020-02-19  Enrico Schumann  <es@enricoschumann.net>
 
         * R/returns.R (returns,returns_rebalance):
-        the 'weights' argument need no longer sum to one
+        the 'weights' argument needs no longer sum to one
 
 2020-02-18  Enrico Schumann  <es@enricoschumann.net>
 
