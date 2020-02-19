@@ -727,23 +727,24 @@ returns_rebalance <- function(prices, weights,
         weights <- tmp
     }
 
-
     val <- numeric(nr) + 1
     h <- ctb <- array(0, dim = dim(prices))
 
     if (any(when)) {
         first <- which(when)[1L]
         val[seq(to = first)] <- 1
+        cash <- 1 - sum(weights[first, ])
         h[first, ] <- weights[first, ]/prices[first, ]
 
         if (first < nr)
             for (i in (first+1):nr) {
-                val[i] <- sum(prices[i, ] * h[i-1, ])
+                val[i] <- sum(prices[i, ] * h[i-1, ]) + cash
                 ctb[i, ] <- (prices[i, ]-prices[i-1, ]) *
                     h[i-1, ] / val[i-1]
-                if (when[i])
+                if (when[i]) {
                     h[i, ] <- val[i] * weights[i, ]/prices[i, ]
-                else
+                    cash <- val[i] - sum(weights[i, ])*val[i]
+                } else
                     h[i, ] <- h[i - 1, ]
             }
     }

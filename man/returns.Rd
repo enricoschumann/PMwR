@@ -17,7 +17,7 @@
 returns(x, \dots)
 
 \method{returns}{default}(x, t = NULL, period = NULL, complete.first = TRUE,
-        pad = NULL, position = NULL, 
+        pad = NULL, position = NULL,
         weights = NULL, rebalance.when = NULL,
         lag = 1, \dots)
 
@@ -30,15 +30,15 @@ returns(x, \dots)
       na.print = NULL)
 
 \method{toLatex}{p_returns}(object, \dots,
-        year.rows = TRUE, ytd = "YTD", month.names = NULL, 
+        year.rows = TRUE, ytd = "YTD", month.names = NULL,
         eol = "\\\\\\\\", stand.alone = FALSE)
 
 \method{toHTML}{p_returns}(x, \dots,
-       year.rows = TRUE, ytd = "YTD", month.names = NULL, 
-       stand.alone = TRUE, table.style = NULL, table.class = NULL, 
+       year.rows = TRUE, ytd = "YTD", month.names = NULL,
+       stand.alone = TRUE, table.style = NULL, table.class = NULL,
        th.style = NULL, th.class = NULL,
-       td.style = "text-align:right; padding:0.5em;", 
-       td.class = NULL, tr.style = NULL, tr.class = NULL, 
+       td.style = "text-align:right; padding:0.5em;",
+       td.class = NULL, tr.style = NULL, tr.class = NULL,
        browse = FALSE)
 
 .returns(x, pad = NULL, lag)
@@ -56,16 +56,16 @@ returns(x, \dots)
     For \code{.returns}, \code{x} must be
     \code{numeric} (for other classes, \code{.returns}
     may not work properly).
-    
+
   }
   \item{t}{
-    
+
     timestamps. See arguments \code{period} and
     \code{rebalance.when}.
-    
+
   }
   \item{period}{
-    
+
     Typically \code{character}; supported are
     \code{"hour"}, \code{"day"}, \code{"month"},
     \code{"quarter"}, \code{"year"},
@@ -78,7 +78,7 @@ returns(x, \dots)
     instance, when \code{t} is not \code{NULL} or with
     \code{zoo}/\code{xts} objects. The exception is \code{"itd"}:
     it can be computed without timestamp information.
-    
+
     All returns are computed as simple returns. They
     will only be annualised with option \code{"ann"}; they
     will not be annualised when the length of the time
@@ -178,7 +178,7 @@ returns(x, \dots)
     either the numbers 1 to 12, or the character vector
     \code{\link{month.abb}}, which lives in the base
     package.
-    
+
   }
   \item{digits}{
 
@@ -216,22 +216,25 @@ returns(x, \dots)
   be used when a \sQuote{raw} return computation is
   needed.
 
-  
+
   \subsection{Holding-Period Returns}{
-    
+
     When a timestamp is available, \code{returns} can
     compute returns for specific calendar periods. See
     argument \code{period}.
-    
+
   }
-  
+
   \subsection{Portfolio Returns}{
-    
+
     \code{returns} may compute returns for a portfolio
     specified in \code{weights}. The portfolio is
     rebalanced at \code{rebalance.when}; the default is
-    every period.
-    
+    every period.  Weights need not sum to one. A
+    zero-weight portfolio, or a portfolio that never
+    rebalances (e.g. with rebalance.when is set to
+    \code{FALSE}), will result in a zero return.
+
     \code{rebalance.when} may either be logical,
     integers or of the same class as a \code{timestamp}
     (e.g. \code{\link{Date}}).
@@ -261,7 +264,7 @@ returns(x, \dots)
   \code{is.annualised}, and an attribute
   \code{from.to}, which tells the start and end date of
   the holding period.
-      
+
 }
 \author{
   Enrico Schumann <es@enricoschumann.net>
