@@ -73,143 +73,143 @@
 
 ## }
 
-test.position_named <- function() {
+## test.position_named <- function() {
 
-    amount <- c(1, 1, 1)
-    checkEquals(position(amount),
-                structure(3,
-                          .Dim = c(1L, 1L),
-                          .Dimnames = list("", ""),
-                          timestamp = NA,
-                          instrument = NA_character_,
-                          class = "position"))
+##     amount <- c(1, 1, 1)
+##     checkEquals(position(amount),
+##                 structure(3,
+##                           .Dim = c(1L, 1L),
+##                           .Dimnames = list("", ""),
+##                           timestamp = NA,
+##                           instrument = NA_character_,
+##                           class = "position"))
 
-    instrument <- c("A", "A", "B")
-    checkEquals(position(amount = amount, instrument = instrument),
-                structure(c(2, 1),
-                          .Dim = 1:2,
-                          .Dimnames = list("", c("A", "B" )),
-                          timestamp = NA,
-                          instrument = c("A", "B"),
-                          class = "position"))
-
-
-    amount <- c(A = 1, B = 1, C = 1)
-    checkEquals(position(amount),
-                structure(c(1, 1, 1), .Dim = c(1L, 3L),
-                          .Dimnames = list("", c("A", "B", "C")),
-                          timestamp = NA,
-                          instrument = c("A", "B", "C"),
-                          class = "position"))
+##     instrument <- c("A", "A", "B")
+##     checkEquals(position(amount = amount, instrument = instrument),
+##                 structure(c(2, 1),
+##                           .Dim = 1:2,
+##                           .Dimnames = list("", c("A", "B" )),
+##                           timestamp = NA,
+##                           instrument = c("A", "B"),
+##                           class = "position"))
 
 
-    amount <- c(A = 1, A = 1, C = 1)
-    position(amount)
-    checkEquals(position(amount),
-                structure(c(2, 1), .Dim = c(1L, 2L),
-                          .Dimnames = list("", c("A", "C")),
-                          timestamp = NA,
-                          instrument = c("A", "C"),
-                          class = "position"))
-
-    checkEquals(position(amount, use.names = FALSE),
-                structure(3, .Dim = c(1L, 1L),
-                          .Dimnames = list("", ""),
-                          timestamp = NA,
-                          instrument = NA_character_,
-                          class = "position"))
-
-    ## row vector
-    A <- array(1:3, dim = c(1, 3))
-    colnames(A) <- letters[1:3]
-    checkEquals(position(A),
-                structure(c(1, 2, 3), .Dim = c(1L, 3L),
-                          .Dimnames = list("", c("a", "b", "c")),
-                          timestamp = NA,
-                          instrument = c("a", "b", "c"),
-                          class = "position"))
-
-    checkEquals(position(A, instrument = letters[1:3]),
-                structure(c(1, 2, 3), .Dim = c(1L, 3L),
-                          .Dimnames = list("", c("a", "b", "c")),
-                          timestamp = NA,
-                          instrument = c("a", "b", "c"),
-                          class = "position"))
-
-    checkEquals(position(A, instrument = letters[4:6]),
-                structure(c(1, 2, 3), .Dim = c(1L, 3L),
-                          .Dimnames = list("", c("d", "e", "f")),
-                          timestamp = NA,
-                          instrument = c("d", "e", "f"),
-                          class = "position"))
-
-    checkEquals(position(A, use.names = TRUE),
-                structure(c(1, 2, 3), .Dim = c(1L, 3L),
-                          .Dimnames = list("", c("a", "b", "c")),
-                          timestamp = NA,
-                          instrument = c("a", "b", "c"),
-                          class = "position"))
-    checkEquals(position(A, use.names = FALSE),
-                structure(6, .Dim = c(1L, 1L),
-                          .Dimnames = list("", ""),
-                          timestamp = NA,
-                          instrument = NA_character_,
-                          class = "position"))
+##     amount <- c(A = 1, B = 1, C = 1)
+##     checkEquals(position(amount),
+##                 structure(c(1, 1, 1), .Dim = c(1L, 3L),
+##                           .Dimnames = list("", c("A", "B", "C")),
+##                           timestamp = NA,
+##                           instrument = c("A", "B", "C"),
+##                           class = "position"))
 
 
-    ## col vector
-    A <- array(1:3, dim = c(3, 1))
-    colnames(A) <- "a"
-    checkEquals(position(A),
-                structure(6,
-                          .Dim = c(1L, 1L),
-                          .Dimnames = list("", "a"),
-                          timestamp = NA,
-                          instrument = "a",
-                          class = "position"))
+##     amount <- c(A = 1, A = 1, C = 1)
+##     position(amount)
+##     checkEquals(position(amount),
+##                 structure(c(2, 1), .Dim = c(1L, 2L),
+##                           .Dimnames = list("", c("A", "C")),
+##                           timestamp = NA,
+##                           instrument = c("A", "C"),
+##                           class = "position"))
 
-    checkEquals(position(A, use.names = TRUE),
-                structure(6,
-                          .Dim = c(1L, 1L),
-                          .Dimnames = list("", "a"),
-                          timestamp = NA,
-                          instrument = "a",
-                          class = "position"))
+##     checkEquals(position(amount, use.names = FALSE),
+##                 structure(3, .Dim = c(1L, 1L),
+##                           .Dimnames = list("", ""),
+##                           timestamp = NA,
+##                           instrument = NA_character_,
+##                           class = "position"))
 
-    checkEquals(position(A, use.names = FALSE),
-                structure(6, .Dim = c(1L, 1L),
-                          .Dimnames = list("", ""),
-                          timestamp = NA,
-                          instrument = NA_character_,
-                          class = "position"))
+##     ## row vector
+##     A <- array(1:3, dim = c(1, 3))
+##     colnames(A) <- letters[1:3]
+##     checkEquals(position(A),
+##                 structure(c(1, 2, 3), .Dim = c(1L, 3L),
+##                           .Dimnames = list("", c("a", "b", "c")),
+##                           timestamp = NA,
+##                           instrument = c("a", "b", "c"),
+##                           class = "position"))
 
-    ## matrix
-    A <- array(1:6, dim = c(2, 3))
-    colnames(A) <- letters[1:3]
-    checkException(position(A, use.names = FALSE),
-                   silent = TRUE)
+##     checkEquals(position(A, instrument = letters[1:3]),
+##                 structure(c(1, 2, 3), .Dim = c(1L, 3L),
+##                           .Dimnames = list("", c("a", "b", "c")),
+##                           timestamp = NA,
+##                           instrument = c("a", "b", "c"),
+##                           class = "position"))
 
-    checkEquals(position(A),
-                structure(c(3, 7, 11), .Dim = c(1L, 3L),
-                          .Dimnames = list("", c("a", "b", "c")),
-                          timestamp = NA,
-                          instrument = c("a", "b", "c"),
-                          class = "position"))
-    checkEquals(position(A, use.names = TRUE),
-                structure(c(3, 7, 11), .Dim = c(1L, 3L),
-                          .Dimnames = list("", c("a", "b", "c")),
-                          timestamp = NA,
-                          instrument = c("a", "b", "c"),
-                          class = "position"))
+##     checkEquals(position(A, instrument = letters[4:6]),
+##                 structure(c(1, 2, 3), .Dim = c(1L, 3L),
+##                           .Dimnames = list("", c("d", "e", "f")),
+##                           timestamp = NA,
+##                           instrument = c("d", "e", "f"),
+##                           class = "position"))
 
-    checkEquals(position(A, timestamp = 3:1),
-                structure(c(3, 7, 11), .Dim = c(1L, 3L),
-                          .Dimnames = list("3", c("a", "b", "c")),
-                          timestamp = 3L,
-                          instrument = c("a", "b", "c"),
-                          class = "position"))
+##     checkEquals(position(A, use.names = TRUE),
+##                 structure(c(1, 2, 3), .Dim = c(1L, 3L),
+##                           .Dimnames = list("", c("a", "b", "c")),
+##                           timestamp = NA,
+##                           instrument = c("a", "b", "c"),
+##                           class = "position"))
+##     checkEquals(position(A, use.names = FALSE),
+##                 structure(6, .Dim = c(1L, 1L),
+##                           .Dimnames = list("", ""),
+##                           timestamp = NA,
+##                           instrument = NA_character_,
+##                           class = "position"))
 
-}
+
+##     ## col vector
+##     A <- array(1:3, dim = c(3, 1))
+##     colnames(A) <- "a"
+##     checkEquals(position(A),
+##                 structure(6,
+##                           .Dim = c(1L, 1L),
+##                           .Dimnames = list("", "a"),
+##                           timestamp = NA,
+##                           instrument = "a",
+##                           class = "position"))
+
+##     checkEquals(position(A, use.names = TRUE),
+##                 structure(6,
+##                           .Dim = c(1L, 1L),
+##                           .Dimnames = list("", "a"),
+##                           timestamp = NA,
+##                           instrument = "a",
+##                           class = "position"))
+
+##     checkEquals(position(A, use.names = FALSE),
+##                 structure(6, .Dim = c(1L, 1L),
+##                           .Dimnames = list("", ""),
+##                           timestamp = NA,
+##                           instrument = NA_character_,
+##                           class = "position"))
+
+##     ## matrix
+##     A <- array(1:6, dim = c(2, 3))
+##     colnames(A) <- letters[1:3]
+##     checkException(position(A, use.names = FALSE),
+##                    silent = TRUE)
+
+##     checkEquals(position(A),
+##                 structure(c(3, 7, 11), .Dim = c(1L, 3L),
+##                           .Dimnames = list("", c("a", "b", "c")),
+##                           timestamp = NA,
+##                           instrument = c("a", "b", "c"),
+##                           class = "position"))
+##     checkEquals(position(A, use.names = TRUE),
+##                 structure(c(3, 7, 11), .Dim = c(1L, 3L),
+##                           .Dimnames = list("", c("a", "b", "c")),
+##                           timestamp = NA,
+##                           instrument = c("a", "b", "c"),
+##                           class = "position"))
+
+##     checkEquals(position(A, timestamp = 3:1),
+##                 structure(c(3, 7, 11), .Dim = c(1L, 3L),
+##                           .Dimnames = list("3", c("a", "b", "c")),
+##                           timestamp = 3L,
+##                           instrument = c("a", "b", "c"),
+##                           class = "position"))
+
+## }
 
 
 
@@ -2681,144 +2681,3 @@ test.pricetable <- function() {
                 pricetable(c(A = 1, B = 2)))
 
 }
-
-## test.div_adjust <- function() {
-
-##     ## no adjustments
-##     x <- 10
-##     div <- 5
-##     t <- 0
-##     checkEquals(div_adjust(x, t, div), 10)
-##     checkEquals(div_adjust(x, t, div, backward = FALSE), 10)
-##     t <- 1
-##     checkEquals(div_adjust(x, t, div), 10)
-##     checkEquals(div_adjust(x, t, div, backward = FALSE), 10)
-##     t <- 2
-##     checkEquals(div_adjust(x, t, div), 10)
-##     checkEquals(div_adjust(x, t, div, backward = FALSE), 10)
-
-
-##     ## one adjustment
-##     x <- c(10, 5)
-##     div <- 5
-##     t <- 2
-##     checkEquals(div_adjust(x, t, div),
-##                 c(5, 5))
-##     checkEquals(div_adjust(x, t, div, backward = FALSE),
-##                 c(10, 10))
-
-
-##     ## two adjustments
-##     x <- c(10,9,9,8)
-##     div <- 1
-##     t <- c(2,4)
-##     checkEquals(div_adjust(x, t, div), rep(8, 4))
-##     checkEquals(div_adjust(x, t, div, backward = FALSE), rep(10, 4))
-
-
-##     ## ADDITIVE tests
-##     x <- c(10,10,8,8,8)
-##     div <- 2
-##     t <- 3
-##     checkEquals(
-##         div_adjust(x, t, div, additive = TRUE),
-##         rep(8, 5))
-##     checkEquals(
-##         div_adjust(x, t, div, additive = TRUE, backward = FALSE),
-##         rep(10, 5))
-
-
-##     x <- c(10,10,8,8,6)
-##     div <- c(2, 2)
-##     t <- c(3, 5)
-##     checkEquals(
-##         div_adjust(x, t, div, additive = TRUE),
-##         rep(6, 5))
-##     checkEquals(
-##         div_adjust(x, t, div, additive = TRUE, backward = FALSE),
-##         rep(10, 5))
-
-
-
-##     ## MULTIPLICATIVE tests
-##     ### 1 div
-##     x <- c(10,11,10,11,12)
-##     div <- 2
-##     t <- 3
-##     R <- returns(x, pad = 0)
-##     R[t] <- (x[t]+div)/x[t-1] - 1
-
-##     checkEqualsNumeric(
-##         div_adjust(x, t, div),
-##         scale1(cumprod(R+1), level = x[length(x)], when = length(x)))
-##     checkEqualsNumeric(
-##         div_adjust(x, t, div, backward = FALSE),
-##         scale1(cumprod(R+1), level = x[1], when = 1))
-
-##     ### 2 divs
-##     x <- c(10,11,9,10,8)
-##     div <- c(2, 2)
-##     t <- c(3, 5)
-##     R <- returns(x, pad = 0)
-##     R[t] <- (x[t]+div)/x[t-1] - 1
-
-##     checkEqualsNumeric(
-##         div_adjust(x, t, div),
-##         scale1(cumprod(R+1), level = x[length(x)], when = length(x)))
-##     checkEqualsNumeric(
-##         div_adjust(x, t, div, backward = FALSE),
-##         scale1(cumprod(R+1), level = x[1], when = 1))
-## }
-
-
-## test.split_adjust <- function() {
-
-##     ## no adjustments
-##     x <- 10
-##     t <- 0
-##     ratio <- 5
-##     checkEquals(split_adjust(x, t, ratio), 10)
-##     checkEquals(split_adjust(x, t, ratio, backward = FALSE), 10)
-##     t <- 1
-##     checkEquals(split_adjust(x, t, ratio), 10)
-##     checkEquals(split_adjust(x, t, ratio, backward = FALSE), 10)
-##     t <- 2
-##     checkEquals(split_adjust(x, t, ratio), 10)
-##     checkEquals(split_adjust(x, t, ratio, backward = FALSE), 10)
-
-
-##     ## one adjustment
-##     x <- c(10, 2)
-##     t <- 2
-##     ratio <- 5
-##     checkEquals(split_adjust(x, t, ratio),
-##                 c(2, 2))
-##     checkEquals(split_adjust(x, t, ratio, backward = FALSE),
-##                 c(10, 10))
-
-
-##     ## two adjustments
-##     x <- c(10, 5, 5, 1)
-##     t <- c(2, 4)
-##     ratio <- c(2,5)
-##     checkEquals(split_adjust(x, t, ratio),
-##                 rep(1,4))
-##     checkEquals(split_adjust(x, t, ratio, backward = FALSE),
-##                 rep(10,4))
-
-
-## }
-
-## test.streaks <- function() {
-
-##     x <- c(112, 102, 101, 104, 111, 98, 82, 93, 99, 105, 103, 110)
-
-## }
-
-## test.valuation <- function() {
-##     pos <- position(c(A = 10, B = 5))
-##     checkEqualsNumeric(valuation(pos, t(c(2, 1))),
-##                        c(20,5))
-
-
-## }

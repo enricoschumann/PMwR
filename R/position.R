@@ -53,6 +53,10 @@ position.default <- function(amount, timestamp, instrument,
                      else
                          rep(1, length(amount))
         no.timestamp <- TRUE
+    } else {
+        if (is.amount.matrix &&
+            length(timestamp) != dim.amount[1L])
+            stop("timestamp length does not match amount")
     }
 
     len <- max(length(amount),
