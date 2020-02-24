@@ -306,17 +306,29 @@ pl.default <- function(amount, price, timestamp = NULL,
                      abs(amount0[i1 == instrument0])
                  else
                      0
-
-        open <- abs(sum(amount1)) > tol
+        sum.amount1 <- sum(amount1)
+        open <- abs(sum.amount1) > tol
         if (open && !custom.timestamp) {
-            if (footnotes && (is.null(vprice) || is.na(vprice1)))
-                fn <- c(fn, paste0(sQuote("sum(amount)"), " is not zero",
+            if (is.null(vprice) || is.na(vprice1)) {
+                if (footnotes)
+                    fn <- c(fn,
+                            paste0(sQuote("sum(amount)"), " is not zero",
                                    if (!no.i) paste0(" for ",  uniq.i[i]),
                                    ": specify ",
                                    sQuote("vprice")," to compute P/L."))
-            subtr <- subtr + abs(sum(amount1))
-            amount1 <- c(amount1, -sum(amount1))
-            price1 <- c(price1, vprice1)
+                subtr <- 0
+            } else {
+                if (footnotes)
+                    fn <- c(fn,
+                            paste0(if (!no.i) paste0(" for ",  uniq.i[i], ": "),
+                                   if (sum.amount1 > 0) "average sell includes "
+                                   else                 "average buy includes ",
+                                   sQuote("vprice")))
+
+                subtr <- subtr + abs(sum.amount1)
+                amount1 <- c(amount1, -sum.amount1)
+                price1 <- c(price1, vprice1)
+            }
         }
 
         pl1 <- .pl(amount1, price1, tol = tol, do.warn = FALSE)

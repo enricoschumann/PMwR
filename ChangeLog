@@ -1,3 +1,9 @@
+2020-02-24  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/pl.R (pl.default): use 'vprice' only if it
+        is actually specified, which avoids unnecessary
+        NAs in average buy/sell prices
+
 2020-02-19  Enrico Schumann  <es@enricoschumann.net>
 
         * R/returns.R (returns,returns_rebalance):

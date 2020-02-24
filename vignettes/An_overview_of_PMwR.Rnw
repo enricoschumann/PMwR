@@ -42,7 +42,7 @@ pv <- gsub("(.*)[.](.*)", "\\1-\\2", pv)
 <<echo=false,results=hide>>=
 library("PMwR")
 library("zoo")
-tinytest::test_package("PMwR")
+try(tinytest::test_package("PMwR"), silent = TRUE)
 @
 
 \noindent The aim of \textsc{pm}w\textsc{r} is to
@@ -69,10 +69,13 @@ nt <- gsub(".*\\(([0-9]+) checks?\\).*", "\\1",
            test.rep[grep("\\(\\d+ checks?\\)", test.rep)])
 
 if (requireNamespace("tinytest")) {
-    tinytest.results <- suppressMessages(
-        suppressWarnings(tinytest::test_package("PMwR")))
-    nt <- nrow(as.data.frame(tinytest.results)) +
-          sum(as.numeric(nt))
+    tinytest.results <- try(suppressMessages(
+        suppressWarnings(tinytest::test_package("PMwR"))))
+    if (inherits(tinytest.results, "try-error"))
+        nt <- "several hundred"
+    else
+        nt <- nrow(as.data.frame(tinytest.results)) +
+            sum(as.numeric(nt))
 } else
     nt <- "several hundred"
 @
