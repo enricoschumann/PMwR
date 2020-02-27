@@ -17,17 +17,17 @@ split_adjust(x, t, ratio, backward = TRUE)
     a numeric vector
   }
   \item{t}{
-    
+
     an integer vector, specifying the positions in \code{x} at which
     dividends were paid (\sQuote{ex-days}) or at which a split occurred
-    
+
   }
   \item{div}{
     a numeric vector, specifying the dividends.  If necessary, recycled
     to the length of \code{t}.
   }
   \item{ratio}{
-    
+
     a numeric vector, specifying the split ratios. The ratio must be
     \sQuote{American Style}: a 2-for-1 stock split, for example,
     corresponds to a ratio of 2. (In other countries, for instance
@@ -43,7 +43,7 @@ split_adjust(x, t, ratio, backward = TRUE)
   }
 }
 \details{
-  
+
   With \code{backward} set to \code{TRUE}, which is the
   default, the final prices in the unadjusted series
   matches the final prices in the adjusted series.
@@ -71,4 +71,15 @@ t <- 3
 
 div_adjust(x, t, div)
 div_adjust(x, t, div, FALSE)
+
+## assume there were three splits: adjust shares outstanding
+shares <- c(100, 100, 200, 200, 1000, 1500)
+t <- c(3, 5, 6)
+ratio <- c(2, 5, 1.5)
+### => invert ratio
+split_adjust(shares, t, 1/ratio)
+## [1] 1500 1500 1500 1500 1500 1500
+
+split_adjust(shares, t, 1/ratio, backward = FALSE)
+## [1] 100 100 100 100 100 100
 }

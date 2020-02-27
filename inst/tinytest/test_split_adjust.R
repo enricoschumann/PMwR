@@ -25,9 +25,31 @@ expect_equal(split_adjust(x, t, ratio, backward = FALSE),
 ## two adjustments
 x <- c(10, 5, 5, 1)
 t <- c(2, 4)
-ratio <- c(2,5)
+ratio <- c(2, 5)
 expect_equal(split_adjust(x, t, ratio),
-            rep(1,4))
+            rep(1, 4))
 expect_equal(split_adjust(x, t, ratio, backward = FALSE),
-            rep(10,4))
+            rep(10, 4))
+
+
+## adjust shares outstanding (=> invert ratio)
+x <- c(100, 100, 200, 200, 400, 1200)
+t <- c(3, 5, 6)
+ratio <- c(2, 2, 3)
+expect_equal(split_adjust(x, t, 1/ratio, backward = FALSE),
+             rep(100, 6))
+
+x <- c(100, 100, 200, 200, 400, 1200)
+t <- c(3, 5, 6)
+ratio <- c(2, 2, 3)
+expect_equal(split_adjust(x, t, 1/ratio, backward = TRUE),
+             rep(1200, 6))
+
+### .... the same, but somewhat less intuitive
+x     <- c(100, 100, 200, 200, 400, 1200)
+ratio <- c(  1,   1,   2,   1,   2,    3)
+### ----------------------- ^  shares remain the same
+expect_equal(split_adjust(x, t = 1:6, 1/ratio, backward = TRUE),
+             rep(1200, 6))
+
 
