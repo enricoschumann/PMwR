@@ -74,41 +74,158 @@ timestamp.P <- structure(
       18305, 18306, 18310, 18311,
       18312, 18313), class = "Date")
 
-## library("PMwR")
-## J <- journal()
-## for (asset in colnames(P)) {
+library("PMwR")
+J <- journal()
+for (asset in colnames(P)) {
 
-##     amount <- sample(c(-20, -10, 10, 20), size = 10, replace = TRUE)
-##     timestamp <- sample(timestamp.P, size = 10, replace = TRUE)
-##     J <- c(J,
-##            journal(amount = amount,
-##                    timestamp = timestamp,
-##                    price = P[match(timestamp, timestamp.P), asset],
-##                    instrument = asset))
-## }
+    amount <- sample(c(-20, -10, 10, 20), size = 5, replace = TRUE)
+    timestamp <- sample(timestamp.P, size = 5, replace = TRUE)
+    J <- c(J,
+           journal(amount = amount,
+                   timestamp = timestamp,
+                   price = P[match(timestamp, timestamp.P), asset],
+                   instrument = asset))
+}
 
-J <- structure(list(timestamp = structure(c(18218, 18292, 18218, 18242, 
-                                            18312, 18284, 18233, 18246, 18233, 18257, 18313, 18229, 18246, 
-                                            18220, 18226, 18270, 18303, 18232, 18275, 18306, 18219, 18235, 
-                                            18229, 18302, 18298, 18236, 18285, 18256, 18226, 18263), class = "Date"), 
-                    amount = c(-10, 20, 10, 20, 20, 20, -10, -10, 20, -10, 20, 
-                               20, -20, -20, -10, 20, 20, -10, 20, -10, -10, -20, -20, -20, 
-                               20, -20, -10, 20, 10, -20), price = c(1752.53, 2008.72, 1752.53, 
-                                                                     1760.33, 2153.1, 1884.58, 1769.96, 1769.21, 1769.96, 1869.8, 
-                                                                     313.05, 267.25, 279.86, 263.19, 264.29, 309.63, 319.61, 264.16, 
-                                                                     312.68, 324.95, 150.39, 149.93, 151.38, 188.7, 183.63, 151.75, 
-                                                                     165.04, 158.67, 152.03, 160.62), instrument = c("AMZN", "AMZN", 
-                                                                                                                     "AMZN", "AMZN", "AMZN", "AMZN", "AMZN", "AMZN", "AMZN", "AMZN", 
-                                                                                                                     "AAPL", "AAPL", "AAPL", "AAPL", "AAPL", "AAPL", "AAPL", "AAPL", 
-                                                                                                                     "AAPL", "AAPL", "MSFT", "MSFT", "MSFT", "MSFT", "MSFT", "MSFT", 
-                                                                                                                     "MSFT", "MSFT", "MSFT", "MSFT")), class = "journal")
+
+J <- structure(list(timestamp = structure(
+                        c(18257, 18302, 18291, 18260, 18276, 18271,
+                          18284, 18232, 18246, 18304, 18227, 18254,
+                          18312, 18232, 18267), class = "Date"),
+                    amount = c(10, -10, -10, -10, 10, 10, 20,
+                               10, -10, -10, 20, -20, 10, -10, 10),
+                    price = c(1869.8, 2133.91, 1870.68, 1846.89,
+                              1862.02, 310.33, 319.23, 264.16,
+                              279.86, 327.2, 152.32, 157.38, 184.42,
+                              149.55, 159.03),
+                    instrument = c("AMZN", "AMZN", "AMZN", "AMZN",
+                                   "AMZN", "AAPL", "AAPL", "AAPL",
+                                   "AAPL", "AAPL", "MSFT", "MSFT",
+                                   "MSFT", "MSFT", "MSFT")),
+               class = "journal")
+
+
+## J <- structure(list(timestamp = structure(c(18218, 18292, 18218, 18242, 
+##                                             18312, 18284, 18233, 18246, 18233, 18257, 18313, 18229, 18246, 
+##                                             18220, 18226, 18270, 18303, 18232, 18275, 18306, 18219, 18235, 
+##                                             18229, 18302, 18298, 18236, 18285, 18256, 18226, 18263), class = "Date"), 
+##                     amount = c(-10, 20, 10, 20, 20, 20, -10, -10, 20, -10, 20, 
+##                                20, -20, -20, -10, 20, 20, -10, 20, -10, -10, -20, -20, -20, 
+##                                20, -20, -10, 20, 10, -20), price = c(1752.53, 2008.72, 1752.53, 
+##                                                                      1760.33, 2153.1, 1884.58, 1769.96, 1769.21, 1769.96, 1869.8, 
+##                                                                      313.05, 267.25, 279.86, 263.19, 264.29, 309.63, 319.61, 264.16, 
+##                                                                      312.68, 324.95, 150.39, 149.93, 151.38, 188.7, 183.63, 151.75, 
+##                                                                      165.04, 158.67, 152.03, 160.62), instrument = c("AMZN", "AMZN", 
+##                                                                                                                      "AMZN", "AMZN", "AMZN", "AMZN", "AMZN", "AMZN", "AMZN", "AMZN", 
+##                                                                                                                      "AAPL", "AAPL", "AAPL", "AAPL", "AAPL", "AAPL", "AAPL", "AAPL", 
+
+## | timestamp        | amount |   price | instrument |
+## |------------------+--------+---------+------------|
+## | [2019-12-27 Fri] |     10 |  1869.8 | AMZN       |
+## | [2020-02-10 Mon] |    -10 | 2133.91 | AMZN       |
+## | [2020-01-30 Thu] |    -10 | 1870.68 | AMZN       |
+## | [2019-12-30 Mon] |    -10 | 1846.89 | AMZN       |
+## | [2020-01-15 Wed] |     10 | 1862.02 | AMZN       |
+## | [2020-01-10 Fri] |     10 |  310.33 | AAPL       |
+## | [2020-01-23 Thu] |     20 |  319.23 | AAPL       |
+## | [2019-12-02 Mon] |     10 |  264.16 | AAPL       |
+## | [2019-12-16 Mon] |    -10 |  279.86 | AAPL       |
+## | [2020-02-12 Wed] |    -10 |   327.2 | AAPL       |
+## | [2019-11-27 Wed] |     20 |  152.32 | MSFT       |
+## | [2019-12-24 Tue] |    -20 |  157.38 | MSFT       |
+## | [2020-02-20 Thu] |     10 |  184.42 | MSFT       |
+## | [2019-12-02 Mon] |    -10 |  149.55 | MSFT       |
+## | [2020-01-06 Mon] |     10 |  159.03 | MSFT       |
+
+J
+##     instrument   timestamp  amount    price
+## 1         AMZN  2019-12-27      10  1869.80
+## 2         AMZN  2020-02-10     -10  2133.91
+## 3         AMZN  2020-01-30     -10  1870.68
+## 4         AMZN  2019-12-30     -10  1846.89
+## 5         AMZN  2020-01-15      10  1862.02
+## 6         AAPL  2020-01-10      10   310.33
+## 7         AAPL  2020-01-23      20   319.23
+## 8         AAPL  2019-12-02      10   264.16
+## 9         AAPL  2019-12-16     -10   279.86
+## 10        AAPL  2020-02-12     -10   327.20
+## 11        MSFT  2019-11-27      20   152.32
+## 12        MSFT  2019-12-24     -20   157.38
+## 13        MSFT  2020-02-20      10   184.42
+## 14        MSFT  2019-12-02     -10   149.55
+## 15        MSFT  2020-01-06      10   159.03
+## 
+## 15 transactions  
+
 
 pl(J)
+## AAPL 
+##   P/L total           NA
+##   average buy   303.2375
+##   average sell    303.53
+##   cum. volume         60
+## 
+## AMZN 
+##   P/L total           NA
+##   average buy    1865.91
+##   average sell  1950.493
+##   cum. volume         50
+## 
+## MSFT 
+##   P/L total           NA
+##   average buy   162.0225
+##   average sell    154.77
+##   cum. volume         70
+## 
+## ‘P/L total’ is in units of instrument;
+## ‘volume’ is sum of /absolute/ amounts.
+## ‘sum(amount)’ is not zero for AAPL: specify ‘vprice’ to compute P/L.
+## ‘sum(amount)’ is not zero for AMZN: specify ‘vprice’ to compute P/L.
+## ‘sum(amount)’ is not zero for MSFT: specify ‘vprice’ to compute P/L.
 
-vprice <- c(AMZN = 2020, MSFT = 178, AAPL = 311)
-pl(J, vprice = vprice)
+position(J)
+##      2020-02-20
+## AAPL         20
+## AMZN        -10
+## MSFT         10
 
-pl(J, vprice = P, along.timestamp = timestamp.P)
+
+pl(J, vprice = c(AMZN = 2020, MSFT = 178, AAPL = 311))
+
+
+str(timestamp.P)
+## Date[1:66], format: "2019-11-15" "2019-11-18" ...
+
+str(P)
+## num [1:66, 1:3] 1739 1753 1753 1746 1735 ...
+## - attr(*, "dimnames")=List of 2
+##  ..$ : NULL
+##  ..$ : chr [1:3] "AMZN" "AAPL" "MSFT"
+
+
+PL <- pl(J, vprice = P, along.timestamp = timestamp.P)
+PL <- sapply(PL, `[[`, "pl")
+tail(PL, 5)
+##             AAPL   AMZN  MSFT
+## 2020-02-14 440.1 -152.1   6.4
+## 2020-02-18 321.1 -360.1   6.4
+## 2020-02-19 413.5 -505.6   6.4
+## 2020-02-20 347.1 -334.4   6.4
+## 2020-02-21 202.1  236.9 -51.9
+
+library("datetimeutils")
+ii <- c(1, nth_day(timestamp.P,  ## extract position of last day of month
+                   period = "month", n = "last",
+                   index = TRUE))
+diff(PL[ii, ])
+##              AAPL   AMZN  MSFT
+## 2019-11-29    0.0    0.0 -18.8
+## 2019-12-31  157.0 -229.1  38.5
+## 2020-01-31 -202.6   86.6 -13.3
+## 2020-02-21  247.7  379.4 -58.3
+
+
+
 
 ii <- J$instrument == "AMZN"
 J$price[ii] <- P[match(J["AMZN"]$timestamp, timestamp.P), "AMZN"]

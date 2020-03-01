@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-19  Enrico Schumann
+## Copyright (C) 2008-20  Enrico Schumann
 
 div_adjust <- function(x, t, div,
                        backward = TRUE,
@@ -65,9 +65,9 @@ split_adjust <- function(x, t, ratio, backward = TRUE) {
         stop("different lengths for ", sQuote("ratio"),
              " and ", sQuote("t"))
     new.series <- x
-    for (s in t) {
-        t1 <- seq_len(s - 1L)
-        new.series[t1] <- new.series[t1]/ratio[s == t]
+    for (i in seq_along(t)) {
+        t1 <- seq_len(t[i] - 1L)
+        new.series[t1] <- new.series[t1]/ratio[i]
     }
     if (!backward)
         new.series <- x[1L] * new.series/new.series[1L]

@@ -53,3 +53,14 @@ expect_equal(split_adjust(x, t = 1:6, 1/ratio, backward = TRUE),
              rep(1200, 6))
 
 
+## several adjustments on same day
+x     <- c(100, 400, 800)
+ratio <- c(2, 2, 2)
+t     <- c(2, 2, 3)
+
+expect_equal(split_adjust(x, t = t, 1/ratio),
+             rep(800, 3))
+
+expect_equal(split_adjust(x, t = t, 1/ratio, backward = FALSE),
+             rep(100, 3))
+
