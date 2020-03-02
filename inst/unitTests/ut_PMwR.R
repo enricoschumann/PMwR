@@ -1,568 +1,568 @@
 ## -*- truncate-lines: t; -*-
 
 
-test.split_trades <- function() {
-
-    amount <- c(1, -1)
-    price <- c(1, 2)
-    ans <- split_trades(amount, price, seq_along(amount))
-    checkEquals(length(ans), 1)
-    checkEquals(ans,
-                list(structure(list(amount = c(1, -1),
-                                    price = c(1, 2),
-                                    timestamp = 1:2),
-                               .Names = c("amount", "price", "timestamp"))))
-
-
-
-    amount <- c(1, -2, 1)
-    price <- c(1,2,3)
-    ans <- split_trades(amount, price, seq_along(amount))
-    checkEquals(length(ans), 2)
-
-    checkEquals(ans[[1L]],
-                structure(list(amount = c(1, -1),
-                               price = c(1, 2),
-                               timestamp = 1:2),
-                          .Names = c("amount", "price", "timestamp")))
-    checkEquals(ans[[2L]],
-                structure(list(amount = c(-1, 1),
-                               price = c(2, 3),
-                               timestamp = 2:3),
-                          .Names = c("amount", "price", "timestamp")))
-
-    n <- c(1,1,-3,1)
-    p <- c(1,2,3,2)
-    tradetimes <- seq_along(n)
-    ans <- split_trades(n, p, tradetimes)
-    checkEquals(length(ans), 2)
-
-}
-
-
-test.btest <- function() {
-
-    library("zoo", quietly = TRUE, warn.conflicts = FALSE)
-
-    btTable <- function(solution, prices)
-        data.frame(prices = prices,
-                   position     = solution$position,
-                   suggested    = solution$suggested.position,
-                   wealth = solution$wealth,
-                   cash   = solution$cash)
-
-    prices <- c(100,98,98,97,101,102,101,98,99,101)
-
-    ## signal returns NULL: not trade at all
-    signal <- function()
-        NULL
-    solution <- btest(prices = prices, signal = signal)
-    checkEquals(drop(solution$position), rep(0, length(prices)))
-    checkEquals(drop(solution$wealth), rep(0, length(prices)))
-    checkEquals(solution$journal, journal())
-
-    ## ... initial wealth not zero
-    solution <- btest(prices = prices, signal = signal, initial.cash = 100)
-    checkEquals(drop(solution$position), rep(0, length(prices)))
-    checkEquals(drop(solution$wealth), rep(100, length(prices)))
-    checkEquals(solution$journal, journal())
-
-    ## ... initial position not zero
-    solution <- suppressWarnings( ## suppress "no ‘prices0’" warning
-        btest(prices = prices, signal = signal, initial.position = 2))
-    checkEquals(drop(solution$position), rep(2, length(prices)))
-    checkEquals(drop(solution$wealth), prices*2)
-    checkEquals(solution$journal, journal())
-
-    ## signal returns 1: hold one unit of asset
-    signal <- function()
-        1
-
-    ## ... default settings
-    solution <- btest(prices = prices, signal = signal)
-    checkEquals(unname(solution$position),
-                structure(c(0, 1, 1, 1, 1, 1, 1, 1, 1, 1), .Dim = c(length(prices), 1L)))
-    checkEquals(solution$wealth,
-                c(0, 0, 0, -1, 3, 4, 3, 0, 1, 3))
-
-    ## ... with no burnin
-    solution <- btest(prices = prices, signal = signal, b = 0)
-    checkEquals(unname(solution$position),
-                structure(c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1), .Dim = c(length(prices), 1L)))
-    checkEquals(solution$wealth,
-                c(0, -2, -2, -3, 1, 2, 1, -2, -1, 1))
-
-    ## signal returns a weight
-    signal <- function()
-        0.12
-
-    ## ... no position (since wealth is 0)
-    solution <- suppressWarnings(btest(prices = prices,
-                                       signal = signal,
-                                       convert.weights = TRUE))
-    checkEquals(drop(solution$position), rep(0, length(prices)))
-    checkEquals(drop(solution$wealth), rep(0, length(prices)))
-    checkEquals(drop(solution$suggested.position), rep(0, length(prices)))
-    checkEquals(solution$journal, journal())
-
-
-    solution <- btest(prices = prices, signal = signal, convert.weights = TRUE,
-                      initial.cash = 1000)
-    checkEquals((solution$wealth * signal()/prices)[-length(prices)],
-                solution$suggested.position[-1])
-    checkEquals((solution$wealth * signal()/prices)[-length(prices)],
-                solution$position[-1])
-
-
-    ## signal returns a weight, 2 assets
-    prices2 <- cbind(A = prices, B = prices/2)
-    signal <- function()
-        c(0.2, 0.3)
-
-    ## ... no initial wealth, no position (creates a warning)
-    solution <- suppressWarnings(btest(list(prices2),
-                                       signal = signal,
-                                       convert.weights = TRUE))
-    checkEquals(dim(solution$position), dim(prices2))
-    checkTrue(all(solution$position == 0))
-    checkEquals(solution$journal, journal())
-
-    ## ... with initial wealth
-    solution <- btest(list(prices2), signal = signal,
-                      convert.weights = TRUE,
-                      initial.cash = 1000)
-    checkEquals((outer(solution$wealth, signal())/prices2)[-nrow(prices2), ],
-                solution$position[-1L, ])
-
-    ## ... with rebalancing in only 2 period
-    do.rebalance <- function()
-        if (Time() == 3L || Time() == 8L)
-            TRUE else FALSE
-    solution <- btest(list(prices2), signal = signal, convert.weights = TRUE,
-                      initial.cash = 1000, do.rebalance = do.rebalance)
-    checkEquals(solution$position,
-                structure(c(0, 0, 0,
-                            2.04081632653061, 2.04081632653061,
-                            2.04081632653061, 2.04081632653061,
-                            2.04081632653061, 2.0512286547272,
-                            2.0512286547272, 0, 0, 0,
-                            6.12244897959184,
-                            6.12244897959184, 6.12244897959184,
-                            6.12244897959184, 6.12244897959184,
-                            6.15368596418159, 6.15368596418159),
-                          .Dim = c(10L, 2L), .Dimnames = list(NULL, c("A", "B"))))
-    checkEquals(c(signal()*solution$wealth[3]/prices2[3,]),
-                c(solution$position[4,]))
-    checkEquals(c(signal()*solution$wealth[3]/prices2[3,]),
-                c(solution$position[5,]))
-    checkEquals(c(signal()*solution$wealth[3]/prices2[3,]),
-                c(solution$position[6,]))
-    checkEquals(c(signal()*solution$wealth[3]/prices2[3,]),
-                c(solution$position[7,]))
-    checkEquals(c(signal()*solution$wealth[3]/prices2[3,]),
-                c(solution$position[8,]))
-    checkEquals(c(signal()*solution$wealth[8]/prices2[8,]),
-                c(solution$position[9,]))
-    checkEquals(c(signal()*solution$wealth[8]/prices2[8,]),
-                c(solution$position[10,]))
-
-    ## signal returns a weight, 3 assets
-    prices3 <- cbind(A = prices, B = prices/2, C = prices/3)
-    signal <- function()
-        c(0.2, 0.3, 0.25)
-
-    ## ... no initial wealth, no position (creates a warning)
-    solution <- suppressWarnings(btest(list(prices3),
-                                       signal = signal,
-                                       convert.weights = TRUE))
-    checkEquals(dim(solution$position), dim(prices3))
-    checkTrue(all(solution$position == 0))
-    checkEquals(solution$journal, journal())
-
-    ## ... with initial cash
-    solution <- btest(list(prices3), signal = signal,
-                      convert.weights = TRUE,
-                      initial.cash = 1000)
-    checkEquals((outer(solution$wealth, signal())/prices3)[-nrow(prices3), ],
-                solution$position[-1L, ])
-
-
-
-    ## tests for initial wealth
-    prices <- c(100,98,98,97,101,102,101,98,99,101)
-    signal <- function()
-        0.5
-    solution <- btest(prices, signal = signal, convert.weights = TRUE,
-                      initial.cash = 1000, b = 0, prices0 = 100)
-
-
-
-    ## with timestamp
-    library("datetimeutils", quietly = TRUE)
-    timestamp <- seq(from = as.Date("2015-01-01"),
-                     to   = as.Date("2015-04-15"),
-                     by   = "1 day")
-    timestamp <- timestamp[!is_weekend(timestamp)]
-    ## prices <- c(100+)
-
-    prices <- cbind(as.numeric(paste0("1.", format(timestamp, "%m%d"))),
-                    as.numeric(paste0("2.", format(timestamp, "%m%d"))))
-
-    res <- btest(list(prices), function() 1)
-    res$position
-    res$journal
-    res <- btest(list(prices), function() 1, b=0)
-    res$position
-    res$journal
-
-    res <- btest(list(prices),
-                 signal = function() c(0.5,0.5),
-                 convert.weights = TRUE,
-                 do.signal = "firstofmonth",
-                 initial.cash = 100,
-                 timestamp = timestamp)
-    res$journal
-
-    res <- btest(list(prices),
-                 signal = function() c(0.5,0.5),
-                 convert.weights = TRUE,
-                 do.signal = "lastofquarter",
-                 initial.cash = 100,
-                 timestamp = timestamp)
-    res$journal
-
-
-    ## check whether date is matched against
-    ## timestamp. The 31 Jan 2015 is not in timestamp, so
-    ## trade takes place on next day (2 Feb)
-    res <- btest(list(prices),
-                 signal = function() c(0.5,0.5),
-                 convert.weights = TRUE,
-                 do.signal = as.Date(c("2015-01-08",
-                                       "2015-01-31")),
-                 initial.cash = 100,
-                 timestamp = timestamp)
-    checkEquals(unique(res$journal$timestamp),
-                as.Date(c("2015-01-08", "2015-02-02")))
-    checkEquals(length(res$journal), 4)
-
-
-    ## specifying when to trade
-    tmp <- structure(c(3490, 3458, 3434, 3358, 3287, 3321,
-                       3419, 3535, 3589, 3603, 3626, 3677,
-                       3672, 3689, 3646, 3633, 3631, 3599,
-                       3517, 3549, 3572, 3578, 3598, 3634,
-                       3618, 3680, 3669, 3640, 3675, 3604,
-                       3492, 3513, 3495, 3503, 3497, 3433,
-                       3356, 3256, 3067, 3228, 3182, 3286,
-                       3279, 3269, 3182, 3205, 3272, 3185,
-                       3201, 3236, 3272, 3224, 3194, 3188,
-                       3213, 3255, 3261),
-                     .Dim = c(57L, 1L),
-                     .Dimnames = list(
-                         NULL, "fesx201509"),
-                     index = structure(
-                         c(16617L, 16618L, 16619L, 16622L,
-                           16623L, 16624L, 16625L, 16626L,
-                           16629L, 16630L, 16631L, 16632L,
-                           16633L, 16636L, 16637L, 16638L,
-                           16639L, 16640L, 16643L, 16644L,
-                           16645L, 16646L, 16647L, 16650L,
-                           16651L, 16652L, 16653L, 16654L,
-                           16657L, 16658L, 16659L, 16660L,
-                           16661L, 16664L, 16665L, 16666L,
-                           16667L, 16668L, 16671L, 16672L,
-                           16673L, 16674L, 16675L, 16678L,
-                           16679L, 16680L, 16681L, 16682L,
-                           16685L, 16686L, 16687L, 16688L,
-                           16689L, 16692L, 16693L, 16694L,
-                           16695L), class = "Date"),
-                     class = "zoo")
-
-    prices <- coredata(tmp)
-    timestamp <- index(tmp)
-
-    ## have a position equal to the numeric timestamp
-    ## => buy 1 unit in every period
-    signal <- function()
-        Time(0)
-    res <- journal(btest(prices = prices, signal = signal))
-    checkEquals(length(res), length(tmp) - 1L)
-    checkTrue(all(res$amount[-1] == 1))   ## the first traded amount
-                                          ## is 2: first trade is at
-                                          ## t==2, since the default
-                                          ## lag of 1 is in force
-
-    checkTrue(all(res$timestamp == seq(2, length(tmp))))
-
-    ## buy at specified timestamps (integers; no lag!)
-    when <- c(10,20,30)
-    j <- journal(btest(prices = prices,
-                       signal = signal,
-                       do.signal = when))
-    checkEquals(j$timestamp, when)
-
-    ## logical
-    j1 <- journal(btest(prices = prices, signal = signal,
-                       do.signal = prices > 3600))
-    j2 <- journal(btest(prices = prices, signal = signal,
-                       do.signal = function() Close(0L) > 3600))
-    checkEquals(j1, j2)
-
-
-    ## do.rebalance FALSE -- strategy never trades
-    ## promote warning to error
-    ## options(warn=2)
-    ## checkException({
-    ##     options(warn=10);
-    ##     btest(prices = prices, signal = signal,
-    ##           do.signal = TRUE,
-    ##           do.rebalance = FALSE)
-    ## })
-    ## warning only, no trades
-    options(warn = 0)
-    checkEquals(length(journal(suppressWarnings(btest(prices = prices, signal = signal,
-                              do.signal = TRUE,
-                              do.rebalance = FALSE)))),
-                0L)
-
-    when <- c(10,20)
-    j <- journal(btest(prices = prices,
-                       signal = signal,
-                       do.rebalance = when))
-    checkEquals(j$timestamp, when)
-
-
-    ## keywords
-    j <- journal(btest(prices = prices,
-                       signal = signal,
-                       do.signal = "firstofmonth",
-                       timestamp = timestamp,
-                       b = 0))
-
-    checkEquals(j$timestamp,
-                PMwR:::first(timestamp, format(timestamp, "%Y-%m")))
-
-    j <- journal(btest(prices = prices,
-                       signal = signal,
-                       do.signal = "lastofmonth",
-                       timestamp = timestamp))
-    checkEquals(j$timestamp,
-                PMwR:::last(timestamp, format(timestamp, "%Y-%m")))
-
-
-    ## include.data
-    prices <- c(100,98,98,97,101,102,101,98,99,101)
-    signal <- function()
-        1
-    res <- btest(prices, signal = signal)
-    checkEquals(res$prices, NULL)
-    checkEquals(res$signal, NULL)
-    res <- btest(list(prices), signal = signal, include.data = TRUE)
-    checkEquals(res$prices, prices)
-    checkEquals(body(res$signal), body(signal))
-    ## !is.list(prices) && is.null(dim(prices))
-
-    prices <- c(100,98,98,97,101,102,101,98,99,101)
-    prices <- cbind(prices, prices)
-    res <- btest(list(prices), signal = signal, include.data = TRUE)
-    checkEquals(res$prices, prices)
-
-
-
-
-
-
-
-
-    ## lags
-    prices <- 101:110
-    signal <- function()
-        if (Close() >= 104)
-            1
-
-    btest(prices, signal,          b=3)$journal
-    btest(prices, signal, lag = 0, b=3)$journal
-    btest(prices, signal, lag = 2, b=3)$journal
-
-
-    checkEquals(
-        journal(btest(
-            1:10,
-            signal = function() 1,
-            b = as.Date("2018-1-5"),
-            timestamp = as.Date("2018-1-1")+0:9))$timestamp,
-        as.Date("2018-1-6"))
-
-}
-
-test.btest.prices <- function() {
-
-    prices <- 1:5
-    checkEquals(
-        btest(prices, signal = function() 1),
-        btest(as.matrix(prices), signal = function() 1))
-
-    checkEquals(
-        btest(prices, signal = function() 1),
-        btest(list(prices), signal = function() 1))
-
-    checkEquals(
-        btest(prices, signal = function() 1),
-        btest(list(as.matrix(prices)), signal = function() 1))
-
-    library("zoo")
-    bt1 <- btest(prices, signal = function() 1)
-    bt2 <- btest(zoo(prices), signal = function() 1)
-    checkEqualsNumeric(bt1$wealth, bt2$wealth)
-    checkEqualsNumeric(bt1$position, bt2$position)
-    checkEqualsNumeric(bt1$suggested.position,
-                       bt2$suggested.position)
-
-}
-
-test.btest.b <- function() {
-    prices <- 1:5
-    timestamp <- Sys.Date() + 0:4
-
-    res <- btest(prices = 1:5,
-                 signal = function() 1,
-                 timestamp = timestamp,
-                 b = timestamp[1L] + 0.5)
-    checkEquals(res$b, 1)
-
-    res <- btest(prices = 1:5,
-                 signal = function() 1,
-                 timestamp = timestamp,
-                 b = timestamp[1L])
-    checkEquals(res$b, 1)
-
-    res <- btest(prices = 1:5,
-                 signal = function() 1,
-                 timestamp = timestamp,
-                 b = timestamp[1L] - 0.5)
-    checkEquals(res$b, 0)
-}
-
-test.btest.position <- function() {
-
-    ## single instrument
-    prices <- 1:10
-    for (i in 1:20) {
-        bt <- btest(prices,
-                    signal = function()
-                                 sample(0:10, 1, replace = TRUE))
-
-        checkEquals(unname(as.matrix(position(journal(bt),
-                                              when = 1:10))),
-                    unname(as.matrix(position(bt))))
-    }
-
-    ## two instruments
-    prices <- cbind(a = 1:10,
-                    b = 101:110)
-
-    for (i in 1:20) {
-        bt <- btest(list(prices),
-                    instrument = c("a", "b"),
-                    signal = function()
-                                 sample(0:10, 2, replace = TRUE))
-
-        checkEquals(unname(as.matrix(position(journal(bt),
-                                              when = 1:10))),
-                    unname(as.matrix(position(bt))))
-    }
-
-}
-
-test.btest.NA <- function() {
-
-    prices <- 1:10
-    signal <- function()
-        if (Time() < 5)
-            1 else 0
-    checkEquals(bt1 <- btest(prices, signal)$wealth,
-                c(0, 0, 1, 2, 3, 4, 4, 4, 4, 4))
-
-    ## signal returns position
-    prices[7:10] <- NA
-    signal <- function()
-        if (Time() < 5)
-            1 else 0
-    checkEquals(bt2 <- btest(prices, signal)$wealth,
-                c(0, 0, 1, 2, 3, 4, 4, 4, 4, 4))
-    checkEquals(bt1, bt2)
-
-    prices1  <- prices2 <- 1:10
-    prices2[7:10] <- NA
-    prices <- cbind(prices1, prices2)
-    signal <- function()
-        if (Time() < 5)
-            c(1,1) else c(1,0)
-    checkEquals(bt3 <- btest(list(prices), signal)$wealth,
-                c(0, 0, 2, 4, 6, 8, 9, 10, 11, 12))
-
-
-    ## signal returns weight
-    prices <- 1:5
-    prices[4:5] <- NA
-    signal <- function() {
-        if (Time(0) <= 3)
-            0.5 else 0
-    }
-    btest(prices, signal, initial.cash = 100, convert.weights = TRUE)$wealth
-
-    prices1  <- prices2 <- 1:10
-    prices2[7:10] <- NA
-    prices <- cbind(prices1, prices2)
-    signal <- function()
-        if (Time() < 5)
-            c(1,1) else c(1,0)
-    checkEquals(bt3 <- btest(list(prices), signal)$wealth,
-                c(0, 0, 2, 4, 6, 8, 9, 10, 11, 12))
-
-
-
-
-}
-
-test.btest.nullsignal <- function() {
-    prices <- 1:10
-
-    ## if signal returns NULL, the previous
-    ## position is kept.
-    signal1 <- function()
-        if (Time() == 5)
-            1 else Portfolio()
-    signal2 <- function()
-        if (Time() == 5)
-            1
-    signal3 <- function()
-        if (Time() == 5)
-            1 else NULL
-
-    checkEquals(btest(prices, signal1), btest(prices, signal2))
-    checkEquals(btest(prices, signal1), btest(prices, signal3))
-
-}
-
-test.btest.tc <- function() {
-    prices <- 1:10
-    signal <- function()
-        Time()
-    tc <- function()
-        Time() ## will be 0:9
-
-    journal(bt <- btest(prices, signal, tc = tc))
-    checkEquals(bt$cum.tc,
-                c(0, cumsum(prices[-1]*seq_len(9))))
-                ###                    ^^^^^^^^^^ tc
-
-    journal(bt <- btest(prices, signal, tc = 1))
-
-    checkEquals(bt$cum.tc,
-                c(0, cumsum(prices[-1])))
-}
+## test.split_trades <- function() {
+
+##     amount <- c(1, -1)
+##     price <- c(1, 2)
+##     ans <- split_trades(amount, price, seq_along(amount))
+##     checkEquals(length(ans), 1)
+##     checkEquals(ans,
+##                 list(structure(list(amount = c(1, -1),
+##                                     price = c(1, 2),
+##                                     timestamp = 1:2),
+##                                .Names = c("amount", "price", "timestamp"))))
+
+
+
+##     amount <- c(1, -2, 1)
+##     price <- c(1,2,3)
+##     ans <- split_trades(amount, price, seq_along(amount))
+##     checkEquals(length(ans), 2)
+
+##     checkEquals(ans[[1L]],
+##                 structure(list(amount = c(1, -1),
+##                                price = c(1, 2),
+##                                timestamp = 1:2),
+##                           .Names = c("amount", "price", "timestamp")))
+##     checkEquals(ans[[2L]],
+##                 structure(list(amount = c(-1, 1),
+##                                price = c(2, 3),
+##                                timestamp = 2:3),
+##                           .Names = c("amount", "price", "timestamp")))
+
+##     n <- c(1,1,-3,1)
+##     p <- c(1,2,3,2)
+##     tradetimes <- seq_along(n)
+##     ans <- split_trades(n, p, tradetimes)
+##     checkEquals(length(ans), 2)
+
+## }
+
+
+## test.btest <- function() {
+
+##     library("zoo", quietly = TRUE, warn.conflicts = FALSE)
+
+##     btTable <- function(solution, prices)
+##         data.frame(prices = prices,
+##                    position     = solution$position,
+##                    suggested    = solution$suggested.position,
+##                    wealth = solution$wealth,
+##                    cash   = solution$cash)
+
+##     prices <- c(100,98,98,97,101,102,101,98,99,101)
+
+##     ## signal returns NULL: not trade at all
+##     signal <- function()
+##         NULL
+##     solution <- btest(prices = prices, signal = signal)
+##     checkEquals(drop(solution$position), rep(0, length(prices)))
+##     checkEquals(drop(solution$wealth), rep(0, length(prices)))
+##     checkEquals(solution$journal, journal())
+
+##     ## ... initial wealth not zero
+##     solution <- btest(prices = prices, signal = signal, initial.cash = 100)
+##     checkEquals(drop(solution$position), rep(0, length(prices)))
+##     checkEquals(drop(solution$wealth), rep(100, length(prices)))
+##     checkEquals(solution$journal, journal())
+
+##     ## ... initial position not zero
+##     solution <- suppressWarnings( ## suppress "no ‘prices0’" warning
+##         btest(prices = prices, signal = signal, initial.position = 2))
+##     checkEquals(drop(solution$position), rep(2, length(prices)))
+##     checkEquals(drop(solution$wealth), prices*2)
+##     checkEquals(solution$journal, journal())
+
+##     ## signal returns 1: hold one unit of asset
+##     signal <- function()
+##         1
+
+##     ## ... default settings
+##     solution <- btest(prices = prices, signal = signal)
+##     checkEquals(unname(solution$position),
+##                 structure(c(0, 1, 1, 1, 1, 1, 1, 1, 1, 1), .Dim = c(length(prices), 1L)))
+##     checkEquals(solution$wealth,
+##                 c(0, 0, 0, -1, 3, 4, 3, 0, 1, 3))
+
+##     ## ... with no burnin
+##     solution <- btest(prices = prices, signal = signal, b = 0)
+##     checkEquals(unname(solution$position),
+##                 structure(c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1), .Dim = c(length(prices), 1L)))
+##     checkEquals(solution$wealth,
+##                 c(0, -2, -2, -3, 1, 2, 1, -2, -1, 1))
+
+##     ## signal returns a weight
+##     signal <- function()
+##         0.12
+
+##     ## ... no position (since wealth is 0)
+##     solution <- suppressWarnings(btest(prices = prices,
+##                                        signal = signal,
+##                                        convert.weights = TRUE))
+##     checkEquals(drop(solution$position), rep(0, length(prices)))
+##     checkEquals(drop(solution$wealth), rep(0, length(prices)))
+##     checkEquals(drop(solution$suggested.position), rep(0, length(prices)))
+##     checkEquals(solution$journal, journal())
+
+
+##     solution <- btest(prices = prices, signal = signal, convert.weights = TRUE,
+##                       initial.cash = 1000)
+##     checkEquals((solution$wealth * signal()/prices)[-length(prices)],
+##                 solution$suggested.position[-1])
+##     checkEquals((solution$wealth * signal()/prices)[-length(prices)],
+##                 solution$position[-1])
+
+
+##     ## signal returns a weight, 2 assets
+##     prices2 <- cbind(A = prices, B = prices/2)
+##     signal <- function()
+##         c(0.2, 0.3)
+
+##     ## ... no initial wealth, no position (creates a warning)
+##     solution <- suppressWarnings(btest(list(prices2),
+##                                        signal = signal,
+##                                        convert.weights = TRUE))
+##     checkEquals(dim(solution$position), dim(prices2))
+##     checkTrue(all(solution$position == 0))
+##     checkEquals(solution$journal, journal())
+
+##     ## ... with initial wealth
+##     solution <- btest(list(prices2), signal = signal,
+##                       convert.weights = TRUE,
+##                       initial.cash = 1000)
+##     checkEquals((outer(solution$wealth, signal())/prices2)[-nrow(prices2), ],
+##                 solution$position[-1L, ])
+
+##     ## ... with rebalancing in only 2 period
+##     do.rebalance <- function()
+##         if (Time() == 3L || Time() == 8L)
+##             TRUE else FALSE
+##     solution <- btest(list(prices2), signal = signal, convert.weights = TRUE,
+##                       initial.cash = 1000, do.rebalance = do.rebalance)
+##     checkEquals(solution$position,
+##                 structure(c(0, 0, 0,
+##                             2.04081632653061, 2.04081632653061,
+##                             2.04081632653061, 2.04081632653061,
+##                             2.04081632653061, 2.0512286547272,
+##                             2.0512286547272, 0, 0, 0,
+##                             6.12244897959184,
+##                             6.12244897959184, 6.12244897959184,
+##                             6.12244897959184, 6.12244897959184,
+##                             6.15368596418159, 6.15368596418159),
+##                           .Dim = c(10L, 2L), .Dimnames = list(NULL, c("A", "B"))))
+##     checkEquals(c(signal()*solution$wealth[3]/prices2[3,]),
+##                 c(solution$position[4,]))
+##     checkEquals(c(signal()*solution$wealth[3]/prices2[3,]),
+##                 c(solution$position[5,]))
+##     checkEquals(c(signal()*solution$wealth[3]/prices2[3,]),
+##                 c(solution$position[6,]))
+##     checkEquals(c(signal()*solution$wealth[3]/prices2[3,]),
+##                 c(solution$position[7,]))
+##     checkEquals(c(signal()*solution$wealth[3]/prices2[3,]),
+##                 c(solution$position[8,]))
+##     checkEquals(c(signal()*solution$wealth[8]/prices2[8,]),
+##                 c(solution$position[9,]))
+##     checkEquals(c(signal()*solution$wealth[8]/prices2[8,]),
+##                 c(solution$position[10,]))
+
+##     ## signal returns a weight, 3 assets
+##     prices3 <- cbind(A = prices, B = prices/2, C = prices/3)
+##     signal <- function()
+##         c(0.2, 0.3, 0.25)
+
+##     ## ... no initial wealth, no position (creates a warning)
+##     solution <- suppressWarnings(btest(list(prices3),
+##                                        signal = signal,
+##                                        convert.weights = TRUE))
+##     checkEquals(dim(solution$position), dim(prices3))
+##     checkTrue(all(solution$position == 0))
+##     checkEquals(solution$journal, journal())
+
+##     ## ... with initial cash
+##     solution <- btest(list(prices3), signal = signal,
+##                       convert.weights = TRUE,
+##                       initial.cash = 1000)
+##     checkEquals((outer(solution$wealth, signal())/prices3)[-nrow(prices3), ],
+##                 solution$position[-1L, ])
+
+
+
+##     ## tests for initial wealth
+##     prices <- c(100,98,98,97,101,102,101,98,99,101)
+##     signal <- function()
+##         0.5
+##     solution <- btest(prices, signal = signal, convert.weights = TRUE,
+##                       initial.cash = 1000, b = 0, prices0 = 100)
+
+
+
+##     ## with timestamp
+##     library("datetimeutils", quietly = TRUE)
+##     timestamp <- seq(from = as.Date("2015-01-01"),
+##                      to   = as.Date("2015-04-15"),
+##                      by   = "1 day")
+##     timestamp <- timestamp[!is_weekend(timestamp)]
+##     ## prices <- c(100+)
+
+##     prices <- cbind(as.numeric(paste0("1.", format(timestamp, "%m%d"))),
+##                     as.numeric(paste0("2.", format(timestamp, "%m%d"))))
+
+##     res <- btest(list(prices), function() 1)
+##     res$position
+##     res$journal
+##     res <- btest(list(prices), function() 1, b=0)
+##     res$position
+##     res$journal
+
+##     res <- btest(list(prices),
+##                  signal = function() c(0.5,0.5),
+##                  convert.weights = TRUE,
+##                  do.signal = "firstofmonth",
+##                  initial.cash = 100,
+##                  timestamp = timestamp)
+##     res$journal
+
+##     res <- btest(list(prices),
+##                  signal = function() c(0.5,0.5),
+##                  convert.weights = TRUE,
+##                  do.signal = "lastofquarter",
+##                  initial.cash = 100,
+##                  timestamp = timestamp)
+##     res$journal
+
+
+##     ## check whether date is matched against
+##     ## timestamp. The 31 Jan 2015 is not in timestamp, so
+##     ## trade takes place on next day (2 Feb)
+##     res <- btest(list(prices),
+##                  signal = function() c(0.5,0.5),
+##                  convert.weights = TRUE,
+##                  do.signal = as.Date(c("2015-01-08",
+##                                        "2015-01-31")),
+##                  initial.cash = 100,
+##                  timestamp = timestamp)
+##     checkEquals(unique(res$journal$timestamp),
+##                 as.Date(c("2015-01-08", "2015-02-02")))
+##     checkEquals(length(res$journal), 4)
+
+
+##     ## specifying when to trade
+##     tmp <- structure(c(3490, 3458, 3434, 3358, 3287, 3321,
+##                        3419, 3535, 3589, 3603, 3626, 3677,
+##                        3672, 3689, 3646, 3633, 3631, 3599,
+##                        3517, 3549, 3572, 3578, 3598, 3634,
+##                        3618, 3680, 3669, 3640, 3675, 3604,
+##                        3492, 3513, 3495, 3503, 3497, 3433,
+##                        3356, 3256, 3067, 3228, 3182, 3286,
+##                        3279, 3269, 3182, 3205, 3272, 3185,
+##                        3201, 3236, 3272, 3224, 3194, 3188,
+##                        3213, 3255, 3261),
+##                      .Dim = c(57L, 1L),
+##                      .Dimnames = list(
+##                          NULL, "fesx201509"),
+##                      index = structure(
+##                          c(16617L, 16618L, 16619L, 16622L,
+##                            16623L, 16624L, 16625L, 16626L,
+##                            16629L, 16630L, 16631L, 16632L,
+##                            16633L, 16636L, 16637L, 16638L,
+##                            16639L, 16640L, 16643L, 16644L,
+##                            16645L, 16646L, 16647L, 16650L,
+##                            16651L, 16652L, 16653L, 16654L,
+##                            16657L, 16658L, 16659L, 16660L,
+##                            16661L, 16664L, 16665L, 16666L,
+##                            16667L, 16668L, 16671L, 16672L,
+##                            16673L, 16674L, 16675L, 16678L,
+##                            16679L, 16680L, 16681L, 16682L,
+##                            16685L, 16686L, 16687L, 16688L,
+##                            16689L, 16692L, 16693L, 16694L,
+##                            16695L), class = "Date"),
+##                      class = "zoo")
+
+##     prices <- coredata(tmp)
+##     timestamp <- index(tmp)
+
+##     ## have a position equal to the numeric timestamp
+##     ## => buy 1 unit in every period
+##     signal <- function()
+##         Time(0)
+##     res <- journal(btest(prices = prices, signal = signal))
+##     checkEquals(length(res), length(tmp) - 1L)
+##     checkTrue(all(res$amount[-1] == 1))   ## the first traded amount
+##                                           ## is 2: first trade is at
+##                                           ## t==2, since the default
+##                                           ## lag of 1 is in force
+
+##     checkTrue(all(res$timestamp == seq(2, length(tmp))))
+
+##     ## buy at specified timestamps (integers; no lag!)
+##     when <- c(10,20,30)
+##     j <- journal(btest(prices = prices,
+##                        signal = signal,
+##                        do.signal = when))
+##     checkEquals(j$timestamp, when)
+
+##     ## logical
+##     j1 <- journal(btest(prices = prices, signal = signal,
+##                        do.signal = prices > 3600))
+##     j2 <- journal(btest(prices = prices, signal = signal,
+##                        do.signal = function() Close(0L) > 3600))
+##     checkEquals(j1, j2)
+
+
+##     ## do.rebalance FALSE -- strategy never trades
+##     ## promote warning to error
+##     ## options(warn=2)
+##     ## checkException({
+##     ##     options(warn=10);
+##     ##     btest(prices = prices, signal = signal,
+##     ##           do.signal = TRUE,
+##     ##           do.rebalance = FALSE)
+##     ## })
+##     ## warning only, no trades
+##     options(warn = 0)
+##     checkEquals(length(journal(suppressWarnings(btest(prices = prices, signal = signal,
+##                               do.signal = TRUE,
+##                               do.rebalance = FALSE)))),
+##                 0L)
+
+##     when <- c(10,20)
+##     j <- journal(btest(prices = prices,
+##                        signal = signal,
+##                        do.rebalance = when))
+##     checkEquals(j$timestamp, when)
+
+
+##     ## keywords
+##     j <- journal(btest(prices = prices,
+##                        signal = signal,
+##                        do.signal = "firstofmonth",
+##                        timestamp = timestamp,
+##                        b = 0))
+
+##     checkEquals(j$timestamp,
+##                 PMwR:::first(timestamp, format(timestamp, "%Y-%m")))
+
+##     j <- journal(btest(prices = prices,
+##                        signal = signal,
+##                        do.signal = "lastofmonth",
+##                        timestamp = timestamp))
+##     checkEquals(j$timestamp,
+##                 PMwR:::last(timestamp, format(timestamp, "%Y-%m")))
+
+
+##     ## include.data
+##     prices <- c(100,98,98,97,101,102,101,98,99,101)
+##     signal <- function()
+##         1
+##     res <- btest(prices, signal = signal)
+##     checkEquals(res$prices, NULL)
+##     checkEquals(res$signal, NULL)
+##     res <- btest(list(prices), signal = signal, include.data = TRUE)
+##     checkEquals(res$prices, prices)
+##     checkEquals(body(res$signal), body(signal))
+##     ## !is.list(prices) && is.null(dim(prices))
+
+##     prices <- c(100,98,98,97,101,102,101,98,99,101)
+##     prices <- cbind(prices, prices)
+##     res <- btest(list(prices), signal = signal, include.data = TRUE)
+##     checkEquals(res$prices, prices)
+
+
+
+
+
+
+
+
+##     ## lags
+##     prices <- 101:110
+##     signal <- function()
+##         if (Close() >= 104)
+##             1
+
+##     btest(prices, signal,          b=3)$journal
+##     btest(prices, signal, lag = 0, b=3)$journal
+##     btest(prices, signal, lag = 2, b=3)$journal
+
+
+##     checkEquals(
+##         journal(btest(
+##             1:10,
+##             signal = function() 1,
+##             b = as.Date("2018-1-5"),
+##             timestamp = as.Date("2018-1-1")+0:9))$timestamp,
+##         as.Date("2018-1-6"))
+
+## }
+
+## test.btest.prices <- function() {
+
+##     prices <- 1:5
+##     checkEquals(
+##         btest(prices, signal = function() 1),
+##         btest(as.matrix(prices), signal = function() 1))
+
+##     checkEquals(
+##         btest(prices, signal = function() 1),
+##         btest(list(prices), signal = function() 1))
+
+##     checkEquals(
+##         btest(prices, signal = function() 1),
+##         btest(list(as.matrix(prices)), signal = function() 1))
+
+##     library("zoo")
+##     bt1 <- btest(prices, signal = function() 1)
+##     bt2 <- btest(zoo(prices), signal = function() 1)
+##     checkEqualsNumeric(bt1$wealth, bt2$wealth)
+##     checkEqualsNumeric(bt1$position, bt2$position)
+##     checkEqualsNumeric(bt1$suggested.position,
+##                        bt2$suggested.position)
+
+## }
+
+## test.btest.b <- function() {
+##     prices <- 1:5
+##     timestamp <- Sys.Date() + 0:4
+
+##     res <- btest(prices = 1:5,
+##                  signal = function() 1,
+##                  timestamp = timestamp,
+##                  b = timestamp[1L] + 0.5)
+##     checkEquals(res$b, 1)
+
+##     res <- btest(prices = 1:5,
+##                  signal = function() 1,
+##                  timestamp = timestamp,
+##                  b = timestamp[1L])
+##     checkEquals(res$b, 1)
+
+##     res <- btest(prices = 1:5,
+##                  signal = function() 1,
+##                  timestamp = timestamp,
+##                  b = timestamp[1L] - 0.5)
+##     checkEquals(res$b, 0)
+## }
+
+## test.btest.position <- function() {
+
+##     ## single instrument
+##     prices <- 1:10
+##     for (i in 1:20) {
+##         bt <- btest(prices,
+##                     signal = function()
+##                                  sample(0:10, 1, replace = TRUE))
+
+##         checkEquals(unname(as.matrix(position(journal(bt),
+##                                               when = 1:10))),
+##                     unname(as.matrix(position(bt))))
+##     }
+
+##     ## two instruments
+##     prices <- cbind(a = 1:10,
+##                     b = 101:110)
+
+##     for (i in 1:20) {
+##         bt <- btest(list(prices),
+##                     instrument = c("a", "b"),
+##                     signal = function()
+##                                  sample(0:10, 2, replace = TRUE))
+
+##         checkEquals(unname(as.matrix(position(journal(bt),
+##                                               when = 1:10))),
+##                     unname(as.matrix(position(bt))))
+##     }
+
+## }
+
+## test.btest.NA <- function() {
+
+##     prices <- 1:10
+##     signal <- function()
+##         if (Time() < 5)
+##             1 else 0
+##     checkEquals(bt1 <- btest(prices, signal)$wealth,
+##                 c(0, 0, 1, 2, 3, 4, 4, 4, 4, 4))
+
+##     ## signal returns position
+##     prices[7:10] <- NA
+##     signal <- function()
+##         if (Time() < 5)
+##             1 else 0
+##     checkEquals(bt2 <- btest(prices, signal)$wealth,
+##                 c(0, 0, 1, 2, 3, 4, 4, 4, 4, 4))
+##     checkEquals(bt1, bt2)
+
+##     prices1  <- prices2 <- 1:10
+##     prices2[7:10] <- NA
+##     prices <- cbind(prices1, prices2)
+##     signal <- function()
+##         if (Time() < 5)
+##             c(1,1) else c(1,0)
+##     checkEquals(bt3 <- btest(list(prices), signal)$wealth,
+##                 c(0, 0, 2, 4, 6, 8, 9, 10, 11, 12))
+
+
+##     ## signal returns weight
+##     prices <- 1:5
+##     prices[4:5] <- NA
+##     signal <- function() {
+##         if (Time(0) <= 3)
+##             0.5 else 0
+##     }
+##     btest(prices, signal, initial.cash = 100, convert.weights = TRUE)$wealth
+
+##     prices1  <- prices2 <- 1:10
+##     prices2[7:10] <- NA
+##     prices <- cbind(prices1, prices2)
+##     signal <- function()
+##         if (Time() < 5)
+##             c(1,1) else c(1,0)
+##     checkEquals(bt3 <- btest(list(prices), signal)$wealth,
+##                 c(0, 0, 2, 4, 6, 8, 9, 10, 11, 12))
+
+
+
+
+## }
+
+## test.btest.nullsignal <- function() {
+##     prices <- 1:10
+
+##     ## if signal returns NULL, the previous
+##     ## position is kept.
+##     signal1 <- function()
+##         if (Time() == 5)
+##             1 else Portfolio()
+##     signal2 <- function()
+##         if (Time() == 5)
+##             1
+##     signal3 <- function()
+##         if (Time() == 5)
+##             1 else NULL
+
+##     checkEquals(btest(prices, signal1), btest(prices, signal2))
+##     checkEquals(btest(prices, signal1), btest(prices, signal3))
+
+## }
+
+## test.btest.tc <- function() {
+##     prices <- 1:10
+##     signal <- function()
+##         Time()
+##     tc <- function()
+##         Time() ## will be 0:9
+
+##     journal(bt <- btest(prices, signal, tc = tc))
+##     checkEquals(bt$cum.tc,
+##                 c(0, cumsum(prices[-1]*seq_len(9))))
+##                 ###                    ^^^^^^^^^^ tc
+
+##     journal(bt <- btest(prices, signal, tc = 1))
+
+##     checkEquals(bt$cum.tc,
+##                 c(0, cumsum(prices[-1])))
+## }
 
 test.btest.journal <- function() {
 
