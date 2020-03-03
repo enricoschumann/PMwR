@@ -23,7 +23,7 @@ expect_equivalent(drop(!!p1),
 
 
 
-## 
+##
 x <- position(amount = 1, instrument = c("a"))
 y <- position(amount = 1:2, instrument = c("a","b"))
 expect_equal(x, +x)

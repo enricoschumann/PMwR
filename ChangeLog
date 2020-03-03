@@ -1,3 +1,9 @@
+2020-03-03  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Suggests): remove 'RUnit'
+
+        * inst/tinytest/*: move all tests to tinytest format
+
 2020-03-01  Enrico Schumann  <es@enricoschumann.net>
 
         * R/div_adjust.R (split_adjust): support several
