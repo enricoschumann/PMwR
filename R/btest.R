@@ -376,7 +376,7 @@ btest  <- function(prices,
               else
                   TRUE
         i_rdays <- match(aggregate(tmp[ii],
-                                   by = list(list(paste0(format(tmp[ii], "%Y"), "-", quarters(tmp[ii])))),
+                                   by = list(paste0(format(tmp[ii], "%Y"), "-", quarters(tmp[ii]))),
                                    FUN = head, 1)[[2L]],
                          tmp)
         do.rebalance <- function(...)
@@ -391,7 +391,7 @@ btest  <- function(prices,
               else
                   TRUE
         i_rdays <- match(aggregate(tmp[ii],
-                                   by = list(list(paste0(format(tmp[ii], "%Y"), "-", quarters(tmp[ii])))),
+                                   by = list(paste0(format(tmp[ii], "%Y"), "-", quarters(tmp[ii]))),
                                    FUN = tail, 1)[[2L]],
                          tmp)
         do.rebalance <- function(...)

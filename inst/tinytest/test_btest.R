@@ -187,6 +187,32 @@ res <- btest(list(prices),
              timestamp = timestamp)
 res$journal
 
+res <- btest(list(prices),
+             signal = function() c(0.5,0.5),
+             convert.weights = TRUE,
+             do.signal = "firstofquarter",
+             initial.cash = 100,
+             timestamp = timestamp)
+res$journal
+
+res <- btest(list(prices),
+             signal = function() c(0.5,0.5),
+             convert.weights = TRUE,
+             do.rebalance = "lastofquarter",
+             initial.cash = 100,
+             timestamp = timestamp)
+res$journal
+
+res <- btest(list(prices),
+             signal = function() c(0.5,0.5),
+             convert.weights = TRUE,
+             do.rebalance = "firstofquarter",
+             initial.cash = 100,
+             timestamp = timestamp)
+res$journal
+
+
+
 
 ## check whether date is matched against
 ## timestamp. The 31 Jan 2015 is not in timestamp, so
