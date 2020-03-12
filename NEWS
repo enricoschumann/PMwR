@@ -1,4 +1,4 @@
-v0.14-0  (2020-XX-XX; not yet released)
+v0.14-0  (2020-03-11)
 
   o 'btest': handling of argument 'do.rebalance' has
     been fixed. It had not worked properly when set to
@@ -24,12 +24,14 @@ v0.14-0  (2020-XX-XX; not yet released)
     operator: the result is a logical matrix of the
     same dimension as the original position
 
-  o 'div_adjust': support several splits on a single timestamp
+  o 'div_adjust': support several splits on a single
+     timestamp
 
-  o 'returns': the 'weights' argument needs no longer sum to one
+  o 'returns': the 'weights' argument needs no longer
+     sum to one
 
-  o 'NAVseries': the toLatex method for summaries gains
-    an argument 'include.bm', with default FALSE
+  o 'NAVseries': the toLatex method for summaries
+    gains an argument 'include.bm', with default FALSE
 
   o various minor bug fixes and documentation
     updates.  See the ChangeLog for all details.
