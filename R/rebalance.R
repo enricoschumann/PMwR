@@ -90,7 +90,7 @@ rebalance <- function(current,
             warning("instrument in current without price: ",
                     if (sum(miss.name) > 3) "\n",
                     paste(names(current)[miss.name],
-                          collapse = if (sum(miss.name) > 3) "\n" else ","),
+                          collapse = if (sum(miss.name) > 3) "\n" else ", "),
                     immediate. = TRUE)
         }
         if (any(miss.name <- is.na(match(names(target),
@@ -98,7 +98,14 @@ rebalance <- function(current,
             warning("instrument in target without price: ",
                     if (sum(miss.name) > 3) "\n",
                     paste(names(current)[miss.name],
-                          collapse = if (sum(miss.name) > 3) "\n" else ","),
+                          collapse = if (sum(miss.name) > 3) "\n" else ", "),
+                    immediate. = TRUE)
+        }
+        if (any(miss.price <- is.na(price))) {
+            warning("NAs in prices: ",
+                    if (sum(miss.price) > 3) "\n",
+                    paste(names(price)[miss.price],
+                          collapse = if (sum(miss.price) > 3) "\n" else ", "),
                     immediate. = TRUE)
         }
         all.names <- sort(unique(
