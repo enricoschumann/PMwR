@@ -113,7 +113,8 @@ scale1.zoo <- function(x, ..., when = "first.complete",
         x <- x*inflate.d^as.numeric(dates-dates[1L])
     }
 
-    if (inherits(when, class(ii)))
+    if (inherits(when, class(ii)) &&
+       !(inherits(when, "character") && when == "first.complete"))
         when <- matchOrNext(when, ii)
     ans <- scale1.default(x, when = when, level = level,
                           centre = centre, scale = scale,

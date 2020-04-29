@@ -1,3 +1,11 @@
+2020-04-29  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/rebalance.R (rebalance): warn about NAs in
+        'price' vector
+
+        * R/scale1.R (scale1.zoo): fix handling of
+        'zoo' series when index is of class 'character'
+
 2020-03-11  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): Version: 0.14-0
