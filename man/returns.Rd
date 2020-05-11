@@ -44,28 +44,27 @@ returns(x, \dots)
 .returns(x, pad = NULL, lag)
 }
 \arguments{
-  \item{x}{
 
-    for the default method, a \code{numeric} vector
-    (possibly with a \code{dim} attribute; i.e. a
-    matrix) of prices.  \code{returns} also supports
-    \code{x} of other classes, such as \code{zoo} or
-    \code{\link{NAVseries}}. For time-series classes,
-    argument \code{t} should be \code{NULL}.
+  \item{x}{%
+    for the default method, a \code{numeric}
+    vector (possibly with a \code{dim} attribute;
+    i.e. a matrix) of prices.  \code{returns} also
+    supports \code{x} of other classes, such as
+    \code{zoo} or \code{\link{NAVseries}}. For
+    time-series classes, argument \code{t} should be
+    \code{NULL}.
 
     For \code{.returns}, \code{x} must be
     \code{numeric} (for other classes, \code{.returns}
     may not work properly).
-
   }
-  \item{t}{
 
+  \item{t}{%
     timestamps. See arguments \code{period} and
     \code{rebalance.when}.
-
   }
-  \item{period}{
 
+  \item{period}{%
     Typically \code{character}; supported are
     \code{"hour"}, \code{"day"}, \code{"month"},
     \code{"quarter"}, \code{"year"},
@@ -91,85 +90,70 @@ returns(x, \dots)
     vector of length one.
 
   }
-  \item{complete.first}{
-
+  \item{complete.first}{%
     logical. For holding-period returns such an monthly
     or yearly, should the first period (if incomplete)
     be used.
 
   }
-  \item{pad}{
-
+  \item{pad}{%
     either \code{NULL} (no padding of initial lost
     observation) or a value used for padding
     (reasonable values might be \code{\link{NA}} or
     \code{0})
-
   }
-  \item{position}{
-
+  \item{position}{%
     numeric; the same length/dimension as
     \code{x}. \strong{This argument is currently ignored.}
-
   }
-  \item{weights}{
-
+  \item{weights}{%
     either a numeric vector of the same length as the
     number of assets (i.e. \code{ncol(x)}), or a
     numeric matrix whose dimensions match those of
     prices (i.e. \code{dim(x)} must equal
     \code{dim(weights)})
-
   }
-  \item{rebalance.when}{
-
+  \item{rebalance.when}{%
     logical or numeric. If \code{x} is a time-series
     class (such as \code{zoo}), it may also be of the
     same class as the time index of \code{x}.
 
   }
-  \item{\dots}{
+  \item{\dots}{%
     further arguments to be passed to methods
   }
 
-  \item{year.rows}{
-
+  \item{year.rows}{%
     logical. If \code{TRUE} (the default), print
     monthly returns with one row per year.
 
   }
-  \item{zero.print}{
-
+  \item{zero.print}{%
     character.  How to print zero values.
 
   }
-  \item{na.print}{
-
+  \item{na.print}{%
     character.  How to print \code{NA} values. (Not
     supported yet.)
 
   }
-  \item{plus}{
-
+  \item{plus}{%
     logical. Add a \sQuote{\code{+}} before positive
     numbers? Default is \code{FALSE}.
 
   }
-  \item{lag}{
-
+  \item{lag}{%
     The lag for computing returns. A positive integer,
     defaults to one; ignored for time-weighted returns
     or if \code{t} is supplied.
 
   }
-  \item{object}{
-
+  \item{object}{%
     an object of class \code{p_returns} (\sQuote{period
     returns})
 
   }
-  \item{month.names}{
-
+  \item{month.names}{%
     character: names of months. Default is an
     abbreviated month name as provided by the
     locale. That may cause trouble, notably with
@@ -180,13 +164,11 @@ returns(x, \dots)
     package.
 
   }
-  \item{digits}{
-
+  \item{digits}{%
     number of digits in table
 
   }
-  \item{ytd}{
-
+  \item{ytd}{%
     header for YTD
 
   }
@@ -200,8 +182,7 @@ returns(x, \dots)
   \item{td.style}{character}
   \item{tr.class}{character}
   \item{tr.style}{character}
-  \item{browse}{
-
+  \item{browse}{%
     logical: open table in browser?
 
   }
