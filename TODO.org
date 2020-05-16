@@ -32,6 +32,10 @@
 ** add 'drop' argument to return matrix?
 
 
+** subset range YYYY-MM-DD/YYYY-MM-DD (character)?
+
+** subset e.g. YYYY-MM for specific month?
+
 * =position= [0/2]
 
 ** TODO =when= keywords?
@@ -58,11 +62,15 @@
  & | < > -- match by name
 
 
-* =returns= [0/2]
+* =returns= [0/3]
 
 ** TODO =YTM= holding-period returns
 
    beginning of year to end of previous month
+
+** TODO "IRR" holding-period returns
+
+   compute internal rate of return
 
 ** TODO print: allow printing in basispoints
 
@@ -98,3 +106,8 @@
 * =streaks=
 
   allow absolute streaks? (i.e. not percentage moves)
+
+* =quote32=
+
+  - methods min, max, range
+  - q32(<num>) => round to closest fraction, warn = <tol>
