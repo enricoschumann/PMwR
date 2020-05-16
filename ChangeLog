@@ -1,3 +1,10 @@
+2020-05-16  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/valuation.R (valuation.position): for a
+        single timestamp and a named position,
+        'price.table' may now also be a named vector;
+        see Examples in ?valuation
+
 2020-04-29  Enrico Schumann  <es@enricoschumann.net>
 
         * R/rebalance.R (rebalance): warn about NAs in

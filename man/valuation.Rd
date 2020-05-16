@@ -26,9 +26,9 @@ valuation(x, ...)
 
 }
 \arguments{
-  \item{x}{
+  \item{x}{%
     an object
-}
+  }
   \item{multiplier}{
     a numeric vector, typically with named elements
 }
@@ -44,9 +44,11 @@ valuation(x, ...)
     logical.  If \code{TRUE} (the default), a positive amount gets
     mapped into a negative cashflow.
 }
-  \item{price.table}{
-    numeric
-  }
+\item{price.table}{%
+  numeric: a matrix whose elements correspond to those in \code{x}.
+  If only a single timestamp is used and the position is named,
+  this may also be a named numeric vector; see Examples.
+}
   \item{do.sum}{
     logical: sum over positions
   }
@@ -85,7 +87,7 @@ valuation(x, ...)
 }
 \references{
 
-  Schumann, E. (2018) \emph{Portfolio Management with R}.
+  Schumann, E. (2020) \emph{Portfolio Management with R}.
   \url{http://enricoschumann.net/R/packages/PMwR/}
 
 }
@@ -99,6 +101,8 @@ valuation(x, ...)
   \code{\link{journal}}
 }
 \examples{
+## valuing a JOURNAL
+
 j <- journal(amount = 10, price = 2)
 ##    amount  price
 ## 1      10      2
@@ -110,4 +114,26 @@ valuation(j, instrument = NA)
 ## 1     -20      1
 ##
 ## 1 transaction
+
+
+
+## valuing a POSITION
+pos <- position(c(AMZN = -10, MSFT = 200))
+
+### contructing a price table:
+### ==> P[i, j] must correspond to pos[i, j]
+P <- array(c(2200, 170), dim = c(1, 2))
+colnames(P) <- instrument(pos)
+
+valuation(pos, price.table = P)
+##        AMZN  MSFT
+## [1,] -22000 34000
+
+### contructing a price table, alternative:
+### a named vector
+### ==> only works when there is only a single timestamp
+valuation(pos, price.table = c(MSFT = 170, AMZN = 2200))
+
+all.equal(valuation(pos, price.table = P),
+          valuation(pos, price.table = c(MSFT = 170, AMZN = 2200)))
 }

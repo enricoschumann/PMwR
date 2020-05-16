@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-19  Enrico Schumann
+## Copyright (C) 2008-20  Enrico Schumann
 
 valuation <- function(x, ...)
     UseMethod("valuation")
@@ -95,14 +95,28 @@ valuation.position <- function(x, price.table, multiplier = 1,
     if (do.warn && any(is.na(multiplier))) {
         warning("NAs in ", sQuote("multiplier"))
     }
+    if (nrow(x) == 1L &&
+        is.null(dim(price.table)) &&
+        !is.null(names(price.table)) &&
+        !all(is.na(instrument))) {
+        price.table_ <- rep(NA_real_, ncol(x))
+        names(price.table_) <- instrument
+        ii <- instrument %in% names(price.table)
+        price.table_[ii] <- price.table[instrument[ii]]
+        price.table <- t(price.table_)
+    }
+
+    if (!all(dim(price.table) == dim(x)))
+        warning("dimensions of position and ", sQuote("price.table"), " differ")
 
     pos <- x != 0
-    miss <- which(is.na(price.table) & pos, TRUE)
+    is.na.prices <- is.na(price.table)
+    miss <- which(is.na.prices & pos, TRUE)
     if (do.warn && nrow(miss)) {
         warning("missing prices")
         if (verbose) {
             for (i in seq_len(ncol(x)))
-                if (any(pos[, i]) && all(miss[, i]))
+                if (any(pos[, i]) && all(is.na.prices[, i]))
                     warning("no prices at all for ", instrument[i])
             print(data.frame(timestamp  = .timestamp(x)[miss[, 1L]],
                              instrument = instrument(x)[miss[, 2L]]))
