@@ -370,7 +370,7 @@ pl.default <- function(amount, price, timestamp = NULL,
                                 timestamp = c(timestamp1, timestamp1),
                                 instrument = c(rep(i1, length(amount1)),
                                                rep("cash", length(amount1))),
-                                when = along.timestamp)[, c(i1, "cash")]
+                                when = along.timestamp)[, c(i1, "cash"), drop = FALSE]
 
                 ## replace vprice1 with zero whenever there is no
                 ## position in instrument: NA values are ignored

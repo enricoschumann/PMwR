@@ -42,25 +42,25 @@ pl(amount, \dots )
 
 }
 \arguments{
-  \item{amount}{
+  \item{amount}{%
     numeric or a \code{\link{journal}}
   }
-  \item{price}{
+  \item{price}{%
     numeric
   }
-  \item{instrument}{
+  \item{instrument}{%
 
     character or numeric (though typically character)
 
   }
-  \item{timestamp}{
+  \item{timestamp}{%
 
     An atomic vector of mode \code{\link{numeric}} or
     \code{\link{character}}.  Timestamps should
     typically be sortable.
 
   }
-  \item{along.timestamp}{
+  \item{along.timestamp}{%
 
     logical; or a a vector of timestamps. If the latter,
     \code{vprice} must be specified as well. See the vignette
@@ -68,13 +68,13 @@ pl(amount, \dots )
     for details.
 
   }
-  \item{initial.position}{
-    a \code{\link{position}}.
+  \item{initial.position}{%
+    a \code{\link{position}}
   }
-  \item{initial.price}{
-    prices to evaluate initial position.
+  \item{initial.price}{%
+    prices to evaluate initial position
   }
-  \item{vprice}{
+  \item{vprice}{%
 
     valuation price; a numeric vector. With several
     instruments, the prices must be named,
@@ -82,14 +82,14 @@ pl(amount, \dots )
     Details.
 
   }
-  \item{multiplier}{
+  \item{multiplier}{%
 
     numeric vector. When \code{instrument} is specified
     and the vector is named, the names will be matched
     against instruments.
 
   }
-  \item{multiplier.regexp}{
+  \item{multiplier.regexp}{%
 
     logical. If \code{TRUE}, the names of
     \code{multiplier} are interpreted as regular
@@ -106,7 +106,8 @@ pl(amount, \dots )
   \item{do.sum}{logical: sum profit/loss across instruments?}
   \item{pl.only}{logical: if \code{TRUE}, return only
     numeric vector of profit/loss}
-  \item{footnotes}{logical, with default \code{TRUE}:
+  \item{footnotes}{%
+    logical, with default \code{TRUE}:
     collect and print notes?}
 }
 \details{
@@ -166,7 +167,7 @@ pl(amount, \dots )
 
 }
 \references{
-Schumann, E. (2019) \emph{Portfolio Management
+Schumann, E. (2020) \emph{Portfolio Management
   with R}. \url{http://enricoschumann.net/PMwR/}
 
 }
@@ -207,12 +208,23 @@ pl(J)
 ## 'P/L total' is in units of instrument;
 ## 'volume' is sum of /absolute/ amounts.
 
-as.data.frame(pl(J))
+as.data.frame(pl(J))  ## a single data.frame
 ##        pl buy sell volume
 ## Bond A  0 101  101      4
 ## Bond B  8 101  105      4
 
+lapply(pl(J), as.data.frame)  ## => a list of data.frames
+## $`Bond A`
+##   pl realised unrealised buy sell volume
+## 1  0       NA         NA 101  101      4
+##
+## $`Bond B`
+##   pl realised unrealised buy sell volume
+## 1  8       NA         NA 101  105      4
+
 pl(pl(J))  ## P/L as a numeric vector
+## Bond A Bond B
+##      0      8
 
 
 

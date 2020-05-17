@@ -646,3 +646,25 @@ expect_equal(pl(j, along.timestamp = timestamp, vprice = close)[[1]]$pl,
                                  "2007-08-30 17:24:00",
                                  "2007-08-31 09:00:00",
                                  "2007-08-31 10:00:00")))
+
+
+## --------------------------------
+
+## custom 'along.timestamp' for a single timestamp
+J <- journal(amount = c(1),
+             price = c(100),
+             timestamp = c(1))
+ans <- pl(J, along.timestamp = 1, vprice = 101)
+expect_equivalent(ans[[1]]$pl, 1)
+
+J <- journal(amount = c(1, -1),
+             price = c(100, 105),
+             timestamp = c(1,1))
+ans <- pl(J, along.timestamp = 1, vprice = 105)
+expect_equivalent(ans[[1]]$pl, 5)
+
+J <- journal(amount = c(1, -1),
+             price = c(100, 105),
+             timestamp = c(1,1))
+ans <- pl(J, along.timestamp = 1, vprice = 999)
+expect_equivalent(ans[[1]]$pl, 5)
