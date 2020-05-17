@@ -37,7 +37,7 @@ pricetable(price, \dots)
 }
 }
 \details{
-  
+
   \code{pricetable} is a helper function for extracting
   prices of particular instrument at specified dates.
   For this, it first creates a table that merges series
@@ -59,7 +59,7 @@ pricetable(price, \dots)
 
 }
 \references{
-  Schumann, E. (2019) \emph{Portfolio Management with
+  Schumann, E. (2020) \emph{Portfolio Management with
     R}. \url{http://enricoschumann.net/R/packages/PMwR/}
 }
 \author{
@@ -94,7 +94,7 @@ pt[ , "A"]
 ## 3 3
 
 pt[ , c("X", "A", "X")]
-##    x A  x
+##    X A  X
 ## 1 NA 1 NA
 ## 2 NA 2 NA
 ## 3 NA 3 NA
