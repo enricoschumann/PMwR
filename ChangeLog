@@ -1,3 +1,10 @@
+2020-05-26  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/valuation.R (valuation.position): add
+        argument 'use.names'. If TRUE, the (column)
+        names of price.table are matched against
+        'instrument'.
+
 2020-05-17  Enrico Schumann  <es@enricoschumann.net>
 
         * R/pl.R (pl): fix profit/loss computation when

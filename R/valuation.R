@@ -83,9 +83,14 @@ jcf <- function(x, multiplier = 1,
     ans
 }
 
-valuation.position <- function(x, price.table, multiplier = 1,
-                               do.sum = FALSE, price.unit,
-                               verbose = TRUE, do.warn = TRUE, ...) {
+valuation.position <- function(x,
+                               price.table,
+                               multiplier = 1,
+                               do.sum = FALSE,
+                               price.unit,
+                               use.names = FALSE,
+                               verbose = TRUE,
+                               do.warn = TRUE, ...) {
 
     instrument <- attr(x, "instrument")
 
@@ -95,7 +100,12 @@ valuation.position <- function(x, price.table, multiplier = 1,
     if (do.warn && any(is.na(multiplier))) {
         warning("NAs in ", sQuote("multiplier"))
     }
-    if (nrow(x) == 1L &&
+    if (use.names &&
+        !is.null(dim(price.table))) {
+        price.table <- price.table[, instrument]
+    }
+    if (use.names &&
+        nrow(x) == 1L &&
         is.null(dim(price.table)) &&
         !is.null(names(price.table)) &&
         !all(is.na(instrument))) {

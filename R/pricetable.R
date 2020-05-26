@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-18  Enrico Schumann
+## Copyright (C) 2008-20  Enrico Schumann
 
 pricetable <- function(price, ...)
     UseMethod("pricetable")
@@ -137,6 +137,8 @@ pricetable.zoo <- function(price, ..., instrument) {
 
     if (!is.na(missing) && missing != "locf") {
         ans[is.na(ans)] <- missing
+    } else if (!is.na(missing) && (missing == "locf" || missing == "previous")) {
+        ans <- zoo::na.locf(ans, na.rm = FALSE)
     }
     class(ans) <- "pricetable"
 
