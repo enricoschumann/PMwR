@@ -1,3 +1,9 @@
+2020-08-09  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Depends): require at least R
+        version 3.2, which was released in 2015 ('lengths'
+        was added in that version)
+
 2020-05-26  Enrico Schumann  <es@enricoschumann.net>
 
         * R/valuation.R (valuation.position): add
