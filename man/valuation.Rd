@@ -22,7 +22,9 @@ valuation(x, ...)
 
 \method{valuation}{position}(x, price.table, multiplier = 1,
           do.sum = FALSE,
-          price.unit, verbose = TRUE, do.warn = TRUE, \dots)
+          price.unit,
+          use.names = FALSE,
+          verbose = TRUE, do.warn = TRUE, \dots)
 
 }
 \arguments{
@@ -51,6 +53,9 @@ valuation(x, ...)
 }
   \item{do.sum}{
     logical: sum over positions
+  }
+  \item{use.names}{
+    logical: use names of \code{vprice}?
   }
   \item{price.unit}{
     a named character vector. Not implemented.

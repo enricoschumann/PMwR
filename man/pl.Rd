@@ -60,14 +60,13 @@ pl(amount, \dots )
     typically be sortable.
 
   }
-  \item{along.timestamp}{%
 
-    logical; or a a vector of timestamps. If the latter,
-    \code{vprice} must be specified as well. See the vignette
+  \item{along.timestamp}{logical; or a a vector of timestamps. If the
+    latter, \code{vprice} must be specified as well. See the vignette
     \dQuote{Profit/Loss for Open Positions} (\code{pl_open_positions})
-    for details.
+    for details.  If necessary, timestamps will be sorted in ascending
+    order (and elements in \code{vprice} will be sorted as well).}
 
-  }
   \item{initial.position}{%
     a \code{\link{position}}
   }
@@ -76,10 +75,9 @@ pl(amount, \dots )
   }
   \item{vprice}{%
 
-    valuation price; a numeric vector. With several
-    instruments, the prices must be named,
-    e.g. \code{c(stock1 = 100, stock2 = 101)}. See
-    Details.
+    valuation price; a numeric vector. With several instruments, the
+    prices must be named, e.g. \code{c(stock1 = 100, stock2 = 101)}.
+    See Details.
 
   }
   \item{multiplier}{%
@@ -113,24 +111,28 @@ pl(amount, \dots )
 \details{
 
   Computes profit and/or loss and returns a list with
-  several statistics (see Section Value, below). To get
-  only the profit/loss numbers as a numeric vector,
-  set argument \code{pl.only} to \code{TRUE}.
+  several statistics (see Section Value, below). To get only
+  the profit/loss numbers as a numeric vector, set argument
+  \code{pl.only} to \code{TRUE}.
 
   \code{pl} is a generic function: The default input is
-  vectors for amount, price, etc. Alternatively (and
-  often more conveniently), the function may also be
-  called with a \code{\link{journal}} or a
-  \code{\link{data.frame}} as its input. For data
-  frames, columns must be named \code{amount},
-  \code{price}, and so on, as in a \code{\link{journal}}.
+  vectors for amount, price, etc. Alternatively (and often
+  more conveniently), the function may also be called with a
+  \code{\link{journal}} or a \code{\link{data.frame}} as its
+  input. For data frames, columns must be named
+  \code{amount}, \code{price}, and so on, as in a
+  \code{\link{journal}}.
 
   \code{pl} may be called in two ways: either to compute
   \emph{total profit/loss} from a list of trades, possibly
-  broken down by \code{instrument} and \code{account};
-  or to compute \emph{profit/loss over time}. The latter case
-  typically requires setting arguments \code{along.timestamp}
-  and/or \code{vprice} (see Examples).
+  broken down by \code{instrument} and \code{account}; or to
+  compute \emph{profit/loss over time}. The latter case
+  typically requires setting arguments
+  \code{along.timestamp} and/or \code{vprice} (see
+  Examples).  Profit/loss over time is always computed with
+  time in ascending order: so if the timestamps in
+  \code{along.timestamp} are not sorted, the function will
+  sort them (and \code{vprice} as well).
 
   Using \code{vprice}: when \code{along.timestamp} is
   logical (\code{FALSE} or \code{TRUE}),
