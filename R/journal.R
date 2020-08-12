@@ -38,14 +38,14 @@ journal.default <- function(amount, price, timestamp, instrument,
     }
 
     if (missing(timestamp))
-        timestamp <- NA
+        timestamp <- NA_real_
     if (missing(instrument) || all(is.na(instrument)))
-        instrument <- NA
+        instrument <- NA_character_
     else if (!any(is.na(instrument)) &&
              all(instrument == instrument[1L]))
         instrument <- instrument[1L]
     if (missing(price))
-        price <- NA
+        price <- NA_real_
     instrument <- as.character(instrument)
 
 
@@ -57,12 +57,13 @@ journal.default <- function(amount, price, timestamp, instrument,
                length(account),
                if (length(dots)) max(lengths(dots)))
 
-    ans <- list(id         = rep(id,         len/length(id)),
-                instrument = rep(instrument, len/length(instrument)),
-                account    = rep(account,    len/length(account)),
-                timestamp  = rep(timestamp,  len/length(timestamp)),
-                amount     = rep(amount,     len/length(amount)),
-                price      = rep(price,      len/length(price)))
+    ans <- list(
+        id         = if ((n <- len/length(id)) == 1)         id else rep(id, n),
+        instrument = if ((n <- len/length(instrument)) == 1) instrument else rep(instrument, n),
+        account    = if ((n <- len/length(account)) == 1)    account else rep(account, n),
+        timestamp  = if ((n <- len/length(timestamp)) == 1)  timestamp else rep(timestamp, n),
+        amount     = if ((n <- len/length(amount)) == 1)     amount else rep(amount, n),
+        price      = if ((n <- len/length(price)) == 1)      price else rep(price, n))
 
     ## remove NULL
     isNul <- unlist(lapply(ans, is.null))

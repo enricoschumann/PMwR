@@ -1,3 +1,9 @@
+2020-08-12  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/journal.R (journal.default): do not recycle
+        journal inputs (i.e. use rep) when they already
+        are of appropriate length
+
 2020-08-09  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Depends): require at least R
