@@ -1,3 +1,39 @@
+v0.15-0  (2020-08-??; not yet released)
+
+  o 'valuation': argument 'price.table' has been renamed:
+
+        price.table   =>   vprice
+
+    The function also gains a new argument 'use.names',
+    with default FALSE.  To keep the old behaviour,
+    simply rename the argument.
+
+    If 'use.names' is set to TRUE, column names are
+    matched against instruments. In effect, argument
+    'vprice' in 'valuation' behaves in essentially the
+    same way as argument 'vprice' of function 'pl'.
+    For examples, see ?valuation and
+    http://enricoschumann.net/notes/valuing-positions.html
+
+  o when a subset is taken from a 'pricetable', the
+    result is no longer a pricetable but a numeric
+    matrix.  The behaviour is controlled by a new
+    argument 'as.matrix'. For the old bevahiour, set
+    this argument to FALSE, i.e. say
+
+        p[<....>, <....>, as.matrix = FALSE]
+  
+  o the PMwR package now explicitly depends on R version >= 3.2
+
+  o 'pl': it is now checked that custom valuation dates
+    passed via 'along.timestamp' are in ascending order
+    (and they now get sorted if they are not)
+
+  o 'rebalance' now warns about NAs in the 'price' input
+
+  o various minor bug fixes and documentation
+    updates.  See the ChangeLog for all details.
+
 v0.14-0  (2020-03-11)
 
   o 'btest': handling of argument 'do.rebalance' has

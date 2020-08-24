@@ -42,30 +42,26 @@ pl(amount, \dots )
 
 }
 \arguments{
-  \item{amount}{%
-    numeric or a \code{\link{journal}}
-  }
-  \item{price}{%
-    numeric
-  }
-  \item{instrument}{%
 
-    character or numeric (though typically character)
+  \item{amount}{numeric or a \code{\link{journal}}}
 
-  }
-  \item{timestamp}{%
+  \item{price}{numeric}
 
-    An atomic vector of mode \code{\link{numeric}} or
-    \code{\link{character}}.  Timestamps should
-    typically be sortable.
+  \item{instrument}{character or numeric (though
+    typically character)}
 
-  }
+  \item{timestamp}{An atomic vector of mode
+    \code{\link{numeric}} or \code{\link{character}}.
+    Timestamps should typically be sortable.}
 
-  \item{along.timestamp}{logical; or a a vector of timestamps. If the
-    latter, \code{vprice} must be specified as well. See the vignette
-    \dQuote{Profit/Loss for Open Positions} (\code{pl_open_positions})
-    for details.  If necessary, timestamps will be sorted in ascending
-    order (and elements in \code{vprice} will be sorted as well).}
+  \item{along.timestamp}{logical; or a a vector of
+    timestamps. If the latter, \code{vprice} must be
+    specified as well. See the vignette
+    \dQuote{Profit/Loss for Open Positions}
+    (\code{pl_open_positions}) for details.  Timestamps
+    must be in ascending order and will be sorted if
+    they are not (and \code{vprice} will then be sorted
+    as well).}
 
   \item{initial.position}{%
     a \code{\link{position}}

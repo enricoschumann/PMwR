@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-19  Enrico Schumann
+## Copyright (C) 2008-20  Enrico Schumann
 
 pl <- function(amount, ...)
     UseMethod("pl")
@@ -172,6 +172,12 @@ pl.default <- function(amount, price, timestamp = NULL,
         if (nrow(vprice) != length(along.timestamp))
             stop("lengths of ", sQuote("vprice"), " and ",
                  sQuote("along.timestamp"), " differ")
+
+        if (is.unsorted(along.timestamp)) {
+            io <- order(along.timestamp)
+            along.timestamp <- along.timestamp[io]
+            vprice <- vprice[io, , drop = FALSE]
+        }
     }
 
     ## initial position should be a named vector

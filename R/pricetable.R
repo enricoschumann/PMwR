@@ -76,7 +76,7 @@ pricetable.zoo <- function(price, ..., instrument) {
 }
 
 `[.pricetable`  <- function(p, i, j, start, end, missing = NA,...,
-                            drop = FALSE) {
+                            drop = FALSE, as.matrix = TRUE) {
 
     ## pt[when, instrument]
     ##
@@ -140,8 +140,14 @@ pricetable.zoo <- function(price, ..., instrument) {
     } else if (!is.na(missing) && (missing == "locf" || missing == "previous")) {
         ans <- zoo::na.locf(ans, na.rm = FALSE)
     }
-    class(ans) <- "pricetable"
-
+    if (!as.matrix)
+        class(ans) <- "pricetable"
+    else {
+        rownames(ans) <- as.character(attr(ans, "timestamp"))
+        colnames(ans) <- as.character(attr(ans, "instrument"))
+        attr(ans, "timestamp") <- NULL
+        attr(ans, "instrument") <- NULL
+    }
     ans
 }
 

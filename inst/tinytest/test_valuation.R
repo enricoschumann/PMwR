@@ -1,6 +1,6 @@
 pos <- position(c(A = 10, B = 5))
 expect_equivalent(
-    c(valuation(pos, price.table = t(c(2, 1)))), c(20, 5))
+    c(valuation(pos, vprice = t(c(2, 1)))), c(20, 5))
 
 
 
@@ -8,52 +8,52 @@ expect_equivalent(
 ## SINGLE timestamp
 ## -------------------------------------
 
-## named position, named price.table
+## named position, named vprice
 pos <- position(c(A = 10, B = 5))
 v <- valuation(pos,
-               price.table = c(B = 1, A = 5), use.names = TRUE)
+               vprice = c(B = 1, A = 5), use.names = TRUE)
 A <- array(c(50, 5), dim = c(1, 2))
 expect_equivalent(unclass(v), A)
 
-## named position, named price.table, without use.names
+## named position, named vprice, without use.names
 pos <- position(c(A = 10, B = 5))
 v <- valuation(pos,
-               price.table = c(B = 1, A = 5), use.names = FALSE)
+               vprice = c(B = 1, A = 5), use.names = FALSE)
 A <- array(c(50, 5), dim = c(1, 2))
 expect_equivalent(c(unclass(v)), c(unclass(pos)) * c(1, 5))
 
-## named position, named price.table
+## named position, named vprice
 pos <- position(c(A = 10, B = 5))
 v <- valuation(pos,
-               price.table = c(D = 99, B = 1, A = 5),  ## irrelevant price D
-               use.names = TRUE) 
+               vprice = c(D = 99, B = 1, A = 5),  ## irrelevant price D
+               use.names = TRUE)
 A <- array(c(50, 5), dim = c(1, 2))
 expect_equivalent(unclass(v), A)
 
-## named position, named price.table
+## named position, named vprice
 pos <- position(c(A = 10, B = 5))
 v <- valuation(pos,
-               price.table = c(D = 99, B = 1),  ## no price for A
+               vprice = c(D = 99, B = 1),  ## no price for A
                do.warn = FALSE,
-               use.names = TRUE) 
+               use.names = TRUE)
 A <- array(c(NA, 5), dim = c(1, 2))
 expect_equivalent(unclass(v), A)
 
-## named position, named price.table
+## named position, named vprice
 pos <- position(c(A = 10, B = 5))
 v <- valuation(pos,
-               price.table = c(B = 1),  ## no price for A
+               vprice = c(B = 1),  ## no price for A
                do.warn = FALSE,
-               use.names = TRUE) 
+               use.names = TRUE)
 A <- array(c(NA, 5), dim = c(1, 2))
 expect_equivalent(unclass(v), A)
 
 ##
 pos <- position(c(A = 10, B = 5, X = 5)) ## position in 'X' without price
 v <- valuation(pos,
-               price.table = c(D = 99, B = 1, A = 5),  ## irrelevant price D
+               vprice = c(D = 99, B = 1, A = 5),  ## irrelevant price D
                do.warn = FALSE,
-               use.names = TRUE) 
+               use.names = TRUE)
 A <- array(c(50, 5, NA), dim = c(1, 3))
 expect_equivalent(unclass(v), A)
 
@@ -70,10 +70,10 @@ class(pos) <- "position"
 
 P <- cbind(1:3, 1:3)
 
-v <- valuation(pos, price.table = P)
+v <- valuation(pos, vprice = P)
 expect_equivalent(v, A*P)
 
-v <- valuation(pos, price.table = P, do.sum = TRUE)
+v <- valuation(pos, vprice = P, do.sum = TRUE)
 expect_equivalent(c(v), rowSums(A*P))
 
 
@@ -88,10 +88,10 @@ class(pos) <- "position"
 
 P <- cbind(2*1:3, 1:3)
 colnames(P) <- c("B", "A")
-v <- valuation(pos, price.table = P, use.names = FALSE)
+v <- valuation(pos, vprice = P, use.names = FALSE)
 expect_equivalent(A * P, v)
 
-v <- valuation(pos, price.table = P, use.names = TRUE)
+v <- valuation(pos, vprice = P, use.names = TRUE)
 expect_equivalent(A * P[, c("A", "B")], v)
 
 
@@ -106,8 +106,8 @@ class(pos) <- "position"
 
 P <- cbind(2*1:3, 1:3)
 colnames(P) <- c("B", "A")
-v <- valuation(pos, price.table = P, use.names = FALSE)
+v <- valuation(pos, vprice = P, use.names = FALSE)
 expect_equivalent(A * P, v)
 
-v <- valuation(pos, price.table = P, use.names = TRUE)
+v <- valuation(pos, vprice = P, use.names = TRUE)
 expect_equivalent(A * P[, c("A", "B")], v)

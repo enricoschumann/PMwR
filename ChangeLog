@@ -1,8 +1,23 @@
+2020-08-22  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/valuation.R (valuation): rename argument
+
+            price.table      =>  vprice
+
+        * R/pricetable.R (`[.pricetable`): subsetting a
+        pricetable gains a new argument 'as.matrix', with
+        default TRUE.
+
+        * R/pl.R (pl.default): check if custom
+        valuation dates passed via 'along.timestamp'
+        are in ascending order (and sort them if they
+        are not)
+
 2020-08-12  Enrico Schumann  <es@enricoschumann.net>
 
         * R/journal.R (journal.default): do not recycle
-        journal inputs (i.e. use rep) when they already
-        are of appropriate length
+        journal inputs (i.e. do not use 'rep') when
+        they already are of appropriate length
 
 2020-08-09  Enrico Schumann  <es@enricoschumann.net>
 
@@ -14,7 +29,7 @@
 
         * R/valuation.R (valuation.position): add
         argument 'use.names'. If TRUE, the (column)
-        names of price.table are matched against
+        names of 'price.table' are matched against
         'instrument'.
 
 2020-05-17  Enrico Schumann  <es@enricoschumann.net>

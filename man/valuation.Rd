@@ -20,7 +20,7 @@ valuation(x, ...)
           instrument = function(x, \dots) "cash",
           flip.sign = TRUE, \dots)
 
-\method{valuation}{position}(x, price.table, multiplier = 1,
+\method{valuation}{position}(x, vprice, multiplier = 1,
           do.sum = FALSE,
           price.unit,
           use.names = FALSE,
@@ -28,16 +28,16 @@ valuation(x, ...)
 
 }
 \arguments{
-  \item{x}{%
-    an object
-  }
-  \item{multiplier}{
-    a numeric vector, typically with named elements
-}
-  \item{cashflow}{
-    either a numeric vector or a function that takes on argument (a
-    journal) and transforms it into a numeric vector
-}
+
+  \item{x}{an object}
+  
+  \item{multiplier}{a numeric vector, typically with
+    named elements}
+  
+  \item{cashflow}{either a numeric vector or a function
+    that takes on argument (a journal) and transforms
+    it into a numeric vector}
+  
   \item{instrument}{
     either a character vector or a function that takes on argument (a
     journal) and transforms it into a character vector
@@ -46,11 +46,15 @@ valuation(x, ...)
     logical.  If \code{TRUE} (the default), a positive amount gets
     mapped into a negative cashflow.
 }
-\item{price.table}{%
-  numeric: a matrix whose elements correspond to those in \code{x}.
-  If only a single timestamp is used and the position is named,
-  this may also be a named numeric vector; see Examples.
-}
+
+\item{vprice}{numeric: a matrix whose elements
+  correspond to those in \code{x}.  If only a single
+  timestamp is used and the position is named, this may
+  also be a named numeric vector; see Examples.  The
+  argument behaves like \code{vprice} in
+  \code{\link{pl}}; but for valuation those prices need
+  not be sorted in time.}
+
   \item{do.sum}{
     logical: sum over positions
   }
@@ -130,15 +134,15 @@ pos <- position(c(AMZN = -10, MSFT = 200))
 P <- array(c(2200, 170), dim = c(1, 2))
 colnames(P) <- instrument(pos)
 
-valuation(pos, price.table = P)
+valuation(pos, vprice = P)
 ##        AMZN  MSFT
 ## [1,] -22000 34000
 
 ### contructing a price table, alternative:
 ### a named vector
 ### ==> only works when there is only a single timestamp
-valuation(pos, price.table = c(MSFT = 170, AMZN = 2200))
+valuation(pos, vprice = c(MSFT = 170, AMZN = 2200))
 
-all.equal(valuation(pos, price.table = P),
-          valuation(pos, price.table = c(MSFT = 170, AMZN = 2200)))
+all.equal(valuation(pos, vprice = P),
+          valuation(pos, vprice = c(MSFT = 170, AMZN = 2200)))
 }
