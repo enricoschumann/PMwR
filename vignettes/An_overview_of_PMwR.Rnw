@@ -63,19 +63,13 @@ over many years and is in need of being groomed for
 general use.%
 \footnote{
 <<echo=false,results=hide>>=
-test.rep <- readLines(system.file("unitTests/test_results.txt",
-                                  package = "PMwR"))
-nt <- gsub(".*\\(([0-9]+) checks?\\).*", "\\1",
-           test.rep[grep("\\(\\d+ checks?\\)", test.rep)])
-
 if (requireNamespace("tinytest")) {
     tinytest.results <- try(suppressMessages(
         suppressWarnings(tinytest::test_package("PMwR"))))
     if (inherits(tinytest.results, "try-error"))
         nt <- "several hundred"
     else
-        nt <- nrow(as.data.frame(tinytest.results)) +
-            sum(as.numeric(nt))
+        nt <- nrow(as.data.frame(tinytest.results))
 } else
     nt <- "several hundred"
 @
