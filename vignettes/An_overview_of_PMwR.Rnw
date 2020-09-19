@@ -120,7 +120,6 @@ utils::bug.report("[PMwR] Unexpected behaviour in function <XXX>",
                   maintainer("PMwR"), package = "PMwR")
 @
 
-
 \section*{What the package provides}
 
 There are three main topics for which the package
@@ -144,7 +143,6 @@ functions. All details are in the manual:
 \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
 \end{center}
 
-<<<<<<< HEAD
 \noindent I am grateful for comments, suggestions and
 corrections.  Please send bug reports directly to the
 package maintainer, for instance by using
@@ -153,24 +151,52 @@ package maintainer, for instance by using
 utils::bug.report("[PMwR] Unexpected behaviour in function <XXX>",
                   maintainer("PMwR"), package = "PMwR")
 @
-=======
 
 \section*{Examples}
-
+<<echo=false,results=hide>>=
+library("PMwR")
+@ 
 \subsection*{Keeping track of transactions}
 
-Suppose you have traded financial futures.
-FGBL, FESX
+List of transactions can be handled as so-called journals.
 
-summary(J)
+Let us invent a small trading history.
 
-position(J, when)
+<<journal>>=
+J <- read.table(text = "
+instrument ,  timestamp , amount ,  price
+      MSFT , 2020-05-04 ,     10 ,  178.0
+      MSFT , 2020-05-04 ,    -10 ,  178.5
+      MSFT , 2020-05-05 ,     20 ,  180.7
+      AMZN , 2020-05-06 ,      5 , 2315.0",
+header = TRUE, sep = ",", strip.white = TRUE)
+J$timestamp <- as.Date(J$timestamp)
+J <- as.journal(J)
+J
+@ 
 
-\subsection*{Computing P\&L and Returns}
+A \texttt{summary} method provides some stats.
+<<summary-journal>>=
+summary(J, by.instrument = TRUE, by.timestamp = TRUE)
+@ 
+
+The function \texttt{positions} aggregates the trades to a position.
+<<position>>=
+position(J)
+@ 
+We may as well specifiy one or more timestamps
+<<position-when>>=
+position(J, when = as.Date("2020-05-04") + 0:2)
+@ 
+
+
+\subsection*{Computing P\&L and Returns, and valuing open positions}
 
 We continue the previous example.
-
+<<pl>>=
 pl(J)
+@ 
+
 
 pl(along.timestamp, vprice)
 
@@ -192,7 +218,6 @@ signal <- function(k) {
 btest(P, signal, k = 5,
       b = 5)
 @ 
->>>>>>> Add outline of expanded vignette
 
 single instrument: moving average
 
