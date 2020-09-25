@@ -1,4 +1,4 @@
-v0.15-0  (2020-08-??; not yet released)
+v0.15-0  (2020-10-??; not yet released)
 
   o 'valuation': argument 'price.table' has been renamed:
 
@@ -22,8 +22,10 @@ v0.15-0  (2020-08-??; not yet released)
     this argument to FALSE, i.e. say
 
         p[<....>, <....>, as.matrix = FALSE]
-  
+
   o the PMwR package now explicitly depends on R version >= 3.2
+
+  o new function 'is_valid_SEDOL'
 
   o 'pl': it is now checked that custom valuation dates
     passed via 'along.timestamp' are in ascending order

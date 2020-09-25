@@ -1,31 +1,44 @@
 \name{is_valid_ISIN}
 \alias{is_valid_ISIN}
+\alias{is_valid_SEDOL}
 \title{
-  Validate International Securities Identification Numbers (ISINs)
+  Validate Security Identification Numbers
 }
 \description{
   Check whether a given ISIN is valid.
 }
 \usage{
 is_valid_ISIN(isin)
+is_valid_SEDOL(SEDOL, NA.FALSE = FALSE)
 }
 \arguments{
   \item{isin}{
     a character vector
   }
+  \item{SEDOL}{
+    a character vector
+  }
+  \item{NA.FALSE}{
+    logical
+  }
 }
-\details{  
+\details{
 
-  Checks a character vector of \acronym{ISIN}s. The function returns
-  \code{TRUE} if the \acronym{ISIN} is valid; else \code{FALSE}.
+  Checks a character vector of \acronym{ISIN}s and \acronym{SEDOL}s. The
+  function returns \code{TRUE} if the \acronym{ISIN} is valid; else
+  \code{FALSE}.
 
-  The test procedure in \acronym{ISO} 6166 does not differentiate
-  between cases.  Thus, \acronym{ISIN}s are transformed to uppercase
-  before being tested.
-  
+  International Securities Identification Numbers (ISINs): The test
+  procedure in \acronym{ISO} 6166 does not differentiate between cases.
+  Thus, \acronym{ISIN}s are transformed to uppercase before being
+  tested.
+
 }
 \value{
-  a logical vector
+
+  A named logical vector. For \code{is_valid_SEDOL}, a character vector
+  is attached as an attribute \code{note}.
+
 }
 \references{
   \url{http://en.wikipedia.org/wiki/ISO_6166}
@@ -42,4 +55,15 @@ is_valid_ISIN(isin)
 
 is_valid_ISIN(c("US0378331005",
                 "us0378331005")) ## case is ignored
+
+
+SEDOL <- c("0263494", "B1F3M59", "0263491", "A", NA)
+is_valid_SEDOL(SEDOL)
+## 0263494 B1F3M59 0263491       A    <NA>
+##    TRUE    TRUE   FALSE   FALSE      NA
+
+is_valid_SEDOL(SEDOL, NA.FALSE = TRUE)
+## 0263494 B1F3M59 0263491       A    <NA>
+##    TRUE    TRUE   FALSE   FALSE   FALSE
+
 }

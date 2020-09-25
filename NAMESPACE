@@ -48,6 +48,7 @@ export(
     instrument,
     is.journal,
     is_valid_ISIN,
+    is_valid_SEDOL,
     journal,
     limit,
     pl,
