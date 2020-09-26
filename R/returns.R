@@ -754,7 +754,8 @@ returns_rebalance <- function(prices, weights,
     ans
 }
 
-rc <- function(R, weights, timestamp, segments = NULL) {
+rc <- function(R, weights, timestamp, segments = NULL,
+               method = "feibel") {
     if (missing(weights))
         weights <- 1
     if (is.null(segments)) {
@@ -775,14 +776,22 @@ rc <- function(R, weights, timestamp, segments = NULL) {
                      cbind(weights*R, rowSums(weights*R)),
                      stringsAsFactors = FALSE)
     names(df) <- c("timestamp", segments, "total")
+    if (method == "feibel") {
+        later_r <- c(rev(cumprod(1 + rev(df[["total"]])))[-1], 1)
 
-    later_r <- c(rev(cumprod(1 + rev(df[["total"]])))[-1], 1)
-
-    total <- rep(NA_real_, ns + 1)
-    names(total) <- c(segments, "total")
-    for (i in seq_len(ns))
-        total[[i]] <- sum(df[[i + 1]] * later_r)
-    total[[ns + 1]] <- cumprod(df[["total"]] + 1)[[nt]] - 1
+        total <- rep(NA_real_, ns + 1)
+        names(total) <- c(segments, "total")
+        for (i in seq_len(ns))
+            total[[i]] <- sum(df[[i + 1]] * later_r)
+        total[[ns + 1]] <- cumprod(df[["total"]] + 1)[[nt]] - 1
+    } else if (method == "logarithmic") {
+        kt <- log(df[["total"]] + 1) / df[["total"]]
+        k <- prod(df[["total"]] + 1)
+        k <- log(k) / (k-1)
+        adj_ct <- df[, -c(1, ncol(df))]*kt
+        total <- colSums(adj_ct)/k
+        total <- c(total, total = sum(total))
+    }
     list(period_contributions = df,
          total_contributions = total)
 }
