@@ -1,3 +1,7 @@
+2020-10-01  Enrico Schumann  <es@enricoschumann.net>
+
+	* inst/tinytest/test_is_valid_SEDOL.R: add tests
+
 2020-09-25  Enrico Schumann  <es@enricoschumann.net>
 
 	* R/is_valid_ISIN.R (is_valid_SEDOL): add function

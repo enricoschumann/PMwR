@@ -9,4 +9,3 @@ expect_equal(unname(is_valid_ISIN(isin)),
 expect_equal(unname(is_valid_ISIN(c("US0378331005",
                                     "us0378331005"))),
              c(TRUE, TRUE))
-
