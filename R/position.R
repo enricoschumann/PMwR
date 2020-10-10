@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-19  Enrico Schumann
+## Copyright (C) 2008-20  Enrico Schumann
 
 position <- function(amount, ...)
     UseMethod("position")
@@ -83,7 +83,16 @@ position.default <- function(amount, timestamp, instrument,
                 when <- max(timestamp)
             else if (when[[1L]] == "all")
                 when <- unique(timestamp)
-            else if (when[[1L]] == "endofmonth" ||
+            else if (when[[1L]] == "endofyear" ||
+                     when[[1L]] == "lastofyear") {
+                ## TODO preferable?
+                ## when <- last(timestamp,
+                ##              format(as.Date(timestamp), "%Y"))
+                timestamp <- as.Date(timestamp)
+                when <- end_of_year(seq(min(timestamp),
+                                        max(timestamp),
+                                        by = "1 year"))
+            } else if (when[[1L]] == "endofmonth" ||
                      when[[1L]] == "lastofmonth") {
                 ## TODO preferable?
                 ## when <- last(timestamp,
@@ -270,7 +279,7 @@ as.data.frame.position <- function(x, ...) {
         timestamp <- make.unique(as.character(attr(x, "timestamp")))
         row.names(ans) <- timestamp
     }
-    names(ans) <- attr(x, "instrument")
+    names(ans) <- colnames(x)
     ans
 }
 

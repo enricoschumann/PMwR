@@ -84,9 +84,9 @@ position(amount, \dots)
   keywords: \code{last} (or \code{newest} or \code{latest}) provides the
   position at the latest timestamp; \code{first} (or \code{oldest})
   provides the position at the earliest timestamp; \code{all} provides
-  the positions at all timestamps in the journal. \code{endofday}
-  and \code{endofmonth}
-  provide positions at the end of all calendar days and months within the
+  the positions at all timestamps in the journal. \code{endofday},
+  \code{endofmonth} and \code{endofyear}
+  provide positions at the end of all calendar days, months and years within the
   timestamp range of the journal. The latter keywords can only work if
   \code{timestamp} can be coerced to \code{\link{Date}}.
     
