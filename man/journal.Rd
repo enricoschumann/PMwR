@@ -45,6 +45,9 @@ is.journal(x)
 
 \method{sort}{journal}(x, decreasing = FALSE, by = "timestamp", \dots, na.last = TRUE)
 
+\method{summary}{journal}(object, by = "instrument", drop.zero = TRUE,
+      na.rm = FALSE, \dots)
+
 \method{subset}{journal}(x, \dots)
 
 \method{[}{journal}(x, i, match.against = NULL,
@@ -99,6 +102,12 @@ is.journal(x)
     \code{is.journal})
 
   }
+
+  \item{object}{
+
+      a \code{journal}
+  }
+
   \item{width}{
     integer. See \code{\link{options}}.
   }
@@ -107,7 +116,14 @@ is.journal(x)
   }
   \item{by}{
     \code{sort}: sort by field. \code{head}/\code{tail}: by instrument.
+    \code{summary}: a vector of keywords (or \code{NULL}); supported are
+    \code{"instrument"}, \code{"year"} and \code{"month"}.
   }
+
+  \item{na.rm}{logical}
+
+  \item{drop.zero}{logical}
+
   \item{na.last}{
     arguments passed to sort
   }
