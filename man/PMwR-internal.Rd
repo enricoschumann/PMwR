@@ -24,8 +24,8 @@
 }
 \references{
 
-  E. Schumann (2019) \emph{Portfolio Management with \R}.
-  \url{http://enricoschumann.net/PMwR}
+  E. Schumann (2020) \emph{Portfolio Management with \R}.
+  \url{http://enricoschumann.net/PMwR/}
 }
 \author{
   Enrico Schumann

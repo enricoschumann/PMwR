@@ -278,6 +278,19 @@ summary.journal <- function(object,
                             na.rm = FALSE,
                             ...) {
 
+    if (length(object) == 0L) {
+        ans <- structure(list(n = numeric(0),
+                              average_buy = numeric(0),
+                              average_sell = numeric(0),
+                              turnover = numeric(0),
+                              first_t = numeric(0),
+                              last_t = numeric(0)),
+                         class = "data.frame",
+                         row.names = integer(0))
+        class(ans) <- c("summary.journal", "data.frame")
+        return(ans)
+    }
+
     no_instrument <- FALSE
     if (all(is.na(instrument(object)))) {
         object$instrument <- rep("___", length(object))
@@ -559,11 +572,19 @@ split.journal <- function(x, f, drop = FALSE, ...) {
            function(ind) x[ind])
 }
 
-head.journal <- function(x, n = 6L, ..., by = TRUE) {
+
+
+## ================= [ head, tail ] =================
+
+head.journal <- function(x, n = 6L, ..., by = "instrument") {
+    if (is.null(by))
+        by <- FALSE
+    if (isTRUE(by))
+        by <- "instrument"
     if ((lenx <- length(x)) <= 1L)
         return(x)
     x <- sort(x)
-    if (by) {
+    if (by == "instrument") {
         insts <- sort(unique(x$instrument))
         ans <- journal()
         for (i in insts) {
@@ -578,11 +599,15 @@ head.journal <- function(x, n = 6L, ..., by = TRUE) {
     }
 }
 
-tail.journal <- function(x, n = 6L, ..., by = TRUE) {
+tail.journal <- function(x, n = 6L, ..., by = "instrument") {
+    if (is.null(by))
+        by <- FALSE
+    if (isTRUE(by))
+        by <- "instrument"
     if ((lenx <- length(x)) <= 1L)
         return(x)
     x <- sort(x, decreasing = TRUE)
-    if (by) {
+    if (by == "instrument") {
         insts <- sort(unique(x$instrument))
         ans <- journal()
         for (i in insts) {
@@ -596,18 +621,6 @@ tail.journal <- function(x, n = 6L, ..., by = TRUE) {
         x[(lenx - min(n, lenx) + 1L):lenx]
     }
 }
-
-cashflows <- function(x, multiplier = 1, ...) {
-
-    if (!is.null(names(multiplier)))
-        multiplier <- multiplier[x$instrument]
-    ans <- x
-    ans$instrument <- "cash"
-    ans$amount <- -x$amount * x$price * multiplier
-    ans$price <- 1
-    ans
-}
-
 
 
 
@@ -765,4 +778,16 @@ all.equal.journal <- function(target, current,
     else
         msg
 
+}
+
+
+cashflows <- function(x, multiplier = 1, ...) {
+
+    if (!is.null(names(multiplier)))
+        multiplier <- multiplier[x$instrument]
+    ans <- x
+    ans$instrument <- "cash"
+    ans$amount <- -x$amount * x$price * multiplier
+    ans$price <- 1
+    ans
 }

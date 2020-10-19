@@ -41,7 +41,7 @@ is_valid_SEDOL(SEDOL, NA.FALSE = FALSE)
 
 }
 \references{
-  \url{http://en.wikipedia.org/wiki/ISO_6166}
+  \url{https://en.wikipedia.org/wiki/ISO_6166}
 
   \url{https://www.anna-web.org/standards/isin-iso-6166/}
 }

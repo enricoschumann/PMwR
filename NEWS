@@ -1,4 +1,4 @@
-v0.15-0  (2020-10-19; not yet released)
+v0.15-0  (2020-10-19)
 
   o 'valuation': argument 'price.table' has been renamed:
 
@@ -23,9 +23,6 @@ v0.15-0  (2020-10-19; not yet released)
 
         p[<....>, <....>, as.matrix = FALSE]
 
-  o the summary method for journals is now properly
-    documented
-
   o the PMwR package now explicitly depends on R version >= 3.2
 
   o new function 'is_valid_SEDOL'
@@ -36,8 +33,13 @@ v0.15-0  (2020-10-19; not yet released)
 
   o 'rebalance' now warns about NAs in the 'price' input
 
-  o various minor bug fixes and documentation
-    updates.  See the ChangeLog for all details.
+  o the summary method for journals is now properly
+    documented
+
+  o various minor bug fixes and documentation updates.
+    See the ChangeLog for all details. The manual at
+    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    has also been updated.
 
 v0.14-0  (2020-03-11)
 

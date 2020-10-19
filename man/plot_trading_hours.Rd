@@ -102,8 +102,8 @@ plot_trading_hours(x, t = NULL, interval = "5 min",
   B.D. Ripley and K. Hornik. \emph{Date-Time Classes}. R-News,
   \strong{1}(2):8--12, 2001.
 
-  E. Schumann (2019) \emph{Portfolio Management with \R}.
-  \url{http://enricoschumann.net/PMwR}
+  E. Schumann (2020) \emph{Portfolio Management with \R}.
+  \url{http://enricoschumann.net/PMwR/}
 
 }
 \author{

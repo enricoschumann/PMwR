@@ -382,7 +382,7 @@ btest(prices, signal,
   in particular the chapter on backtesting:
   \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#backtesting}
 
-  Schumann, E. (2018) \emph{Backtesting}. \url{https://ssrn.com/abstract=3374195}
+  Schumann, E. (2018) \emph{Backtesting}. \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3374195}
 
 }
 \author{

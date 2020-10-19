@@ -59,9 +59,9 @@ is.journal(x)
 
 \method{as.data.frame}{journal}(x, row.names = NULL, optional = FALSE, \dots)
 
-\method{head}{journal}(x, n = 6L, \dots, by = TRUE)
+\method{head}{journal}(x, n = 6L, \dots, by = "instrument")
 
-\method{tail}{journal}(x, n = 6L, \dots, by = TRUE)
+\method{tail}{journal}(x, n = 6L, \dots, by = "instrument")
 
 }
 \arguments{
@@ -115,7 +115,8 @@ is.journal(x)
     passed to \code{\link{sort}}
   }
   \item{by}{
-    \code{sort}: sort by field. \code{head}/\code{tail}: by instrument.
+    \code{sort}: sort by field. \code{head}/\code{tail}: by field
+    (default is instrument).
     \code{summary}: a vector of keywords (or \code{NULL}); supported are
     \code{"instrument"}, \code{"year"} and \code{"month"}.
   }
