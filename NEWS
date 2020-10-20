@@ -1,3 +1,10 @@
+v0.16-0  (????-??-??; not yet released)
+
+  o div_adjust: fix handling of dividends that occur on
+    the first timestep
+
+  o ....
+  
 v0.15-0  (2020-10-19)
 
   o 'valuation': argument 'price.table' has been renamed:

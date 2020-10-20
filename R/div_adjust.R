@@ -15,12 +15,6 @@ div_adjust <- function(x, t, div,
 
     if (length(div) == 1L && length(t) > 1L)
         div <- rep(div, length(t))
-
-    div <- div[valid.t]
-    t <- t[valid.t]
-
-    if (length(t) > 1L && length(div) == 1L)
-        div <- rep(div, length(t))
     else if (length(div) != length(t))
         stop("different lengths for ",
              sQuote("div"), " and ", sQuote("t"))

@@ -1,3 +1,11 @@
+2020-10-20  Enrico Schumann  <es@enricoschumann.net>
+
+	* DESCRIPTION (Version): 0.15-1
+
+	* R/div_adjust.R (div_adjust): fix handling of
+	dividends that include first observation as
+	timestamp
+
 2020-10-19  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.15-0

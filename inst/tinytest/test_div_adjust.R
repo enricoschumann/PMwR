@@ -82,3 +82,13 @@ expect_equivalent(
 expect_equivalent(
     div_adjust(x, t, div, backward = FALSE),
     scale1(cumprod(R+1), level = x[1], when = 1))
+
+
+
+## cashflows
+cf <- c(100, 100, -200)
+t <- c(1, 4, 5)
+x <- c(100, 101, 104, 203, 4)
+ans <- div_adjust(x, t, div = -cf, backward = FALSE)
+expect_equivalent(ans,
+                  100*cumprod(c(1, (x[-1] + c(0,0,-100,+200)) / x[-length(x)])))
