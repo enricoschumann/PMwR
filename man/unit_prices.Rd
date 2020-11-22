@@ -7,9 +7,10 @@
   Compute prices for a portfolio based on outstanding shares.
 }
 \usage{
-unit_prices(NAV, cashflows,
-            initial.price = 100, initial.shares = 0,
-            cf.included = FALSE)
+unit_prices(NAV,
+            cashflows,
+            initial.price, initial.shares = 0,
+            cf.included = TRUE)
 }
 \arguments{
   \item{NAV}{
@@ -31,6 +32,9 @@ unit_prices(NAV, cashflows,
 }
 \details{
 
+  \strong{This function is experimental, and its interface
+  is not stable.}
+
   The function may be used to compute the returns for a
   portfolio with external cashflows, i.e. what is
   usually called time-weighted returns.
@@ -51,15 +55,15 @@ unit_prices(NAV, cashflows,
   \item{timestamp}{}
   \item{NAV}{total NAV}
   \item{price}{NAV per share}
-  \item{shares}{outstanding shares before cashflows, used for valuation}
-  \item{cashflow}{external cashflows}
-  \item{new_shares}{shares add/subtracted}
-  \item{total_shares}{total outstanding shares after cashflows}
-  \item{NAV_after_cf}{total NAV after cashflows}
+  \item{units}{outstanding units (i.e. shares) after cashflows}
+
+  Attached as an attribute is a \code{\link{data.frame}}
+  \code{transactions}.
+
 }
 \references{
 
-  Schumann, E. (2018) \emph{Portfolio Management with
+  Schumann, E. (2020) \emph{Portfolio Management with
     \R}. \url{http://enricoschumann.net/PMwR/}
 
 }
@@ -73,12 +77,11 @@ unit_prices(NAV, cashflows,
 NAV <- data.frame(timestamp = seq(as.Date("2017-1-1"),
                                   as.Date("2017-1-10"),
                                   by = "1 day"),
-                  NAV = c(0,101:104,205:209))
+                  NAV = c(100,101:104,205:209))
 
 cf <- data.frame(timestamp = c(as.Date("2017-1-1"),
-                               as.Date("2017-1-5")),
+                               as.Date("2017-1-6")),
                  cashflow = c(100, 100))
 
-unit_prices(NAV, cf)
-
+unit_prices(NAV, cf, cf.included = TRUE)
 }

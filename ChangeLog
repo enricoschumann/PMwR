@@ -1,10 +1,27 @@
+2020-11-22  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/unit_prices.R (unit_prices): the function
+	now supports cashflows for different
+	ids/accounts, even on the same timestamp. Fewer
+	columns are now returned, with an attribute
+	'transactions' attached: a data.frame of the
+	transactions, for each id/account.
+
+        The old function definition can still be accessed
+	with
+	    PMwR:::.unit_prices>
+	but this will be removed in a future version.
+
+	Argument cf.included it not (yet) supported
+	right now.
+
 2020-10-20  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.15-1
+        * DESCRIPTION (Version): 0.15-1
 
-	* R/div_adjust.R (div_adjust): fix handling of
-	dividends that include first observation as
-	timestamp
+        * R/div_adjust.R (div_adjust): fix handling of
+        dividends that include first observation as
+        timestamp
 
 2020-10-19  Enrico Schumann  <es@enricoschumann.net>
 
