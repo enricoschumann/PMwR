@@ -2,7 +2,7 @@ Package: PMwR
 Type: Package
 Title: Portfolio Management with R
 Version: 0.16-0
-Date: 2020-12-02
+Date: 2020-12-27
 Maintainer: Enrico Schumann <es@enricoschumann.net>
 Authors@R: person(given = "Enrico", family = "Schumann",
                   role  = c("aut", "cre"),
@@ -16,7 +16,7 @@ Description: Functions and examples for 'Portfolio
 Imports: NMOF, datetimeutils, fastmatch,
          orgutils, parallel, textutils, utils, zoo
 Suggests: crayon, rbenchmark, tinytest
-Depends: R (>= 3.20)
+Depends: R (>= 3.2)
 License: GPL-3
 LazyLoad: yes
 LazyData: yes
