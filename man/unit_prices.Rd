@@ -74,13 +74,13 @@ unit_prices(NAV,
   \code{\link{returns}}, \code{\link{pl}}
 }
 \examples{
-NAV <- data.frame(timestamp = seq(as.Date("2017-1-1"),
-                                  as.Date("2017-1-10"),
+NAV <- data.frame(timestamp = seq(as.Date("2017-01-01"),
+                                  as.Date("2017-01-10"),
                                   by = "1 day"),
-                  NAV = c(100,101:104,205:209))
+                  NAV = c(100:104, 205:209))
 
-cf <- data.frame(timestamp = c(as.Date("2017-1-1"),
-                               as.Date("2017-1-6")),
+cf <- data.frame(timestamp = c(as.Date("2017-01-01"),
+                               as.Date("2017-01-06")),
                  cashflow = c(100, 100))
 
 unit_prices(NAV, cf, cf.included = TRUE)
@@ -96,6 +96,20 @@ unit_prices(NAV, cf, cf.included = TRUE)
 ## 9  2017-01-09 208 106.5366 1.952381
 ## 10 2017-01-10 209 107.0488 1.952381
 
-PMwR:::.unit_prices(NAV, cf, cf.included = TRUE)
+\donttest{
+  ## behaviour prior to version 0.16-0:
+  PMwR:::.unit_prices(NAV, cf, cf.included = TRUE)
+  up <- unit_prices(NAV, cf, cf.included = TRUE)
 
+  old.cf <- rep(0, nrow(up))
+  old.cf[up$timestamp \%in\% cf$timestamp] <- cf$cashflow
+  old_up <- data.frame(timestamp = up$timestamp,
+                       NAV = up$NAV,
+                       price = up$price,
+                       shares = up$units - diff(c(0, up$units)),
+                       cashflow = old.cf,
+                       new_shares = diff(c(0, up$units)),
+                       total_shares = up$units,
+                       NAV_after_cf = up$NAV)
+}
 }

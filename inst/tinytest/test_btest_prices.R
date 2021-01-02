@@ -11,7 +11,7 @@ expect_equal(
     btest(prices, signal = function() 1),
     btest(list(as.matrix(prices)), signal = function() 1))
 
-library("zoo")
+library("zoo", warn.conflicts = FALSE, quietly = TRUE)
 bt1 <- btest(prices, signal = function() 1)
 bt2 <- btest(zoo(prices), signal = function() 1)
 expect_equivalent(bt1$wealth, bt2$wealth)
