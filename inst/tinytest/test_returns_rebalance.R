@@ -14,8 +14,7 @@ weights <- c(0.8, 0.2)
 ans <- returns(prices, weights = weights,
                rebalance.when = 2)
 tmp <- returns(prices %*% (weights/prices[2, ]))
-tmp[1] <- 0
-expect_equivalent(ans, drop(tmp))
+expect_equivalent(ans, drop(tmp)[-1])
 
 weights <- c(0.8, 0.2)
 ans <- returns(prices,
@@ -71,6 +70,7 @@ expect_equal(
 
 
 ## ... with zoo
+library("zoo", warn.conflicts = FALSE, quietly = TRUE)
 expect_equal(returns(zoo(x,t))[,1],
              c(returns(zoo(x,t), weights = c(1,0))))
 expect_equal(returns(zoo(x,t))[,2],

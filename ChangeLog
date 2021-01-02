@@ -1,19 +1,31 @@
+2021-01-02  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/returns.R (returns_position): add internal
+        function for computing rebalanced returns, for
+        both fixed weights and fixed positions. No longer
+        use internal function 'returns_rebalance'.
+
+        * R/returns.R: remove 'twReturns'
+
+        * R/internal.R (.copy_fw, .copy_fw_matrix): add
+        internal functions
+
 2020-11-22  Enrico Schumann  <es@enricoschumann.net>
 
         * R/unit_prices.R (unit_prices): the function
-	now supports cashflows for different
-	ids/accounts, even on the same timestamp. Fewer
-	columns are now returned, with an attribute
-	'transactions' attached: a data.frame of the
-	transactions, for each id/account.
+        now supports cashflows for different
+        ids/accounts, even on the same timestamp. Fewer
+        columns are now returned, with an attribute
+        'transactions' attached: a data.frame of the
+        transactions, for each id/account.
 
         The old function definition can still be accessed
-	with
-	    PMwR:::.unit_prices>
-	but this will be removed in a future version.
+        with
+            PMwR:::.unit_prices>
+        but this will be removed in a future version.
 
-	Argument cf.included it not (yet) supported
-	right now.
+        Argument cf.included it not (yet) supported
+        right now.
 
 2020-10-20  Enrico Schumann  <es@enricoschumann.net>
 

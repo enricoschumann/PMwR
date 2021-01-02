@@ -11,12 +11,6 @@ returns.default <- function(x, t = NULL, period = NULL,
                             rebalance.when = NULL,
                             lag = 1, ...) {
 
-    if (!is.null(position)) {
-        position <- NULL
-        warning("time-weighted returns not supported (currently), ",
-                "so position is ignored")
-    }
-
     if (!is.null(period) && period == "total")
         period <- "itd"
 
@@ -39,14 +33,30 @@ returns.default <- function(x, t = NULL, period = NULL,
             warning("rebalance.when is specified, so period is ignored")
             period <- NULL
         }
+    } else if (is.logical(rebalance.when)) {
+        if (isTRUE(rebalance.when)) {
+            rebalance.when <- seq_len(nrow(x))
+        } else if (!all(rebalance.when)) {         ## only FALSE values
+            ## TODO add argument FALSE.NA == FALSE ?
+            ##      if TRUE, make NA?
+            ans <- rep.int(0, nrow(x))
+            if (!is.null(pad))
+                ans[1L] <- pad
+            else
+                ans <- ans[-1L]
+            return(ans)
+        } else
+            rebalance.when <- which(rebalance.when)
     }
+
     if (!is.null(t) &&
         inherits(rebalance.when, class(t))) {
+        ## TODO: support match_or_next/previous?
         ii <- match(rebalance.when, t)
         if (any(is.na(ii)))
             warning(sQuote("rebalance.when") ,
                     " does not match timestamp")
-        rebalance.when <- ii[!is.na(ii)]
+        rebalance.when <- ii[!is.na(ii)] ## TODO: really drop?
     }
 
     if (is.null(t) &&
@@ -59,8 +69,13 @@ returns.default <- function(x, t = NULL, period = NULL,
     if (is.null(period) && is.null(position) && is.null(weights)) {
         .returns(x, pad = pad, lag = lag)
     } else if (is.null(position) && !is.null(weights)) {
-        returns_rebalance(prices = x, weights = weights,
-                          when = rebalance.when, pad = pad)
+        if (lag != 1L)
+            warning(sQuote("lag"), " is ignored")
+        ## returns_rebalance(prices = x, weights = weights,
+        ##                   when = rebalance.when, pad = pad)
+        returns_position(prices = x, positions = weights,
+                         when = rebalance.when, pad = pad,
+                         weights = TRUE)
     } else if (!is.null(period)) {
         if (lag != 1L)
             warning(sQuote("lag"), " is ignored")
@@ -68,8 +83,9 @@ returns.default <- function(x, t = NULL, period = NULL,
     } else {
         if (lag != 1L)
             warning(sQuote("lag"), " is ignored")
-        warning("tw returns not supported any more")
-        twReturns(x, position, pad = pad)
+        returns_position(prices = x, positions = position,
+                         when = rebalance.when, pad = pad,
+                         weights = FALSE)
     }
 }
 
@@ -169,25 +185,7 @@ returns.data.frame <- function(x, t = NULL, period = NULL,
     rets
 }
 
-## not exported
-twReturns <- function(price, position, pad = NULL) {
-    do.pad <- !is.null(pad)
-    position <- as.matrix(position)
-    price <- as.matrix(price)
-    n <- dim(price)[1L]
-    ap <- position*price
-    rt <- returns(price)
 
-    M <- price * position
-    rsM <- rowSums(M)
-    weights <- (M/rsM)
-    weights[abs(rsM) < 1e-14] <- 0
-    weights <- weights[-n, , drop = FALSE]
-    rt <- rowSums(rt * weights)
-    if (do.pad)
-        rt <- c(pad, rt)
-    rt
-}
 
 ## not exported
 pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
@@ -689,13 +687,13 @@ returns_rebalance <- function(prices, weights,
     if (nc == 1L) {
         ## prices == single column.
         ## weights is made into a column vector,
-        ## irrespective of of shape (no dim, row,
+        ## irrespective of shape (no dim, row,
         ## or column)
         dim(weights) <- c(length(weights), 1L)
     } else {
         ## prices has more than one column.
         ## if weights has as many elements as assets (nc),
-        ## make it a row vector, irrespective of of shape
+        ## make it a row vector, irrespective of shape
         ## (no dim, row, or column)
         if (length(weights) == nc) {
             dim(weights) <- c(1L, nc)
@@ -818,3 +816,76 @@ as.matrix.p_returns <- function(x, ...) {
 
 as.data.frame.p_returns <- function(x, ...)
     as.data.frame(as.matrix(x))
+
+## not exported
+returns_position <- function(prices,
+                             positions,
+                             when = NULL,
+                             pad = NULL,
+                             weights = FALSE, ...) {
+
+    if (is.null(when))
+        when <- seq_len(nrow(prices))
+
+    if (anyDuplicated(when))
+        warning("duplicated values in ", sQuote("when"))
+
+    if (is.null(dim(prices)))
+        dim(prices) <- c(length(prices), 1L)
+
+    if (is.null(dim(positions))) {
+        ## TODO handle special cases: one price, vector
+        ##      of weights
+        if (ncol(prices) == 1L)
+            dim(positions) <- c(length(positions), 1L)
+        else
+            dim(positions) <- c(1L, length(positions))
+    }
+
+    if (length(when) > 1L && nrow(positions) == 1L) {
+        n <- length(when)
+        tmp <- rep(positions, each = n)
+        dim(tmp) <- c(n, ncol(positions))
+        positions <- tmp
+    }
+
+    if (nrow(positions) == nrow(prices))
+        positions <- positions[when, , drop = FALSE]
+
+    i <- match(nrow(prices), when, nomatch = 0L)
+    if (i > 0L) {
+        when <- when[-i]
+        positions <- positions[-i, ]
+    }
+    if (!length(when))
+        return(rep.int(0, nrow(prices)))
+
+    if (weights) {
+        cash <- 1 - rowSums(positions)
+        if (any(abs(cash) > sqrt(.Machine$double.eps))) {
+            prices <- cbind(prices, 1)
+            positions <- cbind(positions, cash)
+        }
+        positions <- positions/prices[when, ]
+    }
+
+    X <- array(NA, dim = dim(prices))
+    X[when, ] <- positions
+    X <- .copy_fw_matrix(X)
+    if (when[1L] > 1L)
+        X[seq_len(when[1L] - 1L), ] <- 0
+
+    contrib <- diff(prices)*X[-nrow(X), ]/rowSums(X*prices)[-nrow(X)]
+    if (!is.null(pad)) {
+        contrib <- rbind(pad, contrib)
+        contrib[seq_len(when[1L]), ] <- pad
+    } else {
+        if (when[1L] > 1L)
+            contrib <- contrib[-seq_len(when[1L]-1L), ]
+    }
+    ans <- unname(rowSums(contrib))
+    attr(ans, "holdings") <- X
+    attr(ans, "contributions") <- contrib
+    ans
+
+}

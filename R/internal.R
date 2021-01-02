@@ -204,3 +204,25 @@ debug_prices <- function(nobs, na, base = 100) {
 ## be used with older versions of R
 .isFALSE <- function(x)
     is.logical(x) && length(x) == 1L && !is.na(x) && !x
+
+
+.copy_fw <- function(x) {
+    f <- which(is.finite(x))
+    if (f[1L] != 1L)
+        f <- c(1L, f)
+    runs <- c(f, length(x) + 1L)
+    runs <- runs[-1L] - runs[-length(runs)]
+    rep.int(x[f], times = runs)
+}
+
+.copy_fw_matrix <- function(x) {
+    f <- which(is.finite(x[, 1L]))
+    if (f[1L] != 1L)
+        f <- c(1L, f)
+    runs <- c(f, nrow(x) + 1L)
+    runs <- runs[-1L] - runs[-length(runs)]
+    ans <- rep.int(c(x[f, ]),
+                   times = rep.int(runs, times = ncol(x)))
+    dim(ans) <- dim(x)
+    ans
+}

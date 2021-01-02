@@ -1,10 +1,14 @@
-v0.16-0  (????-??-??; not yet released)
+v0.16-0  (2021-??-??; not yet released)
+
+  o returns: computations for rebalanced portfolios are
+    more efficient, and the function now supports both
+    fixed weights and fixed positions 
+
+v0.15-1  (2020-10-20)
 
   o div_adjust: fix handling of dividends that occur on
     the first timestep
 
-  o ....
-  
 v0.15-0  (2020-10-19)
 
   o 'valuation': argument 'price.table' has been renamed:

@@ -287,4 +287,10 @@ R <- returns(prices, weights = c(0.5, 0.5), rebalance.when = 1)
 ## ... => resulting weights
 h <- attr(R, "holdings")
 h*prices / rowSums(h*prices)
+##             p1        p2
+## [1,] 0.5000000 0.5000000  ## <== only initial weights are .5/.5
+## [2,] 0.5024631 0.4975369
+## [3,] 0.5049020 0.4950980
+## [4,] 0.5073171 0.4926829
+## [5,] 0.5097087 0.4902913
 }
