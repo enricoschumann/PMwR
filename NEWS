@@ -2,7 +2,22 @@ v0.16-0  (2021-??-??; not yet released)
 
   o returns: computations for rebalanced portfolios are
     more efficient, and the function now supports both
-    fixed weights and fixed positions 
+    fixed weights and fixed positions.  When calling
+    returns with rebalance.when and weights/position,
+    the resulting attribute 'contributions' no longer
+    ignores 'pad'
+
+  o unit_prices: the function now supports cashflows
+    for different ids/accounts, even on the same
+    timestamp.  An attribute 'transactions' is
+    attached: a data.frame of the transactions, for
+    each id/account.  Redundant columns are no longer
+    returned, but they can easily be recovered (see
+    Examples for ?unit_prices).
+
+    Argument cf.included it not (yet) supported right now.
+
+  o ...
 
 v0.15-1  (2020-10-20)
 
