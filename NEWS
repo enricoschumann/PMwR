@@ -1,11 +1,11 @@
-v0.16-0  (2021-??-??; not yet released)
+v0.16-0  (2021-01-??; not yet released)
 
   o returns: computations for rebalanced portfolios are
-    more efficient, and the function now supports both
-    fixed weights and fixed positions.  When calling
-    returns with rebalance.when and weights/position,
-    the resulting attribute 'contributions' no longer
-    ignores 'pad'
+    more efficient, and function 'returns' now supports
+    both fixed weights and fixed positions.  When
+    calling 'returns' with 'rebalance.when' and
+    weights/position, the resulting 'contributions' no
+    longer ignore argument 'pad'.
 
   o unit_prices: the function now supports cashflows
     for different ids/accounts, even on the same
@@ -17,7 +17,15 @@ v0.16-0  (2021-??-??; not yet released)
 
     Argument cf.included it not (yet) supported right now.
 
+  o 'div_adjust' now supports several payments on the
+    same timestamp
+
   o ...
+
+  o various minor bug fixes and documentation updates.
+    See the ChangeLog for all details. The manual at
+    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    has also been updated.
 
 v0.15-1  (2020-10-20)
 

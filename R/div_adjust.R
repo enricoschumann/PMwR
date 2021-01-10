@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-20  Enrico Schumann
+## Copyright (C) 2008-21  Enrico Schumann
 
 div_adjust <- function(x, t, div,
                        backward = TRUE,
@@ -9,6 +9,7 @@ div_adjust <- function(x, t, div,
     ##       matrices of one column as well
     if (!is.null(dim(x)))
         stop(sQuote("x"), " must be a vector")
+
     valid.t <- t > 1L & t <= length(x)
     if (all(!valid.t))
         return(x)
@@ -22,6 +23,12 @@ div_adjust <- function(x, t, div,
     div <- div[valid.t]
     t <- t[valid.t]
     n <- length(x)
+
+    if (anyDuplicated(t)) {
+        div <- tapply(div, t, sum)
+        t <- as.numeric(names(div))
+    }
+
     if (!additive) {
         rets1 <- c(1, x[-1L]/x[-n])
         rets1[t] <- (x[t] + div)/x[t - 1L]

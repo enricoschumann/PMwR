@@ -14,17 +14,23 @@ split_adjust(x, t, ratio, backward = TRUE)
 }
 \arguments{
   \item{x}{
-    a numeric vector
+    a numeric vector: the series to be adjusted
   }
   \item{t}{
 
-    an integer vector, specifying the positions in \code{x} at which
-    dividends were paid (\sQuote{ex-days}) or at which a split occurred
+    An integer vector, specifying the positions in
+    \code{x} at which dividends were paid
+    (\sQuote{ex-days}) or at which a split occurred.
+    Timestamps may be duplicated, e.g. several payments
+    may occur on a single timestamp.
 
   }
   \item{div}{
-    a numeric vector, specifying the dividends.  If necessary, recycled
-    to the length of \code{t}.
+
+    A numeric vector, specifying the dividends (or
+    payments, cashflows).  If necessary, recycled to
+    the length of \code{t}.
+
   }
   \item{ratio}{
 
@@ -52,18 +58,17 @@ split_adjust(x, t, ratio, backward = TRUE)
 \value{
   a numeric vector of length equal to \code{length(x)}
 }
-%% \references{
-%% %% ~put references to the literature/web site here ~
-%% }
+\references{
+
+  Schumann, E. (2021) \emph{Portfolio Management with R}.
+  \url{http://enricoschumann.net/PMwR/}
+
+  Using \code{div_adjust} for handling generic external cashflows:
+  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#returns-with-external-cashflows}
+}
 \author{
   Enrico Schumann
 }
-%% \note{
-%% %%  ~~further notes~~
-%% }
-%% \seealso{
-%% %% ~~objects to See Also as \code{\link{help}}, ~~~
-%% }
 \examples{
 x <- c(9.777, 10.04, 9.207, 9.406)
 div <- 0.7

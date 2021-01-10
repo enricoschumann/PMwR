@@ -1,3 +1,13 @@
+2021-01-10  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/div_adjust.R (div_adjust): allow duplicated
+        timestamps, i.e. several payments on a single
+        date; update docs
+
+        * inst/tinytest/test_div_adjust.R: add tests
+        * inst/tinytest/test_split_adjust.R: add tests
+
+
 2021-01-02  Enrico Schumann  <es@enricoschumann.net>
 
         * R/returns.R (returns_position): add internal

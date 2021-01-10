@@ -64,3 +64,20 @@ expect_equal(split_adjust(x, t = t, 1/ratio),
 expect_equal(split_adjust(x, t = t, 1/ratio, backward = FALSE),
              rep(100, 3))
 
+## https://stat.ethz.ch/pipermail/r-sig-finance/2020q2/014926.html
+ans <- split_adjust(x = c(100, 25, 25),  ## prices
+                    t = c(2, 2),         ## index when split occurs
+                    ratio = c(2, 2))     ## split ratio
+
+expect_equal(ans, rep(25, 3))  ## 25 25 25
+
+split_adjust(x = c(100, 25, 30),
+             t = c(2, 2),
+             ratio = c(2, 2),
+             backward = FALSE)  ## [1] 100 100 120 (=30/25)
+
+split_adjust(x = c(100, 25, 30),
+             t = c(2, 2, 1),  ## irrelevant timestamp
+             ratio = c(2, 2, 5),
+             backward = FALSE)  ## [1] 100 100 120 (=30/25)
+
