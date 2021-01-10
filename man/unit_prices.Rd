@@ -52,7 +52,7 @@ unit_prices(NAV,
 }
 \value{
   A data.frame
-  \item{timestamp}{}
+  \item{timestamp}{the timestamp}
   \item{NAV}{total NAV}
   \item{price}{NAV per share}
   \item{units}{outstanding units (i.e. shares) after cashflows}

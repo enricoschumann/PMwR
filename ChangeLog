@@ -1,5 +1,7 @@
 2021-01-10  Enrico Schumann  <es@enricoschumann.net>
 
+        * R/unit_prices.R (unit_prices): support 'cf.included'
+
         * R/div_adjust.R (div_adjust): allow duplicated
         timestamps, i.e. several payments on a single
         date; update docs
@@ -34,7 +36,7 @@
             PMwR:::.unit_prices>
         but this will be removed in a future version.
 
-        Argument cf.included it not (yet) supported
+        Argument 'cf.included' it not (yet) supported
         right now.
 
 2020-10-20  Enrico Schumann  <es@enricoschumann.net>

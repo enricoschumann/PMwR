@@ -1,20 +1,11 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-20  Enrico Schumann
+## Copyright (C) 2008-21  Enrico Schumann
 
 unit_prices <- function(NAV, cashflows,
                         initial.price,
                         initial.shares = 0,
                         cf.included = TRUE) {
 
-    ## result 'price' series
-    ## + attr (data.frame) transactions
-    ##                     - timestamp
-    ##                     - id
-    ##                     - shares
-    ##                     - price
-
-    if (!cf.included)
-        .NotYetUsed("cf.included")
     if (initial.shares != 0)
         .NotYetUsed("initial.shares")
 
@@ -24,13 +15,9 @@ unit_prices <- function(NAV, cashflows,
     if (inherits(cashflows, "zoo"))
         cashflows <- data.frame(index(cashflows), cashflows)
 
-    if (!cf.included) {
-
-    }
-    
     shares <- numeric(nrow(cashflows))
-    all.t <- sort(unique(cashflows[[1]]))
-    t.NAV <- match(all.t, NAV[[1]])
+    all.t <- sort(unique(cashflows[[1L]]))
+    t.NAV <- match(all.t, NAV[[1L]])
 
     if (any(is.na(t.NAV)))
         stop("cashflow without matching NAV timestamp")
@@ -41,30 +28,34 @@ unit_prices <- function(NAV, cashflows,
             initial.price <- 100
         price[1] <- initial.price
     } else
-        price[1] <- (NAV[t.NAV[1]] - cf.included*sum(cashflows[[2]][1]))/
+        price[1] <- (NAV[t.NAV[1L]] - cf.included*sum(cashflows[[2L]][1L]))/
             initial.shares
-    shares[all.t[1] == cashflows[[1]]] <- cashflows[[2]][cashflows[[1]] == all.t[1]]/price[1] +
+    shares[all.t[1L] == cashflows[[1L]]] <-
+        cashflows[[2L]][cashflows[[1L]] == all.t[1L]]/price[1L] +
         initial.shares
     if (length(all.t) > 1L) {
-        sum.shares <- sum(shares[all.t[1] == cashflows[[1]]])
-        for (t in all.t[-1]) {
+        sum.shares <- sum(shares[all.t[1L] == cashflows[[1L]]])
+        for (t in all.t[-1L]) {
             i <- t == all.t
-            price[i] <- (NAV[[2]][t.NAV[i]] -
-                         cf.included*sum(cashflows[[2]][cashflows[[1]] == t]))/
+            price[i] <-
+                (NAV[[2L]][t.NAV[i]] -
+                 cf.included*sum(cashflows[[2L]][cashflows[[1L]] == t]))/
                 sum.shares
-            shares[t == cashflows[[1]]] <- cashflows[[2]][cashflows[[1]] == t]/price[i]
-            sum.shares <- sum.shares + sum(shares[t == cashflows[[1]]])
+            shares[t == cashflows[[1L]]] <- cashflows[[2L]][cashflows[[1L]] == t]/price[i]
+            sum.shares <- sum.shares + sum(shares[t == cashflows[[1L]]])
         }
     }
 
     total.shares <- numeric(nrow(NAV))
-    total.shares[t.NAV] <- tapply(shares, cashflows[[1]], sum)
+    total.shares[t.NAV] <- tapply(shares, cashflows[[1L]], sum)
     total.shares <- cumsum(total.shares)
 
     res <- NAV
     names(res) <- c("timestamp", "NAV")
+    p <- NAV[[2L]]/total.shares
+    p[t.NAV] <- price
     res <- cbind(res,
-                 data.frame(price = NAV[[2]]/total.shares,
+                 data.frame(price = p,
                             units = total.shares,
                             stringsAsFactors = FALSE))
 
@@ -85,7 +76,7 @@ unit_prices <- function(NAV, cashflows,
     .Deprecated("unit_prices",
                 msg = paste0(sQuote(".unit_prices"), " is deprecated.\n",
                              "Use ", sQuote("unit_prices"), " instead."))
-    
+
     if (initial.shares != 0)
         .NotYetUsed("initial.shares")
     res <- NAV

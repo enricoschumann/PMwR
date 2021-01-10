@@ -15,8 +15,6 @@ v0.16-0  (2021-01-??; not yet released)
     returned, but they can easily be recovered (see
     Examples for ?unit_prices).
 
-    Argument cf.included it not (yet) supported right now.
-
   o 'div_adjust' now supports several payments on the
     same timestamp
 
