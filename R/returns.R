@@ -857,8 +857,9 @@ returns_position <- function(prices,
         when <- when[-i]
         positions <- positions[-i, ]
     }
-    if (!length(when))
-        return(rep.int(0, nrow(prices)))
+    if (!length(when)) {
+        return(rep.int(0, nrow(prices))) ## FIXME: pad ignored?
+    }
 
     if (weights) {
         cash <- 1 - rowSums(positions)
@@ -875,7 +876,9 @@ returns_position <- function(prices,
     if (when[1L] > 1L)
         X[seq_len(when[1L] - 1L), ] <- 0
 
+    zero.pos <- apply(X, 1, function(x) all(abs(x) < sqrt(.Machine$double.eps)))
     contrib <- diff(prices)*X[-nrow(X), ]/rowSums(X*prices)[-nrow(X)]
+    contrib[zero.pos[-length(zero.pos)], ] <- 0
     if (!is.null(pad)) {
         contrib <- rbind(pad, contrib)
         contrib[seq_len(when[1L]), ] <- pad

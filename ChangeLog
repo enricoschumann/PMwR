@@ -1,3 +1,8 @@
+2021-01-12  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/returns.R (returns_position): zero positions
+	now correctly return zero returns (instead of NaN)
+
 2021-01-10  Enrico Schumann  <es@enricoschumann.net>
 
         * R/unit_prices.R (unit_prices): support 'cf.included'

@@ -165,3 +165,54 @@ expect_equal(
 ##             rowSums((price*pos1 / rowSums(price*pos1))[-3, ] * returns(price)))
 ## expect_equal(returns(price, position = pos1),
 ##             returns(price, position = pos2))
+
+
+## position: 1 asset
+prices <- cbind(a = 101:105, b = 201:205)
+when <- 1
+
+pos <- c(1, 0)
+target <- returns(prices[, 1])
+expect_equivalent(returns(prices, position = pos, rebalance.when = when),
+                  target)
+
+pos <- c(0, 1)
+target <- returns(prices[, 2])
+expect_equivalent(returns(prices, position = pos, rebalance.when = when),
+                  target)
+
+pos <- c(0, 0)
+target <- numeric(nrow(prices) - 1)
+expect_equivalent(returns(prices, position = pos, rebalance.when = when),
+                  target)
+
+## 
+when <- 2
+
+pos <- c(1, 0)
+target <- returns(prices[, 1])[-1]
+expect_equivalent(returns(prices, position = pos, rebalance.when = when),
+                  target)
+
+pos <- c(0, 1)
+target <- returns(prices[, 2])[-1]
+expect_equivalent(returns(prices, position = pos, rebalance.when = when),
+                  target)
+
+pos <- c(0, 0)
+target <- numeric(nrow(prices) - 1)[-1]
+expect_equivalent(returns(prices, position = pos, rebalance.when = when),
+                  target)
+
+
+
+## position: 2 assets
+prices <- cbind(a = 101:105, b = 201:205)
+pos <- rbind(c(1,0),
+             c(1,2))
+when <- c(1, 3)
+
+target <- c(returns(prices[,1])[1:2],
+            returns(prices %*% c(1,2))[3:4])
+expect_equivalent(returns(prices, position = pos, rebalance.when = when),
+                  target)

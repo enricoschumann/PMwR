@@ -105,14 +105,25 @@ as.NAVseries(x, ...)
 }
 \details{
 
-  An NAVseries is a numeric vector (the actual series) and additional
-  information, attached as attributes: timestamp, instrument, title,
-  description. Of these attributes, timestamp is the most useful, as it
-  is used for several computations (e.g. when calling
-  \code{\link{summary}}) or for plotting.
+  \subsection{NAV series}{
 
-  The summary method returns a list of the original NAVseries plus
-  various statistics, such as return per year and volatility.
+    An NAVseries is a numeric vector (the actual series) and
+    additional information, attached as attributes: timestamp,
+    instrument, title, description. Of these attributes,
+    timestamp is the most useful, as it is used for several
+    computations (e.g. when calling \code{\link{summary}}) or for
+    plotting.
+
+  }
+
+  \subsection{Summaries}{
+
+    The \code{summary} method returns a list of the original
+    NAVseries plus various statistics, such as return per year
+    and volatility.  The method may receive several NAV series as
+    input
+
+  }
 
 }
 \section{Note}{
@@ -133,19 +144,24 @@ as.NAVseries(x, ...)
   benchmark series is present, the summary has an
   attribute \code{bm}: an integer, specifying the
   position of the benchmark.
-  
+
 }
 \references{
 
-  Schumann, E. (2019) \emph{Portfolio Management with
+  Schumann, E. (2021) \emph{Portfolio Management with
   \R}. \url{http://enricoschumann.net/PMwR/}
 
 }
 \author{
-Enrico Schumann <es@enricoschumann.net>
+  Enrico Schumann <es@enricoschumann.net>
 }
 \seealso{
+
   \code{\link{btest}}, \code{\link{journal}}
+
+  For handling external cashflows, see \code{\link{unit_prices}},
+  \code{\link{split_adjust}} and \code{\link{div_adjust}}.
+
 }
 \examples{
 summary(NAVseries(DAX[[1]], as.Date(row.names(DAX)), title = "DAX"))
