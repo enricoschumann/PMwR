@@ -71,8 +71,7 @@ returns.default <- function(x, t = NULL, period = NULL,
     } else if (is.null(position) && !is.null(weights)) {
         if (lag != 1L)
             warning(sQuote("lag"), " is ignored")
-        ## returns_rebalance(prices = x, weights = weights,
-        ##                   when = rebalance.when, pad = pad)
+        x <- as.matrix(x)
         returns_position(prices = x, positions = weights,
                          when = rebalance.when, pad = pad,
                          weights = TRUE)
@@ -83,6 +82,7 @@ returns.default <- function(x, t = NULL, period = NULL,
     } else {
         if (lag != 1L)
             warning(sQuote("lag"), " is ignored")
+        x <- as.matrix(x)
         returns_position(prices = x, positions = position,
                          when = rebalance.when, pad = pad,
                          weights = FALSE)
@@ -870,7 +870,7 @@ returns_position <- function(prices,
         positions <- positions/prices[when, ]
     }
 
-    X <- array(NA, dim = dim(prices))
+    X <- array(NA_real_, dim = dim(prices))
     X[when, ] <- positions
     X <- .copy_fw_matrix(X)
     if (when[1L] > 1L)

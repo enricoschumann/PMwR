@@ -1,3 +1,8 @@
+2021-01-15  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (returns.default): coerce 'x' to
+	matrix if 'returns_position' is called
+
 2021-01-12  Enrico Schumann  <es@enricoschumann.net>
 
         * R/returns.R (returns_position): zero positions
