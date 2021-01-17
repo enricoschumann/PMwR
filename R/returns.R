@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-20  Enrico Schumann
+## Copyright (C) 2008-21  Enrico Schumann
 
 returns <- function(x, ...)
     UseMethod("returns")
@@ -50,6 +50,20 @@ returns.default <- function(x, t = NULL, period = NULL,
     }
 
     if (!is.null(t) &&
+        !is.null(rebalance.when)) {
+
+        if ( is.integer(t) && !is.integer(rebalance.when) &&
+            all(as.integer(rebalance.when) == rebalance.when)) {
+            rebalance.when <- as.integer(rebalance.when)
+        }
+
+        if (!is.integer(t) &&  is.integer(rebalance.when) &&
+            all(as.numeric(rebalance.when) == rebalance.when)) {
+            rebalance.when <- as.numeric(rebalance.when)
+        }
+    }
+
+    if (!is.null(t) &&
         inherits(rebalance.when, class(t))) {
         ## TODO: support match_or_next/previous?
         ii <- match(rebalance.when, t)
@@ -57,6 +71,7 @@ returns.default <- function(x, t = NULL, period = NULL,
             warning(sQuote("rebalance.when") ,
                     " does not match timestamp")
         rebalance.when <- ii[!is.na(ii)] ## TODO: really drop?
+        ## TODO: if weights/position is a matrix
     }
 
     if (is.null(t) &&

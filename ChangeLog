@@ -1,12 +1,19 @@
+2021-01-17  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/returns.R (returns.default): specially handle
+        numeric/integer timestamps, so that a numeric
+        'rebalance.when' will be matched against an
+        integer 't'
+
 2021-01-15  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (returns.default): coerce 'x' to
-	matrix if 'returns_position' is called
+        * R/returns.R (returns.default): coerce 'x' to
+        matrix if 'returns_position' is called
 
 2021-01-12  Enrico Schumann  <es@enricoschumann.net>
 
         * R/returns.R (returns_position): zero positions
-	now correctly return zero returns (instead of NaN)
+        now correctly return zero returns (instead of NaN)
 
 2021-01-10  Enrico Schumann  <es@enricoschumann.net>
 

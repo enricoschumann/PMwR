@@ -305,3 +305,62 @@ expect_equivalent(returns(prices,
                           position = pos,
                           rebalance.when = c(2, 3)),
                   target)
+
+
+## ------ matching of timestamps --------------------------------
+
+prices <- cbind(a = 101:105, b = 201:205)
+pos <- rbind(c(0.4, 0.2),
+             c(0.3, 0.7))
+
+t <- as.Date("2015-1-1") + 1:nrow(prices)
+expect_equivalent(
+    returns(prices,
+            weights = pos,
+            rebalance.when = c(1, 3)),
+    returns(prices,
+            t = t,
+            weights = pos,
+            rebalance.when = t[c(1, 3)]))
+
+expect_equivalent(
+    returns(prices,
+            weights = pos,
+            rebalance.when = c(1, 3)),
+    returns(prices,
+            t = 2:6, ## <== integer
+            weights = pos,
+            rebalance.when = c(2L, 4L))) ## <== integer
+
+expect_equivalent(
+    returns(prices,
+            weights = pos,
+            rebalance.when = c(1, 3)),
+    returns(prices,
+            t = as.numeric(2:6), ## <== numeric
+            weights = pos,
+            rebalance.when = c(2L, 4L))) ## <== integer
+
+expect_equivalent(
+    returns(prices,
+            weights = pos,
+            rebalance.when = c(1, 3)),
+    returns(prices,
+            t = 2:6, ## <== integer
+            weights = pos,
+            rebalance.when = c(2, 4))) ## <== numeric
+
+
+## ------ weights for each row ----------------------------------
+
+prices <- cbind(a = 101:105, b = 201:205)
+w <- sample(1:9/10, size = length(prices), replace = TRUE)
+dim(w) <- dim(prices)
+
+expect_equivalent(
+    rowSums(returns(prices) * w[-nrow(w), ]),
+    returns(x = prices, weights = w))
+
+expect_equivalent(
+    rowSums(returns(prices) * w[-nrow(w), ]),
+    returns(x = prices, weights = w[-nrow(w), ]))
