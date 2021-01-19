@@ -1,4 +1,4 @@
-v0.16-0  (2021-01-??; not yet released)
+v0.16-0  (2021-01-19)
 
   o returns: computations for rebalanced portfolios are
     more efficient, and function 'returns' now supports
@@ -15,10 +15,8 @@ v0.16-0  (2021-01-??; not yet released)
     can easily be recovered (see Examples for
     ?unit_prices).
 
-  o 'div_adjust' now supports several payments on the
+  o 'div_adjust' supports several payments on the
     same timestamp
-
-  o ...
 
   o various minor bug fixes and documentation updates.
     See the ChangeLog for all details. The manual at

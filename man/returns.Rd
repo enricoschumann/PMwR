@@ -103,17 +103,27 @@ returns(x, \dots)
     \code{0})
   }
   \item{position}{%
-    numeric; the same length/dimension as
-    \code{x}. \strong{This argument is currently ignored.}
+
+    either a numeric vector of the same length as the
+    number of assets (i.e. \code{ncol(x)}), or a numeric
+    matrix whose dimensions match those of prices
+    (i.e. \code{dim(x)} must equal \code{dim(weights)}), or
+    a matrix with as many rows as \code{rebalance.when} has
+    elements
+
   }
   \item{weights}{%
+
     either a numeric vector of the same length as the
-    number of assets (i.e. \code{ncol(x)}), or a
-    numeric matrix whose dimensions match those of
-    prices (i.e. \code{dim(x)} must equal
-    \code{dim(weights)})
+    number of assets (i.e. \code{ncol(x)}), or a numeric
+    matrix whose dimensions match those of prices
+    (i.e. \code{dim(x)} must equal \code{dim(weights)}), or
+    a matrix with as many rows as \code{rebalance.when} has
+    elements
+
   }
   \item{rebalance.when}{%
+
     logical or numeric. If \code{x} is a time-series
     class (such as \code{zoo}), it may also be of the
     same class as the time index of \code{x}.
@@ -209,10 +219,10 @@ returns(x, \dots)
   \subsection{Portfolio Returns}{
 
     \code{returns} may compute returns for a portfolio
-    specified in \code{weights}. The portfolio is
-    rebalanced at \code{rebalance.when}; the default is
-    every period.  Weights need not sum to one. A
-    zero-weight portfolio, or a portfolio that never
+    specified in \code{weights} or \code{position}. The
+    portfolio is rebalanced at \code{rebalance.when}; the
+    default is every period.  Weights need not sum to
+    one. A zero-weight portfolio, or a portfolio that never
     rebalances (e.g. with \code{rebalance.when} set to
     \code{FALSE}), will result in a zero return.
 
@@ -232,19 +242,17 @@ returns(x, \dots)
   class \code{"p_returns"} (period returns), which is a
   numeric vector of returns with attributes \code{t}
   (timestamp) and \code{period}.  Main use is to have
-  methods that pretty-print such period returns;
-  currently, there are methods for
-  \code{\link{toLatex}} and
+  methods that pretty-print such period returns; currently,
+  there are methods for \code{\link{toLatex}} and
   \code{\link[tools]{toHTML}}.
 
   In some cases, additional attributes may be attached:
-  when portfolio returns were computed (i.e. argument \code{weights}
-  was specified), there are attributes \code{holdings}
-  and \code{contributions}. For holding-period returns,
-  there may be a logical attribute
-  \code{is.annualised}, and an attribute
-  \code{from.to}, which tells the start and end date of
-  the holding period.
+  when portfolio returns were computed (i.e. argument
+  \code{weights} was specified), there are attributes
+  \code{holdings} and \code{contributions}. For
+  holding-period returns, there may be a logical attribute
+  \code{is.annualised}, and an attribute \code{from.to},
+  which tells the start and end date of the holding period.
 
 }
 \author{
