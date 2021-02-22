@@ -205,7 +205,8 @@ returns.data.frame <- function(x, t = NULL, period = NULL,
 ## not exported
 pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
     ## TODO add also: 'previous month' and pattern 'YYYY-MM'?
-    ## TODO add also: 'ytm'
+    ## TODO add also: 'ytm' ("year to month")
+    ## TODO add also: 'irr' (NMOF::ytm)
 
     x <- as.matrix(x)
     if (!is.null(colnames(x)))
@@ -872,6 +873,10 @@ returns_position <- function(prices,
         when <- when[-i]
         positions <- positions[-i, ]
     }
+
+    if (any(is.na(prices[when, ])))
+        warning("missing values at rebalance times")
+    
     if (!length(when)) {
         return(rep.int(0, nrow(prices))) ## FIXME: pad ignored?
     }

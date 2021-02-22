@@ -1,6 +1,11 @@
+2021-02-22  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/returns.R (returns_position): warn if there
+        are NAs at rebalancing timestamps
+
 2021-01-19  Enrico Schumann  <es@enricoschumann.net>
 
-	* DESCRIPTION (Version): 0.16-0
+        * DESCRIPTION (Version): 0.16-0
 
 2021-01-17  Enrico Schumann  <es@enricoschumann.net>
 

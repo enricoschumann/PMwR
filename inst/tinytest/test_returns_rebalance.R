@@ -364,3 +364,16 @@ expect_equivalent(
 expect_equivalent(
     rowSums(returns(prices) * w[-nrow(w), ]),
     returns(x = prices, weights = w[-nrow(w), ]))
+
+
+
+## ------ NAs ----------------------------------
+
+prices <- cbind(a = 101:105, b = 201:205)
+w <- c(0.6, 0.4)
+R0 <- returns(x = prices, weights = w, rebalance.when = 1)
+
+### NA at a non-rebalancing timestamp
+prices[3, 1] <- NA
+R1 <- returns(x = prices, weights = w, rebalance.when = 1)
+expect_equivalent(R0[is.finite(R1)], R1[is.finite(R1)])
