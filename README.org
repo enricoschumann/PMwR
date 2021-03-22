@@ -42,7 +42,8 @@ management.
 - Keeping track of transactions :: The package provides
      functions for handling journals (sometimes called
      blotters). See =?journal= and =?position=.
-- Testing strategies :: See =?btest=.
+- Testing strategies :: See =?btest= (and this
+  [[https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3374195][tutorial on backtesting]]).
 - Computing profit/loss and returns :: See =?returns=,
      =?rc= =?pl= or =?unit_prices=.
 
