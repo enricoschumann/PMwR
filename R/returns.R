@@ -214,8 +214,10 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
     else
         instr <- NULL
     nc <- ncol(x)
-    period <- tolower(period)
-    if ((best <- grepl("best", period, ignore.case = TRUE)) ||
+    if (is.character(period))
+        period <- tolower(period)
+    if (length(period) == 1L &&
+        (best <- grepl("best",  period, ignore.case = TRUE)) ||
                  grepl("worst", period, ignore.case = TRUE)) {
 
         if (grepl("year", period, ignore.case = TRUE)) {
@@ -229,7 +231,8 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         } else if (grepl("hour",    period, ignore.case = TRUE)) {
 
         }
-    } else if (grepl("^ann", period, ignore.case = TRUE)) {
+    } else if (length(period) == 1L &&
+               grepl("^ann", period, ignore.case = TRUE)) {
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
         force <- grepl("!$", period)
@@ -257,7 +260,8 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         class(from.to) <- "Date"
         attr(ans, "t") <- from.to
         attr(ans, "is.annualised") <- is.ann
-    } else if (period == "itd") {
+    } else if (length(period) == 1L &&
+               period == "itd") {
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
         ans <- numeric(nc)
@@ -280,7 +284,8 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         attr(ans, "period") <- "itd"
         class(from.to) <- "Date"
         attr(ans, "t") <- from.to
-    } else if (grepl("^ytd", period, ignore.case = TRUE)) {
+    } else if (length(period) == 1L &&
+               grepl("^ytd", period, ignore.case = TRUE)) {
         ## TODO allow syntax like "ytd02-15"?
         ## => returns a vector of returns ytd
         ##    up to 15 Feb
@@ -310,7 +315,8 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         class(from.to) <- "Date"
         attr(ans, "t") <- from.to
         attr(ans, "period") <- "ytd"
-    } else if (grepl("^ytm", period, ignore.case = TRUE)) {
+    } else if (length(period) == 1L &&
+               grepl("^ytm", period, ignore.case = TRUE)) {
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
         ymon <- as.numeric(format(t, "%Y%m"))
@@ -337,7 +343,8 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         class(from.to) <- "Date"
         attr(ans, "t") <- from.to
         attr(ans, "period") <- "ytd"
-    } else if (period == "mtd") {
+    } else if (length(period) == 1L &&
+               period == "mtd") {
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
         ymon <- as.numeric(format(t, "%Y%m"))
@@ -362,7 +369,8 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         class(from.to) <- "Date"
         attr(ans, "t") <- from.to
         attr(ans, "period") <- "mtd"
-    } else if ((grepl("[0-9][0-9][0-9][0-9]", period, ignore.case = TRUE))) {
+    } else if (length(period) == 1L &&
+               (grepl("[0-9][0-9][0-9][0-9]", period, ignore.case = TRUE))) {
         m <- which(format(t, "%Y") == period)
         ii <- c(max(1, min(m)-1), max(m))
         ans <- returns(x[ii, ], pad = pad)
@@ -370,8 +378,15 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         class(attr(ans, "t")) <- "Date"
         attr(ans, "period") <- period
 
+    } else if (length(period) > 1L &&
+               length(period) < NROW(x)) {
+        ans <- returns(x[period, ], pad = pad)
+        if (!is.null(t))
+            attr(ans, "t") <- t(t[period])
+        attr(ans, "period") <- period
+
     } else {
-        if (length(period) > 1L) {
+        if (length(period) == NROW(x)) {
             by <- period
         } else if (grepl("hour(ly)?", period, ignore.case = TRUE)) {
             by <- format(t, "%Y%m%d%H")
@@ -400,7 +415,7 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         attr(ans, "period") <- period
     }
     class(ans) <- "p_returns"
-    if (period == "monthly")
+    if (identical(period, "monthly"))
         class(ans) <- c("p_returns_monthly", class(ans))
 
     ans
@@ -477,14 +492,14 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
     period <- attr(x, "period")
     timestamp <- attr(x, "t")
     instr <- names(x)
-    if (period == "yearly" && is.null(dim(x))) {
+    if (identical(period, "yearly") && is.null(dim(x))) {
         tmp <- x
         names(tmp) <- format(timestamp, "%Y")
         if (year.rows)
             print(fmt(tmp, plus, digits), quote = FALSE)
         else
             print(as.matrix(fmt(tmp, plus, digits)), quote = FALSE)
-    } else if (period == "yearly") {
+    } else if (identical(period, "yearly")) {
         tmp <- unclass(x)
         rownames(tmp) <- format(timestamp, "%Y")
         attr(tmp, "t") <- NULL
@@ -494,7 +509,7 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
         } else {
             print(fmt(t(tmp), plus, digits), quote = FALSE, print.gap = 1, right = TRUE)
         }
-    } else if (grepl("annualised", period)) {
+    } else if (identical(period, "annualised")) {
         if (!is.null(instr))
             nn <- paste0(format(instr,
                          width = max(nchar(instr)),
@@ -841,7 +856,7 @@ returns_position <- function(prices,
 
     if (any(is.na(prices[when, ])))
         warning("missing values at rebalance times")
-    
+
     if (!length(when)) {
         return(rep.int(0, nrow(prices))) ## FIXME: pad ignored?
     }
