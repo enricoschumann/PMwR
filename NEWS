@@ -1,4 +1,7 @@
-v0.17-0  (2021-??-??; not yet released)
+v0.17-0  (2021-10-19 yet released)
+
+  o 'rc' now supports performance attribution à la Brinson
+    and friends, including several linking methods
 
   o ....
 

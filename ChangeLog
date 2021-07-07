@@ -1,3 +1,17 @@
+2021-07-07  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/returns.R (returns): avoid warnings when
+        computing holding-period returns when 'period'
+        of is length greater than one
+
+2021-03-21  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/rc.R (rc): [experimental] 'rc' gains limited
+        support for attribution (currently for a single
+        period only); the function gains several arguments
+        for providing necessary information, such as 'R.bm'
+        and and 'weights.bm'
+
 2021-02-22  Enrico Schumann  <es@enricoschumann.net>
 
         * R/returns.R (returns_position): warn if there
