@@ -1,7 +1,12 @@
-v0.17-0  (2021-10-19 yet released)
+v0.17-0  (2021-10-19; not yet released)
 
   o 'rc' now supports performance attribution à la Brinson
     and friends, including several linking methods
+
+  o the print method for 'rebalance' no longer ignores
+    multipliers [note that this never affected the
+    actual computations, only the printing of turnover
+    and transaction values]
 
   o ....
 

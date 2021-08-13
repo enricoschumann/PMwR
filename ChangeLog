@@ -1,3 +1,9 @@
+2021-08-13  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/rebalance.R (print.rebalance): do no longer
+        ignore 'multiplier' when computing values in
+        print method
+
 2021-07-07  Enrico Schumann  <es@enricoschumann.net>
 
         * R/returns.R (returns): avoid warnings when
