@@ -1,3 +1,8 @@
+2021-08-17  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/rebalance.R (print.rebalance): fix print
+        method for subsetting
+
 2021-08-13  Enrico Schumann  <es@enricoschumann.net>
 
         * R/rebalance.R (print.rebalance): do no longer

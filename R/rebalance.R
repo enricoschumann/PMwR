@@ -189,6 +189,10 @@ print.rebalance <- function(x, ..., drop.zero = TRUE) {
         all.names <- seq_along(x$current)
 
     multiplier <- attr(x, "multiplier")
+    multiplier <- if (attr(x, "match.names"))
+        multiplier[x$instrument]
+    else
+        multiplier[as.numeric(row.names(x))]
 
     df <- data.frame(price   = x$price,
                      current = x$current,
