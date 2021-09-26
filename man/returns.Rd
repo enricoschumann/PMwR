@@ -75,8 +75,13 @@ returns(x, \dots)
     The value of \sQuote{period} is used only
     when timestamp information is available: for
     instance, when \code{t} is not \code{NULL} or with
-    \code{zoo}/\code{xts} objects. The exception is \code{"itd"}:
-    it can be computed without timestamp information.
+    \code{zoo}/\code{xts} objects. The exception is
+    \code{"itd"}, which can be computed without timestamp information.
+    Holding period \code{"ytd"} produces a
+    warning if the current year (as obtained from
+    \code{\link{Sys.Date}}) differs from the latest
+    timestamp of the series.  Specifying period as
+    \code{"ytd!"} suppresses the warning.
 
     All returns are computed as simple returns. They
     will only be annualised with option \code{"ann"}; they

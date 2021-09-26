@@ -1,9 +1,13 @@
+2021-09-26  Enrico Schumann  <es@enricoschumann.net>
+
+        * man/returns.Rd: describe "ytd!" in docs
+
 2021-09-15  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/internal.R (.match_or_next): new argument
-	'fastmatch', with default FALSE
-	(.match_or_previous): new argument 'fastmatch',
-	with default FALSE
+        * R/internal.R (.match_or_next): new argument
+        'fastmatch', with default FALSE
+        (.match_or_previous): new argument 'fastmatch',
+        with default FALSE
 
 2021-08-17  Enrico Schumann  <es@enricoschumann.net>
 
