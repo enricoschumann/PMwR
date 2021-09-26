@@ -1,3 +1,10 @@
+2021-09-15  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/internal.R (.match_or_next): new argument
+	'fastmatch', with default FALSE
+	(.match_or_previous): new argument 'fastmatch',
+	with default FALSE
+
 2021-08-17  Enrico Schumann  <es@enricoschumann.net>
 
         * R/rebalance.R (print.rebalance): fix print
@@ -3283,8 +3290,7 @@
 2013-10-23  Enrico Schumann  <es@enricoschumann.net>
 
         * R/internals.R (matchOrNext,matchOrPrevious): added
-        functions
-        (not exported)
+        functions (not exported)
 
 2013-10-22  Enrico Schumann  <es@enricoschumann.net>
 

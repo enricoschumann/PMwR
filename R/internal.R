@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-20  Enrico Schumann
+## Copyright (C) 2008-21  Enrico Schumann
 
 makeHHMMSS <- function(x, label = "time specification (HHMMSS)") {
     x <- as.character(x)
@@ -56,8 +56,8 @@ letter2month <- function(s, instrument = "option"){
         stop("unknown instrument")
 }
 
-.match_or_next <- matchOrNext <- function(x, y) {
-    pos <- match(x, y)
+.match_or_next <- matchOrNext <- function(x, y, fastmatch = FALSE) {
+    pos <- if (fastmatch) fmatch(x, y) else match(x, y)
     NApos <- which(is.na(pos))
     for (i in NApos)
         if (length(tmp <- which(x[i] <= y)))
@@ -65,8 +65,8 @@ letter2month <- function(s, instrument = "option"){
     pos
 }
 
-.match_or_previous <- matchOrPrevious <- function(x, y) {
-    pos <- match(x, y)
+.match_or_previous <- matchOrPrevious <- function(x, y, fastmatch = FALSE) {
+    pos <- if (fastmatch) fmatch(x, y) else match(x, y)
     NApos <- which(is.na(pos))
     for (i in NApos)
         if (length(tmp <- which(x[i] >= y)))
