@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-20  Enrico Schumann
+## Copyright (C) 2008-21  Enrico Schumann
 
 position <- function(amount, ...)
     UseMethod("position")
@@ -88,21 +88,21 @@ position.default <- function(amount, timestamp, instrument,
                 ## TODO preferable?
                 ## when <- last(timestamp,
                 ##              format(as.Date(timestamp), "%Y"))
-                timestamp <- as.Date(timestamp)
+                timestamp <- as.Date(as.POSIXlt(timestamp))
                 when <- end_of_year(seq(min(timestamp),
                                         max(timestamp),
                                         by = "1 year"))
             } else if (when[[1L]] == "endofmonth" ||
-                     when[[1L]] == "lastofmonth") {
+                       when[[1L]] == "lastofmonth") {
                 ## TODO preferable?
                 ## when <- last(timestamp,
                 ##              format(as.Date(timestamp), "%Y-%m"))
-                timestamp <- as.Date(timestamp)
+                timestamp <- as.Date(as.POSIXlt(timestamp))
                 when <- end_of_month(seq(first_of_month(min(timestamp)),
                                          first_of_month(max(timestamp)),
                                          by = "1 month"))
             } else if (when[[1L]] == "endofday") {
-                timestamp <- as.Date(timestamp)
+                timestamp <- as.Date(as.POSIXlt(timestamp))
                 when <- last(timestamp,
                              format(timestamp, "%Y-%m-%d"))
             } else if (when[[1L]] == "first" ||

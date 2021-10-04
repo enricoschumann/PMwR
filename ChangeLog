@@ -2,6 +2,15 @@
 
         * man/returns.Rd: describe "ytd!" in docs
 
+2021-09-18  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 0.16-1
+
+        * R/position.R: convert to Date via as.POSIXlt(....).
+        This fixes computing dates from timestamps in
+        certain locales (timezones with large UTC offsets)
+        in case the "when" keyword was used.
+
 2021-09-15  Enrico Schumann  <es@enricoschumann.net>
 
         * R/internal.R (.match_or_next): new argument

@@ -10,6 +10,16 @@ v0.17-0  (2021-10-19; not yet released)
 
   o ....
 
+v0.16-1  (2021-09-18)
+
+  o position: fix computing dates from timestamps in
+    certain locales (timezones with large UTC offsets)
+    in case the "when" keyword was used, as in
+        position(J, when = "endofday")
+
+    Thanks go to the CRAN team/Brian Ripley for helping
+    to pinpoint the problem.
+
 v0.16-0  (2021-01-19)
 
   o returns: computations for rebalanced portfolios are

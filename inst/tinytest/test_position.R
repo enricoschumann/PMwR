@@ -47,10 +47,10 @@ res <- position(c(1,1,1), timestamp = t,
                 when = "endofday")
 
 expect_equal(as.numeric(res), 2:3)
-expect_equal(attr(res, "timestamp"), unique(as.Date(t)))
+expect_equal(attr(res, "timestamp"), unique(as.Date(as.POSIXlt(t))))
 
 res <- position(c(1,-1,1), timestamp = t,
                 when = "endofday")
 
 expect_equal(as.numeric(res), 0:1)
-expect_equal(attr(res, "timestamp"), unique(as.Date(t)))
+expect_equal(attr(res, "timestamp"), unique(as.Date(as.POSIXlt(t))))
