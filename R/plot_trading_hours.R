@@ -49,7 +49,7 @@ plot_trading_hours <-
             labels <- "day"
         interval <- "1 day"
     }
-    
+
     fromHHMMSS <- makeHHMMSS(fromHHMMSS)
     toHHMMSS   <- makeHHMMSS(toHHMMSS)
 
@@ -61,7 +61,7 @@ plot_trading_hours <-
     grd <- timegrid(from, to, interval = interval,
                     holidays = holidays,
                     fromHHMMSS = fromHHMMSS, toHHMMSS = toHHMMSS)
-    
+
     ## aggregate data to grid (last)
     by <- roundPOSIXt(t, interval = interval)
     values <- last(x, by)
@@ -70,11 +70,11 @@ plot_trading_hours <-
         grd <- as.Date(as.POSIXlt(grd))
     }
     t <- unique(by)
-    
+
     ## match to grid
     ri <- match(grd, t, nomatch = 0L)
     rx <- match(t[ri], grd)
-    values <- values[ri]    
+    values <- values[ri]
 
     maptime <- function(t) {
         ## interval, grd in environment
@@ -82,7 +82,7 @@ plot_trading_hours <-
         ri <- match(t, grd, nomatch = NA)
         list(t = ri[!is.na(ri)], ix = which(!is.na(ri)))
     }
-    
+
     ## prepare labels
     if (grepl("dayhour", labels, ignore.case = TRUE)) {
         pos <- which(abs(diff(as.POSIXlt(grd)$hour)) > 0) + 1
@@ -101,7 +101,7 @@ plot_trading_hours <-
         fmt <- if (is.null(label.format))
             "%b %y" else label.format
     }
-    
+
     if (do.plot) {
         do.call("plot", c(list(x = seq_len(length(grd))[rx],
                                y = values),

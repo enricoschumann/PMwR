@@ -66,7 +66,7 @@ is_valid_SEDOL <- function(SEDOL, NA.FALSE = FALSE) {
         reason[is_valid][i] <- "invalid characters"
         is_valid[is_valid][i] <- FALSE
     }
-    
+
     ## Test check digit
     if (any(is_valid)) {
         values <- c(`0` = 0, `1` = 1, `2` = 2, `3` = 3, `4` = 4,
@@ -76,7 +76,7 @@ is_valid_SEDOL <- function(SEDOL, NA.FALSE = FALSE) {
                     Q = 26, R = 27, S = 28, T = 29, V = 31, W = 32,
                     X = 33, Y = 34, Z = 35)
         weights <- c(1, 3, 1, 7, 3, 9, 1)
-        
+
         S <- strsplit(SEDOL[is_valid], "")
         check.sums <- sapply(S, function(x) sum(values[x] * weights))
         i <- check.sums %% 10 !=0
