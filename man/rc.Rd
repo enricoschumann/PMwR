@@ -1,3 +1,4 @@
+\encoding{UTF-8}
 \name{rc}
 \alias{rc}
 \title{
@@ -7,27 +8,44 @@
   Return contribution of portfolio segments.
 }
 \usage{
-rc(R, weights, timestamp, segments = NULL)
+rc(R, weights, timestamp, segments = NULL,
+   R.bm = NULL, weights.bm = NULL,
+   method = "contribution",
+   linking.method = NULL,
+   allocation.minus.bm = TRUE)
 }
 \arguments{
-  \item{R}{
-    returns: a numeric matrix
-}
-  \item{weights}{
+  \item{R}{returns: a numeric matrix}
+  \item{weights}{%
 
-    the segment weights: a numeric matrix. \code{weights[i,j]} must
-    correspond to \code{R[i,j]}
+    the segment weights: a numeric matrix.
+    \code{weights[i, j]} must correspond to \code{R[i, j]}
 
-}
-\item{timestamp}{
-  character or numeric
-}
-\item{segments}{
+  }
+  \item{timestamp}{character or numeric}
+  \item{segments}{%
 
-  character. If missing, column names of \code{R} or of \code{weights}
-  are used (if they are not \code{NULL}).
+    character. If missing, column names of \code{R} or of
+    \code{weights} are used (if they are not \code{NULL}).
 
-}
+  }
+  \item{method}{a string}
+  \item{linking.method}{\code{NULL} or a string}
+  \item{allocation.minus.bm}{logical}
+
+  If portfolio returns are to be compared against
+  benchmark returns, benchmark returns/weights must be
+  supplied:
+
+  \item{R.bm}{returns: a numeric matrix}
+
+  \item{weights.bm}{%
+
+    the segment weights: a numeric matrix.
+    \code{weights[i, j]} must correspond to \code{R[i, j]}
+
+  }
+
 }
 \details{
 
@@ -47,7 +65,14 @@ rc(R, weights, timestamp, segments = NULL)
 }
 \references{
 
-  Feibel, Bruce (2003), \emph{Investment Performance Measurement}, Wiley.
+  Jon A. Christopherson and David R. Cari\enc{ñ}{n}o
+  and Wayne E. Ferson (2009),
+  \emph{Portfolio Performance Measurement and Benchmarking},
+  McGraw-Hill.
+
+  Feibel, Bruce (2003),
+  \emph{Investment Performance Measurement},
+  Wiley.
 
 }
 \author{

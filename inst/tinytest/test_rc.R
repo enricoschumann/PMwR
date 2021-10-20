@@ -1,4 +1,6 @@
 ## return contribution
+library("PMwR")
+library("tinytest")
 
 prices <- 1:10
 prices <- cbind(A = prices, B = prices + 0.5)
@@ -26,3 +28,69 @@ expect_equal(ans$period_contributions$segment_2, (w*R)[2])
 ans <- rc(t(R), t(w), segments = c("A", "B"))
 expect_equal(ans$period_contributions$A, (w*R)[1])
 expect_equal(ans$period_contributions$B, (w*R)[2])
+
+
+## -----------------------------
+rc(R =       matrix(c(-3.70, -3.50, -0.10,
+                       4.10,  3.70,  2.90,
+                       3.50,  1.20,  1.00)/100, byrow = TRUE, nrow = 3),
+   weights = matrix(c(.6, .1, .3,
+                      .6, .1, .3,
+                      .6, .1, .3), byrow = TRUE, nrow = 3),
+   segments = c("large cap", "small cap", "fixed income"))
+
+## -----------------------------
+rc(R =       matrix(c(-3.70, -3.50, -0.10,
+                       4.10,  3.70,  2.90,
+                       3.50,  1.20,  1.00)/100, byrow = TRUE, nrow = 3),
+   weights = matrix(c(.6, .1, .3,
+                      .6, .1, .3,
+                      .6, .1, .3), byrow = TRUE, nrow = 3),
+   segments = c("large cap", "small cap", "fixed income"),
+   linking.method = "logarithmic")
+
+
+## -----------------------------
+rc(segments = c("large cap", "small cap", "fixed income"),
+   R =
+       matrix(c(-3.70, -3.50, -0.10,
+                 4.10,  3.70,  2.90,
+                 3.50,  1.20,  1.00)/100, byrow = TRUE, nrow = 3)[1, ],
+   weights =
+       matrix(c(.6, .1, .3,
+                .6, .1, .3,
+                .6, .1, .3), byrow = TRUE, nrow = 3)[1, ],
+   method   = "topdown",
+   R.bm =
+       matrix(c(-1.90, -5.30, -0.90,
+                 2.10,  4.30,  2.40,
+                 2.10,  1.40,  0.40)/100, byrow = TRUE, nrow = 3)[1, ],
+   weights.bm =
+       matrix(c(.55, .05, .4,
+                .55, .05, .4,
+                .55, .05, .4), byrow = TRUE, nrow = 3)[1, ],
+   )
+
+## -----------------------------
+## Christopherson / Cari\~no 2009, Table 19.1
+ans <- rc(segments = c("stocks", "bonds"),
+          R = matrix(c(40, 10,
+                       10, 20)/100, byrow = TRUE, nrow = 2),
+          weights =
+              matrix(c(50, 50,
+                       55, 45)/100, byrow = TRUE, nrow = 2),
+          linking.method = "geometric0")
+expect_equal(ans$total_contributions[["total"]],  0.43125)
+expect_equal(ans$total_contributions[["stocks"]], 0.284)
+expect_equal(ans$total_contributions[["bonds"]],  0.14725)
+
+ans <- rc(segments = c("stocks", "bonds"),
+          R = matrix(c(40, 10,
+                       10, 20)/100, byrow = TRUE, nrow = 2),
+          weights =
+              matrix(c(50, 50,
+                       55, 45)/100, byrow = TRUE, nrow = 2),
+          linking.method = "geometric1")
+expect_equal(ans$total_contributions[["total"]],  0.43125)
+expect_equal(ans$total_contributions[["stocks"]], 0.26875)
+expect_equal(ans$total_contributions[["bonds"]],  0.1625)

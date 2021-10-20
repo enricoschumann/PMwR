@@ -57,14 +57,14 @@ position(amount, \dots)
     \code{1-e12} will drop any position whose absolute
     amount is smaller than \code{1-e12}.
 
-  }  
-  \item{x}{    
+  }
+  \item{x}{
     An object of type position.
   }
   \item{\dots}{
     arguments passed to \code{\link{print}}
   }
-  \item{sep}{    
+  \item{sep}{
     A regular expression. Split instruments accordingly. \strong{Not
     implemented yet.}
   }
@@ -73,7 +73,7 @@ position(amount, \dots)
 
   \code{position} is a generic function; most useful is
   the method for \code{\link{journal}}s.
-  
+
   The function checks if \code{timestamp} is sorted (see
   \code{\link{is.unsorted}}) and sorts the journal by \code{timestamp},
   if required. If there are (some) \code{NA} values in \code{timestamp},
@@ -89,7 +89,7 @@ position(amount, \dots)
   provide positions at the end of all calendar days, months and years within the
   timestamp range of the journal. The latter keywords can only work if
   \code{timestamp} can be coerced to \code{\link{Date}}.
-    
+
 }
 \value{
 
@@ -101,15 +101,15 @@ position(amount, \dots)
   printed output.
 
   To extract the numeric position matrix, say \code{as.matrix(p)}.
-  
-  
-  
+
+
+
 }
 \references{
 
   Schumann, E. (2018) \emph{Portfolio Management
     with \R}. \url{http://enricoschumann.net/R/packages/PMwR/}
-  
+
 }
 \author{
   Enrico Schumann

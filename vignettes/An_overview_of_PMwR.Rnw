@@ -45,9 +45,9 @@ library("zoo")
 try(tinytest::test_package("PMwR"), silent = TRUE)
 @
 
-\noindent The aim of \textsc{pm}w\textsc{r} is to
-provide a small set of reliable, efficient and convenient
-tools that help in processing and analysing trade and
+\noindent \textsc{pm}w\textsc{r} provides a small set of
+reliable, efficient and convenient
+tools that help with processing and analysing trade and
 portfolio data. The package does not provide a complete
 application to be used `as is', but tools
 for creating such an application.
@@ -69,7 +69,7 @@ if (requireNamespace("tinytest")) {
     if (inherits(tinytest.results, "try-error"))
         nt <- "several hundred"
     else
-        nt <- nrow(as.data.frame(tinytest.results))
+        nt <- length(tinytest.results)
 } else
     nt <- "several hundred"
 @
@@ -77,9 +77,8 @@ Even if \textsc{pm}w\textsc{r} is under development:
 the package is to provide well-documented and reliable
 code.  For all computations, unit tests are included.
 As of package version %
-\Sexpr{pv}, there are \Sexpr{nt} tests
-included.  These tests are stored in subdirectory
-\texttt{tinytest}.} %
+\Sexpr{pv}, \Sexpr{nt} tests are included.
+These tests are stored in subdirectory \texttt{tinytest}.} %
 
 Specifically, interfaces to functions may not be stable
 yet (e.g., argument names are currently being made
@@ -105,48 +104,13 @@ within a session. The package depends on several other
 packages, which can be obtained from the same
 repository and from \textsc{cran}.
 
-There is currently no automatic Windows build for the
-latest version. If you wish to use the package on
-Windows and have problems building/installing it, then
-please contact me and I will provide you with a Windows
-version.
-
-I am grateful for comments, suggestions and
-corrections.  Please send bug reports directly to the
-package maintainer, for instance by using
-\texttt{bug.report}.\index{bug reports}
-<<eval=false>>=
-utils::bug.report("[PMwR] Unexpected behaviour in function <XXX>",
-                  maintainer("PMwR"), package = "PMwR")
-@
-
-\noindent New package releases are announced on the
- \texttt{PMwR-news} mailing list:\smallskip
-
-\url{https://lists.r-forge.r-project.org/cgi-bin/mailman/listinfo/nmof-pmwr}
-\medskip
-
-\noindent An \textsc{rss} feed of the package \textsc{news} file is
-available at\smallskip
-
-\url{http://enricoschumann.net/R/packages/PMwR/PMwR_news.xml}\,.
-
-\medskip
-
-\noindent Applications, as long as they are finance-related, should be
-discussed on the \texttt{R-SIG-Finance} mailing list:\smallskip
-
-\url{https://stat.ethz.ch/mailman/listinfo/r-sig-finance}
-
-\medskip
-
-\noindent Please send bug reports or suggestions directly to the
-package maintainer, for instance by using \texttt{bug.report}.
-<<eval=false>>=
-library("utils")
-bug.report("[NMOF] Unexpected behaviour in function XXX",
-            maintainer("NMOF"), package = "NMOF")
-@
+% There is currently no automatic Windows build for the
+% latest version.%
+% \footnote{Of course, \textsc{cran} provides Windows
+%  binaries for its version.} %
+% If you wish to use the latest version of the package on
+% Windows and have problems building/installing it, then
+% please contact me.
 
 
 \section*{What the package provides}
@@ -155,7 +119,7 @@ There are three main topics for which the package
 provides functionality:
 
 \begin{description}
-\item[Keep track of transactions] The package provides
+\item[Keeping track of transactions] The package provides
   functions that work with journals (sometimes called
   blotters). See \texttt{?journal} and
   \texttt{?position}.
@@ -165,9 +129,10 @@ provides functionality:
 \item[Testing strategies] See \texttt{?btest}.
 \end{description}
 
-Several examples will be provided in the next section.
-Other than that, there are a number of helper
-functions. All details are in the manual:
+% Several examples will be provided in the next section.
+% Other than that, there are a number of helper
+% functions.
+All details are in the manual:
 \begin{center}
 \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
 \end{center}
@@ -181,80 +146,102 @@ utils::bug.report("[PMwR] Unexpected behaviour in function <XXX>",
                   maintainer("PMwR"), package = "PMwR")
 @
 
-\section*{Examples}
-<<echo=false,results=hide>>=
-library("PMwR")
-@ 
-\subsection*{Keeping track of transactions}
+\noindent Applications, as long as they are finance-related, should be
+discussed on the \texttt{R-SIG-Finance} mailing list:\smallskip
 
-List of transactions can be handled as so-called journals.
-
-Let us invent a small trading history.
-
-<<journal>>=
-J <- read.table(text = "
-instrument ,  timestamp , amount ,  price
-      MSFT , 2020-05-04 ,     10 ,  178.0
-      MSFT , 2020-05-04 ,    -10 ,  178.5
-      MSFT , 2020-05-05 ,     20 ,  180.7
-      AMZN , 2020-05-06 ,      5 , 2315.0",
-header = TRUE, sep = ",", strip.white = TRUE)
-J$timestamp <- as.Date(J$timestamp)
-J <- as.journal(J)
-J
-@ 
-
-A \texttt{summary} method provides some stats.
-<<summary-journal>>=
-summary(J, by.instrument = TRUE, by.timestamp = TRUE)
-@ 
-
-The function \texttt{positions} aggregates the trades to a position.
-<<position>>=
-position(J)
-@ 
-We may as well specifiy one or more timestamps
-<<position-when>>=
-position(J, when = as.Date("2020-05-04") + 0:2)
-@ 
+\url{https://stat.ethz.ch/mailman/listinfo/r-sig-finance}
 
 
-\subsection*{Computing P\&L and Returns, and valuing open positions}
+% \noindent New package releases are announced on the
+%  \texttt{PMwR-news} mailing list:\smallskip
 
-We continue the previous example.
-<<pl>>=
-pl(J)
-@ 
+% \url{https://lists.r-forge.r-project.org/cgi-bin/mailman/listinfo/nmof-pmwr}
+% \medskip
 
+% \noindent An \textsc{rss} feed of the package \textsc{news} file is
+% available at\smallskip
 
-pl(along.timestamp, vprice)
+% \url{http://enricoschumann.net/R/packages/PMwR/PMwR_news.xml}\,.
 
-\subsection*{Testing investment strategies}
-
-<<>>=
-library("PMwR")
-timestamp <- as.Date(row.names(DAX))
-P <- DAX[[1]]
-
-signal <- function(k) {
-  av <- sum(Close(n = k))/k
-  if (Close() > av)
-    1
-  else
-    -1
-}
-
-btest(P, signal, k = 5,
-      b = 5)
-@ 
-
-single instrument: moving average
-
-returns in unit of instrument
+% \medskip
 
 
-vol targeting
-A trivial strategy
+
+
+% \section*{Examples}
+% <<echo=false,results=hide>>=
+% library("PMwR")
+% @
+% \subsection*{Keeping track of transactions}
+
+% List of transactions can be handled as so-called journals.
+
+% Let us invent a small trading history.
+
+% <<journal>>=
+% J <- read.table(text = "
+% instrument ,  timestamp , amount ,  price
+%       MSFT , 2020-05-04 ,     10 ,  178.0
+%       MSFT , 2020-05-04 ,    -10 ,  178.5
+%       MSFT , 2020-05-05 ,     20 ,  180.7
+%       AMZN , 2020-05-06 ,      5 , 2315.0",
+% header = TRUE, sep = ",", strip.white = TRUE)
+% J$timestamp <- as.Date(J$timestamp)
+% J <- as.journal(J)
+% J
+% @
+
+% A \texttt{summary} method provides some stats.
+% <<summary-journal>>=
+% summary(J, by.instrument = TRUE, by.timestamp = TRUE)
+% @
+
+% The function \texttt{positions} aggregates the trades to a position.
+% <<position>>=
+% position(J)
+% @
+% We may as well specifiy one or more timestamps
+% <<position-when>>=
+% position(J, when = as.Date("2020-05-04") + 0:2)
+% @
+
+
+% \subsection*{Computing P\&L and Returns, and valuing open positions}
+
+% We continue the previous example.
+% <<pl>>=
+% pl(J)
+% @
+
+
+% pl(along.timestamp, vprice)
+
+% \subsection*{Testing investment strategies}
+
+% <<>>=
+% library("PMwR")
+% timestamp <- as.Date(row.names(DAX))
+% P <- DAX[[1]]
+
+% signal <- function(k) {
+%   av <- sum(Close(n = k))/k
+%   if (Close() > av)
+%     1
+%   else
+%     -1
+% }
+
+% btest(P, signal, k = 5,
+%       b = 5)
+% @
+
+% single instrument: moving average
+
+% returns in unit of instrument
+
+
+% vol targeting
+% A trivial strategy
 
 
 

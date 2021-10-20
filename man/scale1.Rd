@@ -24,7 +24,7 @@ scale1(x, \dots)
     a time series
   }
   \item{when}{
-    
+
     origin: for the default method, either a string or
     numeric (integer). Allowed strings are
     \code{"first.complete"} (the default),
@@ -33,8 +33,8 @@ scale1(x, \dots)
     value that matches the class of the \code{index} of
     \code{x}; for instance, with an index of class
     \code{\link{Date}}, \code{when} should inherit from
-    \code{\link{Date}}. 
-    
+    \code{\link{Date}}.
+
   }
   \item{level}{
     numeric

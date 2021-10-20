@@ -105,10 +105,12 @@ expect_equal(c(returns(x, t = t, period = "month")),
              returns(x[c(1,ti)]))
 
 
-## period -- ytd
+## period -- ytd/ytd!
 ## --> supress warning that 2012 is not the current year
 expect_equal(c(suppressWarnings(returns(x, t = t, period = "ytd"))),
-             tail(x,1)/head(x,1) - 1)
+             tail(x, 1)/head(x, 1) - 1)
+expect_equal(c(returns(x, t = t, period = "ytd!")),
+             tail(x, 1)/head(x, 1) - 1)
 
 ## period -- mtd
 expect_equal(c(returns(x, t = t, period = "mtd")),
@@ -120,7 +122,7 @@ expect_equal(c(returns(x, t = t, period = "quarterly")),
                                        "2012-3-31",
                                        "2012-6-30",
                                        "2012-9-30",
-                                       "2012-12-31")),t)]))
+                                       "2012-12-31")), t)]))
 
 
 

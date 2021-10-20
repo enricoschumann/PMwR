@@ -18,22 +18,22 @@ instrument(x, \dots) <- value
   }
   \item{\dots}{
     arguments passed to methods
-    
+
   }
   \item{value}{
     an object
-  }    
+  }
 }
 \details{
 
   Generic function: extract or, if meaningful, replace
   instrument information
-  
+
 }
 \value{
 
   when used to extract instrument, a character vector
-  
+
 }
 \references{
 

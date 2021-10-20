@@ -65,7 +65,7 @@ returns(x, \dots)
   }
 
   \item{period}{%
-    Typically \code{character}; supported are
+    Typically a string. Supported are
     \code{"hour"}, \code{"day"}, \code{"month"},
     \code{"quarter"}, \code{"year"},
     \code{"ann"} (annualised), \code{"ytd"}

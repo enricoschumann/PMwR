@@ -1,14 +1,22 @@
-v0.17-0  (2021-10-19; not yet released)
-
-  o 'rc' now supports performance attribution à la Brinson
-    and friends, including several linking methods
+v0.17-0  (2021-10-19)
 
   o the print method for 'rebalance' no longer ignores
     multipliers [note that this never affected the
     actual computations, only the printing of turnover
     and transaction values]
 
-  o ....
+  o calling 'returns' with a position/weights now warns
+    if there are missing prices at rebalance times
+
+  o experimental: 'rc' provides alternative methods to
+    compute performance contribution; it also gains
+    rudimentary support for performance attribution
+    (Brinson et al.)
+
+  o various minor bug fixes and documentation updates.
+    See the ChangeLog for all details. The manual at
+    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    has also been updated.
 
 v0.16-1  (2021-09-18)
 

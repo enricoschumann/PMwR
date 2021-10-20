@@ -30,7 +30,7 @@ tw_exposure(amount, timestamp, start, end, abs.value = TRUE)
     a vector of prices
   }
   \item{timestamp}{
-    a vector. 
+    a vector.
   }
   \item{aggregate}{
     \code{TRUE} or \code{FALSE}

@@ -30,14 +30,14 @@ valuation(x, ...)
 \arguments{
 
   \item{x}{an object}
-  
+
   \item{multiplier}{a numeric vector, typically with
     named elements}
-  
+
   \item{cashflow}{either a numeric vector or a function
     that takes on argument (a journal) and transforms
     it into a numeric vector}
-  
+
   \item{instrument}{
     either a character vector or a function that takes on argument (a
     journal) and transforms it into a character vector

@@ -113,8 +113,21 @@ rebalance <- function(current,
         }
 
         ## set up vectors that match __by position__
+
+        ## ---- collect all relevant names
         all.names <- sort(unique(
             c(names(target), names(current))))
+
+        ## ---- collect relevant multipliers
+        miss.mult <- !all.names %in% names(multiplier)
+        if (any(miss.mult)) {
+            warning("instrument without multiplier: ",
+                    if (sum(miss.mult) > 3) "\n",
+                    paste(all.names[miss.mult],
+                          collapse = if (sum(miss.mult) > 3) "\n" else ", "),
+                    immediate. = TRUE)
+        }
+
         multiplier <- multiplier[all.names]
         target_ <- current_ <- numeric(length(all.names))
         current_[match(names(current), all.names)] <- current

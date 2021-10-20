@@ -13,10 +13,11 @@ expect_equivalent(as.matrix(returns(data.frame(x), pad = 0)), returns(x, pad = 0
 
 
 ## returns with 'period'
-x <- DAX[[1]]
+dax <- DAX[[1]]
 t <- as.Date(row.names(DAX))
-returns(x, t, period = "ytd")
-returns(data.frame(x), t, period = "ytd")
+ans1 <- returns(dax, t, period = "ytd!")
+ans2 <- returns(data.frame(dax), t, period = "ytd!")
+expect_equal(as.numeric(ans1), as.numeric(ans2))
 
 ## expect_true(inherits(returns(data.frame(x), t, period = "quarter"), "data.frame"))
 ## expect_true(inherits(returns(data.frame(cbind(x, x)), t, period = "quarter"), "data.frame"))
