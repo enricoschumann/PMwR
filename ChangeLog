@@ -1,3 +1,10 @@
+2022-05-29  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/streaks.R (streaks): add argument 'relative',
+        with default TRUE (which is current behaviour). If
+        FALSE, the function looks at differences instead of
+        relative changes (returns).
+
 2021-10-19  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.17-0

@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2018-20  Enrico Schumann
+## Copyright (C) 2018-22  Enrico Schumann
 
 streaks <- function(x, ...)
     UseMethod("streaks")
@@ -8,6 +8,7 @@ streaks.default <- function(x,
                             up =  0.2, down = -up,
                             initial.state = NA,
                             y = NULL,
+                            relative = TRUE,
                             ...) {
 
     start <- 1
@@ -34,16 +35,23 @@ streaks.default <- function(x,
         lo.t <- 1
     }
     for (t in 2:length(x)) {
-        dx <- x[t]/x[t - 1] / (y[t]/y[t - 1])
+        dx <- if (relative)
+                  x[t]/x[t - 1] / (y[t]/y[t - 1]) - 1
+              else
+                  x[t] - x[t - 1]
         xy.i <- x[t]/y[t]
         if (is.na(state)) {
-            if (dx >= 1) {
+            if (dx >= 0) {
 
                 if (xy.i > hi) {
                     hi <- xy.i
                     hi.t <- t
                 }
-                if ( (x[t]/x[lo.t]) / (y[t]/y[lo.t]) - 1 >= up) {
+                move <- if (relative)
+                            (x[t]/x[lo.t]) / (y[t]/y[lo.t]) - 1
+                        else
+                            x[t] - x[lo.t]
+                if (move >= up) {
                     state <- "up"
                     if (lo.t == 1) {
                         lo <- NA
@@ -58,13 +66,18 @@ streaks.default <- function(x,
                     }
                 }
 
-            } else if (dx < 1) {
+            } else if (dx < 0) {
 
                 if (xy.i < lo) {
                     lo <- xy.i
                     lo.t <- t
                 }
-                if ( (x[t]/x[hi.t]) / (y[t]/y[hi.t]) - 1 <= down) {
+                move <- if (relative)
+                            (x[t]/x[hi.t]) / (y[t]/y[hi.t]) - 1
+                        else
+                            x[t] - x[hi.t]
+
+                if (move <= down) {
                     state <- "down"
                     if (hi.t == 1) {
                         hi <- NA
@@ -82,12 +95,16 @@ streaks.default <- function(x,
 
         } else if (state == "up") {
 
-            if (dx >= 1) {
+            if (dx >= 0) {
                 if (xy.i > hi) {
                     hi <- xy.i
                     hi.t <- t
                 }
-            } else if (dx < 1 && (x[t]/x[hi.t]) / (y[t]/y[hi.t]) - 1 < down) {
+            } else if (dx < 0 &&
+                       (
+                           ( relative && (x[t]/x[hi.t]) / (y[t]/y[hi.t]) - 1 < down) ||
+                           (!relative &&  x[t] - x[hi.t] < down)
+                       )) {
                 results <- rbind(results,
                                  data.frame(start = start,
                                             end = hi.t,
@@ -102,12 +119,16 @@ streaks.default <- function(x,
 
         } else if (state == "down") {
 
-            if (dx <= 1) {
+            if (dx <= 0) {
                 if (xy.i < lo) {
                     lo <- xy.i
                     lo.t <- t
                 }
-            } else if (dx > 1 && (x[t]/x[lo.t]) / (y[t]/y[lo.t]) - 1 > up) {
+            } else if (dx > 0 &&
+                       (
+                           ( relative && (x[t]/x[lo.t]) / (y[t]/y[lo.t]) - 1 > up) ||
+                           (!relative &&  x[t] - x[lo.t] > up)
+                       )) {
                 results <- rbind(results,
                                  data.frame(start = start,
                                             end = lo.t,
@@ -119,23 +140,28 @@ streaks.default <- function(x,
                 hi.t <- t
                 hi <- xy.i
             }
-
         }
     }
     results <- rbind(results,
                      data.frame(start = start,
                                 end = length(x),
                                 state = state))
-    results[["return"]] <- x[results$end]/x[results$start] /
-                          (y[results$end]/y[results$start]) - 1
+    if (relative) {
+        results[["return"]] <- x[results$end]/x[results$start] /
+            (y[results$end]/y[results$start]) - 1
+    } else {
+        results[["change"]] <- x[results$end] - x[results$start]
+    }
     results
 }
 
 streaks.zoo <- function(x,
-                        up   =  0.2,
+                        up   = 0.2,
                         down = -up,
                         initial.state = NA,
-                        y = NULL, ...) {
+                        y = NULL,
+                        relative = TRUE,
+                        ...) {
     t <- index(x)
     ans <- streaks.default(x = coredata(x),
                            up   = up,
@@ -148,10 +174,12 @@ streaks.zoo <- function(x,
 }
 
 streaks.NAVseries <- function(x,
-                              up   =  0.2,
+                              up   = 0.2,
                               down = -up,
                               initial.state = NA,
-                              bm = NULL, ...) {
+                              bm = NULL,
+                              relative = TRUE,
+                              ...) {
     xx <- as.zoo(x)
     streaks.zoo(xx,
                 up   = up, down = down,

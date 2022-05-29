@@ -13,36 +13,39 @@
 streaks(x, ...)
 
 \method{streaks}{default}(x, up =  0.2, down = -up,
-        initial.state = NA, y = NULL, \dots)
+        initial.state = NA, y = NULL, relative = TRUE, \dots)
 \method{streaks}{zoo}(x, up =  0.2, down = -up,
-        initial.state = NA, y = NULL, \dots)
+        initial.state = NA, y = NULL, relative = TRUE, \dots)
 \method{streaks}{NAVseries}(x, up =  0.2, down = -up,
-        initial.state = NA, bm = NULL, \dots)
+        initial.state = NA, bm = NULL, relative = TRUE, \dots)
 
 }
 \arguments{
-  \item{x}{
+  \item{x}{%
     a price series
   }
-  \item{initial.state}{
+  \item{initial.state}{%
     \code{\link{NA}}, \code{"up"} or \code{"down"}
   }
-  \item{up}{
+  \item{up}{%
     a number, such as 0.1 (i.e. 10\%)
   }
-  \item{down}{
+  \item{down}{%
     a negative number, such as -0.1 (i.e. -10\%)
   }
-  \item{y}{
+  \item{y}{%
     another price series
   }
-  \item{bm}{
+  \item{bm}{%
 
     another price series. Mapped to \sQuote{\code{y}}
     in the default method.
 
   }
-  \item{\dots}{
+  \item{relative}{%
+    logical
+  }
+  \item{\dots}{%
     other arguments passed to methods
   }
 }
@@ -85,9 +88,10 @@ streaks(x, ...)
  \item{start}{beginning of streak}
  \item{end}{end of streak}
  \item{state}{\code{up}, \code{down} or \code{\link{NA}}}
- \item{return}{the return over the streak. If \code{y}
+ \item{return,change}{the return over the streak. If \code{y}
    was specified, geometric excess return is
-   computed (see Examples).}
+   computed (see Examples). If \code{relative} is \code{FALSE},
+   the column is named \code{change}.}
 }
 %% \references{
 %% %% ~put references to the literature/web site here ~
@@ -100,7 +104,6 @@ streaks(x, ...)
 }
 \examples{
 streaks(DAX[[1]], t = as.Date(row.names(DAX)))
-
 
 ## results <- streaks(x = <...>, y = <...>)
 ##
