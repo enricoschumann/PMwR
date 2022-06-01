@@ -167,7 +167,9 @@ streaks.zoo <- function(x,
                            up   = up,
                            down = down,
                            initial.state = initial.state,
-                           y = coredata(y), ...)
+                           y = coredata(y),
+                           relative = relative,
+                           ...)
     ans$start <- t[ans$start]
     ans$end   <- t[ans$end]
     ans
