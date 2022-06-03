@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-19  Enrico Schumann
+## Copyright (C) 2008-22  Enrico Schumann
 
 btest  <- function(prices,
                    signal,
@@ -179,7 +179,8 @@ btest  <- function(prices,
     if ("assignInGlobals" %in% names(list(...)))
         warning("Did you mean 'Globals'? See ChangeLog 2017-11-14.")
 
-    if (convert.weights && initial.cash == 0)
+    if (convert.weights && initial.cash == 0 &&
+        (all(initial.position == 0) || is.null(prices0)))
         warning(sQuote("convert.weights"), " is TRUE and ",
                 sQuote("initial.cash"), " is zero")
 
@@ -190,6 +191,15 @@ btest  <- function(prices,
     if (add)
         .NotYetUsed("add", FALSE)
 
+    if (identical(do.signal, FALSE) &&
+        !final.position &&
+        missing(signal)) {
+        ## if only an initial position is present and should
+        ## be valued: set a dummy signal function
+        signal <- function(...)
+            NULL
+    }
+    
     db.signal <- if (is.function(signal) && isdebugged(signal))
         TRUE else FALSE
 
@@ -220,7 +230,9 @@ btest  <- function(prices,
     } else if (identical(do.signal, FALSE) && !final.position) {
         do.signal <- function(...)
             FALSE
-        warning(sQuote("do.signal"), " is FALSE: strategy will never trade")
+        if (missing(signal))
+            signal <- function(...) NULL
+        message(sQuote("do.signal"), " is FALSE: strategy will never trade")
     } else if (!missing(timestamp) && inherits(do.signal, class(timestamp))) {
         rebalancing_times <- matchOrNext(do.signal, timestamp)
         do.signal <- function(...)
@@ -606,15 +618,15 @@ btest  <- function(prices,
     if (b > 0L) {
         Xs[b, ] <- X[b, ] <- initial.position
         cash[b] <- initial.cash
-        v[b] <- initial.cash + if (initial.position != 0)
+        v[b] <- initial.cash + if (any(initial.position != 0))
                                    initial.position %*% mC[b, ] else 0
     }
 
     ## initial wealth
-    if (initial.position != 0 && !is.null(prices0)) {
+    if (any(initial.position != 0) && !is.null(prices0)) {
         initial.wealth <- sum(prices0 * initial.position) + initial.cash
-    } else if (initial.position != 0) {
-        warning(sQuote("initial.position"), " specified, but no ", sQuote("prices0"))
+    } else if (any(initial.position != 0)) {
+        message(sQuote("initial.position"), " specified, but no ", sQuote("prices0"))
         initial.wealth <- initial.cash ## TODO: initial position needs be evaluated
     } else
         initial.wealth <- initial.cash
@@ -650,7 +662,10 @@ btest  <- function(prices,
                 Xs[t, ] <- initial.position
             computeSignal <- FALSE
         } else {
-            Xs[t, ] <- rep.int(0, nA)
+            Xs[t, ] <- if (any(initial.position != 0))
+                           initial.position
+                       else
+                           rep.int(0, nA)
         }
 
         ## REBALANCE?
