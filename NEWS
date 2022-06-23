@@ -1,16 +1,33 @@
 v0.18-0  (2022-10-19; not yet released)
 
-  o ...
+  o streaks gains an argument "relative", with default
+    TRUE, which is current behaviour. If FALSE, the
+    function looks at differences instead of relative
+    changes (returns), which is useful, for instance, for
+    interest rates.
+
+  o rebalance arithmetic is performed only for positions
+    with non-zero change also in period 1, i.e. the (rare)
+    case when burnin is 0, which allows NAs in prices (for
+    periods > 1, this behaviour had been introduced in
+    version 0.10-0)
+
+  o ....
+
+  o various minor bug fixes and documentation updates.
+    See the ChangeLog for all details. The manual at
+    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    has also been updated.
 
 v0.17-0  (2021-10-19)
 
   o the print method for 'rebalance' no longer ignores
-    multipliers [note that this never affected the
-    actual computations, only the printing of turnover
-    and transaction values]
+    multipliers [note that this never affected the actual
+    computations, only the printing of turnover and
+    transaction values]
 
-  o calling 'returns' with a position/weights now warns
-    if there are missing prices at rebalance times
+  o calling 'returns' with a position/weights now warns if
+    there are missing prices at rebalance times
 
   o experimental: 'rc' provides alternative methods to
     compute performance contribution; it also gains

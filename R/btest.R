@@ -199,7 +199,7 @@ btest  <- function(prices,
         signal <- function(...)
             NULL
     }
-    
+
     db.signal <- if (is.function(signal) && isdebugged(signal))
         TRUE else FALSE
 
@@ -702,8 +702,10 @@ btest  <- function(prices,
                 open <- mO[t, , drop = TRUE]
             else
                 open <- mC[t, , drop = TRUE]
-            sx <- dx %*% open
-            abs_sx <- (abs(dx) * tc) %*% open
+
+            nzero <- dx != 0
+            sx <- dx[nzero] %*% open[nzero]
+            abs_sx <- (abs(dx[nzero]) * tc) %*% open[nzero]
             tccum[t] <- abs_sx
             cash[t] <- initial.cash - sx - abs_sx
             X[t, ] <- if (any(initial.position != 0)) initial.position else 0  + dx

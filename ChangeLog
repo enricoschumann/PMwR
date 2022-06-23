@@ -1,13 +1,20 @@
+2022-06-23  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/btest.R (btest): rebalance arithmetic is
+	performed only for positions with non-zero change
+	also in period 1, i.e. the (rare) case when burnin
+	is 0, which allows NAs in prices (for periods > 1,
+	this behaviour had been introduced in 2018-08-21)
+
 2022-06-03  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/btest.R (btest): fix edge case when an
-        initial position exists but no trade takes
-        place
+        * R/btest.R (btest): fix edge case when an initial
+        position exists but no trade takes place
 
 2022-06-01  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/streaks.R (streaks): pass argument
-        'relative' in 'zoo' method
+        * R/streaks.R (streaks): pass argument 'relative'
+        in 'zoo' method
 
 2022-05-29  Enrico Schumann  <es@enricoschumann.net>
 
