@@ -1,6 +1,7 @@
 # Portfolio Management with R
 
 
+
 ## About PMwR
 
 Functions for the practical management of financial
@@ -13,44 +14,41 @@ provide a complete application that could be used 'as is',
 but building blocks for creating such an application.
 
 PMwR grew out of various pieces of software that I have
-written since 2008. The package is under active development
-and changes frequently, simply because the code has been
-written over many years and is in need of being groomed for
-general use. Specifically, the interfaces to functions are
-not stable (e.g., argument names are currently being made
-consistent across functions); in some cases, generic
-functions will be introduced. The *recommended* *practice*
+written since 2008. While the package has become fairly
+stable in recent years, the interfaces of functions may still
+not be fully stable (e.g., argument names might still be
+made consistent across functions); in some cases, generic
+functions might be introduced. The *recommended* *practice*
 is therefore to *explicitly* *name* *arguments* *in*
 *function* *calls* (and not pass arguments by
 position). Any changes in argument names will be documented
-in the
-[NEWS file](http://enricoschumann.net/R/packages/PMwR/NEWS)
-and so can be followed easily. More details
-are in the
+in the 
+[NEWS file](http://enricoschumann.net/R/packages/PMwR/NEWS) and
+so can be followed easily. More details are in the
 [ChangeLog](http://enricoschumann.net/R/packages/PMwR/ChangeLog).
+
 
 
 ## What PMwR provides
 
-The package provides functions that can serve as
-building blocks for many activities in portfolio
-management.
+The package provides functions that can serve as building
+blocks for many activities in portfolio management.
 
 - Keeping track of transactions: The package provides
      functions for handling journals (sometimes called
      blotters). See ?journal and ?position.
 - Testing strategies: See ?btest (and this
-  [tutorial on backtesting](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3374195).
+  [tutorial on backtesting](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3374195)).
 - Computing profit/loss and returns: See ?returns,
      ?rc, ?pl or ?unit_prices.
 
 All details are in the 
 [manual](http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html).
-
 New features are often described in these
 [notes](http://enricoschumann.net/notes/PMwR/).
 
 I am grateful for comments, suggestions and corrections.
+
 
 
 ## Installation
@@ -72,4 +70,3 @@ There are also publicly-available repositories at
 https://git.sr.ht/~enricoschumann/PMwR ,
 https://gitlab.com/enricoschumann/PMwR and
 https://github.com/enricoschumann/PMwR.
-
