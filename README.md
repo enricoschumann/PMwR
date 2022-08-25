@@ -26,7 +26,7 @@ position). Any changes in argument names will be documented
 in the
 [NEWS file](http://enricoschumann.net/R/packages/PMwR/NEWS)
 and so can be followed easily. More details
-are in the 
+are in the
 [ChangeLog](http://enricoschumann.net/R/packages/PMwR/ChangeLog).
 
 
@@ -38,14 +38,14 @@ management.
 
 - Keeping track of transactions: The package provides
      functions for handling journals (sometimes called
-     blotters). See =?journal= and =?position=.
-- Testing strategies :: See =?btest= (and this
+     blotters). See ?journal and ?position.
+- Testing strategies: See ?btest (and this
   [tutorial on backtesting](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3374195).
 - Computing profit/loss and returns: See ?returns,
      ?rc, ?pl or ?unit_prices.
 
-All details are in the manual:
-(http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html)
+All details are in the 
+[manual](http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html).
 
 New features are often described in these
 [notes](http://enricoschumann.net/notes/PMwR/).
@@ -58,7 +58,7 @@ I am grateful for comments, suggestions and corrections.
 The latest stable version of the package is available from
 [CRAN](https://cran.r-project.org/package=PMwR).  The
 latest *development* version is available from
-(http://enricoschumann.net/R/packages/PMwR/). You can
+http://enricoschumann.net/R/packages/PMwR/ . You can
 install that version package directly from within R:
 
     install.packages('PMwR',
@@ -69,7 +69,7 @@ The package depends on several other packages, which
 can be obtained from the same repository and from CRAN.
 
 There are also publicly-available repositories at
-https://git.sr.ht/~enricoschumann/PMwR,
+https://git.sr.ht/~enricoschumann/PMwR ,
 https://gitlab.com/enricoschumann/PMwR and
 https://github.com/enricoschumann/PMwR.
 
