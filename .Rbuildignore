@@ -1,6 +1,7 @@
 .es_keywords
 .git
 .gitignore
+LICENSE
 R/dev.R
 README.org
 TODO
