@@ -1,18 +1,24 @@
 v0.18-0  (2022-10-19; not yet released)
 
-  o streaks gains an argument "relative", with default
+  o [streaks] gains an argument "relative", with default
     TRUE, which is current behaviour. If FALSE, the
     function looks at differences instead of relative
     changes (returns), which is useful, for instance, for
     interest rates.
 
-  o rebalance arithmetic is performed only for positions
-    with non-zero change also in period 1, i.e. the (rare)
-    case when burnin is 0, which allows NAs in prices (for
-    periods > 1, this behaviour had been introduced in
-    version 0.10-0)
+  o [btest]: rebalance arithmetic is performed only for
+    positions with non-zero change also in period 1,
+    i.e. in the rare case when burnin is 0, which
+    allows NAs in prices. (For periods > 1, this
+    behaviour had been introduced in version 0.10-0.)
+
+  o [position]: if 'when' is not specified, timestamps
+    are now effectively ignored, even if they are NA
 
   o ....
+
+  o There is an additional public Git repository at
+    https://git.sr.ht/~enricoschumann/PMwR
 
   o various minor bug fixes and documentation updates.
     See the ChangeLog for all details. The manual at
@@ -21,7 +27,7 @@ v0.18-0  (2022-10-19; not yet released)
 
 v0.17-0  (2021-10-19)
 
-  o the print method for 'rebalance' no longer ignores
+  o the print method for "rebalance" no longer ignores
     multipliers [note that this never affected the actual
     computations, only the printing of turnover and
     transaction values]

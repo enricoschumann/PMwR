@@ -41,7 +41,7 @@ position(amount, \dots)
     character: symbols to identify different instruments
   }
   \item{account}{
-    character: description of account
+    character: description of account. Ignored if \code{\link{NULL}}.
   }
   \item{use.account}{
     logical

@@ -102,3 +102,5 @@ expect_error(position(A, timestamp = 3:1))
 expect_equal(position(A, timestamp = 1:2),
              position(A, timestamp = 2:1))
 
+
+

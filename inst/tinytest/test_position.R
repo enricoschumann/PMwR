@@ -54,3 +54,17 @@ res <- position(c(1,-1,1), timestamp = t,
 
 expect_equal(as.numeric(res), 0:1)
 expect_equal(attr(res, "timestamp"), unique(as.Date(as.POSIXlt(t))))
+
+
+
+## missing values
+ans <- position(amount = 1:3,
+                timestamp = c(NA, Sys.Date(), Sys.Date()),
+                price = 3:1)
+expect_equivalent(c(ans), 6)
+
+ans <- position(amount = 1:3, instrument = letters[1:3],
+                timestamp = c(NA, Sys.Date(), Sys.Date()),
+                price = 3:1)
+expect_equivalent(c(ans), 1:3)
+expect_equal(instrument(ans), letters[1:3])

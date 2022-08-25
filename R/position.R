@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-21  Enrico Schumann
+## Copyright (C) 2008-22  Enrico Schumann
 
 position <- function(amount, ...)
     UseMethod("position")
@@ -66,12 +66,34 @@ position.default <- function(amount, timestamp, instrument,
     amount <- rep(amount, len/length(amount))
     timestamp <- rep(timestamp, len/length(timestamp))
     instrument <- rep(instrument, len/length(instrument))
-    account <- rep(account, len/length(account))
+
+    if (!is.null(account)) {
+        account <- rep(account, len/length(account))
+        sep <- paste0("%", runif(1)*1e14, unclass(Sys.time()), "%")
+        while (any(grepl(sep, c(account, instrument), fixed = TRUE))) {
+            sep <- paste0("%", runif(1)*1e14, unclass(Sys.time()), "%")
+        }
+        instrument <- paste(account, sep, instrument, sep = "")
+    }
 
     if (missing(when)) {
-        ## TODO: if 'when' is missing, we can simply
-        ##       sum the amounts
+        ## If 'when' is missing, we can sum the
+        ## amounts. Missing timestamps do no harm.
         when <- max(timestamp, na.rm = TRUE)
+
+        nm <- sort(unique(instrument))
+        pos <- array(0, dim = c(1, length(nm)))
+        colnames(pos) <- if (!is.null(account))
+                             gsub(sep, ".", nm, fixed = TRUE)
+                         else
+                             nm
+        rownames(pos) <- ""
+        for (i in seq_along(nm)) {
+            ri  <-  nm[i] == instrument
+            iv  <- amount[ri]
+            pos[1, i] <- sum(iv)
+        }
+
     } else {
         if (no.timestamp)
             warning(sQuote("when"),
@@ -109,60 +131,74 @@ position.default <- function(amount, timestamp, instrument,
                        when[1L] == "oldest")
                 when <- min(timestamp)
         }
-    }
 
-    if (!anyNA(timestamp) && is.unsorted(timestamp)) {
-        io <- order(timestamp)
-        timestamp <- timestamp[io]
-        amount  <- amount[io]
-        instrument <- instrument[io]
-        if (!is.null(account))
-            account <- account[io]
-    }
 
-    if (anyNA(timestamp) && is.unsorted(timestamp, na.rm = TRUE))
-        stop("cannot compute position: journal is not sorted ",
-             "and timestamp has NA values")
-
-    if (anyNA(timestamp) && !is.unsorted(timestamp, na.rm = TRUE))
-        warning("timestamp has NA values")
-
-    if (!is.null(account) && !identical(account, FALSE))
-        instrument <- paste(account, "%SEP%", instrument, sep = "")
-
-    nw <- length(when)
-    nm <- sort(unique(instrument))
-    pos <- array(0, dim = c(nw, length(nm)))
-    colnames(pos) <- gsub("%SEP%", ".", nm, fixed = TRUE)
-    rownames(pos) <- if (no.timestamp)
-                         rep("", length(when))
-                     else
-                         as.character(when)
-    for (j in seq_len(nw)) {
-        for (i in seq_along(nm)) {
-            ri  <-  nm[i] == instrument
-            idt <- timestamp[ri]
-            iv  <- amount[ri]
-            beforewhen <- which(when[j] >= idt)
-            pos[j, i] <- if (length(beforewhen))
-                cumsum(iv)[max(beforewhen)] else 0
+        if (!anyNA(timestamp) && is.unsorted(timestamp)) {
+            io <- order(timestamp)
+            timestamp <- timestamp[io]
+            amount  <- amount[io]
+            instrument <- instrument[io]
+            if (!is.null(account))
+                account <- account[io]
         }
+
+        if (anyNA(timestamp) && is.unsorted(timestamp, na.rm = TRUE))
+            stop("cannot compute position: journal is not sorted ",
+                 "and timestamp has NA values")
+
+        if (anyNA(timestamp) && !is.unsorted(timestamp, na.rm = TRUE))
+            warning("timestamp has NA values")
+
+        nw <- length(when)
+        nm <- sort(unique(instrument))
+        pos <- array(0, dim = c(nw, length(nm)))
+        colnames(pos) <- if (!is.null(account))
+                             gsub(sep, ".", nm, fixed = TRUE)
+                         else
+                             nm
+        rownames(pos) <- if (no.timestamp)
+                             rep("", length(when))
+                         else
+                             as.character(when)
+        for (j in seq_len(nw)) {
+            for (i in seq_along(nm)) {
+                ri  <-  nm[i] == instrument
+                idt <- timestamp[ri]
+                iv  <- amount[ri]
+                beforewhen <- which(when[j] >= idt)
+                pos[j, i] <- if (length(beforewhen))
+                                 cumsum(iv)[max(beforewhen)] else 0
+            }
+        }
+
+
     }
+
+
     if (!is.logical(drop.zero)) {
+        ## drop.zero is a tolerance
         drop <- apply(pos, 2, function(x) all(abs(x) < drop.zero))
-        pos <- pos[ , is.na(drop) | !drop, drop = FALSE]
+        pos <- pos[, is.na(drop) | !drop, drop = FALSE]
         nm <- nm[is.na(drop) | !drop]
+
     } else if (drop.zero) {
         drop <- apply(pos, 2, function(x) all(x == 0))
-        pos <- pos[ , is.na(drop) | !drop, drop = FALSE]
+        pos <- pos[, is.na(drop) | !drop, drop = FALSE]
         nm <- nm[is.na(drop) | !drop]
     }
+
     if (no.instruments)
         nm[] <- NA
+    if (!is.null(account)) {
+        tmp <- strsplit(nm, sep, fixed = TRUE)
+        attr(pos, "instrument") <- unlist(lapply(tmp, `[[`, 2))
+        attr(pos, "account") <- unlist(lapply(tmp, `[[`, 1))
+    } else
+        attr(pos, "instrument") <- nm
     attr(pos, "timestamp") <- if (no.timestamp) NA else when
-    attr(pos, "instrument") <- gsub(".*%SEP%(.*?)", "\\1", nm)
-    if (!is.null(account))
-        attr(pos, "account") <- gsub("(.*)%SEP%.*", "\\1", nm)
+    ## attr(pos, "instrument") <- gsub(".*%SEP%(.*?)", "\\1", nm)
+    ## if (!is.null(account))
+    ##     attr(pos, "account") <- gsub("(.*)%SEP%.*", "\\1", nm)
     attr(pos, "unit") <- "amount"
     class(pos) <- "position"
     pos
@@ -178,7 +214,10 @@ position.journal <- function(amount, when,
                    amount$account
     amount     <- amount$amount
 
-    position.default(amount, timestamp, instrument, when,
+    position.default(amount = amount,
+                     timestamp = timestamp,
+                     instrument = instrument,
+                     when = when,
                      drop.zero = drop.zero,
                      account = account,
                      use.names = FALSE,
