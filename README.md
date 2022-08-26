@@ -22,7 +22,7 @@ functions might be introduced. The *recommended* *practice*
 is therefore to *explicitly* *name* *arguments* *in*
 *function* *calls* (and not pass arguments by
 position). Any changes in argument names will be documented
-in the 
+in the
 [NEWS file](http://enricoschumann.net/R/packages/PMwR/NEWS) and
 so can be followed easily. More details are in the
 [ChangeLog](http://enricoschumann.net/R/packages/PMwR/ChangeLog).
@@ -42,7 +42,7 @@ blocks for many activities in portfolio management.
 - Computing profit/loss and returns: See ?returns,
      ?rc, ?pl or ?unit_prices.
 
-All details are in the 
+All details are in the
 [manual](http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html).
 New features are often described in these
 [notes](http://enricoschumann.net/notes/PMwR/).
@@ -57,9 +57,11 @@ The latest stable version of the package is available from
 [CRAN](https://cran.r-project.org/package=PMwR).  The
 latest *development* version is available from
 http://enricoschumann.net/R/packages/PMwR/ . You can
-install that version package directly from within R:
+install either version directly from within R:
 
-    install.packages('PMwR',
+    install.packages('PMwR') ## CRAN stable version
+
+    install.packages('PMwR', ## development version
                      repos = c('http://enricoschumann.net/R',
                                getOption('repos')))
 

@@ -1,6 +1,7 @@
 .es_keywords
 .git
 .gitignore
+ChangeLog
 LICENSE
 R/dev.R
 README.org
