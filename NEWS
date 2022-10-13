@@ -4,7 +4,8 @@ v0.18-0  (2022-10-19; not yet released)
     TRUE, which is current behaviour. If FALSE, the
     function looks at differences instead of relative
     changes (returns), which is useful, for instance, for
-    interest rates.
+    interest rates. For an example, see
+    http://enricoschumann.net/notes/streaks-in-equity-returns-and-yield-changes.html
 
   o [btest]: rebalance arithmetic is performed only for
     positions with non-zero change also in period 1,
