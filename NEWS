@@ -1,9 +1,9 @@
-v0.18-0  (2022-10-19; not yet released)
+v0.18-0  (2022-10-19)
 
   o [streaks] gains an argument "relative", with default
-    TRUE, which is current behaviour. If FALSE, the
+    TRUE, which is the current behaviour. If FALSE, the
     function looks at differences instead of relative
-    changes (returns), which is useful, for instance, for
+    changes (returns).  Useful, for instance, for
     interest rates.
 
   o [btest]: rebalance arithmetic is performed only for
@@ -14,8 +14,6 @@ v0.18-0  (2022-10-19; not yet released)
 
   o [position]: if 'when' is not specified, timestamps
     are now effectively ignored, even if they are NA
-
-  o ....
 
   o There is an additional public Git repository at
     https://git.sr.ht/~enricoschumann/PMwR
