@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-21  Enrico Schumann
+## Copyright (C) 2008-22  Enrico Schumann
 
 makeHHMMSS <- function(x, label = "time specification (HHMMSS)") {
     x <- as.character(x)
@@ -179,13 +179,20 @@ time.btest <- function(x, ...)
 }
 
 .may_be_Date <- function(x, ...) {
-    ans <- try(as.Date(x), silent = TRUE)
-    res <- if (inherits(ans, "try-error"))
-               FALSE
-           else if (all(is.na(ans)))
-               FALSE
-           else
-               TRUE
+    if (is.numeric(x)) {
+        res <- FALSE
+    } else if (inherits(x, "Date")) {
+        res <- TRUE
+        ans <- x
+    } else {
+        ans <- try(as.Date(x), silent = TRUE)
+        res <- if (inherits(ans, "try-error"))
+                   FALSE
+               else if (all(is.na(ans)))
+                   FALSE
+               else
+                   TRUE
+    }
     if (res)
         attr(res, "Date") <- ans
     res

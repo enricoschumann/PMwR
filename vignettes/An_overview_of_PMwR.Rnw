@@ -42,25 +42,23 @@ pv <- gsub("(.*)[.](.*)", "\\1-\\2", pv)
 <<echo=false,results=hide>>=
 library("PMwR")
 library("zoo")
-try(tinytest::test_package("PMwR"), silent = TRUE)
 @
 
 \noindent \textsc{pm}w\textsc{r} provides a small set of
-reliable, efficient and convenient
-tools that help with processing and analysing trade and
-portfolio data. The package does not provide a complete
-application to be used `as is', but tools
-for creating such an application.
+reliable, efficient and convenient tools that help with
+processing and analysing trade and portfolio data. The
+package does not provide a complete application to be used
+`as is', but tools for creating such an application.
 
 \noindent The package grew out of various pieces of
 software that I have written since 2008.%
 \footnote{In the unlikely case that you come across a
   really-old version of the package: it was called
   \textsc{pm} before 2012.} %
-The package is under active development and changes
-frequently, simply because the code has been written
-over many years and is in need of being groomed for
-general use.%
+The interfaces of functions may still not be fully stable
+(e.g., argument names might still be made consistent across
+functions); in some cases, generic functions might be
+introduced.%
 \footnote{
 <<echo=false,results=hide>>=
 if (requireNamespace("tinytest")) {
@@ -73,36 +71,36 @@ if (requireNamespace("tinytest")) {
 } else
     nt <- "several hundred"
 @
-Even if \textsc{pm}w\textsc{r} is under development:
-the package is to provide well-documented and reliable
-code.  For all computations, unit tests are included.
-As of package version %
-\Sexpr{pv}, \Sexpr{nt} tests are included.
-These tests are stored in subdirectory \texttt{tinytest}.} %
-
-Specifically, interfaces to functions may not be stable
-yet (e.g., argument names are currently being made
-consistent across functions); in some cases, generic
-functions may be introduced. The \textbf{recommended
-  practice} is therefore to \textbf{explicitly name
-  arguments in function calls} and not pass arguments
-by position. Any changes in argument names will be
-documented in the \textsc{news} file
+Even if \textsc{pm}w\textsc{r} is under development: the
+package is to provide well-documented and reliable code.
+For all computations, unit tests are included.  As of
+package version %
+\Sexpr{pv}, \Sexpr{nt} tests are included.  These tests are
+stored in subdirectory \texttt{tinytest}.} %
+The \textbf{recommended practice} is therefore to
+\textbf{explicitly name arguments in function calls} and
+not pass arguments by position. Any changes in argument
+names will be documented in the \texttt{NEWS} file
 (\,\url{http://enricoschumann.net/R/packages/PMwR/NEWS}\,)
-and so can be easily followed. More details
-are in the ChangeLog
+and so can be easily followed. More details are in the
+ChangeLog
 (\,\url{http://enricoschumann.net/R/packages/PMwR/ChangeLog}\,).
 
-The very latest version of the package is available from
-\url{http://enricoschumann.net/R/packages/PMwR/}. To install the
-package from within R, type
+The package is on \textsc{cran} and can be installed from
+there.  The very latest (i.e. development) version of the
+package is available
+from \url{http://enricoschumann.net/R/packages/PMwR/}\,. To
+install that version from within R, type
 <<eval=false, results=hide>>=
 install.packages('PMwR',
-                 repos = c('http://enricoschumann.net/R', getOption('repos')))
+                 repos = c('http://enricoschumann.net/R',
+                           getOption('repos')))
 @
 within a session. The package depends on several other
 packages, which can be obtained from the same
-repository and from \textsc{cran}.
+repository and from \textsc{cran}.  The source code is
+also hosted at publicly-available repositories; see the
+\texttt{DESCRIPTION} file.
 
 % There is currently no automatic Windows build for the
 % latest version.%

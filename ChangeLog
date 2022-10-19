@@ -1,3 +1,20 @@
+2022-10-19  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 0.18-0
+
+2022-10-18  Enrico Schumann  <es@enricoschumann.net>
+
+	* man/is_valid_ISIN.Rd: update links
+
+2022-10-13  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/internal.R (.may_be_Date): in R-devel,
+        as.Date(1) no longer fails but evaluates to a
+        Date. Function '.may_be_Date' now labels Dates
+        and character vectors/factors that can be
+        coerced with as.Date.  All other vectors are
+        FALSE (in particular, numeric vectors).
+
 2022-08-25  Enrico Schumann  <es@enricoschumann.net>
 
         * R/position.R (position): if 'when' is not
@@ -44,9 +61,9 @@
            version 0.16-0]
 
         * R/position.R: convert to Date via as.POSIXlt(....).
-        This fixes computing dates from timestamps in
-        certain locales (timezones with large UTC offsets)
-        in case the "when" keyword was used.
+        This fixes the computation of dates from timestamps
+	in certain locales (timezones with large UTC
+	offsets) in case the "when" keyword was used.
 
 2021-09-15  Enrico Schumann  <es@enricoschumann.net>
 

@@ -18,13 +18,14 @@
 
   \code{.may_be_Date} checks whether a vector could be
   coerced to class \code{\link{Date}}, in which case it
-  evaluates to (a single) \code{TRUE}; otherwise it
-  returns \code{FALSE}.
+  evaluates to (a single) \code{TRUE}; otherwise it returns
+  \code{FALSE}. If \code{TRUE}, the actual \code{Date}s are
+  attached as an attribute \code{Date}.
 
 }
 \references{
 
-  E. Schumann (2020) \emph{Portfolio Management with \R}.
+  E. Schumann (2022) \emph{Portfolio Management with \R}.
   \url{http://enricoschumann.net/PMwR/}
 }
 \author{

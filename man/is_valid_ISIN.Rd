@@ -5,7 +5,7 @@
   Validate Security Identification Numbers
 }
 \description{
-  Check whether a given ISIN is valid.
+  Check whether a given ISIN or SEDOL is valid.
 }
 \usage{
 is_valid_ISIN(isin)
@@ -43,7 +43,9 @@ is_valid_SEDOL(SEDOL, NA.FALSE = FALSE)
 \references{
   \url{https://en.wikipedia.org/wiki/ISO_6166}
 
-  \url{https://www.anna-web.org/standards/isin-iso-6166/}
+  \url{https://en.wikipedia.org/wiki/SEDOL}
+
+  \url{https://anna-web.org/identifiers/}
 }
 \author{
   Enrico Schumann
