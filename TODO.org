@@ -36,6 +36,7 @@
 
 ** subset e.g. YYYY-MM for specific month?
 
+
 * =position= [0/2]
 
 ** TODO =when= keywords?
@@ -106,6 +107,7 @@
 * =streaks=
 
   allow absolute streaks? (i.e. not percentage moves)
+
 
 * =quote32=
 

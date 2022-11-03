@@ -1,9 +1,12 @@
 importFrom(NMOF, drawdown)
 importFrom(NMOF, pm)
-importFrom(zoo, as.zoo)
-importFrom(zoo, coredata)
-importFrom(zoo, index)
-importFrom(zoo, zoo)
+
+importFrom("zoo",
+           as.zoo, as.Date.yearmon, as.Date.yearqtr,
+           coredata,
+           index,
+           zoo)
+
 importFrom(orgutils, toOrg)
 importFrom(textutils, strexp)
 importFrom(textutils, spaces)

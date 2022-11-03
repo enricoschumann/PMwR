@@ -1,3 +1,10 @@
+v0.19-0  (2022-11-03; not released yet)
+
+  o [returns]: support timestamps of class "yearqtr"
+    and "yearmon", as provided by the package "zoo"
+
+  o ....
+
 v0.18-0  (2022-10-19)
 
   o [streaks] gains an argument "relative", with default

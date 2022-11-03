@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-21  Enrico Schumann
+## Copyright (C) 2008-22  Enrico Schumann
 
 returns <- function(x, ...)
     UseMethod("returns")
@@ -239,25 +239,43 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
         ans <- numeric(nc)
         names(ans) <- instr
         is.ann  <- logical(nc)
-        from.to <- array(NA, dim = c(nc, 2))
-        colnames(from.to) <- c("from", "to")
-        t <- as.Date(t)
+        ## from.to <- array(NA, dim = c(nc, 2))
+        ## colnames(from.to) <- c("from", "to")
+        from.to <- vector("list", length = nc)
+
+        if (inherits(t, "yearmon")) {
+            units_per_year <- 1
+        } else if (inherits(t, "yearqtr")) {
+            units_per_year <- 1
+        } else {
+            units_per_year <- 365
+            t <- as.Date(t)
+        }
         for (j in 1:nc) {
             xj <- x[, j]
             t1 <- max(which(!is.na(xj)))
             t0 <- min(which(!is.na(xj)))
-            tt <- as.numeric( t[t1] - t[t0] )/365
+            tt <- as.numeric( t[t1] - t[t0] )/units_per_year
             tmp <- xj[t1]/xj[t0]
             if (tt > 1 || force) {
                 tmp <- tmp^(1/tt)
                 is.ann[j] <- TRUE
             }
             ans[j] <- tmp - 1
-            from.to[ j, ] <- c(t[t0], t[t1])
+            ## from.to[j, ] <- c(t[t0], t[t1])
+            from.to[[j]] <- c(t[t0], t[t1])
         }
         attr(ans, "period") <- if (force)
                                    "annualised!" else "annualised"
-        class(from.to) <- "Date"
+        from.to <- do.call(rbind, from.to)
+        colnames(from.to) <- c("from", "to")
+        if (inherits(t, "yearmon")) {
+            class(from.to) <- "yearmon"
+        } else if (inherits(t, "yearqtr")) {
+            class(from.to) <- "yearqtr"
+        } else {
+            class(from.to) <- "Date"
+        }
         attr(ans, "t") <- from.to
         attr(ans, "is.annualised") <- is.ann
     } else if (length(period) == 1L &&
@@ -517,15 +535,25 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
         else
             nn <- ""
         r_str <- paste0(format(round(x*100, digits), nsmall = digits), "%  ")
-        cal_str <- paste0("[",
-                       format(timestamp[,1],"%d %b %Y"), " -- ",
-                       format(timestamp[,2],"%d %b %Y"))
+        if (inherits(timestamp, "Date")) {
+            cal_str <- paste0("[",
+                              format(timestamp[, 1],"%d %b %Y"), " -- ",
+                              format(timestamp[, 2],"%d %b %Y"))
+        } else if (inherits(timestamp, "yearmon")) {
+            cal_str <- paste0("[",
+                              format(timestamp[, 1],"%b %Y"), " -- ",
+                              format(timestamp[, 2],"%b %Y"))
+        } else if (inherits(timestamp, "yearqtr")) {
+            cal_str <- paste0("[",
+                              format(timestamp[, 1],"Q%q %Y"), " -- ",
+                              format(timestamp[, 2],"Q%q %Y"))
+        }
 
         note <- rep("]", length(x))
-        note[as.numeric(timestamp[,2L]-timestamp[,1L])/365 < 1 &
+        note[as.numeric(timestamp[, 2L] - timestamp[, 1L])/365 < 1 &
               attr(x, "is.annualised")] <-
             "; less than one year, but annualised]"
-        note[as.numeric(timestamp[,2L]-timestamp[,1L])/365 < 1 &
+        note[as.numeric(timestamp[, 2L] - timestamp[, 1L])/365 < 1 &
               !attr(x, "is.annualised")] <-
             "; less than one year, not annualised]"
         cat(paste0(nn, r_str, cal_str, note, collapse = "\n"), "\n")
