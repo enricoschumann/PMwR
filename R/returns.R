@@ -566,10 +566,20 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
         else
             nn <- ""
         r_str <- paste0(format(round(x*100, digits), nsmall = digits), "%  ")
-        cal_str <- paste0("[",
-                          format(timestamp[,1],"%d %b %Y"), " -- ",
-                          format(timestamp[,2],"%d %b %Y"),
-                          "]")
+
+        if (inherits(timestamp, "Date")) {
+            cal_str <- paste0("[",
+                              format(timestamp[, 1],"%d %b %Y"), " -- ",
+                              format(timestamp[, 2],"%d %b %Y"))
+        } else if (inherits(timestamp, "yearmon")) {
+            cal_str <- paste0("[",
+                              format(timestamp[, 1],"%b %Y"), " -- ",
+                              format(timestamp[, 2],"%b %Y"))
+        } else if (inherits(timestamp, "yearqtr")) {
+            cal_str <- paste0("[",
+                              format(timestamp[, 1],"Q%q %Y"), " -- ",
+                              format(timestamp[, 2],"Q%q %Y"))
+        }
         cat(paste0(nn, r_str, cal_str, collapse = "\n"), "\n")
     } else {
         print(unclass(x))
