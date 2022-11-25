@@ -28,3 +28,20 @@ bt <- btest(list(P),
             ## signal = function() NULL,
             do.signal = FALSE)
 expect_equivalent(bt$wealth, c(P %*% c(1, 2)))
+
+P <- cbind(100:110, 200:210)
+bt <- btest(list(P),
+            initial.position = c(1, 2),
+            prices0 = c(1, 2),            ## with prices
+            ## signal = function() NULL,
+            do.signal = FALSE)
+expect_equivalent(bt$wealth, c(P %*% c(1, 2)))
+
+P <- cbind(100:110, 200:210)
+bt <- btest(list(P),
+            initial.position  = c(1, 2),
+            prices0 = t(c(1, 2)),         ## with prices
+            signal = function() c(1, 2),  ##      and signal
+            b = 0,
+            do.signal = TRUE)
+expect_equivalent(bt$wealth, c(P %*% c(1, 2)))
