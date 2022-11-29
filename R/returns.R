@@ -11,7 +11,7 @@ returns.default <- function(x, t = NULL, period = NULL,
                             rebalance.when = NULL,
                             lag = 1, ...) {
 
-    if (!is.null(period) && period == "total")
+    if (identical(tolower(period), "total"))
         period <- "itd"
 
     if (is.unsorted(t)) {  ## this works because
@@ -217,8 +217,8 @@ pReturns <- function(x, t, period, complete.first = TRUE, pad = NULL) {
     if (is.character(period))
         period <- tolower(period)
     if (length(period) == 1L &&
-        (best <- grepl("best",  period, ignore.case = TRUE)) ||
-                 grepl("worst", period, ignore.case = TRUE)) {
+        (best <- grepl("best",  period, ignore.case = TRUE) ||
+                 grepl("worst", period, ignore.case = TRUE))) {
 
         if (grepl("year", period, ignore.case = TRUE)) {
 
