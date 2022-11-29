@@ -84,13 +84,13 @@ btest(prices, signal,
     and must be coercable to \code{\link{Date}}.
 
   }
-  \item{do.rebalance}{
 
-    Same as \code{do.signal}. Can also be the string
-    \code{"do.signal"}, in which case the value of
-    \code{do.signal} is copied.
-
+  \item{do.rebalance}{%
+    Same as \code{do.signal}. Can
+    also be the string \code{"do.signal"}, in which
+    case the value of \code{do.signal} is copied.
   }
+
   \item{print.info}{
 
     A function or \code{NULL}. If \code{NULL}, nothing
@@ -294,7 +294,7 @@ btest(prices, signal,
     \code{SuggestedPortfolio}, \code{Globals}. Further
     reserved names may be added in the future:
     \strong{it is suggested to not start an argument
-    name with capital letter}.
+    name with a capital letter}.
 
     The function \code{signal} must evaluate to the
     target position in units of the instruments. To
