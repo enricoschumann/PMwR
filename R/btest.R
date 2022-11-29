@@ -631,22 +631,38 @@ btest  <- function(prices,
     } else
         initial.wealth <- initial.cash
 
-    ## period 1: code is only used if  b == 0L
+
+    if (progressBar)
+        progr <- txtProgressBar(min = max(2L, b+1L), max = T,
+                                initial = max(2L, b+1L),
+                                char = if (.Platform$OS.type == "unix") "\u2588" else "|",
+                                width = ceiling(getOption("width")*0.8),
+                                style = 3, file = "")
+
+
+    ## Period 1: code is only used if  b == 0L
     if (b == 0L) {
+        if (progressBar)
+            setTxtProgressBar(progr, t)
         t <- 1L
         computeSignal <- do.signal(...,
-                                   Open = Open, High = High,
-                                   Low = Low, Close = Close,
-                                   Wealth = Wealth, Cash = Cash,
-                                   Time = Time, Timestamp = Timestamp,
+                                   Open = Open,
+                                   High = High,
+                                   Low = Low,
+                                   Close = Close,
+                                   Wealth = Wealth,
+                                   Cash = Cash,
+                                   Time = Time,
+                                   Timestamp = Timestamp,
                                    Portfolio = Portfolio,
                                    SuggestedPortfolio = SuggestedPortfolio,
                                    Globals = Globals)
 
         if (computeSignal) {
-            temp <- signal(..., Open = Open, High = High, Low = Low,
-                           Close = Close, Wealth = Wealth, Cash = Cash,
-                           Time = Time, Timestamp = Timestamp,
+            temp <- signal(..., Open = Open, High = High,
+                           Low = Low, Close = Close, Wealth = Wealth,
+                           Cash = Cash, Time = Time,
+                           Timestamp = Timestamp,
                            Portfolio = Portfolio,
                            SuggestedPortfolio = SuggestedPortfolio,
                            Globals = Globals)
@@ -660,6 +676,7 @@ btest  <- function(prices,
                 Xs[t, ] <- temp
             } else
                 Xs[t, ] <- initial.position
+
             computeSignal <- FALSE
         } else {
             Xs[t, ] <- if (any(initial.position != 0))
@@ -684,7 +701,7 @@ btest  <- function(prices,
         if (max(abs(dXs)) < tol)
             rebalance <- FALSE
 
-        if (rebalance) {
+        if (any(rebalance)) {
 
             if (!is.null(tc_fun))
                 tc <- tc_fun(...,
@@ -697,6 +714,7 @@ btest  <- function(prices,
                              Globals = Globals)
 
             dx <- fraction * dXs
+            dx[!rebalance] <- 0
 
             if (trade.at.open) ## will convert m(O|C) to vector
                 open <- mO[t, , drop = TRUE]
@@ -742,20 +760,17 @@ btest  <- function(prices,
     }
     ## end period 1
 
-    if (progressBar)
-        progr <- txtProgressBar(min = max(2L, b+1L), max = T,
-                                initial = max(2L, b+1L),
-                                char = if (.Platform$OS.type == "unix") "\u2588" else "|",
-                                width = ceiling(getOption("width")*0.8),
-                                style = 3, file = "")
+
 
     for (t in max(2L, b+1L):T) {
         if (progressBar)
             setTxtProgressBar(progr, t)
         t1 <- t - 1L
         computeSignal <- do.signal(...,
-                                   Open = Open, High = High,
-                                   Low = Low, Close = Close,
+                                   Open = Open,
+                                   High = High,
+                                   Low = Low,
+                                   Close = Close,
                                    Wealth = Wealth,
                                    Cash = Cash,
                                    Time = Time,
@@ -776,7 +791,8 @@ btest  <- function(prices,
             if (!is.null(temp)) {
                 if (convert.weights) {
                     temp0 <- temp != 0
-                    temp[temp0] <- temp[temp0] * v[t1] / mC[t1, temp0]
+                    temp[temp0] <- temp[temp0] *
+                                   v[t1] / mC[t1, temp0]
                 }
                 Xs[t, ] <- temp
             } else
@@ -787,7 +803,7 @@ btest  <- function(prices,
             Xs[t, ] <- Xs[t1, ] ## b0
         }
 
-
+        ## REBALANCE?
         rebalance <- do.rebalance(..., Open = Open, High = High,
                                   Low = Low, Close = Close,
                                   Wealth = Wealth, Cash = Cash,
@@ -797,6 +813,7 @@ btest  <- function(prices,
                                   Globals = Globals)
 
         dXs <- Xs[t, ] - X[t1, ]  ## b0
+
         if (max(abs(dXs)) < tol)
             rebalance <- FALSE
         else if (!is.na(tol.p) && initial.wealth > 0 && v[t1] > 0 ) {
@@ -807,8 +824,9 @@ btest  <- function(prices,
                 rebalance  <- FALSE
         }
 
-        if (rebalance) {
+        if (any(rebalance)) {
             dx <- fraction * dXs
+            dx[!rebalance] <- 0
 
             if (!is.null(tc_fun))
                 tc <- tc_fun(...,

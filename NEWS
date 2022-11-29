@@ -1,13 +1,17 @@
-v0.19-0  (2022-11-04; not released yet)
+v0.19-0  (2022-11-29; not released yet)
 
-  o [returns]: support timestamps of class "yearqtr"
-    and "yearmon", as provided by the package "zoo"
+  o 'returns': support timestamps of class 'yearqtr'
+    and 'yearmon', as provided by the package 'zoo'
+
+  o 'btest': function 'do.rebalance' may now return a
+    logical vector with length equal to the number of
+    assets, indicating which assets to rebalance
 
   o ....
 
 v0.18-0  (2022-10-19)
 
-  o [streaks] gains an argument "relative", with default
+  o 'streaks' gains an argument 'relative', with default
     TRUE, which is the current behaviour. If FALSE, the
     function looks at differences instead of relative
     changes (returns), which is useful, for instance, for

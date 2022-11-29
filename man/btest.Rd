@@ -86,8 +86,11 @@ btest(prices, signal,
   }
 
   \item{do.rebalance}{%
-    Same as \code{do.signal}. Can
-    also be the string \code{"do.signal"}, in which
+
+    Same as \code{do.signal}, but it may return a
+    logical vector of length equal to the number of
+    assets, which dictates which assets to rebalance.
+    Can also be the string \code{"do.signal"}, in which
     case the value of \code{do.signal} is copied.
   }
 
