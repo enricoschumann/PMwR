@@ -62,7 +62,6 @@ scale1.default <- function (x, ...,
         ## for (i in seq_len(ncol(x0)))
         ##     x[,i] <- cumprod(1 + x0[ ,i] - m[i])
         ## x[NAs] <- NA
-        ## browser()
         if (geometric) {
             ## for (i in seq_len(ncol(x0))) {
             ##     tmp <- (1+x0[-1,i])/

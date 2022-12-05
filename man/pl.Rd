@@ -156,16 +156,19 @@ pl(amount, \dots )
   a list of lists: one list for each instrument. Each
   such list contains numeric vectors: \code{pl},
   \code{realised}, \code{unrealised}, \code{buy},
-  \code{sell}, \code{volume}.
+  \code{sell}, \code{volume}. If \code{along.timestamp}
+  is not \code{\link{FALSE}}, a vector \code{timestamp}
+  is also present.
 
   For \code{.pl}, a numeric vector with four elements:
   profit/loss in units of the instrument, sum of
   absolute amounts, average buy price, average sell
-  price.
+  price. For zero-length vector, the function evaluates to
+  \code{c(0, 0, NaN, NaN)}.
 
 }
 \references{
-Schumann, E. (2020) \emph{Portfolio Management
+Schumann, E. (2022) \emph{Portfolio Management
   with R}. \url{http://enricoschumann.net/PMwR/}
 
 }

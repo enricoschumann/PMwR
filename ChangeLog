@@ -1,9 +1,20 @@
+2022-12-05  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/pl.R (.pl): the behaviour for zero-length
+        vector is now documented (i.e. a profit/loss of
+        zero, which is in the same spirit as
+        'sum(numeric(0))')
+        (pl): support empty journals and zero-length
+        amounts when 'along.timestamp' is TRUE. The result
+        is an 'pl' object with zero-length components 'pl',
+        'unrealised', etc.
+
 2022-11-29  Enrico Schumann  <es@enricoschumann.net>
 
         * R/btest.R (btest): 'do.rebalance' may return a
-	vector of length equal to the number of assets,
-	indicating which assets to rebalance (before, the
-	function had to be return a vector of length one)
+        vector of length equal to the number of assets,
+        indicating which assets to rebalance (before, the
+        function had to be return a vector of length one)
 
         * R/returns.R (returns.default): fix warnings
         in situations when 'period' has length > 1
