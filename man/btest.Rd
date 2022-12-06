@@ -360,7 +360,8 @@ btest(prices, signal,
   \item{\code{wealth}}{time-series of total portfolio
     value (aka equity curve)}
   \item{\code{cum.tc}}{transaction costs}
-  \item{\code{journal}}{\code{\link{journal}} of trades}
+  \item{\code{journal}}{\code{\link{journal}} of trades.
+    Only includes trades done during the backtest, not initial positions.}
   \item{\code{initial.wealth}}{initial wealth}
   \item{\code{b}}{burn-in}
   \item{\code{final.position}}{final position if \code{final.position} is
