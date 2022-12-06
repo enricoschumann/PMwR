@@ -1,5 +1,9 @@
 2022-12-05  Enrico Schumann  <es@enricoschumann.net>
 
+	* R/returns.R (returns.default, returns.zoo)
+	(returns.NAVseries): add argument 'na.rm',
+	currently with default TRUE
+
         * R/pl.R (.pl): the behaviour for zero-length
         vector is now documented (i.e. a profit/loss of
         zero, which is in the same spirit as

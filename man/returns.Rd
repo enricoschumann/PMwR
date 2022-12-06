@@ -19,11 +19,11 @@ returns(x, \dots)
 \method{returns}{default}(x, t = NULL, period = NULL, complete.first = TRUE,
         pad = NULL, position = NULL,
         weights = NULL, rebalance.when = NULL,
-        lag = 1, \dots)
+        lag = 1, na.rm = TRUE, \dots)
 
 \method{returns}{zoo}(x, period = NULL, complete.first = TRUE,
         pad = NULL, position = NULL,
-        weights = NULL, rebalance.when = NULL, lag = 1, \dots)
+        weights = NULL, rebalance.when = NULL, lag = 1, na.rm = TRUE, \dots)
 
 \method{print}{p_returns}(x, \dots, year.rows = TRUE, month.names = NULL,
       zero.print = "0", plus = FALSE, digits = 1,
@@ -106,6 +106,9 @@ returns(x, \dots)
     observation) or a value used for padding
     (reasonable values might be \code{\link{NA}} or
     \code{0})
+  }
+  \item{na.rm}{%
+    logical; see Details
   }
   \item{position}{%
 
@@ -236,6 +239,15 @@ returns(x, \dots)
     (e.g. \code{\link{Date}}).
   }
 
+  \subsection{Handling missing values}{
+
+    Removing missing values (i.e. setting \code{na.rm} to
+    \code{\link{TRUE}}) only has effects when \code{period} is
+    specified.
+
+  }
+
+
 }
 \value{
 
@@ -258,6 +270,8 @@ returns(x, \dots)
   holding-period returns, there may be a logical attribute
   \code{is.annualised}, and an attribute \code{from.to},
   which tells the start and end date of the holding period.
+
+
 
 }
 \author{

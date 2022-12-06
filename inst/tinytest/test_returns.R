@@ -81,6 +81,8 @@ z <- zoo(x, t)
 ## z <- cbind(z,z,z)
 returns(z, period = "mtd")
 
+
+
 expect_true("p_returns" %in% class(returns(x, t = t, period = "month")))
 expect_true("p_returns" %in% class(returns(z,        period = "month")))
 expect_true(class(returns(z)) == "zoo")

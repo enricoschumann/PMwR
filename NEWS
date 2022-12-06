@@ -1,6 +1,11 @@
-v0.19-0  (2022-11-29; not released yet)
+v0.19-0  (2022-12-06; not released yet)
 
-  o 'returns': support timestamps of class 'yearqtr'
+  o 'returns' gains an argument 'na.rm', currently with
+    default TRUE, which matches the current behaviour. In a
+    not-too-distant future version, the default will be
+    changed to FALSE.
+
+  o 'returns' supports timestamps of class 'yearqtr'
     and 'yearmon', as provided by the package 'zoo'
 
   o 'btest': function 'do.rebalance' may now return a
@@ -18,13 +23,13 @@ v0.18-0  (2022-10-19)
     interest rates. For an example, see
     http://enricoschumann.net/notes/streaks-in-equity-returns-and-yield-changes.html
 
-  o [btest]: rebalance arithmetic is performed only for
+  o 'btest': rebalance arithmetic is performed only for
     positions with non-zero change also in period 1,
     i.e. in the rare case when burnin is 0, which
     allows NAs in prices. (For periods > 1, this
     behaviour had been introduced in version 0.10-0.)
 
-  o [position]: if 'when' is not specified, timestamps
+  o 'position': if 'when' is not specified, timestamps
     are now effectively ignored, even if they are NA
 
   o There is an additional public Git repository at
