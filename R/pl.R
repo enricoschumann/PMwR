@@ -144,30 +144,13 @@ pl.default <- function(amount, price, timestamp = NULL,
     if (approx)
         .NotYetUsed("approx")
 
-    if (!length(amount) && isTRUE(along.timestamp) &&
-        is.null(initial.position)) {
-        ans <- list(list(timestamp = numeric(0),
-                         pl = numeric(0),
-                         realised = numeric(0),
-                         unrealised = numeric(0),
-                         buy = numeric(0),
-                         sell = numeric(0),
-                         volume = 0))
-        class(ans) <- "pl"
-        attr(ans, "along.timestamp") <- along.timestamp
-        attr(ans, "instrument") <- NA
-        return(ans)
-    }
-
-
-
     if (footnotes)
         fn <- NULL
 
     custom.timestamp <- FALSE
     if (isTRUE(along.timestamp)) {
 
-        if (is.null(timestamp) || all(is.na(timestamp)))
+        if (!length(timestamp) || all(is.na(timestamp)))
             timestamp <- seq_along(amount)
         else
             if (is.unsorted(timestamp)) {
@@ -177,6 +160,7 @@ pl.default <- function(amount, price, timestamp = NULL,
                 instrument <- instrument[io]
                 price <- price[io]
             }
+
     } else if (!identical(along.timestamp, FALSE)) {
 
         ## User-defined timestamp: vprice needs to be
@@ -204,6 +188,26 @@ pl.default <- function(amount, price, timestamp = NULL,
             vprice <- vprice[io, , drop = FALSE]
         }
     }
+
+    ## empty amount
+    if (!length(amount) && isTRUE(along.timestamp) &&
+        is.null(initial.position)) {
+        ans <- list(list(timestamp = numeric(0),
+                         pl = numeric(0),
+                         realised = numeric(0),
+                         unrealised = numeric(0),
+                         buy = numeric(0),
+                         sell = numeric(0),
+                         volume = 0))
+        class(ans) <- "pl"
+        attr(ans, "along.timestamp") <- along.timestamp
+        attr(ans, "instrument") <- NA
+        return(ans)
+    }
+
+
+
+
 
     ## initial position should be a named vector
     if (!is.null(initial.position)) {

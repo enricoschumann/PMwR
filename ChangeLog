@@ -1,8 +1,8 @@
 2022-12-05  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (returns.default, returns.zoo)
-	(returns.NAVseries): add argument 'na.rm',
-	currently with default TRUE
+        * R/returns.R (returns.default, returns.zoo)
+        (returns.NAVseries): add argument 'na.rm',
+        currently with default TRUE
 
         * R/pl.R (.pl): the behaviour for zero-length
         vector is now documented (i.e. a profit/loss of
@@ -11,7 +11,8 @@
         (pl): support empty journals and zero-length
         amounts when 'along.timestamp' is TRUE. The result
         is an 'pl' object with zero-length components 'pl',
-        'unrealised', etc.
+        'unrealised', etc. Empty journals will be handled
+        in 'pl.default'.
 
 2022-11-29  Enrico Schumann  <es@enricoschumann.net>
 
