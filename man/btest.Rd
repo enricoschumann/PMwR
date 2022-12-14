@@ -83,24 +83,35 @@ btest(prices, signal,
     in these cases, \code{timestamp} needs to specified
     and must be coercable to \code{\link{Date}}.
 
+    If \code{timestamp} is specified, do.signal may also
+    be a vector of the same class as \code{timestamp}
+    (typically \code{\link{Date}} or \code{\link{POSIXct}}).
+    If the timestamps specified in \code{do.signal} do not
+    occur in \code{timestamp}, a signal is computed on the
+    next possible time instance.
+
   }
 
   \item{do.rebalance}{%
 
-    Same as \code{do.signal}, but it may return a
-    logical vector of length equal to the number of
-    assets, which dictates which assets to rebalance.
-    Can also be the string \code{"do.signal"}, in which
-    case the value of \code{do.signal} is copied.
-  }
-
-  \item{print.info}{
-
-    A function or \code{NULL}. If \code{NULL}, nothing
-    is printed.
+    Same as \code{do.signal}, but it may return a logical
+    vector of length equal to the number of assets, which
+    indicates which assets to rebalance. Can also be the
+    string \code{"do.signal"}, in which case the value of
+    \code{do.signal} is copied. \code{do.rebalance} is called
+    after signal computation, so it can access the suggested
+    position of the current period (via \code{SuggestedPortfolio(0)}.
 
   }
-  \item{cashflow}{
+
+  \item{print.info}{%
+
+    A function, called at the very end of each period,
+    i.e. after rebalancing.  Can also be \code{NULL}, in
+    which case nothing is printed.
+
+  }
+  \item{cashflow}{%
 
     A function or \code{NULL} (default).
 
