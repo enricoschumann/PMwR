@@ -83,8 +83,8 @@ btest(prices, signal,
     in these cases, \code{timestamp} needs to specified
     and must be coercable to \code{\link{Date}}.
 
-    If \code{timestamp} is specified, do.signal may also
-    be a vector of the same class as \code{timestamp}
+    If \code{timestamp} is specified, \code{do.signal} may
+    also be a vector of the same class as \code{timestamp}
     (typically \code{\link{Date}} or \code{\link{POSIXct}}).
     If the timestamps specified in \code{do.signal} do not
     occur in \code{timestamp}, a signal is computed on the
