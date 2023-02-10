@@ -895,6 +895,9 @@ returns_rebalance <- function(prices, weights,
     ans
 }
 
+t.p_returns <- function(x) 
+    t(as.matrix.p_returns(x))
+
 as.matrix.p_returns <- function(x, ...) {
 
     if (attr(x, "period") == "monthly" && is.null(dim(x))) {

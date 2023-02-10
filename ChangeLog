@@ -1,3 +1,11 @@
+2023-02-10  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/returns.R (t.p_returns): add method for
+        holding-period returns. Primarily required for
+        handling dim names when printing returns.
+
+        * NAMESPACE: register method "t.p_returns"
+
 2022-12-05  Enrico Schumann  <es@enricoschumann.net>
 
         * R/returns.R (returns.default, returns.zoo)

@@ -144,3 +144,38 @@ rowSums(p*prices)
 ## missing values
 x <- zoo(c(NA, 2:5), as.Date("2017-10-27") + 1:5)
 expect_equivalent(unclass(returns(x, period = "month")), c(NA, 0.25))
+
+
+
+
+
+
+
+
+
+## compute returns for two or more series and try to transpose matrix
+## ==> no timestamp
+a <- 1:10
+b <- 2:11
+c <- 3:12
+expect_equal(dim(t(returns(cbind(a, b, c)))), c(3, length(a) - 1))
+
+
+
+## ==> yearly returns:
+##          a     b     c
+## 2022 500.0 250.0 166.7
+## 2023  66.7  57.1  50.0
+expect_equal(dim(returns(cbind(a=a, b=b, c=c),
+                         t = t, period = "year")),
+             c(2, 3))
+
+
+
+##   2022-12-31 2023-01-04
+## a   5.000000  0.6666667
+## b   2.500000  0.5714286
+## c   1.666667  0.5000000
+expect_equal(dim(t(returns(cbind(a=a, b=b, c=c), t = t, period = "year"))),
+             c(3,2))
+
