@@ -10,7 +10,8 @@
 
         * R/returns.R (returns.default, returns.zoo)
         (returns.NAVseries): add argument 'na.rm',
-        currently with default TRUE
+        currently with default TRUE. This expected to
+        change in a future release.
 
         * R/pl.R (.pl): the behaviour for zero-length
         vector is now documented (i.e. a profit/loss of

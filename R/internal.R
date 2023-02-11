@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-22  Enrico Schumann
+## Copyright (C) 2008-23  Enrico Schumann
 
 makeHHMMSS <- function(x, label = "time specification (HHMMSS)") {
     x <- as.character(x)
@@ -38,7 +38,7 @@ first <- function(x, by, index = FALSE) {
         x[match(unique(by), by)]
 }
 
-letter2month <- function(s, instrument = "option"){
+letter2month <- function(s, instrument = "option") {
     s <- toupper(s)
     if (instrument == "option") {
         meaning <- c("C 1", "C 2", "C 3", "C 4",  "C 5",  "C 6",

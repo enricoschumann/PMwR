@@ -1,7 +1,8 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-20  Enrico Schumann
+## Copyright (C) 2008-23  Enrico Schumann
 
-NAVseries <- function(NAV, timestamp,
+NAVseries <- function(NAV,
+                      timestamp,
                       instrument = NULL,
                       title = NULL,
                       description = NULL,
@@ -9,7 +10,8 @@ NAVseries <- function(NAV, timestamp,
 
     ## 'NAVseries(<btest>)' is natural since the NAV
     ## series ('wealth') is only extracted from the
-    ## 'btest' object
+    ## 'btest' object. But this seems a rare case, so a
+    ## generic should not be required.
     if (inherits(NAV, "btest"))
         return(as.NAVseries.btest(
             NAV,

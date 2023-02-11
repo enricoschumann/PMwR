@@ -1,16 +1,22 @@
-v0.19-0  (2022-12-06; not released yet)
+v0.19-0  (2023-02-10; not released yet)
 
   o 'returns' gains an argument 'na.rm', currently with
     default TRUE, which matches the current behaviour. In a
     not-too-distant future version, the default will be
     changed to FALSE.
 
-  o 'returns' supports timestamps of class 'yearqtr'
-    and 'yearmon', as provided by the package 'zoo'
+  o 'returns' supports timestamps of class 'yearqtr' and
+    'yearmon', as provided by the package 'zoo'
 
   o 'btest': function 'do.rebalance' may now return a
     logical vector with length equal to the number of
     assets, indicating which assets to rebalance
+
+  o a transpose method is now defined for holding-period
+    'returns', for the (rare) case that a returns matrix is
+    to be transposed [before, this had required an explicit
+    conversion with as.matrix, and otherwise would have
+    resulted in an error]
 
   o ....
 

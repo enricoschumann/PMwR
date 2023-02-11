@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-22  Enrico Schumann
+## Copyright (C) 2008-23  Enrico Schumann
 
 returns <- function(x, ...)
     UseMethod("returns")
@@ -895,7 +895,7 @@ returns_rebalance <- function(prices, weights,
     ans
 }
 
-t.p_returns <- function(x) 
+t.p_returns <- function(x)
     t(as.matrix.p_returns(x))
 
 as.matrix.p_returns <- function(x, ...) {
