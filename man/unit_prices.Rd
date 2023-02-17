@@ -63,7 +63,7 @@ unit_prices(NAV,
 }
 \references{
 
-  Schumann, E. (2020) \emph{Portfolio Management with
+  Schumann, E. (2023) \emph{Portfolio Management with
     \R}. \url{http://enricoschumann.net/PMwR/}
 
 }
@@ -95,21 +95,4 @@ unit_prices(NAV, cf, cf.included = TRUE)
 ## 8  2017-01-08 207 106.0244 1.952381
 ## 9  2017-01-09 208 106.5366 1.952381
 ## 10 2017-01-10 209 107.0488 1.952381
-
-
-##  ## behaviour prior to version 0.16-0:
-##  PMwR:::.unit_prices(NAV, cf, cf.included = TRUE)
-##  up <- unit_prices(NAV, cf, cf.included = TRUE)
-##
-##  old.cf <- rep(0, nrow(up))
-##  old.cf[up$timestamp \%in\% cf$timestamp] <- cf$cashflow
-##  old_up <- data.frame(timestamp = up$timestamp,
-##                       NAV = up$NAV,
-##                       price = up$price,
-##                       shares = up$units - diff(c(0, up$units)),
-##                       cashflow = old.cf,
-##                       new_shares = diff(c(0, up$units)),
-##                       total_shares = up$units,
-##                       NAV_after_cf = up$NAV)
-
 }

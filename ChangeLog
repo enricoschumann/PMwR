@@ -1,3 +1,9 @@
+2023-02-17  Enrico Schumann  <es@enricoschumann.net>
+
+        * man/unit_prices.Rd: remove reference to
+        ".unit_prices", which had been deprecated since
+        2020 (see ChangeLog entry 2020-11-22)
+
 2023-02-10  Enrico Schumann  <es@enricoschumann.net>
 
         * R/returns.R (t.p_returns): add method for

@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-21  Enrico Schumann
+## Copyright (C) 2008-23  Enrico Schumann
 
 unit_prices <- function(NAV, cashflows,
                         initial.price,
