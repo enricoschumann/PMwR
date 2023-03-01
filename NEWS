@@ -1,4 +1,4 @@
-v0.19-0  (2023-02-10; not released yet)
+v0.19-0  (2023-03-01; not released yet)
 
   o 'returns' gains an argument 'na.rm', currently with
     default TRUE, which matches the current behaviour. In a
@@ -18,7 +18,15 @@ v0.19-0  (2023-02-10; not released yet)
     conversion with as.matrix, and otherwise would have
     resulted in an error]
 
+  o 'rc' ignores NA values in prices as along as
+    corresponding weights are zero
+
   o ....
+
+  o various minor bug fixes and documentation updates.
+    See the ChangeLog for all details. The manual at
+    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    has also been updated.
 
 v0.18-0  (2022-10-19)
 

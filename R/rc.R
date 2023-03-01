@@ -1,11 +1,12 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2021  Enrico Schumann
+## Copyright (C) 2023  Enrico Schumann
 
 rc <- function(R, weights, timestamp, segments = NULL,
                R.bm = NULL, weights.bm = NULL,
                method = "contribution",
                linking.method = NULL,
-               allocation.minus.bm = TRUE) {
+               allocation.minus.bm = TRUE,
+               tol = sqrt(.Machine$double.eps)) {
 
     if (missing(weights))
         weights <- 1
@@ -56,9 +57,11 @@ rc <- function(R, weights, timestamp, segments = NULL,
     }
 
     ns <- length(segments)
-
+    R0 <- R
+    if (is.finite(tol))
+        R0[abs(weights) < tol] <- 0
     df <- data.frame(timestamp,
-                     cbind(weights*R, rowSums(weights*R)),
+                     cbind(weights*R0, rowSums(weights*R0)),
                      stringsAsFactors = FALSE)
     names(df) <- c("timestamp", segments, "total")
 

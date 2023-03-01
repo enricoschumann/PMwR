@@ -1,6 +1,4 @@
 ## return contribution
-library("PMwR")
-library("tinytest")
 
 prices <- 1:10
 prices <- cbind(A = prices, B = prices + 0.5)
@@ -94,3 +92,27 @@ ans <- rc(segments = c("stocks", "bonds"),
 expect_equal(ans$total_contributions[["total"]],  0.43125)
 expect_equal(ans$total_contributions[["stocks"]], 0.26875)
 expect_equal(ans$total_contributions[["bonds"]],  0.1625)
+
+
+
+
+## --------------------------------------------------------
+
+## NAs in returns should not affect results as long as
+## corresponding weights are zero
+
+weights <- rbind(c( 1, 0.0),
+                 c( 0.40, 0.60),
+                 c( 0.25, 0.75))
+
+R1 <- rbind(c( 1  ,    NA),
+           c( 2.5, -1.0),
+           c(-2  ,  0.5))/100
+r1 <- rc(R1, weights, segment = c("equities", "bonds"))
+
+R2 <- rbind(c( 1  ,    NA),
+           c( 2.5, -1.0),
+           c(-2  ,  0.5))/100
+r2 <- rc(R2, weights, segment = c("equities", "bonds"))
+
+expect_true(all.equal(r1, r2))

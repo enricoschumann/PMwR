@@ -12,7 +12,8 @@ rc(R, weights, timestamp, segments = NULL,
    R.bm = NULL, weights.bm = NULL,
    method = "contribution",
    linking.method = NULL,
-   allocation.minus.bm = TRUE)
+   allocation.minus.bm = TRUE,
+   tol = sqrt(.Machine$double.eps))
 }
 \arguments{
   \item{R}{returns: a numeric matrix}
@@ -35,6 +36,12 @@ rc(R, weights, timestamp, segments = NULL,
 
   \item{allocation.minus.bm}{logical}
 
+  \item{tol}{%
+    numeric: weights whose absolute value is below
+    \code{tol} are considered zero and not used for
+    computations. Ignored if \code{\link{NA}}.
+  }
+  
   If portfolio returns are to be compared against
   benchmark returns, benchmark returns/weights must be
   supplied:
@@ -47,6 +54,7 @@ rc(R, weights, timestamp, segments = NULL,
     the segment weights: a numeric matrix.
     \code{weights[i, j]} must correspond to \code{R[i, j]}
   }
+  
 }
 \details{
 
