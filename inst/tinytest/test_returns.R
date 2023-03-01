@@ -166,6 +166,7 @@ expect_equal(dim(t(returns(cbind(a, b, c)))), c(3, length(a) - 1))
 ##          a     b     c
 ## 2022 500.0 250.0 166.7
 ## 2023  66.7  57.1  50.0
+t <- as.Date("2022-12-25")+1:10
 expect_equal(dim(returns(cbind(a=a, b=b, c=c),
                          t = t, period = "year")),
              c(2, 3))
