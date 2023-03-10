@@ -41,7 +41,7 @@ expect_equal(unname(solution$position),
 expect_equal(solution$wealth,
             c(0, 0, 0, -1, 3, 4, 3, 0, 1, 3))
 
-## ... with no burnin
+## ... with no burn-in
 solution <- btest(prices = prices, signal = signal, b = 0)
 expect_equal(unname(solution$position),
             structure(c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1), .Dim = c(length(prices), 1L)))

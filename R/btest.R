@@ -6,7 +6,7 @@ btest  <- function(prices,
                    do.signal = TRUE,
                    do.rebalance = TRUE,
                    print.info = NULL,
-                   b = 1L,               ## burnin
+                   b = 1L,               ## burn-in
                    fraction = 1,         ## how much to rebalance
                    initial.position = 0,
                    initial.cash = 0,

@@ -78,7 +78,7 @@
 
         * R/btest.R (btest): rebalance arithmetic is
         performed only for positions with non-zero change
-        also in period 1, i.e. the (rare) case when burnin
+        also in period 1, i.e. the (rare) case when burn-in
         is 0, which allows NAs in prices (for periods > 1,
         this behaviour had been introduced in 2018-08-21)
 
@@ -456,7 +456,7 @@
 2019-10-09  Enrico Schumann  <es@enricoschumann.net>
 
         * R/btest.R: fixed -- with an initial position
-        specified and burnin set to zero, the suggested
+        specified and burn-in set to zero, the suggested
         position should equal the initial position
 
 2019-10-08  Enrico Schumann  <es@enricoschumann.net>
@@ -563,7 +563,7 @@
 2019-05-14  Enrico Schumann  <es@enricoschumann.net>
 
         * R/btest.R (btest): clarify documentation of
-        burnin 'b'
+        burn-in 'b'
 
 2019-04-30  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1010,7 +1010,7 @@
 2018-03-05  Enrico Schumann  <es@enricoschumann.net>
 
         * R/btest.R (btest): if a timestamp of class
-        Date or POSIXct is specified, burnin 'b' may be
+        Date or POSIXct is specified, burn-in 'b' may be
         an actual timestamp. Example:
 
            btest(prices = 1:10,
@@ -1237,7 +1237,7 @@
 
         * R/NAVseries.R (as.NAVseries.btest): fixed --
         the method would fail when there are no leading
-        NAs (i.e. no burnin in the test)
+        NAs (i.e. no burn-in in the test)
 
 2017-08-24  Enrico Schumann  <es@enricoschumann.net>
 
@@ -1559,7 +1559,7 @@
         * DESCRIPTION (Version): 0.4-0
 
         * R/btest.R (btest): fixed -- 'do.signal' and
-        'do.rebalance' ignored the burnin 'b' when
+        'do.rebalance' ignored the burn-in 'b' when
         keywords 'firstofmonth' etc. were used
 
 2017-01-28  Enrico Schumann  <es@enricoschumann.net>

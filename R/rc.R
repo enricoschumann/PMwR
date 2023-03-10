@@ -59,7 +59,7 @@ rc <- function(R, weights, timestamp, segments = NULL,
     ns <- length(segments)
     R0 <- R
     if (is.finite(tol))
-        R0[abs(weights) < tol] <- 0
+        R0[is.finite(weights) & abs(weights) < tol] <- 0
     df <- data.frame(timestamp,
                      cbind(weights*R0, rowSums(weights*R0)),
                      stringsAsFactors = FALSE)

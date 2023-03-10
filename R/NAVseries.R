@@ -428,6 +428,16 @@ print.summary.NAVseries <- function(x, ...,
         tmp[1, ] <- ifelse(tmp[1, ] == "",
                            paste0("series.", seq_len(ncol(tmp))),
                            tmp[1, ])
+        row.names(tmp)[1] <- "Instrument"
+        row.names(tmp)[2] <- ""
+        row.names(tmp)[3] <- "Description"
+        row.names(tmp)[4] <- "Start"
+        row.names(tmp)[5] <- "End"
+        row.names(tmp)[6] <- "# Obs"
+        row.names(tmp)[7] <- "# NA"
+        row.names(tmp)[8] <- "Low timestamp"
+        row.names(tmp)[9] <- "High timestamp"
+        
         print(tmp, right = TRUE, quote = FALSE)
     }
 

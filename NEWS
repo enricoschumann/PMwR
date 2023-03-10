@@ -39,7 +39,7 @@ v0.18-0  (2022-10-19)
 
   o 'btest': rebalance arithmetic is performed only for
     positions with non-zero change also in period 1,
-    i.e. in the rare case when burnin is 0, which
+    i.e. in the rare case when burn-in is 0, which
     allows NAs in prices. (For periods > 1, this
     behaviour had been introduced in version 0.10-0.)
 
@@ -198,9 +198,9 @@ v0.14-0  (2020-03-11)
 v0.13-0  (2019-10-19)
 
   o 'btest': fix handling of initial position -- with
-    an initial position specified and burnin set to
+    an initial position specified and burn-in set to
     zero, the suggested position now equals the
-    initial position (as it does for a burnin greater
+    initial position (as it does for a burn-in greater
     than zero)
 
   o 'NAVseries': fix method, which did not work
@@ -407,7 +407,7 @@ v0.8-0  (2018-04-30)
     a numeric vector
 
   o btest: if a timestamp of class Date or POSIXct is
-    specified, burnin 'b' may be an actual timestamp
+    specified, burn-in 'b' may be an actual timestamp
 
   o rebalance: new argument 'current.weights' with
     default FALSE; if TRUE, the current portfolio is
