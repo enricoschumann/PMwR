@@ -1,7 +1,6 @@
 # Portfolio Management with R
 
 
-
 ## About PMwR
 
 Functions for the practical management of financial
@@ -26,7 +25,6 @@ in the
 [NEWS file](http://enricoschumann.net/R/packages/PMwR/NEWS) and
 so can be followed easily. More details are in the
 [ChangeLog](http://enricoschumann.net/R/packages/PMwR/ChangeLog).
-
 
 
 ## What PMwR provides

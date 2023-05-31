@@ -1,4 +1,7 @@
-v0.19-0  (2023-05-31; not released yet)
+v0.19-0  (2023-05-31)
+
+  o Version 0.19 is intended be the last one before the
+    release of version 1.0.
 
   o 'returns' gains an argument 'na.rm', currently with
     default TRUE, which matches the current behaviour. In a
@@ -20,8 +23,6 @@ v0.19-0  (2023-05-31; not released yet)
 
   o 'rc' ignores missing prices as along as
     corresponding weights are zero
-
-  o ....
 
   o various minor bug fixes and documentation updates.
     See the ChangeLog for all details. The manual at
