@@ -1,3 +1,8 @@
+2023-06-01  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Depends): the package depends on
+        R >= 3.3, because it uses \doi{} in the docs.
+
 2023-05-31  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.19-0. This version is

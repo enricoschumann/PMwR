@@ -1,3 +1,17 @@
+v0.19-1  (2023-06-01; not yet released)
+
+  o the package now depends on R >= 3.3. That's because
+    the macro \doi{} is now used in the docs.  R 3.3
+    was released in 2016, so this requirement appears
+    not too unreasonable.
+  
+  o ....
+
+  o various documentation updates.
+    See the ChangeLog for all details. The manual at
+    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    has also been updated.
+
 v0.19-0  (2023-05-31)
 
   o Version 0.19 is intended be the last one before the
