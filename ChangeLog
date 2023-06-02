@@ -1,3 +1,11 @@
+2023-06-02  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/journal.R (journal.position): the first
+        argument of journal.position is now named 'amount',
+        in alignment with the generic
+
+        * NAMESPACE: register 'journal.position'
+
 2023-06-01  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Depends): the package depends on

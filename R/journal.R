@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-20  Enrico Schumann
+## Copyright (C) 2008-23  Enrico Schumann
 
 journal <- function(amount, ...) {
     if (match.call() == "journal()") {
@@ -13,9 +13,9 @@ journal <- function(amount, ...) {
         UseMethod("journal")
 }
 
-journal.position <- function(x, price, ...) {
+journal.position <- function(amount, price, ...) {
     warning("did you mean 'as.journal'?")
-    journal.default(amount = x, price = price, ...)
+    journal.default(amount = amount, price = price, ...)
 }
 
 journal.default <- function(amount, price, timestamp, instrument,
