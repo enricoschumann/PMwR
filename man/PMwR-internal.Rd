@@ -4,7 +4,7 @@
 \alias{.may_be_Date}
 \title{Internal Functions}
 \description{
-  Several internal functions, not exported from the \pkg{PMwR} name space.
+  Several internal functions, not exported from the \pkg{PMwR} namespace.
 }
 \usage{
 .timestamp(x)
@@ -25,7 +25,7 @@
 }
 \references{
 
-  E. Schumann (2022) \emph{Portfolio Management with \R}.
+  E. Schumann (2023) \emph{Portfolio Management with \R}.
   \url{http://enricoschumann.net/PMwR/}
 }
 \author{

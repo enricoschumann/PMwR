@@ -46,6 +46,12 @@ drawdowns(x, \dots)
 }
 \references{
 
+  Gilli, M., Maringer, D. and Schumann, E. (2019) \emph{Numerical Methods
+    and Optimization in Finance}. 2nd edition. Elsevier.
+  \doi{10.1016/C2017-0-01621-X}
+
+  Schumann, E. (2023) \emph{Portfolio Management
+    with R}. \url{http://enricoschumann.net/PMwR/}
 
 }
 \examples{
