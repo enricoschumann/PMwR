@@ -1,11 +1,18 @@
-v0.19-1  (2023-06-01; not yet released)
+v0.19-1  (2023-06-05)
 
   o the package now depends on R >= 3.3. That's because
     the macro \doi{} is now used in the docs.  R 3.3
     was released in 2016, so this requirement appears
     not too unreasonable.
-  
-  o ....
+
+  o functions ".expand" and ".tree" are no longer
+    exported, as they are used internally only
+
+  o the first argument of the (rarely-used) position
+    method of 'journal' (i.e. 'journal.position') is
+    now named 'amount', in alignment with the generic
+
+  o helper function '.pl_stats' is now documented
 
   o various documentation updates.
     See the ChangeLog for all details. The manual at

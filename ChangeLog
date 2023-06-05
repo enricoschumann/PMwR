@@ -1,3 +1,10 @@
+2023-06-05  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 0.19-1
+
+        * NAMESPACE: '.expand' and '.tree' are no longer
+        exported
+
 2023-06-02  Enrico Schumann  <es@enricoschumann.net>
 
         * R/journal.R (journal.position): the first

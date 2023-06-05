@@ -36,11 +36,11 @@ importFrom("utils",
 importFrom(parallel, "clusterExport")
 
 export(
-    .expand,
+    ## .expand,
     .pl,
     .pl_stats,
     .returns,
-    .tree,
+    ## .tree,
     NAVseries,
     as.NAVseries,
     as.journal,

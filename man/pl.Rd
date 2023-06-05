@@ -1,6 +1,7 @@
 \name{pl}
 \alias{pl}
 \alias{.pl}
+\alias{.pl_stats}
 \alias{pl.data.frame}
 \alias{pl.default}
 \alias{pl.journal}
@@ -39,6 +40,7 @@ pl(amount, \dots )
 \method{as.data.frame}{pl}(x, \dots )
 
 .pl(amount, price, tol = 1e-10, do.warn = TRUE)
+.pl_stats(amount, price, tol = sqrt(.Machine$double.eps))
 
 }
 \arguments{
@@ -144,10 +146,16 @@ pl(amount, \dots )
   \code{length(along.timestamp)} times number of
   assets.
 
+  \code{.pl} and \code{.pl_stats} are helper functions
+  that are called by \code{pl}.  \code{.pl_stats}
+  requires amount and price to be sorted in time, and
+  to be of length > 0.
+
   To use package \pkg{crayon} -- which is only sensible
   in interactive use --, either explicitly set
   \code{use.crayon} to \code{TRUE} or set an option
   \code{PMwR.use.crayon} to \code{TRUE}.
+
 
 }
 \value{
@@ -166,10 +174,18 @@ pl(amount, \dots )
   price. For zero-length vector, the function evaluates to
   \code{c(0, 0, NaN, NaN)}.
 
+  For \code{.pl_stats}, a list of two elements:
+  the average entry-price, and the realized profit/loss.
+  profit/loss in units of the instrument, sum of
+  absolute amounts, average buy price, average sell
+  price. For zero-length vector, the function evaluates to
+  \code{c(0, 0, NaN, NaN)}.
+
 }
 \references{
-Schumann, E. (2022) \emph{Portfolio Management
-  with R}. \url{http://enricoschumann.net/PMwR/}
+
+  Schumann, E. (2023) \emph{Portfolio Management
+    with R}. \url{http://enricoschumann.net/PMwR/}
 
 }
 \author{
