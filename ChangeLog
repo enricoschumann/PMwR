@@ -1,3 +1,9 @@
+2023-06-08  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/trades.R (split_trades): add argument
+        'drop.zero', for removing trades with zero-amounts.
+        Also add examples and tests.
+
 2023-06-05  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.19-1

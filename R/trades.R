@@ -1,7 +1,8 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-19  Enrico Schumann
+## Copyright (C) 2008-23  Enrico Schumann
 
-split_trades <- function(amount, price, timestamp, aggregate = FALSE) {
+split_trades <- function(amount, price, timestamp,
+                         aggregate = FALSE, drop.zero = FALSE) {
     n <- amount
     if (missing(price))
         price <- rep(NA, length(amount))
@@ -14,6 +15,7 @@ split_trades <- function(amount, price, timestamp, aggregate = FALSE) {
 
     I <- which(sign(cumn[-1L]) * sign(cumn[-N]) < 0) + 1L
     if (length(I)) {
+        ## FIXME use textutils::insert?
         n[I] <- -cumn[I - 1L]
         newtimes <- timestamp[I]
         newn <- cumn[I]
@@ -27,7 +29,7 @@ split_trades <- function(amount, price, timestamp, aggregate = FALSE) {
         p <- p[ix]
     }
     if (!aggregate) {
-        to <- which(cumsum(n) == 0L)
+        to <- which(cumsum(n) == 0L)  ## FIXME use tolerance?
         if (length(to)) {
             from <- c(1L, to[-length(to)] + 1L)
             ntrades <- length(to)
@@ -37,10 +39,18 @@ split_trades <- function(amount, price, timestamp, aggregate = FALSE) {
                 to <- c(to, length(n))
                 ntrades <- ntrades + 1L
             }
+            if (drop.zero) {
+                n0 <- to - from > 0
+                from <- from[n0]
+                to   <- to  [n0]
+                ntrades <- length(to)
+            }
+            
             res <- vector(mode = "list", length = ntrades)
             for (i in seq_len(ntrades)) {
                 fromto <- from[i]:to[i]
-                res[[i]] <- list(amount = n[fromto], price = p[fromto],
+                res[[i]] <- list(amount = n[fromto],
+                                 price  = p[fromto],
                                  timestamp = timestamp[fromto])
             }
         } else {

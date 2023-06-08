@@ -1,3 +1,15 @@
+v0.19-2  (2023-06-08; not yet released)
+
+  o 'split_trades' gains an argument 'drop.zero', for
+    dropping zero-amount trades
+
+  o ....
+
+  o various documentation updates.
+    See the ChangeLog for all details. The manual at
+    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    has also been updated.
+
 v0.19-1  (2023-06-05)
 
   o the package now depends on R >= 3.3. That's because
