@@ -636,6 +636,9 @@ is.journal <- function (x)
 as.journal <- function(x, ...)
     UseMethod("as.journal")
 
+as.journal.journal <- function(x, ...)
+    x
+
 as.journal.default <- function(x, ...) {
     if (is.vector(x) && is.numeric(x))
         if (is.null(names(x)))
@@ -772,13 +775,13 @@ all.equal.journal <- function(target, current,
             msg <- c(msg, paste0(f, ": ", tmp))
     }
 
-
     if (is.null(msg))
         TRUE
     else
         msg
-
 }
+
+
 
 
 cashflows <- function(x, multiplier = 1, ...) {

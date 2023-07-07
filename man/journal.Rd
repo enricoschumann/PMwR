@@ -3,6 +3,7 @@
 \alias{aggregate.journal}
 \alias{all.equal.journal}
 \alias{as.journal}
+\alias{as.journal.journal}
 \alias{c.journal}
 \alias{head.journal}
 \alias{is.journal}
@@ -186,20 +187,24 @@ is.journal(x)
 }
 \details{
 
-  The \code{journal} function creates a list of the
-  arguments and attaches a class attribute
-  (\sQuote{journal}). It is a generic function; the
-  default method creates a journal from atomic
-  vectors. The \code{btest} method extracts the journal
-  from the results of a backtest; see
+  The \code{journal} function creates a list of its arguments
+  and attaches a class attribute (\sQuote{\code{journal}}).
+  It is a generic function; the default method creates a
+  journal from atomic vectors. The \code{btest} method
+  extracts the journal from the results of a backtest; see
   \code{\link{btest}}.
 
-  \code{as.journal} coerces an object to a journal;
-  mostly used for creating a journal from a
+  \code{as.journal} coerces an object to a journal and is
+  primarily used for creating a journal from a
   \code{\link{data.frame}}.
+  Calling \code{as.journal} on an unnamed numeric vector
+  interprets the vector as amounts.  If the vector is
+  named, these are interpreted as instruments; see Examples.
+  Calling \code{as.journal} on a journal returns the journal
+  itself.
 
-  \code{journal} methods are available for several
-  generic functions, for instance:
+  \code{journal} methods are available for several generic
+  functions, for instance:
 
   \describe{
 
@@ -243,12 +248,13 @@ is.journal(x)
 
   }
 
-  For journals that have a length, missing arguments will be coded as
-  \code{\link{NA}} except for \code{id} and \code{account}, which become
-  \code{\link{NULL}}. In zero-length (i.e. \sQuote{empty}) journals, all
-  fields have length 0. A zero-length journal is created, of instance,
-  by saying \code{journal()} or when an zero-row \code{data.frame} is
-  passed to \code{as.journal}.
+  For journals that have a length, missing arguments will
+  be coded as \code{\link{NA}} except for \code{id} and
+  \code{account}, which become \code{\link{NULL}}.  In
+  zero-length (i.e. \sQuote{empty}) journals, all fields
+  have length 0.  A zero-length journal is created, for
+  instance, by saying \code{journal()} or when an zero-row
+  \code{data.frame} is passed to \code{as.journal}.
 
 }
 \value{
@@ -259,7 +265,7 @@ is.journal(x)
 }
 \references{
 
-Schumann, E. (2019) \emph{Portfolio Management with R}.
+Schumann, E. (2023) \emph{Portfolio Management with R}.
 \url{http://enricoschumann.net/R/packages/PMwR/}
 
 }
@@ -321,4 +327,34 @@ aggregate(j, by = by, FUN = fun)
 ## *** iterate over transactions in (previously defined) journal ***
 for (j in split(j, seq_along(j)))
     print(j)
+
+
+
+## as.journal with numeric vector
+as.journal(1:3)
+##    amount
+## 1       1
+## 2       2
+## 3       3
+##
+## 3 transactions
+
+## as.journal with *named* numeric vector
+x <- 1:3; names(x) <- LETTERS[1:3]
+as.journal(x)
+##    instrument  amount
+## 1           A       1
+## 2           B       2
+## 3           C       3
+##
+## 3 transactions
+
+x <- 1:3; names(x) <- c("A", "B", "A")
+as.journal(x)
+##    instrument  amount
+## 1           A       1
+## 2           B       2
+## 3           A       3
+##
+## 3 transactions
 }

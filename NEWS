@@ -1,8 +1,11 @@
-v0.19-2  (2023-06-08; not yet released)
+v0.19-2  (2023-07-07; not yet released)
 
   o 'split_trades' gains an argument 'drop.zero', for
     dropping zero-amount trades
 
+  o 'as.journal(<journal>)' now evaluates to <journal>
+    (instead of giving an error)
+  
   o ....
 
   o various documentation updates.

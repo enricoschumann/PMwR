@@ -1,3 +1,9 @@
+2023-07-07  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/journal.R (as.journal.journal): calling
+        as.journal on a journal is a no-op now; before,
+        it raised an error
+
 2023-06-08  Enrico Schumann  <es@enricoschumann.net>
 
         * R/trades.R (split_trades): add argument
