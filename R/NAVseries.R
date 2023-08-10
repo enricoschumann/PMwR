@@ -8,10 +8,10 @@ NAVseries <- function(NAV,
                       description = NULL,
                       drop.NA = NULL) {
 
-    ## 'NAVseries(<btest>)' is natural since the NAV
-    ## series ('wealth') is only extracted from the
-    ## 'btest' object. But this seems a rare case, so a
-    ## generic should not be required.
+    ## 'NAVseries(<btest>)' is natural since the NAV series
+    ## ('wealth') is only extracted from the 'btest'
+    ## object, i.e. it is not coerced. But this seems a
+    ## rare case, so a generic should not be required.
     if (inherits(NAV, "btest"))
         return(as.NAVseries.btest(
             NAV,
@@ -437,7 +437,7 @@ print.summary.NAVseries <- function(x, ...,
         row.names(tmp)[7] <- "# NA"
         row.names(tmp)[8] <- "Low timestamp"
         row.names(tmp)[9] <- "High timestamp"
-        
+
         print(tmp, right = TRUE, quote = FALSE)
     }
 

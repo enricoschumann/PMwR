@@ -45,7 +45,7 @@ split_trades <- function(amount, price, timestamp,
                 to   <- to  [n0]
                 ntrades <- length(to)
             }
-            
+
             res <- vector(mode = "list", length = ntrades)
             for (i in seq_len(ntrades)) {
                 fromto <- from[i]:to[i]

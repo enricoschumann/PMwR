@@ -2,7 +2,7 @@
 
 j <- journal()
 ans <- pl(j)  ## no timestamps
-expect_equal(ans[[1]]$pl , 0) 
+expect_equal(ans[[1]]$pl, 0)
 
 
 

@@ -511,7 +511,7 @@ pReturns <- function(x, t, period, complete.first = TRUE,
     ans
 }
 
-as.zoo.p_returns <- function (x, ...) {
+as.zoo.p_returns <- function(x, ...) {
     zoo(x, order.by = attr(x, "t"), ...)
 }
 
@@ -788,9 +788,12 @@ toText.p_returns <- function(x, ..., year.rows = TRUE,
     mt <- rbind(colnames(mt), mt)
     mt <- cbind(rownames(mt), mt)
     mt <- unname(mt)
-    mt <- apply(mt, 2, function(x) {format(x,
-                                           width = max(5, nchar(x)),
-                                           justify = "right")})
+    mt <- apply(mt, 2,
+                function(x) {
+                    format(x,
+                           width = max(5, nchar(x)),
+                           justify = "right")
+    })
     mt <- apply(mt, 1, paste0, collapse = "")
     class(mt) <- "text"
     mt

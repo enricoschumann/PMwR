@@ -5,7 +5,7 @@
 \usepackage{libertine}
 \usepackage[scaled=0.9]{inconsolata}
 \usepackage[T1]{fontenc}
-\renewcommand*\familydefault{\sfdefault} 
+\renewcommand*\familydefault{\sfdefault}
 \usepackage{amsmath,amstext}
 \usepackage{hyperref}
 \usepackage{natbib}

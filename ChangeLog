@@ -977,6 +977,9 @@
         function, also a replacement function;
         see `?.timestamp`
 
+        * R/internal.R (matchOrNext,matchOrPrevious): add
+        aliases .match_or_next and .match_or_previous
+
 2018-06-01  Enrico Schumann  <es@enricoschumann.net>
 
         * R/btest.R (do.rebalance): fix case when
