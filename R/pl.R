@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-22  Enrico Schumann
+## Copyright (C) 2008-23  Enrico Schumann
 
 pl <- function(amount, ...)
     UseMethod("pl")
@@ -44,7 +44,8 @@ print.pl <- function(x, ...,
     for (i in seq_len(ni)) {
 
         no.trades <- length(x[[i]]$volume) == 1 &&
-                            x[[i]]$volume  == 0L
+                            x[[i]]$volume  == 0L &&
+                            x[[i]]$pl == 0L
 
         if (print.inst)
             cat(attr(x, "instrument")[[i]], "\n")
@@ -84,13 +85,34 @@ print.pl <- function(x, ...,
         if (i < ni)
             cat("\n")
     }
+
     if (footnotes) {
         cat("\n", sQuote("P/L total"), " is in units of instrument;\n",
             sQuote("volume"), " is sum of /absolute/ amounts.\n",
             sep = "")
-        if (!is.null(fn <- attr(x, "footnotes")))
+        if (!is.null(fn <- attr(x, "footnotes"))) {
+            i <- grep("average sell includes", fn)
+            if (length(i) > 1L) {
+                instr <- sub(".*For (.*): average sell includes.*", "\\1", fn[i])
+                instr <- paste(instr, collapse = ", ")
+                fn[i[1]] <- sub("(.*For )(.*)(: average sell includes.*)",
+                                paste0("\\1", instr, "\\3"), fn[i[1]])
+                fn <- fn[-i[-1]]
+            }
+
+            i <- grep("average buy includes", fn)
+            if (length(i) > 1L) {
+                instr <- sub(".*For (.*): average buy includes.*", "\\1", fn[i])
+                instr <- paste(instr, collapse = ", ")
+                fn[i[1]] <- sub("(.*For )(.*)(: average buy includes.*)",
+                                paste0("\\1", instr, "\\3"), fn[i[1]])
+                fn <- fn[-i[-1]]
+            }
+
             message(paste(fn, collapse = "\n"))
+        }
     }
+
     invisible(x)
 }
 
@@ -355,10 +377,10 @@ pl.default <- function(amount, price, timestamp = NULL,
             } else {
                 if (footnotes)
                     fn <- c(fn,
-                            paste0(if (!no.i) paste0(" for ",  uniq.i[i], ": "),
+                            paste0(if (!no.i) paste0("For ",  uniq.i[i], ": "),
                                    if (sum.amount1 > 0) "average sell includes "
                                    else                 "average buy includes ",
-                                   sQuote("vprice")))
+                                   sQuote("vprice"), "."))
 
                 subtr <- subtr + abs(sum.amount1)
                 amount1 <- c(amount1, -sum.amount1)

@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-21  Enrico Schumann
+## Copyright (C) 2008-23  Enrico Schumann
 
 rebalance <- function(current,
                       target,
@@ -151,11 +151,9 @@ rebalance <- function(current,
         if (current.weights && target.weights)
             stop(sQuote("notional"), " must be provided")
         if (target.weights)
-            notional <- sum(current * price *
-                            multiplier)
+            notional <- sum(current * price * multiplier)
         else if (current.weights)
-            notional <- sum(target * price *
-                            multiplier)
+            notional <- sum(target  * price * multiplier)
     }
 
     ## if (!is.null(algorithm)) {
@@ -210,12 +208,14 @@ print.rebalance <- function(x, ..., drop.zero = TRUE) {
     df <- data.frame(price   = x$price,
                      current = x$current,
                      value   = x$current * x$price * multiplier,
-                     `%`     = format(100*x$current * x$price / attr(x, "notional"),
+                     `%`     = format(100*x$current * x$price /
+                                      c(attr(x, "notional")),
                                       nsmall = 1, digits = 1),
                      `  `    = format("     ", justify = "centre"),
                      target  = x$target,
                      value   = x$target * x$price * multiplier,
-                     `%`     = format(100*x$target * x$price / attr(x, "notional"),
+                     `%`     = format(100*x$target * x$price /
+                                      c(attr(x, "notional")),
                                       nsmall = 1, digits = 1),
                      `  `    = format("     ", justify = "centre"),
                      order   = x$difference,

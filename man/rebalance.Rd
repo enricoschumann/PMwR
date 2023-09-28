@@ -21,20 +21,20 @@ rebalance(current, target, price,
 replace_weight(weights, ..., prefix = TRUE, sep = "::")
 }
 \arguments{
-  \item{current}{
+  \item{current}{%
     the current holdings: a (typically named) vector of position sizes;
     can also be a \code{position}
   }
-  \item{target}{
+  \item{target}{%
     the target holdings: a (typically named) vector of weights;
     can also be a \code{position}
   }
-  \item{price}{
-    the current prices
+  \item{price}{%
+    a numeric vector: the current prices; may be named
   }
-  \item{notional}{
-    the value of the portfolio; if missing, replaced by
-    \code{sum(current*prices)}
+  \item{notional}{%
+    a single number: the value of the portfolio; if missing,
+    replaced by \code{sum(current*prices)}
   }
   \item{multiplier}{
     numeric vector, possibly named

@@ -1,3 +1,13 @@
+2023-09-28  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/pl.R (print.pl): fix printing in case of initial
+        position but no trades in journal [this bug had been
+        introduced in 2022-12-05]
+        (print.pl): merge related footnotes
+
+        * R/rebalance.R (print.rebalance): drop dimension of
+        "notional"
+
 2023-07-07  Enrico Schumann  <es@enricoschumann.net>
 
         * R/journal.R (as.journal.journal): calling
