@@ -1,5 +1,9 @@
 2023-09-29  Enrico Schumann  <es@enricoschumann.net>
 
+        * man/PMwR-internal.Rd: add \alias{`.timestamp<-`}, as
+        required by changed tools::checkDocFiles() and
+        tools::checkRdContents()
+
         * inst/tinytest/test_pl_print.R: add test for pl
         printing
 

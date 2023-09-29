@@ -1,10 +1,11 @@
 \name{PMwR-internal}
 \alias{PMwR-internal}
 \alias{.timestamp}
+\alias{`.timestamp<-`}
 \alias{.may_be_Date}
 \title{Internal Functions}
 \description{
-  Several internal functions, not exported from the \pkg{PMwR} namespace.
+  Internal functions, not exported from the \pkg{PMwR} namespace.
 }
 \usage{
 .timestamp(x)
