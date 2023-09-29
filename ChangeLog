@@ -1,8 +1,14 @@
+2023-09-29  Enrico Schumann  <es@enricoschumann.net>
+
+        * inst/tinytest/test_pl_print.R: add test for pl
+        printing
+
 2023-09-28  Enrico Schumann  <es@enricoschumann.net>
 
         * R/pl.R (print.pl): fix printing in case of initial
         position but no trades in journal [this bug had been
-        introduced in 2022-12-05]
+        introduced in 2022-12-05; only printing was affected,
+        not the actual computations]
         (print.pl): merge related footnotes
 
         * R/rebalance.R (print.rebalance): drop dimension of
