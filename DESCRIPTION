@@ -16,7 +16,7 @@ Description: Functions and examples for 'Portfolio
 Imports: NMOF, datetimeutils, fastmatch,
          orgutils, parallel, textutils, utils, zoo
 Suggests: crayon, rbenchmark, tinytest
-Depends: R (>= 3.3)
+Depends: R (>= 3.5)
 License: GPL-3
 LazyLoad: yes
 LazyData: yes

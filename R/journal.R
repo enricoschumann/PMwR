@@ -435,7 +435,7 @@ print.summary.journal <- function(x, month.names = month.abb,
             stats[["year"]][ .repeated(stats[["year"]]) ] <- ""
 
         if ("month" %in% colnames(stats) &&
-            !.isFALSE(month.names) &&
+            !isFALSE(month.names) &&
             is.numeric(stats[["month"]]))
             stats[["month"]][] <- month.names[ stats[["month"]] ]
 

@@ -204,15 +204,6 @@ debug_prices <- function(nobs, na, base = 100) {
     t(t(A) + seq(1, na) / 10^nchar(na))
 }
 
-
-## base package has had a function 'isFALSE'
-## since version R 3.5-0, and '.isFALSE'
-## copies this functionality so that PMwR can
-## be used with older versions of R
-.isFALSE <- function(x)
-    is.logical(x) && length(x) == 1L && !is.na(x) && !x
-
-
 .copy_fw <- function(x) {
     f <- which(is.finite(x))
     if (f[1L] != 1L)

@@ -582,6 +582,15 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
     period <- attr(x, "period")
     timestamp <- attr(x, "t")
     instr <- names(x)
+
+    if (inherits(timestamp, "yearmon")) {
+        units_per_year <- 1
+    } else if (inherits(timestamp, "yearqtr")) {
+        units_per_year <- 1
+    } else {
+        units_per_year <- 365
+    }
+
     if (identical(period, "yearly") && is.null(dim(x))) {
         tmp <- x
         names(tmp) <- format(timestamp, "%Y")
@@ -622,10 +631,10 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
         }
 
         note <- rep("]", length(x))
-        note[as.numeric(timestamp[, 2L] - timestamp[, 1L])/365 < 1 &
+        note[as.numeric(timestamp[, 2L] - timestamp[, 1L])/units_per_year < 1 &
               attr(x, "is.annualised")] <-
             "; less than one year, but annualised]"
-        note[as.numeric(timestamp[, 2L] - timestamp[, 1L])/365 < 1 &
+        note[as.numeric(timestamp[, 2L] - timestamp[, 1L])/units_per_year < 1 &
               !attr(x, "is.annualised")] <-
             "; less than one year, not annualised]"
         cat(paste0(nn, r_str, cal_str, note, collapse = "\n"), "\n")

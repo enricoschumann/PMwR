@@ -4,9 +4,10 @@
 \usepackage[noae,nogin]{Sweave}
 \usepackage{libertine}
 \usepackage[scaled=0.9]{inconsolata}
-\usepackage[T1]{fontenc}
+% \usepackage[T1]{fontenc}
 \renewcommand*\familydefault{\sfdefault}
 \usepackage{amsmath,amstext}
+\usepackage{sfmath}
 \usepackage{hyperref}
 \usepackage{natbib}
 \usepackage{xcolor}

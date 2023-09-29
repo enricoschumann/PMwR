@@ -4,10 +4,9 @@
 \usepackage[noae,nogin]{Sweave}
 \usepackage{libertine}
 \usepackage[scaled=0.9]{inconsolata}
-\usepackage[T1]{fontenc}
+% \usepackage[T1]{fontenc}
 \renewcommand*\familydefault{\sfdefault} 
 \usepackage{amsmath,amstext}
-\usepackage{hyperref}
 \usepackage{natbib}
 \usepackage{xcolor}
 \usepackage{framed}
@@ -27,7 +26,7 @@ options(continue = "  ", digits = 3, width = 60, useFancyQuotes = FALSE)
 pv <- packageVersion("PMwR")
 pv <- gsub("(.*)[.](.*)", "\\1-\\2", pv)
 @
-
+\usepackage{hyperref}
 \begin{document}
 \title{Drawdowns and Streaks}
 \author{Enrico Schumann\\\url{es@enricoschumann.net}}

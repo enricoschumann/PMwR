@@ -1,11 +1,25 @@
 2023-09-29  Enrico Schumann  <es@enricoschumann.net>
 
-        * man/PMwR-internal.Rd: add \alias{`.timestamp<-`}, as
-        required by changed tools::checkDocFiles() and
+        * DESCRIPTION (Version): 0.19-2
+
+        * R/internal.R (.isFALSE): remove .isFALSE and
+        replace by isFALSE, introduced in R 3.5
+
+        * DESCRIPTION (Depends): the package depends on
+        R >= 3.5, because it uses \doi{} in the docs.
+
+        * man/PMwR-internal.Rd: add \alias{`.timestamp<-`},
+        as required by changed tools::checkDocFiles() and
         tools::checkRdContents()
 
         * inst/tinytest/test_pl_print.R: add test for pl
         printing
+
+        * R/returns.R (print.p_returns): fix message for
+        annualised returns in case timestamp is of class
+        'yearmon' or 'yearqtr' (from package 'zoo')
+
+        * vignettes/*: remove 'fontenc'
 
 2023-09-28  Enrico Schumann  <es@enricoschumann.net>
 
@@ -48,7 +62,7 @@
 2023-06-01  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Depends): the package depends on
-        R >= 3.3, because it uses \doi{} in the docs.
+        R >= 3.3, because it uses \doi{} in the docs
 
 2023-05-31  Enrico Schumann  <es@enricoschumann.net>
 

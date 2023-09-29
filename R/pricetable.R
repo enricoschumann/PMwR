@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-20  Enrico Schumann
+## Copyright (C) 2008-23  Enrico Schumann
 
 pricetable <- function(price, ...)
     UseMethod("pricetable")
@@ -7,12 +7,12 @@ pricetable <- function(price, ...)
 pricetable.default <- function(price, instrument, timestamp,
                                use.names = NULL, ...) {
 
-    if (.isFALSE(use.names))
+    if (isFALSE(use.names))
         unname(price)
 
     if (!is.matrix(price)) {
 
-        if ((!.isFALSE(use.names) && missing(instrument)) ||
+        if ((!isFALSE(use.names) && missing(instrument)) ||
             isTRUE(use.names)) {
             instrument <- names(price)
             price <- unname(price)

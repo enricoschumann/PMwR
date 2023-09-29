@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-22  Enrico Schumann
+## Copyright (C) 2008-23  Enrico Schumann
 
 position <- function(amount, ...)
     UseMethod("position")
@@ -16,7 +16,7 @@ position.default <- function(amount, timestamp, instrument,
                          sum(dim.amount > 1L) == 1L
 
     no.instruments <- FALSE ## are all instruments missing/NA?
-    if ((!.isFALSE(use.names) && missing(instrument)) ||
+    if ((!isFALSE(use.names) && missing(instrument)) ||
         isTRUE(use.names)) {
 
         if (is.amount.matrix1) {
