@@ -4,19 +4,20 @@
 \usepackage[noae,nogin]{Sweave}
 \usepackage{libertine}
 \usepackage[scaled=0.9]{inconsolata}
-\usepackage[T1]{fontenc}
+% \usepackage[T1]{fontenc}
 \renewcommand*\familydefault{\sfdefault}
 \usepackage{amsmath,amstext}
 \usepackage{hyperref}
 \usepackage{natbib}
 \usepackage{xcolor}
 \usepackage{framed}
+\usepackage{fancyvrb}
 \usepackage[flushmargin]{footmisc}
 \definecolor{grau2}{rgb}{.2,.2,.2}
 \definecolor{grau7}{rgb}{.7,.7,.7}
 \DefineVerbatimEnvironment{Sinput}{Verbatim}{}
-\DefineVerbatimEnvironment{Soutput}{Verbatim}{frame=single,
-  xleftmargin=0em, formatcom=\color{grau2},rulecolor=\color{grau7}}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{frame=single,xleftmargin=0em,%
+  formatcom=\color{grau2},rulecolor=\color{grau7}}
 \DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=2em}
 \fvset{listparameters={\setlength{\topsep}{0pt}}}
 \renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
