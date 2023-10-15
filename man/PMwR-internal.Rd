@@ -1,7 +1,7 @@
 \name{PMwR-internal}
 \alias{PMwR-internal}
 \alias{.timestamp}
-\alias{`.timestamp<-`}
+\alias{.timestamp<-}
 \alias{.may_be_Date}
 \title{Internal Functions}
 \description{
