@@ -32,8 +32,8 @@ unit_prices(NAV,
 }
 \details{
 
-  \strong{This function is experimental, and its interface
-  is not stable.}
+  \strong{This function is experimental, and its interface is
+  not stable yet.}
 
   The function may be used to compute the returns for a
   portfolio with external cashflows, i.e. what is

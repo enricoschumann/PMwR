@@ -76,6 +76,9 @@ valuation(x, ...)
 }
 \details{
 
+  \strong{This function is experimental, and the methods'
+    interfaces are not stable yet.}
+
   \code{valuation} is a generic function.  Its
   semantics suggest that an object (e.g. a financial
   instrument or a position) is mapped into a concrete
@@ -102,9 +105,6 @@ valuation(x, ...)
 }
 \author{
   Enrico Schumann <es@enricoschumann.net>
-}
-\note{
-  \bold{Very experimental.}
 }
 \seealso{
   \code{\link{journal}}

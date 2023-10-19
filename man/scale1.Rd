@@ -71,8 +71,11 @@ scale1(x, \dots)
 An object of the same type as \code{x}.
 }
 \references{
-  Enrico Schumann -- Portfolio Management with R.
-  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
+
+  Schumann, E. (2023) \emph{Portfolio Management with R}.
+  \url{http://enricoschumann.net/PMwR/};
+  in particular, see\cr
+  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#scaling-series}
 }
 \author{
   Enrico Schumann

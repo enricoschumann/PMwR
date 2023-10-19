@@ -274,6 +274,14 @@ returns(x, \dots)
 
 
 }
+\references{
+
+  Schumann, E. (2023) \emph{Portfolio Management with R}.
+  \url{http://enricoschumann.net/R/packages/PMwR/};
+  in particular, see\cr
+  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#computing-returns}
+
+}
 \author{
   Enrico Schumann <es@enricoschumann.net>
 }

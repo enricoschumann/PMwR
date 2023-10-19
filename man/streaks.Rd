@@ -93,9 +93,12 @@ streaks(x, ...)
    computed (see Examples). If \code{relative} is \code{FALSE},
    the column is named \code{change}.}
 }
-%% \references{
-%% %% ~put references to the literature/web site here ~
-%% }
+\references{
+  Schumann, E. (2023) \emph{Portfolio Management with R}.
+  \url{http://enricoschumann.net/PMwR/}; in particular, see\cr
+  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#drawdowns-streaks}
+
+}
 \author{
   Enrico Schumann <es@enricoschumann.net>
 }

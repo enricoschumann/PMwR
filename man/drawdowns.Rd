@@ -29,7 +29,12 @@ drawdowns(x, \dots)
 }
 \value{
 
-  a \code{\link{data.frame}}
+  a \code{\link{data.frame}}:
+  \item{\code{peak}}{peak before drawdown}
+  \item{\code{trough}}{lowest point}
+  \item{\code{recover}}{new high or \code{\link{NA}} if the
+    drawdown has not been recovered yet}
+  \item{\code{max}}{the max drawdown}
 
 }
 \seealso{
@@ -37,8 +42,8 @@ drawdowns(x, \dots)
   The actual computation of the drawdowns is done by function
   \code{\link[NMOF]{drawdown}} in package \pkg{NMOF}.
 
-  Series of uninterrupted up and down movements can be computed
-  with \code{\link{streaks}}.
+  Series of uninterrupted up and down movements can be
+  computed with \code{\link{streaks}}.
 
 }
 \author{
@@ -46,12 +51,13 @@ drawdowns(x, \dots)
 }
 \references{
 
-  Gilli, M., Maringer, D. and Schumann, E. (2019) \emph{Numerical Methods
-    and Optimization in Finance}. 2nd edition. Elsevier.
-  \doi{10.1016/C2017-0-01621-X}
+  Gilli, M., Maringer, D. and Schumann, E. (2019)
+  \emph{Numerical Methods and Optimization in Finance}.
+  2nd edition. Elsevier. \doi{10.1016/C2017-0-01621-X}
 
-  Schumann, E. (2023) \emph{Portfolio Management
-    with R}. \url{http://enricoschumann.net/PMwR/}
+  Schumann, E. (2023) \emph{Portfolio Management with R}.
+  \url{http://enricoschumann.net/PMwR/}; in particular, see\cr
+  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#drawdowns-streaks}
 
 }
 \examples{

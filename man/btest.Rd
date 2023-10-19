@@ -374,12 +374,13 @@ btest(prices, signal,
 }
 \references{
 
-  Schumann, E. (2023) \emph{Portfolio Management
-    with R}. \url{http://enricoschumann.net/PMwR/};
-  in particular the chapter on backtesting:
+  Schumann, E. (2023) \emph{Portfolio Management with R}.
+  \url{http://enricoschumann.net/PMwR/};
+  in particular, see the chapter on backtesting:\cr
   \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#backtesting}
 
-  Schumann, E. (2018) \emph{Backtesting}. \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3374195}
+  Schumann, E. (2018) \emph{Backtesting}.\cr
+  \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3374195}
 
 }
 \author{

@@ -9,7 +9,6 @@
 }
 \usage{
 instrument(x, \dots)
-
 instrument(x, \dots) <- value
 }
 \arguments{
@@ -24,21 +23,21 @@ instrument(x, \dots) <- value
     an object
   }
 }
-\details{
+\details{%
 
   Generic function: extract or, if meaningful, replace
   instrument information
 
 }
-\value{
+\value{%
 
   when used to extract instrument, a character vector
 
 }
-\references{
+\references{%
 
-  Schumann, E. (2017) \emph{Portfolio Management with
-    R}. \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
+  Schumann, E. (2023) \emph{Portfolio Management with R}.
+  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
 
 }
 \author{
@@ -52,5 +51,5 @@ jnl <- journal(instrument = "A",
                amount = 100,
                price = 1)
 instrument(jnl)
-
+instrument(jnl) <- "B"
 }

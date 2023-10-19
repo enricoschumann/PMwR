@@ -41,7 +41,7 @@ rc(R, weights, timestamp, segments = NULL,
     \code{tol} are considered zero and not used for
     computations. Ignored if \code{\link{NA}}.
   }
-  
+
   If portfolio returns are to be compared against
   benchmark returns, benchmark returns/weights must be
   supplied:
@@ -54,7 +54,7 @@ rc(R, weights, timestamp, segments = NULL,
     the segment weights: a numeric matrix.
     \code{weights[i, j]} must correspond to \code{R[i, j]}
   }
-  
+
 }
 \details{
 
@@ -85,6 +85,7 @@ rc(R, weights, timestamp, segments = NULL,
   \emph{Investment Performance Measurement},
   Wiley.
 
+  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#return-contribution}
 }
 \author{
   Enrico Schumann

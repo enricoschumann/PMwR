@@ -148,8 +148,9 @@ as.NAVseries(x, ...)
 }
 \references{
 
-  Schumann, E. (2021) \emph{Portfolio Management with
-  \R}. \url{http://enricoschumann.net/PMwR/}
+  Schumann, E. (2023) \emph{Portfolio Management with R}.
+  \url{http://enricoschumann.net/PMwR/}; in particular, see\cr
+  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#NAVseries}
 
 }
 \author{

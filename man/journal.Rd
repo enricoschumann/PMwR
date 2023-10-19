@@ -198,62 +198,57 @@ is.journal(x)
   primarily used for creating a journal from a
   \code{\link{data.frame}}.
   Calling \code{as.journal} on an unnamed numeric vector
-  interprets the vector as amounts.  If the vector is
-  named, these are interpreted as instruments; see Examples.
-  Calling \code{as.journal} on a journal returns the journal
-  itself.
+  interprets the vector as amounts.  If the vector is named,
+  these are interpreted as instruments; see Examples.  Calling
+  \code{as.journal} on a journal returns the journal itself.
 
   \code{journal} methods are available for several generic
   functions, for instance:
 
   \describe{
 
-    \item{\code{all.equal}}{compare contents of two
-    journals}
+    \item{\code{all.equal}}{compare contents of two journals}
 
-    \item{\code{aggregate}}{Splits a journal according
-    to \code{by}, applies a function to every
-    sub-journal and recombines the results into a
-    journal.}
+    \item{\code{aggregate}}{Splits a journal according to
+    \code{by}, applies a function to every sub-journal and
+    recombines the results into a journal.}
 
-    \item{\code{as.data.frame}}{coerces journal to
-    \code{\link{data.frame}}}
+    \item{\code{as.data.frame}}{Coerce journal to
+    \code{\link{data.frame}}.}
 
-    \item{\code{c}}{Combine several journals into one.
-      Note that the first argument to \code{c.journal}
-      must inherit from \code{journal}, or else the
-      method dispatch will fail.  For empty journals,
-      use \code{journal()} (not \code{NULL}).}
+    \item{\code{c}}{Combine several journals into one.  Note
+      that the first argument to \code{c.journal} must inherit
+      from \code{journal}, or else the method dispatch will
+      fail.  For empty journals, use \code{journal()} (not
+      \code{NULL}).}
 
-    \item{\code{length}}{number of transactions in a
-    journal; it uses the length of \code{amount}.}
+    \item{\code{length}}{number of transactions in a journal;
+    it uses the length of \code{amount}}
 
     \item{\code{split}}{Splits a journal according to
     \code{f}, yielding a list of journals.  Often used
     interactively to have information per sub-journal
-    printed. }
+    printed.}
 
     \item{\code{subset}}{evaluates an expression in an
-    environment that can access all fields of the
-    journal.  The function is meant for interactive
-    analysis; care is needed when it is used within
-    other functions: see Examples and the Manual.}
+    environment that can access all fields of the journal.
+    The function is meant for interactive analysis; care is
+    needed when it is used within other functions: see
+    Examples and the Manual.}
 
-    \item{\code{summary}}{provides summary statistics,
-    such as number of trades and average buy/sell
-    prices}
+    \item{\code{summary}}{provides summary statistics, such as
+    number of trades and average buy/sell prices}
 
-    \item{\code{toOrg}}{converts a journal to an Org
-  table; package \pkg{orgutils} must be available}
-
+    \item{\code{toOrg}}{converts a journal to an Org table;
+    package \pkg{orgutils} must be available}
   }
 
-  For journals that have a length, missing arguments will
-  be coded as \code{\link{NA}} except for \code{id} and
+  For journals that have a length, missing arguments will be
+  coded as \code{\link{NA}} except for \code{id} and
   \code{account}, which become \code{\link{NULL}}.  In
-  zero-length (i.e. \sQuote{empty}) journals, all fields
-  have length 0.  A zero-length journal is created, for
-  instance, by saying \code{journal()} or when an zero-row
+  zero-length (i.e. \sQuote{empty}) journals, all fields have
+  length 0.  A zero-length journal is created, for instance,
+  by saying \code{journal()} or when an zero-row
   \code{data.frame} is passed to \code{as.journal}.
 
 }
@@ -266,8 +261,9 @@ is.journal(x)
 \references{
 
 Schumann, E. (2023) \emph{Portfolio Management with R}.
-\url{http://enricoschumann.net/R/packages/PMwR/}
-
+\url{http://enricoschumann.net/R/packages/PMwR/};
+in particular, see\cr
+\url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#journals}
 }
 \author{
 Enrico Schumann <es@enricoschumann.net>
