@@ -68,8 +68,11 @@ position.default <- function(amount, timestamp, instrument,
     instrument <- rep(instrument, len/length(instrument))
 
     if (!is.null(account)) {
+        ## if 'account' is specified, paste
+        ##   account%SEP%instrument.
+        ## 'account' is then no longer needed
         account <- rep(account, len/length(account))
-        sep <- paste0("%", runif(1)*1e14, unclass(Sys.time()), "%")
+        sep <- "%%"
         while (any(grepl(sep, c(account, instrument), fixed = TRUE))) {
             sep <- paste0("%", runif(1)*1e14, unclass(Sys.time()), "%")
         }
@@ -77,19 +80,19 @@ position.default <- function(amount, timestamp, instrument,
     }
 
     if (missing(when)) {
-        ## If 'when' is missing, we can sum the
+        ## if 'when' is missing, we can sum the
         ## amounts. Missing timestamps do no harm.
         when <- max(timestamp, na.rm = TRUE)
 
-        nm <- sort(unique(instrument))
-        pos <- array(0, dim = c(1, length(nm)))
+        uniq.instrument <- sort(unique(instrument))
+        pos <- array(0, dim = c(1, length(uniq.instrument)))
         colnames(pos) <- if (!is.null(account))
-                             gsub(sep, ".", nm, fixed = TRUE)
+                             gsub(sep, ".", uniq.instrument, fixed = TRUE)
                          else
-                             nm
+                             uniq.instrument
         rownames(pos) <- ""
-        for (i in seq_along(nm)) {
-            ri  <-  nm[i] == instrument
+        for (i in seq_along(uniq.instrument)) {
+            ri  <-  uniq.instrument[i] == instrument
             iv  <- amount[ri]
             pos[1, i] <- sum(iv)
         }
@@ -149,56 +152,82 @@ position.default <- function(amount, timestamp, instrument,
         if (anyNA(timestamp) && !is.unsorted(timestamp, na.rm = TRUE))
             warning("timestamp has NA values")
 
-        nw <- length(when)
-        nm <- sort(unique(instrument))
-        pos <- array(0, dim = c(nw, length(nm)))
-        colnames(pos) <- if (!is.null(account))
-                             gsub(sep, ".", nm, fixed = TRUE)
-                         else
-                             nm
-        rownames(pos) <- if (no.timestamp)
-                             rep("", length(when))
-                         else
-                             as.character(when)
-        for (j in seq_len(nw)) {
-            for (i in seq_along(nm)) {
-                ri  <-  nm[i] == instrument
-                idt <- timestamp[ri]
-                iv  <- amount[ri]
-                beforewhen <- which(when[j] >= idt)
-                pos[j, i] <- if (length(beforewhen))
-                                 cumsum(iv)[max(beforewhen)] else 0
-            }
+        if (any(not.needed <- timestamp > max(when))) {
+            amount    <-      amount[!not.needed]
+            timestamp <-   timestamp[!not.needed]
         }
 
+        ## remove unnecessary timestamps
+        if (drop.zero) {
+            instrument <- instrument[!not.needed]
+            uniq.instrument <- sort(unique(instrument))
+            ni <- length(uniq.instrument)
+        } else {
+            uniq.instrument <- sort(unique(instrument))
+            ni <- length(uniq.instrument)
+            instrument <- instrument[!not.needed]
+        }
 
+        uniq.when <- unique(when)
+        nw <- length(uniq.when)
+        pos <- array(0, dim = c(nw, length(uniq.instrument)))
+        colnames(pos) <- if (!is.null(account))
+                             gsub(sep, ".", uniq.instrument, fixed = TRUE)
+                         else
+                             uniq.instrument
+        rownames(pos) <- if (no.timestamp)
+                             rep("", nw)
+                         else
+                             as.character(uniq.when)
+
+
+        for (i in seq_along(uniq.instrument)) {
+            m <- uniq.instrument[i] == instrument
+            if (!sum(m))
+                next
+            ## m <- fmatch(i, instrument)
+            ## instrument[m]
+            ## amount[m]
+            ## timestamp[m]
+            cum.amount <- cumsum(amount[m])
+
+            j <- findInterval(uniq.when, timestamp[m])
+            good <- j > 0
+            pos[good, i] <- cum.amount[j[good]]
+
+        }
+
+        ## TODO if 'when' entries are not unique, make copies
+        if (length(uniq.when) != length(when)) {
+            pos <- pos[match(when, unique(when)), , drop = FALSE]
+            colnames(pos) <- uniq.instrument
+        }
     }
-
 
     if (!is.logical(drop.zero)) {
         ## drop.zero is a tolerance
         drop <- apply(pos, 2, function(x) all(abs(x) < drop.zero))
         pos <- pos[, is.na(drop) | !drop, drop = FALSE]
-        nm <- nm[is.na(drop) | !drop]
+        uniq.instrument <- uniq.instrument[is.na(drop) | !drop]
 
     } else if (drop.zero) {
         drop <- apply(pos, 2, function(x) all(x == 0))
         pos <- pos[, is.na(drop) | !drop, drop = FALSE]
-        nm <- nm[is.na(drop) | !drop]
+        uniq.instrument <- uniq.instrument[is.na(drop) | !drop]
     }
 
     if (no.instruments)
-        nm[] <- NA
+        uniq.instrument[] <- NA
     if (!is.null(account)) {
-        tmp <- strsplit(nm, sep, fixed = TRUE)
+        tmp <- strsplit(uniq.instrument, sep, fixed = TRUE)
         attr(pos, "instrument") <- unlist(lapply(tmp, `[[`, 2))
         attr(pos, "account") <- unlist(lapply(tmp, `[[`, 1))
     } else
-        attr(pos, "instrument") <- nm
+        attr(pos, "instrument") <- uniq.instrument
     attr(pos, "timestamp") <- if (no.timestamp) NA else when
-    ## attr(pos, "instrument") <- gsub(".*%SEP%(.*?)", "\\1", nm)
+    ## attr(pos, "instrument") <- gsub(".*%SEP%(.*?)", "\\1", uniq.instrument)
     ## if (!is.null(account))
-    ##     attr(pos, "account") <- gsub("(.*)%SEP%.*", "\\1", nm)
+    ##     attr(pos, "account") <- gsub("(.*)%SEP%.*", "\\1", uniq.instrument)
     attr(pos, "unit") <- "amount"
     class(pos) <- "position"
     pos

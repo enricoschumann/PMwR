@@ -1,3 +1,9 @@
+v0.19-4  (2023-11-14; not yet released)
+
+  o the computations for 'position' are much more efficient
+
+  o ....
+
 v0.19-3  (2023-10-19)
 
   o documentation updates.  In particular, many help pages
