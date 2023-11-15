@@ -27,24 +27,25 @@ position(amount, \dots)
 
 }
 \arguments{
-  \item{when}{
+  \item{when}{%
     a timestamp or a vector of timestamps;
     alternatively, several keywords are supported. See Details.
   }
-  \item{amount}{
+  \item{amount}{%
     numeric or an object of class \code{\link{journal}}
   }
-  \item{timestamp}{
+  \item{timestamp}{%
     numeric or character: timestamps, must be sortable
   }
-  \item{instrument}{
+  \item{instrument}{%
     character: symbols to identify different instruments
   }
-  \item{account}{
+  \item{account}{%
     character: description of account. Ignored if \code{\link{NULL}}.
   }
-  \item{use.account}{
-    logical
+  \item{use.account}{%
+    logical. If \link{TRUE}, positions are computed by
+    account and instrument; otherwise by instrument only.
   }
   \item{use.names}{%
     logical or \code{NULL}. The argument handles whether names
@@ -62,19 +63,20 @@ position(amount, \dots)
     position whose absolute amount is smaller than
     \code{1-e12}.
   }
-  \item{x}{
+  \item{x}{%
     An object of type position.
   }
-  \item{\dots}{
+  \item{\dots}{%
     arguments passed to \code{\link{print}}
   }
-  \item{sep}{
-    A regular expression. Split instruments accordingly. \strong{Not
-    implemented yet.}
+  \item{sep}{%
+    A regular expression. Split instruments accordingly.
+    \strong{Not implemented yet.}
   }
 }
 \details{%
 
+  \code{position} computes positions for lists of trades.
   \code{position} is a generic function; most useful is the
   method for \code{\link{journal}}s.
 
@@ -124,7 +126,8 @@ position(amount, \dots)
   Enrico Schumann
 }
 \seealso{
-  \code{\link{journal}}
+  \code{\link{journal}}; internal computations are handled by
+  \code{\link{cumsum}} and \code{\link{findInterval}}
 }
 \examples{
 position(amount = c(1, 1, -1, 3, -4),
@@ -135,7 +138,7 @@ J <- journal(timestamp = 1:5, amount = c(1, 1, -1, 3, -4))
 position(J, when = 4.9)
 
 
-## declaring a position, using names
+## 'declaring' a position, using named amounts
 amount <- c(1, 1, 1)
 instrument <- c("A", "A", "B")
 position(amount = amount, instrument = instrument)
