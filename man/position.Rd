@@ -108,7 +108,8 @@ position(amount, \dots)
   result's \code{dim} attribute: it will always be a matrix of
   size \code{length(when)} times
   \code{length(unique(instrument))}, which may not be obvious
-  from the printed output.
+  from the printed output.  The rows of the matrix correspond
+  to timestamps; the columns correspond to instruments.
 
   To extract the numeric position matrix, say
   \code{as.matrix(p)}.
