@@ -152,14 +152,15 @@ returns.zoo <- function(x, period = NULL, complete.first = TRUE,
                         pad = pad, position = position,
                         weights = weights,
                         rebalance.when = rebalance.when,
-                        lag = lag, ...)
+                        lag = lag, na.rm = na.rm, ...)
     } else {
-        ans <- returns.default(x, t = t, period = NULL,
-                               complete.first = complete.first,
-                               pad = pad, position = position,
-                               weights = weights,
-                               rebalance.when = rebalance.when,
-                               lag = lag, ...)
+        ans <-
+        returns.default(x, t = t, period = NULL,
+                        complete.first = complete.first,
+                        pad = pad, position = position,
+                        weights = weights,
+                        rebalance.when = rebalance.when,
+                        lag = lag,  na.rm = na.rm, ...)
         attrs <- attributes(ans)
         ans <- if (!is.null(pad))
                    zoo(ans, t)

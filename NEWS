@@ -1,3 +1,8 @@
+v0.19-5  (2023-12-27; not yet released)
+
+  o fixed: the zoo method of 'returns' no longer ignores
+    argument 'na.rm'
+
 v0.19-4  (2023-12-08)
 
   o the computations for 'position' are more efficient now
