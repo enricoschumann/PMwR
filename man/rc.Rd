@@ -16,21 +16,22 @@ rc(R, weights, timestamp, segments = NULL,
    tol = sqrt(.Machine$double.eps))
 }
 \arguments{
-  \item{R}{returns: a numeric matrix}
-
+  \item{R}{%
+    returns: a numeric matrix
+  }
   \item{weights}{%
     the segment weights: a numeric matrix.
     \code{weights[i, j]} must correspond to \code{R[i, j]}
   }
-
-  \item{timestamp}{character or numeric}
-
+  \item{timestamp}{%
+    character or numeric
+  }
   \item{segments}{%
     character. If missing, column names of \code{R} or of
     \code{weights} are used (if they are not \code{NULL}).
   }
 
-  \item{method}{a string}
+  \item{method}{a string; default is \code{contribution}}
 
   \item{linking.method}{\code{NULL} or a string}
 
@@ -42,37 +43,38 @@ rc(R, weights, timestamp, segments = NULL,
     computations. Ignored if \code{\link{NA}}.
   }
 
-  If portfolio returns are to be compared against
-  benchmark returns, benchmark returns/weights must be
-  supplied:
+  If portfolio returns are to be compared against benchmark
+  returns, benchmark returns and weights must be supplied:
 
   \item{R.bm}{%
-    returns: a numeric matrix
+    benchmark returns: a numeric matrix
   }
-
   \item{weights.bm}{%
-    the segment weights: a numeric matrix.
-    \code{weights[i, j]} must correspond to \code{R[i, j]}
+    the benchmark weights of segments: a numeric matrix.
+    \code{weights.bm[i, j]} must correspond to \code{R.bm[i, j]}
   }
-
 }
-\details{
+\details{%
 
   The function computes segment contribution, potentially
-  over time. Returns and weights must be arranged in
+  over time.  Returns and weights must be arranged in
   matrices, with rows corresponding to time periods and
   columns to portfolio segments.  If \code{weights} and
-  \code{R} are not matrices (i.e. are atomic vectors), then
-  they are interpreted as cross-sectional weights/returns
-  for a single period.
+  \code{R} are atomic vectors, then they are interpreted as
+  cross-sectional weights/returns for a single period,
+  i.e. they are handled like row vectors.
 
-  Weights can be missing, in which case \code{R} is
-  assumed to already comprise segment returns.
+  Weights can be missing, in which case \code{R} is assumed
+  to already comprise segment returns.
+
 }
-\value{
-  A list of two components
- \item{period_contributions}{a data.frame}
+\value{%
+
+  A list of two components:
+  \item{period_contributions}{a data.frame of single-period
+   contributions, sorted in time}
  \item{total_contributions}{a numeric vector}
+
 }
 \references{
 

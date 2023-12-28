@@ -1,3 +1,4 @@
+## [[file:../../../Documents/Books/PMwR/PMwR-Code.org::rc][rc]]
 ## -*- truncate-lines: t; -*-
 ## Copyright (C) 2023  Enrico Schumann
 
@@ -8,13 +9,13 @@ rc <- function(R, weights, timestamp, segments = NULL,
                allocation.minus.bm = TRUE,
                tol = sqrt(.Machine$double.eps)) {
 
-    if (missing(weights))
-        weights <- 1
-    else if (is.null(dim(weights)))
-        weights <- t(weights)
-
     if (is.null(dim(R)))
         R <- t(R)
+
+    if (missing(weights))
+        weights <- array(1, dim = dim(R))
+    else if (is.null(dim(weights)))
+        weights <- t(weights)
 
     if (is.null(segments)) {
 
@@ -37,11 +38,10 @@ rc <- function(R, weights, timestamp, segments = NULL,
     else if (anyDuplicated(timestamp))
         stop("duplicated timestamps")
     else if (is.unsorted(timestamp)) {
-        ## TODO make checks
         o <- order(timestamp)
-        timestamp <- timestamp(o)
         R <- R[o, ]
-        weights <- weights[o]
+        weights <- weights[o, ]
+        timestamp <- timestamp[o]
     }
 
     nt <- length(timestamp)
@@ -206,3 +206,4 @@ rc <- function(R, weights, timestamp, segments = NULL,
 
     ans
 }
+## rc ends here

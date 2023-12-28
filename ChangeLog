@@ -1,6 +1,15 @@
+2023-12-28  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/rc.R (rc): fix ordering of returns when timestamp
+	is unsorted (not relevant for single-period
+	contributions, but affects overall contributions)
+
+        * inst/tinytest/test_rc.R: add tests with unsorted
+        timestamps
+
 2023-12-27  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (returns.zoo): pass on "na.rm" argument
+        * R/returns.R (returns.zoo): pass on "na.rm" argument
 
 2023-12-08  Enrico Schumann  <es@enricoschumann.net>
 

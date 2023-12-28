@@ -69,6 +69,7 @@ rc(segments = c("large cap", "small cap", "fixed income"),
                 .55, .05, .4), byrow = TRUE, nrow = 3)[1, ],
    )
 
+
 ## -----------------------------
 ## Christopherson / Cari\~no 2009, Table 19.1
 ans <- rc(segments = c("stocks", "bonds"),
@@ -97,7 +98,6 @@ expect_equal(ans$total_contributions[["bonds"]],  0.1625)
 
 
 ## --------------------------------------------------------
-
 ## NAs in returns should not affect results as long as
 ## corresponding weights are zero
 
@@ -116,3 +116,28 @@ R2 <- rbind(c( 1  ,    NA),
 r2 <- rc(R2, weights, segment = c("equities", "bonds"))
 
 expect_true(all.equal(r1, r2))
+
+
+## -----------------------------
+## order by timestamp
+
+weights <- rbind(c( 0.25, 0.75),
+                 c( 0.40, 0.60))
+R <- rbind(c( 1  ,    0),
+           c( 2.5, -1.0))/100
+timestamp <- 1:2
+
+rc1 <- rc(R, weights, timestamp = timestamp,
+          segment = c("equities", "bonds"))
+
+weights <- weights[2:1, ]
+R <- R[2:1, ]
+timestamp <- 2:1
+rc2 <- rc(R, weights, timestamp = timestamp,
+          segment = c("equities", "bonds"))
+
+expect_equivalent(rc1$period_contributions,
+                  rc2$period_contributions)
+
+expect_equivalent(rc1$total_contributions,
+                  rc2$total_contributions)

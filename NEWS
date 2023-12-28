@@ -1,8 +1,13 @@
-v0.19-5  (2023-12-27; not yet released)
+v0.19-5  (2023-12-28; not yet released)
+
+  o fixed: 'rc' did not compute total contributions correctly
+    when returns were not sorted in time
 
   o fixed: the zoo method of 'returns' no longer ignores
     argument 'na.rm'
 
+  o ....
+  
 v0.19-4  (2023-12-08)
 
   o the computations for 'position' are more efficient now
