@@ -1,4 +1,3 @@
-## [[file:../../../Documents/Books/PMwR/PMwR-Code.org::rc][rc]]
 ## -*- truncate-lines: t; -*-
 ## Copyright (C) 2023  Enrico Schumann
 
@@ -206,4 +205,3 @@ rc <- function(R, weights, timestamp, segments = NULL,
 
     ans
 }
-## rc ends here

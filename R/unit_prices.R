@@ -1,4 +1,3 @@
-## [[file:../../../Documents/Books/PMwR/PMwR-Code.org::unit_prices][unit_prices]]
 ## -*- truncate-lines: t; -*-
 ## Copyright (C) 2008-23  Enrico Schumann
 
@@ -122,4 +121,3 @@ unit_prices <- function(NAV, cashflows,
     }
     res
 }
-## unit_prices ends here

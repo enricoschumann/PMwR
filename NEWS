@@ -1,4 +1,12 @@
-v0.19-5  (2023-12-28; not yet released)
+v0.19-5  (2024-01-24; not yet released)
+
+  o 'is_valid_ISIN' gains an argument 'NA.FALSE', with
+    default FALSE.  With this default, is_valid_ISIN(NA)
+    evaluates to NA, whereas before an NA would evaluate to
+    FALSE.  To retain the old behaviour, set NA.FALSE to
+    TRUE.  The function also no longer emits a (harmless but
+    annoying) warning when the check digit of an invalid ISIN
+    was not a number.
 
   o fixed: 'rc' did not compute total contributions correctly
     when returns were not sorted in time
@@ -7,7 +15,7 @@ v0.19-5  (2023-12-28; not yet released)
     argument 'na.rm'
 
   o ....
-  
+
 v0.19-4  (2023-12-08)
 
   o the computations for 'position' are more efficient now

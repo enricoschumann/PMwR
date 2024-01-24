@@ -1,3 +1,11 @@
+2024-01-24  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/is_valid_ISIN.R (is_valid_ISIN): propagate NAs
+	properly, i.e. NA value now avaluate to NA; when
+	new argument NA.FALSE is TRUE, then NA evaluates to
+	FALSE. (This behaviour is consistent with
+	"is_valid_SEDOL".)
+
 2023-12-28  Enrico Schumann  <es@enricoschumann.net>
 
         * R/rc.R (rc): fix ordering of returns when timestamp
