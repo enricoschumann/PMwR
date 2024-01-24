@@ -8,7 +8,7 @@
   Check whether a given ISIN or SEDOL is valid.
 }
 \usage{
-is_valid_ISIN(isin)
+is_valid_ISIN(isin, NA.FALSE = FALSE)
 is_valid_SEDOL(SEDOL, NA.FALSE = FALSE)
 }
 \arguments{
@@ -19,25 +19,30 @@ is_valid_SEDOL(SEDOL, NA.FALSE = FALSE)
     a character vector
   }
   \item{NA.FALSE}{
-    logical
+
+    logical: if \code{\link{TRUE}}, \code{\link{NA}} values
+    evaluate to \code{\link{FALSE}}.
+
   }
 }
 \details{
 
-  Checks a character vector of \acronym{ISIN}s and \acronym{SEDOL}s. The
-  function returns \code{TRUE} if the \acronym{ISIN} is valid; else
-  \code{FALSE}.
+  Checks a character vector of \acronym{ISIN}s and
+  \acronym{SEDOL}s.  The function returns \code{TRUE} if the
+  \acronym{ISIN}/\acronym{SEDOL} is valid, else \code{FALSE}.
+  Handling of \code{\link{NA}} is defined by argument
+  \code{NA.FALSE}.
 
-  International Securities Identification Numbers (ISINs): The test
-  procedure in \acronym{ISO} 6166 does not differentiate between cases.
-  Thus, \acronym{ISIN}s are transformed to uppercase before being
-  tested.
+  International Securities Identification Numbers
+  (\acronym{ISIN}s): The test procedure in \acronym{ISO} 6166
+  does not differentiate between cases.  Thus, \acronym{ISIN}s
+  are transformed to uppercase before being tested.
 
 }
 \value{
 
-  A named logical vector. For \code{is_valid_SEDOL}, a character vector
-  is attached as an attribute \code{note}.
+  A named logical vector. For \code{is_valid_SEDOL}, a
+  character vector is attached as an attribute \code{note}.
 
 }
 \references{
@@ -67,5 +72,4 @@ is_valid_SEDOL(SEDOL)
 is_valid_SEDOL(SEDOL, NA.FALSE = TRUE)
 ## 0263494 B1F3M59 0263491       A    <NA>
 ##    TRUE    TRUE   FALSE   FALSE   FALSE
-
 }
