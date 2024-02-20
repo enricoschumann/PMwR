@@ -106,6 +106,7 @@ rc <- function(R, weights, timestamp, segments = NULL,
 
         } else if (linking.method == "logarithmic") {
             kt <- log(df[["total"]] + 1) / df[["total"]]
+            kt[is.infite(kt)] <- 1
             k <- prod(df[["total"]] + 1)
             k <- log(k) / (k-1)
             adj_ct <- df[, -c(1, ncol(df))]*kt
@@ -116,8 +117,30 @@ rc <- function(R, weights, timestamp, segments = NULL,
                     total_contributions = total)
         attr(ans, "method") <- "contribution"
 
+    } else if (method %in% c("attribution")) {
+              p <- rowSums(R * weights)
+        b <- rowSums(R * weights.bm)
+
+        pT <- prod(p+1)-1
+        bT <- prod(b+1)-1
+        ct <- (weights - weights.bm)*R
+
+        kt <- log(1 + p ) - log(1 + b )
+        kt <- kt / (p - b)
+        kt[is.infinite(kt)] <- 1/(1+p)
+
+        k  <- log(1 + pT) - log(1 + bT)
+        k <- k / (pT - bT)
+        k[is.infinite(k)] <- 1/(1+pT)
+
+        total <- colSums(ct * kt / k)
+        ans <- list(period_contributions = ct,
+                    total_contributions = total)
+        attr(ans, "method") <- "attribution"
+        attr(ans, "linking.method") <- "logarithmic"
+
     } else if (method %in%
-               c("attribution", "topdown", "bottomup")) {
+               c("topdown", "bottomup")) {
 
         if (!is.null(linking.method))
             .NotYetUsed("linking.method", FALSE)

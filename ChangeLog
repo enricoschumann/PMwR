@@ -3,6 +3,9 @@
         * R/rc.R (rc): add new linking methods -- supported
         for contribution are now 'geometric{0,1,0.5}' and
         'logarithmic'
+        (rc): method "attribution" now implements
+        /relative/ contributions; so far, only logarithmic
+        linking is implemented for that method
 
 2024-01-24  Enrico Schumann  <es@enricoschumann.net>
 
