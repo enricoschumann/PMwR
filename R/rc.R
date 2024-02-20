@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2023  Enrico Schumann
+## Copyright (C) 2023-24  Enrico Schumann
 
 rc <- function(R, weights, timestamp, segments = NULL,
                R.bm = NULL, weights.bm = NULL,
@@ -67,27 +67,41 @@ rc <- function(R, weights, timestamp, segments = NULL,
     if (method == "contribution") {
 
         if (is.null(linking.method))
-            linking.method <- "geometric0"
+            linking.method <- "geometric1"
 
-        if (linking.method == "geometric0") {
+        if (linking.method == "geometric1") {
 
-            later_r <- c(rev(cumprod(1 + rev(df[["total"]])))[-1], 1)
+            later_r <-
+                c(rev(cumprod(1 + rev(df[["total"]])))[-1], 1)
 
             total <- rep(NA_real_, ns + 1)
             names(total) <- c(segments, "total")
-            for (i in seq_len(ns))
-                total[[i]] <- sum(df[[i + 1]] * later_r)
+            ns1 <- seq_len(ns)
+            total[ns1] <- colSums(df[, ns1 + 1] * later_r)
             total[[ns + 1]] <- cumprod(df[["total"]] + 1)[[nt]] - 1
 
-        } else if (linking.method == "geometric1") {
+        } else if (linking.method == "geometric0") {
 
-            earlier_r <- c(1,
-                           cumprod(1 + df[["total"]][-nrow(df)]))
+            earlier_r <-
+                c(1, cumprod(1 + df[["total"]][-nrow(df)]))
 
             total <- rep(NA_real_, ns + 1)
             names(total) <- c(segments, "total")
-            for (i in seq_len(ns))
-                total[[i]] <- sum(df[[i + 1]] * earlier_r)
+            ns1 <- seq_len(ns)
+            total[ns1] <- colSums(df[, ns1 + 1] * earlier_r)
+            total[[ns + 1]] <- cumprod(df[["total"]] + 1)[[nt]] - 1
+
+        } else if (grepl("geometric", linking.method)) {
+            f <- 0.5
+            later_r <-
+                c(rev(cumprod(1 + rev(f*df[["total"]])))[-1], 1)
+            earlier_r <-
+                c(1,  cumprod(1 + (1-f)*df[["total"]][-nrow(df)]))
+
+            total <- rep(NA_real_, ns + 1)
+            names(total) <- c(segments, "total")
+            ns1 <- seq_len(ns)
+            total[ns1] <- colSums(df[, ns1 + 1] * earlier_r * later_r)
             total[[ns + 1]] <- cumprod(df[["total"]] + 1)[[nt]] - 1
 
         } else if (linking.method == "logarithmic") {

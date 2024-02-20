@@ -33,7 +33,9 @@ rc(R, weights, timestamp, segments = NULL,
 
   \item{method}{a string; default is \code{contribution}}
 
-  \item{linking.method}{\code{NULL} or a string}
+  \item{linking.method}{\code{NULL} or a string. Currently
+    supported are \code{geometric{0,1,0.5}} and
+    \code{logarithmic}. See Examples.}
 
   \item{allocation.minus.bm}{logical}
 
@@ -67,6 +69,10 @@ rc(R, weights, timestamp, segments = NULL,
   Weights can be missing, in which case \code{R} is assumed
   to already comprise segment returns.
 
+  Note that the segment contributions need not come from
+  asset classes; the computation works for any additive
+  single-period decomposition of portfolio returns.
+
 }
 \value{%
 
@@ -78,8 +84,13 @@ rc(R, weights, timestamp, segments = NULL,
 }
 \references{
 
-  Jon A. Christopherson and David R. Cari\enc{ñ}{n}o
-  and Wayne E. Ferson (2009),
+  David R. Cari\enc{ñ}{n}o (1999).
+  Combining Attribution Effects Over Time.
+  Journal of Performance Measurement.
+  \strong{3} (4), 5--14.
+
+  Jon A. Christopherson and David R. Cari\enc{ñ}{n}o and
+  Wayne E. Ferson (2009),
   \emph{Portfolio Performance Measurement and Benchmarking},
   McGraw-Hill.
 
@@ -105,6 +116,54 @@ R <- rbind(c( 1  ,    0),
            c(-2  ,  0.5))/100
 
 rc(R, weights, segment = c("equities", "bonds"))
+
+
+
+## EXAMPLE of Christopherson et al., ch 19
+weights <- cbind(stocks = c(0.5,  0.55),
+                 bonds  = c(0.5, 0.45))
+##      stocks bonds
+## [1,]   0.50  0.50
+## [2,]   0.55  0.45
+
+R <- cbind(stocks = c(.4, 0.1),
+           bonds  = c(.1, 0.2))
+##      stocks bonds
+## [1,]    0.4   0.1
+## [2,]    0.1   0.2
+
+## ==> contributions grow at portfolio rate-of-return
+rc(R, weights, linking.method =  "geometric1")
+
+## ==> contributions are made on top of current portfolio-value
+rc(R, weights, linking.method =  "geometric0")
+
+## ==> mixture
+rc(R, weights, linking.method =  "geometric0.5")
+
+
+
+## EXAMPLE https://quant.stackexchange.com/questions/36520/how-to-calculate-the-annual-contribution-of-a-fund-to-a-portfolio-of-funds/36530#36530
+
+weights <- rbind(c( 0.5, 0.5),
+                 c( 0.5, 0.5))
+
+R <- rbind(c( 10,   0),
+           c( 0 ,  10))/100
+
+
+rc(R, weights, segment = c("F1", "F2"), timestamp = 1:2,
+   linking.method = "geometric1")
+## ==> F1 contributed first, and so gets a higher total
+##     contribution
+
+rc(R, weights, segment = c("F1", "F2"), timestamp = 1:2,
+   linking.method = "geometric0")
+## ==> F2 contributed later, and so gets a higher total
+##     contribution because it started off a higher base
+##     value
+
+
 
 
 ## contribution for btest:

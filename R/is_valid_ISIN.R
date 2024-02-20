@@ -15,7 +15,7 @@ is_valid_ISIN <- function(isin, NA.FALSE = FALSE) {
     i.NA <- is.na(isin)
     good <- !i.NA
     ## ==> now, everything that is not NA is considered good
-  
+
     ## number of chars == 12?
     validNC <- 12L
     good[good] <- good[good] &
