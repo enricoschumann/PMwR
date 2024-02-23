@@ -1,3 +1,8 @@
+2024-02-23  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/rc.R (rc): factor our logarithmic-linking
+        computations
+
 2024-02-20  Enrico Schumann  <es@enricoschumann.net>
 
         * R/rc.R (rc): add new linking methods -- supported

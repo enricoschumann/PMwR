@@ -1,4 +1,4 @@
-v0.19-5  (2024-01-24; not yet released)
+v0.19-5  (2024-02-23; not yet released)
 
   o 'is_valid_ISIN' gains an argument 'NA.FALSE', with
     default FALSE.  With this default, is_valid_ISIN(NA)
@@ -7,6 +7,10 @@ v0.19-5  (2024-01-24; not yet released)
     TRUE.  The function also no longer emits a (harmless but
     annoying) warning when the check digit of an invalid ISIN
     was not a number.
+
+  o 'rc' now supports (or where it did so already, gets
+    documentation for) various computations, notably
+    for linking single-period returns
 
   o fixed: 'rc' did not compute total contributions correctly
     when returns were not sorted in time

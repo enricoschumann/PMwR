@@ -105,12 +105,11 @@ rc <- function(R, weights, timestamp, segments = NULL,
             total[[ns + 1]] <- cumprod(df[["total"]] + 1)[[nt]] - 1
 
         } else if (linking.method == "logarithmic") {
-            kt <- log(df[["total"]] + 1) / df[["total"]]
-            kt[is.infite(kt)] <- 1
-            k <- prod(df[["total"]] + 1)
-            k <- log(k) / (k-1)
-            adj_ct <- df[, -c(1, ncol(df))]*kt
-            total <- colSums(adj_ct)/k
+            C <- df[, -c(1, ncol(df))]
+            total <- .linking_logarithmic(C,
+                                          r = df[["total"]],
+                                          b = 0)
+            adj_ct <- attr(total, "C.adj")
             total <- c(total, total = sum(total))
         }
         ans <- list(period_contributions = df,
@@ -118,26 +117,22 @@ rc <- function(R, weights, timestamp, segments = NULL,
         attr(ans, "method") <- "contribution"
 
     } else if (method %in% c("attribution")) {
-              p <- rowSums(R * weights)
+        r <- rowSums(R * weights)
         b <- rowSums(R * weights.bm)
 
-        pT <- prod(p+1)-1
-        bT <- prod(b+1)-1
-        ct <- (weights - weights.bm)*R
+        C <- (weights - weights.bm)*R
+        total <- .linking_logarithmic(C,
+                                      r = df[["total"]],
+                                      b = b)
+        adj_ct <- attr(total, "C.adj")
+        total <- c(total, total = sum(total))
 
-        kt <- log(1 + p ) - log(1 + b )
-        kt <- kt / (p - b)
-        kt[is.infinite(kt)] <- 1/(1+p)
-
-        k  <- log(1 + pT) - log(1 + bT)
-        k <- k / (pT - bT)
-        k[is.infinite(k)] <- 1/(1+pT)
-
-        total <- colSums(ct * kt / k)
-        ans <- list(period_contributions = ct,
+        ans <- list(period_contributions = C,
                     total_contributions = total)
+
         attr(ans, "method") <- "attribution"
         attr(ans, "linking.method") <- "logarithmic"
+        attr(ans, "adjusted_period_contributions") <- adj_ct
 
     } else if (method %in%
                c("topdown", "bottomup")) {
@@ -241,4 +236,28 @@ rc <- function(R, weights, timestamp, segments = NULL,
         stop("unknown method")
 
     ans
+}
+
+.linking_logarithmic <- function(C, r, b = 0, ...) {
+
+    ## C .. matrix of contributions
+    ## r .. period returns of portfolio
+    ## b .. period returns of benchmark
+
+    rT <- prod(r + 1) - 1
+    bT <- prod(b + 1) - 1
+
+    kt <- log(1 + r) - log(1 + b)
+    inf <- is.infinite(kt)
+    kt <- kt / (r - b)
+    kt[inf] <- 1/(1 + r)
+
+    k  <- log(1 + rT) - log(1 + bT)
+    k <- k / (rT - bT)
+    k[is.infinite(k)] <- 1/(1 + rT)
+
+    C.adj <- C * kt / k
+    total <- colSums(C.adj)
+    attr(total, "adjusted") <- C.adj
+    total
 }
