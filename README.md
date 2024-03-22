@@ -1,5 +1,7 @@
 # Portfolio Management with R
 
+[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/PMwR)](http://cran.r-project.org/package=PMwR)
+[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/PMwR)](http://cran.r-project.org/web/packages/PMwR/index.html)
 
 ## About PMwR
 
