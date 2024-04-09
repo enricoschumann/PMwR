@@ -107,15 +107,17 @@ replace_weight(weights, ..., prefix = TRUE, sep = "::")
   \item{instrument}{character, or \code{NA} when
                     \code{match.names} is \code{FALSE}}
   \item{price}{prices}
-  \item{current}{current portfolio}
-  \item{target}{new portfolio}
-  \item{difference}{the difference between current and target}
+  \item{current}{current portfolio, in units of instrument}
+  \item{target}{new portfolio, in units of instrument}
+  \item{difference}{the difference between \code{current}
+    and target portfolio}
 
   Attached to the data.frame are several attributes:
 
-  \item{notional}{notional}
+  \item{notional}{a single number}
   \item{match.names}{logical}
-  \item{multiplier}{multipliers}
+  \item{multiplier}{a numeric vector with as many elements as
+    the resulting data.frame has rows}
 
 }
 \references{%
