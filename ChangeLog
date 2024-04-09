@@ -162,7 +162,7 @@
         * R/btest.R (btest): 'do.rebalance' may return a
         vector of length equal to the number of assets,
         indicating which assets to rebalance (before, the
-        function had to be return a vector of length one)
+        function had to return a vector of length one)
 
         * R/returns.R (returns.default): fix warnings
         in situations when 'period' has length > 1
