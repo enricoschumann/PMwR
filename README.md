@@ -1,7 +1,7 @@
 # Portfolio Management with R
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/PMwR)](http://cran.r-project.org/package=PMwR)
-[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/PMwR)](http://cran.r-project.org/web/packages/PMwR/index.html)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/PMwR)](https://cran.r-project.org/package=PMwR)
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/PMwR)](https://cran.r-project.org/package=PMwR)
 
 ## About PMwR
 
@@ -15,18 +15,18 @@ provide a complete application that could be used 'as is',
 but building blocks for creating such an application.
 
 PMwR grew out of various pieces of software that I have
-written since 2008. While the package has become fairly
-stable in recent years, the interfaces of functions may still
-not be fully stable (e.g., argument names might still be
-made consistent across functions); in some cases, generic
-functions might be introduced. The *recommended* *practice*
-is therefore to *explicitly* *name* *arguments* *in*
+written since 2008. The package has become fairly
+stable in recent years, though still not fully stable
+(e.g., argument names might still be made consistent
+across functions); in some cases, generic functions
+might be introduced. The *recommended* *practice* is
+therefore to *explicitly* *name* *arguments* *in*
 *function* *calls* (and not pass arguments by
-position). Any changes in argument names will be documented
-in the
-[NEWS file](http://enricoschumann.net/R/packages/PMwR/NEWS) and
+position). Any changes in argument names will be
+documented in the
+[NEWS file](https://enricoschumann.net/R/packages/PMwR/NEWS) and
 so can be followed easily. More details are in the
-[ChangeLog](http://enricoschumann.net/R/packages/PMwR/ChangeLog).
+[ChangeLog](https://enricoschumann.net/R/packages/PMwR/ChangeLog).
 
 
 ## What PMwR provides
@@ -43,32 +43,39 @@ blocks for many activities in portfolio management.
      ?rc, ?pl or ?unit_prices.
 
 All details are in the
-[manual](http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html).
+[manual](https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html).
 New features are often described in these
-[notes](http://enricoschumann.net/notes/PMwR/).
+[notes](https://enricoschumann.net/notes/PMwR/).
 
-I am grateful for comments, suggestions and corrections.
+I am grateful for comments, suggestions and corrections;
+bug reports, in particular, can be started directly from
+within R:
+
+    library("utils")
+    bug.report("[PMwR] Unexpected behaviour in function XXX",
+               address = maintainer("PMwR"), 
+               package = "PMwR")
 
 
 
 ## Installation
 
-The latest stable version of the package is available from
-[CRAN](https://cran.r-project.org/package=PMwR).  The
-latest *development* version is available from
-http://enricoschumann.net/R/packages/PMwR/ . You can
-install either version directly from within R:
+The latest stable version of the package is available
+from [CRAN](https://cran.r-project.org/package=PMwR).
+The latest *development* version is available from
+[https://enricoschumann.net/R/packages/PMwR/](https://enricoschumann.net/R/packages/PMwR/). You
+can install either version directly from within R:
 
     install.packages('PMwR') ## CRAN stable version
 
     install.packages('PMwR', ## development version
-                     repos = c('http://enricoschumann.net/R',
+                     repos = c('https://enricoschumann.net/R',
                                getOption('repos')))
 
 The package depends on several other packages, which
 can be obtained from the same repository and from CRAN.
 
 There are also publicly-available repositories at
-https://git.sr.ht/~enricoschumann/PMwR ,
-https://gitlab.com/enricoschumann/PMwR and
-https://github.com/enricoschumann/PMwR.
+[https://git.sr.ht/~enricoschumann/PMwR](https://git.sr.ht/~enricoschumann/PMwR) ,
+[https://gitlab.com/enricoschumann/PMwR](https://gitlab.com/enricoschumann/PMwR) and
+[https://github.com/enricoschumann/PMwR](https://github.com/enricoschumann/PMwR).

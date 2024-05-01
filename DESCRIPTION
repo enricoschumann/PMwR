@@ -8,13 +8,14 @@ Authors@R: person(given = "Enrico", family = "Schumann",
                   role  = c("aut", "cre"),
                   email = "es@enricoschumann.net",
                   comment = c(ORCID = "0000-0001-7601-6576"))
-Description: Tools for 'Portfolio Management with R':
-  backtesting investment and trading strategies, computing
-  profit/loss and returns, analysing trades, handling lists of
-  transactions, reporting, and more.  The package provides a
-  small set of reliable, efficient and convenient tools for
-  processing and analysing trade/portfolio data. The Manual
-  provides all the details; it is available from
+Description: Tools for the practical management of financial
+  portfolios: backtesting investment and trading strategies,
+  computing profit/loss and returns, analysing trades,
+  handling lists of transactions, reporting, and more.  The
+  package provides a small set of reliable, efficient and
+  convenient tools for processing and analysing
+  trade/portfolio data.  The Manual provides all the details;
+  it is available from
   <https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html>.
   Examples and descriptions of new features are provided at
   <https://enricoschumann.net/notes/PMwR/>.
