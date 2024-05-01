@@ -1,4 +1,4 @@
-v0.19-5  (2024-02-23; not yet released)
+v0.19-5  (2024-05-01; not yet released)
 
   o 'is_valid_ISIN' gains an argument 'NA.FALSE', with
     default FALSE.  With this default, is_valid_ISIN(NA)
