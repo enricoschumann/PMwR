@@ -15,7 +15,13 @@
   }
 }
 \details{
-  Close prices.
+
+  The \acronym{DAX} (\emph{Deutscher Aktienindex}) is a
+  stock-price index of the largest companies listed in
+  Germany.  The dataset comprises the close prices of
+  the index for the years 2014 and 2015; dates are
+  provided as rownames.
+
 }
 %% \source{
 %% %%  ~~ reference to a publication or URL from which the data were obtained ~~
@@ -25,5 +31,6 @@
 %% }
 \examples{
 str(DAX)
+summary(DAX)
 }
 \keyword{datasets}

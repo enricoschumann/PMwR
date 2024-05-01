@@ -34,7 +34,7 @@
   The \pkg{PMwR} Manual, which explains all functionality:\cr
   Schumann, E. (2023) \emph{Portfolio Management with R}.
   \url{https://enricoschumann.net/PMwR/}
-  
+
   The closely-related \pkg{NMOF} package is described in:\cr
   Gilli, M., Maringer, D. and Schumann, E. (2019) \emph{Numerical Methods
     and Optimization in Finance}. 2nd edition. Elsevier.

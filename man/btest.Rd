@@ -266,20 +266,40 @@ btest(prices, signal,
     \code{NROW(prices)}. In iteration \code{t}, a
     \code{signal} can be computed based on information
     from periods prior to \code{t}. Trading then takes
-    place at the opening price of \code{t}.  For
-    slow-to-compute signals this is reasonable if there
-    is a time lag between close and open. For daily
-    prices, for instance, signals could be computed
-    overnight. For higher frequencies, such as every
-    minute, the signal function should be fast to
+    place at the opening price of \code{t}.
+
+    \preformatted{
+t    time      open  high  low   close
+1    HH:MM:SS                             <--\
+2    HH:MM:SS                             <-- - use information
+3    HH:MM:SS  _________________________  <--/
+4    HH:MM:SS     X                       <- trade here
+5    HH:MM:SS
+    }
+
+    For slow-to-compute signals this is reasonable if
+    there is a time lag between close and open. For
+    daily prices, for instance, signals could be
+    computed overnight. For higher frequencies, such as
+    every minute, the signal function should be fast to
     compute. Alternatively, it may be better to use a
     larger time offset (i.e. use a longer time lag) and
     to trade at the close of \code{t} by setting
     argument \code{trade.at.open} to \code{FALSE}.
 
+    \preformatted{
+t    time      open  high  low   close
+1    HH:MM:SS                             <-- \
+2    HH:MM:SS                             <-- - use information
+3    HH:MM:SS  _________________________  <-- /
+4    HH:MM:SS                        X    <-- trade here
+5    HH:MM:SS
+    }
+
     If no \acronym{OHLC} bars are available, a single
     series per asset (assumed to be close prices) can
-    be used.
+    be used.  \code{trade.at.open} will automaticall be
+    set to \code{\link{FALSE}}.
 
     The trade logic needs to be coded in the function
     \code{signal}. Arguments to that function must be
@@ -297,7 +317,9 @@ btest(prices, signal,
     target position in units of the instruments. To
     work with weights, set \code{convert.weights} to
     \code{TRUE}, and \code{btest} will translate the
-    weights into positions.
+    weights into positions, based on the value of the
+    portfolio at \code{t - 1}.
+
   }
 
   \subsection{Accessing data}{%
@@ -331,7 +353,7 @@ btest(prices, signal,
 
     \code{btest} allows to run backtests in
     parallel. See the examples at
-    \url{http://enricoschumann.net/notes/parallel-backtests.html}.
+    \url{https://enricoschumann.net/notes/parallel-backtests.html}.
 
     The argument \code{variations.settings} is a list with the
     following defaults:
@@ -348,7 +370,8 @@ btest(prices, signal,
 \value{
   A list with class attribute \code{btest}. The list comprises:
   \item{\code{position}}{actual portfolio holdings}
-  \item{\code{suggested.position}}{suggested holdings}
+  \item{\code{suggested.position}}{suggested holdings
+    (aka target position)}
   \item{\code{cash}}{cash}
   \item{\code{wealth}}{time-series of total portfolio
     value (aka equity curve)}
@@ -375,9 +398,9 @@ btest(prices, signal,
 \references{
 
   Schumann, E. (2023) \emph{Portfolio Management with R}.
-  \url{http://enricoschumann.net/PMwR/};
+  \url{https://enricoschumann.net/PMwR/};
   in particular, see the chapter on backtesting:\cr
-  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#backtesting}
+  \url{https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#backtesting}
 
   Schumann, E. (2018) \emph{Backtesting}.\cr
   \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3374195}
@@ -388,7 +411,7 @@ btest(prices, signal,
 }
 \examples{
 ## For more examples, please see the Manual
-## http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+## https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
 
 ## 1 - a simple rule
 timestamp <- structure(c(16679L, 16680L, 16681L, 16682L,

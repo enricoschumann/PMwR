@@ -64,7 +64,7 @@ unit_prices(NAV,
 \references{
 
   Schumann, E. (2023) \emph{Portfolio Management with
-    \R}. \url{http://enricoschumann.net/PMwR/}
+    \R}. \url{https://enricoschumann.net/PMwR/}
 
 }
 \author{

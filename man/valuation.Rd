@@ -100,7 +100,7 @@ valuation(x, ...)
 \references{
 
   Schumann, E. (2020) \emph{Portfolio Management with R}.
-  \url{http://enricoschumann.net/R/packages/PMwR/}
+  \url{https://enricoschumann.net/R/packages/PMwR/}
 
 }
 \author{

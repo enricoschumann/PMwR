@@ -53,7 +53,7 @@ within R:
 
     library("utils")
     bug.report("[PMwR] Unexpected behaviour in function XXX",
-               address = maintainer("PMwR"), 
+               address = maintainer("PMwR"),
                package = "PMwR")
 
 

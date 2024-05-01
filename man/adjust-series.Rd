@@ -42,17 +42,30 @@ split_adjust(x, t, ratio, backward = TRUE)
 
   }
   \item{backward}{
-    logical
+    logical; see Details
   }
   \item{additive}{
-    logical
+    logical; see Details
   }
 }
 \details{
 
-  With \code{backward} set to \code{TRUE}, which is the
-  default, the final prices in the unadjusted series
-  matches the final prices in the adjusted series.
+  The function transforms \eqn{x}{\code{x}} into returns, and
+  with those returns specified in \eqn{t}{\code{t}} calculated
+  as
+
+  \deqn{\frac{x_t + D_t}{x_{t-1}} - 1\,,}{(x(t) + D(t))/x(t-1) - 1,}
+
+  in which \eqn{x}{x} is the price, \eqn{D}{D} are dividends
+  and \eqn{t}{t} is time.  The adjusted \eqn{x}{\code{x}} is
+  then reconstructed from those returns.
+
+  When \code{additive} is \code{\link{TRUE}}, dividends are
+  simply added back to the series; see Examples.
+
+  With \code{backward} set to \code{\link{TRUE}}, which is the
+  default, the final prices in the unadjusted series matches
+  the final prices in the adjusted series.
 
 }
 \value{
@@ -60,11 +73,11 @@ split_adjust(x, t, ratio, backward = TRUE)
 }
 \references{
 
-  Schumann, E. (2021) \emph{Portfolio Management with R}.
-  \url{http://enricoschumann.net/PMwR/}
+  Schumann, E. (2023) \emph{Portfolio Management with R}.
+  \url{https://enricoschumann.net/PMwR/}
 
   Using \code{div_adjust} for handling generic external cashflows:
-  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#returns-with-external-cashflows}
+  \url{https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#returns-with-external-cashflows}
 }
 \author{
   Enrico Schumann
@@ -77,6 +90,8 @@ t <- 3
 div_adjust(x, t, div)
 div_adjust(x, t, div, FALSE)
 
+
+
 ## assume there were three splits: adjust shares outstanding
 shares <- c(100, 100, 200, 200, 1000, 1500)
 t <- c(3, 5, 6)
@@ -87,4 +102,23 @@ split_adjust(shares, t, 1/ratio)
 
 split_adjust(shares, t, 1/ratio, backward = FALSE)
 ## [1] 100 100 100 100 100 100
+
+
+
+## 'additive' ** FALSE ** (default setting)
+x <- c(100, 95, 100, 95, 100)
+div <- 5
+t <- c(2, 4)
+div_adjust(x, t, div)
+## 90.25  90.25  95.00  95.00 100.00
+returns(div_adjust(x, t, div))
+## 0.00000000 0.05263158 0.00000000 0.05263158
+## ==> reflect _actual_ returns 100/95 - 1
+
+## 'additive' ** TRUE **
+div_adjust(x, t, div, additive = TRUE)
+## 90  90  95  95 100
+returns(div_adjust(x, t, div, additive = TRUE))
+## 0.00000000 0.05555556 0.00000000 0.05263158
+## ==> reflect return 95/90 - 1
 }

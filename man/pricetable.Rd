@@ -60,7 +60,7 @@ pricetable(price, \dots)
 }
 \references{
   Schumann, E. (2020) \emph{Portfolio Management with
-    R}. \url{http://enricoschumann.net/R/packages/PMwR/}
+    R}. \url{https://enricoschumann.net/R/packages/PMwR/}
 }
 \author{
   Enrico Schumann

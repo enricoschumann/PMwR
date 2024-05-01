@@ -27,7 +27,7 @@
 \references{
 
   E. Schumann (2023) \emph{Portfolio Management with \R}.
-  \url{http://enricoschumann.net/PMwR/}
+  \url{https://enricoschumann.net/PMwR/}
 }
 \author{
   Enrico Schumann

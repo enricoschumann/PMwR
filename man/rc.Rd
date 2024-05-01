@@ -98,7 +98,7 @@ rc(R, weights, timestamp, segments = NULL,
   \emph{Investment Performance Measurement},
   Wiley.
 
-  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#return-contribution}
+  \url{https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#return-contribution}
 }
 \author{
   Enrico Schumann

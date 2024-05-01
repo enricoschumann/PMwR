@@ -123,9 +123,9 @@ replace_weight(weights, ..., prefix = TRUE, sep = "::")
 \references{%
 
   Schumann, E. (2023) \emph{Portfolio Management with R}.
-  \url{http://enricoschumann.net/R/packages/PMwR/};
+  \url{https://enricoschumann.net/R/packages/PMwR/};
   in particular, see\cr
-  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#rebalance}
+  \url{https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#rebalance}
 
 }
 \author{

@@ -73,9 +73,9 @@ An object of the same type as \code{x}.
 \references{
 
   Schumann, E. (2023) \emph{Portfolio Management with R}.
-  \url{http://enricoschumann.net/PMwR/};
+  \url{https://enricoschumann.net/PMwR/};
   in particular, see\cr
-  \url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#scaling-series}
+  \url{https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#scaling-series}
 }
 \author{
   Enrico Schumann
