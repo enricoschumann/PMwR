@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-23  Enrico Schumann
+## Copyright (C) 2008-24  Enrico Schumann
 
 NAVseries <- function(NAV,
                       timestamp,
@@ -21,6 +21,7 @@ NAVseries <- function(NAV,
             drop.NA = if (is.null(drop.NA))
                           TRUE else FALSE))
 
+
     if (missing(timestamp))
         timestamp <- seq_along(NAV)
     else if (anyDuplicated(timestamp))
@@ -40,12 +41,36 @@ NAVseries <- function(NAV,
     ans
 }
 
+.hl.char <-
+    ifelse(.Platform$OS.type != "windows", "\u2014", "-")
+
 .bigmark <- function(x) {
     if (x >= 10000)
         format(x, big.mark = ",", decimal.mark = ".")
     else
         x
 }
+
+.header <- function(h, width = 55,
+                    line = .hl.char,
+                    open = " [ ",
+                    close = " ] ",
+                    line.start = "",
+                    line.end = "") {
+
+    nc <- nchar(h)
+    left <- width - (nc + nchar(line.start) + nchar(line.end) +
+                     nchar(open) + nchar(close))
+    lines <- character(length(h))
+    for (i in 1:length(h)) {
+        lines[i] <- paste0(rep(line, trunc(left[[i]]/2)), collapse = "")
+    }
+    paste0(line.start,
+           ifelse(left %% 2, " ", ""),
+           lines, open, h, close, lines,
+           line.end)
+}
+
 
 print.NAVseries <- function(x, ...) {
     if (!is.null(title <- attr(x, "title")))
@@ -104,7 +129,11 @@ summary.NAVseries <- function(object, ...,
                               na.rm = FALSE,
                               assume.daily = FALSE) {
 
-    all_series <- c(list(object), list(...))
+    all_series <- if (missing(object) &&
+                      length(list(...)) > 0)
+                      list(...)
+                  else
+                      c(list(object), list(...))
     has.bm <- FALSE
     if (!is.null(bm)) {
         has.bm <- TRUE
@@ -286,6 +315,35 @@ summary.NAVseries <- function(object, ...,
       "tracking.error"
       )
 
+
+.summary.NAVseries_labels <-
+    c("Instrument",
+      "Title",
+      "Description",
+      "Start           ",
+      "End             ",
+      "# observations  ",
+      "# missing obs.  ",
+      "_ time          ",
+      "_ time          ",
+      "Low             ",
+      "High            ",
+      "Return %        ",
+      "_ annualised?   ",
+      "_ time          ",
+      "_ time          ",
+      "_ peak          ",
+      "_ trough        ",
+      "Max. drawdown % ",
+      "_ recovery time ",
+      "underwater %    ",
+      "_ upside        ",
+      "_ downside      ",
+      "Volatility      ",
+      "Tracking error %")
+names(.summary.NAVseries_labels) <- .summary.NAVseries_fields
+
+
 .summary.NAVseries_perc_fields <-
     c("return",
       "mdd",
@@ -351,25 +409,27 @@ print.summary.NAVseries <- function(x, ...,
         for (f in .summary.NAVseries_price_fields)
             x[[f]] <- pricef(x[[f]]) ## format: prices
 
-        cat("---------------------------------------------------------\n")
+        line <- paste(rep(.hl.char, 55), collapse = "")
+        cat(line, "\n", sep = "")
         print(x$NAVseries, ...)
         template <-
-            c("---------------------------------------------------------",
+            c(line,
+              "Return (%)<>%return%|  (annualised)",
+              line,
+              "Volatility (%)<>%volatility%|  (annualised)",
+              "_ upside<>%volatility.up%|",
+              "_ downside<>%volatility.down%|",
+              line,
               "High<>%high%|  (%high.when%)",
               "Low<>%low%|  (%low.when%)",
-              "---------------------------------------------------------",
-              "Return (%)<>%return%|  (annualised)",
-              "---------------------------------------------------------",
+              line,
               "Max. drawdown (%)  <> %mdd%|",
               "_ peak<>%mdd.high%|  (%mdd.high.when%)",
               "_ trough<>%mdd.low%|  (%mdd.low.when%)",
               "_ recovery<>|  (%mdd.recover.when%)",
               "_ underwater now (%)<>%underwater%|",
-              "---------------------------------------------------------",
-              "Volatility (%)<>%volatility%|  (annualised)",
-              "_ upside<>%volatility.up%|",
-              "_ downside<>%volatility.down%|",
-              "---------------------------------------------------------\n")
+              line,
+              "")
         nx <- names(x)
         for (r in c("NAVseries", "NAV",
                     "timestamp", "title",
@@ -419,26 +479,63 @@ print.summary.NAVseries <- function(x, ...,
             }
 
             ## res.i has length >=2
-            if (length(unique(res.i)) == 1L)
-                res.i[-1L] <- ""
+            ## if (length(unique(res.i)) == 1L)
+            ##     res.i[c(FALSE, res.i[-1] == res.i[-lx])] <- ""
             res[[ .summary.NAVseries_fields[i] ]] <- res.i
         }
-        tmp <- t(as.data.frame(res))
-        colnames(tmp) <- rep("", ncol(tmp))
-        tmp[1, ] <- ifelse(tmp[1, ] == "",
-                           paste0("series.", seq_len(ncol(tmp))),
-                           tmp[1, ])
-        row.names(tmp)[1] <- "Instrument"
-        row.names(tmp)[2] <- ""
-        row.names(tmp)[3] <- "Description"
-        row.names(tmp)[4] <- "Start"
-        row.names(tmp)[5] <- "End"
-        row.names(tmp)[6] <- "# Obs"
-        row.names(tmp)[7] <- "# NA"
-        row.names(tmp)[8] <- "Low timestamp"
-        row.names(tmp)[9] <- "High timestamp"
+        tmp <- do.call(rbind, res)
 
-        print(tmp, right = TRUE, quote = FALSE)
+        ##
+        H <- character(ncol(tmp))
+        j <- tmp["title", ] != ""
+        H[j] <- tmp["title", j]
+
+        j <- H == "" & tmp["instrument", ] != ""
+        H[j] <- tmp["instrument", j]
+
+        j <- H == ""
+        fmt.s <- paste0("%0", floor(log10(ncol(tmp)))+1, "d")
+        H[j] <- sprintf(fmt.s, which(j))
+        tmp["title", ] <- H
+
+        tmp <- tmp[c(
+            "title",
+            "start",
+            "end",
+            "nobs",
+            "nna",
+            "return",
+            "return.annualised",
+            "volatility",
+            "volatility.up",
+            "volatility.down",
+            "tracking.error",
+            "high",
+            "high.when",
+            "low",
+            "low.when",
+            "mdd",
+            "mdd.high",
+            "mdd.high.when",
+            "mdd.low",
+            "mdd.low.when",
+            "mdd.recover.when",
+            "underwater"
+        ), ]
+
+
+        tmp <- cbind(.summary.NAVseries_labels[row.names(tmp)],
+                     tmp)
+        tmp[1, 1] <- ""  ## remove "Title"
+        tmp <- apply(tmp, 2,
+                     function(x)
+                         format(x, justify = "right"))
+        hline <- rep(.hl.char, ncol(tmp)*2 + sum(nchar(tmp[1L, ])))
+        for (i in seq_len(nrow(tmp))) {
+            cat(tmp[i, ], "\n", sep = "  ")
+            if (i %in% c(1, 5, 11, 15))
+                cat(hline, "\n", sep = "")
+        }
     }
 
     invisible(x.original)
