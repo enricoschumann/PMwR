@@ -1,3 +1,9 @@
+2024-05-07  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/journal.R
+        (instrument.NAVseries,`instrument<-.NAVseries`):
+        add methods
+
 2024-02-23  Enrico Schumann  <es@enricoschumann.net>
 
         * R/rc.R (rc): factor our logarithmic-linking

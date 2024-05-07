@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-23  Enrico Schumann
+## Copyright (C) 2008-24  Enrico Schumann
 
 journal <- function(amount, ...) {
     if (match.call() == "journal()") {
@@ -243,10 +243,6 @@ instrument <- function(x, ...) {
     UseMethod("instrument")
 }
 
-`instrument<-` <- function(x, ..., value) {
-    UseMethod("instrument<-")
-}
-
 instrument.position <- function(x, ...) {
     attr(x, "instrument")
 }
@@ -259,6 +255,15 @@ instrument.journal <- function(x, ...) {
     x$instrument
 }
 
+instrument.NAVseries <- function(x, ...) {
+    attr(x, "instrument")
+}
+
+
+`instrument<-` <- function(x, ..., value) {
+    UseMethod("instrument<-")
+}
+
 `instrument<-.journal` <- function(x, ..., value) {
     len <- length(value)
     lenx <- length(x)
@@ -269,7 +274,11 @@ instrument.journal <- function(x, ...) {
     else
         stop("length(instrument) differs from length(journal)")
     x
+}
 
+`instrument<-.NAVseries` <- function(x, ..., value) {
+    attr(x, "instrument") <- value
+    x
 }
 
 summary.journal <- function(object,
