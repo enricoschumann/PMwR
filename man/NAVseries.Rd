@@ -21,8 +21,8 @@ as.NAVseries(x, ...)
 \method{print}{NAVseries}(x, \dots )
 
 \method{summary}{NAVseries}(object, \dots, monthly.vol = TRUE,
-                            bm = NULL, monthly.te = TRUE,
-                            na.rm = FALSE, assume.daily = FALSE)
+        bm = NULL, monthly.te = TRUE,
+        na.rm = FALSE, assume.daily = FALSE)
 
 \method{plot}{NAVseries}(x, y, \dots, xlab = "", ylab = "", type = "l")
 
@@ -105,23 +105,28 @@ as.NAVseries(x, ...)
 }
 \details{
 
-  \subsection{NAV series}{
+  \subsection{NAV series}{%
 
     An NAVseries is a numeric vector (the actual series) and
     additional information, attached as attributes: timestamp,
     instrument, title, description. Of these attributes,
     timestamp is the most useful, as it is used for several
-    computations (e.g. when calling \code{\link{summary}}) or for
-    plotting.
+    computations (e.g. when calling \code{\link{summary}}) or
+    for plotting.
 
+    The \sQuote{instrument} is typically an internal label
+    used to identify the series, such as a ticker;
+    \sQuote{title} is a label, too, but is intended to be
+    human-readable; \sQuote{description} finally should be
+    human-readable as well but may be longer.
   }
 
   \subsection{Summaries}{
 
     The \code{summary} method returns a list of the original
     NAVseries plus various statistics, such as return per year
-    and volatility.  The method may receive several NAV series as
-    input
+    and volatility.  The method may receive several NAV series
+    as input
 
   }
 
