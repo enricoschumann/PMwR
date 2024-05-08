@@ -1,4 +1,10 @@
-v0.19-5  (2024-05-01; not yet released)
+v0.19-5  (2024-05-08; not yet released)
+
+  o fixed: 'rc' did not compute total contributions correctly
+    when returns were not sorted in time
+
+  o fixed: the zoo method of 'returns' no longer ignores
+    argument 'na.rm'
 
   o 'is_valid_ISIN' gains an argument 'NA.FALSE', with
     default FALSE.  With this default, is_valid_ISIN(NA)
@@ -12,11 +18,8 @@ v0.19-5  (2024-05-01; not yet released)
     documentation for) various computations, notably
     for linking single-period returns
 
-  o fixed: 'rc' did not compute total contributions correctly
-    when returns were not sorted in time
-
-  o fixed: the zoo method of 'returns' no longer ignores
-    argument 'na.rm'
+  o the print methods for summaries of 'NAVseries' have
+    been improved, notably in the multivariate case
 
   o ....
 
