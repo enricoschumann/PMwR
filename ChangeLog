@@ -554,7 +554,7 @@
         * R/btest.R (btest): 'variations.settings' with
         new option 'expand.grid'.  If FALSE, do not
         compute combinations of variations. See
-        http://enricoschumann.net/notes/backtest-strategy-on-different-datasets.html
+        https://enricoschumann.net/notes/backtest-strategy-on-different-datasets.html
         for an example.
 
 2019-11-07  Enrico Schumann  <es@enricoschumann.net>
@@ -2239,7 +2239,7 @@
 
         * R/runStats.R: move function 'runStats' to separate
         package 'runStats'
-        http://enricoschumann.net/R/packages/runStats/
+        https://enricoschumann.net/R/packages/runStats/
 
         * R/quote32.R (quote32): new function to create
         quotes with 32nds of points
@@ -2559,7 +2559,7 @@
 
         * vignettes/: removed all other vignettes: all examples
         are included in the Manual, available here:
-        http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+        https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
 
 2015-11-23  Enrico Schumann  <es@enricoschumann.net>
 

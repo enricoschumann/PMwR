@@ -84,19 +84,19 @@ The \textbf{recommended practice} is therefore to
 \textbf{explicitly name arguments in function calls} and
 not pass arguments by position.  Any changes in argument
 names will be documented in the \texttt{NEWS} file
-(\,\url{http://enricoschumann.net/R/packages/PMwR/NEWS}\,)
+(\,\url{https://enricoschumann.net/R/packages/PMwR/NEWS}\,)
 and so can be easily followed. More details are in the
 ChangeLog
-(\,\url{http://enricoschumann.net/R/packages/PMwR/ChangeLog}\,).
+(\,\url{https://enricoschumann.net/R/packages/PMwR/ChangeLog}\,).
 
 The package is on \textsc{cran} and can be installed from
 there.  The very latest (i.e. development) version of the
 package is available
-from \url{http://enricoschumann.net/R/packages/PMwR/}\,. To
+from \url{https://enricoschumann.net/R/packages/PMwR/}\,. To
 install that version from within R, type
 <<eval=false, results=hide>>=
 install.packages('PMwR',
-                 repos = c('http://enricoschumann.net/R',
+                 repos = c('https://enricoschumann.net/R',
                            getOption('repos')))
 @
 within a session.  The package depends on several other
@@ -127,7 +127,7 @@ provides functionality:
 % functions.
 All details are in the manual:
 \begin{center}
-\url{http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
+\url{https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
 \end{center}
 
 \noindent I am grateful for comments, suggestions and
@@ -154,7 +154,7 @@ discussed on the \texttt{R-SIG-Finance} mailing list:\smallskip
 % \noindent An \textsc{rss} feed of the package \textsc{news} file is
 % available at\smallskip
 
-% \url{http://enricoschumann.net/R/packages/PMwR/PMwR_news.xml}\,.
+% \url{https://enricoschumann.net/R/packages/PMwR/PMwR_news.xml}\,.
 
 % \medskip
 

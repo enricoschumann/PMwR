@@ -4,9 +4,9 @@ bibentry(bibtype = "Manual",
          title = "Portfolio Management with {R}",
          author = person("Enrico", "Schumann", role = c("aut","cre")),
          year = paste0("2008--", sub("-.*", "", meta$Date)),
-         url  = "http://enricoschumann.net/PMwR/",
+         url  = "https://enricoschumann.net/PMwR/",
          textVersion =
              paste("Enrico Schumann.",
                    "PMwR: Portfolio Management with R.",
-                   "http://enricoschumann.net/PMwR/",
+                   "https://enricoschumann.net/PMwR/",
                    paste0("2008--", sub("-.*", "", meta$Date)), "."))

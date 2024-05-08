@@ -63,7 +63,7 @@ p <- position(amount, timestamp, instrument, when)
 
 
 
-## http://enricoschumann.net/notes/computing-positions.html
+## https://enricoschumann.net/notes/computing-positions.html
 ## errors
 amount <- array(1:6, dim = c(2, 3))
 expect_error(position(amount))

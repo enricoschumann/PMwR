@@ -36,7 +36,7 @@ v0.19-3  (2023-10-19)
   o documentation updates.  In particular, many help pages
     now have links to the revelant manual sections.
     (The manual at
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
     has also been updated.)
 
 v0.19-2  (2023-09-29)
@@ -55,7 +55,7 @@ v0.19-2  (2023-09-29)
 
   o various minor changes and documentation updates.
     See the ChangeLog for all details. The manual at
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
     has also been updated.
 
 v0.19-1  (2023-06-05)
@@ -76,7 +76,7 @@ v0.19-1  (2023-06-05)
 
   o various documentation updates.
     See the ChangeLog for all details. The manual at
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
     has also been updated.
 
 v0.19-0  (2023-05-31)
@@ -107,7 +107,7 @@ v0.19-0  (2023-05-31)
 
   o various minor bug fixes and documentation updates.
     See the ChangeLog for all details. The manual at
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
     has also been updated.
 
 v0.18-0  (2022-10-19)
@@ -117,7 +117,7 @@ v0.18-0  (2022-10-19)
     function looks at differences instead of relative
     changes (returns), which is useful, for instance, for
     interest rates. For an example, see
-    http://enricoschumann.net/notes/streaks-in-equity-returns-and-yield-changes.html
+    https://enricoschumann.net/notes/streaks-in-equity-returns-and-yield-changes.html
 
   o 'btest': rebalance arithmetic is performed only for
     positions with non-zero change also in period 1,
@@ -133,7 +133,7 @@ v0.18-0  (2022-10-19)
 
   o various minor bug fixes and documentation updates.
     See the ChangeLog for all details. The manual at
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
     has also been updated.
 
 v0.17-0  (2021-10-19)
@@ -153,7 +153,7 @@ v0.17-0  (2021-10-19)
 
   o various minor bug fixes and documentation updates.
     See the ChangeLog for all details. The manual at
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
     has also been updated.
 
 v0.16-1  (2021-09-18)
@@ -188,7 +188,7 @@ v0.16-0  (2021-01-19)
 
   o various minor bug fixes and documentation updates.
     See the ChangeLog for all details. The manual at
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
     has also been updated.
 
 v0.15-1  (2020-10-20)
@@ -211,7 +211,7 @@ v0.15-0  (2020-10-19)
     'vprice' in 'valuation' behaves in essentially the
     same way as argument 'vprice' of function 'pl'.
     For examples, see ?valuation and
-    http://enricoschumann.net/notes/valuing-positions.html
+    https://enricoschumann.net/notes/valuing-positions.html
 
   o when a subset is taken from a 'pricetable', the
     result is no longer a pricetable but a numeric
@@ -236,7 +236,7 @@ v0.15-0  (2020-10-19)
 
   o various minor bug fixes and documentation updates.
     See the ChangeLog for all details. The manual at
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
     has also been updated.
 
 v0.14-0  (2020-03-11)
@@ -249,7 +249,7 @@ v0.14-0  (2020-03-11)
   o 'btest': 'variations.settings' gains an option
     'expand.grid'.  If FALSE, 'btest' does not compute
     combinations of variations. See
-    http://enricoschumann.net/notes/backtest-strategy-on-different-datasets.html
+    https://enricoschumann.net/notes/backtest-strategy-on-different-datasets.html
     for an example.
 
   o 'streaks': the function now also allows to compute
@@ -302,7 +302,7 @@ v0.13-0  (2019-10-19)
 
   o various documentation updates; new features are
     now described at
-      http://enricoschumann.net/notes/PMwR/
+      https://enricoschumann.net/notes/PMwR/
 
 v0.12-0  (2019-08-26)
 
@@ -374,7 +374,7 @@ v0.11-0  (2019-04-01)
   o position: new argument 'use.names', which allows to
     use names/colnames as instrument information. Also,
     matrix input is now treated specially; see examples at
-    http://enricoschumann.net/notes/computing-positions.html
+    https://enricoschumann.net/notes/computing-positions.html
 
   o NAVseries: new argument 'drop.NA'. Also, if 'NAV'
     inherits from 'btest', the function now calls
@@ -409,7 +409,7 @@ v0.10-0  (2018-10-19)
     variations, both serially and in parallel.  See new
     arguments 'variations', 'variations.settings'
     and 'replications'. See some examples at
-    http://enricoschumann.net/notes/parallel-backtests.html
+    https://enricoschumann.net/notes/parallel-backtests.html
 
   o new generic function 'streaks' with methods for
     zoo, NAVseries and numeric vectors
@@ -425,7 +425,7 @@ v0.10-0  (2018-10-19)
   o quote32: the function now also recognises a
     colon (:) as a separator. The function can now parse
     more variations; see examples at
-    http://enricoschumann.net/notes/treasury-bond-quotes.html
+    https://enricoschumann.net/notes/treasury-bond-quotes.html
 
   o instrument: new replacement method
     `instrument<-.journal`
@@ -443,7 +443,7 @@ v0.10-0  (2018-10-19)
 
   o various documentation updates/fixes; see the
     ChangeLog for all details. The manual at
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
     has also been updated.
 
 v0.9-0  (2018-06-09)
@@ -499,7 +499,7 @@ v0.8-0  (2018-04-30)
     holding-period returns
 
   o the manual has been substantially revised. See
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
 
 v0.7-0  (2018-01-01)
 
@@ -556,7 +556,7 @@ v0.6-0  (2017-11-16)
 
   o A more-comprehensive list of changes is available
     in the ChangeLog:
-    http://enricoschumann.net/R/packages/PMwR/ChangeLog
+    https://enricoschumann.net/R/packages/PMwR/ChangeLog
 
 v0.5-0  (2017-06-23)
 
@@ -594,7 +594,7 @@ v0.5-0  (2017-06-23)
 
   o A more-comprehensive list of changes is available
     in the ChangeLog:
-    http://enricoschumann.net/R/packages/PMwR/ChangeLog
+    https://enricoschumann.net/R/packages/PMwR/ChangeLog
 
 v0.4-0  (2017-02-07)
 
@@ -613,15 +613,15 @@ v0.4-0  (2017-02-07)
     'position' and 'quote32' objects.
 
   o Updated manual chapter on computing returns:
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#computing-returns
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#computing-returns
 
   o Updated manual chapter on backtesting:
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#backtesting
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#backtesting
 
 v0.3-4  (2016-06-13)
 
   o Moved function 'runStats' to a separate package 'runStats'
-    http://enricoschumann.net/R/packages/runStats/ .
+    https://enricoschumann.net/R/packages/runStats/ .
     The PMwR package contains only R code now, so no
     special tools are required for installing from source.
 
@@ -632,19 +632,19 @@ v0.1-96  (2016-03-13)
 
   o A draft of the manual chapter on computing profit
     and loss is available:
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#profit-and-loss
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#profit-and-loss
 
 v0.1-90  (2016-02-25)
 
   o A draft of the manual chapter on scaling series is
     available:
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#scaling-series
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#scaling-series
 
 v0.1-89  (2016-02-19)
 
   o A draft of the manual chapter on computing returns
     is available:
-    http://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#computing-returns
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#computing-returns
 
 v0.1-81  (2015-12-08)
 
