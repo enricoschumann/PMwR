@@ -1,3 +1,11 @@
+2024-05-08  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/btest.R (btest): delete branch 'btest_na_rm',
+        as there cannot be reliable support for handling
+        NAs.  NAs in price series have been 'tolerated' for
+        some time, as long as there are no positions in
+        such series; see ChangeLog 2018-08-21, 2022-06-23.
+
 2024-05-07  Enrico Schumann  <es@enricoschumann.net>
 
         * R/journal.R
@@ -6,7 +14,7 @@
 
 2024-02-23  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/rc.R (rc): factor our logarithmic-linking
+        * R/rc.R (rc): factor out logarithmic-linking
         computations
 
 2024-02-20  Enrico Schumann  <es@enricoschumann.net>
@@ -21,9 +29,9 @@
 2024-01-24  Enrico Schumann  <es@enricoschumann.net>
 
         * R/is_valid_ISIN.R (is_valid_ISIN): propagate NAs
-        properly, i.e. NA value now avaluate to NA; when
-        new argument NA.FALSE is TRUE, then NA evaluates to
-        FALSE. (This behaviour is consistent with
+        properly, i.e. NA values now evaluate to NA; when
+        new argument "NA.FALSE" is TRUE, then NA evaluates
+        to FALSE. (This behaviour is consistent with
         "is_valid_SEDOL".)
 
 2023-12-28  Enrico Schumann  <es@enricoschumann.net>
