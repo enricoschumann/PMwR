@@ -21,6 +21,8 @@ v0.19-5  (2024-05-08; not yet released)
   o the print methods for summaries of 'NAVseries' have
     been improved, notably in the multivariate case
 
+  o 'instrument' methods have been added for 'NAVseries'
+
   o ....
 
 v0.19-4  (2023-12-08)
