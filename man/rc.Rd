@@ -34,8 +34,8 @@ rc(R, weights, timestamp, segments = NULL,
   \item{method}{a string; default is \code{contribution}}
 
   \item{linking.method}{\code{NULL} or a string. Currently
-    supported are \code{geometric{0,1,0.5}} and
-    \code{logarithmic}. See Examples.}
+    supported are \code{0-cumulative, 1-cumulative, 0.5-cumulative}
+    (\code{geometric{0,1,0.5}}) and \code{logarithmic}. See Examples.}
 
   \item{allocation.minus.bm}{logical}
 
@@ -94,10 +94,15 @@ rc(R, weights, timestamp, segments = NULL,
   \emph{Portfolio Performance Measurement and Benchmarking},
   McGraw-Hill.
 
-  Feibel, Bruce (2003),
-  \emph{Investment Performance Measurement},
+  Feibel, Bruce (2003), \emph{Investment Performance Measurement},
   Wiley.
 
+  Erik Valtonen (2002).
+  Incremental Attribution with and without Notional Portfolios.
+  Journal of Performance Measurement.
+  \strong{7} (1), 68--83.
+
+  
   \url{https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#return-contribution}
 }
 \author{
