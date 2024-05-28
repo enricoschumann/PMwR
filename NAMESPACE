@@ -2,7 +2,8 @@ importFrom("NMOF", "drawdown")
 importFrom("NMOF", "pm")
 
 importFrom("zoo",
-           as.zoo, as.Date.yearmon, as.Date.yearqtr,
+           as.zoo,
+           as.Date.yearmon, as.Date.yearqtr,
            coredata,
            index,
            zoo)

@@ -631,12 +631,24 @@ as.NAVseries.zoo <- function(x,
                              title = NULL,
                              description = NULL, ...){
     dx <- dim(x)
-    if (!is.null(dx) && !any(dx == 1L))
-        stop("can only coerce a _single_ series")
-    NAVseries(NAV = coredata(x), timestamp = index(x),
-              instrument = instrument,
-              title = title,
-              description = description)
+    if (!is.null(dx) && !any(dx == 1L)) {
+        res <- vector("list", dx[2L])
+        for (i in seq_along(res)) {
+            res[[i]] <-
+                NAVseries(NAV = coredata(x[, i]),
+                          timestamp = index(x[, i]),
+                          instrument = instrument,
+                          title = title,
+                          description = description)
+        }
+        res
+
+    } else {
+        NAVseries(NAV = coredata(x), timestamp = index(x),
+                  instrument = instrument,
+                  title = title,
+                  description = description)
+    }
 }
 
 as.NAVseries.btest <- function(x, ...,
@@ -710,4 +722,45 @@ window.NAVseries <- function(x, start = NULL, end = NULL, ...) {
     attributes(ans) <- attributes(x)
     .timestamp(ans) <- .timestamp(ans)[i:j]
     ans
+}
+
+as.data.frame.summary.NAVseries <- function(x, ...){
+
+    .col <- c("instrument", "title", "description",
+              "start", "end", "nobs", "nna",
+              "low",
+              "high", "low.when", "high.when",
+              "return", "return.annualised", "mdd",
+              "mdd.high", "mdd.low", "mdd.high.when",
+               "mdd.low.when", "mdd.recover.when",
+               "underwater", "volatility",
+              "volatility.up", "volatility.down")
+    .col.labels <-
+    c("Instrument",
+      "Title",
+      "Description",
+      "Start",
+      "End",
+      "n.observations",
+      "n.missing",
+      "_ time          ",
+      "_ time          ",
+      "Low             ",
+      "High            ",
+      "Return %        ",
+      "_ annualised?   ",
+      "_ time          ",
+      "_ time          ",
+      "_ peak          ",
+      "_ trough        ",
+      "Max. drawdown % ",
+      "_ recovery time ",
+      "underwater %    ",
+      "_ upside        ",
+      "_ downside      ",
+      "Volatility      ",
+      "Tracking error %")
+
+    
+    do.call(rbind, x)
 }
