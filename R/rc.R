@@ -64,10 +64,15 @@ rc <- function(R, weights, timestamp, segments = NULL,
                      stringsAsFactors = FALSE)
     names(df) <- c("timestamp", segments, "total")
 
+
     if (method == "contribution") {
 
         if (is.null(linking.method))
             linking.method <- "geometric1"
+        else if (linking.method == "1-cumulative")
+            linking.method <- "geometric1"
+        else if (linking.method == "0-cumulative")
+            linking.method <- "geometric0"
 
         if (linking.method == "geometric1") {
 

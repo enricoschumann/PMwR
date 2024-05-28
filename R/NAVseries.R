@@ -761,6 +761,6 @@ as.data.frame.summary.NAVseries <- function(x, ...){
       "Volatility      ",
       "Tracking error %")
 
-    
+
     do.call(rbind, x)
 }

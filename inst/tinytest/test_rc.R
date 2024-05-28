@@ -95,6 +95,30 @@ expect_equal(ans$total_contributions[["stocks"]], 0.26875)
 expect_equal(ans$total_contributions[["bonds"]],  0.1625)
 
 
+## same tests as before, but now with "0-cumulative" etc
+ans <- rc(segments = c("stocks", "bonds"),
+          R = matrix(c(40, 10,
+                       10, 20)/100, byrow = TRUE, nrow = 2),
+          weights =
+              matrix(c(50, 50,
+                       55, 45)/100, byrow = TRUE, nrow = 2),
+          linking.method = "1-cumulative")
+expect_equal(ans$total_contributions[["total"]],  0.43125)
+expect_equal(ans$total_contributions[["stocks"]], 0.284)
+expect_equal(ans$total_contributions[["bonds"]],  0.14725)
+
+ans <- rc(segments = c("stocks", "bonds"),
+          R = matrix(c(40, 10,
+                       10, 20)/100, byrow = TRUE, nrow = 2),
+          weights =
+              matrix(c(50, 50,
+                       55, 45)/100, byrow = TRUE, nrow = 2),
+          linking.method = "0-cumulative")
+expect_equal(ans$total_contributions[["total"]],  0.43125)
+expect_equal(ans$total_contributions[["stocks"]], 0.26875)
+expect_equal(ans$total_contributions[["bonds"]],  0.1625)
+
+
 
 
 ## --------------------------------------------------------
