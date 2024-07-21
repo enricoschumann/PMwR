@@ -50,7 +50,7 @@ pricetable(price, \dots)
   \code{pricetable} is a generic function, currently
   with methods for numeric vectors (including vectors
   with a \code{\link{dim}}, aka matrices) and for
-  \code{\link{zoo}} objects.
+  \code{\link[zoo]{zoo}} objects.
 
 }
 \value{
@@ -59,8 +59,8 @@ pricetable(price, \dots)
 
 }
 \references{
-  Schumann, E. (2020) \emph{Portfolio Management with
-    R}. \url{https://enricoschumann.net/R/packages/PMwR/}
+  Schumann, E. (2023) \emph{Portfolio Management with R}.
+  \url{https://enricoschumann.net/PMwR/}
 }
 \author{
   Enrico Schumann

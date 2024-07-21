@@ -1,3 +1,7 @@
+2024-07-21  Enrico Schumann  <es@enricoschumann.net>
+
+        * man/pricetable.Rd: add link to 'zoo' package
+
 2024-05-28  Enrico Schumann  <es@enricoschumann.net>
 
         * R/NAVseries.R (as.NAVseries.zoo): split
