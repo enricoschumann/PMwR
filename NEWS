@@ -1,4 +1,4 @@
-v0.19-5  (2024-05-08; not yet released)
+v0.19-5  (2024-07-21)
 
   o fixed: 'rc' did not compute total contributions correctly
     when returns were not sorted in time
@@ -23,7 +23,10 @@ v0.19-5  (2024-05-08; not yet released)
 
   o 'instrument' methods have been added for 'NAVseries'
 
-  o ....
+  o experimental: 'as.NAVseries' now splits a
+    multivariate zoo-series into a list of NAVseries
+
+  o documentation updates
 
 v0.19-4  (2023-12-08)
 

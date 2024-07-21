@@ -102,7 +102,7 @@ rc(R, weights, timestamp, segments = NULL,
   Journal of Performance Measurement.
   \strong{7} (1), 68--83.
 
-  
+
   \url{https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#return-contribution}
 }
 \author{
@@ -148,7 +148,11 @@ rc(R, weights, linking.method =  "geometric0.5")
 
 
 
-## EXAMPLE https://quant.stackexchange.com/questions/36520/how-to-calculate-the-annual-contribution-of-a-fund-to-a-portfolio-of-funds/36530#36530
+## EXAMPLE from
+## https://quant.stackexchange.com/questions/36520/
+##         how-to-calculate-the-annual-contribution-of-a-fund-to-a-portfolio-of-funds/
+##         36530#36530
+## (unbreak the URL)
 
 weights <- rbind(c( 0.5, 0.5),
                  c( 0.5, 0.5))
