@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-23  Enrico Schumann
+## Copyright (C) 2008-24  Enrico Schumann
 
 returns <- function(x, ...)
     UseMethod("returns")
@@ -16,6 +16,11 @@ function(x,
          lag = 1,
          na.rm = TRUE,
          ...) {
+
+    if (missing(na.rm) &&
+        any(is.na(x)))
+        warning("missing values in ", sQuote("x"),
+                "; consider setting ", sQuote("na.rm"))
 
     if (identical(tolower(period), "total"))
         period <- "itd"
