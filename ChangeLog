@@ -1,7 +1,11 @@
 2024-07-22  Enrico Schumann  <es@enricoschumann.net>
 
-	* R/returns.R (returns.default): add a warning when
-	there are NAs in "x" and "na.rm" is missing
+        * R/unit_prices.R (unit_prices): rename argument
+        'initial.shares' to 'initial.units', and support
+        computation
+
+        * R/returns.R (returns.default): add a warning when
+        there are NAs in "x" and "na.rm" is missing
 
 2024-07-21  Enrico Schumann  <es@enricoschumann.net>
 

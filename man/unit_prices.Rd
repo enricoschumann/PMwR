@@ -4,12 +4,12 @@
   Compute Prices for Portfolio Based on Units
 }
 \description{
-  Compute prices for a portfolio based on outstanding shares.
+  Compute prices for a portfolio based on outstanding shares (units).
 }
 \usage{
 unit_prices(NAV,
             cashflows,
-            initial.price, initial.shares = 0,
+            initial.price, initial.units = 0,
             cf.included = TRUE)
 }
 \arguments{
@@ -23,8 +23,8 @@ unit_prices(NAV,
   \item{initial.price}{
     initial price
 }
-  \item{initial.shares}{
-    number of outstanding shares for first NAV
+  \item{initial.units}{
+    number of outstanding units for first NAV
 }
   \item{cf.included}{
     logical
@@ -54,7 +54,7 @@ unit_prices(NAV,
   A data.frame
   \item{timestamp}{the timestamp}
   \item{NAV}{total NAV}
-  \item{price}{NAV per share}
+  \item{price}{NAV per unit}
   \item{units}{outstanding units (i.e. shares) after cashflows}
 
   Attached as an attribute is a \code{\link{data.frame}}
