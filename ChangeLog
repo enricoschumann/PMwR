@@ -1,5 +1,9 @@
 2024-07-22  Enrico Schumann  <es@enricoschumann.net>
 
+        * R/returns.R (print.p_returns): fix printing of
+        returns for period "total/itd" when no timestamp is
+        supplied
+
         * R/unit_prices.R (unit_prices): rename argument
         'initial.shares' to 'initial.units', and support
         computation

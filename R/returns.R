@@ -667,8 +667,12 @@ print.p_returns <- function(x, ..., year.rows = TRUE,
             cal_str <- paste0("[",
                               format(timestamp[, 1],"Q%q %Y"), " -- ",
                               format(timestamp[, 2],"Q%q %Y"))
+        } else {
+            cal_str <- ""
         }
-        cat(paste0(nn, r_str, cal_str, "]", collapse = "\n"), "\n")
+        if (all(cal_str != ""))
+            cal_str <- paste0(cal_str, "]")
+        cat(paste0(nn, r_str, cal_str, collapse = "\n"), "\n")
     } else {
         print(unclass(x))
     }
