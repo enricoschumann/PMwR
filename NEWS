@@ -1,3 +1,11 @@
+v0.19-6  (2024-07-22)
+
+  o 'unit_prices': rename argument 'initial.shares' to
+    'initial.units'. (The argument had not been supported so
+    far, but now is.)
+    
+  o ....
+
 v0.19-5  (2024-07-21)
 
   o fixed: 'rc' did not compute total contributions correctly
