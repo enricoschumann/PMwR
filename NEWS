@@ -1,9 +1,8 @@
-v0.19-6  (2024-07-22)
+v0.19-6  (2024-07-24; not released yet)
 
   o 'unit_prices': rename argument 'initial.shares' to
-    'initial.units'. (The argument had not been supported so
-    far, but now is.)
-    
+    'initial.units', and support its use
+
   o ....
 
 v0.19-5  (2024-07-21)
@@ -16,11 +15,11 @@ v0.19-5  (2024-07-21)
 
   o 'is_valid_ISIN' gains an argument 'NA.FALSE', with
     default FALSE.  With this default, is_valid_ISIN(NA)
-    evaluates to NA, whereas before an NA would evaluate to
-    FALSE.  To retain the old behaviour, set NA.FALSE to
-    TRUE.  The function also no longer emits a (harmless but
-    annoying) warning when the check digit of an invalid ISIN
-    was not a number.
+    evaluates to NA, whereas before an NA would evaluate
+    to FALSE.  To retain the old behaviour, set NA.FALSE
+    to TRUE.  The function also no longer emits a (harmless
+    but annoying) warning when the check digit of an invalid
+    ISIN was not a number.
 
   o 'rc' now supports (or where it did so already, gets
     documentation for) various computations, notably

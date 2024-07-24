@@ -4,7 +4,8 @@
   Compute Prices for Portfolio Based on Units
 }
 \description{
-  Compute prices for a portfolio based on outstanding shares (units).
+  Compute prices for a portfolio based on outstanding shares
+  (units).
 }
 \usage{
 unit_prices(NAV,
@@ -13,58 +14,66 @@ unit_prices(NAV,
             cf.included = TRUE)
 }
 \arguments{
-  \item{NAV}{
-    a dataframe of two columns: timestamp and net asset value
-}
-  \item{cashflows}{
+  \item{NAV}{%
+    a dataframe of two columns: timestamp and net asset
+    value. There should be no duplicated timestamps.  Column
+    names are ignored; the function assumes timestamp is the
+    first column, \acronym{NAV} the second.
+  }
+  \item{cashflows}{%
     a data.frame of two or three columns: timestamp,
-    cashflow and (optionally) an id
+    cashflow and (optionally) an id or account. Column names
+    are ignored; the function assumes timestamp is the first
+    column, the external cashflows the second, and an
+    account/id the third.
+  }
+  \item{initial.price}{%
+    initial price; ignored when \code{initial.units} is not
+    zero
+  }
+  \item{initial.units}{%
+    number of outstanding units before first cashflow
+  }
+  \item{cf.included}{%
+    \code{\link{logical}}. If \code{\link{TRUE}} (the
+    default), it is assumed that the NAV series at the time
+    of the cashflow already includes the cashflow.
+  }
 }
-  \item{initial.price}{
-    initial price
-}
-  \item{initial.units}{
-    number of outstanding units for first NAV
-}
-  \item{cf.included}{
-    logical
-}
-}
-\details{
+\details{%
 
-  \strong{This function is experimental, and its interface is
-  not stable yet.}
+  \strong{This function is experimental, and its interface
+  is not stable yet.}
 
   The function may be used to compute the returns for a
-  portfolio with external cashflows, i.e. what is
-  usually called time-weighted returns.
-
-  Valuation (i.e. the computation of the NAV) must take
-  place before external cashflows. Fairness suggests
-  that: what price would you give an external investor
-  if you had not valued the positions? And even if
-  fairness mattered not: suppose we traded on a
-  specific day, had a positive PL, and ended the day in
-  cash. We could then not differentiate any more
-  between a cash increase because of an external inflow
-  and a cash increase because of a profitable trade.
+  portfolio with external cashflows, i.e. what is usually
+  called time-weighted returns.
 
 }
-\value{
-  A data.frame
-  \item{timestamp}{the timestamp}
-  \item{NAV}{total NAV}
+\value{%
+  A \code{\link{data.frame}} with one row for each row in
+  \code{NAV}:
+
+  \item{timestamp}{the timestamp, as provided in argument
+    \code{NAV}}
+
+  \item{NAV}{total NAV, as provided in argument \code{NAV}}
+
   \item{price}{NAV per unit}
-  \item{units}{outstanding units (i.e. shares) after cashflows}
+
+  \item{units}{outstanding units (i.e. shares) \emph{after}
+    cashflows}
 
   Attached as an attribute is a \code{\link{data.frame}}
-  \code{transactions}.
+  \code{transactions}, with as many rows as the provided
+  argument \code{cashflows}, which provides the number of
+  units created/destroyed for each cashflow.
 
 }
 \references{
 
-  Schumann, E. (2023) \emph{Portfolio Management with
-    \R}. \url{https://enricoschumann.net/PMwR/}
+  Schumann, E. (2024) \emph{Portfolio Management with \R}.\cr
+  \url{https://enricoschumann.net/PMwR/}
 
 }
 \author{
@@ -80,10 +89,12 @@ NAV <- data.frame(timestamp = seq(as.Date("2017-01-01"),
                   NAV = c(100:104, 205:209))
 
 cf <- data.frame(timestamp = c(as.Date("2017-01-01"),
+                               as.Date("2017-01-06"),
                                as.Date("2017-01-06")),
-                 cashflow = c(100, 100))
+                 cashflow = c(100, 50, 50),
+                 account = c("A", "A", "B"))
 
-unit_prices(NAV, cf, cf.included = TRUE)
+(up <- unit_prices(NAV, cf, cf.included = TRUE))
 ##     timestamp NAV    price    units
 ## 1  2017-01-01 100 100.0000 1.000000
 ## 2  2017-01-02 101 101.0000 1.000000
@@ -95,4 +106,10 @@ unit_prices(NAV, cf, cf.included = TRUE)
 ## 8  2017-01-08 207 106.0244 1.952381
 ## 9  2017-01-09 208 106.5366 1.952381
 ## 10 2017-01-10 209 107.0488 1.952381
+
+attr(up, "transactions")
+##    timestamp cashflow account     units
+## 1 2017-01-01      100       A 1.0000000
+## 2 2017-01-06       50       A 0.4761905
+## 3 2017-01-06       50       B 0.4761905
 }

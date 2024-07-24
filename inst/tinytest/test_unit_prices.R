@@ -9,6 +9,8 @@ NAV <- data.frame(timestamp = seq(as.Date("2017-1-1"),
 
 x1 <- unit_prices(NAV, cf, cf.included = TRUE)
 
+#### now assume that the external flows have not been
+#### included in the days NAV
 NAV <- data.frame(timestamp = seq(as.Date("2017-1-1"),
                                   as.Date("2017-1-10"),
                                   by = "1 day"),

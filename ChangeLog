@@ -1,3 +1,14 @@
+2024-07-24  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/unit_prices.R (unit_prices): refactor function
+        and add more checks; in particular, check if 'NAV'
+        is sorted by time
+        (.unit_prices): remove unexported function, which
+        has been deprecated since 2020; see ChangeLog
+        2020-11-22
+
+        * man/unit_prices.Rd: update docs
+
 2024-07-22  Enrico Schumann  <es@enricoschumann.net>
 
         * R/returns.R (print.p_returns): fix printing of
