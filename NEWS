@@ -3,6 +3,11 @@ v0.19-6  (2024-07-24; not released yet)
   o 'unit_prices': rename argument 'initial.shares' to
     'initial.units', and support its use
 
+  o 'returns' now issues a warning when there are NAs in
+    series and argument 'na.rm' is not explicitly set.  This
+    warning will be removed when the default of 'na.rm' is
+    set to TRUE in a not-too-distant future version.
+
   o ....
 
 v0.19-5  (2024-07-21)
