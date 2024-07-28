@@ -1,3 +1,8 @@
+2024-07-28  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/unit_prices.R (unit_prices): add arguments
+	'round.price' and 'round.units'
+
 2024-07-24  Enrico Schumann  <es@enricoschumann.net>
 
         * R/unit_prices.R (unit_prices): refactor function

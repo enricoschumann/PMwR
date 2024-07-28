@@ -8,10 +8,10 @@
   (units).
 }
 \usage{
-unit_prices(NAV,
-            cashflows,
+unit_prices(NAV, cashflows,
             initial.price, initial.units = 0,
-            cf.included = TRUE)
+            cf.included = TRUE,
+            round.price = NULL, round.units = NULL)
 }
 \arguments{
   \item{NAV}{%
@@ -39,6 +39,14 @@ unit_prices(NAV,
     default), it is assumed that the NAV series at the time
     of the cashflow already includes the cashflow.
   }
+  \item{round.price}{%
+    round unit prices: \code{NULL} (no rounding) or an
+    integer
+  }
+  \item{round.units}{%
+    round number of units: \code{NULL} (no rounding) or an
+    integer
+  }
 }
 \details{%
 
@@ -47,7 +55,9 @@ unit_prices(NAV,
 
   The function may be used to compute the returns for a
   portfolio with external cashflows, i.e. what is usually
-  called time-weighted returns.
+  called time-weighted returns.  Note that 'cashflows' can
+  also comprise other positions that are added or removed
+  from the portfolio without affecting performance. 
 
 }
 \value{%

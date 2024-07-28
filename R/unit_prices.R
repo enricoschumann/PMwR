@@ -4,7 +4,9 @@
 unit_prices <- function(NAV, cashflows,
                         initial.price,
                         initial.units = 0,
-                        cf.included = TRUE) {
+                        cf.included = TRUE,
+                        round.price = NULL,
+                        round.units = NULL) {
 
     if (inherits(NAV, "zoo"))
         NAV <- data.frame(timestamp = index(NAV), NAV)
@@ -22,7 +24,7 @@ unit_prices <- function(NAV, cashflows,
 
     T <- sort(unique(cashflows[[1L]]))
     price <- numeric(length(T))
-    shares <- numeric(nrow(cashflows)) + NA
+    units <- numeric(nrow(cashflows)) + NA
     S <- initial.units
 
     t.NAV <- match(T, NAV[[1]])
@@ -31,6 +33,25 @@ unit_prices <- function(NAV, cashflows,
              paste(cashflows[[1]][is.na(t.NAV)], collapse = ", "))
     }
 
+
+
+    ## rounding
+    do.round.price <- !is.null(round.price)
+    if (is.numeric(round.price)) {
+        fun_price <- function(x, amount = NULL, ...)
+            round(x, round.price)
+    } else
+        fun_price <- round.price
+
+    ## rounding
+    do.round.units <- !is.null(round.units)
+    if (is.numeric(round.units)) {
+        fun_units <- function(x, amount = NULL, ...)
+            round(x, round.units)
+    } else
+        fun_units <- round.units
+
+
     if (missing(initial.price) && initial.units == 0)
         initial.price <- 100
 
@@ -38,32 +59,35 @@ unit_prices <- function(NAV, cashflows,
         cf.t <- cashflows[[1L]] == t
         scf <- sum(cashflows[[2]][cf.t])
         if (t == T[1L] && initial.units == 0)
-            ## FIXME if NAV.t[1] != cf.t[1] , should
-            ## the initial unit-price be adjusted to
-            ## reflect the performance of the NAV?
             p <- initial.price
         else
             p <- (NAV[[2L]][t.NAV[t == T]] - cf.included*scf)/S
 
+        if (do.round.price)
+            p  <- fun_price(p,  cashflows[[2]][cf.t])
+
         dS <- cashflows[[2]][cf.t]/p
-        shares[cf.t] <- dS
+        if (do.round.units)
+            dS <- fun_units(dS, cashflows[[2]][cf.t])
+
+        units[cf.t] <- dS
         price[t == T] <- p
 
         S <- S + sum(dS)
     }
 
-    total.shares <- numeric(nrow(NAV))
-    total.shares[t.NAV] <- tapply(shares, cashflows[[1L]], sum)
-    total.shares[1L] <- total.shares[1L] + initial.units
-    total.shares <- cumsum(total.shares)
+    total.units <- numeric(nrow(NAV))
+    total.units[t.NAV] <- tapply(units, cashflows[[1L]], sum)
+    total.units[1L] <- total.units[1L] + initial.units
+    total.units <- cumsum(total.units)
 
     res <- NAV
     colnames(res) <- c("timestamp", "NAV")
-    p <- NAV[[2L]]/total.shares
+    p <- NAV[[2L]]/total.units
     p[t.NAV] <- price
     res <- cbind(res,
                  data.frame(price = p,
-                            units = total.shares,
+                            units = total.units,
                             stringsAsFactors = FALSE))
 
     colnames(cashflows) <- if (ncol(cashflows) == 3L)
@@ -71,6 +95,6 @@ unit_prices <- function(NAV, cashflows,
                            else
                                c("timestamp", "cashflow")
     attr(res, "transactions") <- cbind(cashflows,
-                                       units = shares)
+                                       units = units)
     res
 }

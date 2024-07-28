@@ -166,3 +166,21 @@ res <- unit_prices(NAV,
 attr(res, "transactions")
 expect_equivalent(res$price, c(20, 20, 202/200*20))
 expect_equivalent(res$units, c(9, 10, 10))
+
+## -- rounding
+
+NAV <- data.frame(timestamp = 1,
+                  NAV = 150)
+cf <- data.frame(timestamp = 1, amount = 55)
+res <- unit_prices(NAV = NAV, cashflows = cf,
+                   initial.units = 100)
+attr(res, "transactions")
+
+res.r <- unit_prices(NAV = NAV, cashflows = cf,
+                     initial.units = 100,
+                     round.units = 4)
+attr(res.r, "transactions")
+new.units <- 55/(95/100)
+expect_equivalent(res.r$units, round(100+new.units, 4))
+expect_equivalent(attr(res.r, "transactions")$units, round(new.units, 4))
+expect_equivalent(attr(res  , "transactions")$units,       new.units)
