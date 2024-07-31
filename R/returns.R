@@ -1027,5 +1027,4 @@ returns_position <- function(prices,
     attr(ans, "holdings") <- X
     attr(ans, "contributions") <- contrib
     ans
-
 }
