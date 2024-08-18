@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-23  Enrico Schumann
+## Copyright (C) 2008-24  Enrico Schumann
 
 pl <- function(amount, ...)
     UseMethod("pl")
@@ -515,10 +515,8 @@ pl.default <- function(amount, price, timestamp = NULL,
     i <- amount > 0
     c(if (open)
           NA
-      else if (length(amount) > 1000L)
-          -c(crossprod(amount, price))
       else
-          -sum(amount * price),
+          -c(amount %*% price),
       sum(abs(amount)),
       sum(price[ i] * amount[ i])/sum(amount[ i]),
       sum(price[!i] * amount[!i])/sum(amount[!i]))

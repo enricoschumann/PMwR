@@ -1,7 +1,11 @@
+2024-08-18  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/pl.R (.pl): compute profit/loss with %*%
+
 2024-07-28  Enrico Schumann  <es@enricoschumann.net>
 
         * R/unit_prices.R (unit_prices): add arguments
-	'round.price' and 'round.units'
+        'round.price' and 'round.units'
 
 2024-07-24  Enrico Schumann  <es@enricoschumann.net>
 
