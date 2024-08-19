@@ -1,4 +1,4 @@
-v0.19-6  (2024-07-28; not released yet)
+v0.19-6  (2024-08-19; not released yet)
 
   o 'unit_prices': rename argument 'initial.shares' to
     'initial.units', and support its use. The function also

@@ -663,3 +663,16 @@ J <- journal(amount = c(1, -1),
              timestamp = c(1,1))
 ans <- pl(J, along.timestamp = 1, vprice = 999)
 expect_equivalent(ans[[1]]$pl, 5)
+
+
+## --------------------------------
+
+## ChangeLog 2024-08-18: low-level computation of p/l
+## in '.pl' was changed
+for (i in c(1, 5, 100, 1000, 10000)) {
+    amount <- sample(rep(c(-100, 100), i))
+    price <- runif(n = length(amount), min = 90, max = 110)
+    
+    expect_equivalent(-sum(amount*price),
+                      pl(pl(amount = amount, price = price)))
+}
