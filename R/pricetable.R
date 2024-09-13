@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-23  Enrico Schumann
+## Copyright (C) 2008-24  Enrico Schumann
 
 pricetable <- function(price, ...)
     UseMethod("pricetable")
@@ -60,17 +60,28 @@ pricetable.zoo <- function(price, ..., instrument) {
             class(timestamp) <- "Date"
         } else
             timestamp <- sort(unique(timestamp))
-        price <- array(NA, dim = c(length(timestamp), length(dots)))
+
+        cols <- lapply(dots, dim)
+        cols <- lapply(cols,
+                       function(x) if (is.null(x)) 1 else x[2L])
+        cols <- unlist(cols)
+        price <- array(NA, dim = c(length(timestamp), sum(cols)))
+
+        nextC <- 0
         for (j in seq_along(dots)) {
             i <- fmatch(index(dots[[j]]), timestamp, nomatch = 0L)
             ## TODO use unclass instead of coredata?
-            price[i, j] <- coredata(dots[[j]])[i > 0]
+            nextC <- max(nextC) + seq_len(cols[j])
+            price[i, nextC] <-
+                if (cols[j] > 1)
+                    coredata(dots[[j]])[i > 0, ] else
+                    coredata(dots[[j]])[i > 0]
         }
     } else {
         timestamp <- index(price)
         price <- coredata(price)
     }
-    pricetable.default(coredata(price),
+    pricetable.default(price,
                        instrument = instrument,
                        timestamp = timestamp, ...)
 }
@@ -108,6 +119,7 @@ pricetable.zoo <- function(price, ..., instrument) {
     if (missing(i)) {
         i <- timestamp
         i.orig <- i
+        i <- TRUE
     } else {
         i.orig <- i
         if (is.character(i)) {
