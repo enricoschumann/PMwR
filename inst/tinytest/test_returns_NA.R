@@ -1,0 +1,81 @@
+
+library("zoo", quietly = TRUE, warn.conflicts = FALSE)
+library("PMwR")
+library("NMOF")
+library("tinytest")
+
+## numeric vector
+x <- 101:112
+x[3] <- NA
+
+expect_equivalent(returns(x),
+                  x[-1]/x[-length(x)] - 1)
+
+expect_equivalent(returns(x, pad = NA),
+                  c(NA, x[-1]/x[-length(x)] - 1))
+
+
+x <- 101:112
+x[] <- NA
+expect_equivalent(returns(x),
+                  x[-1]/x[-length(x)] - 1)
+expect_equivalent(returns(x, pad = NA),
+                  c(NA, x[-1]/x[-length(x)] - 1))
+
+x <- 101:112
+x <- cbind(x, x , x)
+x[] <- NA
+expect_equivalent(returns(x),
+                  x[-1, ]/x[-nrow(x), ] - 1)
+expect_equivalent(returns(x, pad = NA),
+                  rbind(NA, x[-1, ]/x[-nrow(x), ] - 1))
+
+
+
+
+##
+x <- 100:140
+t <- as.Date("2019-1-1") + seq_along(x) -1
+## returns(x, t = t, period = "Month")
+## ##       Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec  YTD
+## ## 2019 30.0 7.7                                         40.0
+
+r <- as.matrix(returns(x, t = t, period = "Month"))
+expect_equivalent(r[1, 1], x[31]/x[1] - 1)
+expect_equivalent(r[1, 13], x[length(x)]/x[1] - 1)
+
+
+
+
+x <- 100:140
+x[5] <- NA
+t <- as.Date("2019-1-1") + seq_along(x) -1
+## returns(x, t = t, period = "Month")
+## ##       Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec  YTD
+## ## 2019 30.0 7.7                                         40.0
+
+r <- as.matrix(returns(x, t = t, period = "Month"))
+expect_equivalent(r[1, 1], x[31]/x[1] - 1)
+expect_equivalent(r[1, 13], x[length(x)]/x[1] - 1)
+
+
+
+
+x <- 100:140
+x[31] <- NA
+t <- as.Date("2019-1-1") + seq_along(x) -1
+## returns(x, t = t, period = "Month")
+## ##      Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec YTD
+## ## 2019  NA  NA                                          NA
+r <- as.matrix(returns(x, t = t, period = "Month"))
+expect_true(is.na(r[1, 1]))
+expect_true(is.na(r[1, 13]))
+
+
+
+
+x <- 100:190
+x[31] <- NA
+t <- as.Date("2019-12-1") + seq_along(x) - 1
+returns(x, t = t, period = "Month")
+
