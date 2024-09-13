@@ -14,10 +14,12 @@ function(x,
          weights = NULL,
          rebalance.when = NULL,
          lag = 1,
-         na.rm = TRUE,
-         ...) {
+         na.rm = FALSE,
+         ...,
+         na.warn = FALSE) {
 
-    if (missing(na.rm) &&
+    if (na.warn &&
+        missing(na.rm) &&
         any(is.na(x)))
         warning("missing values in ", sQuote("x"),
                 "; consider setting ", sQuote("na.rm"))
@@ -127,7 +129,7 @@ function(x,
 
 returns.NAVseries <- function(x, period = NULL, complete.first = TRUE,
                               pad = NULL, position = NULL, lag = 1,
-                              na.rm = TRUE, ...) {
+                              na.rm = FALSE, ...) {
 
     ## does *not* return a NAVseries since it is not
     ## defined for returns, only for NAVs (levels)
@@ -146,7 +148,7 @@ returns.NAVseries <- function(x, period = NULL, complete.first = TRUE,
 returns.zoo <- function(x, period = NULL, complete.first = TRUE,
                         pad = NULL, position = NULL,
                         weights = NULL, rebalance.when = NULL,
-                        lag = 1, na.rm = TRUE, ...) {
+                        lag = 1, na.rm = FALSE, ...) {
 
     t <- time(x)
     x <- coredata(x)
@@ -181,7 +183,7 @@ returns.data.frame <- function(x, t = NULL, period = NULL,
                                complete.first = TRUE,
                                pad = NULL, position = NULL,
                                weights = NULL, rebalance.when = NULL,
-                               lag = 1, na.rm = TRUE, ...) {
+                               lag = 1, na.rm = FALSE, ...) {
 
     ans <- returns.default(x, t = t, period = period,
                            complete.first = complete.first,
@@ -522,8 +524,11 @@ as.zoo.p_returns <- function(x, ...) {
 }
 
 ## not exported
-fmt <- function(x, plus, digits) {
-    ans <- format(round(100*x, digits),
+fmt <- function(x, plus, digits, type = "%") {
+    if (type == "%") {
+         x <- round(100*x, digits)
+    }
+    ans <- format(x,
                   nsmall = if (digits < 0) 0 else digits,
                   trim = TRUE)
     if (plus)
@@ -535,19 +540,25 @@ fmt <- function(x, plus, digits) {
 ## not exported
 .mtab <- function(x, t, ytd = "YTD", month.names = NULL,
                   zero.print = "0", plus = FALSE, digits = 1,
-                  na.print = NULL) {
+                  na.print = NULL, na.rm = FALSE) {
     years <- as.numeric(format(t, "%Y"))
     mons  <- as.numeric(format(t, "%m"))
     tb <- array("", dim = c(length(unique(years)), 13L))
     tb[cbind(years - years[1L] + 1L, mons)] <- fmt(x, plus, digits)
-    for (y in suy <- sort(unique(years)))
-        tb[y - years[1L] + 1L, 13L] <- fmt(prod(x[years==y & !is.na(x)] + 1L) - 1L,
-                                           plus, digits)
-    rownames(tb) <- sort(unique(years))
-    colnames(tb) <- if (is.null(month.names))
-                        c(format(as.Date(paste0("2012-", 1:12, "-1")), "%b"), ytd)
-                    else
-                        c(month.names, ytd)
+
+    suy <- sort(unique(years))
+    for (y in suy) {
+        good.months <- years == y &
+                       if (na.rm) !is.na(x) else TRUE
+        tb[y - years[1L] + 1L, 13L] <-
+            fmt(prod(x[good.months] + 1) - 1, plus, digits)
+    }
+    rownames(tb) <- suy
+    colnames(tb) <-
+        if (is.null(month.names))
+            c(format(as.Date(paste0("2012-", 1:12, "-1")), "%b"), ytd)
+        else
+            c(month.names, ytd)
     if (!is.null(na.print))
         tb <- gsub("NA", na.print, tb, fixed = TRUE)
     if (zero.print != "0")
@@ -920,7 +931,7 @@ returns_rebalance <- function(prices, weights,
 t.p_returns <- function(x)
     t(as.matrix.p_returns(x))
 
-as.matrix.p_returns <- function(x, ...) {
+as.matrix.p_returns <- function(x, ..., na.rm = FALSE) {
 
     if (attr(x, "period") == "monthly" && is.null(dim(x))) {
         t <- attr(x, "t")
@@ -930,8 +941,15 @@ as.matrix.p_returns <- function(x, ...) {
         mons  <- as.numeric(format(t, "%m"))
         tb <- array(NA, dim = c(length(unique(years)), 13L))
         tb[cbind(years - years[1L] + 1L, mons)] <- x
-        for (y in suy <- sort(unique(years)))
-            tb[y - years[1L] + 1L, 13L] <- prod(x[years==y & !is.na(x)] + 1) - 1
+
+        suy <- sort(unique(years))
+        for (y in suy <- sort(unique(years))) {
+            good.months <- years == y &
+                           if (na.rm) !is.na(x) else TRUE
+            tb[y - years[1L] + 1L, 13L] <-
+                prod(x[good.months] + 1) - 1
+        }
+
         rownames(tb) <- suy
         colnames(tb) <- c(1:12, "YTD")
         tb
