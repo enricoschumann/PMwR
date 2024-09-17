@@ -1,3 +1,7 @@
+2024-09-17  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 0.19-6
+
 2024-09-13  Enrico Schumann  <es@enricoschumann.net>
 
         * R/pricetable.R (pricetable.zoo): support
