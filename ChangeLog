@@ -1,3 +1,7 @@
+2024-09-17  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 0.19-6
+
 2024-08-19  Enrico Schumann  <es@enricoschumann.net>
 
         * inst/tinytest/test_pl.R: add simple tests for

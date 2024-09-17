@@ -1,4 +1,4 @@
-v0.19-6  (2024-08-19; not released yet)
+v0.19-6  (2024-09-17)
 
   o 'unit_prices': rename argument 'initial.shares' to
     'initial.units', and support its use. The function also
@@ -7,9 +7,12 @@ v0.19-6  (2024-08-19; not released yet)
   o 'returns' now issues a warning when there are NAs in
     series and argument 'na.rm' is not explicitly set.  This
     warning will be removed when the default of 'na.rm' is
-    set to FALSE in a not-too-distant future version.
+    set to FALSE in the not-too-distant future version 1.0.
 
-  o ....
+  o various minor changes and documentation updates.
+    See the ChangeLog for all details. The manual at
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    has also been updated.
 
 v0.19-5  (2024-07-21)
 
