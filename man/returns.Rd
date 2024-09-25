@@ -132,9 +132,11 @@ returns(x, \dots)
   }
   \item{rebalance.when}{%
 
-    logical or numeric. If \code{x} is a time-series
-    class (such as \code{zoo}), it may also be of the
-    same class as the time index of \code{x}.
+    a logical vector or a vector of integers indicating the
+    \code{x} at which to rebalance.  If \code{x} inherits
+    from a time-series class (such as \code{zoo}), it may
+    also be of the same class as the time index of
+    \code{x}.
 
   }
   \item{\dots}{%
