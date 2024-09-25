@@ -1,3 +1,12 @@
+v1.0-0  (2024-09-25)
+
+  o 'returns': the default for 'na.rm' is now FALSE. The
+    warning about missing values, introduced in version
+    v0.19-6, remains; it is handled by new argument
+    'na.warn'.
+
+  o ....
+  
 v0.19-6  (2024-09-17)
 
   o 'unit_prices': rename argument 'initial.shares' to
