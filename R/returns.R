@@ -225,14 +225,14 @@ pReturns <- function(x, t, period, complete.first = TRUE,
     ## TODO add also: 'irr' (NMOF::ytm)
 
     x <- as.matrix(x)
-    if (!is.null(colnames(x)))
-        instr <- colnames(x)
-    else
-        instr <- NULL
+    instr <- colnames(x)  ## NULL if no column
+
     nc <- ncol(x)
     if (is.character(period))
         period <- tolower(period)
 
+    na.removed <- rep(NA, nc)
+    names(na.removed) <- instr
 
     ## TODO have periods such as "best 5 years"?
     if (length(period) == 1L &&
@@ -305,25 +305,34 @@ pReturns <- function(x, t, period, complete.first = TRUE,
         ## --
 
         attr(ans, "is.annualised") <- is.ann
+
     } else if (length(period) == 1L && period == "itd") {
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
-        ans <- numeric(nc)
-        names(ans) <- instr
-        from.to <- vector("list", length = nc)
-        for (j in 1:nc) {
-            xj <- x[, j]
-            na <- which(!is.na(xj))
-            if (length(na) <= 1) {
-                ans[j] <- NA
-            } else {
-                t0 <- min(na)
-                t1 <- max(na)
-                ans[j] <- drop(.returns(xj[c(t0, t1)], lag = 1))
-                if (!is.null(t))
-                    from.to[[j]] <- c(t[t0], t[t1])
-            }
-        }
+
+        if (!na.rm || !anyNA(x)) {
+            ans <- x[nrow(x), ]/x[1L, ] - 1
+            from.to <- if (!is.null(t))
+                           rep(list(c(t[1L], t[nrow(x)])), nc)
+
+        } else {
+            ans <- numeric(nc)
+            names(ans) <- instr
+            from.to <- vector("list", length = nc)
+            for (j in 1:nc) {
+                xj <- x[, j]
+                na <- which(!is.na(xj))
+                if (length(na) <= 1) {
+                    ans[j] <- NA
+                } else {
+                    t0 <- min(na)
+                    t1 <- max(na)
+                    ans[j] <- drop(.returns(xj[c(t0, t1)], lag = 1))
+                    if (!is.null(t))
+                        from.to[[j]] <- c(t[t0], t[t1])
+                }
+             }
+         }
 
         ## --
         if (!is.null(unlist(from.to)) && length(from.to)) {
@@ -341,6 +350,7 @@ pReturns <- function(x, t, period, complete.first = TRUE,
 
         attr(ans, "t") <- from.to
         attr(ans, "period") <- "itd"
+
     } else if (length(period) == 1L &&
                grepl("^ytd", period, ignore.case = TRUE)) {
         ## TODO allow syntax like "ytd02-15"?
@@ -1013,7 +1023,10 @@ returns_position <- function(prices,
         warning("missing values at rebalance times")
 
     if (!length(when)) {
-        return(rep.int(0, nrow(prices))) ## FIXME: pad ignored?
+        if (is.null(pad))
+            return(       rep.int(0, nrow(prices) - 1))
+        else
+            return(c(pad, rep.int(0, nrow(prices) - 1)))
     }
 
     if (weights) {
