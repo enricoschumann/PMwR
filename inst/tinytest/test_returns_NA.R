@@ -79,3 +79,21 @@ x[31] <- NA
 t <- as.Date("2019-12-1") + seq_along(x) - 1
 returns(x, t = t, period = "Month")
 
+
+
+
+x <- 100:190
+x[31] <- NA
+t <- as.Date("2019-12-1") + seq_along(x) - 1
+ans <- returns(x, t = t, period = "total")
+expect_equivalent(c(ans), x[length(x)]/x[1L]-1)
+
+x <- 100:190
+x[1] <- NA
+t <- as.Date("2019-12-1") + seq_along(x) - 1
+returns(x, t = t, period = "total")
+
+x <- 100:190
+x[1] <- NA
+t <- as.Date("2019-12-1") + seq_along(x) - 1
+returns(x, t = t, period = "total", na.rm = TRUE)

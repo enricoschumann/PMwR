@@ -377,3 +377,24 @@ R0 <- returns(x = prices, weights = w, rebalance.when = 1)
 prices[3, 1] <- NA
 R1 <- returns(x = prices, weights = w, rebalance.when = 1)
 expect_equivalent(R0[is.finite(R1)], R1[is.finite(R1)])
+
+
+
+## ------ non-matching timestamp ----------------------------------
+prices <- cbind(a = 101:105, b = 201:205)
+w <- c(0.6, 0.4)
+t <- as.Date("2024-01-01") + seq_len(nrow(prices))
+R0 <- returns(x = prices, t = t,
+              weights = w, rebalance.when = as.Date("2024-01-09"))
+expect_equivalent(c(R0), rep(0, nrow(prices) - 1))
+
+### no match at all: no rebalancing, but with 'pad'
+R0 <- returns(x = prices, t = t,
+              weights = w, rebalance.when = as.Date("2024-01-09"),
+              pad = NA)
+expect_equivalent(c(R0), c(NA, rep(0, nrow(prices) - 1)))
+
+R0 <- returns(x = prices, t = t,
+              weights = w, rebalance.when = as.Date("2024-01-09"),
+              pad = 1)
+expect_equivalent(c(R0), c(1, rep(0, nrow(prices) - 1)))
