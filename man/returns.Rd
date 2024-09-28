@@ -19,11 +19,11 @@ returns(x, \dots)
 \method{returns}{default}(x, t = NULL, period = NULL, complete.first = TRUE,
         pad = NULL, position = NULL,
         weights = NULL, rebalance.when = NULL,
-        lag = 1, na.rm = TRUE, \dots)
+        lag = 1, na.rm = FALSE, \dots, na.warn = FALSE)
 
 \method{returns}{zoo}(x, period = NULL, complete.first = TRUE,
         pad = NULL, position = NULL,
-        weights = NULL, rebalance.when = NULL, lag = 1, na.rm = TRUE, \dots)
+        weights = NULL, rebalance.when = NULL, lag = 1, na.rm = FALSE, \dots)
 
 \method{print}{p_returns}(x, \dots, year.rows = TRUE, month.names = NULL,
       zero.print = "0", plus = FALSE, digits = 1,
@@ -65,34 +65,33 @@ returns(x, \dots)
   }
 
   \item{period}{%
-    Typically a string. Supported are
-    \code{"hour"}, \code{"day"}, \code{"month"},
-    \code{"quarter"}, \code{"year"},
-    \code{"ann"} (annualised), \code{"ytd"}
-    (year-to-date), \code{"mtd"} (month-to-date), \code{"itd"}
-    (inception-to-date) or a single year, such as
-    "2012". Instead of \code{"itd"}, \code{"total"} may also be used.
-    The value of \sQuote{period} is used only
-    when timestamp information is available: for
-    instance, when \code{t} is not \code{NULL} or with
-    \code{zoo}/\code{xts} objects. The exception is
-    \code{"itd"}, which can be computed without timestamp information.
-    Holding period \code{"ytd"} produces a
-    warning if the current year (as obtained from
-    \code{\link{Sys.Date}}) differs from the latest
-    timestamp of the series.  Specifying period as
-    \code{"ytd!"} suppresses the warning.
 
-    All returns are computed as simple returns. They
-    will only be annualised with option \code{"ann"}; they
-    will not be annualised when the length of the time
-    series is less than one year. To force annualising
-    in such a case, use
-    \code{"ann!"}. Annualisation can only work
+    Typically a string. Supported are \code{"hour"},
+    \code{"day"}, \code{"month"}, \code{"quarter"},
+    \code{"year"}, \code{"ann"} (annualised), \code{"ytd"}
+    (year-to-date), \code{"mtd"} (month-to-date),
+    \code{"itd"} (inception-to-date) or a single year,
+    such as "2012". Instead of \code{"itd"},
+    \code{"total"} may also be used.  The value of
+    \sQuote{period} is used only when timestamp
+    information is available: for instance, when \code{t}
+    is not \code{NULL} or with \code{zoo}/\code{xts}
+    objects. The exception is \code{"itd"}, which can be
+    computed without timestamp information.  Holding
+    period \code{"ytd"} produces a warning if the current
+    year (as obtained from \code{\link{Sys.Date}}) differs
+    from the latest timestamp of the series.  Specifying
+    period as \code{"ytd!"} suppresses the warning.
+
+    All returns are computed as simple returns. They will
+    only be annualised with option \code{"ann"}; they will
+    not be annualised when the length of the time series
+    is less than one year. To force annualising in such a
+    case, use \code{"ann!"}. Annualisation can only work
     when the timestamp \code{t} can be coerced to class
-    \code{\link{Date}}. The result will have an
-    attribute \code{is.annualised}, which is a logical
-    vector of length one.
+    \code{\link{Date}}. The result will have an attribute
+    \code{is.annualised}, which is a logical vector of
+    length one.
 
   }
   \item{complete.first}{%
@@ -109,6 +108,9 @@ returns(x, \dots)
   }
   \item{na.rm}{%
     logical; see Details
+  }
+  \item{na.warn}{%
+    logical
   }
   \item{position}{%
 
