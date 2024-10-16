@@ -1,14 +1,14 @@
 v1.0-0  (2024-10-19; not yet released)
 
-  o 'returns': the default for 'na.rm' is now FALSE. The
+  o 'returns': default for 'na.rm' is now FALSE. The
     warning about missing values, introduced in version
     v0.19-6, is handled by new argument 'na.warn' (with
-    default FALSE).
+    default FALSE). Note that 'na.rm' always affected
+    only a limited number of cases of holding-period
+    return computations.
 
   o when computing portfolio returns, 'returns' no longer
     ignores argument 'pad' when no rebalancing takes place
-
-  o ....
 
   o various minor changes and documentation updates.
     See the ChangeLog for all details. The manual at

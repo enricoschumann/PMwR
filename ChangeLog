@@ -1,3 +1,7 @@
+2024-10-16  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/returns.R (returns): set 'na.rm' to FALSE
+
 2024-09-25  Enrico Schumann  <es@enricoschumann.net>
 
         * R/returns.R (returns,returns_position): no
