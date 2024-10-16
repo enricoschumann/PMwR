@@ -1,3 +1,20 @@
+v1.0-0  (2024-10-19; not yet released)
+
+  o 'returns': the default for 'na.rm' is now FALSE. The
+    warning about missing values, introduced in version
+    v0.19-6, is handled by new argument 'na.warn' (with
+    default FALSE).
+
+  o when computing portfolio returns, 'returns' no longer
+    ignores argument 'pad' when no rebalancing takes place
+
+  o ....
+
+  o various minor changes and documentation updates.
+    See the ChangeLog for all details. The manual at
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    has also been updated.
+
 v0.19-6  (2024-09-17)
 
   o 'unit_prices': rename argument 'initial.shares' to

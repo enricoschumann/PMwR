@@ -19,7 +19,7 @@ NAVseries(NAV, timestamp,
 
 as.NAVseries(x, ...)
 
-\method{print}{NAVseries}(x, \dots )
+\method{print}{NAVseries}(x, \dots , na.rm = FALSE)
 
 \method{summary}{NAVseries}(object, \dots, monthly.vol = TRUE,
         bm = NULL, monthly.te = TRUE,

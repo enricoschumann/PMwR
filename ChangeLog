@@ -1,6 +1,19 @@
+2024-09-25  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/returns.R (returns,returns_position): no
+        longer ignore argument 'pad' when no rebalancing
+        takes place
+        (returns,pReturns): no longer ignore 'na.rm' for
+        period 'total'
+
 2024-09-17  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 0.19-6
+
+2024-09-13  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/pricetable.R (pricetable.zoo): support
+        multivariate zoo series
 
 2024-08-19  Enrico Schumann  <es@enricoschumann.net>
 

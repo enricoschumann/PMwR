@@ -14,10 +14,12 @@ function(x,
          weights = NULL,
          rebalance.when = NULL,
          lag = 1,
-         na.rm = TRUE,
-         ...) {
+         na.rm = FALSE,
+         ...,
+         na.warn = FALSE) {
 
-    if (missing(na.rm) &&
+    if (na.warn &&
+        missing(na.rm) &&
         any(is.na(x)))
         warning("missing values in ", sQuote("x"),
                 "; consider setting ", sQuote("na.rm"))
@@ -127,7 +129,7 @@ function(x,
 
 returns.NAVseries <- function(x, period = NULL, complete.first = TRUE,
                               pad = NULL, position = NULL, lag = 1,
-                              na.rm = TRUE, ...) {
+                              na.rm = FALSE, ...) {
 
     ## does *not* return a NAVseries since it is not
     ## defined for returns, only for NAVs (levels)
@@ -146,7 +148,7 @@ returns.NAVseries <- function(x, period = NULL, complete.first = TRUE,
 returns.zoo <- function(x, period = NULL, complete.first = TRUE,
                         pad = NULL, position = NULL,
                         weights = NULL, rebalance.when = NULL,
-                        lag = 1, na.rm = TRUE, ...) {
+                        lag = 1, na.rm = FALSE, ...) {
 
     t <- time(x)
     x <- coredata(x)
@@ -181,7 +183,7 @@ returns.data.frame <- function(x, t = NULL, period = NULL,
                                complete.first = TRUE,
                                pad = NULL, position = NULL,
                                weights = NULL, rebalance.when = NULL,
-                               lag = 1, na.rm = TRUE, ...) {
+                               lag = 1, na.rm = FALSE, ...) {
 
     ans <- returns.default(x, t = t, period = period,
                            complete.first = complete.first,
@@ -223,19 +225,21 @@ pReturns <- function(x, t, period, complete.first = TRUE,
     ## TODO add also: 'irr' (NMOF::ytm)
 
     x <- as.matrix(x)
-    if (!is.null(colnames(x)))
-        instr <- colnames(x)
-    else
-        instr <- NULL
-    nc <- ncol(x)
+    instr <- colnames(x)  ## NULL if no column
+
+    nc <- ncol(x)         ## nc == number of series
     if (is.character(period))
         period <- tolower(period)
 
+    na.removed <- rep(NA, nc)
+    names(na.removed) <- instr
 
     ## TODO have periods such as "best 5 years"?
     if (length(period) == 1L &&
         (best <- grepl("best",  period, ignore.case = TRUE) ||
                  grepl("worst", period, ignore.case = TRUE))) {
+
+        stop("best/worst return periods are not implemented (yet)")
 
         if (grepl("year", period, ignore.case = TRUE)) {
 
@@ -257,6 +261,7 @@ pReturns <- function(x, t, period, complete.first = TRUE,
         ans <- numeric(nc)
         names(ans) <- instr
         is.ann  <- logical(nc)
+        names(is.ann) <- instr
         from.to <- vector("list", length = nc)
 
         if (inherits(t, "yearmon")) {
@@ -268,24 +273,37 @@ pReturns <- function(x, t, period, complete.first = TRUE,
             t <- as.Date(t)
         }
 
-        t0 <- 1
-        t1 <- nrow(x)
-        for (j in 1:nc) {
-            xj <- x[, j]
-            if (na.rm) {
+
+        if (!na.rm || !anyNA(x)) {
+            t1 <- nrow(x)
+            tt <- as.numeric( t[t1] - t[1L] )/units_per_year
+
+            tmp <- x[t1, ] / x[1L, ]
+            if (tt >= 1 || force) {
+                tmp <- tmp^(1/tt)
+                is.ann[] <- TRUE
+            }
+            ans <- tmp - 1
+            from.to <- rep(list(c(t[1L], t[t1])), nc)
+
+        } else {
+            for (j in 1:nc) {
+                xj <- x[, j]
                 tmp <- which(!is.na(xj))
                 t0 <- min(tmp)
                 t1 <- max(tmp)
+
+                tt <- as.numeric( t[t1] - t[t0] )/units_per_year
+                tmp <- xj[t1] / xj[t0]
+                if (tt >= 1 || force) {
+                    tmp <- tmp^(1/tt)
+                    is.ann[j] <- TRUE
+                }
+                ans[j] <- tmp - 1
+                from.to[[j]] <- c(t[t0], t[t1])
             }
-            tt <- as.numeric( t[t1] - t[t0] )/units_per_year
-            tmp <- xj[t1] / xj[t0]
-            if (tt > 1 || force) {
-                tmp <- tmp^(1/tt)
-                is.ann[j] <- TRUE
-            }
-            ans[j] <- tmp - 1
-            from.to[[j]] <- c(t[t0], t[t1])
         }
+
         attr(ans, "period") <-
             if (force) "annualised!" else "annualised"
 
@@ -303,25 +321,34 @@ pReturns <- function(x, t, period, complete.first = TRUE,
         ## --
 
         attr(ans, "is.annualised") <- is.ann
+
     } else if (length(period) == 1L && period == "itd") {
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
-        ans <- numeric(nc)
-        names(ans) <- instr
-        from.to <- vector("list", length = nc)
-        for (j in 1:nc) {
-            xj <- x[, j]
-            na <- which(!is.na(xj))
-            if (length(na) <= 1) {
-                ans[j] <- NA
-            } else {
-                t0 <- min(na)
-                t1 <- max(na)
-                ans[j] <- drop(.returns(xj[c(t0, t1)], lag = 1))
-                if (!is.null(t))
-                    from.to[[j]] <- c(t[t0], t[t1])
-            }
-        }
+
+        if (!na.rm || !anyNA(x)) {
+            ans <- x[nrow(x), ]/x[1L, ] - 1
+            from.to <- if (!is.null(t))
+                           rep(list(c(t[1L], t[nrow(x)])), nc)
+
+        } else {
+            ans <- numeric(nc)
+            names(ans) <- instr
+            from.to <- vector("list", length = nc)
+            for (j in 1:nc) {
+                xj <- x[, j]
+                na <- which(!is.na(xj))
+                if (length(na) <= 1) {
+                    ans[j] <- NA
+                } else {
+                    t0 <- min(na)
+                    t1 <- max(na)
+                    ans[j] <- drop(.returns(xj[c(t0, t1)], lag = 1))
+                    if (!is.null(t))
+                        from.to[[j]] <- c(t[t0], t[t1])
+                }
+             }
+         }
 
         ## --
         if (!is.null(unlist(from.to)) && length(from.to)) {
@@ -339,32 +366,47 @@ pReturns <- function(x, t, period, complete.first = TRUE,
 
         attr(ans, "t") <- from.to
         attr(ans, "period") <- "itd"
+
     } else if (length(period) == 1L &&
                grepl("^ytd", period, ignore.case = TRUE)) {
+
         ## TODO allow syntax like "ytd02-15"?
         ## => returns a vector of returns ytd
         ##    up to 15 Feb
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
         years <- as.numeric(format(t, "%Y"))
-        if (period != "ytd!" && max(years) != as.numeric(format(Sys.Date(), "%Y")))
-            warning("max. timestamp (", max(years), ") does not match current year")
-        ans <- numeric(nc)
-        names(ans) <- instr
-        from.to <- vector("list", length = nc)
-        for (j in 1:nc) {
-            xj <- x[ ,j]
+        if (period != "ytd!" &&
+            max(years) != as.numeric(format(Sys.Date(), "%Y")))
+            warning("max. timestamp (", max(years),
+                    ") does not match current year")
+
+        if (!na.rm || !anyNA(x)) {
             i <- which(years < max(years))
-            if (!length(i)) {
-                ## all obs are within one year
-                i <- seq_along(xj)
-                t0 <- min(which(!is.na(xj[i])))
-            } else {
-                t0 <- max(which(!is.na(xj[i])))
+            if (!length(i))
+                i <- 1
+            i <- max(i)
+            ans <- x[nrow(x), ]/x[i, ] - 1
+            from.to <- if (!is.null(t))
+                           rep(list(c(t[i], t[nrow(x)])), nc)
+        } else {
+            ans <- numeric(nc)
+            names(ans) <- instr
+            from.to <- vector("list", length = nc)
+            for (j in 1:nc) {
+                xj <- x[, j]
+                i <- which(years < max(years))
+                if (!length(i)) {
+                    ## all obs are within one year
+                    i <- seq_along(xj)
+                    t0 <- min(which(!is.na(xj[i])))
+                } else {
+                    t0 <- max(which(!is.na(xj[i])))
+                }
+                t1 <- max(which(!is.na(xj)))
+                ans[j] <- drop(returns( xj[c(t0, t1)] ))
+                from.to[[j]] <- c(t[t0], t[t1])
             }
-            t1 <- max(which(!is.na(xj)))
-            ans[j] <- drop(returns( xj[c(t0, t1)] ))
-            from.to[[j]] <- c(t[t0], t[t1])
         }
 
         ## --
@@ -381,11 +423,14 @@ pReturns <- function(x, t, period, complete.first = TRUE,
         ## --
 
         attr(ans, "period") <- "ytd"
+
     } else if (length(period) == 1L &&
                grepl("^ytm", period, ignore.case = TRUE)) {
         ## compute returns up to most recent month-end
         if (!is.null(pad))
             warning(sQuote("pad"), " is ignored")
+
+        warning("'ytm' is not yet documented/tested")
         ymon <- as.numeric(format(t, "%Y%m"))
         years <- as.numeric(format(t, "%Y"))
         if (period != "ytm!" && max(years) != as.numeric(format(Sys.Date(), "%Y")))
@@ -435,19 +480,33 @@ pReturns <- function(x, t, period, complete.first = TRUE,
         names(ans) <- instr
 
         from.to <- vector("list", length = nc)
-        for (j in 1:nc) {
-            xj <- x[ ,j]
+
+        if (!na.rm || !anyNA(x)) {
             i <- which(ymon < max(ymon))
-            if (!length(i)) {
-                ## all obs are within one month
-                i <- seq_along(xj)
-                t0 <- min(which(!is.na(xj[i])))
-            } else {
-                t0 <- max(which(!is.na(xj[i])))
+            i <- if (!length(i))
+                     1  ## all obs are within one month
+                 else
+                     max(i)
+
+            ans <- x[nrow(x), ]/x[i, ] - 1
+            from.to <- rep(list(c(t[1L], t[nrow(x)])), nc)
+
+
+        } else if (na.rm) {
+            for (j in 1:nc) {
+                xj <- x[ ,j]
+                i <- which(ymon < max(ymon))
+                if (!length(i)) {
+                    ## all obs are within one month
+                    i <- seq_along(xj)
+                    t0 <- min(which(!is.na(xj[i])))
+                } else {
+                    t0 <- max(which(!is.na(xj[i])))
+                }
+                t1 <- max(which(!is.na(xj)))
+                ans[j] <- drop(returns( xj[c(t0, t1)] ))
+                from.to[[j]] <- c(t[t0], t[t1])
             }
-            t1 <- max(which(!is.na(xj)))
-            ans[j] <- drop(returns( xj[c(t0, t1)] ))
-            from.to[[j]] <- c(t[t0], t[t1])
         }
 
         ## --
@@ -466,11 +525,17 @@ pReturns <- function(x, t, period, complete.first = TRUE,
         attr(ans, "period") <- "mtd"
 
     } else if (length(period) == 1L &&
-               (grepl("[0-9][0-9][0-9][0-9]", period, ignore.case = TRUE))) {
+               grepl("[0-9][0-9][0-9][0-9]", period,
+                     ignore.case = TRUE)) {
         m <- which(format(t, "%Y") == period)
-        ii <- c(max(1, min(m)-1), max(m))
-        ans <- returns(x[ii, ], pad = pad)
-        attr(ans, "t") <- t(t[ii])
+        if (!length(m)) {
+            ans <- rep(NA_real_, nc)
+            attr(ans, "t") <- c(NA, NA)
+        } else {
+            ii <- c(max(1, min(m)-1), max(m))
+            ans <- returns(x[ii, ], pad = pad)
+            attr(ans, "t") <- t(t[ii])
+        }
         class(attr(ans, "t")) <- "Date"
         attr(ans, "period") <- period
 
@@ -513,6 +578,8 @@ pReturns <- function(x, t, period, complete.first = TRUE,
     class(ans) <- "p_returns"
     if (identical(period, "monthly"))
         class(ans) <- c("p_returns_monthly", class(ans))
+    if (identical(period, "daily"))
+        class(ans) <- c("p_returns_daily", class(ans))
 
     ans
 }
@@ -522,8 +589,11 @@ as.zoo.p_returns <- function(x, ...) {
 }
 
 ## not exported
-fmt <- function(x, plus, digits) {
-    ans <- format(round(100*x, digits),
+fmt <- function(x, plus, digits, type = "%") {
+    if (type == "%") {
+         x <- round(100*x, digits)
+    }
+    ans <- format(x,
                   nsmall = if (digits < 0) 0 else digits,
                   trim = TRUE)
     if (plus)
@@ -535,19 +605,25 @@ fmt <- function(x, plus, digits) {
 ## not exported
 .mtab <- function(x, t, ytd = "YTD", month.names = NULL,
                   zero.print = "0", plus = FALSE, digits = 1,
-                  na.print = NULL) {
+                  na.print = NULL, na.rm = FALSE) {
     years <- as.numeric(format(t, "%Y"))
     mons  <- as.numeric(format(t, "%m"))
     tb <- array("", dim = c(length(unique(years)), 13L))
     tb[cbind(years - years[1L] + 1L, mons)] <- fmt(x, plus, digits)
-    for (y in suy <- sort(unique(years)))
-        tb[y - years[1L] + 1L, 13L] <- fmt(prod(x[years==y & !is.na(x)] + 1L) - 1L,
-                                           plus, digits)
-    rownames(tb) <- sort(unique(years))
-    colnames(tb) <- if (is.null(month.names))
-                        c(format(as.Date(paste0("2012-", 1:12, "-1")), "%b"), ytd)
-                    else
-                        c(month.names, ytd)
+
+    suy <- sort(unique(years))
+    for (y in suy) {
+        good.months <- years == y &
+                       if (na.rm) !is.na(x) else TRUE
+        tb[y - years[1L] + 1L, 13L] <-
+            fmt(prod(x[good.months] + 1) - 1, plus, digits)
+    }
+    rownames(tb) <- suy
+    colnames(tb) <-
+        if (is.null(month.names))
+            c(format(as.Date(paste0("2012-", 1:12, "-1")), "%b"), ytd)
+        else
+            c(month.names, ytd)
     if (!is.null(na.print))
         tb <- gsub("NA", na.print, tb, fixed = TRUE)
     if (zero.print != "0")
@@ -920,7 +996,7 @@ returns_rebalance <- function(prices, weights,
 t.p_returns <- function(x)
     t(as.matrix.p_returns(x))
 
-as.matrix.p_returns <- function(x, ...) {
+as.matrix.p_returns <- function(x, ..., na.rm = FALSE) {
 
     if (attr(x, "period") == "monthly" && is.null(dim(x))) {
         t <- attr(x, "t")
@@ -930,8 +1006,15 @@ as.matrix.p_returns <- function(x, ...) {
         mons  <- as.numeric(format(t, "%m"))
         tb <- array(NA, dim = c(length(unique(years)), 13L))
         tb[cbind(years - years[1L] + 1L, mons)] <- x
-        for (y in suy <- sort(unique(years)))
-            tb[y - years[1L] + 1L, 13L] <- prod(x[years==y & !is.na(x)] + 1) - 1
+
+        suy <- sort(unique(years))
+        for (y in suy <- sort(unique(years))) {
+            good.months <- years == y &
+                           if (na.rm) !is.na(x) else TRUE
+            tb[y - years[1L] + 1L, 13L] <-
+                prod(x[good.months] + 1) - 1
+        }
+
         rownames(tb) <- suy
         colnames(tb) <- c(1:12, "YTD")
         tb
@@ -995,7 +1078,10 @@ returns_position <- function(prices,
         warning("missing values at rebalance times")
 
     if (!length(when)) {
-        return(rep.int(0, nrow(prices))) ## FIXME: pad ignored?
+        if (is.null(pad))
+            return(       rep.int(0, nrow(prices) - 1))
+        else
+            return(c(pad, rep.int(0, nrow(prices) - 1)))
     }
 
     if (weights) {

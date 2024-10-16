@@ -72,7 +72,7 @@ NAVseries <- function(NAV,
 }
 
 
-print.NAVseries <- function(x, ...) {
+print.NAVseries <- function(x, ..., na.rm = FALSE) {
     if (!is.null(title <- attr(x, "title")))
         cat(title, "\n")
     else if (!is.null(instrument <- attr(x, "instrument")))
@@ -86,11 +86,11 @@ print.NAVseries <- function(x, ...) {
     NAV <- NAV[!isna]
 
     if (all(class(timestamp) == "Date")) {
-        mint <- format(min(timestamp, na.rm = TRUE), "%d %b %Y")
-        maxt <- format(max(timestamp, na.rm = TRUE), "%d %b %Y")
+        mint <- format(min(timestamp, na.rm = na.rm), "%d %b %Y")
+        maxt <- format(max(timestamp, na.rm = na.rm), "%d %b %Y")
     } else {
-        mint <- as.character(min(timestamp, na.rm = TRUE))
-        maxt <- as.character(max(timestamp, na.rm = TRUE))
+        mint <- as.character(min(timestamp, na.rm = na.rm))
+        maxt <- as.character(max(timestamp, na.rm = na.rm))
     }
     na <- sum(isna)
     first <- NAV[1L]
@@ -268,10 +268,10 @@ summary.NAVseries <- function(object, ...,
                                  zoo(bm.NAV, bm.timestamp))
                 if (.may_be_Date(timestamp) && monthly.te) {
                     r.te <- returns(tmp.NAV, period = "month")
-                    r.te <- sd(diff(t(coredata(r.te))), na.rm = TRUE)*sqrt(12)
+                    r.te <- sd(diff(t(coredata(r.te))), na.rm = na.rm)*sqrt(12)
                 } else {
                     r.te <- returns(tmp.NAV)
-                    r.te <- sd(diff(t(coredata(r.te))), na.rm = TRUE) *
+                    r.te <- sd(diff(t(coredata(r.te))), na.rm = na.rm) *
                         if (assume.daily) 16 else 1
                 }
             } else
