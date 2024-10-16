@@ -45,21 +45,8 @@ library("PMwR")
 library("zoo")
 @
 
-\noindent \textsc{pm}w\textsc{r} provides a small set of
-reliable, efficient and convenient tools that help with
-processing and analysing trade and portfolio data.  The
-package does not provide a complete application to be used
-`as is', but tools for creating such an application.
-
-\noindent \textsc{pm}w\textsc{r} grew out of various pieces of
-software that I have written since 2008.%
-\footnote{In the unlikely case that you come across a
-  really-old version of the package: it was called \textsc{pm}
-  before 2012.} %
-The interfaces of functions may still not be fully stable
-(e.g., argument names might still be made consistent across
-functions); in some cases, generic functions might be
-introduced.%
+\noindent \textsc{pm}w\textsc{r} provides a small set
+of reliable,\!%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \footnote{
 <<echo=false,results=hide>>=
@@ -73,21 +60,19 @@ if (requireNamespace("tinytest")) {
 } else
     nt <- "several hundred"
 @
-Even if \textsc{pm}w\textsc{r} is under development: the
-package is to provide well-documented and reliable code.
-For all computations, unit tests are included.  As of
-package version %
+\textsc{pm}w\textsc{r} is to provide well-documented
+and reliable code.  For all computations, unit tests
+are included.  As of package version %
 \Sexpr{pv}, \Sexpr{nt} tests are included.  These tests are
 stored in subdirectory \texttt{tinytest}.} %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-The \textbf{recommended practice} is therefore to
-\textbf{explicitly name arguments in function calls} and
-not pass arguments by position.  Any changes in argument
-names will be documented in the \texttt{NEWS} file
-(\,\url{https://enricoschumann.net/R/packages/PMwR/NEWS}\,)
-and so can be easily followed. More details are in the
-ChangeLog
-(\,\url{https://enricoschumann.net/R/packages/PMwR/ChangeLog}\,).
+efficient and convenient tools that help
+with processing and analysing trade and portfolio data.
+The package grew out of various pieces of software that
+I have written since 2008.%
+\footnote{In the unlikely case that you come across a
+  really-old version of the package: it was called \textsc{pm}
+  before 2012.} %
 
 The package is on \textsc{cran} and can be installed from
 there.  The very latest (i.e. development) version of the
@@ -125,7 +110,7 @@ provides functionality:
 % Several examples will be provided in the next section.
 % Other than that, there are a number of helper
 % functions.
-All details are in the manual:
+\noindent All details are in the manual:
 \begin{center}
 \url{https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
 \end{center}
@@ -145,18 +130,12 @@ discussed on the \texttt{R-SIG-Finance} mailing list:\smallskip
 \url{https://stat.ethz.ch/mailman/listinfo/r-sig-finance}
 
 
-% \noindent New package releases are announced on the
-%  \texttt{PMwR-news} mailing list:\smallskip
+%% \noindent An \textsc{rss} feed of the package
+%% \textsc{news} file is available at\smallskip
 
-% \url{https://lists.r-forge.r-project.org/cgi-bin/mailman/listinfo/nmof-pmwr}
-% \medskip
+%%  \url{https://enricoschumann.net/R/packages/PMwR/PMwR_news.xml}\,.
 
-% \noindent An \textsc{rss} feed of the package \textsc{news} file is
-% available at\smallskip
-
-% \url{https://enricoschumann.net/R/packages/PMwR/PMwR_news.xml}\,.
-
-% \medskip
+%% % \medskip
 
 
 
@@ -235,8 +214,5 @@ discussed on the \texttt{R-SIG-Finance} mailing list:\smallskip
 
 % vol targeting
 % A trivial strategy
-
-
-
 
 \end{document}
