@@ -44,7 +44,7 @@ within R:
 Applications, as long as they are finance-related,
 should be discussed on the R-SIG-Finance mailing list:
 
-[](https://stat.ethz.ch/mailman/listinfo/r-sig-finance)
+[https://stat.ethz.ch/mailman/listinfo/r-sig-finance](https://stat.ethz.ch/mailman/listinfo/r-sig-finance)
 
 
 
