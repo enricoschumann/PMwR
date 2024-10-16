@@ -14,21 +14,6 @@ analysing trade/portfolio data. The package does not
 provide a complete application that could be used 'as is',
 but building blocks for creating such an application.
 
-PMwR grew out of various pieces of software that I have
-written since 2008. The package has become fairly
-stable in recent years, though still not fully stable
-(e.g., argument names might still be made consistent
-across functions); in some cases, generic functions
-might be introduced. The *recommended* *practice* is
-therefore to *explicitly* *name* *arguments* *in*
-*function* *calls* (and not pass arguments by
-position). Any changes in argument names will be
-documented in the
-[NEWS file](https://enricoschumann.net/R/packages/PMwR/NEWS) and
-so can be followed easily. More details are in the
-[ChangeLog](https://enricoschumann.net/R/packages/PMwR/ChangeLog).
-
-
 ## What PMwR provides
 
 The package provides functions that can serve as building
@@ -55,6 +40,12 @@ within R:
     bug.report("[PMwR] Unexpected behaviour in function XXX",
                address = maintainer("PMwR"),
                package = "PMwR")
+
+Applications, as long as they are finance-related,
+should be discussed on the R-SIG-Finance mailing list:
+
+[](https://stat.ethz.ch/mailman/listinfo/r-sig-finance)
+
 
 
 
