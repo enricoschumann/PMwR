@@ -43,8 +43,8 @@ q32(price, sep = "(-|'|:)", warn = TRUE)
 }
 \references{
 
-  CME Group (2015). \emph{Treasury Futures Price Rounding Conventions.}
-  \url{https://www.cmegroup.com/education/articles-and-reports/treasury-futures-price-rounding-conventions.html}
+  CME Group (2020). \emph{Treasury Futures Price Rounding Conventions.}
+  %% \url{https://www.cmegroup.com/education/articles-and-reports/treasury-futures-price-rounding-conventions.html}
 }
 \author{
   Enrico Schumann

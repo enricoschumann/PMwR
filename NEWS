@@ -1,17 +1,18 @@
-v1.0-0  (2024-10-19; not yet released)
+v1.0-0  (2024-10-19)
 
   o 'returns': default for 'na.rm' is now FALSE. The
     warning about missing values, introduced in version
     v0.19-6, is handled by new argument 'na.warn' (with
-    default FALSE). Note that 'na.rm' always affected
-    only a limited number of cases of holding-period
-    return computations.
+    default FALSE). Note that 'na.rm' had always affected
+    only a limited number of cases of holding-period return
+    computations.
 
   o when computing portfolio returns, 'returns' no longer
     ignores argument 'pad' when no rebalancing takes place
 
-  o various minor changes and documentation updates.
-    See the ChangeLog for all details. The manual at
+  o various minor changes and documentation updates;
+    many tests have been added.  See the ChangeLog for
+    all details. The manual at
     https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
     has also been updated.
 
@@ -25,6 +26,8 @@ v0.19-6  (2024-09-17)
     series and argument 'na.rm' is not explicitly set.  This
     warning will be removed when the default of 'na.rm' is
     set to FALSE in the not-too-distant future version 1.0.
+
+  o 'pricetable' supports multivariate zoo series
 
   o various minor changes and documentation updates.
     See the ChangeLog for all details. The manual at

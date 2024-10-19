@@ -672,7 +672,7 @@ expect_equivalent(ans[[1]]$pl, 5)
 for (i in c(1, 5, 100, 1000, 10000)) {
     amount <- sample(rep(c(-100, 100), i))
     price <- runif(n = length(amount), min = 90, max = 110)
-    
+
     expect_equivalent(-sum(amount*price),
                       pl(pl(amount = amount, price = price)))
 }
