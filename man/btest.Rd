@@ -403,7 +403,7 @@ t    time      open  high  low   close
   \url{https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#backtesting}
 
   Schumann, E. (2018) \emph{Backtesting}.\cr
-  \url{https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3374195}
+  \doi{10.2139/ssrn.3374195}
 
 }
 \author{

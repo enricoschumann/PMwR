@@ -57,7 +57,7 @@ unit_prices(NAV, cashflows,
   portfolio with external cashflows, i.e. what is usually
   called time-weighted returns.  Note that 'cashflows' can
   also comprise other positions that are added or removed
-  from the portfolio without affecting performance. 
+  from the portfolio without affecting performance.
 
 }
 \value{%

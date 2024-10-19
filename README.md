@@ -23,7 +23,7 @@ blocks for many activities in portfolio management.
      functions for handling journals (sometimes called
      blotters). See ?journal and ?position.
 - Testing strategies: See ?btest (and this
-  [tutorial on backtesting](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3374195)).
+  [tutorial on backtesting](https://dx.doi.org/10.2139/ssrn.3374195)).
 - Computing profit/loss and returns: See ?returns,
      ?rc, ?pl or ?unit_prices.
 

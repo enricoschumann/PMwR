@@ -1,3 +1,7 @@
+v1.0-1  (2024-10-19)
+
+  o change URL to DOI, as requested by CRAN
+
 v1.0-0  (2024-10-19)
 
   o 'returns': default for 'na.rm' is now FALSE. The
