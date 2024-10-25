@@ -27,12 +27,11 @@
 \usage{
 journal(amount, \dots)
 
-as.journal(x, \dots)
-
-is.journal(x)
-
 \method{journal}{default}(amount, price, timestamp, instrument,
         id = NULL, account = NULL, \dots)
+
+as.journal(x, \dots)
+is.journal(x)
 
 \method{c}{journal}(\dots, recursive = FALSE)
 
@@ -47,16 +46,16 @@ is.journal(x)
 \method{sort}{journal}(x, decreasing = FALSE, by = "timestamp", \dots, na.last = TRUE)
 
 \method{summary}{journal}(object, by = "instrument", drop.zero = TRUE,
-      na.rm = FALSE, \dots)
+        na.rm = FALSE, \dots)
 
 \method{subset}{journal}(x, \dots)
 
 \method{[}{journal}(x, i, match.against = NULL,
-                    ignore.case = TRUE, perl = FALSE, fixed = FALSE,
-                    useBytes = FALSE, \dots, invert = FALSE)
+ ignore.case = TRUE, perl = FALSE, fixed = FALSE,
+ useBytes = FALSE, \dots, invert = FALSE)
 
 \method{[}{journal}(x, i, match.against = NULL,
-                    ignore.case = TRUE, \dots, invert = FALSE) <- value
+ ignore.case = TRUE, \dots, invert = FALSE) <- value
 
 \method{as.data.frame}{journal}(x, row.names = NULL, optional = FALSE, \dots)
 
