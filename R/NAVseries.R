@@ -633,13 +633,24 @@ as.NAVseries.zoo <- function(x,
     dx <- dim(x)
     if (!is.null(dx) && !any(dx == 1L)) {
         res <- vector("list", dx[2L])
+        if (length(instrument)) {
+            instrument <-
+                rep(instrument, dx[2L]/length(instrument))
+        }
+        if (length(title)) {
+            title <- rep(title, dx[2L]/length(title))
+        }
+        if (length(description)) {
+            description <-
+                rep(description, dx[2L]/length(description))
+        }
         for (i in seq_along(res)) {
             res[[i]] <-
                 NAVseries(NAV = coredata(x[, i]),
                           timestamp = index(x[, i]),
-                          instrument = instrument,
-                          title = title,
-                          description = description)
+                          instrument = instrument[[i]],
+                          title = title[[i]],
+                          description = description[[i]])
         }
         res
 
@@ -761,6 +772,6 @@ as.data.frame.summary.NAVseries <- function(x, ...){
       "Volatility      ",
       "Tracking error %")
 
-
-    do.call(rbind, x)
+    datetime.cols <- ""
+    as.data.frame(do.call(rbind, x)[, -c(1:3)])
 }

@@ -1,3 +1,11 @@
+2024-10-30  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/NAVseries.R (as.NAVseries.zoo): 'instrument',
+        'title' and 'description' are now passed on to
+        'NAVseries'
+        (as.data.frame.summary.NAVseries): 'as.data.frame'
+        method for summaries of NAVseries is exported
+
 2024-10-19  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 1.0-1
