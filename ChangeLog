@@ -1,3 +1,9 @@
+2024-11-08  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/btest.R: handle corner cases with initial
+        position, NAs in prices without position and burnin
+        of 0
+
 2024-10-30  Enrico Schumann  <es@enricoschumann.net>
 
         * R/NAVseries.R (as.NAVseries.zoo): 'instrument',
