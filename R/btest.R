@@ -737,12 +737,14 @@ btest  <- function(prices,
             abs_sx <- (abs(dx[nzero]) * tc) %*% open[nzero]
             tccum[t] <- abs_sx
             cash[t] <- initial.cash - sx - abs_sx
-            X[t, ] <- if (any(initial.position != 0)) initial.position else 0  + dx
+            X[t, ] <- dx + if (any(initial.position != 0))
+                               initial.position else 0
             rebalance <- FALSE
         } else {
             tccum[t] <- 0
             cash[t] <- initial.cash
-            X[t, ] <- ifelse(initial.position != 0, initial.position, 0)
+            X[t, ] <- if (any(initial.position != 0))
+                          initial.position else 0
         }
 
         ## cashflow
@@ -759,8 +761,8 @@ btest  <- function(prices,
                             Portfolio = Portfolio,
                             SuggestedPortfolio = SuggestedPortfolio,
                             Globals = Globals)
-
-        v[t] <- X[t, ] %*% mC[t, ] + cash[t]
+        nzero <- X[t, ] != 0
+        v[t] <- X[t, nzero] %*% mC[t, nzero] + cash[t]
         if (doPrintInfo)
             print.info(..., Open = Open, High = High, Low = Low,
                        Close = Close, Wealth = Wealth, Cash = Cash,
