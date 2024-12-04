@@ -1,3 +1,7 @@
+2024-12-04  Enrico Schumann  <es@enricoschumann.net>
+
+        * man/rebalance.Rd: fix documentation
+
 2024-11-08  Enrico Schumann  <es@enricoschumann.net>
 
         * R/btest.R: handle corner cases with initial
