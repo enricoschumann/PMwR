@@ -1,3 +1,15 @@
+v1.1-0  (2024-12-06; not yet released)
+
+  o an 'as.data.frame method' for summaries of NAVseries
+    has been added
+
+  o fixed: btest handles (rare) corner cases with initial
+    position, NAs in prices without position and burnin of
+    0 correctly
+
+  o fixed: the error message in 'unit_prices' could give
+    the wrong date with multiple cashflows on a single date
+
 v1.0-1  (2024-10-19)
 
   o change URL to DOI, as requested by CRAN

@@ -30,7 +30,7 @@ unit_prices <- function(NAV, cashflows,
     t.NAV <- match(T, NAV[[1]])
     if (any(is.na(t.NAV))) {
         stop("cashflow without matching NAV timestamp: ",
-             paste(cashflows[[1]][is.na(t.NAV)], collapse = ", "))
+             paste(T[is.na(t.NAV)], collapse = ", "))
     }
 
 
