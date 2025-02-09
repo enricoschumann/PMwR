@@ -165,3 +165,48 @@ expect_equivalent(rc1$period_contributions,
 
 expect_equivalent(rc1$total_contributions,
                   rc2$total_contributions)
+
+
+## -----------------------------
+
+## single period case
+w <- c(0.2, 0.5, 0.3)
+R <- c(0.1, 0.2, -0.01)
+
+expect_equivalent(sum(w*R),
+                  rc(R = R, weights = w)$total_contributions[["total"]])
+
+
+## named weights
+w <- c(domestic = 0.2, foreign = 0.5, bonds = 0.3)
+R <- c(0.1, 0.2, -0.01)
+rc(R = R, weights = w)
+expect_equal(names(rc(R = R, weights = w)$total_contributions)[1:3],
+             names(w))
+
+## named returns
+w <- c(0.2, 0.5, 0.3)
+R <- c(domestic = 0.1, foreign = 0.2, bonds = -0.01)
+rc(R = R, weights = w)
+expect_equal(names(rc(R = R, weights = w)$total_contributions)[1:3],
+             names(R))
+
+## mixed names
+w <- c(A=0.2, B=0.5, C=0.3)
+R <- c(domestic = 0.1, foreign = 0.2, bonds = -0.01)
+rc(R = R, weights = w)
+expect_equal(names(rc(R = R, weights = w)$total_contributions)[1:3],
+             names(R))
+
+
+
+
+
+w <- rbind(w, w)
+rownames(w) <- c("1", "2")
+R <- rbind(R, R)
+rc(R = R, weights = w)
+
+rc(R = R, weights = w, segments = c("A", "B", "C"))
+
+rc(R = R, weights = w, segments = c("A", "B", "C"))
