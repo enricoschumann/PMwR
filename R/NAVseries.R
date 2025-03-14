@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-24  Enrico Schumann
+## Copyright (C) 2008-25  Enrico Schumann
 
 NAVseries <- function(NAV,
                       timestamp,
@@ -633,13 +633,24 @@ as.NAVseries.zoo <- function(x,
     dx <- dim(x)
     if (!is.null(dx) && !any(dx == 1L)) {
         res <- vector("list", dx[2L])
+        if (length(instrument)) {
+            instrument <-
+                rep(instrument, dx[2L]/length(instrument))
+        }
+        if (length(title)) {
+            title <- rep(title, dx[2L]/length(title))
+        }
+        if (length(description)) {
+            description <-
+                rep(description, dx[2L]/length(description))
+        }
         for (i in seq_along(res)) {
             res[[i]] <-
                 NAVseries(NAV = coredata(x[, i]),
                           timestamp = index(x[, i]),
-                          instrument = instrument,
-                          title = title,
-                          description = description)
+                          instrument = instrument[[i]],
+                          title = title[[i]],
+                          description = description[[i]])
         }
         res
 
@@ -726,41 +737,9 @@ window.NAVseries <- function(x, start = NULL, end = NULL, ...) {
 
 as.data.frame.summary.NAVseries <- function(x, ...){
 
-    .col <- c("instrument", "title", "description",
-              "start", "end", "nobs", "nna",
-              "low",
-              "high", "low.when", "high.when",
-              "return", "return.annualised", "mdd",
-              "mdd.high", "mdd.low", "mdd.high.when",
-               "mdd.low.when", "mdd.recover.when",
-               "underwater", "volatility",
-              "volatility.up", "volatility.down")
-    .col.labels <-
-    c("Instrument",
-      "Title",
-      "Description",
-      "Start",
-      "End",
-      "n.observations",
-      "n.missing",
-      "_ time          ",
-      "_ time          ",
-      "Low             ",
-      "High            ",
-      "Return %        ",
-      "_ annualised?   ",
-      "_ time          ",
-      "_ time          ",
-      "_ peak          ",
-      "_ trough        ",
-      "Max. drawdown % ",
-      "_ recovery time ",
-      "underwater %    ",
-      "_ upside        ",
-      "_ downside      ",
-      "Volatility      ",
-      "Tracking error %")
+    ans <- do.call(rbind, x)
+    cols <- setdiff(colnames(ans),
+                    c("NAVseries", "NAV", "timestamp"))
 
-
-    do.call(rbind, x)
+    as.data.frame(ans[, cols])
 }

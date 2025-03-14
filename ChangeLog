@@ -1,3 +1,30 @@
+2025-03-14  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/NAVseries.R (as.data.frame.summary.NAVseries):
+        remove unused code; simplify method
+
+2024-12-06  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/unit_prices.R (unit_prices): fix error message
+
+2024-12-04  Enrico Schumann  <es@enricoschumann.net>
+
+        * man/rebalance.Rd: fix documentation
+
+2024-11-08  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/btest.R: handle corner cases with initial
+        position, NAs in prices without position and burnin
+        of 0
+
+2024-10-30  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/NAVseries.R (as.NAVseries.zoo): 'instrument',
+        'title' and 'description' are now passed on to
+        'NAVseries'
+        (as.data.frame.summary.NAVseries): 'as.data.frame'
+        method for summaries of NAVseries is exported
+
 2024-10-19  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 1.0-1

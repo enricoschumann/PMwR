@@ -65,7 +65,7 @@ replace_weight(weights, ..., prefix = TRUE, sep = "::")
 
   }
   \item{current.weights}{
-    logical. If \code{TRUE} (the default), the values in \code{current} are
+    logical. If \code{TRUE}, the values in \code{current} are
     interpreted as weights. If \code{FALSE}, \code{current} is
     interpreted as a position (i.e. notional/number of contracts).
   }
@@ -95,7 +95,7 @@ replace_weight(weights, ..., prefix = TRUE, sep = "::")
   not syntactically valid (see
   \code{\link{make.names}}), quote them. The passed
   vectors themselves should be passed as named
-  arguments: see examples.
+  arguments: see Examples.
 
 
 }

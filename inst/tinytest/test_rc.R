@@ -210,3 +210,69 @@ rc(R = R, weights = w)
 rc(R = R, weights = w, segments = c("A", "B", "C"))
 
 rc(R = R, weights = w, segments = c("A", "B", "C"))
+
+
+
+## -- ATTRIBUTION
+## Christopherson / Cari\~no 2009, Table 18.4--18.6
+segments <- c("Large Cap", "Small Cap", "Fixed Income")
+
+w    <- matrix(c(60, 10, 30,
+                 60, 10, 30,
+                 60, 10, 30), nrow = 3, byrow = TRUE)/100
+w.bm <- matrix(c(55,  5, 40,
+                 55,  5, 40,
+                 55,  5, 40), nrow = 3, byrow = TRUE)/100
+
+R    <- matrix(c(-3.7,-3.5,-0.1,
+                 +4.1,+3.7,+2.9,
+                 +3.5,+1.2,+1.0), nrow = 3, byrow = TRUE)/100
+
+R.bm <- matrix(c(-1.9,-5.3,-0.9,
+                 +2.1,+4.3,+2.4,
+                 +2.1,+1.4,+0.4), nrow = 3, byrow = TRUE)/100
+
+
+ans <- rc(R    = R,    weights = w,
+          R.bm = R.bm, weights.bm = w.bm)
+expect_equivalent(ans$period_contributions$total,
+                  rowSums(R * w))
+
+ans <- rc(R = R.bm, weights = w.bm)
+expect_equivalent(ans$period_contributions$total,
+                  rowSums(R.bm * w.bm))
+
+
+### single period (inputs don't have a dim)
+ans <- rc(R    = R[1, ],    weights = w[1, ],
+          R.bm = R.bm[1, ], weights.bm = w.bm[1, ],
+          method = "attribution",
+          segments = segments)
+
+expect_equivalent(round(ans$allocation[, "total"], 4),
+                  -0.0027)
+expect_equivalent(round(ans$selection[, "total"], 4),
+                  -0.0058)
+expect_equivalent(round(ans$interaction[, "total"], 4),
+                  -0.0008)
+
+### single period (inputs are row vectors)
+ans <- rc(R    = R[1, ,drop=FALSE],    weights = w[1, ,drop=FALSE],
+          R.bm = R.bm[1, ,drop=FALSE], weights.bm = w.bm[1, ,drop=FALSE],
+          method = "attribution",
+          segments = segments)
+
+expect_equivalent(round(ans$allocation[, "total"], 4),
+                  -0.0027)
+expect_equivalent(round(ans$selection[, "total"], 4),
+                  -0.0058)
+expect_equivalent(round(ans$interaction[, "total"], 4),
+                  -0.0008)
+
+
+
+### three periods
+rc(R    = R,    weights = w,
+   R.bm = R.bm, weights.bm = w.bm,
+   method = "attribution",
+   segments = segments)
