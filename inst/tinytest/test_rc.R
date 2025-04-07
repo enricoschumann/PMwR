@@ -276,3 +276,21 @@ rc(R    = R,    weights = w,
    R.bm = R.bm, weights.bm = w.bm,
    method = "attribution",
    segments = segments)
+
+
+
+
+
+
+
+seg <- c("A", "A", "A", "B", "B")
+n <- c(1:3, 1:2)
+r <- c(0.05, 0.02, -0.1, 0.02, -0.05)
+
+w <- c(0.2, 0.1, 0.0, 0.4, 0.3)
+b <- c(0.0, 0.2, 0.3, 0.1, 0.4)
+
+
+rc(R = t(r),
+   weights = t(w),
+   segments = seg)
