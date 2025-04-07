@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2023-24  Enrico Schumann
+## Copyright (C) 2023-25  Enrico Schumann
 
 rc <- function(R, weights, timestamp, segments = NULL,
                R.bm = NULL, weights.bm = NULL,
@@ -19,18 +19,27 @@ rc <- function(R, weights, timestamp, segments = NULL,
     if (is.null(segments)) {
 
         ## TODO: segments could also be a matrix
-        ##       (e.g. changing sectors over time),
-        ##       or list of vectors (more than one
-        ##       grouping)
+        ##       (e.g. changing sectors over time), or
+        ##       list of vectors (more than one
+        ##       grouping). [But if a list, it could be
+        ##       aggregated.]
 
-        segments <- if (!is.null(cr <- colnames(R)))
-                        cr
-                    else if (!is.null(cr <- colnames(weights)))
-                        cr
-                    else
-                        paste0("segment_", 1:ncol(weights))
-    } else if (length(segments) != ncol(R))
+        segments <-
+            if (!is.null(cr <- colnames(R)))
+                cr
+            else if (!is.null(cr <- colnames(weights)))
+                cr
+            else
+                paste0("segment_", 1:ncol(weights))
+    } else if (length(segments) != NCOL(R))
         warning("length(segments) != ncol(R)")
+
+    if (any(duplicated(segments))) {
+        u.s <- sort(unique(segments))
+        R <- t(tapply(R*weights, segments, sum))
+        weights <- t(tapply(weights, segments, sum))
+        segments <- u.s
+    }
 
     if (missing(timestamp))
         timestamp <- 1:nrow(R)
@@ -45,15 +54,6 @@ rc <- function(R, weights, timestamp, segments = NULL,
 
     nt <- length(timestamp)
 
-    if (any(duplicated(segments))) {
-        A <- array(NA_real_, dim = c(nt, length(unique(segments))))
-        colnames(A) <- sort(unique(segments))
-        R <- tapply(R*weights, segments, sum)
-        weights <- tapply(weights, segments, sum)
-        R <- R/weights
-        R <- R[segments]
-        weights <- weights[segments]
-    }
 
     ns <- length(segments)
     R0 <- R
@@ -121,26 +121,8 @@ rc <- function(R, weights, timestamp, segments = NULL,
                     total_contributions = total)
         attr(ans, "method") <- "contribution"
 
-    } else if (method %in% c("attribution")) {
-        r <- rowSums(R * weights)
-        b <- rowSums(R * weights.bm)
-
-        C <- (weights - weights.bm)*R
-        total <- .linking_logarithmic(C,
-                                      r = df[["total"]],
-                                      b = b)
-        adj_ct <- attr(total, "C.adj")
-        total <- c(total, total = sum(total))
-
-        ans <- list(period_contributions = C,
-                    total_contributions = total)
-
-        attr(ans, "method") <- "attribution"
-        attr(ans, "linking.method") <- "logarithmic"
-        attr(ans, "adjusted_period_contributions") <- adj_ct
-
     } else if (method %in%
-               c("topdown", "bottomup")) {
+               c("attribution", "topdown", "bottomup")) {
 
         if (!is.null(linking.method))
             .NotYetUsed("linking.method", FALSE)
@@ -182,7 +164,7 @@ rc <- function(R, weights, timestamp, segments = NULL,
                  else
                      dw *  R
              } else
-                 stop("unknown method")
+                 stop("unknown method: ", method)
 
         ## SELECTION
         S <- if (method == "attribution" || method == "bottomup") {
@@ -190,7 +172,7 @@ rc <- function(R, weights, timestamp, segments = NULL,
              } else if (method == "topdown") {
                  weights * (R - B)
              } else
-                 stop("unknown method")
+                 stop("unknown method: ", method)
 
         ## INTERACTION
         I <- if (method == "attribution") {
@@ -198,44 +180,29 @@ rc <- function(R, weights, timestamp, segments = NULL,
              } else if (method %in% c("topdown", "bottomup")) {
                  array(0, dim = dim(R))
              } else
-                 stop("unknown method")
+                 stop("unknown method: ", method)
 
-        ## if (method == "bhb") {
-        ##     alloc <-                     dw * R.bm   ## allocation
-        ##     selec <-            weights.bm  * dR  ## selection
-        ##     inter <-                     dw * dR  ## interaction
 
-        ## } else if (method == "bf") {
-        ##     alloc <-                     dw * (R.bm - R.bm.total)  ## allocation
-        ##     selec <-            weights.bm  * dR  ## selection
-        ##     inter <-                     dw * dR  ## interaction
-        ## }
+        tA <- rowSums(A)
+        tS <- rowSums(S)
+        tI <- rowSums(I)
 
-        ## if (is.character(interaction) && interaction == "top-down") {
-        ##     ## asset allocation first: interaction is combined with selection
-        ##     selec <-                weights * dR  ## selection
-        ##     inter <- rep(0, length(weights))
-
-        ## } else if (is.character(interaction) && interaction == "bottom-up") {
-        ##     ## selection first: interaction is combined with allocation
-        ##     if (method == "bhb")
-        ##         alloc <- (weights - weights.bm) * R
-        ##     else if (method == "bf")
-        ##         alloc <- (weights - weights.bm) * (R - R.bm.total)
-
-        ##     selec <-            weights.bm * dR  ## selection
-        ##     inter <- rep(0, length(weights))
-        ## }
-
-        ans <- list(allocation  = c(A, rowSums(A)),
-                    selection   = c(S, rowSums(S)),
-                    interaction = c(I, rowSums(I)))
-        names(ans$allocation)  <- c(segments, "total")
-        names(ans$selection)   <- c(segments, "total")
-        names(ans$interaction) <- c(segments, "total")
-        attr(ans, "method") <- "attribution (default)"
-        attr(ans, "linking.method") <- "none"
-
+        tt <- rc(cbind(tA, tS, tI), linking.method = linking.method)
+        total <- tt$total_contributions
+        names(total) <- c("allocation", "selection", "interaction", "total")
+        ans <- list(allocation  = cbind(A, total = tA),
+                    selection   = cbind(S, total = tS),
+                    interaction = cbind(I, total = tI),
+                    total       = total)
+        colnames(ans$allocation)  <- c(segments, "total")
+        colnames(ans$selection)   <- c(segments, "total")
+        colnames(ans$interaction) <- c(segments, "total")
+        labels <- c(attribution = "attribution (default)",
+                    topdown     = "attribution (top-down)",
+                    bottomup    = "attribution (bottom-up)")
+        attr(ans, "method") <- labels[method]
+        attr(ans, "linking.method") <- if (is.null(linking.method))
+                                           "none" else linking.method
 
     } else
         stop("unknown method")
