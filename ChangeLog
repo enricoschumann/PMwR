@@ -1,3 +1,9 @@
+2025-04-07  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/journal.R (print.summary.journal): new arguments
+        "columns" and "column.headers", which specify which
+        columns should be printed
+
 2025-03-14  Enrico Schumann  <es@enricoschumann.net>
 
         * R/NAVseries.R (as.data.frame.summary.NAVseries):

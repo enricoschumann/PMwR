@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-24  Enrico Schumann
+## Copyright (C) 2008-25  Enrico Schumann
 
 journal <- function(amount, ...) {
     if (match.call() == "journal()") {
@@ -384,12 +384,17 @@ summary.journal <- function(object,
                                 object, INDEX = INDEX,
                                 function(x)
                                 sum(x$price * abs(x$amount))))),
+                        abs_amount = as.matrix(
+                            c(tapply(
+                                object, INDEX = INDEX,
+                                function(x)
+                                sum(abs(x$amount))))),
                         first_t = as.matrix(
                             c(tapply(
                                 object$timestamp, INDEX = INDEX, min))),
                         last_t = as.matrix(
                             c(tapply(
-                                object$timestamp, INDEX = INDEX, min))),
+                                object$timestamp, INDEX = INDEX, max))),
                         stringsAsFactors = FALSE)
 
     stats$n_transactions0 <- NULL
@@ -422,7 +427,14 @@ summary.journal <- function(object,
 
 print.summary.journal <- function(x, month.names = month.abb,
                                   digits = NULL, na.print = "",
-                                  use.crayon = NULL, ...) {
+                                  use.crayon = NULL, ...,
+                                  columns = NULL,
+                                  column.headers = c("instrument"   = "Instrument",
+                                                     "n"            = "N",
+                                                     "average_buy"  = "Avg buy",
+                                                     "average_sell" = "Avg sell",
+                                                     "turnover"     = "Turnover",
+                                                     "abs_amount"   = "Amount")) {
     if (nrow(x) > 0L) {
         stats <- x
         has_instrument <- !all(is.na(stats$instrument))
@@ -451,12 +463,10 @@ print.summary.journal <- function(x, month.names = month.abb,
         if ("month" %in% colnames(stats))
             stats[["month"]][ .repeated(stats[["month"]]) ] <- ""
 
-        pretty.colnames <- c("n_transactions" = "n",
-                             "average_buy"  = "avg buy",
-                             "average_sell" = "avg sell")
-
-        tmp <- pretty.colnames[colnames(stats)]
-        colnames(stats)[!is.na(tmp)] <- tmp[!is.na(tmp)]
+        i <- match(colnames(stats), names(column.headers), nomatch = 0L)
+        colnames(stats)[i > 0] <- column.headers[i]
+        ## tmp <- pretty.colnames[colnames(stats)]
+        ## colnames(stats)[!is.na(tmp)] <- tmp[!is.na(tmp)]
 
         is.char <- which(unlist(lapply(stats, is.character)))
         ans <- rbind(stats[1, ], stats)
