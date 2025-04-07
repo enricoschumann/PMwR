@@ -23,7 +23,7 @@
 \SweaveOpts{keep.source = TRUE, eps = TRUE}
 
 <<echo=false>>=
-options(continue = "  ", digits = 3, width = 62, useFancyQuotes = FALSE)
+options(continue = "  ", digits = 3, width = 55, useFancyQuotes = FALSE)
 pv <- packageVersion("PMwR")
 pv <- gsub("(.*)[.](.*)", "\\1-\\2", pv)
 @
@@ -93,7 +93,7 @@ returns(head(cbind(DAX, REXP), 5))
 @ 
 
 \noindent When a calendar timestamp is available,
-\texttt{returns} may also aggregate prices over
+\texttt{returns} can also aggregate prices over
 specific holding periods.
 
 <<>>=
