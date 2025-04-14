@@ -1,3 +1,10 @@
+2025-04-14  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/position.R (position.default): fix handling of
+        character timestamps (or of other non-numeric
+        classes) that won't work with `findInterval`,
+        through locally mapping them to numeric via `xtfrm`
+
 2025-04-07  Enrico Schumann  <es@enricoschumann.net>
 
         * R/journal.R (print.summary.journal): new arguments

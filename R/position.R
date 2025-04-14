@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-23  Enrico Schumann
+## Copyright (C) 2008-25  Enrico Schumann
 
 position <- function(amount, ...)
     UseMethod("position")
@@ -66,6 +66,14 @@ position.default <- function(amount, timestamp, instrument,
     amount <- rep(amount, len/length(amount))
     timestamp <- rep(timestamp, len/length(timestamp))
     instrument <- rep(instrument, len/length(instrument))
+
+    timestamp.xtfrm <- TRUE
+    if (inherits(timestamp, "numeric") ||
+        inherits(timestamp, "Date") ||
+        inherits(timestamp, "POSIXt")) {
+        timestamp.xtfrm <- FALSE
+    }
+    
 
     if (!is.null(account)) {
         ## if 'account' is specified, paste
@@ -185,13 +193,21 @@ position.default <- function(amount, timestamp, instrument,
             m <- uniq.instrument[i] == instrument
             if (!sum(m))
                 next
-            ## m <- fmatch(i, instrument)
-            ## instrument[m]
-            ## amount[m]
-            ## timestamp[m]
-            cum.amount <- cumsum(amount[m])
 
-            j <- findInterval(uniq.when, timestamp[m])
+            cum.amount <- cumsum(amount[m])
+            if (timestamp.xtfrm) {
+
+                tmp <- xtfrm(c(uniq.when, timestamp[m]))
+                tmp1 <- length(uniq.when)
+                tmp2 <- length(tmp) - tmp1
+                
+                j <- findInterval(
+                    tmp[seq_len(tmp1)],
+                    tmp[seq(tmp1 + 1, to = length(tmp))])
+                
+            } else {
+                j <- findInterval(uniq.when, timestamp[m])
+            }
             good <- j > 0
             pos[good, i] <- cum.amount[j[good]]
 
