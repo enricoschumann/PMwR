@@ -73,7 +73,7 @@ position.default <- function(amount, timestamp, instrument,
         inherits(timestamp, "POSIXt")) {
         timestamp.xtfrm <- FALSE
     }
-    
+
 
     if (!is.null(account)) {
         ## if 'account' is specified, paste
@@ -200,11 +200,11 @@ position.default <- function(amount, timestamp, instrument,
                 tmp <- xtfrm(c(uniq.when, timestamp[m]))
                 tmp1 <- length(uniq.when)
                 tmp2 <- length(tmp) - tmp1
-                
+
                 j <- findInterval(
                     tmp[seq_len(tmp1)],
                     tmp[seq(tmp1 + 1, to = length(tmp))])
-                
+
             } else {
                 j <- findInterval(uniq.when, timestamp[m])
             }
@@ -268,6 +268,10 @@ position.journal <- function(amount, when,
                      use.names = FALSE,
                      ...)
 }
+
+
+position.data.frame <- position.journal
+
 
 position.btest <- function(amount, when, ...,
                            include.cash = FALSE) {

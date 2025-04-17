@@ -75,17 +75,15 @@ expect_equal(instrument(ans), letters[1:3])
 
 
 
-## character timestamps
+## character timestamps + data.frame (no journal)
 J.char <- read.table(text = "
 instrument,timestamp,amount,price
 A,2025-04-08 15:00:00,  10, 10
 A,2025-04-08 16:00:00,  -5, 20
 B,2025-04-08 22:00:00, 100, 5
 ", sep = ",", header = TRUE)
-J.char <- as.journal(J.char)
 
 J <- J.char
-J$timestamp <- as.POSIXct(J$timestamp)
 
 
 t.valuation <- paste(as.Date("2025-04-08") + 0:1, "17:59:59")

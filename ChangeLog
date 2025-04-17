@@ -1,3 +1,8 @@
+2025-04-17  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/position.R (position.data.frame): add method,
+        similar to `pl.data.frame`, added 2017-12-08
+
 2025-04-14  Enrico Schumann  <es@enricoschumann.net>
 
         * R/position.R (position.default): fix handling of
