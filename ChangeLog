@@ -1,3 +1,8 @@
+2025-04-18  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/pl.R (print.pl): set scipen to 9999, since
+        higher values trigger a warning in R 4.5
+
 2025-04-17  Enrico Schumann  <es@enricoschumann.net>
 
         * R/position.R (position.data.frame): add method,

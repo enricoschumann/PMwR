@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-24  Enrico Schumann
+## Copyright (C) 2008-25  Enrico Schumann
 
 pl <- function(amount, ...)
     UseMethod("pl")
@@ -20,7 +20,7 @@ print.pl <- function(x, ...,
         bold <- identity
 
     oo <- getOption("scipen")
-    options(scipen = 1e8)
+    options(scipen = 9999)
     on.exit(options(scipen = oo))
 
     ni <- length(x)
