@@ -56,7 +56,7 @@ pl(amount, \dots )
     \code{\link{numeric}} or \code{\link{character}}.
     Timestamps should typically be sortable.}
 
-  \item{along.timestamp}{logical; or a a vector of
+  \item{along.timestamp}{logical; or a vector of
     timestamps. If the latter, \code{vprice} must be
     specified as well. See the vignette
     \dQuote{Profit/Loss for Open Positions}
