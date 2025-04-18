@@ -1,12 +1,5 @@
 v1.1-0  (2025-04-14; under development)
 
-  o an 'as.data.frame method' for summaries of NAVseries
-    has been added
-
-  o 'position' can now be used directly on data.frames,
-    as long as they have appropriately-named columns
-    (i.e. "amount", "timestamp", etc.)
-
   o fixed: position with an "along.timestamp" works
     (again) with character timestamps
 
@@ -17,7 +10,20 @@ v1.1-0  (2025-04-14; under development)
   o fixed: the error message in 'unit_prices' could give
     the wrong date with multiple cashflows on a single date
 
+  o an 'as.data.frame method' for summaries of NAVseries
+    has been added
+
+  o 'position' can now be used directly on data.frames,
+    as long as they have appropriately-named columns
+    (i.e. "amount", "timestamp", etc.)
+
   o ....
+
+  o various minor changes and documentation updates;
+    many tests have been added.  See the ChangeLog for
+    all details. The manual at
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    has also been updated.
 
 v1.0-1  (2024-10-19)
 
