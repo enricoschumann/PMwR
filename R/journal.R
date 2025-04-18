@@ -110,6 +110,7 @@ print.journal <- function(x, ...,
 
     ndf <- colnames(df)
     first.cols <- c("instrument", "timestamp", "amount", "price")
+    first.cols <- first.cols[first.cols %in% ndf]
     df <- df[TRUE, c(first.cols, setdiff(ndf, first.cols)), drop = FALSE]
 
     if (!is.null(exclude))

@@ -727,3 +727,13 @@ position(J, when = t.valuation)
 ##                     A   B
 ## 2025-04-08 17:59:59 5   0
 ## 2025-04-09 17:59:59 5 100
+
+
+
+
+## --------------------------------------------------
+
+## invalid journals
+journal(1:5)
+J <- structure(list(amount = 1:5), class = "journal")
+print(J)
