@@ -101,8 +101,8 @@ print.journal <- function(x, ...,
         return(invisible(x))
     }
     oo <- getOption("scipen")
-    options(scipen = 1e8)
     on.exit(options(scipen = oo))
+    options(scipen = 9999)
 
     df <- as.data.frame(unclass(x),
                         row.names = seq_len(lx),

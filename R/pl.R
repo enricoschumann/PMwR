@@ -20,8 +20,8 @@ print.pl <- function(x, ...,
         bold <- identity
 
     oo <- getOption("scipen")
-    options(scipen = 9999)
     on.exit(options(scipen = oo))
+    options(scipen = 9999)
 
     ni <- length(x)
 

@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-23  Enrico Schumann
+## Copyright (C) 2008-25  Enrico Schumann
 
 rebalance <- function(current,
                       target,
@@ -193,7 +193,7 @@ print.rebalance <- function(x, ..., drop.zero = TRUE) {
 
     sp <- getOption("scipen")
     on.exit(options(scipen = sp))
-    options(scipen = 1e8)
+    options(scipen = 9999)
 
     all.names <- x[["instrument"]]
     if (all(is.na(all.names)))
