@@ -109,3 +109,15 @@ t.valuation <- as.POSIXct(t.valuation)
 p2 <- position(J, when = t.valuation)
 expect_equivalent(as.matrix(p1),
                   as.matrix(p2))
+
+
+
+
+
+
+## empty journals
+x <- position(journal())
+expect_equal(dim(as.matrix(x)), c(1, 0))
+
+position(instrument = factor(c("A", "B"), levels = LETTERS[1:3]),
+         amount = 1)

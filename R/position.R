@@ -90,7 +90,12 @@ position.default <- function(amount, timestamp, instrument,
     if (missing(when)) {
         ## if 'when' is missing, we can sum the
         ## amounts. Missing timestamps do no harm.
-        when <- max(timestamp, na.rm = TRUE)
+
+        if (length(timestamp)) {
+            when <- max(timestamp, na.rm = TRUE)
+        } else {
+            when <- Inf
+        }
 
         uniq.instrument <- sort(unique(instrument))
         pos <- array(0, dim = c(1, length(uniq.instrument)))
@@ -241,9 +246,6 @@ position.default <- function(amount, timestamp, instrument,
     } else
         attr(pos, "instrument") <- uniq.instrument
     attr(pos, "timestamp") <- if (no.timestamp) NA else when
-    ## attr(pos, "instrument") <- gsub(".*%SEP%(.*?)", "\\1", uniq.instrument)
-    ## if (!is.null(account))
-    ##     attr(pos, "account") <- gsub("(.*)%SEP%.*", "\\1", uniq.instrument)
     attr(pos, "unit") <- "amount"
     class(pos) <- "position"
     pos

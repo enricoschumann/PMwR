@@ -1,3 +1,10 @@
+2025-05-03  Enrico Schumann  <es@enricoschumann.net>
+
+	* R/position.R (position.default): if `when` is
+	missing, and there is no timestamp -- e.g. for an
+	empty journal --, `when` is set to `Inf`, which
+	suppresses a (harmless) warning
+
 2025-04-19  Enrico Schumann  <es@enricoschumann.net>
 
         * R/rebalance.R (print.rebalance): set scipen to 9999,
