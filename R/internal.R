@@ -206,6 +206,8 @@ debug_prices <- function(nobs, na, base = 100) {
 
 .copy_fw <- function(x) {
     f <- which(is.finite(x))
+    if (!length(f) || length(f) == length(x))
+        return(x)
     if (f[1L] != 1L)
         f <- c(1L, f)
     runs <- c(f, length(x) + 1L)
@@ -215,6 +217,8 @@ debug_prices <- function(nobs, na, base = 100) {
 
 .copy_fw_matrix <- function(x) {
     f <- which(is.finite(x[, 1L]))
+    if (!length(f) || length(f) == nrow(x))
+        return(x)
     if (f[1L] != 1L)
         f <- c(1L, f)
     runs <- c(f, nrow(x) + 1L)

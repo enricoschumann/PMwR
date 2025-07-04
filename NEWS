@@ -1,11 +1,11 @@
-v1.1-0  (2025-04-14; under development)
+v1.1-0  (2025-07-03; under development)
 
   o fixed: position with an "along.timestamp" works
     (again) with character timestamps
 
   o fixed: btest handles (rare) corner cases with initial
-    position, NAs in prices without position and burnin of
-    0 correctly
+    position, NAs in prices without position and burnin
+    of 0 correctly
 
   o fixed: the error message in 'unit_prices' could give
     the wrong date with multiple cashflows on a single date

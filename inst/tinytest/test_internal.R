@@ -29,3 +29,41 @@
 
 
 
+
+
+## x <- c(9, NA, 2)
+## PMwR:::.copy_fw(x)
+
+## x <- c(9, NA, NA)
+## PMwR:::.copy_fw(x)
+
+## x <- c(NA, NA, 1)
+## PMwR:::.copy_fw(x)
+
+## x <- c(1, 2, 3)
+## PMwR:::.copy_fw(x)
+
+## x <- c(NA, NA, NA)
+## PMwR:::.copy_fw(x)
+
+
+
+## x <- c(9, NA, 2)
+## x <- cbind(x, x)
+## PMwR:::.copy_fw_matrix(x)
+
+## x <- c(9, NA, NA)
+## x <- cbind(x, x)
+## PMwR:::.copy_fw_matrix(x)
+
+## x <- c(NA, NA, 1)
+## x <- cbind(x, x)
+## PMwR:::.copy_fw_matrix(x)
+
+## x <- c(1, 2, 3)
+## x <- cbind(x, x)
+## PMwR:::.copy_fw_matrix(x)
+
+## x <- c(NA, NA, NA)
+## x <- cbind(x, x)
+## PMwR:::.copy_fw_matrix(x)
