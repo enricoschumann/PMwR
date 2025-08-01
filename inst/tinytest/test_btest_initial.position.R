@@ -77,7 +77,6 @@ bt <- btest(list(P),
             signal = function() NULL)
 expect_equal(bt$wealth, 100:110)
 
-debug(btest)
 bt <- btest(list(P),
             initial.position = c(1, 0),
             b = 0,
