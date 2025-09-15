@@ -50,8 +50,8 @@ split_adjust(x, t, ratio, backward = TRUE)
 }
 \details{
 
-  The function transforms \eqn{x}{\code{x}} into returns, and
-  with those returns specified in \eqn{t}{\code{t}} calculated
+  The function transforms \eqn{x}{\code{x}} into returns.
+  The return in \eqn{t}{\code{t}} is calculated
   as
 
   \deqn{\frac{x_t + D_t}{x_{t-1}} - 1\,,}{(x(t) + D(t))/x(t-1) - 1,}
