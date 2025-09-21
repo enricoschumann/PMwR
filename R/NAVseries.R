@@ -735,11 +735,17 @@ window.NAVseries <- function(x, start = NULL, end = NULL, ...) {
     ans
 }
 
-as.data.frame.summary.NAVseries <- function(x, ...){
+as.data.frame.summary.NAVseries <-
+function(x, ...) {
 
-    ans <- do.call(rbind, x)
-    cols <- setdiff(colnames(ans),
-                    c("NAVseries", "NAV", "timestamp"))
+    ## x is a list of lists:
+    ##   each 'sublist' contains values
+    ##   'NAVseries', 'NAV', ...
 
-    as.data.frame(ans[, cols])
+    drop <- c("NAVseries", "NAV", "timestamp")
+    N <- setdiff(names(x[[1L]]), drop)
+
+    ans <- lapply(x, `[`, N)
+    ans <- lapply(ans, list2DF)
+    do.call(rbind, ans)
 }
