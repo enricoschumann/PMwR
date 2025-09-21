@@ -1,3 +1,9 @@
+2025-09-21  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/NAVseries.R (as.data.frame.summary.NAVseries):
+        the columns of the dataframe should now be atomic
+        vectors, not lists
+
 2025-07-04  Enrico Schumann  <es@enricoschumann.net>
 
         * R/internal.R (.copy_fw, .copy_fw_matrix): handle
