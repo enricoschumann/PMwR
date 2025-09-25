@@ -1,5 +1,5 @@
 ## operations: +, -, /, ...
-
+require(PMwR);require(tinytest)
 p1 <- position(c(a = 1, b = 2))
 p2 <- position(c(b = 2, c = 3))
 
@@ -13,6 +13,31 @@ expect_equal(-p1,
              position(c(a = -1, b =-2)))
 
 expect_equal(+p1, p1)
+
+expect_equal(p1 > p2,
+             c(a = TRUE,  b = FALSE, c = FALSE))
+expect_equal(p1 < p2,
+             c(a = FALSE, b = FALSE, c = TRUE))
+expect_equal(p1 >= p2,
+             c(a = TRUE,  b = TRUE, c = FALSE))
+expect_equal(p1 <= p2,
+             c(a = FALSE, b = TRUE, c = TRUE))
+expect_equal(p1 == p2,
+             c(a = FALSE, b = TRUE, c = FALSE))
+expect_equal(p1 | p2,
+             c(a = TRUE,  b = TRUE, c = TRUE))
+expect_equal(!(p1 | p2),
+             !c(a = TRUE,  b = TRUE, c = TRUE))
+expect_equal(!p1,
+             c(a = TRUE,  b = TRUE, c = TRUE))
+
+
+p1 <- position(c(a = 1, b = 2))
+p2 <- position(c(b = NA, c = NA))
+
+expect_equal(p1 + p2,
+             position(c(a = 1, b = NA, c = NA)))
+
 
 
 

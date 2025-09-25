@@ -301,9 +301,14 @@ position.btest <- function(amount, when, ...,
 }
 
 print.position <- function(x, ..., sep = ":") {
+    original.x <- x
+    if (is.null(dim(x))) {
+        warning("position without ", sQuote("dim"))
+        dim(x) <- c(1, length(x))
+    }
     if (dim(x)[[2L]] == 0L)  ## empty position
         return(invisible(x))
-    original.x <- x
+
     ## if (!is.na(sep))
     ##     .NotYetUsed("sep")
     account <- attr(x, "account")
@@ -374,6 +379,7 @@ as.data.frame.position <- function(x, ...) {
 }
 
 Ops.position <- function(e1, e2) {
+
     if (nargs() == 1L) {
         switch(.Generic,
                `+` = {},
@@ -394,23 +400,103 @@ Ops.position <- function(e1, e2) {
         return(e1)
     }
 
-    if (inherits(e1, "position") && inherits(e2, "position") &&
+    if (inherits(e1, "position") &&
+        inherits(e2, "position") &&
         all(!is.na(i1 <- instrument(e1))) &&
         all(!is.na(i2 <- instrument(e2))) ) {
+
         allI <- sort(unique(c(i1, i2)))
-        ans <- numeric(length(allI))
-        ans[match(instrument(e1), allI)] <- as.numeric(e1)
-        ii <- match(instrument(e2), allI)
-        if (.Generic == "+") {
-            ans[ii] <- ans[ii] + as.numeric(e2)
-        } else if (.Generic == "-") {
-            ans[ii] <- ans[ii] - as.numeric(e2)
-        } else if (.Generic == "/") {
-            ans[ii] <- ans[ii] / as.numeric(e2)
-        }
-        position.default(ans, instrument = allI,
-                         timestamp = rep(attr(e1, "timestamp"),
-                                         length(allI)))
+        m1 <- match(i1, allI)
+        m2 <- match(i2, allI)
+
+        switch(.Generic,
+               `+` = {
+                   ans <- numeric(length(allI))
+                   ans[m1] <- as.numeric(e1)
+                   ans[m2] <- ans[m2] + as.numeric(e2)
+                   position.default(
+                       ans,
+                       instrument = allI,
+                       timestamp = rep(attr(e1, "timestamp"),
+                                       length(allI)))
+               },
+               `-` = {
+                   ans <- numeric(length(allI))
+                   ans[m1] <- as.numeric(e1)
+                   ans[m2] <- ans[m2] - as.numeric(e2)
+                   position.default(
+                       ans,
+                       instrument = allI,
+                       timestamp = rep(attr(e1, "timestamp"),
+                                       length(allI)))
+               },
+               `/` = {
+                   ans <- numeric(length(allI))
+                   ans[m1] <- as.numeric(e1)
+                   ans[m2] <- ans[m2] / as.numeric(e2)
+                   position.default(
+                       ans,
+                       instrument = allI,
+                       timestamp = rep(attr(e1, "timestamp"),
+                                       length(allI)))
+               },
+
+               `|` = {
+                   tmp1 <- tmp2 <- numeric(length(allI))
+                   names(tmp1) <- allI
+                   tmp1[m1] <- as.numeric(e1)
+                   tmp2[m2] <- as.numeric(e2)
+                   tmp1 | tmp2
+               },
+
+               `&` = {
+                   tmp1 <- tmp2 <- numeric(length(allI))
+                   names(tmp1) <- allI
+                   tmp1[m1] <- as.numeric(e1)
+                   tmp2[m2] <- as.numeric(e2)
+                   tmp1 & tmp2
+               },
+
+               `>` = {
+                   tmp1 <- tmp2 <- numeric(length(allI))
+                   names(tmp1) <- allI
+                   tmp1[m1] <- as.numeric(e1)
+                   tmp2[m2] <- as.numeric(e2)
+                   tmp1 > tmp2
+               },
+
+               `>=` = {
+                   tmp1 <- tmp2 <- numeric(length(allI))
+                   names(tmp1) <- allI
+                   tmp1[m1] <- as.numeric(e1)
+                   tmp2[m2] <- as.numeric(e2)
+                   tmp1 >= tmp2
+               },
+
+               `<` = {
+                   tmp1 <- tmp2 <- numeric(length(allI))
+                   names(tmp1) <- allI
+                   tmp1[m1] <- as.numeric(e1)
+                   tmp2[m2] <- as.numeric(e2)
+                   tmp1 < tmp2
+               },
+
+               `<=` = {
+                   tmp1 <- tmp2 <- numeric(length(allI))
+                   names(tmp1) <- allI
+                   tmp1[m1] <- as.numeric(e1)
+                   tmp2[m2] <- as.numeric(e2)
+                   tmp1 <= tmp2
+               },
+
+               `==` = {
+                   tmp1 <- tmp2 <- numeric(length(allI))
+                   names(tmp1) <- allI
+                   tmp1[m1] <- as.numeric(e1)
+                   tmp2[m2] <- as.numeric(e2)
+                   tmp1 == tmp2
+               })
+
     } else
         NextMethod(.Generic)
 }

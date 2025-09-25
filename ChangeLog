@@ -1,3 +1,11 @@
+2025-09-25  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/position.R (print.position): protect against
+        dim-less objects, e.g. when having called 'drop' on
+        a single-timestamp position
+        (Ops.position): support generics `>`, `>=`,
+        `<`, `<=`, `==`, `|` and `&`
+
 2025-09-21  Enrico Schumann  <es@enricoschumann.net>
 
         * R/NAVseries.R (as.data.frame.summary.NAVseries):
@@ -1032,8 +1040,8 @@
 
         * DESCRIPTION (Version): 0.10-0
 
-        * R/position.R (Ops.position): allow +,-,/ only
-        when both operands (i.e. positions) have
+        * R/position.R (Ops.position): allow `+`, `-` and
+        `/` only when both operands (i.e. positions) have
         instrument information
 
 2018-10-18  Enrico Schumann  <es@enricoschumann.net>
