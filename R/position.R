@@ -10,6 +10,13 @@ position.default <- function(amount, timestamp, instrument,
                              use.names = NULL, ...) {
 
     dim.amount <- dim(amount)
+
+    if (length(dim.amount) == 1L) {
+        amount <- c(amount)
+        dim.amount <- NULL
+    }
+    
+    
     is.amount.matrix  <- !is.null(dim.amount) &&
                          sum(dim.amount > 1L) == 2L
     is.amount.matrix1 <- !is.null(dim.amount) &&

@@ -32,7 +32,11 @@ position(amount, \dots)
     alternatively, several keywords are supported. See Details.
   }
   \item{amount}{%
-    numeric or an object of class \code{\link{journal}}
+
+    numeric or an object of class \code{\link{journal}}.
+    If \code{amount} is a one-dimensional array, the
+    dimension is dropped.
+
   }
   \item{timestamp}{%
     numeric or character: timestamps, must be sortable
@@ -98,6 +102,7 @@ position(amount, \dots)
   timestamp range of the journal. The latter keywords can only
   work if \code{timestamp} can be coerced to
   \code{\link{Date}}.
+
 
 }
 \value{%

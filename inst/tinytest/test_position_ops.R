@@ -1,5 +1,4 @@
 ## operations: +, -, /, ...
-require(PMwR);require(tinytest)
 p1 <- position(c(a = 1, b = 2))
 p2 <- position(c(b = 2, c = 3))
 
