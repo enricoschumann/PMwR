@@ -1,3 +1,8 @@
+2025-10-07  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/position.R (Ops.position): generics such as `+`
+        or `>` now respect timestamp
+
 2025-09-26  Enrico Schumann  <es@enricoschumann.net>
 
         * R/position.R (position.default): if 'amount' is a

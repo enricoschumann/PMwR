@@ -15,8 +15,8 @@ position.default <- function(amount, timestamp, instrument,
         amount <- c(amount)
         dim.amount <- NULL
     }
-    
-    
+
+
     is.amount.matrix  <- !is.null(dim.amount) &&
                          sum(dim.amount > 1L) == 2L
     is.amount.matrix1 <- !is.null(dim.amount) &&
@@ -386,7 +386,6 @@ as.data.frame.position <- function(x, ...) {
 }
 
 Ops.position <- function(e1, e2) {
-
     if (nargs() == 1L) {
         switch(.Generic,
                `+` = {},
@@ -407,105 +406,151 @@ Ops.position <- function(e1, e2) {
         return(e1)
     }
 
+    ## both operands are positions ...
     if (inherits(e1, "position") &&
-        inherits(e2, "position") &&
-        all(!is.na(i1 <- instrument(e1))) &&
-        all(!is.na(i2 <- instrument(e2))) ) {
+        inherits(e2, "position")) {
+
+        i1 <- instrument(e1)
+        i2 <- instrument(e2)
+        if (
+            !((length(i1) == 1L && is.na(i1) &&
+               length(i2) == 1L && is.na(i2))
+                ||
+              (all(!is.na(i1)) && all(!is.na(i2))))
+        ) {
+            warning("missing values in instruments")
+            NextMethod(.Generic)
+        }
+        
+        t1 <- attr(e1, "timestamp")
+        t2 <- attr(e2, "timestamp")
+        if (length(t1) != length(t2))
+            NextMethod(.Generic)
+
+        m <- match(t1, t2)
+        if (
+            !(( length(t1) == 1L && is.na(t1) &&
+                length(t2) == 1L && is.na(t2) )
+                ||
+              ( all(!is.na(t1)) &&
+                all(!is.na(t2)) &&
+                all(t1 == t2[m]) )))
+            NextMethod(.Generic)
 
         allI <- sort(unique(c(i1, i2)))
         m1 <- match(i1, allI)
         m2 <- match(i2, allI)
 
+        ans <- array(0, dim = c(length(t1),
+                                length(allI)))
         switch(.Generic,
                `+` = {
-                   ans <- numeric(length(allI))
-                   ans[m1] <- as.numeric(e1)
-                   ans[m2] <- ans[m2] + as.numeric(e2)
-                   position.default(
-                       ans,
-                       instrument = allI,
-                       timestamp = rep(attr(e1, "timestamp"),
-                                       length(allI)))
+                   ans[, m1] <- as.matrix(e1)
+                   ans[, m2] <- ans[, m2] + as.matrix(e2)[m, ]
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   structure(ans,
+                             instrument = allI,
+                             timestamp = t1,
+                             class = "position")
                },
                `-` = {
-                   ans <- numeric(length(allI))
-                   ans[m1] <- as.numeric(e1)
-                   ans[m2] <- ans[m2] - as.numeric(e2)
-                   position.default(
-                       ans,
-                       instrument = allI,
-                       timestamp = rep(attr(e1, "timestamp"),
-                                       length(allI)))
+                   ans[, m1] <- as.matrix(e1)
+                   ans[, m2] <- ans[, m2] - as.matrix(e2)[m, ]
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   structure(ans,
+                             instrument = allI,
+                             timestamp = t1,
+                             class = "position")
                },
+
                `/` = {
-                   ans <- numeric(length(allI))
-                   ans[m1] <- as.numeric(e1)
-                   ans[m2] <- ans[m2] / as.numeric(e2)
-                   position.default(
-                       ans,
-                       instrument = allI,
-                       timestamp = rep(attr(e1, "timestamp"),
-                                       length(allI)))
+                   ans[, m1] <- as.matrix(e1)
+                   ans[, m2] <- ans[, m2] / as.matrix(e2)[m, ]
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   structure(ans,
+                             instrument = allI,
+                             timestamp = t1,
+                             class = "position")
+               },
+
+               `*` = {
+                   stop("multiplying a position by a position is not defined")
                },
 
                `|` = {
-                   tmp1 <- tmp2 <- numeric(length(allI))
-                   names(tmp1) <- allI
-                   tmp1[m1] <- as.numeric(e1)
-                   tmp2[m2] <- as.numeric(e2)
-                   tmp1 | tmp2
+                   ans[, m1] <- as.matrix(e1)
+                   ans[, m2] <- ans[, m2] | as.matrix(e2)[m, ]
+                   storage.mode(ans) <- "logical"
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   ans
                },
 
                `&` = {
-                   tmp1 <- tmp2 <- numeric(length(allI))
-                   names(tmp1) <- allI
-                   tmp1[m1] <- as.numeric(e1)
-                   tmp2[m2] <- as.numeric(e2)
-                   tmp1 & tmp2
+                   ans[, m1] <- as.matrix(e1)
+                   ans[, m2] <- ans[, m2] & as.matrix(e2)[m, ]
+                   storage.mode(ans) <- "logical"
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   ans
                },
 
                `>` = {
-                   tmp1 <- tmp2 <- numeric(length(allI))
-                   names(tmp1) <- allI
-                   tmp1[m1] <- as.numeric(e1)
-                   tmp2[m2] <- as.numeric(e2)
-                   tmp1 > tmp2
+                   ans2 <- ans
+                   ans [, m1] <- as.matrix(e1)
+                   ans2[, m2] <- as.matrix(e2)
+                   ans <- ans > ans2
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   ans
                },
 
                `>=` = {
-                   tmp1 <- tmp2 <- numeric(length(allI))
-                   names(tmp1) <- allI
-                   tmp1[m1] <- as.numeric(e1)
-                   tmp2[m2] <- as.numeric(e2)
-                   tmp1 >= tmp2
+                   ans2 <- ans
+                   ans [, m1] <- as.matrix(e1)
+                   ans2[, m2] <- as.matrix(e2)
+                   ans <- ans >= ans2
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   ans
                },
 
                `<` = {
-                   tmp1 <- tmp2 <- numeric(length(allI))
-                   names(tmp1) <- allI
-                   tmp1[m1] <- as.numeric(e1)
-                   tmp2[m2] <- as.numeric(e2)
-                   tmp1 < tmp2
+                   ans2 <- ans
+                   ans [, m1] <- as.matrix(e1)
+                   ans2[, m2] <- as.matrix(e2)
+                   ans <- ans < ans2
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   ans
                },
 
                `<=` = {
-                   tmp1 <- tmp2 <- numeric(length(allI))
-                   names(tmp1) <- allI
-                   tmp1[m1] <- as.numeric(e1)
-                   tmp2[m2] <- as.numeric(e2)
-                   tmp1 <= tmp2
+                   ans2 <- ans
+                   ans [, m1] <- as.matrix(e1)
+                   ans2[, m2] <- as.matrix(e2)
+                   ans <- ans <= ans2
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   ans
                },
 
                `==` = {
-                   tmp1 <- tmp2 <- numeric(length(allI))
-                   names(tmp1) <- allI
-                   tmp1[m1] <- as.numeric(e1)
-                   tmp2[m2] <- as.numeric(e2)
-                   tmp1 == tmp2
+                   ans2 <- ans
+                   ans [, m1] <- as.matrix(e1)
+                   ans2[, m2] <- as.matrix(e2)
+                   ans <- ans == ans2
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   ans
                })
 
-    } else
+    } else {
         NextMethod(.Generic)
+    }
 }
 
 as.zoo.position <- function(x, ...) {
