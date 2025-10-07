@@ -82,7 +82,7 @@ unit_prices(NAV, cashflows,
 }
 \references{
 
-  Schumann, E. (2024) \emph{Portfolio Management with \R}.\cr
+  Schumann, E. (2025) \emph{Portfolio Management with \R}.
   \url{https://enricoschumann.net/PMwR/}
 
 }

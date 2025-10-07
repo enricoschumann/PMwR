@@ -108,7 +108,7 @@ position(amount, \dots)
     positions. Unary \code{+}/\code{-} work directly on
     positions, whereas unary \code{!}  returns a logical
     vector of the same dimensions as the initial position.
-    (So \code{!!<position>} shows whether an position is
+    (So \code{!!<position>} shows whether a position is
     non-zero.)
 
     Binary operations, such as \code{+}, \code{-} or \code{>},

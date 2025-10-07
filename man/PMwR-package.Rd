@@ -32,7 +32,7 @@
 \references{
 
   The \pkg{PMwR} Manual, which explains all functionality:\cr
-  Schumann, E. (2023) \emph{Portfolio Management with R}.
+  Schumann, E. (2025) \emph{Portfolio Management with R}.
   \url{https://enricoschumann.net/PMwR/}
 
   The closely-related \pkg{NMOF} package is described in:\cr
@@ -40,7 +40,7 @@
     and Optimization in Finance}. 2nd edition. Elsevier.
   \doi{10.1016/C2017-0-01621-X}
 
-  Schumann, E. (2023) Financial Optimisation with R (\pkg{NMOF} Manual).
+  Schumann, E. (2025) Financial Optimisation with R (\pkg{NMOF} Manual).
   \url{https://enricoschumann.net/NMOF.htm#NMOFmanual}
 
 }
