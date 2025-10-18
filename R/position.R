@@ -421,7 +421,7 @@ Ops.position <- function(e1, e2) {
             warning("missing values in instruments")
             NextMethod(.Generic)
         }
-        
+
         t1 <- attr(e1, "timestamp")
         t2 <- attr(e2, "timestamp")
         if (length(t1) != length(t2))

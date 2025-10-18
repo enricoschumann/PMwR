@@ -112,3 +112,24 @@ expect_true(is.na(attr(xy, "timestamp")))
 expect_equal(dim(xy), c(1, 2))
 expect_equal(attr(xy, "instrument"), c("a", "b"))
 expect_equal(dimnames(xy), list("", c("a", "b")))
+
+
+
+p <- position(amount = 1:2, instrument = c("a","b"))
+expect_equivalent(as.matrix(p + 1),   t(c(2, 3)))
+expect_equivalent(as.matrix(p + 1:2), t(c(2, 4)))
+
+
+p <- position(journal(instrument = c("a", "a", "a", "a"),
+                      amount     = c(1, 1, 1, 1),
+                      timestamp  = c(1, 2, 3, 4)),
+               when = 1:4)
+expect_equivalent(as.matrix(p + 1), as.matrix(2:5))
+
+p <- position(journal(instrument = c("a", "a", "b", "b"),
+                      amount     = c(1, 1, 1, 1),
+                      timestamp  = c(1, 2, 3, 4)),
+               when = 1:4)
+a <- array(c(1, 2, 2, 2, 0, 0, 1, 2), dim = c(4L, 2L))
+expect_equivalent(as.matrix(p + 1), a + 1)
+expect_equivalent(as.matrix(p + a), 2 * a)
