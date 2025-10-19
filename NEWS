@@ -1,4 +1,4 @@
-v1.1-0  (2025-10-20; under development)
+v1.1-0  (2025-10-19)
 
   o fixed: position with an "along.timestamp" works
     (again) with character timestamps
@@ -17,12 +17,10 @@ v1.1-0  (2025-10-20; under development)
     as long as they have appropriately-named columns
     (i.e. "amount", "timestamp", etc.)
 
-  o 'position' supports generics `>`, `>=`, `<`, `<=`,
-    `==`, `|` and `&`; binary generics, such as `+` or `>`,
-    now match timestamps, i.e. can be used for positions
-    with multiple timestamps
-
-  o ....
+  o 'position' supports generics `>`, `>=`, `<`, `<=`, `==`,
+    `|` and `&`; binary operations, such as `+` or `>`, now
+    match timestamps, i.e. can be used for positions with
+    multiple timestamps
 
   o various minor changes and documentation updates;
     many tests have been added.  See the ChangeLog for

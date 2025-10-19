@@ -1,3 +1,7 @@
+2025-10-19  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 1.1-0
+
 2025-10-18  Enrico Schumann  <es@enricoschumann.net>
 
         * inst/tinytest/test_position_ops.R: add more tests
