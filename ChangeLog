@@ -1,3 +1,8 @@
+2025-10-21  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/internal.R (.colin): add code; not exported,
+        might be added to 'rc' in the future
+
 2025-10-19  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 1.1-0
