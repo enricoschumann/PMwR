@@ -1,3 +1,33 @@
+v1.1-0  (2025-10-19)
+
+  o fixed: position with an "along.timestamp" works
+    (again) with character timestamps
+
+  o fixed: btest handles (rare) corner cases with initial
+    position, NAs in prices without position and burnin
+    of 0 correctly
+
+  o fixed: the error message in 'unit_prices' could give
+    the wrong date with multiple cashflows on a single date
+
+  o an 'as.data.frame method' for summaries of NAVseries
+    has been added
+
+  o 'position' can now be used directly on data.frames,
+    as long as they have appropriately-named columns
+    (i.e. "amount", "timestamp", etc.)
+
+  o 'position' supports generics `>`, `>=`, `<`, `<=`, `==`,
+    `|` and `&`; binary operations, such as `+` or `>`, now
+    match timestamps, i.e. can be used for positions with
+    multiple timestamps
+
+  o various minor changes and documentation updates;
+    many tests have been added.  See the ChangeLog for
+    all details. The manual at
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    has also been updated.
+
 v1.0-1  (2024-10-19)
 
   o change URL to DOI, as requested by CRAN

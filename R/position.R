@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-23  Enrico Schumann
+## Copyright (C) 2008-25  Enrico Schumann
 
 position <- function(amount, ...)
     UseMethod("position")
@@ -10,6 +10,13 @@ position.default <- function(amount, timestamp, instrument,
                              use.names = NULL, ...) {
 
     dim.amount <- dim(amount)
+
+    if (length(dim.amount) == 1L) {
+        amount <- c(amount)
+        dim.amount <- NULL
+    }
+
+
     is.amount.matrix  <- !is.null(dim.amount) &&
                          sum(dim.amount > 1L) == 2L
     is.amount.matrix1 <- !is.null(dim.amount) &&
@@ -67,6 +74,14 @@ position.default <- function(amount, timestamp, instrument,
     timestamp <- rep(timestamp, len/length(timestamp))
     instrument <- rep(instrument, len/length(instrument))
 
+    timestamp.xtfrm <- TRUE
+    if (inherits(timestamp, "numeric") ||
+        inherits(timestamp, "Date") ||
+        inherits(timestamp, "POSIXt")) {
+        timestamp.xtfrm <- FALSE
+    }
+
+
     if (!is.null(account)) {
         ## if 'account' is specified, paste
         ##   account%SEP%instrument.
@@ -82,7 +97,12 @@ position.default <- function(amount, timestamp, instrument,
     if (missing(when)) {
         ## if 'when' is missing, we can sum the
         ## amounts. Missing timestamps do no harm.
-        when <- max(timestamp, na.rm = TRUE)
+
+        if (length(timestamp)) {
+            when <- max(timestamp, na.rm = TRUE)
+        } else {
+            when <- Inf
+        }
 
         uniq.instrument <- sort(unique(instrument))
         pos <- array(0, dim = c(1, length(uniq.instrument)))
@@ -185,13 +205,21 @@ position.default <- function(amount, timestamp, instrument,
             m <- uniq.instrument[i] == instrument
             if (!sum(m))
                 next
-            ## m <- fmatch(i, instrument)
-            ## instrument[m]
-            ## amount[m]
-            ## timestamp[m]
-            cum.amount <- cumsum(amount[m])
 
-            j <- findInterval(uniq.when, timestamp[m])
+            cum.amount <- cumsum(amount[m])
+            if (timestamp.xtfrm) {
+
+                tmp <- xtfrm(c(uniq.when, timestamp[m]))
+                tmp1 <- length(uniq.when)
+                tmp2 <- length(tmp) - tmp1
+
+                j <- findInterval(
+                    tmp[seq_len(tmp1)],
+                    tmp[seq(tmp1 + 1, to = length(tmp))])
+
+            } else {
+                j <- findInterval(uniq.when, timestamp[m])
+            }
             good <- j > 0
             pos[good, i] <- cum.amount[j[good]]
 
@@ -225,9 +253,6 @@ position.default <- function(amount, timestamp, instrument,
     } else
         attr(pos, "instrument") <- uniq.instrument
     attr(pos, "timestamp") <- if (no.timestamp) NA else when
-    ## attr(pos, "instrument") <- gsub(".*%SEP%(.*?)", "\\1", uniq.instrument)
-    ## if (!is.null(account))
-    ##     attr(pos, "account") <- gsub("(.*)%SEP%.*", "\\1", uniq.instrument)
     attr(pos, "unit") <- "amount"
     class(pos) <- "position"
     pos
@@ -252,6 +277,10 @@ position.journal <- function(amount, when,
                      use.names = FALSE,
                      ...)
 }
+
+
+position.data.frame <- position.journal
+
 
 position.btest <- function(amount, when, ...,
                            include.cash = FALSE) {
@@ -279,9 +308,14 @@ position.btest <- function(amount, when, ...,
 }
 
 print.position <- function(x, ..., sep = ":") {
+    original.x <- x
+    if (is.null(dim(x))) {
+        warning("position without ", sQuote("dim"))
+        dim(x) <- c(1, length(x))
+    }
     if (dim(x)[[2L]] == 0L)  ## empty position
         return(invisible(x))
-    original.x <- x
+
     ## if (!is.na(sep))
     ##     .NotYetUsed("sep")
     account <- attr(x, "account")
@@ -372,25 +406,151 @@ Ops.position <- function(e1, e2) {
         return(e1)
     }
 
-    if (inherits(e1, "position") && inherits(e2, "position") &&
-        all(!is.na(i1 <- instrument(e1))) &&
-        all(!is.na(i2 <- instrument(e2))) ) {
-        allI <- sort(unique(c(i1, i2)))
-        ans <- numeric(length(allI))
-        ans[match(instrument(e1), allI)] <- as.numeric(e1)
-        ii <- match(instrument(e2), allI)
-        if (.Generic == "+") {
-            ans[ii] <- ans[ii] + as.numeric(e2)
-        } else if (.Generic == "-") {
-            ans[ii] <- ans[ii] - as.numeric(e2)
-        } else if (.Generic == "/") {
-            ans[ii] <- ans[ii] / as.numeric(e2)
+    ## both operands are positions ...
+    if (inherits(e1, "position") &&
+        inherits(e2, "position")) {
+
+        i1 <- instrument(e1)
+        i2 <- instrument(e2)
+        if (
+            !((length(i1) == 1L && is.na(i1) &&
+               length(i2) == 1L && is.na(i2))
+                ||
+              (all(!is.na(i1)) && all(!is.na(i2))))
+        ) {
+            warning("missing values in instruments")
+            NextMethod(.Generic)
         }
-        position.default(ans, instrument = allI,
-                         timestamp = rep(attr(e1, "timestamp"),
-                                         length(allI)))
-    } else
+
+        t1 <- attr(e1, "timestamp")
+        t2 <- attr(e2, "timestamp")
+        if (length(t1) != length(t2))
+            NextMethod(.Generic)
+
+        m <- match(t1, t2)
+        if (
+            !(( length(t1) == 1L && is.na(t1) &&
+                length(t2) == 1L && is.na(t2) )
+                ||
+              ( all(!is.na(t1)) &&
+                all(!is.na(t2)) &&
+                all(t1 == t2[m]) )))
+            NextMethod(.Generic)
+
+        allI <- sort(unique(c(i1, i2)))
+        m1 <- match(i1, allI)
+        m2 <- match(i2, allI)
+
+        ans <- array(0, dim = c(length(t1),
+                                length(allI)))
+        switch(.Generic,
+               `+` = {
+                   ans[, m1] <- as.matrix(e1)
+                   ans[, m2] <- ans[, m2] + as.matrix(e2)[m, ]
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   structure(ans,
+                             instrument = allI,
+                             timestamp = t1,
+                             class = "position")
+               },
+               `-` = {
+                   ans[, m1] <- as.matrix(e1)
+                   ans[, m2] <- ans[, m2] - as.matrix(e2)[m, ]
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   structure(ans,
+                             instrument = allI,
+                             timestamp = t1,
+                             class = "position")
+               },
+
+               `/` = {
+                   ans[, m1] <- as.matrix(e1)
+                   ans[, m2] <- ans[, m2] / as.matrix(e2)[m, ]
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   structure(ans,
+                             instrument = allI,
+                             timestamp = t1,
+                             class = "position")
+               },
+
+               `*` = {
+                   stop("multiplying a position by a position is not defined")
+               },
+
+               `|` = {
+                   ans[, m1] <- as.matrix(e1)
+                   ans[, m2] <- ans[, m2] | as.matrix(e2)[m, ]
+                   storage.mode(ans) <- "logical"
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   ans
+               },
+
+               `&` = {
+                   ans[, m1] <- as.matrix(e1)
+                   ans[, m2] <- ans[, m2] & as.matrix(e2)[m, ]
+                   storage.mode(ans) <- "logical"
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   ans
+               },
+
+               `>` = {
+                   ans2 <- ans
+                   ans [, m1] <- as.matrix(e1)
+                   ans2[, m2] <- as.matrix(e2)
+                   ans <- ans > ans2
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   ans
+               },
+
+               `>=` = {
+                   ans2 <- ans
+                   ans [, m1] <- as.matrix(e1)
+                   ans2[, m2] <- as.matrix(e2)
+                   ans <- ans >= ans2
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   ans
+               },
+
+               `<` = {
+                   ans2 <- ans
+                   ans [, m1] <- as.matrix(e1)
+                   ans2[, m2] <- as.matrix(e2)
+                   ans <- ans < ans2
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   ans
+               },
+
+               `<=` = {
+                   ans2 <- ans
+                   ans [, m1] <- as.matrix(e1)
+                   ans2[, m2] <- as.matrix(e2)
+                   ans <- ans <= ans2
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   ans
+               },
+
+               `==` = {
+                   ans2 <- ans
+                   ans [, m1] <- as.matrix(e1)
+                   ans2[, m2] <- as.matrix(e2)
+                   ans <- ans == ans2
+                   colnames(ans) <- allI
+                   rownames(ans) <- if (all(is.na(t1))) "" else t1
+                   ans
+               })
+
+    } else {
         NextMethod(.Generic)
+    }
 }
 
 as.zoo.position <- function(x, ...) {

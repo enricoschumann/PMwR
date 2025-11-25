@@ -68,3 +68,56 @@ ans <- position(amount = 1:3, instrument = letters[1:3],
                 price = 3:1)
 expect_equivalent(c(ans), 1:3)
 expect_equal(instrument(ans), letters[1:3])
+
+
+
+
+
+
+
+## character timestamps + data.frame (no journal)
+J.char <- read.table(text = "
+instrument,timestamp,amount,price
+A,2025-04-08 15:00:00,  10, 10
+A,2025-04-08 16:00:00,  -5, 20
+B,2025-04-08 22:00:00, 100, 5
+", sep = ",", header = TRUE)
+
+J <- J.char
+
+
+t.valuation <- paste(as.Date("2025-04-08") + 0:1, "17:59:59")
+p1 <- position(J.char, when = t.valuation)
+
+t.valuation <- as.POSIXct(t.valuation)
+p2 <- position(J, when = t.valuation)
+expect_equivalent(as.matrix(p1),
+                  as.matrix(p2))
+
+t.valuation <- paste(as.Date("2024-04-08") + 0:5, "17:59:59")
+p1 <- position(J.char, when = t.valuation)
+
+t.valuation <- as.POSIXct(t.valuation)
+p2 <- position(J, when = t.valuation)
+expect_equivalent(as.matrix(p1),
+                  as.matrix(p2))
+
+t.valuation <- paste(as.Date("2026-04-08") + 0:5, "17:59:59")
+p1 <- position(J.char, when = t.valuation)
+
+t.valuation <- as.POSIXct(t.valuation)
+p2 <- position(J, when = t.valuation)
+expect_equivalent(as.matrix(p1),
+                  as.matrix(p2))
+
+
+
+
+
+
+## empty journals
+x <- position(journal())
+expect_equal(dim(as.matrix(x)), c(1, 0))
+
+position(instrument = factor(c("A", "B"), levels = LETTERS[1:3]),
+         amount = 1)

@@ -56,7 +56,7 @@ pl(amount, \dots )
     \code{\link{numeric}} or \code{\link{character}}.
     Timestamps should typically be sortable.}
 
-  \item{along.timestamp}{logical; or a a vector of
+  \item{along.timestamp}{logical; or a vector of
     timestamps. If the latter, \code{vprice} must be
     specified as well. See the vignette
     \dQuote{Profit/Loss for Open Positions}
@@ -184,7 +184,7 @@ pl(amount, \dots )
 }
 \references{
 
-  Schumann, E. (2023) \emph{Portfolio Management with R}.
+  Schumann, E. (2025) \emph{Portfolio Management with R}.
   \url{https://enricoschumann.net/PMwR/}; in particular
   \url{https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#profit-and-loss}
 

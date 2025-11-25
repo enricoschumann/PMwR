@@ -36,7 +36,7 @@ instrument(x, \dots) <- value
 }
 \references{%
 
-  Schumann, E. (2023) \emph{Portfolio Management with R}.
+  Schumann, E. (2025) \emph{Portfolio Management with R}.
   \url{https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html}
 
 }

@@ -676,3 +676,64 @@ for (i in c(1, 5, 100, 1000, 10000)) {
     expect_equivalent(-sum(amount*price),
                       pl(pl(amount = amount, price = price)))
 }
+
+
+
+
+
+
+
+
+## --------------------------------
+
+
+J <- read.table(text = "
+instrument,timestamp,amount,price
+A,2025-04-08 15:00:00,  10, 10
+A,2025-04-08 16:00:00,  -5, 20
+B,2025-04-08 22:00:00, 100, 5
+", sep = ",", header = TRUE)
+## J$timestamp <- as.POSIXct(J$timestamp)
+## J <- as.journal(J)
+##    instrument            timestamp  amount  price
+## 1           A  2025-04-08 15:00:00      10     10
+## 2           A  2025-04-08 16:00:00      -5     20
+## 3           B  2025-04-08 22:00:00     100      5
+##
+## 3 transactions
+
+
+t.valuation <- as.POSIXct(paste(as.Date("2025-04-08") + 0:1, "17:59:59"))
+## [1] "2025-04-08 17:59:59 CEST" "2025-04-09 17:59:59 CEST"
+
+
+price <- read.table(text = "
+A,B
+15, 5
+15, 10
+", sep = ",", header = TRUE)
+##    A  B
+## 1 15  5
+## 2 15 10
+
+pl <- pl(J, along.timestamp = t.valuation, vprice = price)
+
+as.matrix(sapply(pl, `[[`, "pl"))
+##                      A   B
+## 2025-04-08 17:59:59 75   0
+## 2025-04-09 17:59:59 75 500
+
+position(J, when = t.valuation)
+##                     A   B
+## 2025-04-08 17:59:59 5   0
+## 2025-04-09 17:59:59 5 100
+
+
+
+
+## --------------------------------------------------
+
+## invalid journals
+journal(1:5)
+J <- structure(list(amount = 1:5), class = "journal")
+print(J)

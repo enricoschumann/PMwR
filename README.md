@@ -1,15 +1,12 @@
 # Portfolio Management with R
 
-[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/PMwR)](https://cran.r-project.org/package=PMwR)
-[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/PMwR)](https://cran.r-project.org/package=PMwR)
-
 ## About PMwR
 
 Functions for the practical management of financial
 portfolios: backtesting investment and trading strategies,
 computing profit-and-loss and returns, analysing trades,
 reporting, and more. PMwR provides a small set of reliable,
-efficient and convenient tools that help in processing and
+efficient and convenient tools that help with processing and
 analysing trade/portfolio data. The package does not
 provide a complete application that could be used 'as is',
 but building blocks for creating such an application.
@@ -60,6 +57,7 @@ can install either version directly from within R:
     install.packages('PMwR') ## CRAN stable version
 
     install.packages('PMwR', ## development version
+	                 type = 'source',
                      repos = c('https://enricoschumann.net/R',
                                getOption('repos')))
 

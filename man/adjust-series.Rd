@@ -50,8 +50,8 @@ split_adjust(x, t, ratio, backward = TRUE)
 }
 \details{
 
-  The function transforms \eqn{x}{\code{x}} into returns, and
-  with those returns specified in \eqn{t}{\code{t}} calculated
+  The function transforms \eqn{x}{\code{x}} into returns.
+  The return in \eqn{t}{\code{t}} is calculated
   as
 
   \deqn{\frac{x_t + D_t}{x_{t-1}} - 1\,,}{(x(t) + D(t))/x(t-1) - 1,}
@@ -73,7 +73,7 @@ split_adjust(x, t, ratio, backward = TRUE)
 }
 \references{
 
-  Schumann, E. (2023) \emph{Portfolio Management with R}.
+  Schumann, E. (2025) \emph{Portfolio Management with R}.
   \url{https://enricoschumann.net/PMwR/}
 
   Using \code{div_adjust} for handling generic external cashflows:

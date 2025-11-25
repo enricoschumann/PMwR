@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-24  Enrico Schumann
+## Copyright (C) 2008-25  Enrico Schumann
 
 NAVseries <- function(NAV,
                       timestamp,
@@ -735,43 +735,17 @@ window.NAVseries <- function(x, start = NULL, end = NULL, ...) {
     ans
 }
 
-as.data.frame.summary.NAVseries <- function(x, ...){
+as.data.frame.summary.NAVseries <-
+function(x, ...) {
 
-    .col <- c("instrument", "title", "description",
-              "start", "end", "nobs", "nna",
-              "low",
-              "high", "low.when", "high.when",
-              "return", "return.annualised", "mdd",
-              "mdd.high", "mdd.low", "mdd.high.when",
-               "mdd.low.when", "mdd.recover.when",
-               "underwater", "volatility",
-              "volatility.up", "volatility.down")
-    .col.labels <-
-    c("Instrument",
-      "Title",
-      "Description",
-      "Start",
-      "End",
-      "n.observations",
-      "n.missing",
-      "_ time          ",
-      "_ time          ",
-      "Low             ",
-      "High            ",
-      "Return %        ",
-      "_ annualised?   ",
-      "_ time          ",
-      "_ time          ",
-      "_ peak          ",
-      "_ trough        ",
-      "Max. drawdown % ",
-      "_ recovery time ",
-      "underwater %    ",
-      "_ upside        ",
-      "_ downside      ",
-      "Volatility      ",
-      "Tracking error %")
+    ## x is a list of lists:
+    ##   each 'sublist' contains values
+    ##   'NAVseries', 'NAV', ...
 
-    datetime.cols <- ""
-    as.data.frame(do.call(rbind, x)[, -c(1:3)])
+    drop <- c("NAVseries", "NAV", "timestamp")
+    N <- setdiff(names(x[[1L]]), drop)
+
+    ans <- lapply(x, `[`, N)
+    ans <- lapply(ans, list2DF)
+    do.call(rbind, ans)
 }

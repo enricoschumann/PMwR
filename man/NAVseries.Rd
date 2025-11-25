@@ -4,6 +4,7 @@
 \alias{plot.NAVseries}
 \alias{print.NAVseries}
 \alias{summary.NAVseries}
+\alias{as.data.frame.summary.NAVseries}
 \alias{window.NAVseries}
 \title{
   Net-Asset-Value (NAV) Series
@@ -28,96 +29,98 @@ as.NAVseries(x, ...)
 \method{plot}{NAVseries}(x, y, \dots, xlab = "", ylab = "", type = "l")
 
 \method{window}{NAVseries}(x, start = NULL, end = NULL, \dots)
+
+\method{as.data.frame}{summary.NAVseries}(x, \dots)
 }
 \arguments{
   \item{NAV}{%
     numeric
-}
+  }
   \item{timestamp}{%
     time stamp, typically \code{\link{Date}} or \code{\link{POSIXct}}
-}
+  }
   \item{instrument}{%
     character
-}
+  }
   \item{title}{%
     character
-}
+  }
   \item{description}{%
     character
-}
-\item{x}{%
-  an \code{NAVseries} or an object to be coerced to NAVseries
-}
-\item{object}{%
-  an \code{NAVseries}
-}
-\item{\dots}{%
+  }
+  \item{x}{%
+    an \code{NAVseries} or an object to be coerced to NAVseries
+  }
+  \item{object}{%
+    an \code{NAVseries}
+  }
+  \item{\dots}{%
 
-  further arguments. For \code{summary}, these can be
-  \code{NAVseries}.
+    further arguments. For \code{summary}, these can be
+    \code{NAVseries}.
 
-}
-\item{drop.NA}{%
+  }
+  \item{drop.NA}{%
 
-  logical. If \code{NAV} is the result of calling
-  \code{btest}, then this controls whether unused initial
-  observations (\sQuote{burnin}) are dropped.
+    logical. If \code{NAV} is the result of calling
+    \code{btest}, then this controls whether unused initial
+    observations (\sQuote{burnin}) are dropped.
 
-}
-\item{bm}{%
+  }
+  \item{bm}{%
 
-  an optional NAVseries. If \code{bm} does not inherit
-  from \code{NAVseries}, \code{\link{as.NAVseries}} is
-  tried.
+    an optional NAVseries. If \code{bm} does not inherit
+    from \code{NAVseries}, \code{\link{as.NAVseries}} is
+    tried.
 
-}
-\item{monthly.vol}{%
+  }
+  \item{monthly.vol}{%
 
-  if \code{TRUE} (default), volatility computations
-  are done on monthly returns
+    if \code{TRUE} (default), volatility computations
+    are done on monthly returns
 
-}
-\item{monthly.te}{%
+  }
+  \item{monthly.te}{%
 
-  if \code{TRUE} (default), tracking-error computations
-  are done on monthly returns
+    if \code{TRUE} (default), tracking-error computations
+    are done on monthly returns
 
-}
-\item{assume.daily}{%
-  logical
-}
-\item{na.rm}{%
-  logical
-}
-\item{y}{%
-  a second NAVseries to be plotted. Not supported yet.
-}
-\item{xlab}{%
-  character. See \code{\link{plot}}.
-}
-\item{ylab}{%
-  character. See \code{\link{plot}}.
-}
-\item{type}{%
-  character. See \code{\link{plot}}.
-}
-\item{start}{%
-  same class as timestamp; \code{NULL} means the first timestamp
-}
-\item{end}{%
-  same class as timestamp; \code{NULL} means the last timestamp
-}
+  }
+  \item{assume.daily}{%
+    logical
+  }
+  \item{na.rm}{%
+    logical
+  }
+  \item{y}{%
+    a second NAVseries to be plotted. Not supported yet.
+  }
+  \item{xlab}{%
+    character. See \code{\link{plot}}.
+  }
+  \item{ylab}{%
+    character. See \code{\link{plot}}.
+  }
+  \item{type}{%
+    character. See \code{\link{plot}}.
+  }
+  \item{start}{%
+    same class as timestamp; \code{NULL} means the first timestamp
+  }
+  \item{end}{%
+    same class as timestamp; \code{NULL} means the last timestamp
+  }
 }
 \details{
 
   \subsection{NAV series}{%
 
-    An NAV series is a numeric vector (the actual series) and
-    additional information, attached as attributes: timestamp,
-    instrument, title, description. Of these attributes,
-    timestamp is the most useful, as it is used for several
-    computations (e.g. when calling \code{\link{summary}}) or
-    for plotting.
+    An \acronym{NAV} series is a numeric vector (the actual
+    series) and additional information, attached as
+    attributes: timestamp, instrument, title, description. Of
+    these attributes, timestamp is the most useful, as it is
+    used for several computations (e.g. when calling
+    \code{\link{summary}}) and for plotting.
 
     The \sQuote{instrument} is typically an internal label
     used to identify the series, such as a ticker;
@@ -158,8 +161,9 @@ as.NAVseries(x, ...)
 }
 \references{
 
-  Schumann, E. (2024) \emph{Portfolio Management with R}.
-  \url{https://enricoschumann.net/PMwR/}; in particular, see\cr
+  Schumann, E. (2025) \emph{Portfolio Management with R}.
+  \url{https://enricoschumann.net/PMwR/};\cr
+  in particular, see
   \url{https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#NAVseries}
 
 }
@@ -175,5 +179,7 @@ as.NAVseries(x, ...)
 
 }
 \examples{
-summary(NAVseries(DAX[[1]], as.Date(row.names(DAX)), title = "DAX"))
+summary(NAVseries(DAX[[1]],
+        timestamp = as.Date(row.names(DAX)),
+        title = "DAX"))
 }

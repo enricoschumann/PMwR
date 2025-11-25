@@ -74,3 +74,14 @@ colnames(amount) <- letters[1:3]
 amount
 expect_equivalent(unclass(position(amount)),
                   array(c(3, 7, 11), dim = c(1, 3)))
+
+
+
+p <- position(c(a = 1, a = 1, b = 2, a = 5))
+expect_equivalent(p, position(c(a = 7, b = 2)))
+
+## one-dimensional array: drop dim
+v <- c(a = 1, a = 1, b = 2, a = 5)
+v <- tapply(v, names(v), sum)
+position(v)
+expect_equivalent(p, position(c(a = 7, b = 2)))

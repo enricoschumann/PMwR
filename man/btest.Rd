@@ -397,7 +397,7 @@ t    time      open  high  low   close
 }
 \references{
 
-  Schumann, E. (2023) \emph{Portfolio Management with R}.
+  Schumann, E. (2025) \emph{Portfolio Management with R}.
   \url{https://enricoschumann.net/PMwR/};
   in particular, see the chapter on backtesting:\cr
   \url{https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#backtesting}

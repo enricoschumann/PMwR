@@ -1,3 +1,96 @@
+2025-10-21  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/internal.R (.colin): add code; not exported,
+        might be added to 'rc' in the future
+
+2025-10-19  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 1.1-0
+
+2025-10-18  Enrico Schumann  <es@enricoschumann.net>
+
+        * inst/tinytest/test_position_ops.R: add more tests
+
+2025-10-07  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/position.R (Ops.position): generics such as `+`
+        or `>` now respect timestamp
+
+2025-09-26  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/position.R (position.default): if 'amount' is a
+        one-dimensional array -- such as the result of a
+        call to `tapply` --, the dimension is dropped
+
+2025-09-25  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/position.R (print.position): protect against
+        dim-less objects, e.g. when having called 'drop' on
+        a single-timestamp position
+        (Ops.position): support generics `>`, `>=`,
+        `<`, `<=`, `==`, `|` and `&`
+
+2025-09-21  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/NAVseries.R (as.data.frame.summary.NAVseries):
+        the columns of the dataframe should now be atomic
+        vectors, not lists
+
+2025-07-04  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/internal.R (.copy_fw, .copy_fw_matrix): handle
+        case of only NA values
+
+2025-05-03  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/position.R (position.default): if `when` is
+        missing, and there is no timestamp -- e.g. for an
+        empty journal --, `when` is set to `Inf`, which
+        suppresses a (harmless) warning
+
+2025-04-19  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/rebalance.R (print.rebalance): set scipen to 9999,
+        since higher values trigger a warning in R 4.5
+
+        * R/journal.R (print.journal): set scipen to 9999
+
+2025-04-18  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/journal.R (print.journal): protect against
+        invalid journals that lack required fields such as
+        "amount"
+
+        * R/pl.R (print.pl): set scipen to 9999, since
+        higher values trigger a warning in R 4.5
+
+2025-04-17  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/position.R (position.data.frame): add method,
+        similar to `pl.data.frame`, added 2017-12-08
+
+2025-04-14  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/position.R (position.default): fix handling of
+        character timestamps (or of other non-numeric
+        classes) that won't work with `findInterval`,
+        through locally mapping them to numeric via `xtfrm`
+
+2025-04-07  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/journal.R (print.summary.journal): new arguments
+        "columns" and "column.headers", which specify which
+        columns should be printed
+
+2025-03-14  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/NAVseries.R (as.data.frame.summary.NAVseries):
+        remove unused code; simplify method
+
+2024-12-06  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/unit_prices.R (unit_prices): fix error message
+
 2024-12-04  Enrico Schumann  <es@enricoschumann.net>
 
         * man/rebalance.Rd: fix documentation
@@ -971,8 +1064,8 @@
 
         * DESCRIPTION (Version): 0.10-0
 
-        * R/position.R (Ops.position): allow +,-,/ only
-        when both operands (i.e. positions) have
+        * R/position.R (Ops.position): allow `+`, `-` and
+        `/` only when both operands (i.e. positions) have
         instrument information
 
 2018-10-18  Enrico Schumann  <es@enricoschumann.net>

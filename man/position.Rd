@@ -32,7 +32,10 @@ position(amount, \dots)
     alternatively, several keywords are supported. See Details.
   }
   \item{amount}{%
-    numeric or an object of class \code{\link{journal}}
+    numeric or an object of class \code{\link{journal}}.
+    If \code{amount} is a one-dimensional array, the
+    dimension is dropped.
+
   }
   \item{timestamp}{%
     numeric or character: timestamps, must be sortable
@@ -99,25 +102,43 @@ position(amount, \dots)
   work if \code{timestamp} can be coerced to
   \code{\link{Date}}.
 
+  \subsection{Computing with positions}{%
+
+    Several mathematical operators work specially for
+    positions. Unary \code{+}/\code{-} work directly on
+    positions, whereas unary \code{!}  returns a logical
+    vector of the same dimensions as the initial position.
+    (So \code{!!<position>} shows whether a position is
+    non-zero.)
+
+    Binary operations, such as \code{+}, \code{-} or \code{>},
+    work if both positions have the same timestamps (which
+    includes the case in which the timestamp of both is
+    \code{\link{NA}}).  Multiplication produces an error.
+    Instruments can differ, but must be non-\code{NA}, except
+    for the special case of length-one \code{NA}.
+  }
+
+
 }
 \value{%
 
-  An object of class \code{position}, which is a numeric
-  matrix with \code{instrument} and \code{timestamp}
-  attributes. Note that \code{position} will never drop the
-  result's \code{dim} attribute: it will always be a matrix of
-  size \code{length(when)} times
-  \code{length(unique(instrument))}, which may not be obvious
-  from the printed output.  The rows of the matrix correspond
-  to timestamps; the columns correspond to instruments.
+  An object of class \code{position}, which is a numeric matrix
+  with \code{instrument} and \code{timestamp} attributes. Note
+  that \code{position} will never drop the result's \code{dim}
+  attribute: it will always be a matrix of size
+  \code{length(when)} times \code{length(unique(instrument))},
+  which may not be obvious from the printed output. (An operation
+  such as \code{<} or \code{!} results in a logical matrix of the
+  same dimension.)
+  The rows of the matrix correspond to timestamps; the columns
+  correspond to instruments.
 
-  To extract the numeric position matrix, say
-  \code{as.matrix(p)}.
-
+  To extract the numeric position matrix, use \code{as.matrix(p)}.
 }
 \references{
 
-  Schumann, E. (2023) \emph{Portfolio Management with \R}.
+  Schumann, E. (2025) \emph{Portfolio Management with \R}.
   \url{https://enricoschumann.net/R/packages/PMwR/};
   in particular, see\cr
   \url{https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#computing-balances}
@@ -149,4 +170,14 @@ position(amount)
 
 ## ignore names of amount
 position(amount, use.names = FALSE)
+
+
+## adding/subtracting positions
+p1 <- position(c(A = 0.2, B = 0.8))
+p2 <- position(c(         B = 0.7, C = 0.3))
+p1 - p2
+## A 0.2
+## B 0.1
+## C -0.3
+
 }

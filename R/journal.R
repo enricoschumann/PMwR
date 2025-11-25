@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-24  Enrico Schumann
+## Copyright (C) 2008-25  Enrico Schumann
 
 journal <- function(amount, ...) {
     if (match.call() == "journal()") {
@@ -101,8 +101,8 @@ print.journal <- function(x, ...,
         return(invisible(x))
     }
     oo <- getOption("scipen")
-    options(scipen = 1e8)
     on.exit(options(scipen = oo))
+    options(scipen = 9999)
 
     df <- as.data.frame(unclass(x),
                         row.names = seq_len(lx),
@@ -110,6 +110,7 @@ print.journal <- function(x, ...,
 
     ndf <- colnames(df)
     first.cols <- c("instrument", "timestamp", "amount", "price")
+    first.cols <- first.cols[first.cols %in% ndf]
     df <- df[TRUE, c(first.cols, setdiff(ndf, first.cols)), drop = FALSE]
 
     if (!is.null(exclude))
@@ -239,48 +240,6 @@ amount <- function(x, ...) {
     x
 }
 
-instrument <- function(x, ...) {
-    UseMethod("instrument")
-}
-
-instrument.position <- function(x, ...) {
-    attr(x, "instrument")
-}
-
-instrument.pricetable <- function(x, ...) {
-    attr(x, "instrument")
-}
-
-instrument.journal <- function(x, ...) {
-    x$instrument
-}
-
-instrument.NAVseries <- function(x, ...) {
-    attr(x, "instrument")
-}
-
-
-`instrument<-` <- function(x, ..., value) {
-    UseMethod("instrument<-")
-}
-
-`instrument<-.journal` <- function(x, ..., value) {
-    len <- length(value)
-    lenx <- length(x)
-    if (len == lenx)
-        x$instrument <- value
-    else if (len == 1L)
-        x$instrument <- rep(value, lenx)
-    else
-        stop("length(instrument) differs from length(journal)")
-    x
-}
-
-`instrument<-.NAVseries` <- function(x, ..., value) {
-    attr(x, "instrument") <- value
-    x
-}
-
 summary.journal <- function(object,
                             by = "instrument",
                             drop.zero = TRUE,
@@ -384,12 +343,17 @@ summary.journal <- function(object,
                                 object, INDEX = INDEX,
                                 function(x)
                                 sum(x$price * abs(x$amount))))),
+                        abs_amount = as.matrix(
+                            c(tapply(
+                                object, INDEX = INDEX,
+                                function(x)
+                                sum(abs(x$amount))))),
                         first_t = as.matrix(
                             c(tapply(
                                 object$timestamp, INDEX = INDEX, min))),
                         last_t = as.matrix(
                             c(tapply(
-                                object$timestamp, INDEX = INDEX, min))),
+                                object$timestamp, INDEX = INDEX, max))),
                         stringsAsFactors = FALSE)
 
     stats$n_transactions0 <- NULL
@@ -422,7 +386,14 @@ summary.journal <- function(object,
 
 print.summary.journal <- function(x, month.names = month.abb,
                                   digits = NULL, na.print = "",
-                                  use.crayon = NULL, ...) {
+                                  use.crayon = NULL, ...,
+                                  columns = NULL,
+                                  column.headers = c("instrument"   = "Instrument",
+                                                     "n"            = "N",
+                                                     "average_buy"  = "Avg buy",
+                                                     "average_sell" = "Avg sell",
+                                                     "turnover"     = "Turnover",
+                                                     "abs_amount"   = "Amount")) {
     if (nrow(x) > 0L) {
         stats <- x
         has_instrument <- !all(is.na(stats$instrument))
@@ -451,12 +422,10 @@ print.summary.journal <- function(x, month.names = month.abb,
         if ("month" %in% colnames(stats))
             stats[["month"]][ .repeated(stats[["month"]]) ] <- ""
 
-        pretty.colnames <- c("n_transactions" = "n",
-                             "average_buy"  = "avg buy",
-                             "average_sell" = "avg sell")
-
-        tmp <- pretty.colnames[colnames(stats)]
-        colnames(stats)[!is.na(tmp)] <- tmp[!is.na(tmp)]
+        i <- match(colnames(stats), names(column.headers), nomatch = 0L)
+        colnames(stats)[i > 0] <- column.headers[i]
+        ## tmp <- pretty.colnames[colnames(stats)]
+        ## colnames(stats)[!is.na(tmp)] <- tmp[!is.na(tmp)]
 
         is.char <- which(unlist(lapply(stats, is.character)))
         ans <- rbind(stats[1, ], stats)

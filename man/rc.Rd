@@ -17,7 +17,8 @@ rc(R, weights, timestamp, segments = NULL,
 }
 \arguments{
   \item{R}{%
-    returns: a numeric matrix
+    returns: a numeric matrix. Rows are time periods;
+    columns are assets.
   }
   \item{weights}{%
     the segment weights: a numeric matrix.
@@ -31,11 +32,20 @@ rc(R, weights, timestamp, segments = NULL,
     \code{weights} are used (if they are not \code{NULL}).
   }
 
-  \item{method}{a string; default is \code{contribution}}
+  \item{method}{%
+    a string; default is \code{contribution}, and also
+    supported are \code{attribution}, \code{bottomup} or
+    \code{topdown}
+  }
 
-  \item{linking.method}{\code{NULL} or a string. Currently
-    supported are \code{0-cumulative, 1-cumulative, 0.5-cumulative}
-    (\code{geometric{0,1,0.5}}) and \code{logarithmic}. See Examples.}
+  \item{linking.method}{%
+
+    \code{NULL} or a string. Currently supported are
+    \code{0-cumulative, 1-cumulative, 0.5-cumulative}
+    (\code{geometric{0,1,0.5}}) and \code{logarithmic}. See
+    Examples.
+
+  }
 
   \item{allocation.minus.bm}{logical}
 
@@ -76,7 +86,7 @@ rc(R, weights, timestamp, segments = NULL,
 }
 \value{%
 
-  A list of two components:
+  For method \code{contribution}, a list of two components:
   \item{period_contributions}{a data.frame of single-period
    contributions, sorted in time}
  \item{total_contributions}{a numeric vector}
