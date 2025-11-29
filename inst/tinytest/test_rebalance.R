@@ -1,21 +1,37 @@
 ## WITHOUT NAMES
 
-current <- c(0,0,100,100)
-prices  <- c(1,1,1,1)
+### __ rebalancing when current and target are
+###    quantities, not weights
+current <- 0
+target <- 1
+
+R <- rebalance(current, target, price = 1,
+               current.weights = FALSE,
+               target.weights = FALSE,
+               match.names = FALSE)
+expect_equal(R$target, 1)
+expect_equal(R$difference, 1)
+
+
+
+
+current <- c(   0,    0,  100,  100)
+prices  <- c(   1,    1,    1,    1)
 target  <- c(0.25, 0.25, 0.25, 0.25)
 
-## missing names should raise error
+### __ missing names should raise error
 expect_error(rebalance(current, target, prices))
 
 x <- rebalance(current, target, prices,
                match.names = FALSE)
+print(x)
 expect_equal(x$target, rep(50, 4))
 
 x <- rebalance(current, target, prices,
                multiplier = 10,
                match.names = FALSE)
 
-### ... no initial position: 'current' is 0
+### __ no initial position: 'current' is 0
 current <- 0
 target  <- c(0.25, 0.25, 0.25, 0.25)
 x <- rebalance(current, target, prices,

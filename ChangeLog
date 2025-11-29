@@ -1,3 +1,9 @@
+2025-11-29  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/rebalance.R (rebalance): fix corner cases, such
+        as rebalancing when 'current' and 'target' are not
+        weights, and no notional is specified
+
 2025-10-21  Enrico Schumann  <es@enricoschumann.net>
 
         * R/internal.R (.colin): add code; not exported,

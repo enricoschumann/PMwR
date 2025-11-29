@@ -112,7 +112,8 @@ replace_weight(weights, ..., prefix = TRUE, sep = "::")
   \item{difference}{the difference between \code{current}
     and target portfolio}
 
-  Attached to the data.frame are several attributes:
+  Attached to the \code{\link{data.frame}} are several
+  attributes:
 
   \item{notional}{a single number}
   \item{match.names}{logical}

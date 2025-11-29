@@ -1,9 +1,15 @@
+v1.2-0  (2025-11-29; not yet released)
+
+  o fixed: 'rebalance' handles more corner cases; for
+    example, when 'current' and 'target' are not weights,
+    and no notional is specified
+
 v1.1-0  (2025-10-19)
 
-  o fixed: position with an "along.timestamp" works
+  o fixed: 'position' with an "along.timestamp" works
     (again) with character timestamps
 
-  o fixed: btest handles (rare) corner cases with initial
+  o fixed: 'btest' handles (rare) corner cases with initial
     position, NAs in prices without position and burnin
     of 0 correctly
 
