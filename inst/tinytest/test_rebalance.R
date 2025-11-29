@@ -149,10 +149,65 @@ x <- rebalance(current, target, prices, match.names=FALSE)
 expect_equal(x$target, c(0,2))
 expect_equal(x$difference, c(-10,-3))
 
-## price <- c(a = 1, b = 2, c = 3)
-## current <- c(a = 100, b = 20)
-## target <- c(a = 0.2, c = 0.3)
-## rebalance(current, target, price)
+
+
+
+## print
+prices  <- c(1,1,1,1)
+names(prices) <- letters[1:4]
+
+current <- position(amount = 10, instrument = "b")
+target  <- position(amount = 5,  instrument = "d")
+
+x <- rebalance(current, target, prices)
+print(x)
+
+
+
+## multipliers, drop.zero
+prices  <- c(1,1,1,1)
+names(prices) <- letters[1:4]
+mult <- c(a=1,b=2,c=3,d=4)
+
+current <- position(amount = c(10, 10), instrument = c("a", "b"))
+target  <- position(amount = c(10,  0), instrument = c("a", "b"))
+
+## --- multipliers *not* specified ==> set to 1
+x <- rebalance(current, target, prices)
+expect_equal(attr(x, "multiplier"), c(a = 1, b = 1))
+print(x)
+
+x <- rebalance(current, target, prices, drop.zero = TRUE)
+expect_equal(attr(x, "multiplier"), c(b = 1))
+print(x)
+
+## --- multipliers *specified* ==> set to 1
+x <- rebalance(current, target, prices, multiplier = mult)
+expect_equal(attr(x, "multiplier"), c(a = 1, b = 2))
+print(x)
+
+x <- rebalance(current, target, prices, multiplier = mult,
+               drop.zero = TRUE)
+expect_equal(attr(x, "multiplier"), c(b = 2))
+print(x)
+
+
+
+
+
+
+## one more example
+price   <- c(a =   1, b =   2, c = 3)
+current <- c(a = 100, b =  20)
+target  <- c(a = 0.2, c = 0.3)
+R <- rebalance(current, target, price)
+print(R)
+exp <- sum(current * price[names(current)]) * target/
+       price[names(target)]
+t <- R$target
+names(t) <- R$instrument
+expect_equal(t[t != 0], exp)
+
 
 ## price <- c(1,2,3)
 ## current <- c(100, 20, 0)
@@ -191,3 +246,7 @@ expect_equal(x$difference, c(-10,-3))
 ## amount <- rebalance(position(j), w, price = c(A=1, B=12))
 ## journal(amount)
 ## dput(journal(amount))
+
+
+
+

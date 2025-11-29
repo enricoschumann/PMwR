@@ -1,8 +1,16 @@
 2025-11-29  Enrico Schumann  <es@enricoschumann.net>
 
+        * R/rebalance.R (rebalance): fixed -- with
+        'drop.zero', the 'multiplier' attribute was not
+        properly subsetted
+
         * R/rebalance.R (rebalance): fix corner cases, such
         as rebalancing when 'current' and 'target' are not
         weights, and no notional is specified
+
+        * inst/tinytest/test_rebalance.R: add more tests;
+        add explicit calls to print(rebalance(...)) so that
+        Errors in print method are captured
 
 2025-10-21  Enrico Schumann  <es@enricoschumann.net>
 

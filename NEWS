@@ -2,7 +2,9 @@ v1.2-0  (2025-11-29; not yet released)
 
   o fixed: 'rebalance' handles more corner cases; for
     example, when 'current' and 'target' are not weights,
-    and no notional is specified
+    and no notional is specified. Also, the multiplier
+    attribute was not subsetted when 'drop.zero' was
+    specified.
 
 v1.1-0  (2025-10-19)
 

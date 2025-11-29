@@ -155,6 +155,10 @@ rebalance <- function(current,
             notional <- sum(current * price * multiplier)
         else if (current.weights)
             notional <- sum(target  * price * multiplier)
+
+        ## notional could be NULL in case
+        ## !current.weights && !target.weights
+
     }
 
     ## if (!is.null(algorithm)) {
@@ -174,18 +178,24 @@ rebalance <- function(current,
         diff <- round(trunc(diff/10^(-truncate))*10^(-truncate))
     } else
         diff <- fraction*(target - current)
+
     rbl <- data.frame(instrument = all.names,
                       price = price,
                       current = current,
                       target = target,
                       difference = diff,
                       stringsAsFactors = FALSE)
+
     attr(rbl, "notional") <- notional
     attr(rbl, "match.names") <- match.names
     attr(rbl, "multiplier") <-  multiplier
 
-    if (drop.zero)
-        rbl <- rbl[rbl$current != rbl$target, ]
+    if (drop.zero) {
+        d <- rbl$current != rbl$target
+        rbl <- rbl[d, ]
+        attr(rbl, "multiplier") <- attr(rbl, "multiplier")[d]
+    }
+
     class(rbl) <- c("rebalance", "data.frame")
     rbl
 }
