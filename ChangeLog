@@ -1,3 +1,9 @@
+2025-11-30  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/rc.R (.colin2007): rename '.colin' to
+        '.colin2007', and move to file rc.R (from
+        internal.R)
+
 2025-11-29  Enrico Schumann  <es@enricoschumann.net>
 
         * R/rebalance.R (rebalance): fixed -- with
