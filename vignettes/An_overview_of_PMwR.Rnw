@@ -31,13 +31,13 @@ pv <- gsub("(.*)[.](.*)", "\\1-\\2", pv)
 
 \begin{document}
 \title{An Overview of the PMwR Package}
-\author{Enrico Schumann\\\url{es@enricoschumann.net}}
+\author{Enrico Schumann\\\url{mailto:es@enricoschumann.net}}
 
 {\raggedright{\LARGE An Overview of the PMwR Package}}\hspace*{\fill}
 {\footnotesize Package version \Sexpr{pv}}\medskip
 
 \noindent Enrico Schumann\\
-\noindent \url{es@enricoschumann.net}\\
+\noindent \url{mailto:es@enricoschumann.net}\\
 \bigskip
 
 <<echo=false,results=hide>>=

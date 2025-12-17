@@ -29,13 +29,13 @@ pv <- gsub("(.*)[.](.*)", "\\1-\\2", pv)
 \usepackage{hyperref}
 \begin{document}
 \title{Drawdowns and Streaks}
-\author{Enrico Schumann\\\url{es@enricoschumann.net}}
+\author{Enrico Schumann\\\url{mailto:es@enricoschumann.net}}
 
 {\raggedright{\LARGE Drawdowns and Streaks}}\hspace*{\fill}
 {\footnotesize Package version \Sexpr{pv}}\medskip
 
 \noindent Enrico Schumann\\
-\noindent \url{es@enricoschumann.net}\\
+\noindent \url{mailto:es@enricoschumann.net}\\
 \bigskip
 
 <<echo=false>>=

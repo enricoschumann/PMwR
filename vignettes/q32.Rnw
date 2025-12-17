@@ -30,13 +30,13 @@ pv <- gsub("(.*)[.](.*)", "\\1-\\2", pv)
 
 \begin{document}
 \title{Treasury Quotes with 1/32 Fractions}
-\author{Enrico Schumann\\\url{es@enricoschumann.net}}
+\author{Enrico Schumann\\\url{mailto:es@enricoschumann.net}}
 
 {\raggedright{\LARGE Treasury Quotes with 1/32 Fractions}}\hspace*{\fill}
 {\footnotesize Package version \Sexpr{pv}}\medskip
 
 \noindent Enrico Schumann\\
-\noindent \url{es@enricoschumann.net}\\
+\noindent \url{mailto:es@enricoschumann.net}\\
 \bigskip
 
 <<echo=false>>=
