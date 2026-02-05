@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-24  Enrico Schumann
+## Copyright (C) 2008-22  Enrico Schumann
 
 btest  <- function(prices,
                    signal,
@@ -500,31 +500,15 @@ btest  <- function(prices,
         Timestamp <- Time
 
     ## create Globals
-    Globals <- list2env(Globals)  ## TODO enclosing env?
+    Globals <- list2env(Globals)
 
     ## check reserved names
-    reservedNames <-
-        c("Open", "High", "Low", "Close",
-          "Wealth", "Cash", "Time", "Timestamp",
-          "Portfolio", "SuggestedPortfolio", "Globals")
-
-    add.args <- list(Open = Open,
-                     High = High,
-                     Low = Low,
-                     Close = Close,
-                     Wealth = Wealth,
-                     Cash = Cash,
-                     Time = Time,
-                     Timestamp = Timestamp,
-                     Portfolio = Portfolio,
-                     SuggestedPortfolio = SuggestedPortfolio,
-                     Globals = Globals)
-
-    funs <- c("signal", "do.signal", "do.rebalance",
-              "print.info", "cashflow")
+    reservedNames <- c("Open", "High", "Low", "Close",
+                       "Wealth", "Cash", "Time", "Timestamp",
+                       "Portfolio", "SuggestedPortfolio", "Globals")
+    funs <- c("signal", "do.signal", "do.rebalance", "print.info", "cashflow")
     if (!is.null(tc_fun))
         funs <- c(funs, "tc_fun")
-
     for (thisfun in funs) {
         fNames <- names(formals(get(thisfun)))
         for (rname in reservedNames)
@@ -532,37 +516,42 @@ btest  <- function(prices,
                 stop(sQuote(rname), " cannot be used as an argument name for ",
                      sQuote(thisfun))}
 
-    e <- list2env(add.args, parent = emptyenv())
-    
-    parent.env(e) <- environment(signal)
-    environment(signal) <- e
-
-
-    ## formals(signal) <- c(formals(signal), add.args)
+    add.args <- alist(Open = Open,
+                      High = High,
+                      Low = Low,
+                      Close = Close,
+                      Wealth = Wealth,
+                      Cash = Cash,
+                      Time = Time,
+                      Timestamp = Timestamp,
+                      Portfolio = Portfolio,
+                      SuggestedPortfolio = SuggestedPortfolio,
+                      Globals = Globals)
+    formals(signal) <- c(formals(signal), add.args)
     if (db.signal)
         debug(signal)
 
-    ## formals(do.signal) <- c(formals(do.signal), add.args)
-    ## if (db.do.signal)
-    ##     debug(do.signal)
+    formals(do.signal) <- c(formals(do.signal), add.args)
+    if (db.do.signal)
+        debug(do.signal)
 
-    ## formals(do.rebalance) <- c(formals(do.rebalance), add.args)
-    ## if (db.do.rebalance)
-    ##     debug(do.rebalance)
+    formals(do.rebalance) <- c(formals(do.rebalance), add.args)
+    if (db.do.rebalance)
+        debug(do.rebalance)
 
-    ## formals(print.info) <- c(formals(print.info), add.args)
-    ## if (db.print.info)
-    ##     debug(print.info)
+    formals(print.info) <- c(formals(print.info), add.args)
+    if (db.print.info)
+        debug(print.info)
 
-    ## formals(cashflow) <- c(formals(cashflow), add.args)
-    ## if (db.cashflow)
-    ##     debug(cashflow)
+    formals(cashflow) <- c(formals(cashflow), add.args)
+    if (db.cashflow)
+        debug(cashflow)
 
-    ## if (!is.null(tc_fun)) {
-    ##     formals(tc_fun) <- c(formals(tc_fun), add.args)
-    ##     if (db.tc_fun)
-    ##         debug(tc_fun)
-    ## }
+    if (!is.null(tc_fun)) {
+        formals(tc_fun) <- c(formals(tc_fun), add.args)
+        if (db.tc_fun)
+            debug(tc_fun)
+    }
 
     if (is.list(prices)) {
         if (length(prices) == 1L) {
