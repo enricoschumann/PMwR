@@ -1,6 +1,7 @@
 \name{position}
 \alias{position}
 \alias{position.default}
+\alias{position.btest}
 \alias{position.journal}
 \alias{print.position}
 \alias{as.matrix.position}
@@ -22,6 +23,8 @@ position(amount, \dots)
 
 \method{position}{journal}(amount, when, drop.zero = FALSE,
                            use.account = FALSE, \dots)
+
+\method{position}{btest}(amount, when, \dots, include.cash = FALSE)
 
 \method{print}{position}(x, \dots, sep = ":")
 
@@ -76,6 +79,10 @@ position(amount, \dots)
     A regular expression. Split instruments accordingly.
     \strong{Not implemented yet.}
   }
+  \item{include.cash}{%
+    logical: if \link{TRUE}, the cash position is attached
+    as an additional column
+  }
 }
 \details{%
 
@@ -119,7 +126,6 @@ position(amount, \dots)
     for the special case of length-one \code{NA}.
   }
 
-
 }
 \value{%
 
@@ -138,7 +144,7 @@ position(amount, \dots)
 }
 \references{
 
-  Schumann, E. (2025) \emph{Portfolio Management with \R}.
+  Schumann, E. (2026) \emph{Portfolio Management with \R}.
   \url{https://enricoschumann.net/R/packages/PMwR/};
   in particular, see\cr
   \url{https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html#computing-balances}
@@ -176,8 +182,7 @@ position(amount, use.names = FALSE)
 p1 <- position(c(A = 0.2, B = 0.8))
 p2 <- position(c(         B = 0.7, C = 0.3))
 p1 - p2
-## A 0.2
-## B 0.1
+## A  0.2
+## B  0.1
 ## C -0.3
-
 }
