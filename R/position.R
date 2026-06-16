@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-25  Enrico Schumann
+## Copyright (C) 2008-26  Enrico Schumann
 
 position <- function(amount, ...)
     UseMethod("position")
@@ -283,7 +283,9 @@ position.data.frame <- position.journal
 
 
 position.btest <- function(amount, when, ...,
-                           include.cash = FALSE) {
+                           include.cash = FALSE,
+                           unit = "amount",
+                           prices = NULL) {
     ans <- amount$position
     class(ans) <- "position"
 
@@ -302,8 +304,23 @@ position.btest <- function(amount, when, ...,
         instrument <- c(instrument, "cash")
     }
 
+    if (grepl("weight", unit)) {
+        if (is.null(prices))
+            prices <- amount$prices
+        if (is.null(prices)) {
+            warning("no prices provided ==> ",
+                    sQuote("unit"), " changed to ", sQuote("amount"))
+            unit <- "amount"
+
+        } else {
+            ans <- ans * if (include.cash)
+                             cbind(prices, 1) else prices
+            ans <- ans/rowSums(ans)
+        }
+    }
+    
     attr(ans, "instrument") <- instrument
-    attr(ans, "unit") <- "amount"
+    attr(ans, "unit") <- unit
     ans
 }
 
