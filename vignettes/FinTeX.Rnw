@@ -127,10 +127,10 @@ toLatex(summary(as.NAVseries(DAX,  title = "DAX"),
 toLatex(summary(as.NAVseries(DAX,  title = "DAX")),
         template = "The DAX %sparkline made %return\\% during the period.")
 @
-It uses the \LaTeX\ package
-\texttt{sparklines}~(\url{https://ctan.org/pkg/sparklines}).
 
-\noindent Since templates are recycled, we can easily create rows for
+This display uses the \LaTeX\ package
+\texttt{sparklines}~(\url{https://ctan.org/pkg/sparklines}).
+ Since templates are recycled, we can easily create rows for
 \LaTeX\ tables, such as this one:
 \begin{center}
 \begin{tabular}{llrr}
