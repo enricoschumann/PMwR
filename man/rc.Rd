@@ -33,8 +33,8 @@ rc(R, weights, timestamp, segments = NULL,
   }
 
   \item{method}{%
-    a string; default is \code{contribution}, and also
-    supported are \code{attribution}, \code{bottomup} or
+    a string: default is \code{contribution}, and also
+    supported are \code{attribution}, \code{bottomup} and
     \code{topdown}
   }
 
@@ -68,13 +68,13 @@ rc(R, weights, timestamp, segments = NULL,
 }
 \details{%
 
-  The function computes segment contribution, potentially
+  The function computes segment contributions, potentially
   over time.  Returns and weights must be arranged in
   matrices, with rows corresponding to time periods and
   columns to portfolio segments.  If \code{weights} and
   \code{R} are atomic vectors, then they are interpreted as
   cross-sectional weights/returns for a single period,
-  i.e. they are handled like row vectors.
+  i.e. they are handled like single-row matrices.
 
   Weights can be missing, in which case \code{R} is assumed
   to already comprise segment returns.
@@ -88,8 +88,11 @@ rc(R, weights, timestamp, segments = NULL,
 
   For method \code{contribution}, a list of two components:
   \item{period_contributions}{a data.frame of single-period
-   contributions, sorted in time}
- \item{total_contributions}{a numeric vector}
+    contributions, sorted in time, with an additional column
+    "\code{total}"}
+  \item{total_contributions}{a numeric vector with the total
+    contributions per segment, and an additional element
+    "\code{total}"}
 
 }
 \references{
