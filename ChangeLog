@@ -1,3 +1,7 @@
+2026-06-24  Enrico Schumann  <es@enricoschumann.net>
+
+        * vignettes/rc_return_constribution.Rnw: add vignette
+
 2026-06-16  Enrico Schumann  <es@enricoschumann.net>
 
         * R/position.R (position.btest): new arguments

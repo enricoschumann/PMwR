@@ -4,7 +4,6 @@
 \usepackage[noae,nogin]{Sweave}
 \usepackage{libertine}
 \usepackage[scaled=0.9]{inconsolata}
-% \usepackage[T1]{fontenc}
 \renewcommand*\familydefault{\sfdefault}
 \usepackage{amsmath,amstext}
 \usepackage{hyperref}
@@ -21,7 +20,7 @@
 \DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=2em}
 \fvset{listparameters={\setlength{\topsep}{0pt}}}
 \renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
-\SweaveOpts{keep.source = TRUE, eps = TRUE}
+\SweaveOpts{keep.source = TRUE}
 
 <<echo=false>>=
 options(continue = "  ", digits = 3, width = 60, useFancyQuotes = FALSE)

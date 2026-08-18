@@ -1,0 +1,81 @@
+%% \VignetteIndexEntry{Return contribution}
+\documentclass[a4paper,11pt]{article}
+\usepackage[left = 3cm, top = 2cm, bottom = 2cm, right = 4cm]{geometry}
+\usepackage[noae,nogin]{Sweave}
+\usepackage{libertine}
+\usepackage[scaled=0.9]{inconsolata}
+\renewcommand*\familydefault{\sfdefault}
+\usepackage{amsmath,amstext}
+\usepackage{hyperref}
+\usepackage{natbib}
+\usepackage{xcolor}
+\usepackage{framed}
+\usepackage{fancyvrb}
+\usepackage[flushmargin]{footmisc}
+\definecolor{grau2}{rgb}{.2,.2,.2}
+\definecolor{grau7}{rgb}{.7,.7,.7}
+\DefineVerbatimEnvironment{Sinput}{Verbatim}{}
+\DefineVerbatimEnvironment{Soutput}{Verbatim}{frame=single,xleftmargin=0em,%
+  formatcom=\color{grau2},rulecolor=\color{grau7}}
+\DefineVerbatimEnvironment{Scode}{Verbatim}{xleftmargin=2em}
+\fvset{listparameters={\setlength{\topsep}{0pt}}}
+\renewenvironment{Schunk}{\vspace{\topsep}}{\vspace{\topsep}}
+\SweaveOpts{keep.source = TRUE}
+
+<<echo=false>>=
+options(continue = "  ", digits = 3, width = 60, useFancyQuotes = FALSE)
+pv <- packageVersion("PMwR")
+pv <- gsub("(.*)[.](.*)", "\\1-\\2", pv)
+@
+
+\begin{document}
+\title{Return contribution}
+\author{Enrico Schumann\\\url{mailto:es@enricoschumann.net}}
+
+{\raggedright{\LARGE Return contribution}}\hspace*{\fill}
+{\footnotesize Package version \Sexpr{pv}}\medskip
+
+\noindent Enrico Schumann\\
+\noindent \url{mailto:es@enricoschumann.net}\\
+\bigskip
+
+\noindent This vignette shows how function \texttt{rc}
+can be used.
+
+
+
+\section{Return contribution}
+<<>>=
+library("PMwR")
+w <- c( 0.1, 0.5, 0.4)
+R <- c(-0.1, 0.1, 0.2)
+rc(R, w)   ## sum(w*R)
+@
+
+\noindent Add a benchmark, which will trigger a split into
+alloction, selection and interaction. Since the benchmark
+returns are the same as the portfolio returns, the total
+effect is captured by `allocation'.
+<<>>=
+w.bm <- c(0.2, 0.4, 0.4)
+rc(R, w, weights.bm = w.bm)   ## sum((w - w.bm)*R)
+@
+
+Pass separate benchmark returns.
+<<>>=
+R.bm <- c(-0.1, 0.2, 0.3)
+rc(R, w, weights.bm = w.bm, R.bm = R.bm)
+@
+
+
+
+Specify segments
+<<>>=
+w <- c( 0.1, 0.5, 0.4)
+R <- c(-0.1, 0.1, 0.2)
+segments <- c("Equity", "Equity", "Bonds")
+rc(R, w, segments = segments)
+@
+
+
+\end{document}
