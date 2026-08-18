@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-25  Enrico Schumann
+## Copyright (C) 2008-26  Enrico Schumann
 
 pl <- function(amount, ...)
     UseMethod("pl")
@@ -460,7 +460,7 @@ pl.default <- function(amount, price, timestamp = NULL,
                                         along.timestamp,
                         pl = pnl * unname(mult[i1]),
                         realised = real * unname(mult[i1]),
-                        unrealised = pnl - real,
+                        unrealised = (pnl - real) * unname(mult[i1]),
                         buy = pl1[3L],
                         sell = pl1[4L],
                         volume = volume)

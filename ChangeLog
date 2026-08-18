@@ -1,3 +1,8 @@
+2026-08-18  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/pl.R: fixed -- multiplier was ignored when
+        computing unrealised P/L
+
 2026-06-24  Enrico Schumann  <es@enricoschumann.net>
 
         * vignettes/rc_return_constribution.Rnw: add vignette
