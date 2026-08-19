@@ -1,5 +1,11 @@
 2026-08-19  Enrico Schumann  <es@enricoschumann.net>
 
+        * R/rc.R (rc): when benchmark returns or weights
+        are specified and 'method' is not explicitly set,
+        'method' is set to "attribution"
+        (.carino1999): add internal functions, such as
+        ".carino1999"
+
         * R/pl.R: fixed -- when a 'vprice' is specified for
         an open position with 'along.timestamp' set to
         TRUE, the final profit/loss was shown as 'realised';

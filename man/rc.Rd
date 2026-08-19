@@ -13,7 +13,8 @@ rc(R, weights, timestamp, segments = NULL,
    method = "contribution",
    linking.method = NULL,
    allocation.minus.bm = TRUE,
-   tol = sqrt(.Machine$double.eps))
+   tol = sqrt(.Machine$double.eps),
+   options = list())
 }
 \arguments{
   \item{R}{%
@@ -64,6 +65,9 @@ rc(R, weights, timestamp, segments = NULL,
   \item{weights.bm}{%
     the benchmark weights of segments: a numeric matrix.
     \code{weights.bm[i, j]} must correspond to \code{R.bm[i, j]}
+  }
+  \item{options}{%
+    a list of options; currently not used
   }
 }
 \details{%

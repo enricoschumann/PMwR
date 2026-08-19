@@ -1,12 +1,19 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2023-25  Enrico Schumann
+## Copyright (C) 2023-26  Enrico Schumann
 
 rc <- function(R, weights, timestamp, segments = NULL,
                R.bm = NULL, weights.bm = NULL,
                method = "contribution",
                linking.method = NULL,
                allocation.minus.bm = TRUE,
-               tol = sqrt(.Machine$double.eps)) {
+               tol = sqrt(.Machine$double.eps),
+               options = list()) {
+
+    if (missing(method) &&
+        (!is.null(R.bm) || !is.null(weights.bm))) {
+        message("method switched to attribution")
+        method <- "attribution"
+    }
 
     if (is.null(dim(R)))
         R <- t(R)
@@ -16,13 +23,21 @@ rc <- function(R, weights, timestamp, segments = NULL,
     else if (is.null(dim(weights)))
         weights <- t(weights)
 
+    if (!is.null(R.bm) && is.null(dim(R.bm)))
+        R.bm <- t(R.bm)
+    if (!is.null(weights.bm) && is.null(dim(weights.bm)))
+        weights.bm <- t(weights.bm)
+
+    if (!is.null(weights.bm) && is.null(R.bm))
+        R.bm <- R
+
+
     if (is.null(segments)) {
 
-        ## TODO: segments could also be a matrix
-        ##       (e.g. changing sectors over time), or
-        ##       list of vectors (more than one
-        ##       grouping). [But if a list, it could be
-        ##       aggregated.]
+        ## TODO segments could also be a matrix
+        ## (e.g. changing sectors over time), or list of
+        ## vectors (more than one grouping). [But if a
+        ## list, it could be aggregated.]
 
         segments <-
             if (!is.null(cr <- colnames(R)))
@@ -42,7 +57,7 @@ rc <- function(R, weights, timestamp, segments = NULL,
     }
 
     if (missing(timestamp))
-        timestamp <- 1:nrow(R)
+        timestamp <- seq_len(nrow(R))
     else if (anyDuplicated(timestamp))
         stop("duplicated timestamps")
     else if (is.unsorted(timestamp)) {
@@ -53,23 +68,23 @@ rc <- function(R, weights, timestamp, segments = NULL,
     }
 
     nt <- length(timestamp)
-
-
     ns <- length(segments)
-    R0 <- R
-    if (is.finite(tol))
-        R0[is.finite(weights) & abs(weights) < tol] <- 0
-    df <- data.frame(timestamp,
-                     cbind(weights*R0, rowSums(weights*R0)),
-                     stringsAsFactors = FALSE)
-    names(df) <- c("timestamp", segments, "total")
 
 
     if (method == "contribution") {
 
+        R0 <- R
+        if (is.finite(tol))
+            R0[is.finite(weights) & abs(weights) < tol] <- 0
+        df <- data.frame(timestamp,
+                         cbind(weights*R0, rowSums(weights*R0)),
+                         stringsAsFactors = FALSE)
+        names(df) <- c("timestamp", segments, "total")
+
         if (is.null(linking.method))
-            linking.method <- "geometric1"
-        else if (linking.method == "1-cumulative")
+            linking.method <- "1-cumulative"
+
+        if (linking.method == "1-cumulative")
             linking.method <- "geometric1"
         else if (linking.method == "0-cumulative")
             linking.method <- "geometric0"
@@ -82,7 +97,7 @@ rc <- function(R, weights, timestamp, segments = NULL,
             total <- rep(NA_real_, ns + 1)
             names(total) <- c(segments, "total")
             ns1 <- seq_len(ns)
-            total[ns1] <- colSums(df[, ns1 + 1] * later_r)
+            total[ns1] <- colSums(as.matrix(df[, ns1 + 1, drop = FALSE]) * later_r)
             total[[ns + 1]] <- cumprod(df[["total"]] + 1)[[nt]] - 1
 
         } else if (linking.method == "geometric0") {
@@ -124,9 +139,6 @@ rc <- function(R, weights, timestamp, segments = NULL,
     } else if (method %in%
                c("attribution", "topdown", "bottomup")) {
 
-        if (!is.null(linking.method))
-            .NotYetUsed("linking.method", FALSE)
-
         if (any(duplicated(segments))) {
             R <- tapply(R*weights, segments, sum)
             weights <- tapply(weights, segments, sum)
@@ -139,8 +151,6 @@ rc <- function(R, weights, timestamp, segments = NULL,
             weights.bm <- t(weights.bm)
 
         B <- R.bm
-        if (is.null(dim(B)))
-            B <- t(B)
 
         if (!is.null(segments))
             colnames(weights) <- colnames(weights.bm) <-
@@ -182,51 +192,150 @@ rc <- function(R, weights, timestamp, segments = NULL,
              } else
                  stop("unknown method: ", method)
 
-
         tA <- rowSums(A)
         tS <- rowSums(S)
         tI <- rowSums(I)
 
-        tt <- rc(cbind(tA, tS, tI), linking.method = linking.method)
-        total <- tt$total_contributions
-        names(total) <- c("allocation", "selection", "interaction", "total")
+        total <- c("allocation"  = sum(tA),
+                   "selection"   = sum(tS),
+                   "interaction" = sum(tI),
+                   "total" = sum(tA, tS, tI))
         ans <- list(allocation  = cbind(A, total = tA),
                     selection   = cbind(S, total = tS),
                     interaction = cbind(I, total = tI),
                     total       = total)
+
         colnames(ans$allocation)  <- c(segments, "total")
         colnames(ans$selection)   <- c(segments, "total")
         colnames(ans$interaction) <- c(segments, "total")
-        labels <- c(attribution = "attribution (default)",
-                    topdown     = "attribution (top-down)",
-                    bottomup    = "attribution (bottom-up)")
-        attr(ans, "method") <- labels[method]
-        attr(ans, "linking.method") <- if (is.null(linking.method))
-                                           "none" else linking.method
+        attr(ans, "method") <-
+            c(attribution = "attribution",
+              topdown     = "attribution (top-down)",
+              bottomup    = "attribution (bottom-up)")[[method]]
+
+        if (!is.null(linking.method)) {
+
+            tmp.C <- cbind(ans$allocation [, seq(1, ns)],
+                           ans$selection  [, seq(1, ns)],
+                           ans$interaction[, seq(1, ns)])
+            tmp.C <- .carino1999(tmp.C, R.total, B.total)
+
+            attr(ans, "linking.method") <- "Carino1999"
+            attr(ans, "adjusted") <- list(
+                "allocation"  = attr(tmp.C, "adjusted")[,      seq(1, ns)],
+                "selection"   = attr(tmp.C, "adjusted")[, 1*ns+seq(1, ns)],
+                "interaction" = attr(tmp.C, "adjusted")[, 2*ns+seq(1, ns)])
+
+            ans$total <-
+                rowSums(do.call(
+                    rbind, lapply(attr(ans, "adjusted"), colSums)))
+            ans$total <- c(ans$total, total = sum(ans$total))
+
+        } else {
+            attr(ans, "linking.method") <- "none"
+        }
+
 
     } else
-        stop("unknown method")
+        stop("unknown method; should be 'contribution' or 'attribution'")
 
+    class(ans) <- "rc"
     ans
 }
 
-.linking_logarithmic <- function(C, r, b = 0, ...) {
 
-    ## C .. matrix of contributions
+
+
+## @Article{valtonen2002,
+##   author       = {Erik Valtonen},
+##   title        = {Incremental Attribution with and without
+##                   Notional Portfolios},
+##   journaltitle = {Journal of Performance Measurement},
+##   year         = 2002,
+##   volume       = 7,
+##   number       = 1,
+##   pages        = {68--83}
+## }
+.linking_cumulative0 <- function(C, r, b = 0, ...) {
+
+    ## C .. matrix of contributions (or 'attributes')
+    ## r .. period returns of portfolio
+    ## b .. period returns of benchmark
+    tr <- cumprod(1 + r)
+    f <- c(1, tr[-length(tr)])  ## earlier
+    C * f
+}
+
+.linking_cumulative1 <- function(C, r, b = 0, ...) {
+
+    if (nrow(C) == 1L)
+        return(C)
+
+    i <- seq.int(from = length(r), to = 1, by = -1)
+    f <- c(cumprod(1 + r[i])[i][-1L], 1)
+    C * f
+}
+
+.linking_cumulativex <- function(C, r, b = 0, x = 0, ...) {
+
+    ## C .. matrix of contributions (or 'attributes')
+    ## r .. period returns of portfolio
+    ## b .. period returns of benchmark
+
+    R <- cumprod(1 + r) - 1
+    B <- cumprod(1 + b) - 1
+
+    rb <- r - b
+    RB <- R - B
+
+    n <- nrow(C)
+    A <- array(NA, dim = dim(C))
+
+    A[1, ] <- C[1, ]
+
+    if (n > 1L) {
+        if (!identical(b, 0) && length(b) == 1)
+            b <- rep.int(b, n)
+
+        if (identical(b, 0))
+            for (i in 2:n) {
+                A[i, ] <- A[i - 1, ] * (1 +         x  * r[i]) +
+                          C[i,     ] * (1 +    (1 - x) * R[i-1])
+            }
+        else
+            for (i in 2:n) {
+                A[i, ] <- A[i - 1, ] * (1 + b[i  ] +      x  * rb[i]) +
+                          C[i,     ] * (1 + B[i-1] + (1 - x) * RB[i-1])
+            }
+    }
+
+    A
+}
+
+
+
+## D. R. Cari{\~n}o -- Combining Attribution Effects Over
+## Time, 1999
+.carino1999 <- .linking_logarithmic <- function(C, r, b = 0, ...) {
+
+    ## C .. matrix of contributions (or 'attributes')
     ## r .. period returns of portfolio
     ## b .. period returns of benchmark
 
     rT <- prod(r + 1) - 1
     bT <- prod(b + 1) - 1
 
+    r_b <- r - b
     kt <- log(1 + r) - log(1 + b)
-    inf <- is.infinite(kt)
-    kt <- kt / (r - b)
-    kt[inf] <- 1/(1 + r)
+    i <- abs(r_b) < 1e-14
+    kt <- kt / r_b
+    kt[i] <- 1/(1 + r[i])
 
     k  <- log(1 + rT) - log(1 + bT)
-    k <- k / (rT - bT)
-    k[is.infinite(k)] <- 1/(1 + rT)
+
+    rT_bT <- rT - bT
+    if (abs(rT_bT) < 1e-14)
+        k <- 1/(1 + rT) else k <- k / (rT - bT)
 
     C.adj <- C * kt / k
     total <- colSums(C.adj)
@@ -235,8 +344,14 @@ rc <- function(R, weights, timestamp, segments = NULL,
 }
 
 
-## A. Colin -- A Brinson Model Alternative: an Equity
-## Attribution Model with Orthogonal Risk Contributions, 2007
+## @Article{colin2007,
+##   author       = {Andrew Colin},
+##   title        = {A Brinson Model Alternative: an Equity Attribution
+##                   Model with Orthogonal Risk Contributions},
+##   journal      = {Journal of Performance Measurement},
+##   year         = 2007,
+##   issue         = {fall}
+## }
 .colin2007 <- function(weights, weights.bm, R) {
 
     if (is.null(names(weights)) &&
@@ -263,19 +378,14 @@ rc <- function(R, weights, timestamp, segments = NULL,
     df <- rbind(df, apply(df, 2, sum))
     row.names(df)[nrow(df)] <- "total"
     df
-    ## c(portfolio = sum(w*r),
-    ##   benchmark = sum(W*r),
-    ##   selection = sum((w_ - W)*r),
-    ##   allocation = sum((w - w_)*r))
-
 }
 
 ## weights <- c(a=0.5,b=0.1,cash=0.4)
 ## weights.bm <- c(a=0.5,b=0.5)
 ## R <- c(a=0.02,b=-0.01, cash = 0)
-## .colin(weights, weights.bm, R)
+## .colin2007(weights, weights.bm, R)
 
 ## weights <- c(0.8,0,0.2,0,0)
 ## weights.bm <- c(.3,.3,.1,.1,.2)
 ## R <- c(2,-2,1,-2,0)/100
-## dput(.colin(weights, weights.bm, R))
+## dput(.colin2007(weights, weights.bm, R))
