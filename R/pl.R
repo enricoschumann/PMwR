@@ -87,8 +87,10 @@ print.pl <- function(x, ...,
     }
 
     if (footnotes) {
+        along.ts <- !identical(attr(x, "along.timestamp"), FALSE)
         cat("\n", sQuote("P/L total"), " is in units of instrument;\n",
-            sQuote("volume"), " is sum of /absolute/ amounts.\n",
+            if (along.ts) sQuote("cum. volume") else sQuote("volume"),
+            " is sum of /absolute/ amounts.\n",
             sep = "")
         if (!is.null(fn <- attr(x, "footnotes"))) {
             i <- grep("average sell includes", fn)
@@ -393,18 +395,17 @@ pl.default <- function(amount, price, timestamp = NULL,
         if (identical(along.timestamp, FALSE)) {
 
             ## total P/L, ignoring the timestamp
-
             tmp <- list(pl = pl1[1L] * unname(mult[i1]),
-                        realised = NA,
-                        unrealised = NA,
-                        buy = pl1[3L],
+                        realised = NA,   ## TODO realised/unrealised could be
+                        unrealised = NA, ##      computed without timestamp
+                        buy = pl1[3L],   ##      (based on average price)?
                         sell = pl1[4L],
                         volume = pl1[2L] - subtr)
 
         } else {
 
-            ## P/L along timestamp
 
+            ## P/L along timestamp
             cumcash <- cumsum(-price1 * amount1)
             cumpos  <- cumsum(amount1)
             real <- if (length(amount1))
@@ -455,6 +456,16 @@ pl.default <- function(amount, price, timestamp = NULL,
                                  yleft = 0, ties = "ordered")$y
 
             }
+
+
+            ## adjustments in case an open position is included
+            if (open && !custom.timestamp && !is.null(vprice)) {
+                ## if an open position exists and
+                ## vprice is specified, length of 'real'
+                ## is at least 2
+                real[length(real)] <-  real[length(real) - 1]
+                volume[length(volume)] <- volume[length(volume) - 1]
+            }
             tmp <- list(timestamp = if (isTRUE(along.timestamp))
                                         timestamp1 else
                                         along.timestamp,
@@ -465,8 +476,10 @@ pl.default <- function(amount, price, timestamp = NULL,
                         sell = pl1[4L],
                         volume = volume)
         }
+
         ans[[i]] <- tmp
     }
+
     class(ans) <- "pl"
     attr(ans, "along.timestamp") <- along.timestamp
     if (no.i) {

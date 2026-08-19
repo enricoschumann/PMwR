@@ -1,3 +1,10 @@
+2026-08-19  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/pl.R: fixed -- when a 'vprice' is specified for
+        an open position with 'along.timestamp' set to
+        TRUE, the final profit/loss was shown as 'realised';
+        it is now correctly shown as 'unrealised'
+
 2026-08-18  Enrico Schumann  <es@enricoschumann.net>
 
         * R/pl.R: fixed -- multiplier was ignored when

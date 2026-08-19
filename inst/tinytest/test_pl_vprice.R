@@ -39,15 +39,18 @@ expect_error(pl(j, vprice = c(B = 19, A = 21)))
 
 
 ## ## single trade, along.timestamp is TRUE
-## j <- journal(amount = 1,
-##              price = 20,
-##              instrument = "A",
-##              timestamp = 5)
+j <- journal(amount = 1,
+             price = 20,
+             instrument = "A",
+             timestamp = 5)
 
-## pl(j, along.timestamp = TRUE)
-## pl(j, along.timestamp = TRUE, vprice = 21)  ## FIXME INCORRECT: profit is labelled realised
+res <- pl(j, along.timestamp = TRUE)
+expect_equivalent(res[[1]]$realised, c(0))
+expect_equivalent(res[[1]]$unrealised, c(0))
 
-
+res <- pl(j, along.timestamp = TRUE, vprice = 21)
+expect_equivalent(res[[1]]$realised, c(0, 0))
+expect_equivalent(res[[1]]$unrealised, c(0, 1))
 
 ##
 j <- journal(amount = 1,
