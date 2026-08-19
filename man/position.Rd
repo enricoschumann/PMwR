@@ -24,7 +24,8 @@ position(amount, \dots)
 \method{position}{journal}(amount, when, drop.zero = FALSE,
                            use.account = FALSE, \dots)
 
-\method{position}{btest}(amount, when, \dots, include.cash = FALSE)
+\method{position}{btest}(amount, when, \dots, include.cash = FALSE,
+                         unit = "amount", prices = NULL)
 
 \method{print}{position}(x, \dots, sep = ":")
 
@@ -74,6 +75,13 @@ position(amount, \dots)
   }
   \item{\dots}{%
     arguments passed to \code{\link{print}}
+  }
+  \item{unit}{%
+    string: \sQuote{\code{amount}} of \sQuote{\code{weights}}
+  }
+  \item{prices}{%
+    a numeric matrix of valuation prices (typically the same that
+    was passed to \code{\link{btest}})
   }
   \item{sep}{%
     A regular expression. Split instruments accordingly.
