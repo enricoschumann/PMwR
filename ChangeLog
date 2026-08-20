@@ -1,8 +1,14 @@
+2026-08-20  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/pl.R (print.pl): rewrite display of pl, with
+        too-wide columns trimmed "in the middle". Also,
+        columns across instruments now share a common width
+
 2026-08-19  Enrico Schumann  <es@enricoschumann.net>
 
-        * R/rc.R (rc): when benchmark returns or weights
-        are specified and 'method' is not explicitly set,
-        'method' is set to "attribution"
+        * R/rc.R (rc): when benchmark returns or weights are
+        specified and 'method' is not explicitly set, 'method'
+        is set to "attribution"
         (.carino1999): add internal functions, such as
         ".carino1999"
 

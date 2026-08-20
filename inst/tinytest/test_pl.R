@@ -737,3 +737,34 @@ position(J, when = t.valuation)
 journal(1:5)
 J <- structure(list(amount = 1:5), class = "journal")
 print(J)
+
+## --------------------------------------------------
+
+
+pl(amount = rep(100, 10), price = rep(100, 10),
+   timestamp = Sys.Date()+1:10, along.timestamp = TRUE)
+
+J <- journal(amount = c(1, 2, -2),
+             price = c(1, 2, 3),
+             instrument = c("A", "B", "B"))
+pl(J)
+pl(J, along.timestamp = TRUE)
+res <- pl(J, along.timestamp = TRUE, vprice = c(A = NA, B = NA))
+
+
+pl(J, along.timestamp = TRUE, do.sum = TRUE, vprice = c(A = NA, B = NA))
+
+
+
+
+## J <- orgutils::readOrg(text = "
+## | instrument  | amount | price |
+## |-------------+--------+-------|
+## | Adidas      |     50 |   100 |
+## | Adidas      |    -50 |   102 |
+## | Commerzbank |    500 |     8 |
+## | Commerzbank |   -500 |     7 |
+## ")
+## J <- as.journal(J)
+## J
+## pl(J)

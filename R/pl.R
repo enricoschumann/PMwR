@@ -7,7 +7,8 @@ pl <- function(amount, ...)
 print.pl <- function(x, ...,
                      use.crayon = NULL,
                      na.print = ".",
-                     footnotes = TRUE) {
+                     footnotes = TRUE,
+                     col.sep = " [..] ") {
     if (is.null(use.crayon))
         use.crayon <- getOption("PMwR.use.crayon")
 
@@ -26,12 +27,29 @@ print.pl <- function(x, ...,
     ni <- length(x)
 
     numrow <- function(x, w) {
-        ans <- substr(paste0(format(x, width = w, justify = "right"),
-                             collapse = " "),
-                      start = 1, stop = ceiling(getOption("width")*0.9))
-        if (nchar(ans) < nchar(paste0(format(x, width = w), collapse = " ")))
-            ans  <- paste(ans, "[...]")
-        ans
+        ans <- x
+        for (i in seq_along(ans)) {
+            ans[i] <- format(ans[i], width = w[i], justify = "right")
+        }
+
+        tw <- sum(nchar(ans))
+
+        max.w <- ceiling(getOption("width")*0.98) - nchar(col.sep)
+        if (tw > max.w) {
+
+            i <- seq_along(ans)
+            i <- c(rbind(i, rev(i)))[i]
+
+            j <- min(which(cumsum(nchar(ans)) > max.w)) - 1
+
+            j <- sort(i[seq_len(j)])
+            k <- which(diff(j) > 1)
+
+            ans <- c(ans[j[ seq_len(k - 1)]],
+                     col.sep, ans[j[k]])
+
+        }
+        paste(ans, collapse = " ")
     }
 
     indent <- ""
@@ -39,6 +57,13 @@ print.pl <- function(x, ...,
     if (!all(is.na(attr(x, "instrument")))) {
         print.inst <- TRUE
         indent <- "  "
+    }
+
+    ncol <- max(sapply(x, lengths))
+    w <- numeric(ncol)
+    for (i in seq_len(ncol)) {
+        tmp <- lapply(lapply(x, function(x) lapply(x, `[`, i)), prettyNum)
+        w[i] <- max(nchar(as.character(prettyNum(unlist(tmp)))), na.rm = TRUE)
     }
 
     for (i in seq_len(ni)) {
@@ -57,14 +82,7 @@ print.pl <- function(x, ...,
         if (no.trades) {
             BUY <- SELL <- "."
             PL <- "0  <no trades>"
-            w <- 1
-        } else
-            w <- max(0,
-                     nchar(c(
-                         as.character(prettyNum(c(PL, BUY, SELL,
-                                                  x[[i]]$realised,
-                                                  x[[i]]$unrealised))),
-                         as.character(x[[i]]$timestamp))))
+        }
 
         if (!is.null(x[[i]]$timestamp) && length(x[[i]]$timestamp))
             cat(indent,      "timestamp     ",
@@ -368,7 +386,7 @@ pl.default <- function(amount, price, timestamp = NULL,
         sum.amount1 <- sum(amount1)
         open <- abs(sum.amount1) > tol
         if (open && !custom.timestamp) {
-            if (is.null(vprice) || is.na(vprice1)) {
+            if (is.null(vprice)) {
                 if (footnotes)
                     fn <- c(fn,
                             paste0(sQuote("sum(amount)"), " is not zero",
@@ -491,12 +509,20 @@ pl.default <- function(amount, price, timestamp = NULL,
 
     if (do.sum) {
         if ((n <- length(ans)) > 1L) {
-            ans1 <- ans[[1L]]
-            for (i in 2:n) {
-                ans1$pl <- ans1$pl + ans[[i]]$pl
-                ans1$realised <- ans1$realised + ans[[i]]$realised
-                ans1$unrealised <- ans1$unrealised + ans[[i]]$unrealised
-                ans1$volume <- ans1$volume + ans[[i]]$volume
+
+            t <- unique(unlist(lapply(ans, `[[`, "timestamp")))
+            ans1 <- list(timestamp = t,
+                         pl = numeric(length(t)),
+                         realised = numeric(length(t)),
+                         unrealised = numeric(length(t)),
+                         volume = numeric(length(t)))
+
+            for (i in 1:n) {
+                .t <- match(ans[[i]]$timestamp, t)
+                ans1$pl[.t] <- ans1$pl[.t] + ans[[i]]$pl
+                ans1$realised[.t] <- ans1$realised[.t] + ans[[i]]$realised
+                ans1$unrealised[.t] <- ans1$unrealised[.t] + ans[[i]]$unrealised
+                ans1$volume[.t] <- ans1$volume[.t] + ans[[i]]$volume
             }
             ans1$buy <- NA
             ans1$sell <- NA
@@ -507,6 +533,7 @@ pl.default <- function(amount, price, timestamp = NULL,
             ans <- ans1
         }
     }
+
     if (pl.only) {
         if (!identical(along.timestamp, FALSE))
             stop("only supported for ",
