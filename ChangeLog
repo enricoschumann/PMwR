@@ -1,3 +1,7 @@
+2026-08-21  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/rebalance.R (rebalance): fix warning text
+
 2025-12-17  Enrico Schumann  <es@enricoschumann.net>
 
         * DESCRIPTION (Version): 1.2-0
