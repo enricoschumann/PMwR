@@ -1,3 +1,7 @@
+2026-08-21  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/rebalance.R (rebalance): fix warning text
+
 2026-08-20  Enrico Schumann  <es@enricoschumann.net>
 
         * R/pl.R (print.pl): rewrite display of pl, with

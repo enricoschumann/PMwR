@@ -37,7 +37,8 @@ replace_weight(weights, ..., prefix = TRUE, sep = "::")
     replaced by \code{sum(current*prices)}
   }
   \item{multiplier}{
-    numeric vector, possibly named
+    numeric vector, possibly named. If unnamed and of length 1,
+    \code{multiplier} will be recycled to the length of \code{price}.
   }
   \item{truncate}{
     truncate computed positions? Default is \code{TRUE}.

@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-25  Enrico Schumann
+## Copyright (C) 2008-26  Enrico Schumann
 
 rebalance <- function(current,
                       target,
@@ -101,7 +101,7 @@ rebalance <- function(current,
                                          names(price))))) {
             warning("instrument in target without price: ",
                     if (sum(miss.name) > 3) "\n",
-                    paste(names(current)[miss.name],
+                    paste(names(target)[miss.name],
                           collapse = if (sum(miss.name) > 3) "\n" else ", "),
                     immediate. = TRUE)
         }
