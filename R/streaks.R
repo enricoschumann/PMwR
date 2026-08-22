@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2018-22  Enrico Schumann
+## Copyright (C) 2018-26  Enrico Schumann
 
 streaks <- function(x, ...)
     UseMethod("streaks")
@@ -11,6 +11,11 @@ streaks.default <- function(x,
                             relative = TRUE,
                             ...) {
 
+    if (!length(x)) {
+        return(data.frame(start = numeric(0),
+                          end = numeric(0),
+                          state = character(0)))
+    }
     start <- 1
     end <- NA
     state <- tolower(initial.state)
@@ -34,114 +39,115 @@ streaks.default <- function(x,
         hi.t <- NA
         lo.t <- 1
     }
-    for (t in 2:length(x)) {
-        dx <- if (relative)
-                  x[t]/x[t - 1] / (y[t]/y[t - 1]) - 1
-              else
-                  x[t] - x[t - 1]
-        xy.i <- x[t]/y[t]
-        if (is.na(state)) {
-            if (dx >= 0) {
+    if (length(x) > 1L)
+        for (t in 2:length(x)) {
+            dx <- if (relative)
+                      x[t]/x[t - 1] / (y[t]/y[t - 1]) - 1
+                  else
+                      x[t] - x[t - 1]
+            xy.i <- x[t]/y[t]
+            if (is.na(state)) {
+                if (dx >= 0) {
 
-                if (xy.i > hi) {
-                    hi <- xy.i
-                    hi.t <- t
-                }
-                move <- if (relative)
-                            (x[t]/x[lo.t]) / (y[t]/y[lo.t]) - 1
-                        else
-                            x[t] - x[lo.t]
-                if (move >= up) {
-                    state <- "up"
-                    if (lo.t == 1) {
-                        lo <- NA
-                        lo.t <- NA
-                        start <- 1
-                    } else {
-                        results <- rbind(results,
-                                         data.frame(start = 1,
-                                                    end = lo.t,
-                                                    state = NA))
-                        start <- lo.t
+                    if (xy.i > hi) {
+                        hi <- xy.i
+                        hi.t <- t
+                    }
+                    move <- if (relative)
+                                (x[t]/x[lo.t]) / (y[t]/y[lo.t]) - 1
+                            else
+                                x[t] - x[lo.t]
+                    if (move >= up) {
+                        state <- "up"
+                        if (lo.t == 1) {
+                            lo <- NA
+                            lo.t <- NA
+                            start <- 1
+                        } else {
+                            results <- rbind(results,
+                                             data.frame(start = 1,
+                                                        end = lo.t,
+                                                        state = NA))
+                            start <- lo.t
+                        }
+                    }
+
+                } else if (dx < 0) {
+
+                    if (xy.i < lo) {
+                        lo <- xy.i
+                        lo.t <- t
+                    }
+                    move <- if (relative)
+                                (x[t]/x[hi.t]) / (y[t]/y[hi.t]) - 1
+                            else
+                                x[t] - x[hi.t]
+
+                    if (move <= down) {
+                        state <- "down"
+                        if (hi.t == 1) {
+                            hi <- NA
+                            hi.t <- NA
+                            start <- 1
+                        } else {
+                            results <- rbind(results,
+                                             data.frame(start = 1,
+                                                        end = hi.t,
+                                                        state = NA))
+                            start <- hi.t
+                        }
                     }
                 }
 
-            } else if (dx < 0) {
+            } else if (state == "up") {
 
-                if (xy.i < lo) {
-                    lo <- xy.i
-                    lo.t <- t
-                }
-                move <- if (relative)
-                            (x[t]/x[hi.t]) / (y[t]/y[hi.t]) - 1
-                        else
-                            x[t] - x[hi.t]
-
-                if (move <= down) {
+                if (dx >= 0) {
+                    if (xy.i > hi) {
+                        hi <- xy.i
+                        hi.t <- t
+                    }
+                } else if (dx < 0 &&
+                           (
+                               ( relative && (x[t]/x[hi.t]) / (y[t]/y[hi.t]) - 1 <= down) ||
+                               (!relative &&  x[t] - x[hi.t] <= down)
+                           )) {
+                    results <- rbind(results,
+                                     data.frame(start = start,
+                                                end = hi.t,
+                                                state = state))
                     state <- "down"
-                    if (hi.t == 1) {
-                        hi <- NA
-                        hi.t <- NA
-                        start <- 1
-                    } else {
-                        results <- rbind(results,
-                                         data.frame(start = 1,
-                                                    end = hi.t,
-                                                    state = NA))
-                        start <- hi.t
-                    }
-                }
-            }
-
-        } else if (state == "up") {
-
-            if (dx >= 0) {
-                if (xy.i > hi) {
-                    hi <- xy.i
-                    hi.t <- t
-                }
-            } else if (dx < 0 &&
-                       (
-                           ( relative && (x[t]/x[hi.t]) / (y[t]/y[hi.t]) - 1 < down) ||
-                           (!relative &&  x[t] - x[hi.t] < down)
-                       )) {
-                results <- rbind(results,
-                                 data.frame(start = start,
-                                            end = hi.t,
-                                            state = state))
-                state <- "down"
-                start <- hi.t
-                lo.t <- t
-                lo <- xy.i
-                hi.t <- NA
-                hi <- NA
-            }
-
-        } else if (state == "down") {
-
-            if (dx <= 0) {
-                if (xy.i < lo) {
-                    lo <- xy.i
+                    start <- hi.t
                     lo.t <- t
+                    lo <- xy.i
+                    hi.t <- NA
+                    hi <- NA
                 }
-            } else if (dx > 0 &&
-                       (
-                           ( relative && (x[t]/x[lo.t]) / (y[t]/y[lo.t]) - 1 > up) ||
-                           (!relative &&  x[t] - x[lo.t] > up)
-                       )) {
-                results <- rbind(results,
-                                 data.frame(start = start,
-                                            end = lo.t,
-                                            state = state))
-                state <- "up"
-                start <- lo.t
-                lo.t <- NA
-                lo <- NA
-                hi.t <- t
-                hi <- xy.i
+
+            } else if (state == "down") {
+
+                if (dx <= 0) {
+                    if (xy.i < lo) {
+                        lo <- xy.i
+                        lo.t <- t
+                    }
+                } else if (dx > 0 &&
+                           (
+                               ( relative && (x[t]/x[lo.t]) / (y[t]/y[lo.t]) - 1 >= up) ||
+                               (!relative &&  x[t] - x[lo.t] >= up)
+                           )) {
+                    results <- rbind(results,
+                                     data.frame(start = start,
+                                                end = lo.t,
+                                                state = state))
+                    state <- "up"
+                    start <- lo.t
+                    lo.t <- NA
+                    lo <- NA
+                    hi.t <- t
+                    hi <- xy.i
+                }
             }
         }
-    }
     results <- rbind(results,
                      data.frame(start = start,
                                 end = length(x),

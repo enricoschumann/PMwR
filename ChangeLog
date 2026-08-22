@@ -1,3 +1,10 @@
+2026-08-22  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/streaks.R (streaks.default): return useful
+        result when length(x) is 0 or 1; align
+        implementation with documentation: use ">=" instead
+        of ">"
+
 2026-08-21  Enrico Schumann  <es@enricoschumann.net>
 
         * R/rebalance.R (rebalance): fix warning text
@@ -5,8 +12,10 @@
 2026-08-20  Enrico Schumann  <es@enricoschumann.net>
 
         * R/pl.R (print.pl): rewrite display of pl, with
-        too-wide columns trimmed "in the middle". Also,
-        columns across instruments now share a common width
+        too-wide columns trimmed "in the middle"; the new
+        argument 'col.sep', with default "[..]", determines
+        how the gap is marked.  Also, columns across
+        instruments now share a common width.
 
 2026-08-19  Enrico Schumann  <es@enricoschumann.net>
 
