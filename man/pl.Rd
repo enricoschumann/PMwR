@@ -35,7 +35,7 @@ pl(amount, \dots )
 \method{pl}{pl}(amount, \dots )
 
 \method{print}{pl}(x, \dots, use.crayon = NULL, na.print = ".",
-        footnotes = TRUE)
+        footnotes = TRUE, col.sep = " [..] ")
 
 \method{as.data.frame}{pl}(x, \dots )
 
@@ -98,6 +98,7 @@ pl(amount, \dots )
   \item{\dots}{further argument}
   \item{use.crayon}{logical}
   \item{na.print}{character: how to print \code{NA} values}
+  \item{col.sep}{string: how to indicate suppressed columns?}
   \item{do.warn}{logical: issue warnings?}
   \item{do.sum}{logical: sum profit/loss across instruments?}
   \item{pl.only}{logical: if \code{TRUE}, return only
