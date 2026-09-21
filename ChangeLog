@@ -1,3 +1,8 @@
+2026-09-21  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/pl.R (print.pl): use prettyNum for PL, BUY
+        and SELL
+
 2026-08-22  Enrico Schumann  <es@enricoschumann.net>
 
         * R/streaks.R (streaks.default): return useful

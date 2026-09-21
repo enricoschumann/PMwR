@@ -29,7 +29,8 @@ print.pl <- function(x, ...,
     numrow <- function(x, w) {
         ans <- x
         for (i in seq_along(ans)) {
-            ans[i] <- format(ans[i], width = w[i], justify = "right")
+            ans[i] <- format(ans[i],
+                             width = w[i], justify = "right")
         }
 
         tw <- sum(nchar(ans))
@@ -63,7 +64,7 @@ print.pl <- function(x, ...,
     w <- numeric(ncol)
     for (i in seq_len(ncol)) {
         tmp <- lapply(lapply(x, function(x) lapply(x, `[`, i)), prettyNum)
-        w[i] <- max(nchar(as.character(prettyNum(unlist(tmp)))), na.rm = TRUE)
+        w[i] <- max(nchar(as.character(prettyNum(unlist(tmp), big.mark = ","))), na.rm = TRUE)
     }
 
     for (i in seq_len(ni)) {
@@ -75,9 +76,9 @@ print.pl <- function(x, ...,
         if (print.inst)
             cat(attr(x, "instrument")[[i]], "\n")
 
-        PL   <- x[[i]]$pl
-        BUY  <- x[[i]]$buy
-        SELL <- x[[i]]$sell
+        PL   <- prettyNum(x[[i]]$pl)
+        BUY  <- prettyNum(x[[i]]$buy)
+        SELL <- prettyNum(x[[i]]$sell)
 
         if (no.trades) {
             BUY <- SELL <- "."
