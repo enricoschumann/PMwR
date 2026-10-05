@@ -315,10 +315,11 @@ position.btest <- function(amount, when, ...,
         } else {
             ans <- ans * if (include.cash)
                              cbind(prices, 1) else prices
-            ans <- ans/rowSums(ans)
+            ans <- ans/amount$wealth
+            unit <- "weight"
         }
     }
-    
+
     attr(ans, "instrument") <- instrument
     attr(ans, "unit") <- unit
     ans

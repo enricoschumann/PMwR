@@ -1,3 +1,9 @@
+2026-10-05  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/position.R (position.btest): scale weights by
+        wealth, not by sum of position values; the latter is
+        valid only if there is no cash position
+
 2026-10-01  Enrico Schumann  <es@enricoschumann.net>
 
         * man/rc.Rd: no longer mention "geometric" linking
