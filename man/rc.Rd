@@ -34,7 +34,7 @@ rc(R, weights, timestamp, segments = NULL,
   }
 
   \item{method}{%
-    a string: default is \code{contribution}, and also
+    a string: default is \code{contribution}; also
     supported are \code{attribution}, \code{bottomup} and
     \code{topdown}
   }
@@ -42,9 +42,11 @@ rc(R, weights, timestamp, segments = NULL,
   \item{linking.method}{%
 
     \code{NULL} or a string. Currently supported are
-    \code{0-cumulative, 1-cumulative, 0.5-cumulative}
-    (\code{geometric{0,1,0.5}}) and \code{logarithmic}. See
-    Examples.
+    \code{0-cumulative, 1-cumulative, 0.5-cumulative} and
+    \code{logarithmic}.  \code{logarithmic} uses the method
+    described in Cari\enc{ñ}{n}o (1999).  The other methods
+    implement Valtonen (2002). For contribution,
+    \code{NULL} is equivalent to \code{1-cumulative}.
 
   }
 
@@ -86,6 +88,26 @@ rc(R, weights, timestamp, segments = NULL,
   Note that the segment contributions need not come from
   asset classes; the computation works for any additive
   single-period decomposition of portfolio returns.
+
+
+  \subsection{Multi-period linking}{
+
+    For contribution, in the terminology of Valtonen (2002),
+    \code{1-cumulative} means that contributions in one
+    period are re-invested in the overall portfolio after
+    that period. So for positive overall portfolio returns,
+    \emph{early} contributions count more since they get
+    compounded by the portfolio return. \code{0-cumulative}
+    means that contributions in one period are increased by
+    previous portfolio returns (i.e. contributions reflect a
+    base effect). For positive overall portfolio returns,
+    \emph{later} contributions count more since they are
+    earned on top of an increased portfolio value.
+    \code{0.5-cumulative} shares both effects. Valtonen shows
+    that this variant is practically equivalent to the
+    methods described in Cari\enc{ñ}{n}o (1999).
+
+  }
 
 }
 \value{%
@@ -155,7 +177,7 @@ R <- cbind(stocks = c(.4, 0.1),
 ## [2,]    0.1   0.2
 
 ## ==> contributions grow at portfolio rate-of-return
-rc(R, weights, linking.method =  "geometric1")
+rc(R, weights, linking.method =  "1-cumulative")
 
 ## ==> contributions are made on top of current portfolio-value
 rc(R, weights, linking.method =  "geometric0")
@@ -175,16 +197,16 @@ weights <- rbind(c( 0.5, 0.5),
                  c( 0.5, 0.5))
 
 R <- rbind(c( 10,   0),
-           c( 0 ,  10))/100
+           c(  0,  10))/100
 
 
 rc(R, weights, segment = c("F1", "F2"), timestamp = 1:2,
-   linking.method = "geometric1")
+   linking.method = "1-cumulative")
 ## ==> F1 contributed first, and so gets a higher total
 ##     contribution
 
 rc(R, weights, segment = c("F1", "F2"), timestamp = 1:2,
-   linking.method = "geometric0")
+   linking.method = "0-cumulative")
 ## ==> F2 contributed later, and so gets a higher total
 ##     contribution because it started off a higher base
 ##     value
