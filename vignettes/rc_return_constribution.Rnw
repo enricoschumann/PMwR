@@ -45,21 +45,56 @@ can be used.
 
 
 \section{Return contribution}
+
+The simplest case: three assets, one period.  Let $w$
+be the beginning-of-period weights, and $R$ are be
+returns over the period.  In R, the return
+contributions would be computed as \texttt{w*R}, in
+which the elements of the vectors are multiplied
+position by position.
 <<>>=
-library("PMwR")
 w <- c( 0.1, 0.5, 0.4)
 R <- c(-0.1, 0.1, 0.2)
-rc(R, w)   ## sum(w*R)
+names(w) <- c("A", "B", "C")
+w*R
 @
 
-\noindent Add a benchmark, which will trigger a split into
+The total return would be
+<<>>=
+sum(w*R)
+@
+
+With \texttt{rc}:
+<<>>=
+library("PMwR")
+rc(R, w)
+@
+
+Now suppose the benchmark weights are stored in \texttt{w.bm}.
+<<>>=
+w.bm <- c(0.2, 0.4, 0.4)
+@
+
+The active return contributions are:
+<<>>=
+(w - w.bm)*R
+@
+
+
+\noindent For rc, this will trigger a split into
 alloction, selection and interaction. Since the benchmark
 returns are the same as the portfolio returns, the total
 effect is captured by `allocation'.
 <<>>=
-w.bm <- c(0.2, 0.4, 0.4)
-rc(R, w, weights.bm = w.bm)   ## sum((w - w.bm)*R)
+rc(R, w, weights.bm = w.bm)   ##
 @
+
+But the result is not the same as above: now all return
+is attributed to A, when before A and B both contribited 0.01.
+The reason is that rc, per default, computes allocation
+as $(w - w_{\mathrm{bm}})(R - R_{\mathrm{bm}})$.
+
+
 
 Pass separate benchmark returns.
 <<>>=
