@@ -1,6 +1,31 @@
-v1.3-0  (2026-??-??; not yet released)
+v1.3-0  (2026-10-19; not yet released)
+
+  o 'rc': The "geometric" linking methods are no longer
+    documented, and "0-cumulative", "1-cumulative" and
+    "0.5-cumulative" should be used (instead "geometric0",
+    "geometric1" and "geometric0.5"), since these are the
+    terms used in Valtonen (2002). (The old labels still
+    work, though.)
+
+  o 'rc': When benchmark returns or weights are specified and
+    'method' is not explicitly set, 'method' is set to
+    "attribution". To keep the old behaviour, set method to
+    "contribution".
+
+  o  A short vignette for 'rc' has been added.
+
+  o 'position': the 'btest' method gains arguments "unit" and
+    "prices"
+
+  o 'pl': the print method has been rewritten and improved
 
   o ....
+
+  o various minor changes and documentation updates;
+    several fixes of minor bugs.  See the ChangeLog for
+    all details. The manual at
+    https://enricoschumann.net/R/packages/PMwR/manual/PMwR.html
+    has also been updated.
 
 v1.2-0  (2025-12-17)
 

@@ -1,3 +1,9 @@
+2026-10-01  Enrico Schumann  <es@enricoschumann.net>
+
+        * man/rc.Rd: no longer mention "geometric" linking
+        methods in documentation; add brief description of
+        Valtonen's method
+
 2026-09-21  Enrico Schumann  <es@enricoschumann.net>
 
         * R/pl.R (print.pl): use prettyNum for PL, BUY
