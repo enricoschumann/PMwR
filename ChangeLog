@@ -1,3 +1,12 @@
+2026-10-07  Enrico Schumann  <es@enricoschumann.net>
+
+        * vignettes/rc_return_constribution.Rnw: update
+        vignette
+
+        * vignettes/PMwR.bib: add file
+
+        * vignettes/.install_extras: add file
+
 2026-10-06  Enrico Schumann  <es@enricoschumann.net>
 
         * R/rc.R (rc): linking method for attribution
