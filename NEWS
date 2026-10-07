@@ -1,6 +1,6 @@
 v1.3-0  (2026-10-19; not yet released)
 
-  o 'rc': The "geometric" linking methods are no longer
+  o 'rc': "geometric" linking methods are no longer
     documented, and "0-cumulative", "1-cumulative" and
     "0.5-cumulative" should be used (instead "geometric0",
     "geometric1" and "geometric0.5"), since these are the

@@ -1,3 +1,9 @@
+2026-10-06  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/rc.R (rc): linking method for attribution
+        accepts "logarithmic", "cari\u00f1o1999" and
+        "carino1999" as synonyms
+
 2026-10-05  Enrico Schumann  <es@enricoschumann.net>
 
         * R/position.R (position.btest): scale weights by

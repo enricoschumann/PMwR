@@ -51,8 +51,29 @@ rc <- function(R, weights, timestamp, segments = NULL,
 
     if (any(duplicated(segments))) {
         u.s <- sort(unique(segments))
-        R <- t(tapply(R*weights, segments, sum))
-        weights <- t(tapply(weights, segments, sum))
+
+        ## R is R*weights == contributions
+        R <- t(
+            apply(R*weights, 1,
+                  function(x)
+                      tapply(x, segments, sum, default = 0)))
+        weights <- t(
+            apply(weights, 1,
+                  function(x)
+                      tapply(x, segments, sum, default = 0)))
+
+        R <- R/weights
+        if (!is.null(R.bm))
+            R.bm <- t(
+                apply(weights.bm * R.bm, 1,
+                      function(x)
+                          tapply(x, segments, sum, default = 0)))
+        if (!is.null(weights.bm))
+            weights.bm <- t(
+                apply(weights.bm, 1,
+                      function(x)
+                          tapply(x, segments, sum, default = 0)))
+        R.bm <- R.bm/weights.bm
         segments <- u.s
     }
 
@@ -70,18 +91,20 @@ rc <- function(R, weights, timestamp, segments = NULL,
     nt <- length(timestamp)
     ns <- length(segments)
 
+    linking.method <- tolower(linking.method)
+
+    R0 <- R
+    if (is.finite(tol) && tol != 0)
+        R0[is.finite(weights) & abs(weights) < tol] <- 0
 
     if (method == "contribution") {
 
-        R0 <- R
-        if (is.finite(tol))
-            R0[is.finite(weights) & abs(weights) < tol] <- 0
         df <- data.frame(timestamp,
                          cbind(weights*R0, rowSums(weights*R0)),
                          stringsAsFactors = FALSE)
         names(df) <- c("timestamp", segments, "total")
 
-        if (is.null(linking.method))
+        if (!length(linking.method))
             linking.method <- "1-cumulative"
 
         if (linking.method == "1-cumulative")
@@ -124,7 +147,9 @@ rc <- function(R, weights, timestamp, segments = NULL,
             total[ns1] <- colSums(df[, ns1 + 1] * earlier_r * later_r)
             total[[ns + 1]] <- cumprod(df[["total"]] + 1)[[nt]] - 1
 
-        } else if (linking.method == "logarithmic") {
+        } else if (linking.method == "logarithmic" ||
+                   linking.method == "cari\u00f1o1999"||
+                   linking.method == "carino1999") {
             C <- df[, -c(1, ncol(df))]
             total <- .linking_logarithmic(C,
                                           r = df[["total"]],
@@ -156,8 +181,13 @@ rc <- function(R, weights, timestamp, segments = NULL,
             colnames(weights) <- colnames(weights.bm) <-
                 colnames(R) <- colnames(B) <- segments
 
-        B.total <- rowSums(weights.bm * B)
-        R.total <- rowSums(weights * R)
+        B0 <- R.bm
+        if (is.finite(tol) && tol != 0)
+            B0[is.finite(weights.bm) & abs(weights.bm) < tol] <- 0
+        B.total <- rowSums(weights.bm * B0)
+
+
+        R.total <- rowSums(weights * R0)
         dw <- weights - weights.bm
         dR <- R - B
 
@@ -213,7 +243,7 @@ rc <- function(R, weights, timestamp, segments = NULL,
               topdown     = "attribution (top-down)",
               bottomup    = "attribution (bottom-up)")[[method]]
 
-        if (!is.null(linking.method)) {
+        if (length(linking.method)) {
 
             tmp.C <- cbind(ans$allocation [, seq(1, ns)],
                            ans$selection  [, seq(1, ns)],
@@ -316,7 +346,10 @@ rc <- function(R, weights, timestamp, segments = NULL,
 
 ## D. R. Cari{\~n}o -- Combining Attribution Effects Over
 ## Time, 1999
-.carino1999 <- .linking_logarithmic <- function(C, r, b = 0, ...) {
+.carino1999 <-
+.linking_logarithmic <-
+function(C, r, b = 0, ...,
+         geometric = FALSE) {
 
     ## C .. matrix of contributions (or 'attributes')
     ## r .. period returns of portfolio
@@ -337,20 +370,28 @@ rc <- function(R, weights, timestamp, segments = NULL,
     if (abs(rT_bT) < 1e-14)
         k <- 1/(1 + rT) else k <- k / (rT - bT)
 
-    C.adj <- C * kt / k
-    total <- colSums(C.adj)
-    attr(total, "adjusted") <- C.adj
+    if (geometric) {
+        C.adj <- C*kt
+        total <- apply(exp(C.adj), 2, prod)
+        attr(total, "adjusted") <- C.adj
+    } else {
+        C.adj <- C * kt / k
+        total <- colSums(C.adj)
+        attr(total, "adjusted") <- C.adj
+    }
     total
 }
 
 
-## @Article{colin2007,
-##   author       = {Andrew Colin},
-##   title        = {A Brinson Model Alternative: an Equity Attribution
-##                   Model with Orthogonal Risk Contributions},
-##   journal      = {Journal of Performance Measurement},
-##   year         = 2007,
-##   issue         = {fall}
+## @article{colin2007,
+##   author  = {Andrew Colin},
+##   title   = {A Brinson Model Alternative: an Equity Attribution
+##              Model with Orthogonal Risk Contributions},
+##   file    = {Colin12-1.pdf},
+##   journal = {Journal of Performance Measurement},
+##   year    = 2007,
+##   number  = 1,
+##   volume  = 12
 ## }
 .colin2007 <- function(weights, weights.bm, R) {
 
@@ -379,13 +420,3 @@ rc <- function(R, weights, timestamp, segments = NULL,
     row.names(df)[nrow(df)] <- "total"
     df
 }
-
-## weights <- c(a=0.5,b=0.1,cash=0.4)
-## weights.bm <- c(a=0.5,b=0.5)
-## R <- c(a=0.02,b=-0.01, cash = 0)
-## .colin2007(weights, weights.bm, R)
-
-## weights <- c(0.8,0,0.2,0,0)
-## weights.bm <- c(.3,.3,.1,.1,.2)
-## R <- c(2,-2,1,-2,0)/100
-## dput(.colin2007(weights, weights.bm, R))
