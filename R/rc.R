@@ -383,6 +383,7 @@ function(C, r, b = 0, ...,
 }
 
 
+
 ## @article{colin2007,
 ##   author  = {Andrew Colin},
 ##   title   = {A Brinson Model Alternative: an Equity Attribution
@@ -419,4 +420,41 @@ function(C, r, b = 0, ...,
     df <- rbind(df, apply(df, 2, sum))
     row.names(df)[nrow(df)] <- "total"
     df
+}
+
+
+
+## @Article{menchero2000,
+##   author       = {Jose G. Menchero},
+##   title        = {An Optimized Approach to Linking
+##                   Attribution Effects Over Time},
+##   journaltitle = {Journal of Performance Measurement},
+##   date         = 2000,
+##   volume       = 5,
+##   number       = 1
+## }
+.menchero2000 <- function(C, r, b = 0, ...) {
+
+    ## C .. matrix of contributions (or 'attributes')
+    ## r .. period returns of portfolio
+    ## b .. period returns of benchmark
+
+    T <- nrow(C)
+    RT <- prod(r + 1)
+    BT <- prod(b + 1)
+
+    r_b <- r - b
+    T1 <- 1/T
+    A <- if (abs(RT - BT) < 1e-12)
+             RT^((T - 1)/T)
+         else
+             (RT - BT) / (RT^T1 - BT^T1) / T
+
+
+    a <- (RT - BT - A*sum(r_b)) / (r_b %*% r_b) * (r - b)
+
+    C.adj <- C * (A + a)
+    total <- colSums(C.adj)
+    attr(total, "adjusted") <- C.adj
+    total
 }

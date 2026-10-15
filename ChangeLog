@@ -1,5 +1,7 @@
 2026-10-15  Enrico Schumann  <es@enricoschumann.net>
 
+        * R/rc.R (.menchero2000): add internal function
+
         * DESCRIPTION (URL): remove GitLab/GitHub links
 
 2026-10-07  Enrico Schumann  <es@enricoschumann.net>
