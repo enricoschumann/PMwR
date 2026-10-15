@@ -41,12 +41,13 @@ rc(R, weights, timestamp, segments = NULL,
 
   \item{linking.method}{%
 
-    \code{NULL} or a string. Currently supported are
-    \code{0-cumulative, 1-cumulative, 0.5-cumulative} and
-    \code{logarithmic}.  \code{logarithmic} uses the method
-    described in Cari\enc{ñ}{n}o (1999).  The other methods
-    implement Valtonen (2002). For contribution,
-    \code{NULL} is equivalent to \code{1-cumulative}.
+    \code{NULL} or a string. Supported are \code{0-cumulative},
+    \code{1-cumulative}, \code{0.5-cumulative} (described in
+    Valtonen, 2002) and \code{logarithmic} (described in
+    Cari\enc{ñ}{n}o, 1999).  For \sQuote{\code{attribution}},
+    only method \code{logarithmic} is available. For
+    \sQuote{\code{contribution}}, \code{NULL} is equivalent to
+    \code{1-cumulative}.
 
   }
 
@@ -82,8 +83,9 @@ rc(R, weights, timestamp, segments = NULL,
   cross-sectional weights/returns for a single period,
   i.e. they are handled like single-row matrices.
 
-  Weights can be missing, in which case \code{R} is assumed
-  to already comprise segment returns.
+  For method \code{contribution}, weights can be missing, in
+  which case \code{R} is assumed to already comprise segment
+  returns (i. e. contributions).
 
   Note that the segment contributions need not come from
   asset classes; the computation works for any additive
@@ -103,9 +105,12 @@ rc(R, weights, timestamp, segments = NULL,
     base effect). For positive overall portfolio returns,
     \emph{later} contributions count more since they are
     earned on top of an increased portfolio value.
-    \code{0.5-cumulative} shares both effects. Valtonen shows
-    that this variant is practically equivalent to the
-    methods described in Cari\enc{ñ}{n}o (1999).
+    \code{0.5-cumulative} averages both effects. Valtonen shows
+    that \code{0.5-cumulative} is practically equivalent to the
+    method described in Cari\enc{ñ}{n}o (1999).
+
+    For method attribution, currently only the method of
+    Cari\enc{ñ}{n}o (1999) is supported.
 
   }
 
