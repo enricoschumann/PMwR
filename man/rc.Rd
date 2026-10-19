@@ -41,13 +41,14 @@ rc(R, weights, timestamp, segments = NULL,
 
   \item{linking.method}{%
 
-    \code{NULL} or a string. Supported are \code{0-cumulative},
-    \code{1-cumulative}, \code{0.5-cumulative} (described in
-    Valtonen, 2002) and \code{logarithmic} (described in
-    Cari\enc{ñ}{n}o, 1999).  For \sQuote{\code{attribution}},
-    only method \code{logarithmic} is available. For
-    \sQuote{\code{contribution}}, \code{NULL} is equivalent to
-    \code{1-cumulative}.
+    \code{NULL} or a string. Supported are \code{sum}, for which
+    period contributions are added without any linking;
+    \code{0-cumulative}, \code{1-cumulative}, \code{0.5-cumulative}
+    (Valtonen, 2002); and \code{logarithmic} (Cari\enc{ñ}{n}o, 1999).
+    For \sQuote{\code{attribution}}, only method \code{logarithmic}
+    is available. For \sQuote{\code{contribution}}, \code{NULL} is
+    equivalent to \code{1-cumulative}. For \sQuote{\code{attribution}},
+    \code{NULL} is equivalent to \code{logarithmic}.
 
   }
 
@@ -124,6 +125,20 @@ rc(R, weights, timestamp, segments = NULL,
   \item{total_contributions}{a numeric vector with the total
     contributions per segment, and an additional element
     "\code{total}"}
+
+  For method \code{attribution}, a list of four components:
+  \item{allocation}{a data.frame of single-period
+    contributions, sorted in time, with an additional column
+    "\code{total}"}
+  \item{selection}{a data.frame of single-period
+    contributions, sorted in time, with an additional column
+    "\code{total}"}
+  \item{interaction}{a data.frame of single-period
+    contributions, sorted in time, with an additional column
+    "\code{total}"}
+  \item{total}{a numeric vector with the total
+    contributions for allocation, selection and interaction,
+    and an additional element "\code{total}"}
 
 }
 \references{
