@@ -1,3 +1,9 @@
+2026-10-17  Enrico Schumann  <es@enricoschumann.net>
+
+        * R/rc.R (rc): add linking.method "sum", which
+        adds single-period return contributions without any
+        adjustment
+
 2026-10-15  Enrico Schumann  <es@enricoschumann.net>
 
         * R/rc.R (.menchero2000): add internal function

@@ -112,7 +112,15 @@ rc <- function(R, weights, timestamp, segments = NULL,
         else if (linking.method == "0-cumulative")
             linking.method <- "geometric0"
 
-        if (linking.method == "geometric1") {
+        if (linking.method == "sum") {
+
+            total <- rep(NA_real_, ns + 1)
+            names(total) <- c(segments, "total")
+            ns1 <- seq_len(ns)
+            total[ns1] <- colSums(as.matrix(df[, ns1 + 1, drop = FALSE]))
+            total[[ns + 1]] <- sum(df[["total"]])
+
+        } else if (linking.method == "geometric1") {
 
             later_r <-
                 c(rev(cumprod(1 + rev(df[["total"]])))[-1], 1)
@@ -243,7 +251,7 @@ rc <- function(R, weights, timestamp, segments = NULL,
               topdown     = "attribution (top-down)",
               bottomup    = "attribution (bottom-up)")[[method]]
 
-        if (length(linking.method)) {
+        if (length(linking.method) && linking.method != "sum") {
 
             tmp.C <- cbind(ans$allocation [, seq(1, ns)],
                            ans$selection  [, seq(1, ns)],
