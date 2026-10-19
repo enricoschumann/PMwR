@@ -1,4 +1,4 @@
-v1.3-0  (2026-10-19; not yet released)
+v1.3-0  (2026-10-19)
 
   o 'rc': "geometric" linking methods are no longer
     documented, and "0-cumulative", "1-cumulative" and
@@ -9,7 +9,7 @@ v1.3-0  (2026-10-19; not yet released)
 
   o 'rc': When benchmark returns or weights are specified and
     'method' is not explicitly set, 'method' is set to
-    "attribution". To keep the old behaviour, set method to
+    "attribution". To keep the old behaviour, set 'method' to
     "contribution".
 
   o  A short vignette for 'rc' has been added.
@@ -18,8 +18,6 @@ v1.3-0  (2026-10-19; not yet released)
     "prices"
 
   o 'pl': the print method has been rewritten and improved
-
-  o ....
 
   o various minor changes and documentation updates;
     several fixes of minor bugs.  See the ChangeLog for
