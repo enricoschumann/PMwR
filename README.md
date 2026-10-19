@@ -57,7 +57,7 @@ can install either version directly from within R:
     install.packages('PMwR') ## CRAN stable version
 
     install.packages('PMwR', ## development version
-	                 type = 'source',
+                     type = 'source',
                      repos = c('https://enricoschumann.net/R',
                                getOption('repos')))
 
