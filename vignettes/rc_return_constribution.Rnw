@@ -2,16 +2,16 @@
 \documentclass[a4paper,11pt]{article}
 \usepackage[left = 3cm, top = 2cm, bottom = 2cm, right = 4cm]{geometry}
 \usepackage[noae,nogin]{Sweave}
-\usepackage[biolinum]{libertine}
+\usepackage{libertine}
 \usepackage[scaled=0.9]{inconsolata}
-% \renewcommand*\familydefault{\sfdefault}
+\renewcommand*\familydefault{\sfdefault}
 \usepackage{amsmath,amstext}
+\usepackage{sfmath}
 \usepackage{hyperref}
 \usepackage{natbib}
 \usepackage{xcolor}
 \usepackage{framed}
 \usepackage{fancyvrb}
-\usepackage{sfmath}
 \usepackage[flushmargin]{footmisc}
 \definecolor{grau2}{rgb}{.2,.2,.2}
 \definecolor{grau7}{rgb}{.7,.7,.7}
@@ -53,7 +53,7 @@ for the period.
 <<>>=
 w <- c( 0.1, 0.5, 0.4)
 R <- c(-0.1, 0.1, 0.2)
-@ 
+@
 \noindent You get the return contributions of the single
 assets by multiplying $wR$ element by element (as is the default in R).
 Summing the contributions gives the total return.
@@ -86,7 +86,7 @@ the total active return.
 <<>>=
 sum((w - w.bm)*R)
 sum(w*R) - sum(w.bm*R)
-@ 
+@
 
 \noindent If you provide benchmark weights or
 returns to \texttt{rc}, then this will trigger a
@@ -128,29 +128,8 @@ R.bm <- matrix(c(-1.9,-5.3,-0.9,
 
 rc(R = R, weights = w, R.bm = R.bm, weights.bm = w.bm,
    method = "attribution", segments = segments)
-@ 
+@
 
-<<>>=
-options(digits=8)
-prod(1+rowSums(w*R))
-
-prod(1+rowSums(w.bm*R.bm))
-
-
-sum(rowSums(w*R)-rowSums(w.bm*R.bm))
-
-rc(R = R, weights = w, R.bm = R.bm, weights.bm = w.bm,
-   method = "attribution", segments = segments)
-
-@ 
-
-<<>>=
-rc(R = R, weights = w, R.bm = R.bm, weights.bm = w.bm,
-   method = "attribution", segments = segments,
-   linking.method = "logarithmic")
-prod(1+rowSums(w*R)) - prod(1+rowSums(w.bm*R.bm))
-
-@ 
 \bibliographystyle{plainnat}
 \bibliography{PMwR}
 
