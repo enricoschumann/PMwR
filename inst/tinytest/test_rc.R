@@ -77,6 +77,16 @@ ans <- rc(segments = c("stocks", "bonds"),
           weights =
               matrix(c(50, 50,
                        55, 45)/100, byrow = TRUE, nrow = 2),
+          linking.method = "sum")
+expect_equal(ans$total_contributions[["total"]],
+             sum(ans$period_contributions[, 2:3]))
+
+ans <- rc(segments = c("stocks", "bonds"),
+          R = matrix(c(40, 10,
+                       10, 20)/100, byrow = TRUE, nrow = 2),
+          weights =
+              matrix(c(50, 50,
+                       55, 45)/100, byrow = TRUE, nrow = 2),
           linking.method = "geometric1")
 expect_equal(ans$total_contributions[["total"]],  0.43125)
 expect_equal(ans$total_contributions[["stocks"]], 0.284)
