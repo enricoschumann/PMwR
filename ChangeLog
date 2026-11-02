@@ -1,5 +1,7 @@
 2026-11-02  Enrico Schumann  <es@enricoschumann.net>
 
+        * README.md: add link
+
         * R/btest.R: fixed -- the journal always included the
         close price, even with "trade.at.open" set to TRUE and
         open prices supplied (but actual wealth computations
