@@ -1,5 +1,5 @@
 ## -*- truncate-lines: t; -*-
-## Copyright (C) 2008-22  Enrico Schumann
+## Copyright (C) 2008-26  Enrico Schumann
 
 btest  <- function(prices,
                    signal,
@@ -587,10 +587,10 @@ btest  <- function(prices,
             mC <- prices
             trade.at.open <- FALSE
         } else if (ncol(prices) == 4L) {
-            mO <- prices[, 1L]
-            mH <- prices[, 2L]
-            mL <- prices[, 3L]
-            mC <- prices[, 4L]
+            mO <- prices[, 1L, drop = FALSE]
+            mH <- prices[, 2L, drop = FALSE]
+            mL <- prices[, 3L, drop = FALSE]
+            mC <- prices[, 4L, drop = FALSE]
         } else
             stop("see documentation on ", sQuote("prices"))
     }
@@ -932,7 +932,10 @@ btest  <- function(prices,
             ccc <- as.character(cc)
             j.timestamp[[ccc]] <- timestamp[ic]
             j.amount[[ccc]] <- trades[ic, cc]
-            j.price[[ccc]] <- mC[ic, cc]
+            j.price[[ccc]] <- if (trade.at.open)
+                                  mO[ic, cc]
+                              else
+                                  mC[ic, cc]
             j.instrument[[ccc]] <- rep(colnames(X)[cc], sum(ic))
         }
         j.timestamp <- do.call(c, j.timestamp)

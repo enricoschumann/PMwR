@@ -1,3 +1,11 @@
+v1.3-1  (2026-11-??; not released yet)
+
+  o fixed: with 'trade.at.open', 'btest' always reported close
+    prices in the trade journal. Reported by Max Thomasberger in
+    https://blechturm.com/articles/fastest-backtester-plain-r/
+
+  o ....
+
 v1.3-0  (2026-10-19)
 
   o 'rc': "geometric" linking methods are no longer
