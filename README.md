@@ -21,8 +21,8 @@ blocks for many activities in portfolio management.
   blotters). See ?journal and ?position.
 - Testing strategies: See ?btest (and this
   [tutorial on backtesting](https://dx.doi.org/10.2139/ssrn.3374195),
-  and [The fastest backtester you’ve never heard of is built in plain R](https://blechturm.com/articles/fastest-backtester-plain-r/) 
-  for a speed comparison with other backtest packages.)
+  and [The fastest backtester you’ve never heard of is built in plain R](https://blechturm.com/articles/fastest-backtester-plain-r/)
+  for a speed comparison with other backtest packages).
 - Computing profit/loss and returns: See ?returns,
   ?rc, ?pl or ?unit_prices.
 
