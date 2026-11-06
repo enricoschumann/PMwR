@@ -376,3 +376,42 @@ expect_equal(
         timestamp = as.Date("2018-1-1")+0:9))$timestamp,
     as.Date("2018-1-6"))
 
+
+
+
+## ------------- single asset
+
+close <- 101:105
+open  <- close - 100
+high <- low <- open
+
+b1 <- btest(close, signal = function() 1)
+expect_equal(journal(b1)$price, close[2])
+
+b2 <- btest(close, signal = function() 1, b = 0)
+expect_equal(journal(b2)$price, close[1])
+
+
+
+b3 <- btest(list(open, high, low, close), signal = function() 1)
+expect_equal(journal(b3)$price, open[2])
+
+b4 <- btest(list(open, high, low, close), signal = function() 1, b = 0)
+expect_equal(journal(b4)$price, open[1])
+
+
+
+b3b <- btest(list(as.matrix(open),
+                  as.matrix(high),
+                  as.matrix(low),
+                  as.matrix(close)), signal = function() 1)
+expect_equal(journal(b3b)$price, open[2])
+
+
+b5 <- btest(list(open, high, low, close), signal = function() 1,
+            trade.at.open = FALSE)
+expect_equal(journal(b5)$price, close[2])
+
+b6 <- btest(list(open, high, low, close), signal = function() 1, b = 0,
+            trade.at.open = FALSE)
+expect_equal(journal(b6)$price, close[1])

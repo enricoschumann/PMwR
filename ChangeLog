@@ -1,3 +1,10 @@
+2026-11-05  Enrico Schumann  <es@enricoschumann.net>
+
+        * DESCRIPTION (Version): 1.3-1
+
+        * inst/tinytest/test_btest.R: add tests (OHLC and
+        close only) for a single asset
+
 2026-11-02  Enrico Schumann  <es@enricoschumann.net>
 
         * README.md: add link
@@ -5,7 +12,8 @@
         * R/btest.R: fixed -- the journal always included the
         close price, even with "trade.at.open" set to TRUE and
         open prices supplied (but actual wealth computations
-        etc. were correct).  Reported by Max Thomasberger at
+        etc. were correct);
+        reported by Max Thomasberger at
         https://blechturm.com/articles/fastest-backtester-plain-r/
 
         * inst/tinytest/test_btest_journal.R: add tests for
